@@ -76,7 +76,6 @@ import org.thoughtcrime.securesms.MainFragment;
 import org.thoughtcrime.securesms.MainNavigator;
 import org.thoughtcrime.securesms.NewConversationActivity;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.components.RatingManager;
 import org.thoughtcrime.securesms.components.SearchToolbar;
 import org.thoughtcrime.securesms.components.recyclerview.DeleteItemAnimator;
 import org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton;
@@ -242,8 +241,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     initializeListAdapters();
     initializeTypingObserver();
     initializeSearchListener();
-
-    RatingManager.showRatingDialogIfNecessary(requireContext());
 
     TooltipCompat.setTooltipText(searchAction, getText(R.string.SearchToolbar_search_for_conversations_contacts_and_messages));
   }

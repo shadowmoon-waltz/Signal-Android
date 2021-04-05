@@ -67,6 +67,8 @@ def abiPostFix = ['universal'   : 0,
 
 def keystores = [ 'debug'  : loadKeystoreProperties('keystore.debug.properties') ]
 
+boolean signConfigExists = project.hasProperty("keystoreFile") && project.hasProperty("keystorePassword") && project.hasProperty("keystoreAlias") && project.hasProperty("keystoreAliasPassword")
+
 android {
     buildToolsVersion BUILD_TOOL_VERSION
     compileSdkVersion COMPILE_SDK
@@ -85,6 +87,14 @@ android {
                 storePassword keystores.debug.storePassword
                 keyAlias keystores.debug.keyAlias
                 keyPassword keystores.debug.keyPassword
+            }
+        }
+        if (signConfigExists) {
+            release {
+                storeFile file(project.property("keystoreFile"))
+                storePassword project.property("keystorePassword")
+                keyAlias project.property("keystoreAlias")
+                keyPassword project.property("keystoreAliasPassword")
             }
         }
     }
@@ -125,19 +135,20 @@ android {
         buildConfigField "int", "CANONICAL_VERSION_CODE", "$canonicalVersionCode"
 
         ndk {
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            //abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+            abiFilters 'arm64-v8a'
         }
 
         resConfigs autoResConfig()
 
-        splits {
+        /*splits {
             abi {
                 enable true
                 reset()
                 include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
                 universalApk true
             }
-        }
+        }*/
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -196,7 +207,11 @@ android {
         }
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles = buildTypes.debug.proguardFiles
+            if (signConfigExists) {
+                signingConfig signingConfigs.release
+            }
         }
         perf {
             initWith debug
@@ -242,6 +257,14 @@ android {
             ext.websiteUpdateUrl = "null"
             buildConfigField "boolean", "PLAY_STORE_DISABLED", "false"
             buildConfigField "String", "NOPLAY_UPDATE_URL", "$ext.websiteUpdateUrl"
+        }
+
+        sw {
+            dimension 'distribution'
+            ext.websiteUpdateUrl = "null"
+            buildConfigField "boolean", "PLAY_STORE_DISABLED", "true"
+            buildConfigField "String", "NOPLAY_UPDATE_URL", "$ext.websiteUpdateUrl"
+            applicationIdSuffix ".sw"
         }
 
         prod {

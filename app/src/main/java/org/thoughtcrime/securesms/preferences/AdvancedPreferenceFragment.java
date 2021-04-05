@@ -31,7 +31,6 @@ import org.thoughtcrime.securesms.contacts.ContactIdentityManager;
 import org.thoughtcrime.securesms.delete.DeleteAccountFragment;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
-import org.thoughtcrime.securesms.logsubmit.SubmitDebugLogActivity;
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter;
 import org.thoughtcrime.securesms.registration.RegistrationNavigationActivity;
 import org.thoughtcrime.securesms.util.DynamicTheme;
@@ -60,10 +59,6 @@ public class AdvancedPreferenceFragment extends CorrectedPreferenceFragment {
     super.onCreate(paramBundle);
 
     initializeIdentitySelection();
-
-    Preference submitDebugLog = this.findPreference(SUBMIT_DEBUG_LOG_PREF);
-    submitDebugLog.setOnPreferenceClickListener(new SubmitDebugLogListener());
-    submitDebugLog.setSummary(getVersion(getActivity()));
 
     Preference pinSettings = this.findPreference(ADVANCED_PIN_PREF);
     pinSettings.setOnPreferenceClickListener(preference -> {
@@ -189,15 +184,6 @@ public class AdvancedPreferenceFragment extends CorrectedPreferenceFragment {
     if (contactUri != null) {
       TextSecurePreferences.setIdentityContactUri(getActivity(), contactUri.toString());
       initializeIdentitySelection();
-    }
-  }
-
-  private class SubmitDebugLogListener implements Preference.OnPreferenceClickListener {
-    @Override
-    public boolean onPreferenceClick(Preference preference) {
-      final Intent intent = new Intent(getActivity(), SubmitDebugLogActivity.class);
-      startActivity(intent);
-      return true;
     }
   }
 
