@@ -30,4 +30,12 @@
         android:key="pref_delete_account"
         android:title="@string/preferences__delete_account" />
 
+    <PreferenceCategory android:layout="@layout/preference_divider"/>
+
+    <org.thoughtcrime.securesms.components.SwitchPreferenceCompat
+                        android:defaultValue="false"
+                        android:key="pref_hide_insights"
+                        android:title="Hide Insights"
+                        android:summary="Disable the Insights main menu option that appears if SMS is enabled" />
+
 </PreferenceScreen>

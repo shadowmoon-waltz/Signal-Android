@@ -300,7 +300,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   @Override
   public void onPrepareOptionsMenu(Menu menu) {
-    menu.findItem(R.id.menu_insights).setVisible(TextSecurePreferences.isSmsEnabled(requireContext()));
+    final boolean bInsights = TextSecurePreferences.isSmsEnabled(requireContext()) && !TextSecurePreferences.isHideInsights(requireContext());
+    menu.findItem(R.id.menu_insights).setVisible(bInsights);
     menu.findItem(R.id.menu_clear_passphrase).setVisible(!TextSecurePreferences.isPasswordDisabled(requireContext()));
   }
 

@@ -214,6 +214,8 @@ public class TextSecurePreferences {
 
   private static final String ARGON2_TESTED = "argon2_tested";
 
+  private static final String PREF_HIDE_INSIGHTS = "pref_hide_insights";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -229,7 +231,8 @@ public class TextSecurePreferences {
                                                               NEW_CONTACTS_NOTIFICATIONS,
                                                               SHOW_INVITE_REMINDER_PREF,
                                                               SYSTEM_EMOJI_PREF,
-                                                              ENTER_SENDS_PREF};
+                                                              ENTER_SENDS_PREF,
+                                                              PREF_HIDE_INSIGHTS};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1246,6 +1249,14 @@ public class TextSecurePreferences {
 
   public static void setArgon2Tested(Context context, boolean tested) {
     setBooleanPreference(context, ARGON2_TESTED, tested);
+  }
+
+  public static boolean isHideInsights(Context context) {
+    return getBooleanPreference(context, PREF_HIDE_INSIGHTS, false);
+  }
+
+  public static void setHideInsights(Context context, boolean hideInsights) {
+    setBooleanPreference(context, PREF_HIDE_INSIGHTS, hideInsights);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {
