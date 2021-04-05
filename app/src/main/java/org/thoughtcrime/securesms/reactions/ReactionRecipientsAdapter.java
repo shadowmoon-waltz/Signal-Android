@@ -12,13 +12,21 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.util.AvatarUtil;
+import org.thoughtcrime.securesms.util.DateUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecipientsAdapter.ViewHolder> {
 
+  private Locale locale = null;
+
   private List<ReactionDetails> data = Collections.emptyList();
+
+  public ReactionRecipientsAdapter(Locale locale) {
+    this.locale = locale;
+  }
 
   public void updateData(List<ReactionDetails> newData) {
     data = newData;
@@ -35,7 +43,7 @@ final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecip
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    holder.bind(data.get(position));
+    holder.bind(data.get(position), locale);
   }
 
   @Override
@@ -47,6 +55,7 @@ final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecip
 
     private final AvatarImageView avatar;
     private final TextView        recipient;
+    private final TextView        time;
     private final TextView        emoji;
 
     public ViewHolder(@NonNull View itemView) {
@@ -54,11 +63,17 @@ final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecip
 
       avatar    = itemView.findViewById(R.id.reactions_bottom_view_recipient_avatar);
       recipient = itemView.findViewById(R.id.reactions_bottom_view_recipient_name);
+      time      = itemView.findViewById(R.id.reactions_bottom_view_recipient_time);
       emoji     = itemView.findViewById(R.id.reactions_bottom_view_recipient_emoji);
     }
 
-    void bind(@NonNull ReactionDetails reaction) {
+    void bind(@NonNull ReactionDetails reaction, Locale locale) {
       this.emoji.setText(reaction.getDisplayEmoji());
+      if (locale != null) {
+        this.time.setText(DateUtils.getExtendedRelativeTimeSpanString(this.time.getContext(), locale, reaction.getTimestamp()));
+      } else {
+        this.time.setVisibility(View.GONE);
+      }
 
       if (reaction.getSender().isSelf()) {
         this.recipient.setText(R.string.ReactionsRecipientAdapter_you);

@@ -1451,7 +1451,8 @@ public class ConversationFragment extends LoggingFragment {
       if (getContext() == null) return;
 
       listener.handleReactionDetails(reactionTarget);
-      ReactionsBottomSheetDialogFragment.create(messageId, isMms).show(requireFragmentManager(), null);
+      ReactionsBottomSheetDialogFragment.create(messageId, isMms, TextSecurePreferences.isShowReactionTimeEnabled(requireContext()) ? locale : null)
+                                        .show(requireFragmentManager(), null);
     }
 
     @Override

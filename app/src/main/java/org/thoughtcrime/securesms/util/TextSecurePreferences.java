@@ -216,6 +216,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_HIDE_INSIGHTS = "pref_hide_insights";
 
+  private static final String PREF_SHOW_REACTION_TIME = "pref_show_reaction_time";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -232,7 +234,8 @@ public class TextSecurePreferences {
                                                               SHOW_INVITE_REMINDER_PREF,
                                                               SYSTEM_EMOJI_PREF,
                                                               ENTER_SENDS_PREF,
-                                                              PREF_HIDE_INSIGHTS};
+                                                              PREF_HIDE_INSIGHTS,
+                                                              PREF_SHOW_REACTION_TIME};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1257,6 +1260,14 @@ public class TextSecurePreferences {
 
   public static void setHideInsights(Context context, boolean hideInsights) {
     setBooleanPreference(context, PREF_HIDE_INSIGHTS, hideInsights);
+  }
+
+  public static boolean isShowReactionTimeEnabled(Context context) {
+    return getBooleanPreference(context, PREF_SHOW_REACTION_TIME, false);
+  }
+
+  public static void setShowReactionTimeEnabled(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_SHOW_REACTION_TIME, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

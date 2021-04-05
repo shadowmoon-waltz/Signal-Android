@@ -12,6 +12,8 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.util.adapter.AlwaysChangedDiffUtil;
 
 import java.util.List;
+import java.util.Locale;
+
 
 /**
  * ReactionViewPagerAdapter provides pages to a ViewPager2 which contains the reactions on a given message.
@@ -19,9 +21,11 @@ import java.util.List;
 class ReactionViewPagerAdapter extends ListAdapter<EmojiCount, ReactionViewPagerAdapter.ViewHolder> {
 
   private int selectedPosition = 0;
+  private Locale locale = null;
 
-  protected ReactionViewPagerAdapter() {
+  protected ReactionViewPagerAdapter(Locale locale) {
     super(new AlwaysChangedDiffUtil<>());
+    this.locale = locale;
   }
 
   @NonNull EmojiCount getEmojiCount(int position) {
@@ -36,7 +40,7 @@ class ReactionViewPagerAdapter extends ListAdapter<EmojiCount, ReactionViewPager
 
   @Override
   public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.reactions_bottom_sheet_dialog_fragment_recycler, parent, false));
+    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.reactions_bottom_sheet_dialog_fragment_recycler, parent, false), locale);
   }
 
   @Override
@@ -66,10 +70,12 @@ class ReactionViewPagerAdapter extends ListAdapter<EmojiCount, ReactionViewPager
   static class ViewHolder extends RecyclerView.ViewHolder {
 
     private final RecyclerView              recycler;
-    private final ReactionRecipientsAdapter adapter = new ReactionRecipientsAdapter();
+    private final ReactionRecipientsAdapter adapter;
 
-    public ViewHolder(@NonNull View itemView) {
+    public ViewHolder(@NonNull View itemView, Locale locale) {
       super(itemView);
+
+      adapter = new ReactionRecipientsAdapter(locale);
 
       recycler = (RecyclerView) itemView;
 

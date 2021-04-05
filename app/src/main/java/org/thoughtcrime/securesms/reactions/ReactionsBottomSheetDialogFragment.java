@@ -26,12 +26,14 @@ import org.thoughtcrime.securesms.components.emoji.EmojiImageView;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public final class ReactionsBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
   private static final String ARGS_MESSAGE_ID = "reactions.args.message.id";
   private static final String ARGS_IS_MMS     = "reactions.args.is.mms";
+  private static final String ARGS_LOCALE     = "reactions.args.locale";
 
   private long                      messageId;
   private ViewPager2                recipientPagerView;
@@ -40,12 +42,13 @@ public final class ReactionsBottomSheetDialogFragment extends BottomSheetDialogF
   private ReactionsViewModel        viewModel;
   private Callback                  callback;
 
-  public static DialogFragment create(long messageId, boolean isMms) {
+  public static DialogFragment create(long messageId, boolean isMms, Locale locale) {
     Bundle         args     = new Bundle();
     DialogFragment fragment = new ReactionsBottomSheetDialogFragment();
 
     args.putLong(ARGS_MESSAGE_ID, messageId);
     args.putBoolean(ARGS_IS_MMS, isMms);
+    args.putSerializable(ARGS_LOCALE, locale);
 
     fragment.setArguments(args);
 
@@ -125,7 +128,7 @@ public final class ReactionsBottomSheetDialogFragment extends BottomSheetDialogF
     recipientPagerView = view.findViewById(R.id.reactions_bottom_view_recipient_pager);
     messageId          = requireArguments().getLong(ARGS_MESSAGE_ID);
 
-    setUpRecipientsRecyclerView();
+    setUpRecipientsRecyclerView((Locale)requireArguments().getSerializable(ARGS_LOCALE));
 
     reactionsLoader = new ReactionsLoader(requireContext(),
                                           requireArguments().getLong(ARGS_MESSAGE_ID),
@@ -147,8 +150,8 @@ public final class ReactionsBottomSheetDialogFragment extends BottomSheetDialogF
     callback.onReactionsDialogDismissed();
   }
 
-  private void setUpRecipientsRecyclerView() {
-    recipientsAdapter = new ReactionViewPagerAdapter();
+  private void setUpRecipientsRecyclerView(Locale locale) {
+    recipientsAdapter = new ReactionViewPagerAdapter(locale);
 
     recipientPagerView.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
       @Override
