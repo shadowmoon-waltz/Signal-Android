@@ -168,4 +168,8 @@ public class IdentityKeyUtil {
     context.getSharedPreferences(MasterSecretUtil.PREFERENCES_NAME, 0).edit().remove(key).commit();
   }
 
+  public static void setIdentityKeys(@NonNull Context context, @NonNull byte[] publicKey, @NonNull byte[] privateKey) {
+    save(context, IDENTITY_PUBLIC_KEY_PREF, Base64.encodeBytes(publicKey));
+    save(context, IDENTITY_PRIVATE_KEY_PREF, Base64.encodeBytes(privateKey));
+  }
 }

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+  <TextView
+      android:id="@+id/set_identity_keys_public_key_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/Signal.Text.Preview"
+      android:fontFamily="sans-serif-medium"
+      android:textColor="@color/signal_accent_primary"
+      android:text="Public key"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"/>
+
+  <EditText
+      android:id="@+id/set_identity_keys_public_key"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="-2dp"
+      android:hint="Enter public key"
+      app:layout_constraintTop_toBottomOf="@id/set_identity_keys_public_key_title"
+      tools:hint="00000000000000000000000000000000000000000000"/>
+
+  <TextView
+      android:id="@+id/set_identity_keys_private_key_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="25dp"
+      style="@style/Signal.Text.Preview"
+      android:fontFamily="sans-serif-medium"
+      android:textColor="@color/signal_accent_primary"
+      android:text="Private key"
+      app:layout_constraintTop_toBottomOf="@id/set_identity_keys_public_key"/>
+
+  <EditText
+      android:id="@+id/set_identity_keys_private_key"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="-2dp"
+      android:hint="Enter private key"
+      app:layout_constraintTop_toBottomOf="@id/set_identity_keys_private_key_title"
+      tools:hint="00000000000000000000000000000000000000000000"/>
+
+  <Button
+      android:id="@+id/set_identity_keys_populate"
+      style="@style/Button.Borderless"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="15dp"
+      android:text="Populate Current Values"
+      android:textAppearance="@style/Signal.Text.Body"
+      app:layout_constraintTop_toBottomOf="@id/set_identity_keys_private_key"/>
+
+  <com.dd.CircularProgressButton
+      android:id="@+id/set_identity_keys_apply"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom|end"
+      android:layout_marginEnd="16dp"
+      android:layout_marginBottom="16dp"
+      android:textColor="@color/white"
+      android:text="Apply"
+      app:cornerRadius="80dp"
+      app:elevation="4dp"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:cpb_colorIndicator="@color/white"
+      app:cpb_colorProgress="?colorAccent"
+      app:cpb_cornerRadius="28dp"
+      app:cpb_selectorIdle="@drawable/progress_button_state"
+      app:cpb_textIdle="Apply" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

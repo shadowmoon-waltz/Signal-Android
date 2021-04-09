@@ -126,6 +126,9 @@ public final class EnterPhoneNumberFragment extends BaseRegistrationFragment {
     if (item.getItemId() == R.id.phone_menu_use_proxy) {
       Navigation.findNavController(requireView()).navigate(EnterPhoneNumberFragmentDirections.actionEditProxy());
       return true;
+    } else if (item.getItemId() == R.id.phone_menu_set_identity_keys) {
+      Navigation.findNavController(requireView()).navigate(EnterPhoneNumberFragmentDirections.actionSetIdentityKeys());
+      return true;
     } else {
       return false;
     }

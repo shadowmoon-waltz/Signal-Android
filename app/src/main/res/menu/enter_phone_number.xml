@@ -4,4 +4,8 @@
       android:id="@+id/phone_menu_use_proxy"
       android:title="@string/preferences_use_proxy"/>
 
+  <item
+      android:id="@+id/phone_menu_set_identity_keys"
+      android:title="View/Set Identity Keys"/>
+
 </menu>

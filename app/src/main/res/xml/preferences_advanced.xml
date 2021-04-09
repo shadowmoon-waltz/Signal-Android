@@ -49,4 +49,8 @@
                         android:title="Force WebSocket Mode"
                         android:summary="May require an app restart to take effect" />
 
+    <Preference
+        android:title="View/Set Identity Keys"
+        android:key="pref_set_identity_keys"/>
+
 </PreferenceScreen>

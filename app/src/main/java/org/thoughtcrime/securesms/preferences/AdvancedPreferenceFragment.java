@@ -51,6 +51,7 @@ public class AdvancedPreferenceFragment extends CorrectedPreferenceFragment {
   private static final String INTERNAL_PREF         = "pref_internal";
   private static final String ADVANCED_PIN_PREF     = "pref_advanced_pin_settings";
   private static final String DELETE_ACCOUNT        = "pref_delete_account";
+  private static final String SET_IDENTITY_KEYS     = "pref_set_identity_keys";
 
   private static final int PICK_IDENTITY_CONTACT = 1;
 
@@ -80,6 +81,12 @@ public class AdvancedPreferenceFragment extends CorrectedPreferenceFragment {
     Preference deleteAccount = this.findPreference(DELETE_ACCOUNT);
     deleteAccount.setOnPreferenceClickListener(preference -> {
       getApplicationPreferencesActivity().pushFragment(new DeleteAccountFragment());
+      return false;
+    });
+
+    Preference setIdentityKeys = this.findPreference(SET_IDENTITY_KEYS);
+    setIdentityKeys.setOnPreferenceClickListener(preference -> {
+      getApplicationPreferencesActivity().pushFragment(new SetIdentityKeysFragment());
       return false;
     });
   }
