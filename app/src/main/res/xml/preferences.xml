@@ -38,9 +38,11 @@
                 android:title="@string/preferences__linked_devices"
                 android:icon="@drawable/ic_linked_devices_24"/>
 
+    <!--
     <Preference android:key="preference_category_help"
                 android:title="@string/preferences__help"
                 android:icon="@drawable/ic_help_24" />
+    -->
 
     <Preference android:key="preference_category_advanced"
                 android:title="@string/preferences__advanced"

@@ -32,7 +32,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 
 import org.signal.core.util.logging.Log;
-import org.thoughtcrime.securesms.help.HelpFragment;
+//import org.thoughtcrime.securesms.help.HelpFragment;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.preferences.AdvancedPreferenceFragment;
 import org.thoughtcrime.securesms.preferences.AppProtectionPreferenceFragment;
@@ -84,7 +84,7 @@ public class ApplicationPreferencesActivity extends PassphraseRequiredActivity
   private static final String PREFERENCE_CATEGORY_CHATS          = "preference_category_chats";
   private static final String PREFERENCE_CATEGORY_STORAGE        = "preference_category_storage";
   private static final String PREFERENCE_CATEGORY_DEVICES        = "preference_category_devices";
-  private static final String PREFERENCE_CATEGORY_HELP           = "preference_category_help";
+  //private static final String PREFERENCE_CATEGORY_HELP           = "preference_category_help";
   private static final String PREFERENCE_CATEGORY_ADVANCED       = "preference_category_advanced";
   private static final String PREFERENCE_CATEGORY_DONATE         = "preference_category_donate";
 
@@ -110,8 +110,8 @@ public class ApplicationPreferencesActivity extends PassphraseRequiredActivity
       initFragment(android.R.id.content, new NotificationsPreferenceFragment());
     } else if (getIntent() != null && getIntent().getBooleanExtra(LAUNCH_TO_BACKUPS_FRAGMENT, false)) {
       initFragment(android.R.id.content, new BackupsPreferenceFragment());
-    } else if (getIntent() != null && getIntent().getBooleanExtra(LAUNCH_TO_HELP_FRAGMENT, false)) {
-      initFragment(android.R.id.content, new HelpFragment());
+    //} else if (getIntent() != null && getIntent().getBooleanExtra(LAUNCH_TO_HELP_FRAGMENT, false)) {
+    //  initFragment(android.R.id.content, new HelpFragment());
     } else if (getIntent() != null && getIntent().getBooleanExtra(LAUNCH_TO_PROXY_FRAGMENT, false)) {
       initFragment(android.R.id.content, EditProxyFragment.newInstance());
     } else if (getIntent() != null && getIntent().getBooleanExtra(LAUNCH_TO_NOTIFICATIONS_FRAGMENT, false)) {
@@ -213,8 +213,8 @@ public class ApplicationPreferencesActivity extends PassphraseRequiredActivity
         .setOnPreferenceClickListener(new CategoryClickListener(PREFERENCE_CATEGORY_STORAGE));
       this.findPreference(PREFERENCE_CATEGORY_DEVICES)
         .setOnPreferenceClickListener(new CategoryClickListener(PREFERENCE_CATEGORY_DEVICES));
-      this.findPreference(PREFERENCE_CATEGORY_HELP)
-          .setOnPreferenceClickListener(new CategoryClickListener(PREFERENCE_CATEGORY_HELP));
+      //this.findPreference(PREFERENCE_CATEGORY_HELP)
+      //    .setOnPreferenceClickListener(new CategoryClickListener(PREFERENCE_CATEGORY_HELP));
       this.findPreference(PREFERENCE_CATEGORY_ADVANCED)
           .setOnPreferenceClickListener(new CategoryClickListener(PREFERENCE_CATEGORY_ADVANCED));
       this.findPreference(PREFERENCE_CATEGORY_DONATE)
@@ -330,9 +330,9 @@ public class ApplicationPreferencesActivity extends PassphraseRequiredActivity
         case PREFERENCE_CATEGORY_ADVANCED:
           fragment = new AdvancedPreferenceFragment();
           break;
-        case PREFERENCE_CATEGORY_HELP:
-          fragment = new HelpFragment();
-          break;
+        //case PREFERENCE_CATEGORY_HELP:
+        //  fragment = new HelpFragment();
+        //  break;
         case PREFERENCE_CATEGORY_DONATE:
           CommunicationActions.openBrowserLink(requireContext(), getString(R.string.donate_url));
           break;
