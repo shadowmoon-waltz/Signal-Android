@@ -218,6 +218,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_SHOW_REACTION_TIME = "pref_show_reaction_time";
 
+  private static final String PREF_FORCE_WEBSOCKET_MODE = "pref_force_websocket_mode";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -235,7 +237,8 @@ public class TextSecurePreferences {
                                                               SYSTEM_EMOJI_PREF,
                                                               ENTER_SENDS_PREF,
                                                               PREF_HIDE_INSIGHTS,
-                                                              PREF_SHOW_REACTION_TIME};
+                                                              PREF_SHOW_REACTION_TIME,
+                                                              PREF_FORCE_WEBSOCKET_MODE};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -529,7 +532,7 @@ public class TextSecurePreferences {
   }
 
   public static boolean isFcmDisabled(Context context) {
-    return getBooleanPreference(context, GCM_DISABLED_PREF, false);
+    return getBooleanPreference(context, GCM_DISABLED_PREF, false) || isForceWebsocketMode(context);
   }
 
   public static void setFcmDisabled(Context context, boolean disabled) {
@@ -1268,6 +1271,14 @@ public class TextSecurePreferences {
 
   public static void setShowReactionTimeEnabled(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_SHOW_REACTION_TIME, enabled);
+  }
+
+  public static boolean isForceWebsocketMode(Context context) {
+    return getBooleanPreference(context, PREF_FORCE_WEBSOCKET_MODE, false);
+  }
+
+  public static void setForceWebsocketMode(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_FORCE_WEBSOCKET_MODE, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {
