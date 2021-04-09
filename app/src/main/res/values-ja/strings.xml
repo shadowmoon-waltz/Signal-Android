@@ -56,6 +56,7 @@
   <string name="AttachmentKeyboard_location">場所</string>
   <string name="AttachmentKeyboard_Signal_needs_permission_to_show_your_photos_and_videos">写真や動画を表示するには、Signalに許可が必要です。</string>
   <string name="AttachmentKeyboard_give_access">アクセスを許可する</string>
+  <string name="AttachmentKeyboard_payment">支払い</string>
   <!--AttachmentManager-->
   <string name="AttachmentManager_cant_open_media_selection">メディアを選択するアプリが見つかりません。</string>
   <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">写真や動画、音声データを添付するには、Signalにストレージへのアクセス許可が必要ですが、無効になっています。アプリ設定メニューの「アクセス許可」で「ストレージ」を有効にしてください。</string>
@@ -781,7 +782,7 @@
   <string name="Megaphones_introducing_reactions">リアクションのご紹介</string>
   <string name="Megaphones_tap_and_hold_any_message_to_quicky_share_how_you_feel">メッセージを長押しして、手軽にリアクションできます。</string>
   <string name="Megaphones_remind_me_later">あとで通知</string>
-  <string name="Megaphones_verify_your_signal_pin">Signal PINを確認</string>
+  <string name="Megaphones_verify_your_signal_pin">Signal PINの確認</string>
   <string name="Megaphones_well_occasionally_ask_you_to_verify_your_pin">PINを忘れないよう、確認をお願いします。</string>
   <string name="Megaphones_verify_pin">PINを確認する</string>
   <string name="Megaphones_get_started">始めましょう</string>
@@ -792,6 +793,7 @@
   <string name="NotificationBarManager_signal_call_in_progress">Signal通話中</string>
   <string name="NotificationBarManager__establishing_signal_call">Signal通話を接続しています</string>
   <string name="NotificationBarManager__incoming_signal_call">Signal通話の着信</string>
+  <string name="NotificationBarManager__stopping_signal_call_service">Signal着信サービスを停止しています</string>
   <string name="NotificationBarManager__deny_call">通話を拒否</string>
   <string name="NotificationBarManager__answer_call">通話を開始</string>
   <string name="NotificationBarManager__end_call">通話を終了</string>
@@ -1525,6 +1527,7 @@
   <string name="ConversationUpdateItem_return_to_call">通話に戻る</string>
   <string name="ConversationUpdateItem_call_is_full">満席です</string>
   <string name="ConversationUpdateItem_invite_friends">友達を招待する</string>
+  <string name="ConversationUpdateItem_enable_call_notifications">着信通知を有効にする</string>
   <!--audio_view-->
   <string name="audio_view__play_pause_accessibility_description">再生 … 停止</string>
   <string name="audio_view__download_accessibility_description">ダウンロード</string>
@@ -1550,7 +1553,12 @@
   <string name="safety_number_change_dialog__previous_verified">以前に検証済み</string>
   <!--EnableCallNotificationSettingsDialog__call_notifications_checklist-->
   <string name="EnableCallNotificationSettingsDialog__call_notifications_enabled">着信通知を有効にしました。</string>
+  <string name="EnableCallNotificationSettingsDialog__enable_call_notifications">着信通知を有効にする</string>
+  <string name="EnableCallNotificationSettingsDialog__enable_background_activity">バックグラウンド動作を有効にする</string>
+  <string name="EnableCallNotificationSettingsDialog__everything_looks_good_now">すべて順調そうです！</string>
+  <string name="EnableCallNotificationSettingsDialog__to_receive_call_notifications_tap_here_and_turn_on_show_notifications">着信通知を受けるには、ここをタップして「通知を表示する」を有効にします。</string>
   <string name="EnableCallNotificationSettingsDialog__settings">設定</string>
+  <string name="EnableCallNotificationSettingsDialog__to_receive_call_notifications_tap_settings_and_turn_on_show_notifications">着信通知を受けるには、設定をタップして「通知を表示する」を有効にします。</string>
   <!--country_selection_fragment-->
   <string name="country_selection_fragment__loading_countries">国名を読み込んでいます…</string>
   <string name="country_selection_fragment__search">検索</string>
@@ -1716,13 +1724,6 @@
   <string name="HelpFragment__debug_log">デバッグログ:</string>
   <string name="HelpFragment__could_not_upload_logs">ログをアップロードできませんでした</string>
   <string name="HelpFragment__please_be_as_descriptive_as_possible">問題を理解するため、できるだけ詳細に記述してください。</string>
-  <string-array name="HelpFragment__categories">
-    <item>機能の不具合</item>
-    <item>機能のリクエスト</item>
-    <item>質問</item>
-    <item>フィードバック</item>
-    <item>その他</item>
-  </string-array>
   <!--ReactWithAnyEmojiBottomSheetDialogFragment-->
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__this_message">このメッセージ</string>
   <string name="ReactWithAnyEmojiBottomSheetDialogFragment__recently_used">最近使ったもの</string>
@@ -1828,6 +1829,7 @@
   <string name="preferences__request_a_delivery_report_for_each_sms_message_you_send">送信するすべてのSMSで配信レポートを要求します</string>
   <string name="preferences__data_and_storage">データとストレージ</string>
   <string name="preferences__storage">ストレージ</string>
+  <string name="preferences__payments">支払い</string>
   <string name="preferences__conversation_length_limit">チャットの最大メッセージ件数</string>
   <string name="preferences__keep_messages">メッセージの保存期間</string>
   <string name="preferences__clear_message_history">メッセージ履歴を削除</string>
@@ -1934,6 +1936,36 @@
   <string name="preferences_enter_proxy_address">プロキシアドレスを入力してください</string>
   <string name="configurable_single_select__customize_option">オプションのカスタマイズ</string>
   <!--Internal only preferences-->
+  <!--Payments-->
+  <string name="PaymentsAllActivityFragment__all">全員</string>
+  <string name="PaymentsAllActivityFragment__sent">送信</string>
+  <string name="PaymentsAllActivityFragment__received">受信</string>
+  <string name="PaymentsHomeFragment__see_all">すべて表示</string>
+  <string name="PaymentsHomeFragment__send">送信する</string>
+  <string name="PaymentsHomeFragment__help">ヘルプ</string>
+  <string name="PaymentsHomeFragment__continue">続ける</string>
+  <string name="PaymentsHomeFragment__details">詳細</string>
+  <!--PaymentsAddMoneyFragment-->
+  <string name="PaymentsAddMoneyFragment__copy">コピー</string>
+  <string name="PaymentsAddMoneyFragment__copied_to_clipboard">クリップボードにコピーしました</string>
+  <!--PaymentsDetailsFragment-->
+  <string name="PaymentsDetailsFragment__details">詳細</string>
+  <string name="PaymentsDetailsFragment__status">状態</string>
+  <string name="PaymentsDetailsFragment__to">宛先</string>
+  <string name="PaymentsDetailsFragment__from">差出人</string>
+  <!--PaymentsTransferFragment-->
+  <string name="PaymentsTransferFragment__scan_qr_code">QRコードをスキャンする</string>
+  <string name="PaymentsTransferFragment__next">次へ</string>
+  <string name="PaymentsTransferFragment__settings">設定</string>
+  <!--PaymentsTransferQrScanFragment-->
+  <!--CreatePaymentFragment-->
+  <string name="CreatePaymentFragment__request">申請</string>
+  <string name="CreatePaymentFragment__pay">払う</string>
+  <!--EditNoteFragment-->
+  <!--ConfirmPaymentFragment-->
+  <string name="ConfirmPayment__to">宛先</string>
+  <!--CurrencyAmountFormatter_s_at_s-->
+  <!--SetCurrencyFragment-->
   <!--****************************************-->
   <!--menus-->
   <!--****************************************-->
@@ -2319,14 +2351,14 @@
   <string name="DeviceTransfer__transfer_failed">移行に失敗しました</string>
   <string name="DeviceTransfer__unable_to_transfer">移行できません</string>
   <!--OldDeviceTransferInstructionsFragment-->
-  <string name="OldDeviceTransferInstructions__transfer_account">アカウントの移転</string>
+  <string name="OldDeviceTransferInstructions__transfer_account">アカウントの移行</string>
   <string name="OldDeviceTransferInstructions__you_can_transfer_your_signal_account_when_setting_up_signal_on_a_new_android_device">新しいAndroid端末でSignalを設定する際、以下の前であれば、あなたのSignalアカウントを移行できます:</string>
   <string name="OldDeviceTransferInstructions__first_bullet">1.</string>
-  <string name="OldDeviceTransferInstructions__download_signal_on_your_new_android_device">新しいAndroid端末で、Signalをダウンロードします</string>
+  <string name="OldDeviceTransferInstructions__download_signal_on_your_new_android_device">新しいAndroid端末で、Signalをダウンロードします。</string>
   <string name="OldDeviceTransferInstructions__second_bullet">2.</string>
-  <string name="OldDeviceTransferInstructions__tap_on_transfer_or_restore_account">「アカウントの移行または復元」をタップ</string>
+  <string name="OldDeviceTransferInstructions__tap_on_transfer_or_restore_account">「アカウントの移行または復元」をタップします。</string>
   <string name="OldDeviceTransferInstructions__third_bullet">3.</string>
-  <string name="OldDeviceTransferInstructions__select_transfer_from_android_device_when_prompted_and_then_continue">表示に従い「Android端末から移行」、「続ける」を選択します。端末同士を近づけてください。</string>
+  <string name="OldDeviceTransferInstructions__select_transfer_from_android_device_when_prompted_and_then_continue">表示に従い「Android端末から移行」を選択し「続ける」をタップします。端末同士を近づけておきます。</string>
   <string name="OldDeviceTransferInstructions__continue">続ける</string>
   <!--OldDeviceTransferComplete-->
   <string name="OldDeviceTransferComplete__transfer_complete">移行が完了しました</string>
@@ -2351,6 +2383,7 @@
   <string name="OldDeviceTransferLockedDialog__your_signal_account_has_been_transferred_to_your_new_device">あなたのSignalアカウントは新しい端末に移行しましたが、続けるには新しい端末で登録を完了する必要があります。この端末のSignalは、無効になります。</string>
   <string name="OldDeviceTransferLockedDialog__done">完了</string>
   <string name="OldDeviceTransferLockedDialog__cancel_and_activate_this_device">キャンセルしてこの端末をアクティベート</string>
+  <!--AdvancedPreferenceFragment-->
   <!--RecipientBottomSheet-->
   <string name="RecipientBottomSheet_block">ブロック</string>
   <string name="RecipientBottomSheet_unblock">ブロック解除</string>
@@ -2495,5 +2528,28 @@
   <string name="WallpaperCropActivity__set_wallpaper_for_s">%s の壁紙を設定します。</string>
   <string name="WallpaperCropActivity__error_setting_wallpaper">壁紙の設定でエラーが発生しました。</string>
   <string name="WallpaperCropActivity__blur_photo">写真をぼかす</string>
+  <!--InfoCard-->
+  <string name="payment_info_card_hide">閉じる</string>
+  <string name="payment_info_card_update_pin">PINをアップデート</string>
+  <!--DeactivateWalletFragment-->
+  <!--PaymentsRecoveryStartFragment-->
+  <string name="PaymentsRecoveryStartFragment__start">開始</string>
+  <!--PaymentsRecoveryPasteFragment-->
+  <string name="PaymentsRecoveryPasteFragment__next">次へ</string>
+  <!--PaymentsRecoveryPhraseFragment-->
+  <string name="PaymentsRecoveryPhraseFragment__next">次へ</string>
+  <string name="PaymentsRecoveryPhraseFragment__edit">編集</string>
+  <string name="PaymentsRecoveryPhraseFragment__previous">前へ</string>
+  <string name="PaymentsRecoveryPhraseFragment__copy">コピー</string>
+  <!--PaymentsRecoveryPhraseConfirmFragment-->
+  <string name="PaymentRecoveryPhraseConfirmFragment__done">完了</string>
+  <!--PaymentsRecoveryEntryFragment-->
+  <string name="PaymentsRecoveryEntryFragment__next">次へ</string>
+  <!--ClearClipboardAlarmReceiver-->
+  <!--PaymentNotificationsView-->
+  <string name="PaymentNotificationsView__view">表示する</string>
+  <!--UnreadPayments-->
+  <!--CanNotSendPaymentDialog-->
+  <string name="CanNotSendPaymentDialog__send_a_message">メッセージ送信</string>
   <!--EOF-->
 </resources>
