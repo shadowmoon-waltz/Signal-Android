@@ -20,6 +20,8 @@ import org.thoughtcrime.securesms.attachments.DatabaseAttachment;
 import org.thoughtcrime.securesms.attachments.PointerAttachment;
 import org.thoughtcrime.securesms.attachments.TombstoneAttachment;
 import org.thoughtcrime.securesms.attachments.UriAttachment;
+import org.thoughtcrime.securesms.components.emoji.Emoji;
+import org.thoughtcrime.securesms.components.emoji.EmojiUtil;
 import org.thoughtcrime.securesms.contactshare.Contact;
 import org.thoughtcrime.securesms.contactshare.ContactModelMapper;
 import org.thoughtcrime.securesms.crypto.ProfileKeyUtil;
@@ -137,7 +139,6 @@ import org.whispersystems.signalservice.api.payments.Money;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -335,8 +336,8 @@ public final class MessageContentProcessor {
                                             recipient.getId(),
                                             message.getTimestamp(),
                                             paymentNotification.getNote(),
-                                            Money.mobileCoin(BigDecimal.ZERO),
-                                            Money.mobileCoin(BigDecimal.ZERO),
+                                            Money.MobileCoin.ZERO,
+                                            Money.MobileCoin.ZERO,
                                             paymentNotification.getReceipt());
     } catch (PaymentDatabase.PublicKeyConflictException e) {
       Log.w(TAG, "Ignoring payment with public key already in database");
@@ -690,6 +691,11 @@ public final class MessageContentProcessor {
 
   private void handleReaction(@NonNull SignalServiceContent content, @NonNull SignalServiceDataMessage message) {
     SignalServiceDataMessage.Reaction reaction = message.getReaction().get();
+
+    if (!EmojiUtil.isEmoji(context, reaction.getEmoji())) {
+      Log.w(TAG, "Reaction text is not a valid emoji! Ignoring the message.");
+      return;
+    }
 
     Recipient     targetAuthor  = Recipient.externalPush(context, reaction.getTargetAuthor());
     MessageRecord targetMessage = DatabaseFactory.getMmsSmsDatabase(context).getMessageFor(reaction.getTargetSentTimestamp(), targetAuthor.getId());

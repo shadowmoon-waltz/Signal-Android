@@ -30,6 +30,7 @@ import org.thoughtcrime.securesms.storage.StorageSyncHelper.WriteOperationResult
 import org.thoughtcrime.securesms.storage.StorageSyncModels;
 import org.thoughtcrime.securesms.storage.StorageSyncValidations;
 import org.thoughtcrime.securesms.transport.RetryLaterException;
+import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.GroupUtil;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
@@ -70,7 +71,7 @@ public class StorageSyncJob extends BaseJob {
 
   private static final String TAG = Log.tag(StorageSyncJob.class);
 
-  public StorageSyncJob() {
+  private StorageSyncJob() {
     this(new Job.Parameters.Builder().addConstraint(NetworkConstraint.KEY)
                                      .setQueue(QUEUE_KEY)
                                      .setMaxInstancesForFactory(2)
@@ -80,6 +81,22 @@ public class StorageSyncJob extends BaseJob {
 
   private StorageSyncJob(@NonNull Parameters parameters) {
     super(parameters);
+  }
+
+  public static void enqueue() {
+    if (FeatureFlags.internalUser()) {
+      ApplicationDependencies.getJobManager().add(new StorageSyncJobV2());
+    } else {
+      ApplicationDependencies.getJobManager().add(new StorageSyncJob());
+    }
+  }
+
+  public static @NonNull Job create() {
+    if (FeatureFlags.storageSyncV2()) {
+      return new StorageSyncJobV2();
+    } else {
+      return new StorageSyncJob();
+    }
   }
 
   @Override
@@ -175,7 +192,7 @@ public class StorageSyncJob extends BaseJob {
           needsForcePush = true;
         }
 
-        StorageSyncValidations.validate(writeOperationResult);
+        StorageSyncValidations.validate(writeOperationResult, remoteManifest, needsForcePush);
 
         Log.i(TAG, "[Remote Newer] MergeResult :: " + mergeResult);
 
@@ -196,6 +213,7 @@ public class StorageSyncJob extends BaseJob {
           }
 
           remoteManifestVersion = writeOperationResult.getManifest().getVersion();
+          remoteManifest        = Optional.of(writeOperationResult.getManifest());
 
           needsMultiDeviceSync = true;
         } else {
@@ -238,7 +256,7 @@ public class StorageSyncJob extends BaseJob {
       Log.i(TAG, String.format(Locale.ENGLISH, "[Local Changes] Local changes present. %d updates, %d inserts, %d deletes, account update: %b, account insert: %b.", pendingUpdates.size(), pendingInsertions.size(), pendingDeletions.size(), pendingAccountUpdate.isPresent(), pendingAccountInsert.isPresent()));
 
       WriteOperationResult localWrite = localWriteResult.get().getWriteResult();
-      StorageSyncValidations.validate(localWrite);
+      StorageSyncValidations.validate(localWrite, remoteManifest, needsForcePush);
 
       Log.i(TAG, "[Local Changes] WriteOperationResult :: " + localWrite);
 
