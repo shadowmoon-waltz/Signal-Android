@@ -116,6 +116,7 @@ public class ContactRecordProcessor extends DefaultStorageRecordProcessor<Signal
                                     .setIdentityKey(identityKey)
                                     .setBlocked(blocked)
                                     .setProfileSharingEnabled(profileSharing)
+                                    .setArchived(archived)
                                     .setForcedUnread(forcedUnread)
                                     .setMuteUntil(muteUntil)
                                     .build();
@@ -140,7 +141,7 @@ public class ContactRecordProcessor extends DefaultStorageRecordProcessor<Signal
     {
       return 0;
     } else {
-      return lhs.getAddress().getIdentifier().compareTo(rhs.getAddress().getIdentifier());
+      return 1;
     }
   }
 
