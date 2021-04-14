@@ -1,4 +1,19 @@
-# Signal Android 
+# SignalSW
+
+This is a fork of Signal, mostly small changes for my personal use.
+
+License is unchanged (GPLv3 license). Changes from the non-fork in this repository are not made under their CLA (as I have not submitted pull requests), and you may submit a pull request to this fork without signing a CLA.
+
+Differences from stock Signal:
+* Build signing code is slightly tweaked to my preferred style (note that the build target I use is assembleSwProdRelease).
+* As I may not provide support, the sending debug log feature is disabled.
+* Option to hide insights option when sms enabled (just tells you how much of your messages sent were encrypted).
+* Option to show read reaction timestamp.
+* Option to view/set identity keys (very specific use cases, may break Signal installation, read security warnings when clicking the button in the view/set screen that populates your public and private identity keys).
+
+The original README follows, and may not reflect changes in the fork.
+
+## Original README (Signal Android)
 
 Signal is a messaging app for simple private communication with friends.
 
