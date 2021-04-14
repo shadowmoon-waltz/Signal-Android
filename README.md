@@ -5,11 +5,13 @@ This is a fork of Signal, mostly small changes for my personal use.
 License is unchanged (GPLv3 license). Changes from the non-fork in this repository are not made under their CLA (as I have not submitted pull requests), and you may submit a pull request to this fork without signing a CLA.
 
 Differences from stock Signal:
+* Package name is different, so the fork can be installed on the same device as stock Signal. Note that a phone number can be registered to only one Signal (non-fork or fork) instance at a time (the older one will be deregistered, and if a backup is not restored during install time on the new instance, the identity key will change, chat history will be lost, etc). The fork should be compatiable with stock Signal backups and vice versa (but not really tested).
 * Build signing code is slightly tweaked to my preferred style (note that the build target I use is assembleSwProdRelease).
 * As I may not provide support, the sending debug log feature is disabled.
+* Update check is not currently set up for the fork and is disabled.
 * Option to hide insights option when sms enabled (just tells you how much of your messages sent were encrypted).
 * Option to show read reaction timestamp.
-* Option to view/set identity keys (very specific use cases, may break Signal installation, read security warnings when clicking the button in the view/set screen that populates your public and private identity keys).
+* Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys).
 
 The original README follows, and may not reflect changes in the fork.
 
