@@ -8,7 +8,7 @@ include ':video'
 include ':device-transfer'
 include ':device-transfer-app'
 
-project(':app').name = 'Signal-Android'
+project(':app').name = 'SignalSW'
 project(':paging').projectDir = file('paging/lib')
 project(':paging-app').projectDir = file('paging/app')
 
