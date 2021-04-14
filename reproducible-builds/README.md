@@ -56,7 +56,7 @@ We will use this directory to share APKs between the host OS and the Docker cont
 
 ## Getting the installed version of Signal APK
 
-To compare the APKs we of course need a version of Signal to compare against. Just download one from the GitHub releases page and put it into `~/reproducible-signal/apk-from-github-releases/` with the name `Signal-<version>.apk`, to match the non-fork version of this guide.
+To compare the APKs we of course need a version of Signal to compare against. Just download one from the GitHub releases page and put it into `~/reproducible-signal/apk-from-github-releases/` with the name `SignalSW-<version>.apk`, to match the non-fork version of this guide.
 
 We will use this APK in the final part when we compare it with the self-built APK using the source from GitHub.
 
@@ -167,7 +167,7 @@ And run the diff script to compare (updating the filenames for your specific ver
 ```bash
 python3 reproducible-builds/apkdiff/apkdiff.py \
         app/build/outputs/apk/swProd/release/*sw-prod-$abi-release-unsigned*.apk \
-        ../apk-from-github-releases/Signal-5.0.0.apk
+        ../apk-from-github-releases/SignalSW-5.0.0.apk
 ```
 
 Output:
