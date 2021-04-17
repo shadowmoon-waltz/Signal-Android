@@ -13,10 +13,8 @@ import org.thoughtcrime.securesms.database.RecipientDatabase;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.GroupsV1MigrationUtil;
 import org.thoughtcrime.securesms.recipients.RecipientId;
-import org.thoughtcrime.securesms.util.ParcelUtil;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.storage.SignalGroupV2Record;
-import org.whispersystems.signalservice.internal.storage.protos.GroupV2Record;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -46,13 +44,20 @@ public final class GroupV2RecordProcessor extends DefaultStorageRecordProcessor<
   }
 
   @Override
-  @NonNull Optional<SignalGroupV2Record> getMatching(@NonNull SignalGroupV2Record record) {
+  @NonNull Optional<SignalGroupV2Record> getMatching(@NonNull SignalGroupV2Record record, @NonNull StorageKeyGenerator keyGenerator) {
     GroupId.V2 groupId = GroupId.v2(record.getMasterKeyOrThrow());
 
     Optional<RecipientId> recipientId = recipientDatabase.getByGroupId(groupId);
 
     return recipientId.transform(recipientDatabase::getRecipientSettingsForSync)
-                      .transform(StorageSyncModels::localToRemoteRecord)
+                      .transform(settings -> {
+                        if (settings.getSyncExtras().getGroupMasterKey() != null) {
+                          return StorageSyncModels.localToRemoteRecord(settings);
+                        } else {
+                          Log.w(TAG, "No local master key. Assuming it matches remote since the groupIds match.");
+                          return StorageSyncModels.localToRemoteRecord(settings, record.getMasterKeyOrThrow());
+                        }
+                      })
                       .transform(r -> r.getGroupV2().get());
   }
 
@@ -108,7 +113,6 @@ public final class GroupV2RecordProcessor extends DefaultStorageRecordProcessor<
 
   @Override
   void updateLocal(@NonNull StorageRecordUpdate<SignalGroupV2Record> update) {
-    Log.i(TAG, "Local GV2 update: " + update.toString());
     recipientDatabase.applyStorageSyncGroupV2Update(update);
   }
 

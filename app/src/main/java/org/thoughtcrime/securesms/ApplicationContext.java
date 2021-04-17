@@ -142,6 +142,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                               }
                             })
                             .addBlocking("blob-provider", this::initializeBlobProvider)
+                            .addBlocking("feature-flags", FeatureFlags::init)
                             .addNonBlocking(this::initializeRevealableMessageManager)
                             .addNonBlocking(this::initializeGcmCheck)
                             .addNonBlocking(this::initializeSignedPreKeyCheck)
@@ -150,7 +151,6 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addNonBlocking(this::initializePendingMessages)
                             .addNonBlocking(this::initializeCleanup)
                             .addNonBlocking(this::initializeGlideCodecs)
-                            .addNonBlocking(FeatureFlags::init)
                             .addNonBlocking(RefreshPreKeysJob::scheduleIfNecessary)
                             .addNonBlocking(StorageSyncHelper::scheduleRoutineSync)
                             .addNonBlocking(() -> ApplicationDependencies.getJobManager().beginJobLoop())
@@ -229,7 +229,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
   private void initializeLogging() {
     persistentLogger = new PersistentLogger(this, LogSecretProvider.getOrCreateAttachmentSecret(this), BuildConfig.VERSION_NAME);
-    org.signal.core.util.logging.Log.initialize(new AndroidLogger(), persistentLogger);
+    org.signal.core.util.logging.Log.initialize(FeatureFlags::internalUser, new AndroidLogger(), persistentLogger);
 
     SignalProtocolLoggerProvider.setProvider(new CustomSignalProtocolLogger());
   }

@@ -1400,16 +1400,17 @@
   <string name="MessageNotifier_this_message_was_deleted">このメッセージは削除されました。</string>
   <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">連絡先のSignal参加時の通知を受け取らないようにしますか？この設定はあとでSignal &gt; 設定 &gt; 通知から元に戻せます。</string>
   <!--Notification Channels-->
-  <string name="NotificationChannel_messages">既定</string>
+  <string name="NotificationChannel_channel_messages">メッセージ</string>
   <string name="NotificationChannel_calls">通話</string>
   <string name="NotificationChannel_failures">障害</string>
   <string name="NotificationChannel_backups">バックアップ</string>
   <string name="NotificationChannel_locked_status">ロック状態</string>
   <string name="NotificationChannel_app_updates">アプリ更新</string>
   <string name="NotificationChannel_other">その他</string>
-  <string name="NotificationChannel_group_messages">メッセージ</string>
+  <string name="NotificationChannel_group_chats">チャット</string>
   <string name="NotificationChannel_missing_display_name">不明</string>
   <string name="NotificationChannel_voice_notes">音声メモ</string>
+  <string name="NotificationChannel_contact_joined_signal">連絡先のSignal参加時</string>
   <!--ProfileEditNameFragment-->
   <!--QuickResponseService-->
   <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Signalのロック中はクイックレスポンスを使えません！</string>
@@ -1962,6 +1963,7 @@
   <string name="PaymentsHomeFragment__processing_payment">支払いを処理しています</string>
   <string name="PaymentsHomeFragment__unknown_amount">---</string>
   <string name="PaymentsHomeFragment__currency_conversion_not_available">通貨換算は利用できません</string>
+  <string name="PaymentsHomeFragment__deactivate_payments_question">支払い機能を停止しますか？</string>
   <string name="PaymentsHomeFragment__continue">続ける</string>
   <string name="PaymentsHomeFragment__details">詳細</string>
   <!--PaymentsAddMoneyFragment-->
@@ -2572,6 +2574,7 @@
   <string name="WallpaperCropActivity__error_setting_wallpaper">壁紙の設定でエラーが発生しました。</string>
   <string name="WallpaperCropActivity__blur_photo">写真をぼかす</string>
   <!--InfoCard-->
+  <string name="payment_info_card_about_mobilecoin">MobileCoinについて</string>
   <string name="payment_info_card_hide">閉じる</string>
   <string name="payment_info_card_update_pin">PINをアップデート</string>
   <!--DeactivateWalletFragment-->
