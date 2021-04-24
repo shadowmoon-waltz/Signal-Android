@@ -300,7 +300,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     RotateSenderCertificateListener.schedule(this);
     MessageProcessReceiver.startOrUpdateAlarm(this);
 
-    if (BuildConfig.PLAY_STORE_DISABLED) {
+    if (BuildConfig.PLAY_STORE_DISABLED && BuildConfig.NOPLAY_UPDATE_URL != null) {
       UpdateApkRefreshListener.schedule(this);
     }
   }
