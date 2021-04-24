@@ -66,7 +66,7 @@ public class UpdateApkJob extends BaseJob {
   public void onRun() throws IOException, PackageManager.NameNotFoundException {
     if (!BuildConfig.PLAY_STORE_DISABLED) return;
 
-    if (!BuildConfig.NOPLAY_UPDATE_URL.startsWith("https://")) return;
+    if (BuildConfig.NOPLAY_UPDATE_URL == null || !BuildConfig.NOPLAY_UPDATE_URL.startsWith("https://")) return;
 
     Log.i(TAG, "Checking for APK update...");
 
