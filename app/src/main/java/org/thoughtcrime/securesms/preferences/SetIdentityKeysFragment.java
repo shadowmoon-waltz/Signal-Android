@@ -53,29 +53,28 @@ public class SetIdentityKeysFragment extends Fragment {
     requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
   }
 
-  @Override
-  public void onResume() {
-    super.onResume();
-    // this is still around as it's still being called the old way if started during initial setup
-    try {
-      ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(R.string.ForkSettingsFragment__view_set_identity_keys);
-    } catch (ClassCastException | NullPointerException e) {
-    
-    }
-  }
-
   private void onApplyClicked() {
     if (publicKeyText.getText().length() == 44 && privateKeyText.getText().length() == 44) {
       try {
         final byte[] publicKey = Base64.decode(publicKeyText.getText().toString());
         final byte[] privateKey = Base64.decode(privateKeyText.getText().toString());
-        IdentityKeyUtil.setIdentityKeys(requireContext(), publicKey, privateKey);
         new AlertDialog.Builder(requireContext())
-                       .setMessage("Identity keys set successfully.")
-                       .setPositiveButton(android.R.string.ok, (d, i) -> {
-                         d.dismiss();
-                       })
-                       .show();
+                 .setTitle("WARNING!")
+                 .setMessage("Setting these keys to incorrect values may cause app issues. Continue?")
+                 .setPositiveButton("Proceed", (d, i) -> {
+                   d.dismiss();
+                   IdentityKeyUtil.setIdentityKeys(requireContext(), publicKey, privateKey);
+                   new AlertDialog.Builder(requireContext())
+                                  .setMessage("Identity keys set successfully.")
+                                  .setPositiveButton(android.R.string.ok, (d2, i2) -> {
+                                    d2.dismiss();
+                                  })
+                                  .show();
+                 })
+                 .setNegativeButton("Cancel", (d, i) -> {
+                   d.dismiss();
+                 })
+                 .show();
         return;
       } catch (Exception e) {
 
@@ -95,7 +94,7 @@ public class SetIdentityKeysFragment extends Fragment {
              .setTitle("WARNING!")
              .setMessage("This will show public and private identity keys. Anyone that has them can potentially impersonate you on Signal. " +
                          "Only view somewhere relatively private, and be careful about it showing up in screenshots, recent apps, the clipboard, " +
-                         "and wherever else you choose to store it. Setting it to incorrect values may cause app issues.")
+                         "and wherever else you choose to store it.")
              .setPositiveButton("Proceed", (d, i) -> {
                try {
                  IdentityKeyPair ikp = IdentityKeyUtil.getIdentityKeyPair(requireContext());
