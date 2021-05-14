@@ -80,7 +80,7 @@ import org.thoughtcrime.securesms.components.MaskView;
 import org.thoughtcrime.securesms.components.TooltipPopup;
 import org.thoughtcrime.securesms.components.TypingStatusRepository;
 import org.thoughtcrime.securesms.components.recyclerview.SmoothScrollingLinearLayoutManager;
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
+//import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNotePlaybackState;
 import org.thoughtcrime.securesms.contactshare.Contact;
@@ -1568,10 +1568,10 @@ public class ConversationFragment extends LoggingFragment {
           .setPositiveButton(android.R.string.ok, (d, w) -> {
             d.dismiss();
           })
-          .setNeutralButton(R.string.ConversationFragment_contact_us, (d, w) -> {
-            startActivity(AppSettingsActivity.help(requireContext(), 0));
-            d.dismiss();
-          })
+          //.setNeutralButton(R.string.ConversationFragment_contact_us, (d, w) -> {
+          //  startActivity(AppSettingsActivity.help(requireContext(), 0));
+          //  d.dismiss();
+          //})
           .show();
     }
 

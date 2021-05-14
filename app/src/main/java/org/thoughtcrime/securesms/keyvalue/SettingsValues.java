@@ -62,6 +62,10 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String CALL_VIBRATE_ENABLED                    = "settings.call.vibrate.enabled";
   public static final String NOTIFY_WHEN_CONTACT_JOINS_SIGNAL        = "settings.notify.when.contact.joins.signal";
 
+  public static final String HIDE_INSIGHTS                           = "settings.fork.hide.insights";
+  public static final String SHOW_REACTION_TIMESTAMPS                = "settings.fork.show.reaction.timestamps";
+  public static final String FORCE_WEBSOCKET_MODE                    = "settings.fork.force.websocket.mode";
+
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
   private static final String DEFAULT_SMS = "settings.default_sms";
@@ -104,7 +108,10 @@ public final class SettingsValues extends SignalStoreValues {
                          CALL_NOTIFICATIONS_ENABLED,
                          CALL_RINGTONE,
                          CALL_VIBRATE_ENABLED,
-                         NOTIFY_WHEN_CONTACT_JOINS_SIGNAL);
+                         NOTIFY_WHEN_CONTACT_JOINS_SIGNAL,
+                         HIDE_INSIGHTS,
+                         SHOW_REACTION_TIMESTAMPS,
+                         FORCE_WEBSOCKET_MODE);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -378,5 +385,29 @@ public final class SettingsValues extends SignalStoreValues {
     } else {
       return Uri.parse(uri);
     }
+  }
+
+  public boolean isHideInsights() {
+    return getBoolean(HIDE_INSIGHTS, TextSecurePreferences.isHideInsights(ApplicationDependencies.getApplication()));
+  }
+
+  public void setHideInsights(boolean hideInsights) {
+    putBoolean(HIDE_INSIGHTS, hideInsights);
+  }
+
+  public boolean isShowReactionTimestamps() {
+    return getBoolean(SHOW_REACTION_TIMESTAMPS, TextSecurePreferences.isShowReactionTimeEnabled(ApplicationDependencies.getApplication()));
+  }
+
+  public void setShowReactionTimestamps(boolean showReactionTimestamps) {
+    putBoolean(SHOW_REACTION_TIMESTAMPS, showReactionTimestamps);
+  }
+
+  public boolean isForceWebsocketMode() {
+    return getBoolean(FORCE_WEBSOCKET_MODE, TextSecurePreferences.isForceWebsocketMode(ApplicationDependencies.getApplication()));
+  }
+
+  public void setForceWebsocketMode(boolean forceWebsocketMode) {
+    putBoolean(FORCE_WEBSOCKET_MODE, forceWebsocketMode);
   }
 }

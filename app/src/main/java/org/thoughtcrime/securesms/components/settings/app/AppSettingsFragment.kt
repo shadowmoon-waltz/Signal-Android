@@ -113,6 +113,15 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
       dividerPref()
 
       clickPref(
+        title = DSLSettingsText.from(R.string.preferences__fork_specific),
+        onClick = {
+          Navigation.findNavController(requireView()).navigate(R.id.action_appSettingsFragment_to_forkSettingsFragment)
+        }
+      )
+
+      dividerPref()
+
+      clickPref(
         title = DSLSettingsText.from(R.string.preferences__help),
         iconId = R.drawable.ic_help_24,
         onClick = {

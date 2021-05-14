@@ -56,7 +56,12 @@ public class SetIdentityKeysFragment extends Fragment {
   @Override
   public void onResume() {
     super.onResume();
-    ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle("View/Set Identity Keys");
+    // this is still around as it's still being called the old way if started during initial setup
+    try {
+      ((AppCompatActivity) requireActivity()).getSupportActionBar().setTitle(R.string.ForkSettingsFragment__view_set_identity_keys);
+    } catch (ClassCastException | NullPointerException e) {
+    
+    }
   }
 
   private void onApplyClicked() {

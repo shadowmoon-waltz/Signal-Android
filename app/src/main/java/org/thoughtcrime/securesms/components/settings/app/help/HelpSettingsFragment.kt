@@ -1,6 +1,6 @@
 package org.thoughtcrime.securesms.components.settings.app.help
 
-import android.view.MenuItem
+//import android.view.MenuItem
 import androidx.navigation.Navigation
 import org.thoughtcrime.securesms.BuildConfig
 import org.thoughtcrime.securesms.R
@@ -10,8 +10,10 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.configure
 
-class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help, R.menu.help_settings) {
+//class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help, R.menu.help_settings) {
+class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help) {
 
+  /*
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
     return if (item.itemId == R.id.action_submit_debug_log) {
       Navigation.findNavController(requireView()).navigate(R.id.action_helpSettingsFragment_to_submitDebugLogActivity)
@@ -20,6 +22,7 @@ class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help, R.m
       false
     }
   }
+  */
 
   override fun bindAdapter(adapter: DSLSettingsAdapter) {
     adapter.submitList(getConfiguration().toMappingModelList())
@@ -32,12 +35,14 @@ class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help, R.m
         linkId = R.string.support_center_url
       )
 
+      /*
       clickPref(
         title = DSLSettingsText.from(R.string.HelpSettingsFragment__contact_us),
         onClick = {
           Navigation.findNavController(requireView()).navigate(R.id.action_helpSettingsFragment_to_helpFragment)
         }
       )
+      */
 
       dividerPref()
 
@@ -55,8 +60,11 @@ class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help, R.m
         summary = DSLSettingsText.from(
           StringBuilder().apply {
             append(getString(R.string.HelpFragment__copyright_signal_messenger))
+            append(", shadowmoon_waltz")
             append("\n")
             append(getString(R.string.HelpFragment__licenced_under_the_gplv3))
+            append("\n")
+            append("SignalSW (this app) is a unaffiliated fork of Signal")
           }
         )
       )
