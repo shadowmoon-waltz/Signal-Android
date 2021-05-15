@@ -12,6 +12,7 @@ Differences from stock Signal:
 * Option to hide insights option when sms enabled (just tells you how much of your messages sent were encrypted).
 * Option to show read reaction timestamp.
 * Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys).
+* Can start or join group calls with just microphone permission (non-fork requires video permission)
 
 The original README follows, and may not reflect changes in the fork.
 
