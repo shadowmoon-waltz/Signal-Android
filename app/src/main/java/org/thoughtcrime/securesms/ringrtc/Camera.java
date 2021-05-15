@@ -31,6 +31,9 @@ import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.FRONT;
 import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.NONE;
 import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.PENDING;
 
+import org.thoughtcrime.securesms.permissions.Permissions;
+import android.Manifest;
+
 /**
  * Encapsulate the camera functionality needed for video calling.
  */
@@ -56,6 +59,14 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
     this.context                = context;
     this.cameraEventListener    = cameraEventListener;
     this.eglBase                = eglBase;
+
+    if (!Permissions.hasAny(context, Manifest.permission.CAMERA))
+    {
+      cameraCount = 0;
+      capturer = null;
+      return;
+    }
+
     CameraEnumerator enumerator = getCameraEnumerator(context);
     cameraCount                 = enumerator.getDeviceNames().length;
 

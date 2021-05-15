@@ -259,7 +259,23 @@ public class CommunicationActions {
                .execute();
   }
 
+  private static void startVideoCallInternal2(@NonNull FragmentActivity activity, @NonNull Recipient recipient) {
+    ApplicationDependencies.getSignalCallManager().startPreJoinCall(recipient);
+
+    Intent activityIntent = new Intent(activity, WebRtcCallActivity.class);
+
+    activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        .putExtra(WebRtcCallActivity.EXTRA_ENABLE_VIDEO_IF_AVAILABLE, true);
+
+    activity.startActivity(activityIntent);  
+  }
+
   private static void startVideoCallInternal(@NonNull FragmentActivity activity, @NonNull Recipient recipient) {
+    if (Permissions.hasAny(activity, Manifest.permission.RECORD_AUDIO)) {
+      startVideoCallInternal2(activity, recipient);
+      return;
+    }
+
     Permissions.with(activity)
                .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
                .ifNecessary()
@@ -268,14 +284,7 @@ public class CommunicationActions {
                                     R.drawable.ic_video_solid_24_tinted)
                .withPermanentDenialDialog(activity.getString(R.string.ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s, recipient.getDisplayName(activity)))
                .onAllGranted(() -> {
-                 ApplicationDependencies.getSignalCallManager().startPreJoinCall(recipient);
-
-                 Intent activityIntent = new Intent(activity, WebRtcCallActivity.class);
-
-                 activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                     .putExtra(WebRtcCallActivity.EXTRA_ENABLE_VIDEO_IF_AVAILABLE, true);
-
-                 activity.startActivity(activityIntent);
+                 startVideoCallInternal2(activity, recipient);
                })
                .execute();
   }
