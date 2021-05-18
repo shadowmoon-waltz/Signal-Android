@@ -29,6 +29,7 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         summary = DSLSettingsText.from(R.string.ForkSettingsFragment__hide_insights_summary),
         isChecked = state.hideInsights,
         onClick = {
+          TextSecurePreferences.setHideInsights(requireContext(), !state.hideInsights)
           viewModel.setHideInsights(!state.hideInsights)
         }
       )
@@ -37,6 +38,7 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__show_reaction_timestamps),
         isChecked = state.showReactionTimestamps,
         onClick = {
+          TextSecurePreferences.setShowReactionTimeEnabled(requireContext(), !state.showReactionTimestamps)
           viewModel.setShowReactionTimestamps(!state.showReactionTimestamps)
         }
       )
@@ -46,6 +48,7 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         summary = DSLSettingsText.from(R.string.ForkSettingsFragment__force_websocket_mode_summary),
         isChecked = state.forceWebsocketMode,
         onClick = {
+          TextSecurePreferences.setForceWebsocketMode(requireContext(), !state.forceWebsocketMode)
           viewModel.setForceWebsocketMode(!state.forceWebsocketMode)
         }
       )
