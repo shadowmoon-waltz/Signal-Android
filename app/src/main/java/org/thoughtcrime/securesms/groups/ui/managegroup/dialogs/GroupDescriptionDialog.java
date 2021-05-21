@@ -3,10 +3,8 @@ package org.thoughtcrime.securesms.groups.ui.managegroup.dialogs;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,10 +14,12 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.LiveGroup;
 import org.thoughtcrime.securesms.groups.ParcelableGroupId;
 import org.thoughtcrime.securesms.groups.v2.GroupDescriptionUtil;
+import org.thoughtcrime.securesms.util.LongClickMovementMethod;
 
 /**
  * Dialog to show a full group description. Information regarding the description can be provided
@@ -34,7 +34,7 @@ public final class GroupDescriptionDialog extends DialogFragment {
   private static final String ARGUMENT_LINKIFY     = "linkify";
   private static final String DIALOG_TAG           = "GroupDescriptionDialog";
 
-  private TextView descriptionText;
+  private EmojiTextView descriptionText;
 
   public static void show(@NonNull FragmentManager fragmentManager, @NonNull String title, @Nullable String description, boolean linkify) {
     show(fragmentManager, null, title, description, linkify);
@@ -67,7 +67,7 @@ public final class GroupDescriptionDialog extends DialogFragment {
     LiveGroup liveGroup           = argumentGroupId != null ? new LiveGroup(argumentGroupId) : null;
 
     descriptionText = dialogView.findViewById(R.id.group_description_dialog_text);
-    descriptionText.setMovementMethod(LinkMovementMethod.getInstance());
+    descriptionText.setMovementMethod(LongClickMovementMethod.getInstance(requireContext()));
 
     MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext(), R.style.Signal_ThemeOverlay_Dialog_Rounded);
     Dialog dialog = builder.setTitle(TextUtils.isEmpty(argumentTitle) ? getString(R.string.GroupDescriptionDialog__group_description) : argumentTitle)
@@ -76,9 +76,9 @@ public final class GroupDescriptionDialog extends DialogFragment {
                            .create();
 
     if (argumentDescription != null) {
-      descriptionText.setText(GroupDescriptionUtil.style(requireContext(), argumentDescription, linkify, null));
+      GroupDescriptionUtil.setText(requireContext(), descriptionText, argumentDescription, linkify, null);
     } else if (liveGroup != null) {
-      liveGroup.getDescription().observe(this, d -> descriptionText.setText(GroupDescriptionUtil.style(requireContext(), d, linkify, null)));
+      liveGroup.getDescription().observe(this, d -> GroupDescriptionUtil.setText(requireContext(), descriptionText, d, linkify, null));
     }
 
     if (TextUtils.isEmpty(argumentTitle) && liveGroup != null) {

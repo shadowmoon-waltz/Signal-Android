@@ -90,7 +90,7 @@
   <string name="BlockUnblockDialog_unblock_s">Κατάργηση αποκλεισμού του/της %1$s;</string>
   <string name="BlockUnblockDialog_block">Αποκλεισμός</string>
   <string name="BlockUnblockDialog_block_and_leave">Αποκλεισμός και αποχώρηση</string>
-  <!-- Removed by excludeNonTranslatables <string name="BlockUnblockDialog_block_and_delete">Αποκλεισμός και διαγραφή</string> -->
+  <string name="BlockUnblockDialog_report_spam_and_block">Αναφορά ως ανεπιθύμητο και φραγή</string>
   <!--BucketedThreadMedia-->
   <string name="BucketedThreadMedia_Today">Σήμερα</string>
   <string name="BucketedThreadMedia_Yesterday">Χθες</string>
@@ -237,6 +237,7 @@
   <string name="ConversationActivity_join">Γίνε μέλος</string>
   <string name="ConversationActivity_full">Γεμάτο</string>
   <string name="ConversationActivity_error_sending_media">Σφάλμα στην αποστολή πολυμέσων</string>
+  <string name="ConversationActivity__reported_as_spam_and_blocked">Αναφέρθηκε ως ανεπιθύμητο και είναι σε φραγή</string>
   <!--ConversationAdapter-->
   <plurals name="ConversationAdapter_n_unread_messages">
     <item quantity="one">%d μη αναγνωσμένο μήνυμα</item>
@@ -972,6 +973,7 @@
   <string name="MessageRecord_s_changed_the_group_name_to_s">Ο/Η %1$s άλλαξε το όνομα της ομάδας σε \"%2$s\".</string>
   <string name="MessageRecord_the_group_name_has_changed_to_s">Το όνομα της ομάδας άλλαξε σε \"%1$s\".</string>
   <!--GV2 description change-->
+  <string name="MessageRecord_you_changed_the_group_description">Άλλαξες την περιγραφή της ομάδας.</string>
   <!--GV2 avatar change-->
   <string name="MessageRecord_you_changed_the_group_avatar">Άλλαξες το εικονίδιο της ομάδας.</string>
   <string name="MessageRecord_s_changed_the_group_avatar">Ο/Η %1$s άλλαξε το εικονίδιο της ομάδας.</string>
@@ -1103,9 +1105,9 @@
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Το Signal χρειάζεται τα δικαιώματα Κάμερας για το σκανάρισμα του κωδικού QR, αλλά αυτά δεν έχουν δοθεί μόνιμα. Παρακαλώ πήγαινε στις ρυθμίσεις εφαρμογών, επέλεξε τα \"Δικαιώματα\", και ενεργοποίησε την \"Κάμερα\".</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Δεν μπορούμε να σκανάρουμε QR κωδικούς χωρίς τα δικαιώματα Κάμερας</string>
   <!--ExpirationDialog-->
-  <string name="ExpirationDialog_disappearing_messages">Μηνύματα που εξαφανίζονται</string>
-  <string name="ExpirationDialog_your_messages_will_not_expire">Τα μηνύματά σου δε θα λήξουν.</string>
-  <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Μηνύματα που στέλνονται και λαμβάνονται σε αυτή τη συνομιλία θα εξαφανίζονται %s αφού τα δεις.</string>
+  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_disappearing_messages">Μηνύματα που εξαφανίζονται</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_not_expire">Τα μηνύματά σου δε θα λήξουν.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Μηνύματα που στέλνονται και λαμβάνονται σε αυτή τη συνομιλία θα εξαφανίζονται %s αφού τα δεις.</string> -->
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">Αναβάθμιση τώρα</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Αυτή η έκδοση Signal θα λήξει τώρα. Αναβάθμισε στη πιο πρόσφατη έκδοση.</string>
@@ -1740,6 +1742,7 @@
   <string name="CreateProfileActivity__username">Όνομα χρήστη</string>
   <string name="CreateProfileActivity__create_a_username">Δημιουργία ονόματος χρήστη</string>
   <string name="CreateProfileActivity_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Τα προσαρμοσμένα ονόματα και φωτογραφίες των ομαδών MMS θα είναι ορατά μόνο από εσένα.</string>
+  <string name="CreateProfileActivity_group_descriptions_will_be_visible_to_members_of_this_group_and_people_who_have_been_invited">Οι περιγραφές ομάδας θα είναι ορατές στα μέλη της ομάδας και στα άτομα που έχουν προσκληθεί.</string>
   <!--EditAboutFragment-->
   <string name="EditAboutFragment_about">Πληροφορίες</string>
   <string name="EditAboutFragment_write_a_few_words_about_yourself">Γράψε δυο πράγματα για σένα…</string>
@@ -2744,12 +2747,34 @@
   <string name="PrivacySettingsFragment__blocked">Λίστα Φραγής</string>
   <string name="PrivacySettingsFragment__d_contacts">%1$d επαφές</string>
   <string name="PrivacySettingsFragment__messaging">Συνομιλίες</string>
+  <string name="PrivacySettingsFragment__disappearing_messages">Μηνύματα που εξαφανίζονται</string>
   <string name="PrivacySettingsFragment__app_security">Ασφάλεια εφαρμογής</string>
   <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Να μην επιτρέπεται η καταγραφή της οθόνης (screenshots) στη λίστα με τα πρόσφατα και μέσα στην εφαρμογή</string>
   <string name="PrivacySettingsFragment__signal_message_and_calls">Κλήσεις και μηνύματα Signal. οι κλήσεις πάντα αναμεταδίδονται, και προστατευμένος αποστολέας</string>
+  <string name="PrivacySettingsFragment__default_timer_for_new_changes">Προκαθορισμένο χρονόμετρο για νέες συνομιλίες</string>
+  <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Ορισμός ενός προκαθορισμένου χρόνου εξαφάνισης μηνυμάτων για όλες τις συνομιλίες που ξεκινάς εσύ.</string>
   <!--AdvancedPrivacySettingsFragment-->
   <string name="AdvancedPrivacySettingsFragment__show_status_icon">Εμφάνιση εικονιδίου κατάστασης</string>
   <string name="AdvancedPrivacySettingsFragment__show_an_icon">Εμφάνιση εικονιδίου στις λεπτομέρειες μηνύματος όταν αυτά έχουν παραδοθεί με χρήση του προστατευμένου αποστολέα.</string>
+  <!--ExpireTimerSettingsFragment-->
+  <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Όταν ενεργοποιηθεί, τα νέα μηνύματα που στέλνονται και λαμβάνονται σε σε νέες συνομιλίες που ξεκινάς εσύ θα εξαφανίζονται αφού διαβαστούν.</string>
+  <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Όταν ενεργοποιηθεί, τα νέα μηνύματα που στέλνονται και λαμβάνονται σε αυτή τη συνομιλία θα εξαφανίζονται αφού διαβαστούν.</string>
+  <string name="ExpireTimerSettingsFragment__off">Ανενεργό</string>
+  <string name="ExpireTimerSettingsFragment__4_weeks">4 εβδομάδες</string>
+  <string name="ExpireTimerSettingsFragment__1_week">1 εβδομάδα</string>
+  <string name="ExpireTimerSettingsFragment__1_day">1 ημέρα</string>
+  <string name="ExpireTimerSettingsFragment__8_hours">8 ώρες</string>
+  <string name="ExpireTimerSettingsFragment__1_hour">1 ώρα</string>
+  <string name="ExpireTimerSettingsFragment__5_minutes">5 λεπτά</string>
+  <string name="ExpireTimerSettingsFragment__30_seconds">30 δευτερόλεπτα</string>
+  <string name="ExpireTimerSettingsFragment__custom_time">Προσαρμοσμένος χρόνος</string>
+  <string name="ExpireTimerSettingsFragment__set">Ορισμός</string>
+  <string name="ExpireTimerSettingsFragment__save">Αποθήκευση</string>
+  <!-- Removed by excludeNonTranslatables <string name="CustomExpireTimerSelectorView__second">Δευτερόλεπτο</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="CustomExpireTimerSelectorView__minute">Λεπτό</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="CustomExpireTimerSelectorView__hour">Ώρα</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="CustomExpireTimerSelectorView__day">Ημέρα</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="CustomExpireTimerSelectorView__week">Εβδομάδα</string> -->
   <!--HelpSettingsFragment-->
   <string name="HelpSettingsFragment__support_center">Κέντρο υποστήριξης</string>
   <string name="HelpSettingsFragment__contact_us">Επικοινώνησε μαζί μας</string>

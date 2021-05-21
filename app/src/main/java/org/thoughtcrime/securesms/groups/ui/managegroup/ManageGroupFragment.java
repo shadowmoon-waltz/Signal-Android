@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -58,12 +57,14 @@ import org.thoughtcrime.securesms.profiles.edit.EditProfileActivity;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.ui.bottomsheet.RecipientBottomSheetDialogFragment;
+import org.thoughtcrime.securesms.recipients.ui.disappearingmessages.RecipientDisappearingMessagesActivity;
 import org.thoughtcrime.securesms.recipients.ui.notifications.CustomNotificationsDialogFragment;
 import org.thoughtcrime.securesms.recipients.ui.sharablegrouplink.ShareableGroupLinkDialogFragment;
 import org.thoughtcrime.securesms.util.AsynchronousCallback;
 import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.LifecycleCursorWrapper;
+import org.thoughtcrime.securesms.util.LongClickMovementMethod;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.views.LearnMoreTextView;
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog;
@@ -280,7 +281,12 @@ public class ManageGroupFragment extends LoggingFragment {
 
     viewModel.getDisappearingMessageTimer().observe(getViewLifecycleOwner(), string -> disappearingMessages.setText(string));
 
-    disappearingMessagesRow.setOnClickListener(v -> viewModel.handleExpirationSelection());
+    disappearingMessagesRow.setOnClickListener(v -> {
+      Recipient recipient = viewModel.getGroupRecipient().getValue();
+      if (recipient != null) {
+        startActivity(RecipientDisappearingMessagesActivity.forRecipient(requireContext(), recipient.getId()));
+      }
+    });
     blockGroup.setOnClickListener(v -> viewModel.blockAndLeave(requireActivity()));
     unblockGroup.setOnClickListener(v -> viewModel.unblock(requireActivity()));
 
@@ -442,7 +448,7 @@ public class ManageGroupFragment extends LoggingFragment {
   private void updateGroupDescription(@NonNull ManageGroupViewModel.Description description) {
     if (!TextUtils.isEmpty(description.getDescription()) || (FeatureFlags.groupsV2Description() && description.canEditDescription())) {
       groupDescription.setVisibility(View.VISIBLE);
-      groupDescription.setMovementMethod(LinkMovementMethod.getInstance());
+      groupDescription.setMovementMethod(LongClickMovementMethod.getInstance(requireContext()));
       memberCountUnderAvatar.setVisibility(View.GONE);
     } else {
       groupDescription.setVisibility(View.GONE);
@@ -452,15 +458,17 @@ public class ManageGroupFragment extends LoggingFragment {
 
     if (TextUtils.isEmpty(description.getDescription())) {
       if (FeatureFlags.groupsV2Description() && description.canEditDescription()) {
+        groupDescription.setOverflowText(null);
         groupDescription.setText(R.string.ManageGroupActivity_add_group_description);
         groupDescription.setOnClickListener(v -> startActivity(EditProfileActivity.getIntentForGroupProfile(requireActivity(), getGroupId())));
       }
     } else {
       groupDescription.setOnClickListener(null);
-      groupDescription.setText(GroupDescriptionUtil.style(requireContext(),
-                                                          description.getDescription(),
-                                                          description.shouldLinkifyWebLinks(),
-                                                          () -> GroupDescriptionDialog.show(getChildFragmentManager(), getGroupId(), null, description.shouldLinkifyWebLinks())));
+      GroupDescriptionUtil.setText(requireContext(),
+                                   groupDescription,
+                                   description.getDescription(),
+                                   description.shouldLinkifyWebLinks(),
+                                   () -> GroupDescriptionDialog.show(getChildFragmentManager(), getGroupId(), null, description.shouldLinkifyWebLinks()));
     }
   }
 

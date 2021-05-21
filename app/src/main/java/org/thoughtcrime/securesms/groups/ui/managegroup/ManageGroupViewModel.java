@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.signal.core.util.ThreadUtil;
 import org.thoughtcrime.securesms.BlockUnblockDialog;
 import org.thoughtcrime.securesms.ContactSelectionListFragment;
-import org.thoughtcrime.securesms.ExpirationDialog;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.contacts.ContactsCursorLoader;
 import org.thoughtcrime.securesms.database.MediaDatabase;
@@ -255,14 +254,6 @@ public class ManageGroupViewModel extends ViewModel {
 
   LiveData<GroupInfoMessage> getGroupInfoMessage() {
     return groupInfoMessage;
-  }
-
-  void handleExpirationSelection() {
-    manageGroupRepository.getRecipient(getGroupId(),
-                                       groupRecipient ->
-                                         ExpirationDialog.show(context,
-                                                               groupRecipient.getExpireMessages(),
-                                                               expirationTime -> manageGroupRepository.setExpiration(getGroupId(), expirationTime, this::showErrorToast)));
   }
 
   void applyMembershipRightsChange(@NonNull GroupAccessControl newRights) {

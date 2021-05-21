@@ -3,7 +3,6 @@ package org.thoughtcrime.securesms.groups.ui.invitesandrequests.joining;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.color.MaterialColor;
 import org.thoughtcrime.securesms.components.AvatarImageView;
+import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
 import org.thoughtcrime.securesms.contacts.avatars.FallbackContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.ResourceContactPhoto;
 import org.thoughtcrime.securesms.conversation.ConversationIntents;
@@ -34,6 +34,7 @@ import org.thoughtcrime.securesms.groups.v2.GroupInviteLinkUrl;
 import org.thoughtcrime.securesms.jobs.RetrieveProfileJob;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
+import org.thoughtcrime.securesms.util.LongClickMovementMethod;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 
 public final class GroupJoinBottomSheetDialogFragment extends BottomSheetDialogFragment {
@@ -46,7 +47,7 @@ public final class GroupJoinBottomSheetDialogFragment extends BottomSheetDialogF
   private AvatarImageView avatar;
   private TextView        groupName;
   private TextView        groupDetails;
-  private TextView        groupDescription;
+  private EmojiTextView   groupDescription;
   private TextView        groupJoinExplain;
   private Button          groupJoinButton;
   private Button          groupCancelButton;
@@ -157,11 +158,12 @@ public final class GroupJoinBottomSheetDialogFragment extends BottomSheetDialogF
 
   private void updateGroupDescription(@NonNull String name, @NonNull String description) {
     groupDescription.setVisibility(View.VISIBLE);
-    groupDescription.setMovementMethod(LinkMovementMethod.getInstance());
-    groupDescription.setText(GroupDescriptionUtil.style(requireContext(),
-                                                        description,
-                                                        true,
-                                                        () -> GroupDescriptionDialog.show(getChildFragmentManager(), name, description, true)));
+    groupDescription.setMovementMethod(LongClickMovementMethod.getInstance(requireContext()));
+    GroupDescriptionUtil.setText(requireContext(),
+                                 groupDescription,
+                                 description,
+                                 true,
+                                 () -> GroupDescriptionDialog.show(getChildFragmentManager(), name, description, true));
   }
 
   private static ExtendedGroupJoinStatus getGroupJoinStatus() {

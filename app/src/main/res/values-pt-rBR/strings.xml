@@ -90,7 +90,7 @@
   <string name="BlockUnblockDialog_unblock_s">Desbloquear %1$s ?</string>
   <string name="BlockUnblockDialog_block">Bloquear</string>
   <string name="BlockUnblockDialog_block_and_leave">Bloquear e sair</string>
-  <!-- Removed by excludeNonTranslatables <string name="BlockUnblockDialog_block_and_delete">Bloquear e apagar</string> -->
+  <string name="BlockUnblockDialog_report_spam_and_block">Denunciar spam e bloquear</string>
   <!--BucketedThreadMedia-->
   <string name="BucketedThreadMedia_Today">Hoje</string>
   <string name="BucketedThreadMedia_Yesterday">Ontem</string>
@@ -237,6 +237,7 @@
   <string name="ConversationActivity_join">Entrar</string>
   <string name="ConversationActivity_full">Lotada</string>
   <string name="ConversationActivity_error_sending_media">Erro ao enviar a mídia</string>
+  <string name="ConversationActivity__reported_as_spam_and_blocked">Denunciado como spam e bloqueado.</string>
   <!--ConversationAdapter-->
   <plurals name="ConversationAdapter_n_unread_messages">
     <item quantity="one">%d mensagem não lida</item>
@@ -388,7 +389,7 @@
   <string name="DocumentView_unnamed_file">Arquivo sem nome</string>
   <!--DonateMegaphone-->
   <string name="DonateMegaphone_donate_to_signal">Doar para o Signal</string>
-  <string name="DonateMegaphone_Signal_is_powered_by_people_like_you_show_your_support_today">O Signal é criado por pessoas como você. Mostre o seu apoio hoje!</string>
+  <string name="DonateMegaphone_Signal_is_powered_by_people_like_you_show_your_support_today">O Signal é mantido por pessoas como você. Mostre o seu apoio hoje!</string>
   <string name="DonateMegaphone_donate">Doar</string>
   <string name="DonateMegaphone_no_thanks">Não. Agradeço.</string>
   <!--GroupCallingMegaphone-->
@@ -1109,9 +1110,9 @@
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">O Signal precisa da permissão Câmera para escanear um código QR, mas ela foi permanentemente negada. Favor ir no menu de configurações de aplicativos, selecionar \"Permissões\", e habilitar \"Câmera\".</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Não é possível escanear um código QR sem a permissão Câmera</string>
   <!--ExpirationDialog-->
-  <string name="ExpirationDialog_disappearing_messages">Mensagens efêmeras</string>
-  <string name="ExpirationDialog_your_messages_will_not_expire">Suas mensagens não irão expirar.</string>
-  <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Mensagens enviadas e recebidas nesta conversa irão desaparecer %s após terem sido visualizadas.</string>
+  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_disappearing_messages">Mensagens efêmeras</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_not_expire">Suas mensagens não irão expirar.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Mensagens enviadas e recebidas nesta conversa irão desaparecer %s após terem sido visualizadas.</string> -->
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">Atualize agora</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Esta versão do Signal perderá suporte hoje. Atualize para a versão mais recente.</string>
@@ -2114,6 +2115,7 @@
   <string name="PaymentsDetailsFragment__s_on_s_at_s">%1$s em %2$s às %3$s</string>
   <string name="PaymentsDetailsFragment__to">Para</string>
   <string name="PaymentsDetailsFragment__from">De</string>
+  <string name="PaymentsDetailsFragment__no_details_available">Não há detalhes adicionais sobre esta transação</string>
   <string name="PaymentsDetailsFragment__sent_payment">Pagamento enviado</string>
   <string name="PaymentsDetailsFragment__received_payment">Pagamento recebido</string>
   <string name="PaymentsDeatilsFragment__payment_completed_s">Pagamento concluído %1$s</string>
@@ -2151,14 +2153,19 @@
   <!--ConfirmPaymentFragment-->
   <string name="ConfirmPayment__confirm_payment">Confirmar pagamento</string>
   <string name="ConfirmPayment__network_fee">Taxa de transação</string>
+  <string name="ConfirmPayment__error_getting_fee">Erro ao obter a taxa</string>
   <string name="ConfirmPayment__to">Para</string>
+  <string name="ConfirmPayment__total_amount">Valor total</string>
   <string name="ConfirmPayment__balance_s">Saldo: %1$s</string>
   <string name="ConfirmPayment__submitting_payment">Enviando o pagamento…</string>
   <string name="ConfirmPayment__processing_payment">Processando o pagamento…</string>
   <string name="ConfirmPayment__payment_complete">Pagamento concluído</string>
   <string name="ConfirmPayment__payment_failed">Falha ao pagar</string>
+  <string name="ConfirmPaymentFragment__unable_to_request_a_network_fee">Não foi possível obter a taxa de transação. Para este pagamento prosseguir, toque em ok para tentar novamente.</string>
   <!--CurrencyAmountFormatter_s_at_s-->
   <!--SetCurrencyFragment-->
+  <string name="SetCurrencyFragment__set_currency">Definir a moeda</string>
+  <string name="SetCurrencyFragment__all_currencies">Todas as moedas</string>
   <!--****************************************-->
   <!--menus-->
   <!--****************************************-->
@@ -2588,6 +2595,7 @@
   <string name="OldDeviceTransferLockedDialog__done">Pronto</string>
   <string name="OldDeviceTransferLockedDialog__cancel_and_activate_this_device">Cancelar e ativar este aparelho</string>
   <!--AdvancedPreferenceFragment-->
+  <string name="AdvancedPreferenceFragment__you_have_a_balance_of_s">Você tem um saldo de %1$s. Se você não transferir essa quantia para o endereço de outra carteira antes de excluir a sua conta, você perderá o saldo para sempre.</string>
   <string name="AdvancedPreferenceFragment__dont_transfer">Não transferir</string>
   <string name="AdvancedPreferenceFragment__transfer">Transferir</string>
   <!--RecipientBottomSheet-->
@@ -2809,12 +2817,25 @@
   <string name="PrivacySettingsFragment__blocked">Bloqueada</string>
   <string name="PrivacySettingsFragment__d_contacts">%1$d contatos</string>
   <string name="PrivacySettingsFragment__messaging">Mensagens</string>
+  <string name="PrivacySettingsFragment__disappearing_messages">Mensagens efêmeras</string>
   <string name="PrivacySettingsFragment__app_security">Segurança do app</string>
   <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Bloquear capturas de tela na lista de recentes e dentro do aplicativo</string>
   <string name="PrivacySettingsFragment__signal_message_and_calls">Mensagens e chamadas no Signal, redirecionar chamadas e remetente oculto</string>
+  <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Defina um cronômetro padrão para o desaparecimento de mensagens em todas as novas conversas iniciadas por você.</string>
   <!--AdvancedPrivacySettingsFragment-->
   <string name="AdvancedPrivacySettingsFragment__show_status_icon">Exibir indicadores</string>
   <string name="AdvancedPrivacySettingsFragment__show_an_icon">Mostrar ícone de status em mensagens que foram entregues usando remetente oculto.</string>
+  <!--ExpireTimerSettingsFragment-->
+  <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Quando habilitadas, as mensagens enviadas e recebidas nesta conversa desaparecerão após terem sido lidas.</string>
+  <string name="ExpireTimerSettingsFragment__off">Desligado</string>
+  <string name="ExpireTimerSettingsFragment__1_week">1 semana</string>
+  <string name="ExpireTimerSettingsFragment__1_day">1 dia</string>
+  <string name="ExpireTimerSettingsFragment__8_hours">8 horas</string>
+  <string name="ExpireTimerSettingsFragment__1_hour">1 hora</string>
+  <string name="ExpireTimerSettingsFragment__5_minutes">5 minutos</string>
+  <string name="ExpireTimerSettingsFragment__30_seconds">30 segundos</string>
+  <string name="ExpireTimerSettingsFragment__set">Definir</string>
+  <string name="ExpireTimerSettingsFragment__save">Salvar</string>
   <!--HelpSettingsFragment-->
   <string name="HelpSettingsFragment__support_center">Central de suporte</string>
   <string name="HelpSettingsFragment__contact_us">Entre em contato</string>
