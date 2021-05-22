@@ -41,6 +41,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -797,7 +798,6 @@ public class ConversationFragment extends LoggingFragment {
     Collections.sort(messageList, (lhs, rhs) -> Long.compare(lhs.getMessageRecord().getDateReceived(), rhs.getMessageRecord().getDateReceived()));
 
     SpannableStringBuilder bodyBuilder = new SpannableStringBuilder();
-    ClipboardManager       clipboard   = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
 
     for (ConversationMessage message : messageList) {
       CharSequence body = message.getDisplayBody(requireContext());
@@ -810,7 +810,27 @@ public class ConversationFragment extends LoggingFragment {
     }
 
     if (!TextUtils.isEmpty(bodyBuilder)) {
-      clipboard.setPrimaryClip(ClipData.newPlainText(null, bodyBuilder));
+      if (TextSecurePreferences.isCopyTextOpensPopup(requireContext())) {
+        // https://stackoverflow.com/questions/7197939/copy-text-from-android-alertdialog
+        //TextView v = new TextView(getActivity());
+        //v.setTextIsSelectable(true);
+        EditText v = new EditText(getActivity());
+        v.setText(bodyBuilder.toString());
+        new AlertDialog.Builder(getActivity())
+          .setView(v)
+          .setPositiveButton("Close", (d, i) -> {
+             d.dismiss();
+           })
+           .setNegativeButton("Copy All", (d, i) -> {
+             ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+             clipboard.setPrimaryClip(ClipData.newPlainText(null, bodyBuilder));
+             d.dismiss();
+           })
+           .show();
+      } else {
+        ClipboardManager clipboard = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        clipboard.setPrimaryClip(ClipData.newPlainText(null, bodyBuilder));
+      }
     }
   }
 

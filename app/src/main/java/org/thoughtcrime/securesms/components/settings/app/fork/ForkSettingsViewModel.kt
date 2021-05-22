@@ -13,7 +13,8 @@ class ForkSettingsViewModel : ViewModel() {
       hideInsights = SignalStore.settings().isHideInsights,
       showReactionTimestamps = SignalStore.settings().isShowReactionTimestamps,
       forceWebsocketMode = SignalStore.settings().isForceWebsocketMode,
-      fastCustomReactionChange = SignalStore.settings().isFastCustomReactionChange
+      fastCustomReactionChange = SignalStore.settings().isFastCustomReactionChange,
+      copyTextOpensPopup = SignalStore.settings().isCopyTextOpensPopup
     )
 
     store = Store(initialState)
@@ -39,5 +40,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setFastCustomReactionChange(fastCustomReactionChange: Boolean) {
     store.update { it.copy(fastCustomReactionChange = fastCustomReactionChange) }
     SignalStore.settings().isFastCustomReactionChange = fastCustomReactionChange
+  }
+
+  fun setCopyTextOpensPopup(copyTextOpensPopup: Boolean) {
+    store.update { it.copy(copyTextOpensPopup = copyTextOpensPopup) }
+    SignalStore.settings().isCopyTextOpensPopup = copyTextOpensPopup
   }
 }

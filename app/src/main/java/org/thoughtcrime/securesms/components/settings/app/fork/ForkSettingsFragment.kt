@@ -63,6 +63,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__copy_text_opens_popup),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__copy_text_opens_popup_summary),
+        isChecked = state.copyTextOpensPopup,
+        onClick = {
+          TextSecurePreferences.setCopyTextOpensPopup(requireContext(), !state.copyTextOpensPopup)
+          viewModel.setCopyTextOpensPopup(!state.copyTextOpensPopup)
+        }
+      )
+
       clickPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
         onClick = {

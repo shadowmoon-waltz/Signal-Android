@@ -69,6 +69,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String SHOW_REACTION_TIMESTAMPS                = "settings.fork.show.reaction.timestamps";
   public static final String FORCE_WEBSOCKET_MODE                    = "settings.fork.force.websocket.mode";
   public static final String FAST_CUSTOM_REACTION_CHANGE             = "settings.fork.fast.custom.reaction.change";
+  public static final String COPY_TEXT_OPENS_POPUP                   = "settings.fork.copy.text.opens.popup";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -115,7 +116,8 @@ public final class SettingsValues extends SignalStoreValues {
                          HIDE_INSIGHTS,
                          SHOW_REACTION_TIMESTAMPS,
                          FORCE_WEBSOCKET_MODE,
-                         FAST_CUSTOM_REACTION_CHANGE);
+                         FAST_CUSTOM_REACTION_CHANGE,
+                         COPY_TEXT_OPENS_POPUP);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -437,5 +439,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setFastCustomReactionChange(boolean fastCustomReactionChange) {
     putBoolean(FAST_CUSTOM_REACTION_CHANGE, fastCustomReactionChange);
+  }
+
+  public boolean isCopyTextOpensPopup() {
+    return getBoolean(COPY_TEXT_OPENS_POPUP, TextSecurePreferences.isCopyTextOpensPopup(ApplicationDependencies.getApplication()));
+  }
+
+  public void setCopyTextOpensPopup(boolean copyTextOpensPopup) {
+    putBoolean(COPY_TEXT_OPENS_POPUP, copyTextOpensPopup);
   }
 }

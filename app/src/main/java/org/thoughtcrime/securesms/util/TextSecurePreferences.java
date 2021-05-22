@@ -223,6 +223,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_FAST_CUSTOM_REACTION_CHANGE = "pref_fast_custom_reaction_change";
 
+  private static final String PREF_COPY_TEXT_OPENS_POPUP = "pref_copy_text_opens_popup";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -242,7 +244,8 @@ public class TextSecurePreferences {
                                                               PREF_HIDE_INSIGHTS,
                                                               PREF_SHOW_REACTION_TIME,
                                                               PREF_FORCE_WEBSOCKET_MODE,
-                                                              PREF_FAST_CUSTOM_REACTION_CHANGE};
+                                                              PREF_FAST_CUSTOM_REACTION_CHANGE,
+                                                              PREF_COPY_TEXT_OPENS_POPUP};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1271,6 +1274,14 @@ public class TextSecurePreferences {
 
   public static void setFastCustomReactionChange(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_FAST_CUSTOM_REACTION_CHANGE, enabled);
+  }
+
+  public static boolean isCopyTextOpensPopup(Context context) {
+    return getBooleanPreference(context, PREF_COPY_TEXT_OPENS_POPUP, false);
+  }
+
+  public static void setCopyTextOpensPopup(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_COPY_TEXT_OPENS_POPUP, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

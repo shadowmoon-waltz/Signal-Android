@@ -14,6 +14,7 @@ Differences from stock Signal:
 * Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys).
 * Can start or join group calls with just microphone permission (non-fork requires video permission)
 * Option to long-press a custom emoji previously used as a reaction in the long-press your selected reaction popup to change it to another custom emoji (so you don't have to press it once to deselect it and then select a different one; note that you still have to let go of the custom emoji after long pressing to show the custom emoji selector)
+* Option to open popup with editable text when selecting copying text for one or more messages in a conversation, which allows for easy modification and/or copying of part or all of the string
 
 The original README follows, and may not reflect changes in the fork.
 
