@@ -65,6 +65,7 @@ public final class ConversationReactionOverlay extends RelativeLayout {
   private boolean downIsOurs;
   private boolean isToolbarTouch;
   private int     selected = -1;
+  private long    selectedAtTime = 0;
   private int     customEmojiIndex;
   private int     originalStatusBarColor;
 
@@ -337,6 +338,7 @@ public final class ConversationReactionOverlay extends RelativeLayout {
     switch (motionEvent.getAction()) {
       case MotionEvent.ACTION_DOWN:
         selected = getSelectedIndexViaDownEvent(motionEvent);
+        selectedAtTime = System.currentTimeMillis();
 
         if (selected == -1) {
           if (motionEvent.getY() < toolbar.getHeight() + statusBarHeight) {
@@ -351,6 +353,7 @@ public final class ConversationReactionOverlay extends RelativeLayout {
         return true;
       case MotionEvent.ACTION_MOVE:
         selected = getSelectedIndexViaMoveEvent(motionEvent);
+        selectedAtTime = System.currentTimeMillis();
         return true;
       case MotionEvent.ACTION_UP:
         handleUpEvent();
@@ -467,7 +470,7 @@ public final class ConversationReactionOverlay extends RelativeLayout {
   private void handleUpEvent() {
     if (selected != -1 && onReactionSelectedListener != null) {
       if (selected == customEmojiIndex) {
-        onReactionSelectedListener.onCustomReactionSelected(messageRecord, emojiViews[selected].getTag() != null);
+        onReactionSelectedListener.onCustomReactionSelected(messageRecord, emojiViews[selected].getTag() != null, System.currentTimeMillis() - selectedAtTime);
       } else {
         onReactionSelectedListener.onReactionSelected(messageRecord, SignalStore.emojiValues().getPreferredVariation(ReactionEmoji.values()[selected].emoji));
       }
@@ -615,7 +618,7 @@ public final class ConversationReactionOverlay extends RelativeLayout {
 
   public interface OnReactionSelectedListener {
     void onReactionSelected(@NonNull MessageRecord messageRecord, String emoji);
-    void onCustomReactionSelected(@NonNull MessageRecord messageRecord, boolean hasAddedCustomEmoji);
+    void onCustomReactionSelected(@NonNull MessageRecord messageRecord, boolean hasAddedCustomEmoji, long holdDuration);
   }
 
   private static class Boundary {

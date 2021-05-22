@@ -2292,13 +2292,13 @@ public class ConversationActivity extends PassphraseRequiredActivity
   }
 
   @Override
-  public void onCustomReactionSelected(@NonNull MessageRecord messageRecord, boolean hasAddedCustomEmoji) {
+  public void onCustomReactionSelected(@NonNull MessageRecord messageRecord, boolean hasAddedCustomEmoji, long holdDuration) {
     ReactionRecord oldRecord = Stream.of(messageRecord.getReactions())
                                      .filter(record -> record.getAuthor().equals(Recipient.self().getId()))
                                      .findFirst()
                                      .orElse(null);
 
-    if (oldRecord != null && hasAddedCustomEmoji) {
+    if ((!TextSecurePreferences.isFastCustomReactionChange(this) || holdDuration < 500) && oldRecord != null && hasAddedCustomEmoji) {
       final Context context = getApplicationContext();
 
       reactionDelegate.hide();

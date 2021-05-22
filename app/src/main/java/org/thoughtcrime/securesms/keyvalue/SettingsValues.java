@@ -68,6 +68,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String HIDE_INSIGHTS                           = "settings.fork.hide.insights";
   public static final String SHOW_REACTION_TIMESTAMPS                = "settings.fork.show.reaction.timestamps";
   public static final String FORCE_WEBSOCKET_MODE                    = "settings.fork.force.websocket.mode";
+  public static final String FAST_CUSTOM_REACTION_CHANGE             = "settings.fork.fast.custom.reaction.change";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -113,7 +114,8 @@ public final class SettingsValues extends SignalStoreValues {
                          UNIVERSAL_EXPIRE_TIMER,
                          HIDE_INSIGHTS,
                          SHOW_REACTION_TIMESTAMPS,
-                         FORCE_WEBSOCKET_MODE);
+                         FORCE_WEBSOCKET_MODE,
+                         FAST_CUSTOM_REACTION_CHANGE);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -427,5 +429,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setForceWebsocketMode(boolean forceWebsocketMode) {
     putBoolean(FORCE_WEBSOCKET_MODE, forceWebsocketMode);
+  }
+
+  public boolean isFastCustomReactionChange() {
+    return getBoolean(FAST_CUSTOM_REACTION_CHANGE, TextSecurePreferences.isFastCustomReactionChange(ApplicationDependencies.getApplication()));
+  }
+
+  public void setFastCustomReactionChange(boolean fastCustomReactionChange) {
+    putBoolean(FAST_CUSTOM_REACTION_CHANGE, fastCustomReactionChange);
   }
 }

@@ -59,6 +59,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
           Navigation.findNavController(requireView()).navigate(R.id.action_forkSettingsFragment_to_setIdentityKeysFragment)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__fast_custom_reaction_change),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__fast_custom_reaction_change_summary),
+        isChecked = state.fastCustomReactionChange,
+        onClick = {
+          TextSecurePreferences.setFastCustomReactionChange(requireContext(), !state.fastCustomReactionChange)
+          viewModel.setFastCustomReactionChange(!state.fastCustomReactionChange)
+        }
+      )
     }
   }
 }
