@@ -607,7 +607,7 @@
   <string name="ManageGroupActivity_mute_notifications">ବିଜ୍ଞପ୍ତି ମ୍ୟୁଟ୍ କରନ୍ତୁ</string>
   <string name="ManageGroupActivity_custom_notifications">କଷ୍ଟମ୍ ବିଜ୍ଞପ୍ତି</string>
   <string name="ManageGroupActivity_mentions">ଉଲ୍ଲେଖ</string>
-  <string name="ManageGroupActivity_chat_wallpaper">ବାର୍ତ୍ତା କାନ୍ଥଛବି</string>
+  <!-- Removed by excludeNonTranslatables <string name="ManageGroupActivity_chat_wallpaper">ବାର୍ତ୍ତା କାନ୍ଥଛବି</string> -->
   <string name="ManageGroupActivity_until_s">%1$s ପର୍ଯ୍ୟନ୍ତ</string>
   <string name="ManageGroupActivity_always">ସବୁବେଳେ</string>
   <string name="ManageGroupActivity_off">ବନ୍ଦ</string>
@@ -1102,10 +1102,6 @@
   <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">ଏହା ଦେଖାଯାଉଛି ଯେ ଆପଣ ଏକ 3ତୀୟ ପକ୍ଷ ସ୍କାନର୍ ବ୍ୟବହାର କରି ଏକ Signal ଉପକରଣ ଲିଙ୍କ୍ କରିବାକୁ ଚେଷ୍ଟା କରୁଛନ୍ତି | ଆପଣଙ୍କର ସୁରକ୍ଷା ପାଇଁ, ଦୟାକରି Signal ଭିତରୁ କୋଡ୍ ସ୍କାନ୍ କରନ୍ତୁ</string>
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">ଏକ କ୍ୟୁ.ଆର କୋଡ୍ ସ୍କାନ୍ କରିବା ପାଇଁ Signal କ୍ୟାମେରା ଅନୁମତି ଆବଶ୍ୟକ କରେ, କିନ୍ତୁ ଏହାକୁ ସ୍ଥାୟୀ ଭାବରେ ପ୍ରତ୍ୟାଖ୍ୟାନ କରାଯାଇଛି | ଦୟାକରି ଆପ୍ ସେଟିଂସମୂହକୁ ଯାଇଁ, \"ଅନୁମତି\" ଚୟନ କରନ୍ତୁ ଏବଂ \"କ୍ୟାମେରା\" ସକ୍ଷମ କରନ୍ତୁ</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">କ୍ୟାମେରା ଅନୁମତି ବିନା ଏକ କ୍ୟୁ.ଆର କୋଡ୍ ସ୍କାନ୍ କରିବାରେ ଅସମର୍ଥ</string>
-  <!--ExpirationDialog-->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_disappearing_messages">ଉଭାନ ହୋଇଯାଉଥିବା ବାର୍ତ୍ତାଗଡ଼ିକ</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_not_expire">ଆପଣଙ୍କର ବାର୍ତ୍ତାର ସମୟ ସମାପ୍ତ ହେବ ନାହିଁ</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">ଏହି ବାର୍ତ୍ତାଳାପରେ ପଠାଯାଇଥିବା ଏବଂ ଗ୍ରହଣ କରାଯାଇଥିବା ସନ୍ଦେଶଗୁଡ଼ିକ ଦେଖିବାର %s ପରେ  ଅଦୃଶ୍ୟ ହୋଇଯିବ</string> -->
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">ଏବେ ଅଦ୍ୟତନ କରନ୍ତୁ</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Signal ର ଏହି ସଂସ୍କରଣର ସମୟ ସମାପ୍ତ ହୋଇଛି | ବାର୍ତ୍ତା ପଠାଇବା ଏବଂ ଗ୍ରହଣ କରିବା ପାଇଁ ବର୍ତ୍ତମାନ ଅଦ୍ୟତନ କରନ୍ତୁ</string>
@@ -2520,12 +2516,12 @@
   <string name="ChatWallpaperActivity__chat_wallpaper">ବାର୍ତ୍ତା କାନ୍ଥଛବି</string>
   <!--ChatWallpaperFragment-->
   <string name="ChatWallpaperFragment__set_wallpaper">କାନ୍ଥଛବି ସେଟ୍ କରନ୍ତୁ</string>
-  <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">ଅନ୍ଧାର ଥିମ୍ କାନ୍ଥଛବିକୁ ଅନ୍ଧାରୁଆ କରିଦିଏ</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper">କାନ୍ଥଛବି ହଟାନ୍ତୁ</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">ଏହି ବାର୍ତ୍ତାଳାପ ପାଇଁ କାନ୍ଥଛବି ହଟାନ୍ତୁ?</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">କାନ୍ଥଛବି ହଟାନ୍ତୁ? ଆପଣଙ୍କ ବାର୍ତ୍ତାଳାପ ପାଇଁ ସେଟ୍ କରିଥିବା କଷ୍ଟମ୍ କାନ୍ଥଛବିଗୁଡିକୁ ଏହା ସଫା କରିବ ନାହିଁ</string>
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">ଅନ୍ଧାର ଥିମ୍ କାନ୍ଥଛବିକୁ ଅନ୍ଧାରୁଆ କରିଦିଏ</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper">କାନ୍ଥଛବି ହଟାନ୍ତୁ</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">ଏହି ବାର୍ତ୍ତାଳାପ ପାଇଁ କାନ୍ଥଛବି ହଟାନ୍ତୁ?</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">କାନ୍ଥଛବି ହଟାନ୍ତୁ? ଆପଣଙ୍କ ବାର୍ତ୍ତାଳାପ ପାଇଁ ସେଟ୍ କରିଥିବା କଷ୍ଟମ୍ କାନ୍ଥଛବିଗୁଡିକୁ ଏହା ସଫା କରିବ ନାହିଁ</string> -->
   <string name="ChatWallpaperFragment__reset_all_wallpapers">ସମସ୍ତ କାନ୍ଥଛବି ପୁନଃନିର୍ଦ୍ଧାରିତ କରନ୍ତୁ</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">ଆପଣଙ୍କ ବାର୍ତ୍ତାଳାପ ପାଇଁ ସେଟ୍ ହୋଇଥିବା କଷ୍ଟମ୍ କାନ୍ଥଛବି ସମେତ ସମସ୍ତ କାନ୍ଥଛବି ପୁନଃସେଟ୍ କରନ୍ତୁ? </string>
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">ଆପଣଙ୍କ ବାର୍ତ୍ତାଳାପ ପାଇଁ ସେଟ୍ ହୋଇଥିବା କଷ୍ଟମ୍ କାନ୍ଥଛବି ସମେତ ସମସ୍ତ କାନ୍ଥଛବି ପୁନଃସେଟ୍ କରନ୍ତୁ? </string> -->
   <string name="ChatWallpaperFragment__contact_name">ସମ୍ପର୍କର ନାମ</string>
   <string name="ChatWallpaperFragment__reset">ରିସେଟ୍ କରନ୍ତୁ</string>
   <string name="ChatWallpaperFragment__clear">ସଫା କରନ୍ତୁ</string>

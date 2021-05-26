@@ -643,7 +643,7 @@
   <string name="ManageGroupActivity_mute_notifications">Utišaj obavijesti</string>
   <string name="ManageGroupActivity_custom_notifications">Prilagođene obavijesti</string>
   <string name="ManageGroupActivity_mentions">Spominjanja</string>
-  <string name="ManageGroupActivity_chat_wallpaper">Pozadina razgovora</string>
+  <!-- Removed by excludeNonTranslatables <string name="ManageGroupActivity_chat_wallpaper">Pozadina razgovora</string> -->
   <string name="ManageGroupActivity_until_s">Do %1$s</string>
   <string name="ManageGroupActivity_always">Uvijek</string>
   <string name="ManageGroupActivity_off">Isključeno</string>
@@ -672,7 +672,7 @@
   <string name="ManageGroupActivity_upgrade_this_group">nadogradi ovu grupu.</string>
   <string name="ManageGroupActivity_this_is_an_insecure_mms_group">Ovo je nesigurna MMS grupa. Da biste privatno razgovarali, pozovite svoje kontakte u Signal.</string>
   <string name="ManageGroupActivity_invite_now">Pozovi sada</string>
-  <string name="ManageGroupActivity_more">…više</string>
+  <string name="ManageGroupActivity_more">više</string>
   <string name="ManageGroupActivity_add_group_description">Dodaj opis grupe…</string>
   <!--GroupMentionSettingDialog-->
   <string name="GroupMentionSettingDialog_notify_me_for_mentions">Obavijesti me samo za Spominjanja</string>
@@ -1168,10 +1168,6 @@
   <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">Čini se da pokušavate povezati Signal uređaj pomoću skenera treće strane. Radi vaše zaštite ponovo skenirajte kôd unutar Signal aplikacije.</string>
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">Signal zahtijeva dopuštenje za kameru kako bi mogao skenirati QR kôd, ali je trajno odbijen. Otvorite postavke aplikacije, odaberite \"Dozvole\" i omogućite \"Kamera\".</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">Nije moguće skenirati QR kôd bez dozvole pristupa kamere</string>
-  <!--ExpirationDialog-->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_disappearing_messages">Poruke koje nestaju</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_not_expire">Vaše poruke neće nestati.</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">Poslane i primljene poruke u ovom razgovoru će nestati za %s nakon što ih se vidi.</string> -->
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">Ažuriraj sada</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Ova verzija Signala istječe danas. Ažurirajte na najnoviju verziju.</string>
@@ -2731,12 +2727,12 @@ broj telefona</string>
   <string name="ChatWallpaperActivity__chat_wallpaper">Pozadina razgovora</string>
   <!--ChatWallpaperFragment-->
   <string name="ChatWallpaperFragment__set_wallpaper">Postavi pozadinu</string>
-  <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">Zatamni pozadinu</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper">Ukloni pozadinu</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">Ukloni pozadinu iz ovog razgovora?</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">Želite li ukloniti pozadinu? Ovo neće ukloniti prilagođene pozadine koje ste postavili za razgovore.</string>
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">Zatamni pozadinu</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper">Ukloni pozadinu</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">Ukloni pozadinu iz ovog razgovora?</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">Želite li ukloniti pozadinu? Ovo neće ukloniti prilagođene pozadine koje ste postavili za razgovore.</string> -->
   <string name="ChatWallpaperFragment__reset_all_wallpapers">Poništi sve pozadine</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">Želite li poništiti sve pozadine, uključujući prilagođene pozadine koje ste postavili za razgovore?</string>
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">Želite li poništiti sve pozadine, uključujući prilagođene pozadine koje ste postavili za razgovore?</string> -->
   <string name="ChatWallpaperFragment__contact_name">Ime kontakta</string>
   <string name="ChatWallpaperFragment__reset">Poništi</string>
   <string name="ChatWallpaperFragment__clear">Ukloni</string>
@@ -2834,6 +2830,11 @@ broj telefona</string>
   <string name="ExpireTimerSettingsFragment__30_seconds">30 sekundi</string>
   <string name="ExpireTimerSettingsFragment__set">Postavi</string>
   <string name="ExpireTimerSettingsFragment__save">Spremi</string>
+  <string name="CustomExpireTimerSelectorView__seconds">sekundi</string>
+  <string name="CustomExpireTimerSelectorView__minutes">minute</string>
+  <string name="CustomExpireTimerSelectorView__hours">sati</string>
+  <string name="CustomExpireTimerSelectorView__days">dana</string>
+  <string name="CustomExpireTimerSelectorView__weeks">tjedana</string>
   <!--HelpSettingsFragment-->
   <string name="HelpSettingsFragment__contact_us">Kontaktirajte nas</string>
   <string name="HelpSettingsFragment__version">Verzija</string>

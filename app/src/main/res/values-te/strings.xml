@@ -609,7 +609,7 @@
   <string name="ManageGroupActivity_mute_notifications">  ప్రకటనలను మ్యూట్లో ఉంచు</string>
   <string name="ManageGroupActivity_custom_notifications">అనుకూల ప్రకటనలను</string>
   <string name="ManageGroupActivity_mentions">ప్రస్తావనలు</string>
-  <string name="ManageGroupActivity_chat_wallpaper">సంభాషణ వాల్పేపర్</string>
+  <!-- Removed by excludeNonTranslatables <string name="ManageGroupActivity_chat_wallpaper">సంభాషణ వాల్పేపర్</string> -->
   <string name="ManageGroupActivity_until_s">వరకు %1$s</string>
   <string name="ManageGroupActivity_always">ఎల్లప్పుడూ</string>
   <string name="ManageGroupActivity_off">ఆఫ్</string>
@@ -1105,10 +1105,6 @@
   <string name="DeviceProvisioningActivity_it_looks_like_youre_trying_to_link_a_signal_device_using_a_3rd_party_scanner">మీరు ఒక 3 వ పార్టీ స్కానర్ను ఉపయోగించి ఒక Signal పరికరం లింక్ ప్రయత్నిస్తున్నట్లుగా కనిపిస్తోంది. మీ రక్షణ కోసం, Signal లోపల నుండి మళ్ళీ కోడ్ స్కాన్ చెయ్యండి.</string>
   <string name="DeviceActivity_signal_needs_the_camera_permission_in_order_to_scan_a_qr_code">ఒక QR కోడ్ను స్కాన్ చేయడానికి Signalకు కెమెరా అనుమతి అవసరం, కానీ ఇది శాశ్వతంగా తిరస్కరించబడింది. దయచేసి అనువర్తనం సెట్టింగ్లకు కొనసాగించండి, \"అనుమతులు\" ఎంచుకోండి మరియు \"కెమెరా\" ని ప్రారంభించండి.</string>
   <string name="DeviceActivity_unable_to_scan_a_qr_code_without_the_camera_permission">కెమెరా అనుమతి లేకుండా QR కోడ్ను స్కాన్ చేయడం సాధ్యపడలేదు</string>
-  <!--ExpirationDialog-->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_disappearing_messages">అదృశ్యమవుతున్న  సందేశాలు</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_not_expire">మీ సందేశాలకు గడువు ఉండదు.</string> -->
-  <!-- Removed by excludeNonTranslatables <string name="ExpirationDialog_your_messages_will_disappear_s_after_they_have_been_seen">వారు చూసిన తరువాత ఈ సంభాషణ లో పంపిన మరియు అందుకున్న సందేశాలు %s కనిపించదు.</string> -->
   <!--OutdatedBuildReminder-->
   <string name="OutdatedBuildReminder_update_now">నవీకరణ చేయండి ఇప్పుడు</string>
   <string name="OutdatedBuildReminder_your_version_of_signal_will_expire_today">Signal యొక్క ఈ వెర్షన్ ఈ రోజుతో ముగుస్తుంది. ఇటీవలి సంస్కరణకు నవీకరించండి.</string>
@@ -2498,12 +2494,12 @@
   <string name="ChatWallpaperActivity__chat_wallpaper">సంభాషణ వాల్పేపర్</string>
   <!--ChatWallpaperFragment-->
   <string name="ChatWallpaperFragment__set_wallpaper">వాల్‌పేపర్‌ను జత చేయండి</string>
-  <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">మూదురు థీమ్ వాల్పెపర్ను మసకబారుతుంది</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper">వాల్‌పేపర్‌ను క్లియర్ చేయండి</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">ఈ మాటామంతీ కోసం వాల్‌పేపర్‌ను క్లియర్ చేయాలా?</string>
-  <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">వాల్‌పేపర్‌ను క్లియర్ చేయాలా? ఇది మీ మాటామంతీ‌ల కోసం మీరు సెట్ చేసిన అనుకూల వాల్‌పేపర్‌లను క్లియర్ చేయదు.</string>
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__dark_theme_dims_wallpaper">మూదురు థీమ్ వాల్పెపర్ను మసకబారుతుంది</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper">వాల్‌పేపర్‌ను క్లియర్ చేయండి</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper_for_this_chat">ఈ మాటామంతీ కోసం వాల్‌పేపర్‌ను క్లియర్ చేయాలా?</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__clear_wallpaper_this_will_not">వాల్‌పేపర్‌ను క్లియర్ చేయాలా? ఇది మీ మాటామంతీ‌ల కోసం మీరు సెట్ చేసిన అనుకూల వాల్‌పేపర్‌లను క్లియర్ చేయదు.</string> -->
   <string name="ChatWallpaperFragment__reset_all_wallpapers">అన్ని వాల్‌పేపర్‌లను రీసెట్ చేయండి</string>
-  <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">మీ చాట్‌ల కోసం మీరు సెట్ చేసిన అనుకూల వాల్‌పేపర్‌లతో సహా అన్ని వాల్‌పేపర్‌లను రీసెట్ చేయాలా?</string>
+  <!-- Removed by excludeNonTranslatables <string name="ChatWallpaperFragment__reset_all_wallpapers_including_custom">మీ చాట్‌ల కోసం మీరు సెట్ చేసిన అనుకూల వాల్‌పేపర్‌లతో సహా అన్ని వాల్‌పేపర్‌లను రీసెట్ చేయాలా?</string> -->
   <string name="ChatWallpaperFragment__contact_name">సంప్రదింపు పేరు</string>
   <string name="ChatWallpaperFragment__reset">పునరుద్ధరించు</string>
   <string name="ChatWallpaperFragment__clear">స్పష్టమైన</string>
@@ -2579,6 +2575,8 @@
   <string name="ExpireTimerSettingsFragment__30_seconds">30సెకన్లు</string>
   <string name="ExpireTimerSettingsFragment__set">జత</string>
   <string name="ExpireTimerSettingsFragment__save">భద్రపరుచు</string>
+  <string name="CustomExpireTimerSelectorView__minutes">నిముషాలు </string>
+  <string name="CustomExpireTimerSelectorView__hours">గంటలు</string>
   <!--HelpSettingsFragment-->
   <string name="HelpSettingsFragment__contact_us">మమ్మల్ని సంప్రదించండి</string>
   <string name="HelpSettingsFragment__version">వివరణము</string>

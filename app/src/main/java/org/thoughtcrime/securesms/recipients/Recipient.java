@@ -12,12 +12,9 @@ import androidx.annotation.WorkerThread;
 
 import com.annimon.stream.Stream;
 
-import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.logging.Log;
 import org.signal.zkgroup.profiles.ProfileKeyCredential;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.color.MaterialColor;
-import org.thoughtcrime.securesms.contacts.avatars.ContactColors;
 import org.thoughtcrime.securesms.contacts.avatars.ContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.FallbackContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.GeneratedContactPhoto;
@@ -26,6 +23,9 @@ import org.thoughtcrime.securesms.contacts.avatars.ProfileContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.ResourceContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.SystemContactPhoto;
 import org.thoughtcrime.securesms.contacts.avatars.TransparentContactPhoto;
+import org.thoughtcrime.securesms.conversation.colors.AvatarColor;
+import org.thoughtcrime.securesms.conversation.colors.ChatColors;
+import org.thoughtcrime.securesms.conversation.colors.ChatColorsPalette;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.RecipientDatabase;
 import org.thoughtcrime.securesms.database.RecipientDatabase.MentionSetting;
@@ -84,7 +84,6 @@ public class Recipient {
   private final VibrateState           callVibrate;
   private final Uri                    messageRingtone;
   private final Uri                    callRingtone;
-  private final MaterialColor          color;
   private final Optional<Integer>      defaultSubscriptionId;
   private final int                    expireMessages;
   private final RegisteredState        registered;
@@ -108,6 +107,8 @@ public class Recipient {
   private final byte[]                 storageId;
   private final MentionSetting         mentionSetting;
   private final ChatWallpaper          wallpaper;
+  private final ChatColors             chatColors;
+  private final AvatarColor            avatarColor;
   private final String                 about;
   private final String                 aboutEmoji;
   private final ProfileName            systemProfileName;
@@ -330,7 +331,6 @@ public class Recipient {
     this.callVibrate                 = VibrateState.DEFAULT;
     this.messageRingtone             = null;
     this.callRingtone                = null;
-    this.color                       = null;
     this.insightsBannerTier          = InsightsBannerTier.TIER_TWO;
     this.defaultSubscriptionId       = Optional.absent();
     this.expireMessages              = 0;
@@ -354,6 +354,8 @@ public class Recipient {
     this.storageId                   = null;
     this.mentionSetting              = MentionSetting.ALWAYS_NOTIFY;
     this.wallpaper                   = null;
+    this.chatColors                  = null;
+    this.avatarColor                 = AvatarColor.UNKNOWN;
     this.about                       = null;
     this.aboutEmoji                  = null;
     this.systemProfileName           = ProfileName.EMPTY;
@@ -379,7 +381,6 @@ public class Recipient {
     this.callVibrate                 = details.callVibrateState;
     this.messageRingtone             = details.messageRingtone;
     this.callRingtone                = details.callRingtone;
-    this.color                       = details.color;
     this.insightsBannerTier          = details.insightsBannerTier;
     this.defaultSubscriptionId       = details.defaultSubscriptionId;
     this.expireMessages              = details.expireMessages;
@@ -403,6 +404,8 @@ public class Recipient {
     this.storageId                   = details.storageId;
     this.mentionSetting              = details.mentionSetting;
     this.wallpaper                   = details.wallpaper;
+    this.chatColors                  = details.chatColors;
+    this.avatarColor                 = details.avatarColor;
     this.about                       = details.about;
     this.aboutEmoji                  = details.aboutEmoji;
     this.systemProfileName           = details.systemProfileName;
@@ -554,24 +557,6 @@ public class Recipient {
                                         getUsername().orNull());
 
     return StringUtil.isolateBidi(name);
-  }
-
-  public @NonNull MaterialColor getColor() {
-    if (isGroupInternal()) {
-      return MaterialColor.GROUP;
-    } else if (color != null) {
-      return color;
-     } else if (groupName != null || profileSharing) {
-      Log.w(TAG, "Had no color for " + id + "! Saving a new one.");
-
-      Context       context = ApplicationDependencies.getApplication();
-      MaterialColor color   = ContactColors.generateFor(getDisplayName(context));
-
-      SignalExecutors.BOUNDED.execute(() -> DatabaseFactory.getRecipientDatabase(context).setColorIfNotSet(id, color));
-      return color;
-    } else {
-      return ContactColors.UNKNOWN_COLOR;
-    }
   }
 
   public @NonNull Optional<UUID> getUuid() {
@@ -775,11 +760,11 @@ public class Recipient {
   }
 
   public @NonNull Drawable getFallbackContactPhotoDrawable(Context context, boolean inverted, @Nullable FallbackPhotoProvider fallbackPhotoProvider) {
-    return getFallbackContactPhoto(Util.firstNonNull(fallbackPhotoProvider, DEFAULT_FALLBACK_PHOTO_PROVIDER)).asDrawable(context, getColor().toAvatarColor(context), inverted);
+    return getFallbackContactPhoto(Util.firstNonNull(fallbackPhotoProvider, DEFAULT_FALLBACK_PHOTO_PROVIDER)).asDrawable(context, avatarColor.colorInt(), inverted);
   }
 
   public @NonNull Drawable getSmallFallbackContactPhotoDrawable(Context context, boolean inverted, @Nullable FallbackPhotoProvider fallbackPhotoProvider) {
-    return getFallbackContactPhoto(Util.firstNonNull(fallbackPhotoProvider, DEFAULT_FALLBACK_PHOTO_PROVIDER)).asSmallDrawable(context, getColor().toAvatarColor(context), inverted);
+    return getFallbackContactPhoto(Util.firstNonNull(fallbackPhotoProvider, DEFAULT_FALLBACK_PHOTO_PROVIDER)).asSmallDrawable(context, avatarColor.colorInt(), inverted);
   }
 
   public @NonNull FallbackContactPhoto getFallbackContactPhoto() {
@@ -920,6 +905,36 @@ public class Recipient {
     return wallpaper != null || SignalStore.wallpaper().hasWallpaperSet();
   }
 
+  public boolean hasOwnChatColors() {
+    return chatColors != null;
+  }
+
+  public @NonNull ChatColors getChatColors() {
+    if (chatColors != null && chatColors.getId() instanceof ChatColors.Id.Auto) {
+      return getAutoChatColor();
+    } else if (chatColors != null) {
+      return chatColors;
+    } else if (SignalStore.chatColorsValues().hasChatColors()) {
+      return Objects.requireNonNull(SignalStore.chatColorsValues().getChatColors());
+    } else {
+      return getAutoChatColor();
+    }
+  }
+
+  private @NonNull ChatColors getAutoChatColor() {
+    if (wallpaper != null) {
+      return wallpaper.getAutoChatColors();
+    } else if (getWallpaper() != null) {
+      return getWallpaper().getAutoChatColors();
+    } else {
+      return ChatColorsPalette.Bubbles.getDefault();
+    }
+  }
+
+  public @NonNull AvatarColor getAvatarColor() {
+    return avatarColor;
+  }
+
   public boolean isSystemContact() {
     return contactUri != null;
   }
@@ -1001,7 +1016,6 @@ public class Recipient {
   public int hashCode() {
     return Objects.hash(id);
   }
-
 
   public enum Capability {
     UNKNOWN(0),
@@ -1088,7 +1102,6 @@ public class Recipient {
            callVibrate == other.callVibrate &&
            Objects.equals(messageRingtone, other.messageRingtone) &&
            Objects.equals(callRingtone, other.callRingtone) &&
-           color == other.color &&
            Objects.equals(defaultSubscriptionId, other.defaultSubscriptionId) &&
            registered == other.registered &&
            Arrays.equals(profileKey, other.profileKey) &&
@@ -1108,6 +1121,8 @@ public class Recipient {
            Arrays.equals(storageId, other.storageId) &&
            mentionSetting == other.mentionSetting &&
            Objects.equals(wallpaper, other.wallpaper) &&
+           Objects.equals(chatColors, other.chatColors) &&
+           Objects.equals(avatarColor, other.avatarColor) &&
            Objects.equals(about, other.about) &&
            Objects.equals(aboutEmoji, other.aboutEmoji) &&
            Objects.equals(extras, other.extras);

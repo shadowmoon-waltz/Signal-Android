@@ -1318,7 +1318,7 @@ public class ThreadDatabase extends Database {
     }
   }
 
-  private @Nullable ThreadRecord getThreadRecord(@Nullable Long threadId) {
+  public @Nullable ThreadRecord getThreadRecord(@Nullable Long threadId) {
     if (threadId == null) {
       return null;
     }
@@ -1502,6 +1502,7 @@ public class ThreadDatabase extends Database {
                                                           group.hasAvatar() ? Optional.of(group.getAvatarId()) : Optional.absent(),
                                                           false,
                                                           false,
+                                                          recipientSettings.getRegistered(),
                                                           recipientSettings,
                                                           null);
           recipient = new Recipient(recipientId, details, false);

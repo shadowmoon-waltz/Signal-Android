@@ -90,6 +90,8 @@ import org.thoughtcrime.securesms.contactshare.SharedContactDetailsActivity;
 import org.thoughtcrime.securesms.conversation.ConversationAdapter.ItemClickListener;
 import org.thoughtcrime.securesms.conversation.ConversationAdapter.StickyHeaderViewHolder;
 import org.thoughtcrime.securesms.conversation.ConversationMessage.ConversationMessageFactory;
+import org.thoughtcrime.securesms.conversation.colors.Colorizer;
+import org.thoughtcrime.securesms.conversation.colors.ColorizerView;
 import org.thoughtcrime.securesms.conversation.ui.error.EnableCallNotificationSettingsDialog;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.MessageDatabase;
@@ -101,9 +103,10 @@ import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.database.model.MmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.ReactionRecord;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.giph.mp4.GiphyMp4Playable;
+import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackController;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackPolicy;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4ProjectionPlayerHolder;
-import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackController;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4ProjectionRecycler;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.GroupMigrationMembershipChange;
@@ -184,39 +187,41 @@ public class ConversationFragment extends LoggingFragment {
 
   private ConversationFragmentListener listener;
 
-  private LiveRecipient                recipient;
-  private long                         threadId;
-  private boolean                      isReacting;
-  private ActionMode                   actionMode;
-  private Locale                       locale;
-  private FrameLayout                  videoContainer;
-  private RecyclerView                 list;
-  private RecyclerView.ItemDecoration  lastSeenDecoration;
-  private RecyclerView.ItemDecoration  inlineDateDecoration;
-  private ViewSwitcher                 topLoadMoreView;
-  private ViewSwitcher                 bottomLoadMoreView;
-  private ConversationTypingView       typingView;
-  private View                         composeDivider;
-  private ConversationScrollToView     scrollToBottomButton;
-  private ConversationScrollToView     scrollToMentionButton;
-  private TextView                     scrollDateHeader;
-  private ConversationBannerView       conversationBanner;
-  private MessageRequestViewModel      messageRequestViewModel;
-  private MessageCountsViewModel       messageCountsViewModel;
-  private ConversationViewModel        conversationViewModel;
-  private SnapToTopDataObserver        snapToTopDataObserver;
-  private MarkReadHelper               markReadHelper;
-  private Animation                    scrollButtonInAnimation;
-  private Animation                    mentionButtonInAnimation;
-  private Animation                    scrollButtonOutAnimation;
-  private Animation                    mentionButtonOutAnimation;
-  private OnScrollListener             conversationScrollListener;
-  private int                          pulsePosition = -1;
-  private VoiceNoteMediaController     voiceNoteMediaController;
-  private View                         toolbarShadow;
-  private Stopwatch                    startupStopwatch;
+  private LiveRecipient               recipient;
+  private long                        threadId;
+  private boolean                     isReacting;
+  private ActionMode                  actionMode;
+  private Locale                      locale;
+  private FrameLayout                 videoContainer;
+  private RecyclerView                list;
+  private RecyclerView.ItemDecoration lastSeenDecoration;
+  private RecyclerView.ItemDecoration inlineDateDecoration;
+  private ViewSwitcher                topLoadMoreView;
+  private ViewSwitcher                bottomLoadMoreView;
+  private ConversationTypingView      typingView;
+  private View                        composeDivider;
+  private ConversationScrollToView    scrollToBottomButton;
+  private ConversationScrollToView    scrollToMentionButton;
+  private TextView                    scrollDateHeader;
+  private ConversationBannerView      conversationBanner;
+  private MessageRequestViewModel     messageRequestViewModel;
+  private MessageCountsViewModel      messageCountsViewModel;
+  private ConversationViewModel       conversationViewModel;
+  private SnapToTopDataObserver       snapToTopDataObserver;
+  private MarkReadHelper              markReadHelper;
+  private Animation                   scrollButtonInAnimation;
+  private Animation                   mentionButtonInAnimation;
+  private Animation                   scrollButtonOutAnimation;
+  private Animation                   mentionButtonOutAnimation;
+  private OnScrollListener            conversationScrollListener;
+  private int                         pulsePosition = -1;
+  private VoiceNoteMediaController    voiceNoteMediaController;
+  private View                        toolbarShadow;
+  private ColorizerView               colorizerView;
+  private Stopwatch                   startupStopwatch;
 
   private GiphyMp4ProjectionRecycler giphyMp4ProjectionRecycler;
+  private Colorizer                  colorizer;
 
   public static void prepare(@NonNull Context context) {
     FrameLayout parent = new FrameLayout(context);
@@ -248,6 +253,10 @@ public class ConversationFragment extends LoggingFragment {
     scrollToMentionButton = view.findViewById(R.id.scroll_to_mention);
     scrollDateHeader      = view.findViewById(R.id.scroll_date_header);
     toolbarShadow         = requireActivity().findViewById(R.id.conversation_toolbar_shadow);
+    colorizerView         = view.findViewById(R.id.conversation_colorizer_view);
+
+    ConversationIntents.Args args = ConversationIntents.Args.from(requireActivity().getIntent());
+    colorizerView.setBackground(args.getChatColors().getChatBubbleMask());
 
     final LinearLayoutManager layoutManager = new SmoothScrollingLinearLayoutManager(getActivity(), true);
     list.setHasFixedSize(false);
@@ -273,7 +282,7 @@ public class ConversationFragment extends LoggingFragment {
                                                                conversationMessage.getMessageRecord(),
                                                                messageRequestViewModel.shouldShowMessageRequest()),
             this::handleReplyMessage,
-            giphyMp4ProjectionRecycler
+            this::onViewHolderPositionTranslated
     ).attachToRecyclerView(list);
 
     setupListLayoutListeners();
@@ -310,6 +319,19 @@ public class ConversationFragment extends LoggingFragment {
     scrollToMentionButton.setOnClickListener(v -> scrollToNextMention());
 
     updateToolbarDependentMargins();
+
+    colorizer = new Colorizer(colorizerView);
+    colorizer.attachToRecyclerView(list);
+
+    conversationViewModel.getChatColors().observe(getViewLifecycleOwner(), chatColors -> colorizer.onChatColorsChanged(chatColors));
+    conversationViewModel.getNameColorsMap().observe(getViewLifecycleOwner(), nameColorsMap -> {
+      colorizer.onNameColorsChanged(nameColorsMap);
+
+      ConversationAdapter adapter = getListAdapter();
+      if (adapter != null) {
+        adapter.notifyDataSetChanged();
+      }
+    });
 
     return view;
   }
@@ -353,10 +375,12 @@ public class ConversationFragment extends LoggingFragment {
   private void setListVerticalTranslation() {
     if (list.canScrollVertically(1) || list.canScrollVertically(-1) || list.getChildCount() == 0) {
       list.setTranslationY(0);
+      colorizerView.setTranslationY(0);
       list.setOverScrollMode(RecyclerView.OVER_SCROLL_IF_CONTENT_SCROLLS);
     } else {
       int chTop = list.getChildAt(list.getChildCount() - 1).getTop();
       list.setTranslationY(Math.min(0, -chTop));
+      colorizerView.setTranslationY(Math.min(0, -chTop));
       list.setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
     }
 
@@ -465,6 +489,16 @@ public class ConversationFragment extends LoggingFragment {
           setInlineDateDecoration(adapter);
         }
       }
+    }
+  }
+
+  private void onViewHolderPositionTranslated(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+    if (viewHolder instanceof GiphyMp4Playable) {
+      giphyMp4ProjectionRecycler.updateDisplay(recyclerView, (GiphyMp4Playable) viewHolder);
+    }
+
+    if (colorizer != null) {
+      colorizer.applyClipPathsToMaskedGradient(recyclerView);
     }
   }
 
@@ -617,7 +651,7 @@ public class ConversationFragment extends LoggingFragment {
       }
 
       Log.d(TAG, "Initializing adapter for " + recipient.getId());
-      ConversationAdapter adapter = new ConversationAdapter(this, GlideApp.with(this), locale, selectionClickListener, this.recipient.get(), new AttachmentMediaSourceFactory(requireContext()));
+      ConversationAdapter adapter = new ConversationAdapter(this, GlideApp.with(this), locale, selectionClickListener, this.recipient.get(), new AttachmentMediaSourceFactory(requireContext()), colorizer);
       adapter.setPagingController(conversationViewModel.getPagingController());
       list.setAdapter(adapter);
       setInlineDateDecoration(adapter);
@@ -1142,6 +1176,10 @@ public class ConversationFragment extends LoggingFragment {
     if (getListAdapter() != null) {
       getListAdapter().onSearchQueryUpdated(query);
     }
+  }
+
+  public @NonNull Colorizer getColorizer() {
+    return Objects.requireNonNull(colorizer);
   }
 
   @SuppressWarnings("CodeBlock2Expr")
