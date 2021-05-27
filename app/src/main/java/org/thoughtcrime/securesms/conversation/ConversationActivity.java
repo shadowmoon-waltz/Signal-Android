@@ -894,6 +894,10 @@ public class ConversationActivity extends PassphraseRequiredActivity
 
     inflater.inflate(R.menu.conversation, menu);
 
+    if (!TextSecurePreferences.isConversationDeleteInMenu(this)) {
+      hideMenuItem(menu, R.id.menu_delete_conversation);
+    }
+
     if (isSingleConversation() && isSecureText) {
       inflater.inflate(R.menu.conversation_secure, menu);
     } else if (isSingleConversation()) {
@@ -1028,6 +1032,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
     case R.id.menu_expiring_messages_off:
     case R.id.menu_expiring_messages:         handleSelectMessageExpiration();                   return true;
     case R.id.menu_create_bubble:             handleCreateBubble();                              return true;
+    case R.id.menu_delete_conversation:       handleDeleteConversation();                        return true;
     case android.R.id.home:                   super.onBackPressed();                             return true;
     }
 
@@ -1284,6 +1289,23 @@ public class ConversationActivity extends PassphraseRequiredActivity
 
     BubbleUtil.displayAsBubble(this, args.getRecipientId(), args.getThreadId());
     finish();
+  }
+
+  private void handleDeleteConversation() {
+    final long threadId = viewModel.getArgs().getThreadId();
+
+    new AlertDialog.Builder(this)
+      .setTitle(R.string.ConversationActivity_delete_conversation)
+      .setPositiveButton(R.string.yes, (d, i) -> {
+        DatabaseFactory.getThreadDatabase(this).deleteConversation(threadId);
+        ApplicationDependencies.getMessageNotifier().updateNotification(this);
+        finish();
+        d.dismiss();
+      })
+      .setNegativeButton(R.string.no, (d, i) -> {
+        d.dismiss();
+      })
+      .show();
   }
 
   private static void addIconToHomeScreen(@NonNull Context context,

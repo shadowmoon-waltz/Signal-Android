@@ -73,6 +73,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__conversation_delete_in_menu),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__conversation_delete_in_menu_summary),
+        isChecked = state.conversationDeleteInMenu,
+        onClick = {
+          TextSecurePreferences.setConversationDeleteInMenu(requireContext(), !state.conversationDeleteInMenu)
+          viewModel.setConversationDeleteInMenu(!state.conversationDeleteInMenu)
+        }
+      )
+
       clickPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
         onClick = {

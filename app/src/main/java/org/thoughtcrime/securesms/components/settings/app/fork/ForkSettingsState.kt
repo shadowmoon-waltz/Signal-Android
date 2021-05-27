@@ -5,5 +5,6 @@ data class ForkSettingsState(
   val showReactionTimestamps: Boolean,
   val forceWebsocketMode: Boolean,
   val fastCustomReactionChange: Boolean,
-  val copyTextOpensPopup: Boolean
+  val copyTextOpensPopup: Boolean,
+  val conversationDeleteInMenu: Boolean
 )

@@ -70,6 +70,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String FORCE_WEBSOCKET_MODE                    = "settings.fork.force.websocket.mode";
   public static final String FAST_CUSTOM_REACTION_CHANGE             = "settings.fork.fast.custom.reaction.change";
   public static final String COPY_TEXT_OPENS_POPUP                   = "settings.fork.copy.text.opens.popup";
+  public static final String CONVERSATION_DELETE_IN_MENU             = "settings.conversation.delete.in.menu";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -117,7 +118,8 @@ public final class SettingsValues extends SignalStoreValues {
                          SHOW_REACTION_TIMESTAMPS,
                          FORCE_WEBSOCKET_MODE,
                          FAST_CUSTOM_REACTION_CHANGE,
-                         COPY_TEXT_OPENS_POPUP);
+                         COPY_TEXT_OPENS_POPUP,
+                         CONVERSATION_DELETE_IN_MENU);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -447,5 +449,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setCopyTextOpensPopup(boolean copyTextOpensPopup) {
     putBoolean(COPY_TEXT_OPENS_POPUP, copyTextOpensPopup);
+  }
+
+  public boolean isConversationDeleteInMenu() {
+    return getBoolean(CONVERSATION_DELETE_IN_MENU, TextSecurePreferences.isConversationDeleteInMenu(ApplicationDependencies.getApplication()));
+  }
+
+  public void setConversationDeleteInMenu(boolean conversationDeleteInMenu) {
+    putBoolean(CONVERSATION_DELETE_IN_MENU, conversationDeleteInMenu);
   }
 }
