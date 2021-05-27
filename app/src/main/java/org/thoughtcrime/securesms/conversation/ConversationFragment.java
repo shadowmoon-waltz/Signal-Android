@@ -702,7 +702,8 @@ public class ConversationFragment extends LoggingFragment {
         replacedByIncomingMessage = false;
       }
 
-      typingView.setTypists(GlideApp.with(ConversationFragment.this), recipients, recipient.get().isGroup());
+      Recipient resolved = recipient.get();
+      typingView.setTypists(GlideApp.with(ConversationFragment.this), recipients, resolved.isGroup(), resolved.hasWallpaper());
 
       ConversationAdapter adapter = getListAdapter();
 
