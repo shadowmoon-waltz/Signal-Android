@@ -15,6 +15,7 @@ import com.annimon.stream.Stream;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.signal.core.util.MapUtil;
 import org.signal.core.util.logging.Log;
 import org.signal.paging.PagedData;
 import org.signal.paging.PagingConfig;
@@ -25,6 +26,7 @@ import org.thoughtcrime.securesms.conversation.colors.ChatColorsPalette;
 import org.thoughtcrime.securesms.conversation.colors.NameColor;
 import org.thoughtcrime.securesms.database.DatabaseObserver;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.LiveGroup;
 import org.thoughtcrime.securesms.groups.ui.GroupMemberEntry;
 import org.thoughtcrime.securesms.mediasend.Media;
@@ -32,15 +34,21 @@ import org.thoughtcrime.securesms.mediasend.MediaRepository;
 import org.thoughtcrime.securesms.ratelimit.RecaptchaRequiredEvent;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
+import org.thoughtcrime.securesms.util.DefaultValueLiveData;
 import org.thoughtcrime.securesms.util.SingleLiveEvent;
 import org.thoughtcrime.securesms.util.livedata.LiveDataUtil;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
 import org.whispersystems.libsignal.util.Pair;
+import org.whispersystems.libsignal.util.guava.Optional;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 public class ConversationViewModel extends ViewModel {
@@ -63,6 +71,8 @@ public class ConversationViewModel extends ViewModel {
   private final LiveData<ChatWallpaper>             wallpaper;
   private final SingleLiveEvent<Event>              events;
   private final LiveData<ChatColors>                chatColors;
+
+  private final Map<GroupId, Set<Recipient>> sessionMemberCache = new HashMap<>();
 
   private ConversationIntents.Args args;
   private int                      jumpToPosition;
@@ -203,31 +213,48 @@ public class ConversationViewModel extends ViewModel {
   }
 
   @NonNull LiveData<Map<RecipientId, NameColor>> getNameColorsMap() {
-    LiveData<Recipient>                         recipient       = Transformations.switchMap(recipientId, r -> Recipient.live(r).getLiveData());
-    LiveData<Recipient>                         groupRecipients = LiveDataUtil.filter(recipient, Recipient::isGroup);
-    LiveData<List<GroupMemberEntry.FullMember>> groupMembers    = Transformations.switchMap(groupRecipients, r -> new LiveGroup(r.getGroupId().get()).getFullMembers());
+    LiveData<Recipient>         recipient    = Transformations.switchMap(recipientId, r -> Recipient.live(r).getLiveData());
+    LiveData<Optional<GroupId>> group        = Transformations.map(recipient, Recipient::getGroupId);
+    LiveData<Set<Recipient>>    groupMembers = Transformations.switchMap(group, g -> {
+      //noinspection CodeBlock2Expr
+      return g.transform(this::getSessionGroupRecipients)
+              .or(() -> new DefaultValueLiveData<>(Collections.emptySet()));
+    });
 
     return Transformations.map(groupMembers, members -> {
-      List<GroupMemberEntry.FullMember> sorted = Stream.of(members)
-                                                       .filter(member -> !Objects.equals(member.getMember(), Recipient.self()))
-                                                       .sortBy(this::getMemberIdentifier)
-                                                       .toList();
+      List<Recipient> sorted = Stream.of(members)
+                                     .filter(member -> !Objects.equals(member, Recipient.self()))
+                                     .sortBy(this::getMemberIdentifier)
+                                     .toList();
 
       List<NameColor> names = ChatColorsPalette.Names.getAll();
       Map<RecipientId, NameColor> colors = new HashMap<>();
       for (int i = 0; i < sorted.size(); i++) {
-        colors.put(sorted.get(i).getMember().getId(), names.get(i % names.size()));
+        colors.put(sorted.get(i).getId(), names.get(i % names.size()));
       }
 
       return colors;
     });
   }
 
-  private @NonNull String getMemberIdentifier(@NonNull GroupMemberEntry.FullMember fullMember) {
-    return fullMember.getMember()
-                     .getUuid()
+  private @NonNull LiveData<Set<Recipient>> getSessionGroupRecipients(@NonNull GroupId groupId) {
+    LiveData<List<Recipient>> fullMembers = Transformations.map(new LiveGroup(groupId).getFullMembers(),
+                                                                members -> Stream.of(members)
+                                                                                 .map(GroupMemberEntry.FullMember::getMember)
+                                                                                 .toList());
+
+    return Transformations.map(fullMembers, currentMembership -> {
+      Set<Recipient> cachedMembers = MapUtil.getOrDefault(sessionMemberCache, groupId, new HashSet<>());
+      cachedMembers.addAll(currentMembership);
+      sessionMemberCache.put(groupId, cachedMembers);
+      return cachedMembers;
+    });
+  }
+
+  private @NonNull String getMemberIdentifier(@NonNull Recipient fullMember) {
+    return fullMember.getUuid()
                      .transform(UUID::toString)
-                     .or(fullMember.getMember().getE164())
+                     .or(fullMember.getE164())
                      .or("");
   }
 
