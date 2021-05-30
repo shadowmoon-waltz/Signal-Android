@@ -17,6 +17,7 @@ Differences from stock Signal:
 * Option to open popup with editable text when selecting copying text for one or more messages in a conversation, which allows for easy modification and/or copying of part or all of the string
 * Option to add menu option to conversation view to delete the current conversation (still prompted with a confirmation popup)
 * Option to customize swipe to right conversation item action. Options are reply (non-fork version uses this), do nothing (disable swipe to right), delete message (with usual prompt or for me without prompt), copy text (normal method or with popup), or show message details
+* Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)
 
 The original README follows, and may not reflect changes in the fork.
 

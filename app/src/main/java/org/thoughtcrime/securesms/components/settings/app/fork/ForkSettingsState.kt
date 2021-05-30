@@ -7,5 +7,6 @@ data class ForkSettingsState(
   val fastCustomReactionChange: Boolean,
   val copyTextOpensPopup: Boolean,
   val conversationDeleteInMenu: Boolean,
-  val swipeToRightAction: String
+  val swipeToRightAction: String,
+  val rangeMultiSelect: Boolean
 )

@@ -72,6 +72,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String COPY_TEXT_OPENS_POPUP                   = "settings.fork.copy.text.opens.popup";
   public static final String CONVERSATION_DELETE_IN_MENU             = "settings.conversation.delete.in.menu";
   public static final String SWIPE_TO_RIGHT_ACTION                   = "settings.swipe.to.right.action";
+  public static final String RANGE_MULTI_SELECT                      = "settings.range.multi.select";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -121,7 +122,8 @@ public final class SettingsValues extends SignalStoreValues {
                          FAST_CUSTOM_REACTION_CHANGE,
                          COPY_TEXT_OPENS_POPUP,
                          CONVERSATION_DELETE_IN_MENU,
-                         SWIPE_TO_RIGHT_ACTION);
+                         SWIPE_TO_RIGHT_ACTION,
+                         RANGE_MULTI_SELECT);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -467,5 +469,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setSwipeToRightAction(@NonNull String swipeToRightAction) {
     putString(SWIPE_TO_RIGHT_ACTION, swipeToRightAction);
+  }
+
+  public boolean isRangeMultiSelect() {
+    return getBoolean(RANGE_MULTI_SELECT, TextSecurePreferences.isRangeMultiSelect(ApplicationDependencies.getApplication()));
+  }
+
+  public void setRangeMultiSelect(boolean rangeMultiSelect) {
+    putBoolean(RANGE_MULTI_SELECT, rangeMultiSelect);
   }
 }

@@ -1493,7 +1493,15 @@ public class ConversationFragment extends LoggingFragment {
     @Override
     public void onItemLongClick(View itemView, ConversationMessage conversationMessage) {
 
-      if (actionMode != null) return;
+      if (actionMode != null) {
+        if (TextSecurePreferences.isRangeMultiSelect(requireContext())) {
+          ((ConversationAdapter) list.getAdapter()).toggleFromMostRecentSelectedTo(conversationMessage);
+          list.getAdapter().notifyDataSetChanged();
+          setCorrectMenuVisibility(actionMode.getMenu());
+          actionMode.setTitle(String.valueOf(getListAdapter().getSelectedItems().size()));
+        }
+        return;
+      }
 
       MessageRecord messageRecord = conversationMessage.getMessageRecord();
 

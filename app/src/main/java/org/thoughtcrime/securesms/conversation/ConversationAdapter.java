@@ -125,6 +125,7 @@ public class ConversationAdapter
   private boolean             isMessageRequestAccepted;
   private ConversationMessage inlineContent;
   private Colorizer           colorizer;
+  private ConversationMessage mostRecentSelected;
 
   ConversationAdapter(@NonNull LifecycleOwner lifecycleOwner,
                       @NonNull GlideRequests glideRequests,
@@ -161,6 +162,8 @@ public class ConversationAdapter
     this.isMessageRequestAccepted     = true;
     this.attachmentMediaSourceFactory = attachmentMediaSourceFactory;
     this.colorizer                    = colorizer;
+
+    this.mostRecentSelected           = null;
 
     setHasStableIds(true);
   }
@@ -537,6 +540,7 @@ public class ConversationAdapter
    * Clears all selected records from multi-select mode.
    */
   void clearSelection() {
+    mostRecentSelected = null;
     selected.clear();
   }
 
@@ -545,10 +549,55 @@ public class ConversationAdapter
    */
   void toggleSelection(ConversationMessage conversationMessage) {
     if (selected.contains(conversationMessage)) {
+      mostRecentSelected = null;
       selected.remove(conversationMessage);
     } else {
+      mostRecentSelected = conversationMessage;
       selected.add(conversationMessage);
     }
+  }
+
+  void toggleFromMostRecentSelectedTo(@NonNull ConversationMessage conversationMessage) {
+    if (mostRecentSelected == null) {
+      return;
+    }
+
+    int indexOfMRS = 0;
+    for (; indexOfMRS < getItemCount(); indexOfMRS++) {
+      //if (getItem(indexOfMRS).getMessageRecord().getId() == mostRecentSelected.getMessageRecord().getId()) {
+      if (getItem(indexOfMRS) == mostRecentSelected) {
+        break;
+      }
+    }
+
+    if (indexOfMRS == getItemCount()) {
+      return;
+    }
+
+    int indexOfCM = 0;
+    for (; indexOfCM < getItemCount(); indexOfCM++) {
+      //if (getItem(indexOfCM).getMessageRecord().getId() == conversationMessage.getMessageRecord().getId()) {
+      if (getItem(indexOfCM) == conversationMessage) {
+        break;
+      }
+    }
+
+    if (indexOfCM == getItemCount()) {
+      return;
+    }
+
+    if (indexOfMRS > indexOfCM) {
+      final int t = indexOfMRS;
+      indexOfMRS = indexOfCM;
+      indexOfCM = t;
+    }
+
+    while (indexOfMRS <= indexOfCM) {
+      selected.add(getItem(indexOfMRS));
+      indexOfMRS++;
+    }
+
+    mostRecentSelected = conversationMessage;
   }
 
   /**
