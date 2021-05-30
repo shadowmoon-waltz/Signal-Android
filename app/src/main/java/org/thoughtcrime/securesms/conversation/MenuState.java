@@ -133,6 +133,24 @@ final class MenuState {
            !messageRecord.getRecipient().isBlocked();
   }
 
+  static boolean canDeleteMessage(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord) || !messageRecord.isInMemoryMessageRecord());
+  }
+
+
+  static boolean canCopyMessage(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord) && !messageRecord.isRemoteDelete() && messageRecord.getBody().length() > 0);
+  }
+
+  static boolean canForwardMessage(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord) && (!messageRecord.isMms() || ((MmsMessageRecord) messageRecord).getSharedContacts().isEmpty()) &&
+            !messageRecord.isViewOnce() && !messageRecord.isRemoteDelete() && !messageRecord.isMediaPending());
+  }
+
+  static boolean canShowMessageDetails(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord));
+  }
+
   static boolean isActionMessage(@NonNull MessageRecord messageRecord) {
     return messageRecord.isGroupAction()           ||
            messageRecord.isCallLog()               ||

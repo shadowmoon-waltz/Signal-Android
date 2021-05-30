@@ -53,6 +53,7 @@ import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
@@ -124,6 +125,8 @@ import org.thoughtcrime.securesms.util.LongClickMovementMethod;
 import org.thoughtcrime.securesms.util.Projection;
 import org.thoughtcrime.securesms.util.SearchUtil;
 import org.thoughtcrime.securesms.util.StringUtil;
+import org.thoughtcrime.securesms.util.SwipeToRightActionTypes;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.UrlClickHandler;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.VibrateUtil;
@@ -305,6 +308,21 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     this.recipient.observeForever(this);
     this.conversationRecipient.observeForever(this);
+
+    if (replyIcon != null) {
+      final String swipeToRightAction = TextSecurePreferences.getSwipeToRightAction(context);
+      if (SwipeToRightActionTypes.DELETE.equals(swipeToRightAction) || SwipeToRightActionTypes.DELETE_NO_PROMPT.equals(swipeToRightAction)) {
+        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_trash_24);
+      } else if (SwipeToRightActionTypes.COPY_TEXT.equals(swipeToRightAction) || SwipeToRightActionTypes.COPY_TEXT_POPUP.equals(swipeToRightAction)) {
+        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_copy_24);
+      } else if (SwipeToRightActionTypes.FORWARD.equals(swipeToRightAction)) {
+        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_forward_24);
+      } else if (SwipeToRightActionTypes.MESSAGE_DETAILS.equals(swipeToRightAction)) {
+        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_info_white_24);
+      } else {
+        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_reply_24);
+      }
+    }
 
     setGutterSizes(messageRecord, groupThread);
     setMessageShape(messageRecord, previousMessageRecord, nextMessageRecord, groupThread);

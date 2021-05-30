@@ -15,7 +15,8 @@ class ForkSettingsViewModel : ViewModel() {
       forceWebsocketMode = SignalStore.settings().isForceWebsocketMode,
       fastCustomReactionChange = SignalStore.settings().isFastCustomReactionChange,
       copyTextOpensPopup = SignalStore.settings().isCopyTextOpensPopup,
-      conversationDeleteInMenu = SignalStore.settings().isConversationDeleteInMenu
+      conversationDeleteInMenu = SignalStore.settings().isConversationDeleteInMenu,
+      SignalStore.settings().swipeToRightAction
     )
 
     store = Store(initialState)
@@ -51,5 +52,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setConversationDeleteInMenu(conversationDeleteInMenu: Boolean) {
     store.update { it.copy(conversationDeleteInMenu = conversationDeleteInMenu) }
     SignalStore.settings().isConversationDeleteInMenu = conversationDeleteInMenu
+  }
+
+  fun setSwipeToRightAction(swipeToRightAction: String) {
+    store.update { it.copy(swipeToRightAction = swipeToRightAction) }
+    SignalStore.settings().swipeToRightAction = swipeToRightAction
   }
 }

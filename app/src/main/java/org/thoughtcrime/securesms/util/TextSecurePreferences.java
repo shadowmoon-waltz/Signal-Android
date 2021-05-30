@@ -228,6 +228,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_CONVERSATION_DELETE_IN_MENU = "pref_conversation_delete_in_menu";
 
+  private static final String PREF_SWIPE_TO_RIGHT_ACTION = "pref_swipe_to_right_action";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -257,7 +259,8 @@ public class TextSecurePreferences {
                                                              NOTIFICATION_PRIVACY_PREF,
                                                              THEME_PREF,
                                                              LANGUAGE_PREF,
-                                                             MESSAGE_BODY_TEXT_SIZE_PREF};
+                                                             MESSAGE_BODY_TEXT_SIZE_PREF,
+                                                             PREF_SWIPE_TO_RIGHT_ACTION};
 
   private static final String[] stringSetPreferencesToBackup = {MEDIA_DOWNLOAD_MOBILE_PREF,
                                                                 MEDIA_DOWNLOAD_WIFI_PREF,
@@ -1305,6 +1308,14 @@ public class TextSecurePreferences {
 
   public static void setConversationDeleteInMenu(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_CONVERSATION_DELETE_IN_MENU, enabled);
+  }
+
+  public static String getSwipeToRightAction(Context context) {
+    return getStringPreference(context, PREF_SWIPE_TO_RIGHT_ACTION, SwipeToRightActionTypes.DEFAULT);
+  }
+
+  public static void setSwipeToRightAction(Context context, String swipeToRightAction) {
+    setStringPreference(context, PREF_SWIPE_TO_RIGHT_ACTION, swipeToRightAction);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

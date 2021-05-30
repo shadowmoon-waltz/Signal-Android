@@ -3486,6 +3486,10 @@
     <string name="ForkSettingsFragment__conversation_delete_in_menu">Delete Option in Conversation Menu</string>
     <string name="ForkSettingsFragment__conversation_delete_in_menu_summary">Option will show up in menu while viewing a conversation</string>
     <string name="conversation__delete_conversation">Delete conversation</string>
+    <string name="ForkSettingsFragment__swipe_to_right_action__default">Default (Reply)</string>
+    <string name="ForkSettingsFragment__swipe_to_right_action__delete_no_prompt">Delete (For Me) (No Prompt)</string>
+    <string name="ForkSettingsFragment__swipe_to_right_action__copy_text_popup">Copy Text (Popup)</string>
+    <string name="ForkSettingsFragment__swipe_to_right_action">Swipe to Right Conversation Item Action</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>

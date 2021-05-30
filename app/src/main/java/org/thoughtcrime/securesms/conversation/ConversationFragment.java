@@ -154,6 +154,7 @@ import org.thoughtcrime.securesms.util.SnapToTopDataObserver;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.Stopwatch;
 import org.thoughtcrime.securesms.util.StorageUtil;
+import org.thoughtcrime.securesms.util.SwipeToRightActionTypes;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.Util;
@@ -275,15 +276,66 @@ public class ConversationFragment extends LoggingFragment {
 
     giphyMp4ProjectionRecycler = initializeGiphyMp4();
 
-    new ConversationItemSwipeCallback(
-            conversationMessage -> actionMode == null &&
-                                   MenuState.canReplyToMessage(recipient.get(),
-                                                               MenuState.isActionMessage(conversationMessage.getMessageRecord()),
-                                                               conversationMessage.getMessageRecord(),
-                                                               messageRequestViewModel.shouldShowMessageRequest()),
-            this::handleReplyMessage,
-            this::onViewHolderPositionTranslated
-    ).attachToRecyclerView(list);
+    final String swipeToRightAction = TextSecurePreferences.getSwipeToRightAction(requireContext());
+    if (SwipeToRightActionTypes.NONE.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> false,
+              this::handleReplyMessage,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.DELETE.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
+              this::handleDeleteMessage,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.DELETE_NO_PROMPT.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
+              this::handleDeleteMessageForMe,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.COPY_TEXT.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
+              this::handleCopyMessage,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.COPY_TEXT_POPUP.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
+              this::handleCopyMessagePopup,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.FORWARD.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
+              this::handleForwardMessage,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.MESSAGE_DETAILS.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canShowMessageDetails(conversationMessage.getMessageRecord()),
+              this::handleDisplayDetails,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canReplyToMessage(recipient.get(),
+                                                                 MenuState.isActionMessage(conversationMessage.getMessageRecord()),
+                                                                 conversationMessage.getMessageRecord(),
+                                                                 messageRequestViewModel.shouldShowMessageRequest()),
+              this::handleReplyMessage,
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    }
 
     setupListLayoutListeners();
 
@@ -829,6 +881,10 @@ public class ConversationFragment extends LoggingFragment {
   }
 
   private void handleCopyMessage(final Set<ConversationMessage> conversationMessages) {
+    handleCopyMessage(conversationMessages, TextSecurePreferences.isCopyTextOpensPopup(requireContext()));
+  }
+
+  private void handleCopyMessage(final Set<ConversationMessage> conversationMessages, boolean popup) {
     List<ConversationMessage> messageList = new ArrayList<>(conversationMessages);
     Collections.sort(messageList, (lhs, rhs) -> Long.compare(lhs.getMessageRecord().getDateReceived(), rhs.getMessageRecord().getDateReceived()));
 
@@ -845,7 +901,7 @@ public class ConversationFragment extends LoggingFragment {
     }
 
     if (!TextUtils.isEmpty(bodyBuilder)) {
-      if (TextSecurePreferences.isCopyTextOpensPopup(requireContext())) {
+      if (popup) {
         // https://stackoverflow.com/questions/7197939/copy-text-from-android-alertdialog
         //TextView v = new TextView(getActivity());
         //v.setTextIsSelectable(true);
@@ -867,6 +923,38 @@ public class ConversationFragment extends LoggingFragment {
         clipboard.setPrimaryClip(ClipData.newPlainText(null, bodyBuilder));
       }
     }
+  }
+
+  private void handleCopyMessage(final ConversationMessage conversationMessage) {
+    handleCopyMessage(Collections.singleton(conversationMessage), false);
+  }
+
+  private void handleCopyMessagePopup(final ConversationMessage conversationMessage) {
+    handleCopyMessage(Collections.singleton(conversationMessage), true);
+  }
+
+  private void handleDeleteMessageForMe(final ConversationMessage conversationMessage) {
+    Context       context       = requireActivity();
+    MessageRecord messageRecord = conversationMessage.getMessageRecord();
+    boolean       threadDeleted;
+
+    if (messageRecord.isMms()) {
+      threadDeleted = DatabaseFactory.getMmsDatabase(context).deleteMessage(messageRecord.getId());
+    } else {
+      threadDeleted = DatabaseFactory.getSmsDatabase(context).deleteMessage(messageRecord.getId());
+    }
+
+    if (threadDeleted) {
+      threadId = -1;
+      conversationViewModel.clearThreadId();
+      messageCountsViewModel.clearThreadId();
+      listener.setThreadId(threadId);
+    }
+  }
+
+  private void handleDeleteMessage(final ConversationMessage conversationMessage) {
+    Set<MessageRecord> messageRecords = Collections.singleton(conversationMessage.getMessageRecord());
+    buildRemoteDeleteConfirmationDialog(messageRecords).show();
   }
 
   private void handleDeleteMessages(final Set<ConversationMessage> conversationMessages) {
