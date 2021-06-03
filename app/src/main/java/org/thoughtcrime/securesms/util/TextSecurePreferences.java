@@ -1380,6 +1380,6 @@ public class TextSecurePreferences {
 
   // NEVER rename these -- they're persisted by name
   public enum MediaKeyboardMode {
-    EMOJI, STICKER
+    EMOJI, STICKER, GIF
   }
 }
