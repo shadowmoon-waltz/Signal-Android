@@ -18,8 +18,8 @@ import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.emoji.EmojiKeyboardProvider.EmojiEventListener;
 import org.thoughtcrime.securesms.components.emoji.EmojiPageViewGridAdapter.VariationSelectorListener;
-import org.thoughtcrime.securesms.keyboard.emoji.KeyboardPageSearchView;
 import org.thoughtcrime.securesms.util.MappingModelList;
+import org.thoughtcrime.securesms.util.ViewUtil;
 
 public class EmojiPageView extends FrameLayout implements VariationSelectorListener {
   private static final String TAG = Log.tag(EmojiPageView.class);
@@ -31,23 +31,19 @@ public class EmojiPageView extends FrameLayout implements VariationSelectorListe
   private RecyclerView.OnItemTouchListener scrollDisabler;
   private VariationSelectorListener        variationSelectorListener;
   private EmojiVariationSelectorPopup      popup;
-  private boolean                          searchEnabled;
-  private SpanSizeLookup                   spanSizeLookup;
 
   public EmojiPageView(@NonNull Context context,
                        @NonNull EmojiEventListener emojiSelectionListener,
                        @NonNull VariationSelectorListener variationSelectorListener,
-                       boolean allowVariations,
-                       @Nullable KeyboardPageSearchView.Callbacks searchCallbacks)
+                       boolean allowVariations)
   {
-    this(context, emojiSelectionListener, variationSelectorListener, allowVariations, searchCallbacks, new GridLayoutManager(context, 8), R.layout.emoji_display_item);
+    this(context, emojiSelectionListener, variationSelectorListener, allowVariations, new GridLayoutManager(context, 8), R.layout.emoji_display_item);
   }
 
   public EmojiPageView(@NonNull Context context,
                        @NonNull EmojiEventListener emojiSelectionListener,
                        @NonNull VariationSelectorListener variationSelectorListener,
                        boolean allowVariations,
-                       @Nullable KeyboardPageSearchView.Callbacks searchCallbacks,
                        @NonNull RecyclerView.LayoutManager layoutManager,
                        @LayoutRes int displayItemLayoutResId)
   {
@@ -64,16 +60,19 @@ public class EmojiPageView extends FrameLayout implements VariationSelectorListe
                                                              emojiSelectionListener,
                                                              this,
                                                              allowVariations,
-                                                             displayItemLayoutResId,
-                                                             searchCallbacks);
-
-    if (layoutManager instanceof GridLayoutManager) {
-      spanSizeLookup = new SpanSizeLookup();
-      ((GridLayoutManager) layoutManager).setSpanSizeLookup(spanSizeLookup);
-    }
+                                                             displayItemLayoutResId);
 
     recyclerView.setLayoutManager(layoutManager);
     recyclerView.setItemAnimator(null);
+  }
+
+  public void presentForEmojiKeyboard() {
+    recyclerView.setPadding(recyclerView.getPaddingLeft(),
+                            recyclerView.getPaddingTop(),
+                            recyclerView.getPaddingRight(),
+                            recyclerView.getPaddingBottom() + ViewUtil.dpToPx(56));
+
+    recyclerView.setClipToPadding(false);
   }
 
   public void onSelected() {
@@ -91,20 +90,15 @@ public class EmojiPageView extends FrameLayout implements VariationSelectorListe
   }
 
   public void bindSearchableAdapter(@Nullable EmojiPageModel model) {
-    this.searchEnabled = true;
-    this.model         = model;
+    this.model = model;
 
     EmojiPageViewGridAdapter adapter = adapterFactory.create();
     recyclerView.setAdapter(adapter);
-    adapter.submitList(getMappingModelList(), () -> layoutManager.scrollToPosition(1));
+    adapter.submitList(getMappingModelList());
   }
 
   private @NonNull MappingModelList getMappingModelList() {
     MappingModelList mappingModels = new MappingModelList();
-
-    if (searchEnabled) {
-      mappingModels.add(new EmojiPageViewGridAdapter.SearchModel());
-    }
 
     if (model != null) {
       mappingModels.addAll(Stream.of(model.getDisplayEmoji()).map(EmojiPageViewGridAdapter.EmojiModel::new).toList());
@@ -126,7 +120,6 @@ public class EmojiPageView extends FrameLayout implements VariationSelectorListe
       int idealWidth  = getContext().getResources().getDimensionPixelOffset(R.dimen.emoji_drawer_item_width);
       int spanCount = Math.max(w / idealWidth, 1);
 
-      spanSizeLookup.setSpansPerRow(spanCount);
       ((GridLayoutManager) layoutManager).setSpanCount(spanCount);
     }
   }
@@ -159,20 +152,6 @@ public class EmojiPageView extends FrameLayout implements VariationSelectorListe
 
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean b) { }
-  }
-
-  private class SpanSizeLookup extends GridLayoutManager.SpanSizeLookup {
-
-    private int spansPerRow;
-
-    public void setSpansPerRow(int spansPerRow) {
-      this.spansPerRow = spansPerRow;
-    }
-
-    @Override
-    public int getSpanSize(int position) {
-      return position == 0 && searchEnabled ? spansPerRow : 1;
-    }
   }
 
   private interface AdapterFactory {
