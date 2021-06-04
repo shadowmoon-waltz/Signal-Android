@@ -319,6 +319,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_forward_24);
       } else if (SwipeToRightActionTypes.MESSAGE_DETAILS.equals(swipeToRightAction)) {
         ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_info_white_24);
+      } else if (SwipeToRightActionTypes.SHOW_OPTIONS.equals(swipeToRightAction)) {
+        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_more_vert_24);
       } else {
         ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_reply_24);
       }

@@ -154,7 +154,8 @@ public final class ConversationReactionOverlay extends RelativeLayout {
                    @NonNull Recipient conversationRecipient,
                    @NonNull MessageRecord messageRecord,
                    int maskPaddingBottom,
-                   @NonNull PointF lastSeenDownPoint)
+                   @NonNull PointF lastSeenDownPoint,
+                   @Nullable MotionEvent motionEvent)
   {
 
     if (overlayState != OverlayState.HIDDEN) {
@@ -211,6 +212,13 @@ public final class ConversationReactionOverlay extends RelativeLayout {
       if (!ThemeUtil.isDarkTheme(getContext())) {
         WindowUtil.setLightStatusBar(activity.getWindow());
       }
+    }
+
+    if (motionEvent != null) {
+      motionEvent.setAction(MotionEvent.ACTION_DOWN);
+      applyTouchEvent(motionEvent);
+      motionEvent.setAction(MotionEvent.ACTION_UP);
+      applyTouchEvent(motionEvent);
     }
   }
 

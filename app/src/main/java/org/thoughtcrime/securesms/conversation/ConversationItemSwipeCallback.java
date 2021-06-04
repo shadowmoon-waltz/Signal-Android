@@ -121,13 +121,13 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     }
   }
 
-  private void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder) {
+  private void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull MotionEvent motionEvent) {
     if (cannotSwipeViewHolder(viewHolder)) return;
 
     ConversationItem    item          = ((ConversationItem) viewHolder.itemView);
     ConversationMessage messageRecord = item.getConversationMessage();
 
-    onSwipeListener.onSwipe(messageRecord);
+    onSwipeListener.onSwipe(messageRecord, item, motionEvent);
   }
 
   @SuppressLint("ClickableViewAccessibility")
@@ -141,7 +141,7 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
           shouldTriggerSwipeFeedback = true;
           break;
         case MotionEvent.ACTION_UP:
-          handleTouchActionUp(recyclerView, viewHolder, dx);
+          handleTouchActionUp(recyclerView, viewHolder, dx, event);
         case MotionEvent.ACTION_CANCEL:
           swipeBack = true;
           shouldTriggerSwipeFeedback = false;
@@ -154,11 +154,12 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
 
   private void handleTouchActionUp(@NonNull RecyclerView recyclerView,
                                    @NonNull RecyclerView.ViewHolder viewHolder,
-                                   float dx)
+                                   float dx,
+                                   @NonNull MotionEvent motionEvent)
   {
     if (dx > SWIPE_SUCCESS_DX) {
       canTriggerSwipe = false;
-      onSwiped(viewHolder);
+      onSwiped(viewHolder, motionEvent);
       if (shouldTriggerSwipeFeedback) {
         vibrate(viewHolder.itemView.getContext());
       }
@@ -207,7 +208,7 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   }
 
   interface OnSwipeListener {
-    void onSwipe(ConversationMessage conversationMessage);
+    void onSwipe(ConversationMessage conversationMessage, ConversationItem conversationItem, MotionEvent motionEvent);
   }
 
   public interface OnViewHolderTranslated {

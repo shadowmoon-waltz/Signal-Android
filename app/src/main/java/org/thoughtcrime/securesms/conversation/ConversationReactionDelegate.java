@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import org.thoughtcrime.securesms.components.MaskView;
@@ -42,9 +43,10 @@ final class ConversationReactionDelegate {
             @NonNull MaskView.MaskTarget maskTarget,
             @NonNull Recipient conversationRecipient,
             @NonNull MessageRecord messageRecord,
-            int maskPaddingBottom)
+            int maskPaddingBottom,
+            @Nullable MotionEvent motionEvent)
   {
-    resolveOverlay().show(activity, maskTarget, conversationRecipient, messageRecord, maskPaddingBottom, lastSeenDownPoint);
+    resolveOverlay().show(activity, maskTarget, conversationRecipient, messageRecord, maskPaddingBottom, lastSeenDownPoint, motionEvent);
   }
 
   void showMask(@NonNull MaskView.MaskTarget maskTarget, int maskPaddingTop, int maskPaddingBottom) {

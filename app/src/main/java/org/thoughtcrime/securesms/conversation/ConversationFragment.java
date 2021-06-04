@@ -35,6 +35,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -280,49 +281,56 @@ public class ConversationFragment extends LoggingFragment {
     if (SwipeToRightActionTypes.NONE.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> false,
-              this::handleReplyMessage,
+              (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.DELETE.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-              this::handleDeleteMessage,
+              (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessage(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.DELETE_NO_PROMPT.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-              this::handleDeleteMessageForMe,
+              (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessageForMe(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.COPY_TEXT.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-              this::handleCopyMessage,
+              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.COPY_TEXT_POPUP.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-              this::handleCopyMessagePopup,
+              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessagePopup(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.FORWARD.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
-              this::handleForwardMessage,
+              (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.MESSAGE_DETAILS.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canShowMessageDetails(conversationMessage.getMessageRecord()),
-              this::handleDisplayDetails,
+              (conversationMessage, conversationItem, motionEvent) -> handleDisplayDetails(conversationMessage),
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.SHOW_OPTIONS.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null,
+              (conversationMessage, conversationItem, motionEvent) ->
+                ((ConversationFragmentItemClickListener)selectionClickListener).onItemLongClick2(conversationItem, conversationMessage, motionEvent),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else {
@@ -332,7 +340,7 @@ public class ConversationFragment extends LoggingFragment {
                                                                  MenuState.isActionMessage(conversationMessage.getMessageRecord()),
                                                                  conversationMessage.getMessageRecord(),
                                                                  messageRequestViewModel.shouldShowMessageRequest()),
-              this::handleReplyMessage,
+              (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     }
@@ -1397,7 +1405,8 @@ public class ConversationFragment extends LoggingFragment {
     void handleReaction(@NonNull MaskView.MaskTarget maskTarget,
                         @NonNull MessageRecord messageRecord,
                         @NonNull Toolbar.OnMenuItemClickListener toolbarListener,
-                        @NonNull ConversationReactionOverlay.OnHideListener onHideListener);
+                        @NonNull ConversationReactionOverlay.OnHideListener onHideListener,
+                        @Nullable MotionEvent motionEvent);
     void onCursorChanged();
     void onListVerticalTranslationChanged(float translationY);
     void onMessageWithErrorClicked(@NonNull MessageRecord messageRecord);
@@ -1490,8 +1499,7 @@ public class ConversationFragment extends LoggingFragment {
       }
     }
 
-    @Override
-    public void onItemLongClick(View itemView, ConversationMessage conversationMessage) {
+    public void onItemLongClick2(View itemView, ConversationMessage conversationMessage, @Nullable MotionEvent motionEvent) {
 
       if (actionMode != null) {
         if (TextSecurePreferences.isRangeMultiSelect(requireContext())) {
@@ -1514,18 +1522,33 @@ public class ConversationFragment extends LoggingFragment {
           ((ConversationAdapter) list.getAdapter()).getSelectedItems().isEmpty())
       {
         isReacting = true;
-        list.setLayoutFrozen(true);
+        // https://stackoverflow.com/questions/34960749/setlayoutfrozenboolean-and-sethasfixedsizeboolean-purpose-for-recyclerview
+        // motionEvent is only sent when using show options as a swipe option; when this happens and you swipe off the edge of the screen,
+        // the event that causes the message to translate back to its original position is dropped (I think) (if you don't swipe off the
+        // edge of the screen, it's fine); not freezing the layout for the list seems to work fine, but we'll only do that in this specific case
+        // for now
+        if (motionEvent != null) {
+          list.setLayoutFrozen(true);
+        }
         listener.handleReaction(getMaskTarget(itemView), messageRecord, new ReactionsToolbarListener(conversationMessage), () -> {
           isReacting = false;
-          list.setLayoutFrozen(false);
+          if (motionEvent != null) {
+            list.setLayoutFrozen(false);
+          }
           WindowUtil.setLightStatusBarFromTheme(requireActivity());
-        });
+        },
+        motionEvent);
       } else {
         ((ConversationAdapter) list.getAdapter()).toggleSelection(conversationMessage);
         list.getAdapter().notifyDataSetChanged();
 
         actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(actionModeCallback);
       }
+    }
+
+    @Override
+    public void onItemLongClick(View itemView, ConversationMessage conversationMessage) {
+      onItemLongClick2(itemView, conversationMessage, null);
     }
 
     @Override
