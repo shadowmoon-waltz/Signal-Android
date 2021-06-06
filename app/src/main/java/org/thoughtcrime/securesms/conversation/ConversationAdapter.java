@@ -600,6 +600,12 @@ public class ConversationAdapter
     mostRecentSelected = conversationMessage;
   }
 
+  public void clearMostRecentSelectedIfNecessary(@Nullable final Set<ConversationMessage> conversationMessages) {
+    if (mostRecentSelected != null && conversationMessages.contains(mostRecentSelected)) {
+      mostRecentSelected = null;
+    }
+  }
+
   /**
    * Provided a pool, this will initialize it with view counts that make sense.
    */

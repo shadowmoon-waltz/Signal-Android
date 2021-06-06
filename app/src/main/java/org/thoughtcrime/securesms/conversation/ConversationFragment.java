@@ -962,15 +962,15 @@ public class ConversationFragment extends LoggingFragment {
 
   private void handleDeleteMessage(final ConversationMessage conversationMessage) {
     Set<MessageRecord> messageRecords = Collections.singleton(conversationMessage.getMessageRecord());
-    buildRemoteDeleteConfirmationDialog(messageRecords).show();
+    buildRemoteDeleteConfirmationDialog(messageRecords, TextSecurePreferences.isRangeMultiSelect(requireContext()) ? Collections.singleton(conversationMessage) : null).show();
   }
 
   private void handleDeleteMessages(final Set<ConversationMessage> conversationMessages) {
     Set<MessageRecord> messageRecords = Stream.of(conversationMessages).map(ConversationMessage::getMessageRecord).collect(Collectors.toSet());
-    buildRemoteDeleteConfirmationDialog(messageRecords).show();
+    buildRemoteDeleteConfirmationDialog(messageRecords, TextSecurePreferences.isRangeMultiSelect(requireContext()) ? conversationMessages : null).show();
   }
 
-  private AlertDialog.Builder buildRemoteDeleteConfirmationDialog(Set<MessageRecord> messageRecords) {
+  private AlertDialog.Builder buildRemoteDeleteConfirmationDialog(Set<MessageRecord> messageRecords, @Nullable final Set<ConversationMessage> conversationMessages) {
     Context             context       = requireActivity();
     int                 messagesCount = messageRecords.size();
     AlertDialog.Builder builder       = new AlertDialog.Builder(getActivity());
@@ -985,6 +985,9 @@ public class ConversationFragment extends LoggingFragment {
       {
         @Override
         protected Void doInBackground(Void... voids) {
+          if (conversationMessages != null) {
+            getListAdapter().clearMostRecentSelectedIfNecessary(conversationMessages);
+          }
           for (MessageRecord messageRecord : messageRecords) {
             boolean threadDeleted;
 
@@ -1008,16 +1011,19 @@ public class ConversationFragment extends LoggingFragment {
     });
 
     if (RemoteDeleteUtil.isValidSend(messageRecords, System.currentTimeMillis())) {
-      builder.setNeutralButton(R.string.ConversationFragment_delete_for_everyone, (dialog, which) -> handleDeleteForEveryone(messageRecords));
+      builder.setNeutralButton(R.string.ConversationFragment_delete_for_everyone, (dialog, which) -> handleDeleteForEveryone(messageRecords, conversationMessages));
     }
 
     builder.setNegativeButton(android.R.string.cancel, null);
     return builder;
   }
 
-  private void handleDeleteForEveryone(Set<MessageRecord> messageRecords) {
+  private void handleDeleteForEveryone(Set<MessageRecord> messageRecords, @Nullable final Set<ConversationMessage> conversationMessages) {
     Runnable deleteForEveryone = () -> {
       SignalExecutors.BOUNDED.execute(() -> {
+        if (conversationMessages != null) {
+          getListAdapter().clearMostRecentSelectedIfNecessary(conversationMessages);
+        }
         for (MessageRecord message : messageRecords) {
           MessageSender.sendRemoteDelete(ApplicationDependencies.getApplication(), message.getId(), message.isMms());
         }
