@@ -302,14 +302,14 @@ public class ConversationFragment extends LoggingFragment {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(conversationMessage),
+              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(Collections.singleton(conversationMessage), false),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.COPY_TEXT_POPUP.equals(swipeToRightAction)) {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
                                      MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessagePopup(conversationMessage),
+              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(Collections.singleton(conversationMessage), true),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
     } else if (SwipeToRightActionTypes.FORWARD.equals(swipeToRightAction)) {
@@ -931,14 +931,6 @@ public class ConversationFragment extends LoggingFragment {
         clipboard.setPrimaryClip(ClipData.newPlainText(null, bodyBuilder));
       }
     }
-  }
-
-  private void handleCopyMessage(final ConversationMessage conversationMessage) {
-    handleCopyMessage(Collections.singleton(conversationMessage), false);
-  }
-
-  private void handleCopyMessagePopup(final ConversationMessage conversationMessage) {
-    handleCopyMessage(Collections.singleton(conversationMessage), true);
   }
 
   private void handleDeleteMessageForMe(final ConversationMessage conversationMessage) {
