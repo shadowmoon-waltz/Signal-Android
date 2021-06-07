@@ -333,6 +333,13 @@ public class ConversationFragment extends LoggingFragment {
                 ((ConversationFragmentItemClickListener)selectionClickListener).onItemLongClick2(conversationItem, conversationMessage, motionEvent),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.NOTE_TO_SELF.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null &&
+                                     MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
+              (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage, true),
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
     } else {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&
@@ -1041,6 +1048,10 @@ public class ConversationFragment extends LoggingFragment {
   }
 
   private void handleForwardMessage(ConversationMessage conversationMessage) {
+    handleForwardMessage(conversationMessage, false);
+  }
+
+  private void handleForwardMessage(ConversationMessage conversationMessage, boolean noteToSelf) {
     if (conversationMessage.getMessageRecord().isViewOnce()) {
       throw new AssertionError("Cannot forward a view-once message.");
     }
@@ -1101,6 +1112,10 @@ public class ConversationFragment extends LoggingFragment {
             Log.w(TAG, "Failed to read long message text when forwarding.");
           }
         }
+      }
+
+      if (noteToSelf) {
+        shareIntentBuilder.setNoteToSelf(true);
       }
 
       return shareIntentBuilder.build();

@@ -28,4 +28,5 @@ public interface SwipeToRightActionTypes {
   public static final String FORWARD = "forward";
   public static final String MESSAGE_DETAILS = "message_details";
   public static final String SHOW_OPTIONS = "show_options";
+  public static final String NOTE_TO_SELF = "note_to_self";
 }
