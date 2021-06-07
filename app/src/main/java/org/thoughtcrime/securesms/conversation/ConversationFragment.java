@@ -1540,12 +1540,12 @@ public class ConversationFragment extends LoggingFragment {
         // the event that causes the message to translate back to its original position is dropped (I think) (if you don't swipe off the
         // edge of the screen, it's fine); not freezing the layout for the list seems to work fine, but we'll only do that in this specific case
         // for now
-        if (motionEvent != null) {
+        if (motionEvent == null) {
           list.setLayoutFrozen(true);
         }
         listener.handleReaction(getMaskTarget(itemView), messageRecord, new ReactionsToolbarListener(conversationMessage), () -> {
           isReacting = false;
-          if (motionEvent != null) {
+          if (motionEvent == null) {
             list.setLayoutFrozen(false);
           }
           WindowUtil.setLightStatusBarFromTheme(requireActivity());
