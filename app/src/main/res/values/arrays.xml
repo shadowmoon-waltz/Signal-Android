@@ -401,6 +401,7 @@
         <item>@string/conversation_context__menu_message_details</item>
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
+        <item>@string/conversation_context__reaction_multi_select</item>
     </string-array>
 
     <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeToRightActionTypes -->
@@ -416,6 +417,7 @@
         <item>message_details</item>
         <item>show_options</item>
         <item>note_to_self</item>
+        <item>multi_select</item>
     </string-array>
 
 </resources>

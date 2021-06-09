@@ -340,6 +340,12 @@ public class ConversationFragment extends LoggingFragment {
               (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage, true),
               this::onViewHolderPositionTranslated
       ).attachToRecyclerView(list);
+    } else if (SwipeToRightActionTypes.MULTI_SELECT.equals(swipeToRightAction)) {
+      new ConversationItemSwipeCallback(
+              conversationMessage -> actionMode == null,
+              (conversationMessage, conversationItem, motionEvent) -> handleEnterMultiSelect(conversationMessage),
+              this::onViewHolderPositionTranslated
+      ).attachToRecyclerView(list);
     } else {
       new ConversationItemSwipeCallback(
               conversationMessage -> actionMode == null &&

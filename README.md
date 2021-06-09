@@ -24,6 +24,7 @@ Differences from stock Signal:
     * show message details
     * show options (show long press menu)
     * note to self (shortcut for forward to self, only works if you have an existing note to self conversation)
+    * select multiple (select item and enter multi select mode)
 * Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)
 
 The original README follows, and may not reflect changes in the fork.

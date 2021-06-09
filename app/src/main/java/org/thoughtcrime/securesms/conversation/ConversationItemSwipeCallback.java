@@ -32,6 +32,8 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   private final OnSwipeListener               onSwipeListener;
   private final OnViewHolderTranslated        onViewHolderTranslated;
 
+  private boolean                             returnToInitial;
+
   ConversationItemSwipeCallback(@NonNull SwipeAvailabilityProvider swipeAvailabilityProvider,
                                 @NonNull OnSwipeListener onSwipeListener,
                                 @NonNull OnViewHolderTranslated onViewHolderTranslated)
@@ -43,6 +45,7 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     this.onViewHolderTranslated     = onViewHolderTranslated;
     this.shouldTriggerSwipeFeedback = true;
     this.canTriggerSwipe            = true;
+    this.returnToInitial            = false;
   }
 
   void attachToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -86,7 +89,8 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
           @NonNull RecyclerView.ViewHolder viewHolder,
           float dx, float dy, int actionState, boolean isCurrentlyActive)
   {
-    if (cannotSwipeViewHolder(viewHolder)) return;
+    final boolean cannotSwipe = cannotSwipeViewHolder(viewHolder);
+    if (cannotSwipe && !returnToInitial) return;
 
     float   sign              = getSignFromDirection(viewHolder.itemView);
     boolean isCorrectSwipeDir = sameSign(dx, sign);
@@ -95,7 +99,7 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
       ConversationSwipeAnimationHelper.update((ConversationItem) viewHolder.itemView, Math.abs(dx), sign);
       dispatchTranslationUpdate(recyclerView, viewHolder);
       handleSwipeFeedback((ConversationItem) viewHolder.itemView, Math.abs(dx));
-      if (canTriggerSwipe) {
+      if (canTriggerSwipe && !returnToInitial) {
         setTouchListener(recyclerView, viewHolder, Math.abs(dx));
       }
     } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE || dx == 0) {
@@ -106,6 +110,9 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     if (dx == 0) {
       shouldTriggerSwipeFeedback = true;
       canTriggerSwipe            = true;
+      if (returnToInitial) {
+        returnToInitial          = false;
+      }
     }
   }
 
@@ -128,6 +135,8 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     ConversationMessage messageRecord = item.getConversationMessage();
 
     onSwipeListener.onSwipe(messageRecord, item, motionEvent);
+    
+    if (cannotSwipeViewHolder(viewHolder)) returnToInitial = true;
   }
 
   @SuppressLint("ClickableViewAccessibility")
