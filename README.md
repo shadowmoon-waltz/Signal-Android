@@ -28,6 +28,8 @@ Differences from stock Signal:
 * Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)
 * Option to enable select multiple mode when long pressing any type of conversation item (most useful when setting swipe to right conversation item action to show options)
 
+Due to using a custom build target and not realizing a specific setting needed to add in that build target, the usual gradle build target did not perform dependency verification prior to commit 850f9bfe on 2021-06-09 (part of release 5.14.2), when it was fixed.
+
 The original README follows, and may not reflect changes in the fork.
 
 ## Original README (Signal Android)
