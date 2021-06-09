@@ -27,6 +27,7 @@ Differences from stock Signal:
     * select multiple (select item and enter multi select mode)
 * Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)
 * Option to enable select multiple mode when long pressing any type of conversation item (most useful when setting swipe to right conversation item action to show options)
+
 The original README follows, and may not reflect changes in the fork.
 
 ## Original README (Signal Android)
