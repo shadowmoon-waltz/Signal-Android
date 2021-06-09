@@ -485,7 +485,7 @@ dependencies {
 }
 
 dependencyVerification {
-    configuration = '(play|website)(Prod|Staging)(Debug|Release)RuntimeClasspath'
+    configuration = '(play|website|sw)(Prod|Staging)(Debug|Release)RuntimeClasspath'
 }
 
 def assembleWebsiteDescriptor = { variant, file ->
