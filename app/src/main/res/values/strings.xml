@@ -3498,6 +3498,8 @@
     <string name="ForkSettingsFragment__swipe_to_right_action">Swipe to Right Conversation Item Action</string>
     <string name="ForkSettingsFragment__range_multi_select">Conversation Items Range Multi Select</string>
     <string name="ForkSettingsFragment__range_multi_select_summary">When using select multiple on conversation items, allow long pressing an item after selecting an item to select all items in that range (including the selected and long pressed items)</string>
+    <string name="ForkSettingsFragment__long_press_multi_select">Conversation Item Long Press Always Multi Select</string>
+    <string name="ForkSettingsFragment__long_press_multi_select_summary">Most useful when setting Swipe to Right Conversation Item Action to Show Options</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>

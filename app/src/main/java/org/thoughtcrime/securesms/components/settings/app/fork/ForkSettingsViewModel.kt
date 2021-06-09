@@ -17,7 +17,8 @@ class ForkSettingsViewModel : ViewModel() {
       copyTextOpensPopup = SignalStore.settings().isCopyTextOpensPopup,
       conversationDeleteInMenu = SignalStore.settings().isConversationDeleteInMenu,
       SignalStore.settings().swipeToRightAction,
-      rangeMultiSelect = SignalStore.settings().isRangeMultiSelect
+      rangeMultiSelect = SignalStore.settings().isRangeMultiSelect,
+      longPressMultiSelect = SignalStore.settings().isLongPressMultiSelect
     )
 
     store = Store(initialState)
@@ -63,5 +64,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setRangeMultiSelect(rangeMultiSelect: Boolean) {
     store.update { it.copy(rangeMultiSelect = rangeMultiSelect) }
     SignalStore.settings().isRangeMultiSelect = rangeMultiSelect
+  }
+
+  fun setLongPressMultiSelect(longPressMultiSelect: Boolean) {
+    store.update { it.copy(longPressMultiSelect = longPressMultiSelect) }
+    SignalStore.settings().isLongPressMultiSelect = longPressMultiSelect
   }
 }

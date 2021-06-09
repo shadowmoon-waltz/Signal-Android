@@ -106,6 +106,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__long_press_multi_select),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__long_press_multi_select_summary),
+        isChecked = state.longPressMultiSelect,
+        onClick = {
+          TextSecurePreferences.setLongPressMultiSelect(requireContext(), !state.longPressMultiSelect)
+          viewModel.setLongPressMultiSelect(!state.longPressMultiSelect)
+        }
+      )
+
       clickPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
         onClick = {

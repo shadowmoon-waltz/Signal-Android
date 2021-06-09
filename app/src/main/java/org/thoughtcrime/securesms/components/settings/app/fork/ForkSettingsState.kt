@@ -8,5 +8,6 @@ data class ForkSettingsState(
   val copyTextOpensPopup: Boolean,
   val conversationDeleteInMenu: Boolean,
   val swipeToRightAction: String,
-  val rangeMultiSelect: Boolean
+  val rangeMultiSelect: Boolean,
+  val longPressMultiSelect: Boolean
 )

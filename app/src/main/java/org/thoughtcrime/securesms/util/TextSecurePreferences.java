@@ -232,6 +232,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_RANGE_MULTI_SELECT = "pref_range_multi_select";
 
+  private static final String PREF_LONG_PRESS_MULTI_SELECT = "pref_long_press_multi_select";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -254,7 +256,8 @@ public class TextSecurePreferences {
                                                               PREF_FAST_CUSTOM_REACTION_CHANGE,
                                                               PREF_COPY_TEXT_OPENS_POPUP,
                                                               PREF_CONVERSATION_DELETE_IN_MENU,
-                                                              PREF_RANGE_MULTI_SELECT};
+                                                              PREF_RANGE_MULTI_SELECT,
+                                                              PREF_LONG_PRESS_MULTI_SELECT};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1327,6 +1330,14 @@ public class TextSecurePreferences {
 
   public static void setRangeMultiSelect(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_RANGE_MULTI_SELECT, enabled);
+  }
+
+  public static boolean isLongPressMultiSelect(Context context) {
+    return getBooleanPreference(context, PREF_LONG_PRESS_MULTI_SELECT, false);
+  }
+
+  public static void setLongPressMultiSelect(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_LONG_PRESS_MULTI_SELECT, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

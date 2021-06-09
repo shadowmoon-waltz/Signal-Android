@@ -73,6 +73,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String CONVERSATION_DELETE_IN_MENU             = "settings.conversation.delete.in.menu";
   public static final String SWIPE_TO_RIGHT_ACTION                   = "settings.swipe.to.right.action";
   public static final String RANGE_MULTI_SELECT                      = "settings.range.multi.select";
+  public static final String LONG_PRESS_MULTI_SELECT                 = "settings.long.press.multi.select";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -123,7 +124,8 @@ public final class SettingsValues extends SignalStoreValues {
                          COPY_TEXT_OPENS_POPUP,
                          CONVERSATION_DELETE_IN_MENU,
                          SWIPE_TO_RIGHT_ACTION,
-                         RANGE_MULTI_SELECT);
+                         RANGE_MULTI_SELECT,
+                         LONG_PRESS_MULTI_SELECT);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -477,5 +479,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setRangeMultiSelect(boolean rangeMultiSelect) {
     putBoolean(RANGE_MULTI_SELECT, rangeMultiSelect);
+  }
+
+  public boolean isLongPressMultiSelect() {
+    return getBoolean(LONG_PRESS_MULTI_SELECT, TextSecurePreferences.isLongPressMultiSelect(ApplicationDependencies.getApplication()));
+  }
+
+  public void setLongPressMultiSelect(boolean longPressMultiSelect) {
+    putBoolean(LONG_PRESS_MULTI_SELECT, longPressMultiSelect);
   }
 }

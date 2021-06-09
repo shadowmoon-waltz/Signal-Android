@@ -1530,39 +1530,42 @@ public class ConversationFragment extends LoggingFragment {
         return;
       }
 
-      MessageRecord messageRecord = conversationMessage.getMessageRecord();
+      if (!TextSecurePreferences.isLongPressMultiSelect(requireContext())) {
+        MessageRecord messageRecord = conversationMessage.getMessageRecord();
 
-      if (messageRecord.isSecure()                                        &&
-          !messageRecord.isRemoteDelete()                                 &&
-          !messageRecord.isUpdate()                                       &&
-          !recipient.get().isBlocked()                                    &&
-          !messageRequestViewModel.shouldShowMessageRequest()             &&
-          (!recipient.get().isGroup() || recipient.get().isActiveGroup()) &&
-          ((ConversationAdapter) list.getAdapter()).getSelectedItems().isEmpty())
-      {
-        isReacting = true;
-        // https://stackoverflow.com/questions/34960749/setlayoutfrozenboolean-and-sethasfixedsizeboolean-purpose-for-recyclerview
-        // motionEvent is only sent when using show options as a swipe option; when this happens and you swipe off the edge of the screen,
-        // the event that causes the message to translate back to its original position is dropped (I think) (if you don't swipe off the
-        // edge of the screen, it's fine); not freezing the layout for the list seems to work fine, but we'll only do that in this specific case
-        // for now
-        if (motionEvent == null) {
-          list.setLayoutFrozen(true);
-        }
-        listener.handleReaction(getMaskTarget(itemView), messageRecord, new ReactionsToolbarListener(conversationMessage), () -> {
-          isReacting = false;
+        if (messageRecord.isSecure()                                        &&
+            !messageRecord.isRemoteDelete()                                 &&
+            !messageRecord.isUpdate()                                       &&
+            !recipient.get().isBlocked()                                    &&
+            !messageRequestViewModel.shouldShowMessageRequest()             &&
+            (!recipient.get().isGroup() || recipient.get().isActiveGroup()) &&
+            ((ConversationAdapter) list.getAdapter()).getSelectedItems().isEmpty())
+        {
+          isReacting = true;
+          // https://stackoverflow.com/questions/34960749/setlayoutfrozenboolean-and-sethasfixedsizeboolean-purpose-for-recyclerview
+          // motionEvent is only sent when using show options as a swipe option; when this happens and you swipe off the edge of the screen,
+          // the event that causes the message to translate back to its original position is dropped (I think) (if you don't swipe off the
+          // edge of the screen, it's fine); not freezing the layout for the list seems to work fine, but we'll only do that in this specific case
+          // for now
           if (motionEvent == null) {
-            list.setLayoutFrozen(false);
+            list.setLayoutFrozen(true);
           }
-          WindowUtil.setLightStatusBarFromTheme(requireActivity());
-        },
-        motionEvent);
-      } else {
-        ((ConversationAdapter) list.getAdapter()).toggleSelection(conversationMessage);
-        list.getAdapter().notifyDataSetChanged();
-
-        actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(actionModeCallback);
+          listener.handleReaction(getMaskTarget(itemView), messageRecord, new ReactionsToolbarListener(conversationMessage), () -> {
+            isReacting = false;
+            if (motionEvent == null) {
+              list.setLayoutFrozen(false);
+            }
+            WindowUtil.setLightStatusBarFromTheme(requireActivity());
+          },
+          motionEvent);
+          return;
+        }
       }
+      
+      ((ConversationAdapter) list.getAdapter()).toggleSelection(conversationMessage);
+      list.getAdapter().notifyDataSetChanged();
+
+      actionMode = ((AppCompatActivity)getActivity()).startSupportActionMode(actionModeCallback);
     }
 
     @Override
