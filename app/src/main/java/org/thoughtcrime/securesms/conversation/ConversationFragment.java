@@ -1541,7 +1541,7 @@ public class ConversationFragment extends LoggingFragment {
         return;
       }
 
-      if (!TextSecurePreferences.isLongPressMultiSelect(requireContext())) {
+      if (motionEvent != null || !TextSecurePreferences.isLongPressMultiSelect(requireContext())) {
         MessageRecord messageRecord = conversationMessage.getMessageRecord();
 
         if (messageRecord.isSecure()                                        &&
