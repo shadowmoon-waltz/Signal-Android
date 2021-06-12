@@ -3512,6 +3512,8 @@
     <string name="ForkSettingsFragment__range_multi_select_summary">When using select multiple on conversation items, allow long pressing an item after selecting an item to select all items in that range (including the selected and long pressed items)</string>
     <string name="ForkSettingsFragment__long_press_multi_select">Conversation Item Long Press Always Multi Select</string>
     <string name="ForkSettingsFragment__long_press_multi_select_summary">Most useful when setting Swipe to Right Conversation Item Action to Show Options</string>
+    <string name="ForkSettingsFragment__also_show_profile_name">Also Show Profile Names with Contact Names</string>
+    <string name="ForkSettingsFragment__also_show_profile_name_summary">When enabled, profile names will be shown under contact names in detailed recipient views, for recipients with contact entries (by default, contact names replace profile names in most views)</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>

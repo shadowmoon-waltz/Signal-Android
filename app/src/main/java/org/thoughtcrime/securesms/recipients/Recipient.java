@@ -510,6 +510,16 @@ public class Recipient {
     return StringUtil.isolateBidi(name);
   }
 
+  public @NonNull String getDisplayName2(@NonNull Context context) {
+    if (TextUtils.isEmpty(getGroupName(context)) && !TextUtils.isEmpty(systemContactName)) {
+      String name = getProfileName().toString();
+      if (!name.equals(systemContactName)) {
+        return name;
+      }
+    }
+    return "";
+  }
+
   public @NonNull String getDisplayNameOrUsername(@NonNull Context context) {
     String name = getGroupName(context);
 

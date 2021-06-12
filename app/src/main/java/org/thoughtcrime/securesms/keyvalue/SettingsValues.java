@@ -74,6 +74,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String SWIPE_TO_RIGHT_ACTION                   = "settings.swipe.to.right.action";
   public static final String RANGE_MULTI_SELECT                      = "settings.range.multi.select";
   public static final String LONG_PRESS_MULTI_SELECT                 = "settings.long.press.multi.select";
+  public static final String ALSO_SHOW_PROFILE_NAME                  = "settings.also.show.profile.name";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -125,7 +126,8 @@ public final class SettingsValues extends SignalStoreValues {
                          CONVERSATION_DELETE_IN_MENU,
                          SWIPE_TO_RIGHT_ACTION,
                          RANGE_MULTI_SELECT,
-                         LONG_PRESS_MULTI_SELECT);
+                         LONG_PRESS_MULTI_SELECT,
+                         ALSO_SHOW_PROFILE_NAME);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -483,5 +485,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setLongPressMultiSelect(boolean longPressMultiSelect) {
     putBoolean(LONG_PRESS_MULTI_SELECT, longPressMultiSelect);
+  }
+
+  public boolean isAlsoShowProfileName() {
+    return getBoolean(ALSO_SHOW_PROFILE_NAME, TextSecurePreferences.isAlsoShowProfileName(ApplicationDependencies.getApplication()));
+  }
+
+  public void setAlsoShowProfileName(boolean alsoShowProfileName) {
+    putBoolean(ALSO_SHOW_PROFILE_NAME, alsoShowProfileName);
   }
 }

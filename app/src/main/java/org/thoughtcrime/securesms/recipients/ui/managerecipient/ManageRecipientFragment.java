@@ -48,6 +48,7 @@ import org.thoughtcrime.securesms.recipients.ui.notifications.CustomNotification
 import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.LifecycleCursorWrapper;
 import org.thoughtcrime.securesms.util.ServiceUtil;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaperActivity;
@@ -67,6 +68,7 @@ public class ManageRecipientFragment extends LoggingFragment {
   private GroupMemberListView                    sharedGroupList;
   private Toolbar                                toolbar;
   private TextView                               title;
+  private TextView                               title2;
   private TextView                               about;
   private TextView                               subtitle;
   private ViewGroup                              internalDetails;
@@ -127,6 +129,7 @@ public class ManageRecipientFragment extends LoggingFragment {
     contactText                 = view.findViewById(R.id.recipient_contact_text);
     contactIcon                 = view.findViewById(R.id.recipient_contact_icon);
     title                       = view.findViewById(R.id.name);
+    title2                      = view.findViewById(R.id.name2);
     about                       = view.findViewById(R.id.about);
     subtitle                    = view.findViewById(R.id.username_number);
     internalDetails             = view.findViewById(R.id.recipient_internal_details);
@@ -207,6 +210,15 @@ public class ManageRecipientFragment extends LoggingFragment {
     }
 
     viewModel.getTitle().observe(getViewLifecycleOwner(), title::setText);
+    if (TextSecurePreferences.isAlsoShowProfileName(requireContext())) {
+      viewModel.getTitle2().observe(getViewLifecycleOwner(), text -> {
+        title2.setText(text);
+        title2.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);
+      });
+    } else {
+      title2.setVisibility(View.GONE);
+    }
+
     viewModel.getSubtitle().observe(getViewLifecycleOwner(), text -> {
       subtitle.setText(text);
       subtitle.setVisibility(TextUtils.isEmpty(text) ? View.GONE : View.VISIBLE);

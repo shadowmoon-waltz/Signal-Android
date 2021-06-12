@@ -60,6 +60,15 @@
                     tools:text="Hangin' around the web" />
 
                 <TextView
+                    android:id="@+id/name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textAppearance="@style/Signal.Text.Body"
+                    android:textColor="@color/signal_text_secondary"
+                    tools:text="name2" />
+
+                <TextView
                     android:id="@+id/username_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

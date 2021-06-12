@@ -18,7 +18,8 @@ class ForkSettingsViewModel : ViewModel() {
       conversationDeleteInMenu = SignalStore.settings().isConversationDeleteInMenu,
       SignalStore.settings().swipeToRightAction,
       rangeMultiSelect = SignalStore.settings().isRangeMultiSelect,
-      longPressMultiSelect = SignalStore.settings().isLongPressMultiSelect
+      longPressMultiSelect = SignalStore.settings().isLongPressMultiSelect,
+      alsoShowProfileName = SignalStore.settings().isAlsoShowProfileName
     )
 
     store = Store(initialState)
@@ -69,5 +70,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setLongPressMultiSelect(longPressMultiSelect: Boolean) {
     store.update { it.copy(longPressMultiSelect = longPressMultiSelect) }
     SignalStore.settings().isLongPressMultiSelect = longPressMultiSelect
+  }
+
+  fun setAlsoShowProfileName(alsoShowProfileName: Boolean) {
+    store.update { it.copy(alsoShowProfileName = alsoShowProfileName) }
+    SignalStore.settings().isAlsoShowProfileName = alsoShowProfileName
   }
 }

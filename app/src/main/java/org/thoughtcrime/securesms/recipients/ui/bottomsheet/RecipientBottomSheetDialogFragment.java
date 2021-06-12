@@ -35,6 +35,7 @@ import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.ServiceUtil;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
@@ -55,6 +56,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
   private RecipientDialogViewModel viewModel;
   private AvatarImageView          avatar;
   private TextView                 fullName;
+  private TextView                 fullName2;
   private TextView                 about;
   private TextView                 usernameNumber;
   private Button                   messageButton;
@@ -103,6 +105,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
 
     avatar                 = view.findViewById(R.id.rbs_recipient_avatar);
     fullName               = view.findViewById(R.id.rbs_full_name);
+    fullName2              = view.findViewById(R.id.rbs_full_name2);
     about                  = view.findViewById(R.id.rbs_about);
     usernameNumber         = view.findViewById(R.id.rbs_username_number);
     messageButton          = view.findViewById(R.id.rbs_message_button);
@@ -158,6 +161,18 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
         fullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_profile_circle_outline_16, 0);
         fullName.setCompoundDrawablePadding(ViewUtil.dpToPx(4));
         TextViewCompat.setCompoundDrawableTintList(fullName, ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.signal_text_primary)));
+      }
+
+      if (TextSecurePreferences.isAlsoShowProfileName(requireContext())) {
+        String name2 = recipient.getDisplayName2(requireContext());
+        if (!Util.isEmpty(name2)) {
+          fullName2.setText(name2);
+          fullName2.setVisibility(View.VISIBLE);
+        } else {
+          fullName2.setVisibility(View.GONE);
+        }
+      } else {
+        fullName2.setVisibility(View.GONE);
       }
 
       String aboutText = recipient.getCombinedAboutAndEmoji();

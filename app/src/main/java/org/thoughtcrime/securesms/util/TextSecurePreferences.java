@@ -234,6 +234,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_LONG_PRESS_MULTI_SELECT = "pref_long_press_multi_select";
 
+  private static final String PREF_ALSO_SHOW_PROFILE_NAME = "pref_also_show_profile_name";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -257,7 +259,8 @@ public class TextSecurePreferences {
                                                               PREF_COPY_TEXT_OPENS_POPUP,
                                                               PREF_CONVERSATION_DELETE_IN_MENU,
                                                               PREF_RANGE_MULTI_SELECT,
-                                                              PREF_LONG_PRESS_MULTI_SELECT};
+                                                              PREF_LONG_PRESS_MULTI_SELECT,
+                                                              PREF_ALSO_SHOW_PROFILE_NAME};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1340,6 +1343,14 @@ public class TextSecurePreferences {
     setBooleanPreference(context, PREF_LONG_PRESS_MULTI_SELECT, enabled);
   }
 
+  public static boolean isAlsoShowProfileName(Context context) {
+    return getBooleanPreference(context, PREF_ALSO_SHOW_PROFILE_NAME, false);
+  }
+
+  public static void setAlsoShowProfileName(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_ALSO_SHOW_PROFILE_NAME, enabled);
+  }
+  
   public static void setBooleanPreference(Context context, String key, boolean value) {
     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
   }

@@ -52,6 +52,7 @@ public final class ManageRecipientViewModel extends ViewModel {
   private final Context                                          context;
   private final ManageRecipientRepository                        manageRecipientRepository;
   private final LiveData<String>                                 title;
+  private final LiveData<String>                                 title2;
   private final LiveData<String>                                 subtitle;
   private final LiveData<String>                                 internalDetails;
   private final LiveData<String>                                 disappearingMessageTimer;
@@ -73,6 +74,7 @@ public final class ManageRecipientViewModel extends ViewModel {
     this.manageRecipientRepository = manageRecipientRepository;
     this.recipient                 = Recipient.live(manageRecipientRepository.getRecipientId()).getLiveData();
     this.title                     = Transformations.map(recipient, r -> getDisplayTitle(r, context)   );
+    this.title2                    = Transformations.map(recipient, r -> getDisplayTitle2(r, context)  );
     this.subtitle                  = Transformations.map(recipient, r -> getDisplaySubtitle(r, context));
     this.identity                  = new MutableLiveData<>();
     this.mediaCursor               = new MutableLiveData<>(null);
@@ -125,6 +127,14 @@ public final class ManageRecipientViewModel extends ViewModel {
     }
   }
 
+  private static @NonNull String getDisplayTitle2(@NonNull Recipient recipient, @NonNull Context context) {
+    if (!recipient.isSelf()) {
+      return recipient.getDisplayName2(context);
+    } else {
+      return "";
+    }
+  }
+
   private static @NonNull String getDisplaySubtitle(@NonNull Recipient recipient, @NonNull Context context) {
     if (!recipient.isSelf() && recipient.hasAUserSetDisplayName(context)) {
       return recipient.getSmsAddress().transform(PhoneNumberFormatter::prettyPrint).or("").trim();
@@ -141,6 +151,10 @@ public final class ManageRecipientViewModel extends ViewModel {
 
   LiveData<String> getTitle() {
     return title;
+  }
+
+  LiveData<String> getTitle2() {
+    return title2;
   }
 
   LiveData<String> getSubtitle() {

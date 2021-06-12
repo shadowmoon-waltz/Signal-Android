@@ -9,5 +9,6 @@ data class ForkSettingsState(
   val conversationDeleteInMenu: Boolean,
   val swipeToRightAction: String,
   val rangeMultiSelect: Boolean,
-  val longPressMultiSelect: Boolean
+  val longPressMultiSelect: Boolean,
+  val alsoShowProfileName: Boolean
 )
