@@ -27,7 +27,7 @@ Differences from stock Signal:
     * select multiple (select item and enter multi select mode)
 * Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)
 * Option to enable select multiple mode when long pressing any type of conversation item (most useful when setting swipe to right conversation item action to show options)
-* Option to also show profile names under contact names in detailed recipient views, for recipients with contact entries (by default, contact names replace profile names in most views)
+* Option to also show profile names under contact names in detailed recipient views and group member lists (when a member does not have about set), for recipients with contact entries (by default, contact names replace profile names in most views)
 * Option to enable manage group view tweaks, which include hiding text with prompt to add group description or number of members and moving member list almost to top of view (but leaving the add members button where it usually is)
 
 Due to using a custom build target and not realizing a specific setting needed to add in that build target, the usual gradle build target did not perform dependency verification prior to commit 850f9bfe on 2021-06-09 (part of release 5.14.2), when it was fixed.

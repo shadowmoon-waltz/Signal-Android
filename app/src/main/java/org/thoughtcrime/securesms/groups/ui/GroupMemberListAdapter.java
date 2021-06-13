@@ -20,6 +20,7 @@ import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.LifecycleRecyclerAdapter;
 import org.thoughtcrime.securesms.util.LifecycleViewHolder;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 
 import java.util.ArrayList;
@@ -214,8 +215,16 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
       this.avatar.setRecipient(recipient);
 
       if (this.about != null) {
-        this.about.setText(about);
-        this.about.setVisibility(Util.isEmpty(about) ? View.GONE : View.VISIBLE);
+        if (!Util.isEmpty(about)) {
+          this.about.setText(about);
+          this.about.setVisibility(View.VISIBLE);
+        } else if (TextSecurePreferences.isAlsoShowProfileName(this.context)) {
+          final String displayName2 = recipient.getDisplayName2(this.context);
+          this.about.setText(displayName2);
+          this.about.setVisibility(Util.isEmpty(displayName2) ? View.GONE : View.VISIBLE);
+        } else {
+          this.about.setVisibility(View.GONE);
+        }
       }
     }
 
