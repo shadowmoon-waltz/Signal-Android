@@ -477,7 +477,7 @@ public class ManageGroupFragment extends LoggingFragment {
     }
 
     if (TextUtils.isEmpty(description.getDescription())) {
-      if (manageGroupTweaks && description.canEditDescription()) {
+      if (!manageGroupTweaks && description.canEditDescription()) {
         groupDescription.setOverflowText(null);
         groupDescription.setText(R.string.ManageGroupActivity_add_group_description);
         groupDescription.setOnClickListener(v -> startActivity(EditProfileActivity.getIntentForGroupProfile(requireActivity(), getGroupId())));
