@@ -151,6 +151,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -669,12 +670,39 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/group_block_and_leave_card"
+                android:id="@+id/group_membership_card2"
                 style="@style/Widget.Signal.CardView.PreferenceRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/group_manage_fragment_card_vertical_padding"
                 app:layout_constraintTop_toBottomOf="@id/group_membership_card">
+
+                <TextView
+                    android:id="@+id/add_members2"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="?selectableItemBackground"
+                    android:drawableStart="@drawable/ic_add_members_circle"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical|start"
+                    android:paddingStart="@dimen/group_manage_fragment_row_horizontal_padding"
+                    android:paddingEnd="@dimen/group_manage_fragment_row_horizontal_padding"
+                    android:text="@string/ManageGroupActivity_add_members"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="@style/Signal.Text.Body"
+                    android:textColor="@color/ultramarine_text_button"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/group_block_and_leave_card"
+                style="@style/Widget.Signal.CardView.PreferenceRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/group_manage_fragment_card_vertical_padding"
+                app:layout_constraintTop_toBottomOf="@id/group_membership_card2">
 
                 <LinearLayout
                     android:layout_width="match_parent"

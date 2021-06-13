@@ -3514,6 +3514,8 @@
     <string name="ForkSettingsFragment__long_press_multi_select_summary">Most useful when setting Swipe to Right Conversation Item Action to Show Options</string>
     <string name="ForkSettingsFragment__also_show_profile_name">Also Show Profile Names with Contact Names</string>
     <string name="ForkSettingsFragment__also_show_profile_name_summary">When enabled, profile names will be shown under contact names in detailed recipient views, for recipients with contact entries (by default, contact names replace profile names in most views)</string>
+    <string name="ForkSettingsFragment__manage_group_tweaks">Manage Group View Tweaks</string>
+    <string name="ForkSettingsFragment__manage_group_tweaks_summary">Hide text with prompt to add group description or number of members and move member list almost to top of view</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>

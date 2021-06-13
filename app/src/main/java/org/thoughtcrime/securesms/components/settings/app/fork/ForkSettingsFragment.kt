@@ -126,6 +126,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__manage_group_tweaks),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__manage_group_tweaks_summary),
+        isChecked = state.manageGroupTweaks,
+        onClick = {
+          TextSecurePreferences.setManageGroupTweaks(requireContext(), !state.manageGroupTweaks)
+          viewModel.setManageGroupTweaks(!state.manageGroupTweaks)
+        }
+      )
+
       clickPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
         onClick = {

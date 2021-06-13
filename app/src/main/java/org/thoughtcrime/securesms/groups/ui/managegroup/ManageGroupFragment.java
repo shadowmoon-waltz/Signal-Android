@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -67,6 +69,7 @@ import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.LifecycleCursorWrapper;
 import org.thoughtcrime.securesms.util.LongClickMovementMethod;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.views.LearnMoreTextView;
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog;
@@ -169,7 +172,6 @@ public class ManageGroupFragment extends LoggingFragment {
     blockGroup                  = view.findViewById(R.id.blockGroup);
     unblockGroup                = view.findViewById(R.id.unblockGroup);
     leaveGroup                  = view.findViewById(R.id.leaveGroup);
-    addMembers                  = view.findViewById(R.id.add_members);
     muteNotificationsUntilLabel = view.findViewById(R.id.group_mute_notifications_until);
     muteNotificationsSwitch     = view.findViewById(R.id.group_mute_notifications_switch);
     muteNotificationsRow        = view.findViewById(R.id.group_mute_notifications_row);
@@ -181,6 +183,25 @@ public class ManageGroupFragment extends LoggingFragment {
     groupLinkRow                = view.findViewById(R.id.group_link_row);
     groupLinkButton             = view.findViewById(R.id.group_link_button);
     wallpaperButton             = view.findViewById(R.id.chat_wallpaper);
+
+    if (!TextSecurePreferences.isManageGroupTweaks(requireContext())) {
+      addMembers                = view.findViewById(R.id.add_members);
+    } else {
+      addMembers                = view.findViewById(R.id.add_members2);
+
+      // https://stackoverflow.com/questions/44685816/removing-adding-constraint-programmatically-in-constraintlayout
+      final ConstraintLayout layout = (ConstraintLayout)view.findViewById(R.id.constraint_layout);
+      final int padding = getResources().getDimensionPixelOffset(R.dimen.group_manage_fragment_card_vertical_padding);
+      final ConstraintSet set = new ConstraintSet();
+      set.clone(layout);
+      set.clear(R.id.group_disappearing_messages_card, ConstraintSet.TOP);
+      set.clear(R.id.group_membership_card, ConstraintSet.TOP);
+      set.clear(R.id.group_membership_card2, ConstraintSet.TOP);
+      set.connect(R.id.group_membership_card, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, padding);
+      set.connect(R.id.group_disappearing_messages_card, ConstraintSet.TOP, R.id.group_membership_card, ConstraintSet.BOTTOM, padding);
+      set.connect(R.id.group_membership_card2, ConstraintSet.TOP, R.id.group_link_card, ConstraintSet.BOTTOM, padding);
+      set.applyTo(layout);
+    }
 
     return view;
   }
@@ -444,18 +465,19 @@ public class ManageGroupFragment extends LoggingFragment {
   }
 
   private void updateGroupDescription(@NonNull ManageGroupViewModel.Description description) {
-    if (!TextUtils.isEmpty(description.getDescription()) || description.canEditDescription()) {
+    final boolean manageGroupTweaks = TextSecurePreferences.isManageGroupTweaks(requireContext());
+    if (!TextUtils.isEmpty(description.getDescription()) || (!manageGroupTweaks && description.canEditDescription())) {
       groupDescription.setVisibility(View.VISIBLE);
       groupDescription.setMovementMethod(LongClickMovementMethod.getInstance(requireContext()));
       memberCountUnderAvatar.setVisibility(View.GONE);
     } else {
       groupDescription.setVisibility(View.GONE);
       groupDescription.setMovementMethod(null);
-      memberCountUnderAvatar.setVisibility(View.VISIBLE);
+      memberCountUnderAvatar.setVisibility(!manageGroupTweaks ? View.VISIBLE : View.GONE);
     }
 
     if (TextUtils.isEmpty(description.getDescription())) {
-      if (description.canEditDescription()) {
+      if (manageGroupTweaks && description.canEditDescription()) {
         groupDescription.setOverflowText(null);
         groupDescription.setText(R.string.ManageGroupActivity_add_group_description);
         groupDescription.setOnClickListener(v -> startActivity(EditProfileActivity.getIntentForGroupProfile(requireActivity(), getGroupId())));

@@ -75,6 +75,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String RANGE_MULTI_SELECT                      = "settings.range.multi.select";
   public static final String LONG_PRESS_MULTI_SELECT                 = "settings.long.press.multi.select";
   public static final String ALSO_SHOW_PROFILE_NAME                  = "settings.also.show.profile.name";
+  public static final String MANAGE_GROUP_TWEAKS                     = "settings.manage.group.tweaks";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -127,7 +128,8 @@ public final class SettingsValues extends SignalStoreValues {
                          SWIPE_TO_RIGHT_ACTION,
                          RANGE_MULTI_SELECT,
                          LONG_PRESS_MULTI_SELECT,
-                         ALSO_SHOW_PROFILE_NAME);
+                         ALSO_SHOW_PROFILE_NAME,
+                         MANAGE_GROUP_TWEAKS);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -493,5 +495,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setAlsoShowProfileName(boolean alsoShowProfileName) {
     putBoolean(ALSO_SHOW_PROFILE_NAME, alsoShowProfileName);
+  }
+
+  public boolean isManageGroupTweaks() {
+    return getBoolean(MANAGE_GROUP_TWEAKS, TextSecurePreferences.isManageGroupTweaks(ApplicationDependencies.getApplication()));
+  }
+
+  public void setManageGroupTweaks(boolean manageGroupTweaks) {
+    putBoolean(MANAGE_GROUP_TWEAKS, manageGroupTweaks);
   }
 }
