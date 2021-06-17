@@ -588,7 +588,8 @@ public class ConversationAdapter
     final int itemCount = getItemCount();
     try {
       for (; indexOfMRS < itemCount; indexOfMRS++) {
-        if (getItem(indexOfMRS).getMessageRecord().getId() == mostRecentSelected.getMessageRecord().getId()) {
+        final ConversationMessage cm = getItem(indexOfMRS);
+        if (cm != null && cm.getMessageRecord().getId() == mostRecentSelected.getMessageRecord().getId()) {
           break;
         }
       }
@@ -598,7 +599,8 @@ public class ConversationAdapter
       }
 
       for (; indexOfCM < itemCount; indexOfCM++) {
-        if (getItem(indexOfCM).getMessageRecord().getId() == conversationMessage.getMessageRecord().getId()) {
+        final ConversationMessage cm = getItem(indexOfCM);
+        if (cm != null && cm.getMessageRecord().getId() == conversationMessage.getMessageRecord().getId()) {
           break;
         }
       }
