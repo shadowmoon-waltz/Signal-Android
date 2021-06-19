@@ -18,7 +18,7 @@ import org.signal.libsignal.metadata.ProtocolLegacyMessageException;
 import org.signal.libsignal.metadata.ProtocolNoSessionException;
 import org.signal.libsignal.metadata.ProtocolUntrustedIdentityException;
 import org.signal.libsignal.metadata.SelfSendException;
-import org.thoughtcrime.securesms.crypto.DatabaseSessionLock;
+import org.thoughtcrime.securesms.crypto.ReentrantSessionLock;
 import org.thoughtcrime.securesms.crypto.UnidentifiedAccessUtil;
 import org.thoughtcrime.securesms.crypto.storage.SignalProtocolStoreImpl;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
@@ -68,7 +68,7 @@ public final class MessageDecryptionUtil {
   public static @NonNull DecryptionResult decrypt(@NonNull Context context, @NonNull SignalServiceEnvelope envelope) {
     SignalProtocolStore  axolotlStore = new SignalProtocolStoreImpl(context);
     SignalServiceAddress localAddress = new SignalServiceAddress(Optional.of(TextSecurePreferences.getLocalUuid(context)), Optional.of(TextSecurePreferences.getLocalNumber(context)));
-    SignalServiceCipher  cipher       = new SignalServiceCipher(localAddress, axolotlStore, DatabaseSessionLock.INSTANCE, UnidentifiedAccessUtil.getCertificateValidator());
+    SignalServiceCipher  cipher       = new SignalServiceCipher(localAddress, axolotlStore, ReentrantSessionLock.INSTANCE, UnidentifiedAccessUtil.getCertificateValidator());
     List<Job>            jobs         = new LinkedList<>();
 
     if (envelope.isPreKeySignalMessage()) {
@@ -82,7 +82,7 @@ public final class MessageDecryptionUtil {
         Log.w(TAG, String.valueOf(envelope.getTimestamp()), e);
         return DecryptionResult.forError(MessageState.INVALID_VERSION, toExceptionMetadata(e), jobs);
 
-      } catch (ProtocolInvalidKeyIdException | ProtocolInvalidKeyException | ProtocolUntrustedIdentityException | ProtocolNoSessionException e) {
+      } catch (ProtocolInvalidKeyIdException | ProtocolInvalidKeyException | ProtocolUntrustedIdentityException | ProtocolNoSessionException | ProtocolInvalidMessageException e) {
         Log.w(TAG, String.valueOf(envelope.getTimestamp()), e);
         Recipient sender = Recipient.external(context, e.getSender());
 
@@ -99,7 +99,7 @@ public final class MessageDecryptionUtil {
       } catch (ProtocolDuplicateMessageException e) {
         Log.w(TAG, String.valueOf(envelope.getTimestamp()), e);
         return DecryptionResult.forError(MessageState.DUPLICATE_MESSAGE, toExceptionMetadata(e), jobs);
-      } catch (InvalidMetadataVersionException | InvalidMetadataMessageException | ProtocolInvalidMessageException e) {
+      } catch (InvalidMetadataVersionException | InvalidMetadataMessageException e) {
         Log.w(TAG, String.valueOf(envelope.getTimestamp()), e);
         return DecryptionResult.forNoop(jobs);
       } catch (SelfSendException e) {

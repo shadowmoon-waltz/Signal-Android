@@ -66,6 +66,7 @@ import android.widget.Toast;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -142,7 +143,7 @@ import org.thoughtcrime.securesms.conversation.ui.error.SafetyNumberChangeDialog
 import org.thoughtcrime.securesms.conversation.ui.groupcall.GroupCallViewModel;
 import org.thoughtcrime.securesms.conversation.ui.mentions.MentionsPickerViewModel;
 import org.thoughtcrime.securesms.search.MessageResult;
-import org.thoughtcrime.securesms.crypto.DatabaseSessionLock;
+import org.thoughtcrime.securesms.crypto.ReentrantSessionLock;
 import org.thoughtcrime.securesms.crypto.SecurityEvent;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.DraftDatabase;
@@ -2105,14 +2106,8 @@ public class ConversationActivity extends PassphraseRequiredActivity
     }
   }
 
-  private boolean isInBubble() {
-    if (Build.VERSION.SDK_INT >= ConversationUtil.CONVERSATION_SUPPORT_VERSION) {
-      Display display = getDisplay();
-
-      return display != null && display.getDisplayId() != Display.DEFAULT_DISPLAY;
-    } else {
-      return false;
-    }
+  protected boolean isInBubble() {
+    return false;
   }
 
   private void initializeResources(@NonNull ConversationIntents.Args args) {
@@ -3787,7 +3782,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
       new AsyncTask<Void, Void, Void>() {
         @Override
         protected Void doInBackground(Void... params) {
-          try (SignalSessionLock.Lock unused = DatabaseSessionLock.INSTANCE.acquire()) {
+          try (SignalSessionLock.Lock unused = ReentrantSessionLock.INSTANCE.acquire()) {
             for (IdentityRecord identityRecord : unverifiedIdentities) {
               identityDatabase.setVerified(identityRecord.getRecipientId(),
                                            identityRecord.getIdentityKey(),
