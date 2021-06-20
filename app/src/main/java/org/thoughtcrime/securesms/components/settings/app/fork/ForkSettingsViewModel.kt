@@ -20,7 +20,8 @@ class ForkSettingsViewModel : ViewModel() {
       rangeMultiSelect = SignalStore.settings().isRangeMultiSelect,
       longPressMultiSelect = SignalStore.settings().isLongPressMultiSelect,
       alsoShowProfileName = SignalStore.settings().isAlsoShowProfileName,
-      manageGroupTweaks = SignalStore.settings().isManageGroupTweaks
+      manageGroupTweaks = SignalStore.settings().isManageGroupTweaks,
+      SignalStore.settings().swipeToLeftAction
     )
 
     store = Store(initialState)
@@ -81,5 +82,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setManageGroupTweaks(manageGroupTweaks: Boolean) {
     store.update { it.copy(manageGroupTweaks = manageGroupTweaks) }
     SignalStore.settings().isAlsoShowProfileName = manageGroupTweaks
+  }
+
+  fun setSwipeToLeftAction(swipeToLeftAction: String) {
+    store.update { it.copy(swipeToLeftAction = swipeToLeftAction) }
+    SignalStore.settings().swipeToLeftAction = swipeToLeftAction
   }
 }

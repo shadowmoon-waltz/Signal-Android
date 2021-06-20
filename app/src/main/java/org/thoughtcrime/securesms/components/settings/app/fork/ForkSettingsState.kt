@@ -11,5 +11,6 @@ data class ForkSettingsState(
   val rangeMultiSelect: Boolean,
   val longPressMultiSelect: Boolean,
   val alsoShowProfileName: Boolean,
-  val manageGroupTweaks: Boolean
+  val manageGroupTweaks: Boolean,
+  val swipeToLeftAction: String
 )

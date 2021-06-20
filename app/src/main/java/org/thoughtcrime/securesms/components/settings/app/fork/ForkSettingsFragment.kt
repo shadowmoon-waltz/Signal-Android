@@ -17,6 +17,9 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
   private val swipeToRightActionLabels by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_right_action__entries) }
   private val swipeToRightActionValues by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_right_action__values) }
 
+  private val swipeToLeftActionLabels by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_left_action__entries) }
+  private val swipeToLeftActionValues by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_left_action__values) }
+
   override fun bindAdapter(adapter: DSLSettingsAdapter) {
     viewModel = ViewModelProviders.of(this)[ForkSettingsViewModel::class.java]
 
@@ -133,6 +136,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         onClick = {
           TextSecurePreferences.setManageGroupTweaks(requireContext(), !state.manageGroupTweaks)
           viewModel.setManageGroupTweaks(!state.manageGroupTweaks)
+        }
+      )
+
+      radioListPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__swipe_to_left_action),
+        listItems = swipeToLeftActionLabels,
+        selected = swipeToLeftActionValues.indexOf(state.swipeToLeftAction),
+        onSelected = {
+          TextSecurePreferences.setSwipeToLeftAction(requireContext(), swipeToLeftActionValues[it])
+          viewModel.setSwipeToLeftAction(swipeToLeftActionValues[it])
         }
       )
 

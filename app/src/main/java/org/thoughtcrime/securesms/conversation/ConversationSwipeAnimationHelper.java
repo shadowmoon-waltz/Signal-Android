@@ -29,17 +29,28 @@ final class ConversationSwipeAnimationHelper {
   private ConversationSwipeAnimationHelper() {
   }
 
-  public static void update(@NonNull ConversationItem conversationItem, float dx, float sign) {
+  public static void update(@NonNull ConversationItem conversationItem, float dx, float sign, boolean swipeToLeft) {
+    if (swipeToLeft) sign *= -1.0f;
+
     float progress = dx / TRIGGER_DX;
 
     updateBodyBubbleTransition(conversationItem.bodyBubble, dx, sign);
     updateReactionsTransition(conversationItem.reactionsView, dx, sign);
-    updateReplyIconTransition(conversationItem.reply, dx, progress, sign);
-    updateContactPhotoHolderTransition(conversationItem.contactPhotoHolder, progress, sign);
+    if (!swipeToLeft) {
+      updateReplyIconTransition(conversationItem.reply, dx, progress, sign);
+      updateContactPhotoHolderTransition(conversationItem.contactPhotoHolder, progress, sign);
+      
+      updateReplyIconTransition(conversationItem.swipeToLeft, 0.0f, 0.0f, sign);
+    } else {
+      updateReplyIconTransition(conversationItem.swipeToLeft, dx, progress, sign);
+      
+      updateReplyIconTransition(conversationItem.reply, 0.0f, 0.0f, sign);
+      updateContactPhotoHolderTransition(conversationItem.contactPhotoHolder, 0.0f, sign);
+    }
   }
 
-  public static void trigger(@NonNull ConversationItem conversationItem) {
-    triggerReplyIcon(conversationItem.reply);
+  public static void trigger(@NonNull ConversationItem conversationItem, boolean swipeToLeft) {
+    triggerReplyIcon(!swipeToLeft ? conversationItem.reply : conversationItem.swipeToLeft);
   }
 
   private static void updateBodyBubbleTransition(@NonNull View bodyBubble, float dx, float sign) {

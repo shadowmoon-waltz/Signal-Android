@@ -238,6 +238,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_MANAGE_GROUP_TWEAKS = "pref_manage_group_tweaks";
 
+  private static final String PREF_SWIPE_TO_LEFT_ACTION = "pref_swipe_to_left_action";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -272,7 +274,8 @@ public class TextSecurePreferences {
                                                              THEME_PREF,
                                                              LANGUAGE_PREF,
                                                              MESSAGE_BODY_TEXT_SIZE_PREF,
-                                                             PREF_SWIPE_TO_RIGHT_ACTION};
+                                                             PREF_SWIPE_TO_RIGHT_ACTION,
+                                                             PREF_SWIPE_TO_LEFT_ACTION};
 
   private static final String[] stringSetPreferencesToBackup = {MEDIA_DOWNLOAD_MOBILE_PREF,
                                                                 MEDIA_DOWNLOAD_WIFI_PREF,
@@ -1323,7 +1326,7 @@ public class TextSecurePreferences {
   }
 
   public static String getSwipeToRightAction(Context context) {
-    return getStringPreference(context, PREF_SWIPE_TO_RIGHT_ACTION, SwipeToRightActionTypes.DEFAULT);
+    return getStringPreference(context, PREF_SWIPE_TO_RIGHT_ACTION, SwipeActionTypes.DEFAULT);
   }
 
   public static void setSwipeToRightAction(Context context, String swipeToRightAction) {
@@ -1362,6 +1365,14 @@ public class TextSecurePreferences {
     setBooleanPreference(context, PREF_MANAGE_GROUP_TWEAKS, enabled);
   }
   
+  public static String getSwipeToLeftAction(Context context) {
+    return getStringPreference(context, PREF_SWIPE_TO_LEFT_ACTION, SwipeActionTypes.DEFAULT);
+  }
+
+  public static void setSwipeToLeftAction(Context context, String swipeToLeftAction) {
+    setStringPreference(context, PREF_SWIPE_TO_LEFT_ACTION, swipeToLeftAction);
+  }
+
   public static void setBooleanPreference(Context context, String key, boolean value) {
     PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(key, value).apply();
   }

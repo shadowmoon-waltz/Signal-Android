@@ -125,7 +125,7 @@ import org.thoughtcrime.securesms.util.LongClickMovementMethod;
 import org.thoughtcrime.securesms.util.Projection;
 import org.thoughtcrime.securesms.util.SearchUtil;
 import org.thoughtcrime.securesms.util.StringUtil;
-import org.thoughtcrime.securesms.util.SwipeToRightActionTypes;
+import org.thoughtcrime.securesms.util.SwipeActionTypes;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.UrlClickHandler;
 import org.thoughtcrime.securesms.util.Util;
@@ -176,6 +176,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
             protected ConversationItemBodyBubble bodyBubble;
             protected View                       reply;
             protected View                       replyIcon;
+            protected View                       swipeToLeft;
+            protected View                       swipeToLeftIcon;
   @Nullable protected ViewGroup                  contactPhotoHolder;
   @Nullable private   QuoteView                  quoteView;
             private   EmojiTextView              bodyText;
@@ -264,6 +266,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     this.quoteView               =            findViewById(R.id.quote_view);
     this.reply                   =            findViewById(R.id.reply_icon_wrapper);
     this.replyIcon               =            findViewById(R.id.reply_icon);
+    this.swipeToLeft             =            findViewById(R.id.swipe_to_left_icon_wrapper);
+    this.swipeToLeftIcon         =            findViewById(R.id.swipe_to_left_icon);
     this.reactionsView           =            findViewById(R.id.reactions_view);
 
     setOnClickListener(new ClickListener(null));
@@ -310,24 +314,11 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     this.conversationRecipient.observeForever(this);
 
     if (replyIcon != null) {
-      final String swipeToRightAction = TextSecurePreferences.getSwipeToRightAction(context);
-      if (SwipeToRightActionTypes.DELETE.equals(swipeToRightAction) || SwipeToRightActionTypes.DELETE_NO_PROMPT.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_trash_24);
-      } else if (SwipeToRightActionTypes.COPY_TEXT.equals(swipeToRightAction) || SwipeToRightActionTypes.COPY_TEXT_POPUP.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_copy_24);
-      } else if (SwipeToRightActionTypes.FORWARD.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_forward_24);
-      } else if (SwipeToRightActionTypes.MESSAGE_DETAILS.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_info_white_24);
-      } else if (SwipeToRightActionTypes.SHOW_OPTIONS.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_more_vert_24);
-      } else if (SwipeToRightActionTypes.NOTE_TO_SELF.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_note_24);
-      } else if (SwipeToRightActionTypes.MULTI_SELECT.equals(swipeToRightAction)) {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_select_24);
-      } else {
-        ((AppCompatImageView)replyIcon).setImageResource(R.drawable.ic_reply_24);
-      }
+      setSwipeIcon(((AppCompatImageView)replyIcon), TextSecurePreferences.getSwipeToRightAction(context), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_RIGHT);
+    }
+
+    if (swipeToLeftIcon != null) {
+      setSwipeIcon(((AppCompatImageView)swipeToLeftIcon), TextSecurePreferences.getSwipeToLeftAction(context), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_LEFT);
     }
 
     setGutterSizes(messageRecord, groupThread);
@@ -347,6 +338,28 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     setFooter(messageRecord, nextMessageRecord, locale, groupThread, hasWallpaper);
   }
 
+  private void setSwipeIcon(final @NonNull AppCompatImageView icon, final @NonNull String action, int defaultDrawableId) {
+    if (SwipeActionTypes.REPLY.equals(action)) {
+      icon.setImageResource(R.drawable.ic_reply_24);
+    } else if (SwipeActionTypes.DELETE.equals(action) || SwipeActionTypes.DELETE_NO_PROMPT.equals(action)) {
+      icon.setImageResource(R.drawable.ic_trash_24);
+    } else if (SwipeActionTypes.COPY_TEXT.equals(action) || SwipeActionTypes.COPY_TEXT_POPUP.equals(action)) {
+      icon.setImageResource(R.drawable.ic_copy_24);
+    } else if (SwipeActionTypes.FORWARD.equals(action)) {
+      icon.setImageResource(R.drawable.ic_forward_24);
+    } else if (SwipeActionTypes.MESSAGE_DETAILS.equals(action)) {
+      icon.setImageResource(R.drawable.ic_info_white_24);
+    } else if (SwipeActionTypes.SHOW_OPTIONS.equals(action)) {
+      icon.setImageResource(R.drawable.ic_more_vert_24);
+    } else if (SwipeActionTypes.NOTE_TO_SELF.equals(action)) {
+      icon.setImageResource(R.drawable.ic_note_24);
+    } else if (SwipeActionTypes.MULTI_SELECT.equals(action)) {
+      icon.setImageResource(R.drawable.ic_select_24);
+    } else { // for SwipeActionTypes.DEFAULT, SwipeActionTypes.NONE, and any other string
+      icon.setImageResource(defaultDrawableId);
+    }
+  }
+
   @Override
   public void updateTimestamps() {
     getActiveFooter(messageRecord).setMessageRecord(messageRecord, locale);
@@ -354,7 +367,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
   @Override
   protected void onDetachedFromWindow() {
-    ConversationSwipeAnimationHelper.update(this, 0f, 1f);
+    ConversationSwipeAnimationHelper.update(this, 0f, 1f, false);
     unbind();
     super.onDetachedFromWindow();
   }
@@ -534,8 +547,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     if (hasWallpaper) {
       replyIcon.setBackgroundResource(R.drawable.wallpaper_message_decoration_background);
+      swipeToLeftIcon.setBackgroundResource(R.drawable.wallpaper_message_decoration_background);
     } else {
       replyIcon.setBackground(null);
+      swipeToLeftIcon.setBackground(null);
     }
   }
 

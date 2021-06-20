@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,26 +27,31 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   private boolean canTriggerSwipe;
   private float   latestDownX;
   private float   latestDownY;
-
+  private float   latestDx;
+  
   private final SwipeAvailabilityProvider     swipeAvailabilityProvider;
   private final ConversationItemTouchListener itemTouchListener;
   private final OnSwipeListener               onSwipeListener;
   private final OnViewHolderTranslated        onViewHolderTranslated;
 
-  private boolean                             returnToInitial;
+  private final SwipeAvailabilityProvider     swipeAvailabilityProvider2;
+  private final OnSwipeListener               onSwipeListener2;
 
-  ConversationItemSwipeCallback(@NonNull SwipeAvailabilityProvider swipeAvailabilityProvider,
-                                @NonNull OnSwipeListener onSwipeListener,
-                                @NonNull OnViewHolderTranslated onViewHolderTranslated)
+  ConversationItemSwipeCallback(@Nullable SwipeAvailabilityProvider swipeAvailabilityProvider,
+                                @Nullable OnSwipeListener onSwipeListener,
+                                @Nullable OnViewHolderTranslated onViewHolderTranslated,
+                                @Nullable SwipeAvailabilityProvider swipeAvailabilityProvider2,
+                                @Nullable OnSwipeListener onSwipeListener2)
   {
-    super(0, ItemTouchHelper.END);
+    super(0, ItemTouchHelper.START | ItemTouchHelper.END);
     this.itemTouchListener          = new ConversationItemTouchListener(this::updateLatestDownCoordinate);
     this.swipeAvailabilityProvider  = swipeAvailabilityProvider;
     this.onSwipeListener            = onSwipeListener;
+    this.swipeAvailabilityProvider2 = swipeAvailabilityProvider2;
+    this.onSwipeListener2           = onSwipeListener2;
     this.onViewHolderTranslated     = onViewHolderTranslated;
     this.shouldTriggerSwipeFeedback = true;
     this.canTriggerSwipe            = true;
-    this.returnToInitial            = false;
   }
 
   void attachToRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -69,8 +75,8 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   public int getSwipeDirs(@NonNull RecyclerView recyclerView,
                           @NonNull RecyclerView.ViewHolder viewHolder)
   {
-    if (cannotSwipeViewHolder(viewHolder)) return 0;
-    return super.getSwipeDirs(recyclerView, viewHolder);
+    return (!cannotSwipeViewHolder(viewHolder, -1.0f) ? ItemTouchHelper.START : 0) |
+           (!cannotSwipeViewHolder(viewHolder, 1.0f) ? ItemTouchHelper.END : 0);
   }
 
   @Override
@@ -89,60 +95,75 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
           @NonNull RecyclerView.ViewHolder viewHolder,
           float dx, float dy, int actionState, boolean isCurrentlyActive)
   {
-    final boolean cannotSwipe = cannotSwipeViewHolder(viewHolder);
-    if (cannotSwipe && !returnToInitial) return;
+    final float sign = getSignFromDirection(viewHolder.itemView);
+    final float dx2 = sign * dx;
 
-    float   sign              = getSignFromDirection(viewHolder.itemView);
-    boolean isCorrectSwipeDir = sameSign(dx, sign);
-
-    if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && isCorrectSwipeDir) {
-      ConversationSwipeAnimationHelper.update((ConversationItem) viewHolder.itemView, Math.abs(dx), sign);
+    if (actionState == ItemTouchHelper.ACTION_STATE_IDLE || dx == 0) {
+      ConversationSwipeAnimationHelper.update((ConversationItem) viewHolder.itemView, 0, 1, false);
       dispatchTranslationUpdate(recyclerView, viewHolder);
-      handleSwipeFeedback((ConversationItem) viewHolder.itemView, Math.abs(dx));
-      if (canTriggerSwipe && !returnToInitial) {
-        setTouchListener(recyclerView, viewHolder, Math.abs(dx));
+
+      if (dx == 0) {
+        shouldTriggerSwipeFeedback = true;
+        canTriggerSwipe            = true;
       }
-    } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE || dx == 0) {
-      ConversationSwipeAnimationHelper.update((ConversationItem) viewHolder.itemView, 0, 1);
+    } else if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+      final boolean cannotSwipe = cannotSwipeViewHolder(viewHolder, dx2);
+      if (cannotSwipe && canTriggerSwipe) return;
+
+      if (!sameSign(dx2, latestDx)) {
+        shouldTriggerSwipeFeedback = true;
+        canTriggerSwipe            = true;
+      }
+
+      final boolean swipeToLeft = dx2 < 0.0f;
+
+      ConversationSwipeAnimationHelper.update((ConversationItem) viewHolder.itemView, Math.abs(dx), sign, swipeToLeft);
       dispatchTranslationUpdate(recyclerView, viewHolder);
+      handleSwipeFeedback((ConversationItem) viewHolder.itemView, Math.abs(dx), swipeToLeft);
+      if (canTriggerSwipe) {
+        setTouchListener(recyclerView, viewHolder, Math.abs(dx), swipeToLeft);
+      }
     }
 
-    if (dx == 0) {
-      shouldTriggerSwipeFeedback = true;
-      canTriggerSwipe            = true;
-      if (returnToInitial) {
-        returnToInitial          = false;
-      }
-    }
+    latestDx = dx2;
   }
 
   private void dispatchTranslationUpdate(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-    onViewHolderTranslated.onViewHolderTranslated(recyclerView, viewHolder);
+    if (onViewHolderTranslated != null) {
+      onViewHolderTranslated.onViewHolderTranslated(recyclerView, viewHolder);
+    }
   }
 
-  private void handleSwipeFeedback(@NonNull ConversationItem item, float dx) {
+  private void handleSwipeFeedback(@NonNull ConversationItem item, float dx, boolean swipeToLeft) {
     if (dx > SWIPE_SUCCESS_DX && shouldTriggerSwipeFeedback) {
       vibrate(item.getContext());
-      ConversationSwipeAnimationHelper.trigger(item);
+      ConversationSwipeAnimationHelper.trigger(item, swipeToLeft);
       shouldTriggerSwipeFeedback = false;
     }
   }
 
-  private void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull MotionEvent motionEvent) {
-    if (cannotSwipeViewHolder(viewHolder)) return;
+  private void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, @NonNull MotionEvent motionEvent, boolean swipeToLeft) {
+    if (cannotSwipeViewHolder(viewHolder, (!swipeToLeft ? 1.0f : -1.0f))) return;
 
     ConversationItem    item          = ((ConversationItem) viewHolder.itemView);
     ConversationMessage messageRecord = item.getConversationMessage();
 
-    onSwipeListener.onSwipe(messageRecord, item, motionEvent);
-    
-    if (cannotSwipeViewHolder(viewHolder)) returnToInitial = true;
+    if (!swipeToLeft) {
+      if (onSwipeListener != null) {
+        onSwipeListener.onSwipe(messageRecord, item, motionEvent);
+      }
+    } else {
+      if (onSwipeListener2 != null) {
+        onSwipeListener2.onSwipe(messageRecord, item, motionEvent);
+      }
+    }
   }
 
   @SuppressLint("ClickableViewAccessibility")
   private void setTouchListener(@NonNull RecyclerView recyclerView,
                                 @NonNull RecyclerView.ViewHolder viewHolder,
-                                float dx)
+                                float dx,
+                                boolean swipeToLeft)
   {
     recyclerView.setOnTouchListener((v, event) -> {
       switch (event.getAction()) {
@@ -150,7 +171,7 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
           shouldTriggerSwipeFeedback = true;
           break;
         case MotionEvent.ACTION_UP:
-          handleTouchActionUp(recyclerView, viewHolder, dx, event);
+          handleTouchActionUp(recyclerView, viewHolder, dx, event, swipeToLeft);
         case MotionEvent.ACTION_CANCEL:
           swipeBack = true;
           shouldTriggerSwipeFeedback = false;
@@ -164,11 +185,12 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   private void handleTouchActionUp(@NonNull RecyclerView recyclerView,
                                    @NonNull RecyclerView.ViewHolder viewHolder,
                                    float dx,
-                                   @NonNull MotionEvent motionEvent)
+                                   @NonNull MotionEvent motionEvent,
+                                   boolean swipeToLeft)
   {
     if (dx > SWIPE_SUCCESS_DX) {
       canTriggerSwipe = false;
-      onSwiped(viewHolder, motionEvent);
+      onSwiped(viewHolder, motionEvent, swipeToLeft);
       if (shouldTriggerSwipeFeedback) {
         vibrate(viewHolder.itemView.getContext());
       }
@@ -181,17 +203,23 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     if (AccessibilityUtil.areAnimationsDisabled(viewHolder.itemView.getContext())) {
       ConversationSwipeAnimationHelper.update((ConversationItem) viewHolder.itemView,
                                               0f,
-                                              getSignFromDirection(viewHolder.itemView));
+                                              getSignFromDirection(viewHolder.itemView),
+                                              false);
       dispatchTranslationUpdate(recyclerView, viewHolder);
+      shouldTriggerSwipeFeedback = true;
+      canTriggerSwipe = true;
+      latestDx = 0.0f;
     }
   }
 
-  private boolean cannotSwipeViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
-    if (!(viewHolder.itemView instanceof ConversationItem)) return true;
-
+  private boolean cannotSwipeViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, float direction) {
     ConversationItem item = ((ConversationItem) viewHolder.itemView);
-    return !swipeAvailabilityProvider.isSwipeAvailable(item.getConversationMessage()) ||
-           item.disallowSwipe(latestDownX, latestDownY);
+    if (!(viewHolder.itemView instanceof ConversationItem) || item.disallowSwipe(latestDownX, latestDownY)) return true;
+
+    final boolean canSwipeToRight = (direction >= 0.0f && swipeAvailabilityProvider != null && swipeAvailabilityProvider.isSwipeAvailable(item.getConversationMessage()));
+    final boolean canSwipeToLeft = (direction <= 0.0f && swipeAvailabilityProvider2 != null && swipeAvailabilityProvider2.isSwipeAvailable(item.getConversationMessage()));
+
+    return (!canSwipeToRight && !canSwipeToLeft);
   }
 
   private void updateLatestDownCoordinate(float x, float y) {

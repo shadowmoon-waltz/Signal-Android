@@ -155,7 +155,7 @@ import org.thoughtcrime.securesms.util.SnapToTopDataObserver;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.Stopwatch;
 import org.thoughtcrime.securesms.util.StorageUtil;
-import org.thoughtcrime.securesms.util.SwipeToRightActionTypes;
+import org.thoughtcrime.securesms.util.SwipeActionTypes;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.Util;
@@ -278,86 +278,16 @@ public class ConversationFragment extends LoggingFragment {
 
     giphyMp4ProjectionRecycler = initializeGiphyMp4();
 
-    final String swipeToRightAction = TextSecurePreferences.getSwipeToRightAction(requireContext());
-    if (SwipeToRightActionTypes.NONE.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> false,
-              (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.DELETE.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessage(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.DELETE_NO_PROMPT.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessageForMe(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.COPY_TEXT.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(Collections.singleton(conversationMessage), false),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.COPY_TEXT_POPUP.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(Collections.singleton(conversationMessage), true),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.FORWARD.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.MESSAGE_DETAILS.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canShowMessageDetails(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleDisplayDetails(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.SHOW_OPTIONS.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null,
-              (conversationMessage, conversationItem, motionEvent) ->
-                ((ConversationFragmentItemClickListener)selectionClickListener).onItemLongClick2(conversationItem, conversationMessage, motionEvent),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.NOTE_TO_SELF.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
-              (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage, true),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else if (SwipeToRightActionTypes.MULTI_SELECT.equals(swipeToRightAction)) {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null,
-              (conversationMessage, conversationItem, motionEvent) -> handleEnterMultiSelect(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    } else {
-      new ConversationItemSwipeCallback(
-              conversationMessage -> actionMode == null &&
-                                     MenuState.canReplyToMessage(recipient.get(),
-                                                                 MenuState.isActionMessage(conversationMessage.getMessageRecord()),
-                                                                 conversationMessage.getMessageRecord(),
-                                                                 messageRequestViewModel.shouldShowMessageRequest()),
-              (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage),
-              this::onViewHolderPositionTranslated
-      ).attachToRecyclerView(list);
-    }
+    SetupSwipeResult ssrRight = setupSwipe(TextSecurePreferences.getSwipeToRightAction(requireContext()), SwipeActionTypes.DEFAULT_FOR_RIGHT);
+    SetupSwipeResult ssrLeft = setupSwipe(TextSecurePreferences.getSwipeToLeftAction(requireContext()), SwipeActionTypes.DEFAULT_FOR_LEFT);
+
+    new ConversationItemSwipeCallback(
+            ssrRight.SAP(),
+            ssrRight.OSL(),
+            this::onViewHolderPositionTranslated,
+            ssrLeft.SAP(),
+            ssrLeft.OSL()
+    ).attachToRecyclerView(list);
 
     setupListLayoutListeners();
 
@@ -411,6 +341,77 @@ public class ConversationFragment extends LoggingFragment {
     getViewLifecycleOwner().getLifecycle().addObserver(conversationUpdateTick);
 
     return view;
+  }
+
+  private class SetupSwipeResult {
+    private final @Nullable ConversationItemSwipeCallback.SwipeAvailabilityProvider sap;
+    private final @Nullable ConversationItemSwipeCallback.OnSwipeListener osl;
+
+    SetupSwipeResult(final @Nullable ConversationItemSwipeCallback.SwipeAvailabilityProvider sap,
+                     final @Nullable ConversationItemSwipeCallback.OnSwipeListener osl) {
+      this.sap = sap;
+      this.osl = osl;
+    }
+
+    public @Nullable ConversationItemSwipeCallback.SwipeAvailabilityProvider SAP()
+    {
+      return sap;
+    }
+
+    public @Nullable ConversationItemSwipeCallback.OnSwipeListener OSL()
+    {
+      return osl;
+    }
+  }
+
+  private @NonNull SetupSwipeResult setupSwipe(final @NonNull String swipeAction, final @Nullable String defaultAction) {
+    final @NonNull String action = (defaultAction != null && SwipeActionTypes.DEFAULT.equals(swipeAction)) ? defaultAction : swipeAction;
+    if (SwipeActionTypes.REPLY.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canReplyToMessage(recipient.get(),
+                                                                                     MenuState.isActionMessage(conversationMessage.getMessageRecord()),
+                                                                                     conversationMessage.getMessageRecord(),
+                                                                                     messageRequestViewModel.shouldShowMessageRequest()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage));
+    } else if (SwipeActionTypes.DELETE.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessage(conversationMessage));
+    } else if (SwipeActionTypes.DELETE_NO_PROMPT.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessageForMe(conversationMessage));
+    } else if (SwipeActionTypes.COPY_TEXT.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(Collections.singleton(conversationMessage), false));
+    } else if (SwipeActionTypes.COPY_TEXT_POPUP.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(Collections.singleton(conversationMessage), true));
+    } else if (SwipeActionTypes.FORWARD.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage));
+    } else if (SwipeActionTypes.MESSAGE_DETAILS.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canShowMessageDetails(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleDisplayDetails(conversationMessage));
+    } else if (SwipeActionTypes.SHOW_OPTIONS.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null,
+                                  (conversationMessage, conversationItem, motionEvent) ->
+                                    ((ConversationFragmentItemClickListener)selectionClickListener).onItemLongClick2(conversationItem, conversationMessage, motionEvent));
+    } else if (SwipeActionTypes.NOTE_TO_SELF.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null &&
+                                                         MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
+                                  (conversationMessage, conversationItem, motionEvent) -> handleForwardMessage(conversationMessage, true));
+    } else if (SwipeActionTypes.MULTI_SELECT.equals(action)) {
+      return new SetupSwipeResult(conversationMessage -> actionMode == null,
+                                  (conversationMessage, conversationItem, motionEvent) -> handleEnterMultiSelect(conversationMessage));
+    } else { // includes SwipeActionTypes.NONE and any other string
+      return new SetupSwipeResult(null,
+                                  null);
+    }
   }
 
   private @NonNull GiphyMp4ProjectionRecycler initializeGiphyMp4() {
