@@ -425,6 +425,7 @@
     <string-array name="ForkSettingsFragment__swipe_to_left_action__entries">
         <item>@string/ForkSettingsFragment__swipe_to_left_action__default</item>
         <item>@string/conversation_context__menu_message_details</item>
+        <item>@string/MessageNotifier_reply</item>
         <item>@string/delete</item>
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
         <item>@string/conversation_context__menu_copy_text</item>
@@ -440,6 +441,7 @@
     <string-array name="ForkSettingsFragment__swipe_to_left_action__values">
         <item>default</item>
         <item>message_details</item>
+        <item>reply</item>
         <item>delete</item>
         <item>delete_no_prompt</item>
         <item>copy_text</item>
