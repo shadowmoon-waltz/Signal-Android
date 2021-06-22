@@ -149,6 +149,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__type_reaction_option),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__type_reaction_option_summary),
+        isChecked = state.typeReactionOption,
+        onClick = {
+          TextSecurePreferences.setTypeReactionOption(requireContext(), !state.typeReactionOption)
+          viewModel.setTypeReactionOption(!state.typeReactionOption)
+        }
+      )
+
       clickPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
         onClick = {
