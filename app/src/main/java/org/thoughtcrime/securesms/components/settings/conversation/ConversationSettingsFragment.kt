@@ -532,7 +532,9 @@ class ConversationSettingsFragment : DSLSettingsFragment(
               recipient = member.member,
               isAdmin = member.isAdmin,
               onClick = {
-                RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
+                if (!member.member.isSelf()) {
+                  RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
+                }
               }
             )
           )
