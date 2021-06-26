@@ -44,10 +44,13 @@ object GroupDescriptionPreference {
       groupDescriptionTextView.movementMethod = LongClickMovementMethod.getInstance(context)
 
       if (model.groupDescription.isNullOrEmpty()) {
+        groupDescriptionTextView.setOverflowText(null)
         if (model.canEditGroupAttributes) {
-          groupDescriptionTextView.setOverflowText(null)
           groupDescriptionTextView.setText(R.string.ManageGroupActivity_add_group_description)
           groupDescriptionTextView.setOnClickListener { model.onEditGroupDescription() }
+        } else {
+          groupDescriptionTextView.setText("")
+          groupDescriptionTextView.setOnClickListener(null)
         }
       } else {
         groupDescriptionTextView.setOnClickListener(null)
