@@ -21,8 +21,7 @@ class ForkSettingsViewModel : ViewModel() {
       longPressMultiSelect = SignalStore.settings().isLongPressMultiSelect,
       alsoShowProfileName = SignalStore.settings().isAlsoShowProfileName,
       manageGroupTweaks = SignalStore.settings().isManageGroupTweaks,
-      SignalStore.settings().swipeToLeftAction,
-      typeReactionOption = SignalStore.settings().isTypeReactionOption
+      SignalStore.settings().swipeToLeftAction
     )
 
     store = Store(initialState)
@@ -88,10 +87,5 @@ class ForkSettingsViewModel : ViewModel() {
   fun setSwipeToLeftAction(swipeToLeftAction: String) {
     store.update { it.copy(swipeToLeftAction = swipeToLeftAction) }
     SignalStore.settings().swipeToLeftAction = swipeToLeftAction
-  }
-
-  fun setTypeReactionOption(typeReactionOption: Boolean) {
-    store.update { it.copy(typeReactionOption = typeReactionOption) }
-    SignalStore.settings().isTypeReactionOption = typeReactionOption
   }
 }

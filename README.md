@@ -30,7 +30,6 @@ Differences from stock Signal:
 * Option to also show profile names under contact names in detailed recipient views and group member lists (when a member does not have about set), for recipients with contact entries (by default, contact names replace profile names in most views)
 * Option to enable manage group view tweaks, which include hiding text with prompt to add group description or number of members and moving member list almost to top of view (but leaving the add members button where it usually is)
 * Added in support for swipe to left conversation item action. Option to customize swipe to right conversation item action has the same options as the swipe to right conversation item action
-* Option to type reaction emoji, by long pressing the custom emoji bottom sheet settings button to use the keyboard to enter reaction emoji. Useful if you want to search for emojis and your keyboard supports it
 
 Due to using a custom build target and not realizing a specific setting needed to add in that build target, the usual gradle build target did not perform dependency verification prior to commit 850f9bfe on 2021-06-09 (part of release 5.14.2), when it was fixed.
 

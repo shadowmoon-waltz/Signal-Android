@@ -3524,8 +3524,6 @@
     <string name="ForkSettingsFragment__manage_group_tweaks_summary">Hide text with prompt to add group description or number of members and move member list almost to top of view (but leaving the add members button where it usually is)</string>
     <string name="ForkSettingsFragment__swipe_to_left_action__default">Default (None)</string>
     <string name="ForkSettingsFragment__swipe_to_left_action">Swipe to Left Conversation Item Action</string>
-    <string name="ForkSettingsFragment__type_reaction_option">Option to Type Reaction Emoji</string>
-    <string name="ForkSettingsFragment__type_reaction_option_summary">Enable to long press the custom emoji bottom sheet settings button to use the keyboard to enter reaction emoji. Useful if you want to search for emojis and your keyboard supports it</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>

@@ -1,6 +1,5 @@
 package org.thoughtcrime.securesms.reactions.any;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +10,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextSwitcher;
 
@@ -36,11 +34,9 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.emoji.EmojiKeyboardProvider;
 import org.thoughtcrime.securesms.components.emoji.EmojiPageViewGridAdapter;
-import org.thoughtcrime.securesms.components.emoji.EmojiUtil;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.reactions.ReactionsLoader;
 import org.thoughtcrime.securesms.reactions.edit.EditReactionsActivity;
-import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.ViewUtil;
 
@@ -226,29 +222,7 @@ public final class ReactWithAnyEmojiBottomSheetDialogFragment extends BottomShee
       customizeReactions = tabBar.findViewById(R.id.customize_reactions_frame);
       if (showEditReactions) {
         customizeReactions.setVisibility(View.VISIBLE);
-        final View cr = tabBar.findViewById(R.id.customize_reactions);
-        cr.setOnClickListener(v -> startActivity(new Intent(requireContext(), EditReactionsActivity.class)));
-        if (TextSecurePreferences.isTypeReactionOption(requireContext())) {
-          cr.setOnLongClickListener(v -> {
-            // https://stackoverflow.com/questions/7197939/copy-text-from-android-alertdialog
-            EditText et = new EditText(getActivity());
-            et.setHint("Enter an emoji");
-            new AlertDialog.Builder(requireActivity())
-              .setView(et)
-              .setPositiveButton("React", (d, i) -> {
-                final String s = et.getText().toString();
-                if (EmojiUtil.isEmoji(s)) {
-                  onEmojiSelected(s);
-                }
-                d.dismiss();
-              })
-              .setNegativeButton("Cancel", (d, i) -> {
-                d.dismiss();
-              })
-              .show();
-            return true;
-          });
-        }
+        tabBar.findViewById(R.id.customize_reactions).setOnClickListener(v -> startActivity(new Intent(requireContext(), EditReactionsActivity.class)));
       }
 
       if (!requireArguments().getBoolean(ARG_SHADOWS)) {

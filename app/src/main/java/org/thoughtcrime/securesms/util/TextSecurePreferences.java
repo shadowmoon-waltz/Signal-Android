@@ -240,8 +240,6 @@ public class TextSecurePreferences {
 
   private static final String PREF_SWIPE_TO_LEFT_ACTION = "pref_swipe_to_left_action";
 
-  private static final String PREF_TYPE_REACTION_OPTION = "pref_type_reaction_option";
-
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -267,8 +265,7 @@ public class TextSecurePreferences {
                                                               PREF_RANGE_MULTI_SELECT,
                                                               PREF_LONG_PRESS_MULTI_SELECT,
                                                               PREF_ALSO_SHOW_PROFILE_NAME,
-                                                              PREF_MANAGE_GROUP_TWEAKS,
-                                                              PREF_TYPE_REACTION_OPTION};
+                                                              PREF_MANAGE_GROUP_TWEAKS};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1374,14 +1371,6 @@ public class TextSecurePreferences {
 
   public static void setSwipeToLeftAction(Context context, String swipeToLeftAction) {
     setStringPreference(context, PREF_SWIPE_TO_LEFT_ACTION, swipeToLeftAction);
-  }
-
-  public static boolean isTypeReactionOption(Context context) {
-    return getBooleanPreference(context, PREF_TYPE_REACTION_OPTION, false);
-  }
-
-  public static void setTypeReactionOption(Context context, boolean enabled) {
-    setBooleanPreference(context, PREF_TYPE_REACTION_OPTION, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

@@ -77,7 +77,6 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String ALSO_SHOW_PROFILE_NAME                  = "settings.also.show.profile.name";
   public static final String MANAGE_GROUP_TWEAKS                     = "settings.manage.group.tweaks";
   public static final String SWIPE_TO_LEFT_ACTION                    = "settings.swipe.to.left.action";
-  public static final String TYPE_REACTION_OPTION                    = "settings.type.reaction.option";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -132,8 +131,7 @@ public final class SettingsValues extends SignalStoreValues {
                          LONG_PRESS_MULTI_SELECT,
                          ALSO_SHOW_PROFILE_NAME,
                          MANAGE_GROUP_TWEAKS,
-                         SWIPE_TO_LEFT_ACTION,
-                         TYPE_REACTION_OPTION);
+                         SWIPE_TO_LEFT_ACTION);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -515,13 +513,5 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setSwipeToLeftAction(@NonNull String swipeToLeftAction) {
     putString(SWIPE_TO_LEFT_ACTION, swipeToLeftAction);
-  }
-
-  public boolean isTypeReactionOption() {
-    return getBoolean(TYPE_REACTION_OPTION, TextSecurePreferences.isTypeReactionOption(ApplicationDependencies.getApplication()));
-  }
-
-  public void setTypeReactionOption(boolean typeReactionOption) {
-    putBoolean(TYPE_REACTION_OPTION, typeReactionOption);
   }
 }
