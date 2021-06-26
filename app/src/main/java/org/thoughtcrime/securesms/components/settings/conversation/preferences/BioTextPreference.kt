@@ -9,6 +9,7 @@ import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.util.MappingAdapter
 import org.thoughtcrime.securesms.util.MappingViewHolder
+import org.thoughtcrime.securesms.util.TextSecurePreferences
 
 /**
  * Renders name, description, about, etc. for a given group or recipient.
@@ -22,6 +23,7 @@ object BioTextPreference {
 
   abstract class BioTextPreferenceModel<T : BioTextPreferenceModel<T>> : PreferenceModel<T>() {
     abstract fun getHeadlineText(context: Context): String
+    abstract fun getSubhead0Text(context: Context): String?
     abstract fun getSubhead1Text(): String?
     abstract fun getSubhead2Text(): String?
   }
@@ -31,6 +33,14 @@ object BioTextPreference {
   ) : BioTextPreferenceModel<RecipientModel>() {
 
     override fun getHeadlineText(context: Context): String = recipient.getDisplayNameOrUsername(context)
+
+    override fun getSubhead0Text(context: Context): String? {
+      if (!recipient.isSelf() && TextSecurePreferences.isAlsoShowProfileName(context)) {
+        return recipient.getDisplayName2(context).let { return if (!it.isEmpty()) it else null }
+      } else {
+        return null
+      }
+    }
 
     override fun getSubhead1Text(): String? = recipient.combinedAboutAndEmoji
 
@@ -51,6 +61,8 @@ object BioTextPreference {
   ) : BioTextPreferenceModel<GroupModel>() {
     override fun getHeadlineText(context: Context): String = groupTitle
 
+    override fun getSubhead0Text(context: Context): String? = null
+
     override fun getSubhead1Text(): String? = groupMembershipDescription
 
     override fun getSubhead2Text(): String? = null
@@ -69,11 +81,17 @@ object BioTextPreference {
   private abstract class BioTextViewHolder<T : BioTextPreferenceModel<T>>(itemView: View) : MappingViewHolder<T>(itemView) {
 
     private val headline: TextView = itemView.findViewById(R.id.bio_preference_headline)
+    private val subhead0: TextView = itemView.findViewById(R.id.bio_preference_subhead_0)
     private val subhead1: TextView = itemView.findViewById(R.id.bio_preference_subhead_1)
     private val subhead2: TextView = itemView.findViewById(R.id.bio_preference_subhead_2)
 
     override fun bind(model: T) {
       headline.text = model.getHeadlineText(context)
+
+      model.getSubhead0Text(context).let {
+        subhead0.text = it
+        subhead0.visibility = if (it == null) View.GONE else View.VISIBLE
+      }
 
       model.getSubhead1Text().let {
         subhead1.text = it

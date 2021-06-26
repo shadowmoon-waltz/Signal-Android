@@ -71,6 +71,7 @@ import org.thoughtcrime.securesms.recipients.ui.sharablegrouplink.ShareableGroup
 import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.ContextUtil
 import org.thoughtcrime.securesms.util.ExpirationUtil
+import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.ThemeUtil
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog
@@ -349,9 +350,49 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         R.drawable.ic_update_timer_16
       }
 
+      val manageGroupTweaks = TextSecurePreferences.isManageGroupTweaks(requireContext())
+
       var enabled = true
-      state.withGroupSettingsState {
-        enabled = it.canEditGroupAttributes
+      state.withGroupSettingsState { groupState ->
+        enabled = groupState.canEditGroupAttributes
+
+        if (manageGroupTweaks) {
+          val memberCount = groupState.allMembers.size
+
+          if (memberCount > 0) {
+            sectionHeaderPref(DSLSettingsText.from(resources.getQuantityString(R.plurals.ContactSelectionListFragment_d_members, memberCount, memberCount)))
+          }
+
+          for (member in groupState.members) {
+            customPref(
+              RecipientPreference.Model(
+                recipient = member.member,
+                isAdmin = member.isAdmin,
+                onClick = {
+                  if (!member.member.isSelf()) {
+                    RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
+                  }
+                }
+              )
+            )
+          }
+
+          if (groupState.canShowMoreGroupMembers) {
+            customPref(
+              LargeIconClickPreference.Model(
+                title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
+                icon = DSLSettingsIcon.from(R.drawable.show_more, NO_TINT),
+                onClick = {
+                  viewModel.revealAllMembers()
+                }
+              )
+            )
+          }
+
+          if (memberCount > 0) {
+            dividerPref()
+          }
+        }
       }
 
       clickPref(
@@ -508,10 +549,12 @@ class ConversationSettingsFragment : DSLSettingsFragment(
       state.withGroupSettingsState { groupState ->
         val memberCount = groupState.allMembers.size
 
-        if (groupState.canAddToGroup || memberCount > 0) {
+        if (groupState.canAddToGroup || (!manageGroupTweaks && memberCount > 0)) {
           dividerPref()
 
-          sectionHeaderPref(DSLSettingsText.from(resources.getQuantityString(R.plurals.ContactSelectionListFragment_d_members, memberCount, memberCount)))
+          if (!manageGroupTweaks) {
+            sectionHeaderPref(DSLSettingsText.from(resources.getQuantityString(R.plurals.ContactSelectionListFragment_d_members, memberCount, memberCount)))
+          }
         }
 
         if (groupState.canAddToGroup) {
@@ -526,30 +569,32 @@ class ConversationSettingsFragment : DSLSettingsFragment(
           )
         }
 
-        for (member in groupState.members) {
-          customPref(
-            RecipientPreference.Model(
-              recipient = member.member,
-              isAdmin = member.isAdmin,
-              onClick = {
-                if (!member.member.isSelf()) {
-                  RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
+        if (!manageGroupTweaks) {
+          for (member in groupState.members) {
+            customPref(
+              RecipientPreference.Model(
+                recipient = member.member,
+                isAdmin = member.isAdmin,
+                onClick = {
+                  if (!member.member.isSelf()) {
+                    RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
+                  }
                 }
-              }
+              )
             )
-          )
-        }
+          }
 
-        if (groupState.canShowMoreGroupMembers) {
-          customPref(
-            LargeIconClickPreference.Model(
-              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
-              icon = DSLSettingsIcon.from(R.drawable.show_more, NO_TINT),
-              onClick = {
-                viewModel.revealAllMembers()
-              }
+          if (groupState.canShowMoreGroupMembers) {
+            customPref(
+              LargeIconClickPreference.Model(
+                title = DSLSettingsText.from(R.string.ConversationSettingsFragment__see_all),
+                icon = DSLSettingsIcon.from(R.drawable.show_more, NO_TINT),
+                onClick = {
+                  viewModel.revealAllMembers()
+                }
+              )
             )
-          )
+          }
         }
 
         if (state.recipient.isPushV2Group) {

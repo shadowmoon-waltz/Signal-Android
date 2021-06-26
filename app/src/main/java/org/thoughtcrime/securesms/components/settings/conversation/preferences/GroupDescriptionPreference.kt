@@ -9,6 +9,7 @@ import org.thoughtcrime.securesms.groups.v2.GroupDescriptionUtil
 import org.thoughtcrime.securesms.util.LongClickMovementMethod
 import org.thoughtcrime.securesms.util.MappingAdapter
 import org.thoughtcrime.securesms.util.MappingViewHolder
+import org.thoughtcrime.securesms.util.TextSecurePreferences
 
 object GroupDescriptionPreference {
 
@@ -45,7 +46,7 @@ object GroupDescriptionPreference {
 
       if (model.groupDescription.isNullOrEmpty()) {
         groupDescriptionTextView.setOverflowText(null)
-        if (model.canEditGroupAttributes) {
+        if (model.canEditGroupAttributes && !TextSecurePreferences.isManageGroupTweaks(context)) {
           groupDescriptionTextView.setText(R.string.ManageGroupActivity_add_group_description)
           groupDescriptionTextView.setOnClickListener { model.onEditGroupDescription() }
         } else {

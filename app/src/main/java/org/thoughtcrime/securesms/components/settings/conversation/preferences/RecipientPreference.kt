@@ -8,6 +8,7 @@ import org.thoughtcrime.securesms.components.settings.PreferenceModel
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.util.MappingAdapter
 import org.thoughtcrime.securesms.util.MappingViewHolder
+import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.visible
 
 /**
@@ -53,7 +54,17 @@ object RecipientPreference {
 
       val aboutText = model.recipient.combinedAboutAndEmoji
       if (aboutText.isNullOrEmpty()) {
-        about.visibility = View.GONE
+        if (TextSecurePreferences.isAlsoShowProfileName(context)) {
+          val displayName2 = model.recipient.getDisplayName2(context);
+          if (!displayName2.isNullOrEmpty()) {
+            about.text = displayName2
+            about.visibility = View.VISIBLE
+          } else {
+            about.visibility = View.GONE
+          }
+        } else {
+          about.visibility = View.GONE
+        }
       } else {
         about.text = model.recipient.combinedAboutAndEmoji
         about.visibility = View.VISIBLE
