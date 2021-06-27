@@ -47,13 +47,16 @@ object GroupDescriptionPreference {
       if (model.groupDescription.isNullOrEmpty()) {
         groupDescriptionTextView.setOverflowText(null)
         if (model.canEditGroupAttributes && !TextSecurePreferences.isManageGroupTweaks(context)) {
+          groupDescriptionTextView.visibility = View.VISIBLE
           groupDescriptionTextView.setText(R.string.ManageGroupActivity_add_group_description)
           groupDescriptionTextView.setOnClickListener { model.onEditGroupDescription() }
         } else {
+          groupDescriptionTextView.visibility = View.GONE
           groupDescriptionTextView.setText("")
           groupDescriptionTextView.setOnClickListener(null)
         }
       } else {
+        groupDescriptionTextView.visibility = View.VISIBLE
         groupDescriptionTextView.setOnClickListener(null)
         GroupDescriptionUtil.setText(
           context,

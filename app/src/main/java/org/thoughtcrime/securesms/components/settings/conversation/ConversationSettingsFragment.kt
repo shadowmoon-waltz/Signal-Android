@@ -250,11 +250,17 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         customPref(BioTextPreference.RecipientModel(recipient = state.recipient))
       }
 
+      val manageGroupTweaks = TextSecurePreferences.isManageGroupTweaks(requireContext())
+
       state.withGroupSettingsState { groupState ->
 
         val groupMembershipDescription = if (groupState.groupId.isV1) {
-          String.format("%s · %s", groupState.membershipCountDescription, getString(R.string.ManageGroupActivity_legacy_group))
-        } else if (!groupState.canEditGroupAttributes && groupState.groupDescription.isNullOrEmpty()) {
+          if (!manageGroupTweaks) {
+            String.format("%s · %s", groupState.membershipCountDescription, getString(R.string.ManageGroupActivity_legacy_group))
+          } else {
+            String.format("%s", getString(R.string.ManageGroupActivity_legacy_group))
+          }
+        } else if (!manageGroupTweaks && !groupState.canEditGroupAttributes && groupState.groupDescription.isNullOrEmpty()) {
           groupState.membershipCountDescription
         } else {
           null
@@ -349,8 +355,6 @@ class ConversationSettingsFragment : DSLSettingsFragment(
       } else {
         R.drawable.ic_update_timer_16
       }
-
-      val manageGroupTweaks = TextSecurePreferences.isManageGroupTweaks(requireContext())
 
       var enabled = true
       state.withGroupSettingsState { groupState ->
