@@ -258,7 +258,7 @@ class ConversationSettingsFragment : DSLSettingsFragment(
           if (!manageGroupTweaks) {
             String.format("%s · %s", groupState.membershipCountDescription, getString(R.string.ManageGroupActivity_legacy_group))
           } else {
-            String.format("%s", getString(R.string.ManageGroupActivity_legacy_group))
+            getString(R.string.ManageGroupActivity_legacy_group)
           }
         } else if (!manageGroupTweaks && !groupState.canEditGroupAttributes && groupState.groupDescription.isNullOrEmpty()) {
           groupState.membershipCountDescription
