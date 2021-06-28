@@ -213,8 +213,10 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   }
 
   private boolean cannotSwipeViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, float direction) {
+    if (!(viewHolder.itemView instanceof ConversationItem)) return true;
+
     ConversationItem item = ((ConversationItem) viewHolder.itemView);
-    if (!(viewHolder.itemView instanceof ConversationItem) || item.disallowSwipe(latestDownX, latestDownY)) return true;
+    if (item.disallowSwipe(latestDownX, latestDownY)) return true;
 
     final boolean canSwipeToRight = (direction >= 0.0f && swipeAvailabilityProvider != null && swipeAvailabilityProvider.isSwipeAvailable(item.getConversationMessage()));
     final boolean canSwipeToLeft = (direction <= 0.0f && swipeAvailabilityProvider2 != null && swipeAvailabilityProvider2.isSwipeAvailable(item.getConversationMessage()));
