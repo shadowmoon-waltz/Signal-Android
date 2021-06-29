@@ -592,29 +592,26 @@ public class ConversationAdapter
     int indexOfCM = 0;
 
     final int itemCount = getItemCount();
-    try {
-      for (; indexOfMRS < itemCount; indexOfMRS++) {
-        final ConversationMessage cm = getItem(indexOfMRS);
-        if (cm != null && cm.getMessageRecord().getId() == mostRecentSelected.getMessageRecord().getId()) {
-          break;
-        }
-      }
 
-      if (indexOfMRS == itemCount) {
-        return;
+    for (; indexOfMRS < itemCount; indexOfMRS++) {
+      final ConversationMessage cm = getItem(indexOfMRS);
+      if (cm != null && cm.getMessageRecord().getId() == mostRecentSelected.getMessageRecord().getId()) {
+        break;
       }
+    }
 
-      for (; indexOfCM < itemCount; indexOfCM++) {
-        final ConversationMessage cm = getItem(indexOfCM);
-        if (cm != null && cm.getMessageRecord().getId() == conversationMessage.getMessageRecord().getId()) {
-          break;
-        }
-      }
+    if (indexOfMRS == itemCount) {
+      return;
+    }
 
-      if (indexOfCM == itemCount) {
-        return;
+    for (; indexOfCM < itemCount; indexOfCM++) {
+      final ConversationMessage cm = getItem(indexOfCM);
+      if (cm != null && cm.getMessageRecord().getId() == conversationMessage.getMessageRecord().getId()) {
+        break;
       }
-    } catch (IndexOutOfBoundsException e) {
+    }
+
+    if (indexOfCM == itemCount) {
       return;
     }
 
