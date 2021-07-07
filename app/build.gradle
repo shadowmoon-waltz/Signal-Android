@@ -57,8 +57,8 @@ protobuf {
     }
 }
 
-def canonicalVersionCode = 873
-def canonicalVersionName = "5.15.6"
+def canonicalVersionCode = 874
+def canonicalVersionName = "5.16.0"
 
 def postFixSize = 100
 def abiPostFix = ['universal'   : 0,
@@ -429,7 +429,7 @@ dependencies {
 
     implementation 'org.signal:argon2:13.1@aar'
 
-    implementation 'org.signal:ringrtc-android:2.10.1.1'
+    implementation 'org.signal:ringrtc-android:2.10.6'
 
     implementation "me.leolin:ShortcutBadger:1.1.22"
     implementation 'se.emilsjolander:stickylistheaders:2.7.0'
@@ -498,6 +498,8 @@ dependencies {
     }
     testImplementation 'org.robolectric:shadows-multidex:4.4'
     testImplementation 'org.hamcrest:hamcrest:2.2'
+
+    testImplementation(testFixtures(project(":libsignal-service")))
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
