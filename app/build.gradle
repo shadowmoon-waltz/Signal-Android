@@ -57,8 +57,8 @@ protobuf {
     }
 }
 
-def canonicalVersionCode = 874
-def canonicalVersionName = "5.16.0"
+def canonicalVersionCode = 875
+def canonicalVersionName = "5.16.1"
 
 def postFixSize = 100
 def abiPostFix = ['universal'   : 0,
@@ -276,6 +276,15 @@ android {
             buildConfigField "String", "BUILD_DISTRIBUTION_TYPE", "\"internal\""
         }
 
+        nightly {
+            dimension 'distribution'
+            versionNameSuffix "-nightly-${getDateSuffix()}"
+            ext.websiteUpdateUrl = "null"
+            buildConfigField "boolean", "PLAY_STORE_DISABLED", "false"
+            buildConfigField "String", "NOPLAY_UPDATE_URL", "$ext.websiteUpdateUrl"
+            buildConfigField "String", "BUILD_DISTRIBUTION_TYPE", "\"internal\""
+        }
+
         study {
             dimension 'distribution'
 
@@ -330,13 +339,17 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            output.outputFileName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
-            def abiName = output.getFilter("ABI") ?: 'universal'
-            def postFix = abiPostFix.get(abiName, 0)
+            if (output.baseName.contains('nightly')) {
+                output.versionCodeOverride = canonicalVersionCode * postFixSize + 5
+            } else {
+                output.outputFileName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
+                def abiName = output.getFilter("ABI") ?: 'universal'
+                def postFix = abiPostFix.get(abiName, 0)
 
-            if (postFix >= postFixSize) throw new AssertionError("postFix is too large")
+                if (postFix >= postFixSize) throw new AssertionError("postFix is too large")
 
-            output.versionCodeOverride = canonicalVersionCode * postFixSize + postFix
+                output.versionCodeOverride = canonicalVersionCode * postFixSize + postFix
+            }
         }
     }
 
@@ -348,6 +361,12 @@ android {
         if (distribution == 'study' && buildType != 'perf' && buildType != 'mock') {
             variant.setIgnore(true)
         } else if (distribution != 'study' && buildType == 'mock') {
+            variant.setIgnore(true)
+        } else if (distribution == 'internal' && buildType != 'flipper' && buildType != 'perf' && buildType != 'release') {
+            variant.setIgnore(true)
+        } else if (distribution == 'nightly' && environment != 'prod') {
+            variant.setIgnore(true)
+        } else if (distribution == 'nightly' && buildType != 'flipper' && buildType != 'perf' && buildType != 'release') {
             variant.setIgnore(true)
         }
     }
@@ -621,4 +640,10 @@ def loadKeystoreProperties(filename) {
     } else {
         return null;
     }
+}
+
+def getDateSuffix() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd-HH:mm')
+    return formattedDate
 }

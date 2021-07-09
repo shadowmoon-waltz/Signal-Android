@@ -1799,7 +1799,6 @@ public class ConversationActivity extends PassphraseRequiredActivity
                 quoteResult.addListener(listener);
               case Draft.VOICE_NOTE:
                 draftViewModel.setVoiceNoteDraft(recipient.getId(), draft);
-                voiceNoteMediaController.getVoiceNotePlaybackState().observe(ConversationActivity.this, inputPanel.getPlaybackStateObserver());
                 break;
             }
           } catch (IOException e) {
@@ -2117,6 +2116,8 @@ public class ConversationActivity extends PassphraseRequiredActivity
         voiceNotePlayerViewStub.get().hide();
       }
     });
+
+    voiceNoteMediaController.getVoiceNotePlaybackState().observe(ConversationActivity.this, inputPanel.getPlaybackStateObserver());
   }
 
   private void updateWallpaper(@Nullable ChatWallpaper chatWallpaper) {
@@ -2680,6 +2681,10 @@ public class ConversationActivity extends PassphraseRequiredActivity
                                        System.currentTimeMillis(), Types.BASE_DRAFT_TYPE, true);
         } else if (threadId > 0) {
           threadDatabase.update(threadId, false);
+        }
+
+        if (drafts.isEmpty()) {
+          draftDatabase.clearDrafts(threadId);
         }
 
         return threadId;
