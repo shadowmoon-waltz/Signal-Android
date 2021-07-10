@@ -1797,6 +1797,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
                 SettableFuture<Boolean> quoteResult = new SettableFuture<>();
                 new QuoteRestorationTask(draft.getValue(), quoteResult).execute();
                 quoteResult.addListener(listener);
+                break;
               case Draft.VOICE_NOTE:
                 draftViewModel.setVoiceNoteDraft(recipient.getId(), draft);
                 break;
@@ -3412,6 +3413,11 @@ public class ConversationActivity extends PassphraseRequiredActivity
   public void onVoiceNoteDraftDelete(@NonNull Uri audioUri) {
     voiceNoteMediaController.stopPlaybackAndReset(audioUri);
     draftViewModel.deleteVoiceNoteDraft();
+  }
+
+  @Override
+  public @NonNull VoiceNoteMediaController getVoiceNoteMediaController() {
+    return voiceNoteMediaController;
   }
 
   // Listeners
