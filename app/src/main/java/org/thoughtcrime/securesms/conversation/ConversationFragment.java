@@ -94,6 +94,7 @@ import org.thoughtcrime.securesms.conversation.ConversationMessage.ConversationM
 import org.thoughtcrime.securesms.conversation.colors.Colorizer;
 import org.thoughtcrime.securesms.conversation.colors.ColorizerView;
 import org.thoughtcrime.securesms.conversation.ui.error.EnableCallNotificationSettingsDialog;
+import org.thoughtcrime.securesms.conversation.ui.error.SafetyNumberChangeDialog;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.MessageDatabase;
 import org.thoughtcrime.securesms.database.MmsDatabase;
@@ -1746,6 +1747,11 @@ public class ConversationFragment extends LoggingFragment {
     @Override
     public void onMessageWithRecaptchaNeededClicked(@NonNull MessageRecord messageRecord) {
       RecaptchaProofBottomSheetFragment.show(getChildFragmentManager());
+    }
+
+    @Override
+    public void onIncomingIdentityMismatchClicked(@NonNull RecipientId recipientId) {
+      SafetyNumberChangeDialog.show(getParentFragmentManager(), recipientId);
     }
 
     @Override
