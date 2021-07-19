@@ -986,6 +986,10 @@ public class ConversationActivity extends PassphraseRequiredActivity
       }
     });
 
+    if (threadId == -1L) {
+      hideMenuItem(menu, R.id.menu_view_media);
+    }
+
     searchViewItem = menu.findItem(R.id.menu_search);
 
     SearchView                     searchView    = (SearchView) searchViewItem.getActionView();
@@ -1147,14 +1151,6 @@ public class ConversationActivity extends PassphraseRequiredActivity
     switch (button) {
       case GALLERY:
         AttachmentManager.selectGallery(this, MEDIA_SENDER, recipient.get(), composeText.getTextTrimmed(), sendButton.getSelectedTransport());
-        break;
-      case GIF:
-        new MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.ConversationActivity_gifs_have_moved)
-            .setMessage(R.string.ConversationActivity_look_for_gifs_next_to_emoji_and_stickers)
-            .setPositiveButton(android.R.string.ok, null)
-            .setOnDismissListener(unused -> inputPanel.showGifMovedTooltip())
-            .show();
         break;
       case FILE:
         AttachmentManager.selectDocument(this, PICK_DOCUMENT);
