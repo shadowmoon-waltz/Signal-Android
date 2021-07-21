@@ -35,11 +35,13 @@
     <dimen name="message_bubble_corner_radius">2dp</dimen>
     <dimen name="message_bubble_shadow_distance">1.5dp</dimen>
     <dimen name="message_bubble_horizontal_padding">12dp</dimen>
-    <dimen name="message_bubble_top_padding">6dp</dimen>
+    <dimen name="message_bubble_top_padding">7dp</dimen>
+    <dimen name="message_bubble_text_top_padding">1dp</dimen>
+    <dimen name="message_bubble_content_top_padding">4dp</dimen>
     <dimen name="message_bubble_top_padding_audio">12dp</dimen>
     <dimen name="message_bubble_collapsed_footer_padding">6dp</dimen>
     <dimen name="message_bubble_edge_margin">32dp</dimen>
-    <dimen name="message_bubble_bottom_padding">8dp</dimen>
+    <dimen name="message_bubble_bottom_padding">7dp</dimen>
     <dimen name="media_bubble_remove_button_size">24dp</dimen>
     <dimen name="media_bubble_edit_button_size">24dp</dimen>
     <dimen name="media_bubble_default_dimens">210dp</dimen>
@@ -191,4 +193,6 @@
     <dimen name="conversation_settings_button_strip_spacing">16dp</dimen>
     <dimen name="conversation_settings_button_strip_button_size">48dp</dimen>
     <dimen name="conversation_settings_button_strip_button_padding">12dp</dimen>
+
+    <dimen name="avatar_picker_image_width">100dp</dimen>
 </resources>
