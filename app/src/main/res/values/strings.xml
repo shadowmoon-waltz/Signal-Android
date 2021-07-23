@@ -959,6 +959,7 @@
     <string name="Megaphones_invite_friends">Invite friends</string>
     <string name="Megaphones_use_sms">Use SMS</string>
     <string name="Megaphones_appearance">Appearance</string>
+    <string name="Megaphones_add_photo">Add photo</string>
 
     <!-- NotificationBarManager -->
     <string name="NotificationBarManager_signal_call_in_progress">Signal call in progress</string>
@@ -3657,6 +3658,8 @@
 
     <!-- VoiceNotePlayerView -->
     <string name="VoiceNotePlayerView__s_dot_s">%1$s · %2$s</string>
+
+    <!-- AvatarPickerFragment -->
     <string name="AvatarPickerFragment__avatar_preview">Avatar preview</string>
     <string name="AvatarPickerFragment__camera">Camera</string>
     <string name="AvatarPickerFragment__take_a_picture">Take a picture</string>
@@ -3665,17 +3668,22 @@
     <string name="AvatarPickerFragment__text">Text</string>
     <string name="AvatarPickerFragment__save">Save</string>
     <string name="AvatarPickerFragment__select_an_avatar">Select an avatar</string>
+    <string name="AvatarPickerFragment__clear_avatar">Clear avatar</string>
+    <string name="AvatarPickerFragment__edit">Edit</string>
+    <string name="AvatarPickerRepository__failed_to_save_avatar">Failed to save avatar</string>
+
+    <!-- TextAvatarCreationFragment -->
     <string name="TextAvatarCreationFragment__preview">Preview</string>
     <string name="TextAvatarCreationFragment__done">Done</string>
     <string name="TextAvatarCreationFragment__text">Text</string>
     <string name="TextAvatarCreationFragment__color">Color</string>
 
+    <!-- VectorAvatarCreationFragment -->
+    <string name="VectorAvatarCreationFragment__select_a_color">Select a color</string>
+
     <!-- ContactSelectionListItem -->
     <string name="ContactSelectionListItem__sms">SMS</string>
     <string name="ContactSelectionListItem__dot_s">· %1$s</string>
-    <string name="AvatarPickerFragment__clear_avatar">Clear avatar</string>
-    <string name="AvatarPickerFragment__edit">Edit</string>
-    <string name="AvatarPickerRepository__failed_to_save_avatar">Failed to save avatar</string>
 
     <!-- EOF -->
 
