@@ -182,6 +182,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
             protected View                       swipeToLeftIcon;
   @Nullable protected ViewGroup                  contactPhotoHolder;
   @Nullable private   QuoteView                  quoteView;
+            private   ViewGroup                  bodyFooterContainer;
             private   EmojiTextView              bodyText;
             private   ConversationItemFooter     footer;
             private   ConversationItemFooter     stickerFooter;
@@ -250,6 +251,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     this.backgroundDrawable      = new ClipProjectionDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(),
                                                                                                                R.drawable.conversation_item_background)));
+    this.bodyFooterContainer     =                    findViewById(R.id.conversation_item_body_footer_container);
     this.bodyText                =                    findViewById(R.id.conversation_item_body);
     this.footer                  =                    findViewById(R.id.conversation_item_footer);
     this.stickerFooter           =                    findViewById(R.id.conversation_item_sticker_footer);
@@ -514,7 +516,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       footer.setIconColor(colorizer.getOutgoingFooterIconColor(context));
       footer.setRevealDotColor(colorizer.getOutgoingFooterIconColor(context));
       footer.setOnlyShowSendingStatus(false, messageRecord);
-    } else if (messageRecord.isRemoteDelete() || (isViewOnceMessage(messageRecord) && ViewOnceUtil.isViewed((MmsMessageRecord) messageRecord))) {
+    } else if (messageRecord.isRemoteDelete()) {
       if (hasWallpaper) {
         bodyBubble.getBackground().setColorFilter(ContextCompat.getColor(context, R.color.wallpaper_bubble_color), PorterDuff.Mode.SRC_IN);
       } else {
@@ -634,8 +636,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     if (hasWallpaper) {
       return false;
     } else {
-      boolean isIncomingViewedOnce = !messageRecord.isOutgoing() && isViewOnceMessage(messageRecord) && ViewOnceUtil.isViewed((MmsMessageRecord) messageRecord);
-      return isIncomingViewedOnce || messageRecord.isRemoteDelete();
+      return messageRecord.isRemoteDelete();
     }
   }
 
@@ -780,6 +781,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   {
     boolean showControls = !messageRecord.isFailed();
 
+    ViewUtil.setTopMargin(bodyText, readDimen(R.dimen.message_bubble_top_padding));
+
     bodyBubble.setQuoteViewProjection(null);
     bodyBubble.setVideoPlayerProjection(null);
     updateSelectedBackgroundDrawableProjections();
@@ -800,9 +803,11 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       if (linkPreviewStub.resolved())    linkPreviewStub.get().setVisibility(GONE);
       if (stickerStub.resolved())        stickerStub.get().setVisibility(View.GONE);
 
-      revealableStub.get().setMessage((MmsMessageRecord) messageRecord);
+      revealableStub.get().setMessage((MmsMessageRecord) messageRecord, hasWallpaper);
       revealableStub.get().setOnClickListener(revealableClickListener);
       revealableStub.get().setOnLongClickListener(passthroughClickListener);
+
+      updateRevealableMargins(messageRecord, previousRecord, nextRecord, isGroupThread);
 
       footer.setVisibility(VISIBLE);
     } else if (hasSharedContact(messageRecord)) {
@@ -821,7 +826,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
       setSharedContactCorners(messageRecord, previousRecord, nextRecord, isGroupThread);
 
-      ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       footer.setVisibility(GONE);
     } else if (hasLinkPreview(messageRecord) && messageRequestAccepted) {
@@ -849,19 +854,23 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         setThumbnailCorners(messageRecord, previousRecord, nextRecord, isGroupThread);
         setLinkPreviewCorners(messageRecord, previousRecord, nextRecord, isGroupThread, true);
 
-        ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewUtil.setTopMargin(linkPreviewStub.get(), 0);
       } else {
         linkPreviewStub.get().setLinkPreview(glideRequests, linkPreview, true);
         linkPreviewStub.get().setDownloadClickedListener(downloadClickListener);
         setLinkPreviewCorners(messageRecord, previousRecord, nextRecord, isGroupThread, false);
-        ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        //noinspection ConstantConditions
+        int topMargin = isGroupThread && isStartOfMessageCluster(messageRecord, previousRecord, isGroupThread) && !messageRecord.isOutgoing() ? readDimen(R.dimen.message_bubble_top_padding) : 0;
+        ViewUtil.setTopMargin(linkPreviewStub.get(), topMargin);
       }
 
       linkPreviewStub.get().setOnClickListener(linkPreviewClickListener);
       linkPreviewStub.get().setOnLongClickListener(passthroughClickListener);
-
 
       footer.setVisibility(VISIBLE);
     } else if (hasAudio(messageRecord)) {
@@ -884,7 +893,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         Log.w(TAG, "setMediaAttributes: could not register listener for audio slide " + audioViewStub.get().getAudioSlideUri());
       }
 
-      ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
       footer.setPlaybackSpeedListener(new AudioPlaybackSpeedToggleListener());
@@ -904,8 +913,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       documentViewStub.get().setDownloadClickListener(singleDownloadClickListener);
       documentViewStub.get().setOnLongClickListener(passthroughClickListener);
 
-      ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.setTopMargin(bodyText, 0);
 
       footer.setVisibility(VISIBLE);
     } else if ((hasSticker(messageRecord) && isCaptionlessMms(messageRecord)) || isBorderless(messageRecord)) {
@@ -933,7 +943,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       stickerStub.get().setOnLongClickListener(passthroughClickListener);
       stickerStub.get().setOnClickListener(passthroughClickListener);
 
-      ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
       footer.setVisibility(VISIBLE);
@@ -969,7 +979,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
       setThumbnailCorners(messageRecord, previousRecord, nextRecord, isGroupThread);
 
-      ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
       footer.setVisibility(VISIBLE);
@@ -998,10 +1008,34 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       if (stickerStub.resolved())        stickerStub.get().setVisibility(View.GONE);
       if (revealableStub.resolved())     revealableStub.get().setVisibility(View.GONE);
 
-      ViewUtil.updateLayoutParams(bodyText, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+      ViewUtil.updateLayoutParams(bodyFooterContainer, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
       ViewUtil.updateLayoutParamsIfNonNull(groupSenderHolder, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
       footer.setVisibility(VISIBLE);
+
+      //noinspection ConstantConditions
+      int topMargin = !messageRecord.isOutgoing() && isGroupThread && isStartOfMessageCluster(messageRecord, previousRecord, isGroupThread)
+                      ? readDimen(R.dimen.message_bubble_text_only_top_margin)
+                      : readDimen(R.dimen.message_bubble_top_padding);
+      ViewUtil.setTopMargin(bodyText, topMargin);
+    }
+  }
+
+  private void updateRevealableMargins(MessageRecord messageRecord, Optional<MessageRecord> previous, Optional<MessageRecord> next, boolean isGroupThread) {
+    int bigMargin = readDimen(R.dimen.message_bubble_revealable_padding);
+    int smallMargin = readDimen(R.dimen.message_bubble_top_padding);
+
+    //noinspection ConstantConditions
+    if (messageRecord.isOutgoing() || !isStartOfMessageCluster(messageRecord, previous, isGroupThread)) {
+      ViewUtil.setTopMargin(revealableStub.get(), bigMargin);
+    } else {
+      ViewUtil.setTopMargin(revealableStub.get(), smallMargin);
+    }
+
+    if (isFooterVisible(messageRecord, next, isGroupThread)) {
+      ViewUtil.setBottomMargin(revealableStub.get(), smallMargin);
+    } else {
+      ViewUtil.setBottomMargin(revealableStub.get(), bigMargin);
     }
   }
 
@@ -1163,6 +1197,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   }
 
   private void setQuote(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> previous, @NonNull Optional<MessageRecord> next, boolean isGroupThread, @NonNull ChatColors chatColors) {
+    boolean startOfCluster = isStartOfMessageCluster(current, previous, isGroupThread);
     if (current.isMms() && !current.isMmsNotification() && ((MediaMmsMessageRecord)current).getQuote() != null) {
       if (quoteView == null) {
         throw new AssertionError();
@@ -1184,7 +1219,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
       quoteView.setOnLongClickListener(passthroughClickListener);
 
-      if (isStartOfMessageCluster(current, previous, isGroupThread)) {
+      if (startOfCluster) {
         if (current.isOutgoing()) {
           quoteView.setTopCornerSizes(true, true);
         } else if (isGroupThread) {
@@ -1212,12 +1247,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         quoteView.dismiss();
       }
 
+      int topMargin = (current.isOutgoing() || !startOfCluster || !groupThread) ? 0 : readDimen(R.dimen.message_bubble_top_image_margin);
       if (mediaThumbnailStub.resolved()) {
-        ViewUtil.setTopMargin(mediaThumbnailStub.require(), 0);
-      }
-
-      if (linkPreviewStub.resolved()) {
-        ViewUtil.setTopMargin(linkPreviewStub.get(), 0);
+        ViewUtil.setTopMargin(mediaThumbnailStub.require(), topMargin);
       }
     }
   }
@@ -1261,10 +1293,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     if (sharedContactStub.resolved())  sharedContactStub.get().getFooter().setVisibility(GONE);
     if (mediaThumbnailStub.resolved()) mediaThumbnailStub.require().getFooter().setVisibility(GONE);
 
-    boolean differentTimestamps = next.isPresent() && !DateUtils.isSameExtendedRelativeTimestamp(context, locale, next.get().getTimestamp(), current.getTimestamp());
-
-    if (forceFooter(messageRecord) || current.getExpiresIn() > 0 || !current.isSecure() || current.isPending() || current.isPendingInsecureSmsFallback() ||
-        current.isFailed() || current.isRateLimited() || differentTimestamps || isEndOfMessageCluster(current, next, isGroupThread))
+    if (isFooterVisible(current, next, isGroupThread))
     {
       ConversationItemFooter activeFooter = getActiveFooter(current);
       activeFooter.setVisibility(VISIBLE);
@@ -1455,15 +1484,22 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   private boolean isEndOfMessageCluster(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {
     if (isGroupThread) {
       return !next.isPresent() || next.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), next.get().getTimestamp()) ||
-             !current.getRecipient().equals(next.get().getRecipient());
+             !current.getRecipient().equals(next.get().getRecipient()) || !current.getReactions().isEmpty();
     } else {
       return !next.isPresent() || next.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), next.get().getTimestamp()) ||
-             current.isOutgoing() != next.get().isOutgoing();
+             current.isOutgoing() != next.get().isOutgoing() || !current.getReactions().isEmpty();
     }
   }
 
   private boolean isSingularMessage(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> previous, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {
     return isStartOfMessageCluster(current, previous, isGroupThread) && isEndOfMessageCluster(current, next, isGroupThread);
+  }
+
+  private boolean isFooterVisible(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {
+    boolean differentTimestamps = next.isPresent() && !DateUtils.isSameExtendedRelativeTimestamp(next.get().getTimestamp(), current.getTimestamp());
+
+    return forceFooter(messageRecord) || current.getExpiresIn() > 0 || !current.isSecure() || current.isPending() || current.isPendingInsecureSmsFallback() ||
+           current.isFailed() || current.isRateLimited() || differentTimestamps || isEndOfMessageCluster(current, next, isGroupThread);
   }
 
   private void setMessageSpacing(@NonNull Context context, @NonNull MessageRecord current, @NonNull Optional<MessageRecord> previous, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {

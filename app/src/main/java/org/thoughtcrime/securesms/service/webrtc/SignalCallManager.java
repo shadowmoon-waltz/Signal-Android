@@ -168,8 +168,8 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
     process((s, p) -> p.handleUpdateRenderedResolutions(s));
   }
 
-  public void orientationChanged(int degrees) {
-    process((s, p) -> p.handleOrientationChanged(s, degrees));
+  public void orientationChanged(boolean isLandscapeEnabled, int degrees) {
+    process((s, p) -> p.handleOrientationChanged(s, isLandscapeEnabled, degrees));
   }
 
   public void setAudioSpeaker(boolean isSpeaker) {
@@ -287,7 +287,7 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
                                                         .toList();
 
         callManager.peekGroupCall(SignalStore.internalValues().groupCallingServer(), credential.getTokenBytes().toByteArray(), members, peekInfo -> {
-          long threadId = DatabaseFactory.getThreadDatabase(context).getThreadIdFor(group);
+          long threadId = DatabaseFactory.getThreadDatabase(context).getOrCreateThreadIdFor(group);
 
           DatabaseFactory.getSmsDatabase(context)
                          .updatePreviousGroupCall(threadId,
@@ -649,7 +649,7 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
 
   @Override
   public void onFullyInitialized() {
-    process((s, p) -> p.handleOrientationChanged(s, s.getLocalDeviceState().getOrientation().getDegrees()));
+    process((s, p) -> p.handleOrientationChanged(s, false, s.getLocalDeviceState().getOrientation().getDegrees()));
   }
 
   @Override

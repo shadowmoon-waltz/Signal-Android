@@ -339,6 +339,7 @@
   <string name="ChooseBackupFragment__icon_content_description">Símbolo de restaurar desde copia de seguridad</string>
   <string name="ChooseBackupFragment__choose_backup">Selecciona copia</string>
   <string name="ChooseBackupFragment__learn_more">Saber más</string>
+  <string name="ChooseBackupFragment__no_file_browser_available">Navegador de archivos no disponible</string>
   <!--RestoreBackupFragment-->
   <string name="RestoreBackupFragment__restore_complete">Recuperación completada</string>
   <string name="RestoreBackupFragment__to_continue_using_backups_please_choose_a_folder">Selecciona una carpeta para continuar usando las copias de seguridad. Las nuevas copias se guardarán en esa carpeta.</string>
@@ -1746,7 +1747,7 @@ Se recibió un mensaje de intercambio de claves para una versión no válida del
   <!--BadDecryptLearnMoreDialog-->
   <string name="BadDecryptLearnMoreDialog_delivery_issue">Fallo en la entrega</string>
   <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_individual">Un mensaje, sticker, reacción, justificante de recibo o adjunto de %s no se ha podido entregar. Lo ha enviado en un chat o en un grupo común.</string>
-  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">Un mensaje, sticker, reacción, justificante de recibo o adjunto de %s no se ha podido entregar.</string>
+  <string name="BadDecryptLearnMoreDialog_couldnt_be_delivered_group">No se ha podido entregar un mensaje, sticker, adjunto, reacción, justificante de recibo de %s.</string>
   <!--profile_create_activity-->
   <string name="CreateProfileActivity_first_name_required">Nombre (necesario)</string>
   <string name="CreateProfileActivity_last_name_optional">Apellido(s) (opcional)</string>
