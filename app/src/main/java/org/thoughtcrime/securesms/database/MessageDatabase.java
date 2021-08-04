@@ -60,7 +60,8 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
 
   private static final String TAG = Log.tag(MessageDatabase.class);
 
-  protected static final String THREAD_ID_WHERE = THREAD_ID + " = ?";
+  protected static final String   THREAD_ID_WHERE      = THREAD_ID + " = ?";
+  protected static final String[] THREAD_ID_PROJECTION = new String[] { THREAD_ID };
 
   public MessageDatabase(Context context, SQLCipherOpenHelper databaseHelper) {
     super(context, databaseHelper);
@@ -79,7 +80,6 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
   public abstract long getThreadIdForMessage(long id);
   public abstract int getMessageCountForThread(long threadId);
   public abstract int getMessageCountForThread(long threadId, long beforeTime);
-  abstract int getMessageCountForThreadSummary(long threadId);
   public abstract boolean hasMeaningfulMessage(long threadId);
   public abstract Optional<MmsNotificationInfo> getNotification(long messageId);
 
@@ -172,7 +172,7 @@ public abstract class MessageDatabase extends Database implements MmsSmsColumns 
 
   public abstract boolean deleteMessage(long messageId);
   abstract void deleteThread(long threadId);
-  abstract void deleteMessagesInThreadBeforeDate(long threadId, long date);
+  abstract boolean deleteMessagesInThreadBeforeDate(long threadId, long date);
   abstract void deleteThreads(@NonNull Set<Long> threadIds);
   abstract void deleteAllThreads();
   abstract void deleteAbandonedMessages();
