@@ -9,6 +9,13 @@
                 android:label="Access to TextSecure Secrets"
                 android:protectionLevel="signature" />
 
+    <queries>
+      <intent>
+        <action android:name="android.intent.action.PROCESS_TEXT" />
+        <data android:mimeType="text/plain" />
+      </intent>
+    </queries>
+
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
     <uses-feature android:name="android.hardware.location" android:required="false"/>
