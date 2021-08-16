@@ -1,7 +1,10 @@
 package org.thoughtcrime.securesms.conversation.mutiselect.forward
 
+import android.app.Activity
 import android.content.Context
+import android.widget.Toast
 import org.signal.core.util.concurrent.SignalExecutors
+import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.DatabaseFactory
 import org.thoughtcrime.securesms.database.ThreadDatabase
 import org.thoughtcrime.securesms.recipients.Recipient
@@ -9,6 +12,7 @@ import org.thoughtcrime.securesms.sharing.MultiShareArgs
 import org.thoughtcrime.securesms.sharing.MultiShareSender
 import org.thoughtcrime.securesms.sharing.ShareContact
 import org.thoughtcrime.securesms.sharing.ShareContactAndThread
+import org.whispersystems.libsignal.util.guava.Optional
 
 class MultiselectForwardRepository(context: Context) {
 
@@ -66,6 +70,24 @@ class MultiselectForwardRepository(context: Context) {
       }
     } else {
       resultHandlers.onAllMessageSentSuccessfully()
+    }
+  }
+
+  companion object {
+    @JvmStatic
+    fun sendNoteToSelf(activity: Activity, args: MultiselectForwardFragmentArgs) {
+      val recipient = Recipient.self()
+      DatabaseFactory.getThreadDatabase(activity).getOrCreateThreadIdFor(recipient)
+      MultiselectForwardRepository(activity).send(
+        "",
+        args.multiShareArgs,
+        listOf(ShareContact(Optional.of(recipient.getId()), null)),
+        MultiselectForwardRepository.MultiselectForwardResultHandlers(
+          onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, R.string.MultiselectForwardFragment__messages_sent, Toast.LENGTH_SHORT).show() } },
+          onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, R.string.MultiselectForwardFragment__messages_failed_to_send, Toast.LENGTH_SHORT).show() } },
+          onSomeMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, R.string.MultiselectForwardFragment__messages_sent, Toast.LENGTH_SHORT).show() } }
+        )
+      )
     }
   }
 }
