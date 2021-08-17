@@ -83,9 +83,9 @@ class MultiselectForwardRepository(context: Context) {
         args.multiShareArgs,
         listOf(ShareContact(Optional.of(recipient.getId()), null)),
         MultiselectForwardRepository.MultiselectForwardResultHandlers(
-          onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, R.string.MultiselectForwardFragment__messages_sent, Toast.LENGTH_SHORT).show() } },
-          onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, R.string.MultiselectForwardFragment__messages_failed_to_send, Toast.LENGTH_SHORT).show() } },
-          onSomeMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, R.string.MultiselectForwardFragment__messages_sent, Toast.LENGTH_SHORT).show() } }
+          onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
+          onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_failed_to_send, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
+          onSomeMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } }
         )
       )
     }
