@@ -24,6 +24,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -424,38 +425,44 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       }
     }
 
+    int defaultMargin = readDimen(R.dimen.message_bubble_default_footer_bottom_margin);
     if (!updatingFooter &&
         !isCaptionlessMms(messageRecord) &&
         !isViewOnceMessage(messageRecord) &&
         isFooterVisible(messageRecord, nextMessageRecord, groupThread) &&
         bodyText.getLastLineWidth() > 0)
     {
-      int footerWidth    = footer.getMeasuredWidth();
-      int availableWidth = getAvailableMessageBubbleWidth(bodyText);
+      TextView dateView       = footer.getDateView();
+      int      footerWidth    = footer.getMeasuredWidth();
+      int      availableWidth = getAvailableMessageBubbleWidth(bodyText);
+      int      bottomDiff     = (int) (bodyText.getPaint().getFontMetrics().bottom - dateView.getPaint().getFontMetrics().bottom);
+      int      topMargin      = -1 * (dateView.getMeasuredHeight() + ViewUtil.dpToPx(7) + bottomDiff) + 1;
       if (bodyText.isSingleLine()) {
         int maxBubbleWidth  = hasBigImageLinkPreview(messageRecord) || hasThumbnail(messageRecord) ? readDimen(R.dimen.media_bubble_max_width) : getMaxBubbleWidth();
         int bodyMargins     = ViewUtil.getLeftMargin(bodyText) + ViewUtil.getRightMargin(bodyText);
         int sizeWithMargins = bodyText.getMeasuredWidth() + ViewUtil.dpToPx(6) + footerWidth + bodyMargins;
         int minSize         = Math.min(maxBubbleWidth, Math.max(bodyText.getMeasuredWidth() + ViewUtil.dpToPx(6) + footerWidth + bodyMargins, bodyBubble.getMeasuredWidth()));
         if (hasQuote(messageRecord) && sizeWithMargins < availableWidth) {
-          ViewUtil.setTopMargin(footer, readDimen(R.dimen.message_bubble_same_line_footer_bottom_margin));
+          ViewUtil.setTopMargin(footer, topMargin);
           needsMeasure   = true;
           updatingFooter = true;
         } else if (sizeWithMargins != bodyText.getMeasuredWidth() && sizeWithMargins <= minSize) {
           bodyBubble.getLayoutParams().width = minSize;
-          ViewUtil.setTopMargin(footer, readDimen(R.dimen.message_bubble_same_line_footer_bottom_margin));
+          ViewUtil.setTopMargin(footer, topMargin);
           needsMeasure   = true;
           updatingFooter = true;
         }
       }
       if (!updatingFooter && bodyText.getLastLineWidth() + ViewUtil.dpToPx(6) + footerWidth <= bodyText.getMeasuredWidth()) {
-        ViewUtil.setTopMargin(footer, readDimen(R.dimen.message_bubble_same_line_footer_bottom_margin));
+        ViewUtil.setTopMargin(footer, topMargin);
         updatingFooter = true;
         needsMeasure   = true;
-      } else if (!updatingFooter && ViewUtil.getTopMargin(footer) == readDimen(R.dimen.message_bubble_same_line_footer_bottom_margin)) {
-        ViewUtil.setTopMargin(footer, readDimen(R.dimen.message_bubble_default_footer_bottom_margin));
-        needsMeasure = true;
       }
+    }
+
+    if (!updatingFooter && ViewUtil.getTopMargin(footer) != defaultMargin) {
+      ViewUtil.setTopMargin(footer, defaultMargin);
+      needsMeasure = true;
     }
 
     if (hasSharedContact(messageRecord)) {
@@ -570,8 +577,17 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       } else {
         return top;
       }
+    } else if (hasDocument(messageRecord)) {
+      Projection documentProjection = Projection.relativeToParent(this, documentViewStub.get(), null);
+      float documentBoundary = documentProjection.getY() + documentProjection.getHeight();
+
+      if (lastYDownRelativeToThis > documentBoundary) {
+        return bottom;
+      } else {
+        return top;
+      }
     } else {
-      throw new IllegalStateException("Found a situation where we have something other than a thumbnail.");
+      throw new IllegalStateException("Found a situation where we have something other than a thumbnail or a document.");
     }
   }
 
@@ -580,8 +596,14 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     if (multiselectPart instanceof MultiselectPart.Attachments && hasThumbnail(messageRecord)) {
       Projection projection = Projection.relativeToViewRoot(mediaThumbnailStub.require(), null);
       return (int) projection.getY();
+    } if (multiselectPart instanceof MultiselectPart.Attachments && hasDocument(messageRecord)) {
+      Projection projection = Projection.relativeToViewRoot(documentViewStub.get(), null);
+      return (int) projection.getY();
     } else if (multiselectPart instanceof MultiselectPart.Text && hasThumbnail(messageRecord)) {
       Projection projection = Projection.relativeToViewRoot(mediaThumbnailStub.require(), null);
+      return (int) projection.getY() + projection.getHeight();
+    } else if (multiselectPart instanceof MultiselectPart.Text && hasDocument(messageRecord)) {
+      Projection projection = Projection.relativeToViewRoot(documentViewStub.get(), null);
       return (int) projection.getY() + projection.getHeight();
     } else if (hasNoBubble(messageRecord)) {
       return getTop();
@@ -595,6 +617,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   public int getBottomBoundaryOfMultiselectPart(@NonNull MultiselectPart multiselectPart) {
     if (multiselectPart instanceof MultiselectPart.Attachments && hasThumbnail(messageRecord)) {
       Projection projection = Projection.relativeToViewRoot(mediaThumbnailStub.require(), null);
+      return (int) projection.getY() + projection.getHeight();
+    } else if (multiselectPart instanceof MultiselectPart.Attachments && hasDocument(messageRecord)) {
+      Projection projection = Projection.relativeToViewRoot(documentViewStub.get(), null);
       return (int) projection.getY() + projection.getHeight();
     } else if (hasNoBubble(messageRecord)) {
       return getBottom();
