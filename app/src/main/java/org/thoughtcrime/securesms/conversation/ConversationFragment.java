@@ -181,7 +181,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @SuppressLint("StaticFieldLeak")
-public class ConversationFragment extends LoggingFragment {
+public class ConversationFragment extends LoggingFragment implements MultiselectForwardFragment.Callback {
   private static final String TAG = Log.tag(ConversationFragment.class);
 
   private static final int SCROLL_ANIMATION_THRESHOLD = 50;
@@ -1100,7 +1100,7 @@ public class ConversationFragment extends LoggingFragment {
 
     MultiselectForwardFragmentArgs.create(requireContext(),
                                           multiselectParts,
-                                          args -> MultiselectForwardFragment.show(getParentFragmentManager(), args));
+                                          args -> MultiselectForwardFragment.show(getChildFragmentManager(), args));
   }
 
   private void handleForwardMessagePartsNoteToSelf(Set<MultiselectPart> multiselectParts) {
@@ -1397,6 +1397,27 @@ public class ConversationFragment extends LoggingFragment {
     });
   }
 
+  private @NonNull String calculateSelectedItemCount() {
+    ConversationAdapter adapter = getListAdapter();
+    if (adapter == null || adapter.getSelectedItems().isEmpty()) {
+      return String.valueOf(0);
+    }
+
+    return String.valueOf(adapter.getSelectedItems()
+                                 .stream()
+                                 .map(MultiselectPart::getConversationMessage)
+                                 .distinct()
+                                 .count());
+  }
+
+  @Override
+  public void onFinishForwardAction() {
+    if (actionMode != null) {
+      actionMode.finish();
+    }
+  }
+
+
   public interface ConversationFragmentListener extends VoiceNoteMediaControllerOwner {
     void setThreadId(long threadId);
     void handleReplyMessage(ConversationMessage conversationMessage);
@@ -1501,7 +1522,7 @@ public class ConversationFragment extends LoggingFragment {
           actionMode.finish();
         } else {
           setCorrectMenuVisibility(actionMode.getMenu());
-          actionMode.setTitle(String.valueOf(getListAdapter().getSelectedItems().size()));
+          actionMode.setTitle(calculateSelectedItemCount());
         }
       }
     }
@@ -1912,7 +1933,7 @@ public class ConversationFragment extends LoggingFragment {
       if (adapter.getSelectedItems().isEmpty()) {
         actionMode.finish();
       } else {
-        actionMode.setTitle(String.valueOf(adapter.getSelectedItems().size()));
+        actionMode.setTitle(calculateSelectedItemCount());
       }
     }
   }
@@ -2004,7 +2025,7 @@ public class ConversationFragment extends LoggingFragment {
       MenuInflater inflater = mode.getMenuInflater();
       inflater.inflate(R.menu.conversation_context, menu);
 
-      mode.setTitle(String.valueOf(getListAdapter().getSelectedItems().size()));
+      mode.setTitle(calculateSelectedItemCount());
 
       if (Build.VERSION.SDK_INT >= 21) {
         Window window = getActivity().getWindow();
@@ -2059,7 +2080,6 @@ public class ConversationFragment extends LoggingFragment {
           return true;
         case R.id.menu_context_forward:
           handleForwardMessageParts(getListAdapter().getSelectedItems());
-          actionMode.finish();
           return true;
         case R.id.menu_context_resend:
           handleResendMessage(getSelectedConversationMessage().getMessageRecord());
