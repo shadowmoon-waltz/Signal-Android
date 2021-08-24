@@ -876,7 +876,7 @@
     <!-- InviteActivity -->
     <string name="InviteActivity_share">Share</string>
     <string name="InviteActivity_share_with_contacts">Share with contacts</string>
-    <string name="InviteActivity_choose_how_to_share">Choose how to share</string>
+    <string name="InviteActivity_share_via">Share via…</string>
 
     <string name="InviteActivity_cancel">Cancel</string>
     <string name="InviteActivity_sending">Sending…</string>
@@ -892,7 +892,6 @@
     </plurals>
     <string name="InviteActivity_lets_switch_to_signal">Let\'s switch to Signal: %1$s</string>
     <string name="InviteActivity_no_app_to_share_to">It looks like you don\'t have any apps to share to.</string>
-    <string name="InviteActivity_friends_dont_let_friends_text_unencrypted">Friends don\'t let friends chat unencrypted.</string>
 
     <!-- LearnMoreTextView -->
     <string name="LearnMoreTextView_learn_more">Learn more</string>
@@ -974,11 +973,13 @@
     <string name="NotificationBarManager_signal_call_in_progress">Signal call in progress</string>
     <string name="NotificationBarManager__establishing_signal_call">Establishing Signal call</string>
     <string name="NotificationBarManager__incoming_signal_call">Incoming Signal call</string>
+    <string name="NotificationBarManager__incoming_signal_group_call">Incoming Signal group call</string>
     <string name="NotificationBarManager__stopping_signal_call_service">Stopping Signal call service</string>
-    <string name="NotificationBarManager__deny_call">Deny call</string>
+    <string name="NotificationBarManager__decline_call">Decline call</string>
     <string name="NotificationBarManager__answer_call">Answer call</string>
     <string name="NotificationBarManager__end_call">End call</string>
     <string name="NotificationBarManager__cancel_call">Cancel call</string>
+    <string name="NotificationBarManager__join_call">Join call</string>
 
     <!-- NotificationsMegaphone -->
     <string name="NotificationsMegaphone_turn_on_notifications">Turn on Notifications?</string>
@@ -1399,6 +1400,7 @@
     <string name="WebRtcCallActivity__to_call_s_signal_needs_access_to_your_camera">To call %1$s, Signal needs access to your camera</string>
     <string name="WebRtcCallActivity__signal_s">Signal %1$s</string>
     <string name="WebRtcCallActivity__calling">Calling…</string>
+    <string name="WebRtcCallActivity__group_is_too_large_to_ring_the_participants">Group is too large to ring the participants.</string>
 
     <!-- WebRtcCallView -->
     <string name="WebRtcCallView__signal_call">Signal Call</string>
@@ -1413,8 +1415,38 @@
     <string name="WebRtcCallView__joining">Joining…</string>
     <string name="WebRtcCallView__disconnected">Disconnected</string>
 
+    <string name="WebRtcCallView__signal_will_ring_s">Signal will ring %1$s</string>
+    <string name="WebRtcCallView__signal_will_ring_s_and_s">Signal will ring %1$s and %2$s</string>
+    <plurals name="WebRtcCallView__signal_will_ring_s_s_and_d_others">
+        <item quantity="one">Signal will ring %1$s, %2$s, and %3$d other</item>
+        <item quantity="other">Signal will ring %1$s, %2$s, and %3$d others</item>
+    </plurals>
+
+    <string name="WebRtcCallView__s_will_be_notified">%1$s will be notified</string>
+    <string name="WebRtcCallView__s_and_s_will_be_notified">%1$s and %2$s will be notified</string>
+    <plurals name="WebRtcCallView__s_s_and_d_others_will_be_notified">
+        <item quantity="one">%1$s, %2$s, and %3$d other will be notified</item>
+        <item quantity="other">%1$s, %2$s, and %3$d others will be notified</item>
+    </plurals>
+
+    <string name="WebRtcCallView__ringing_s">Ringing %1$s</string>
+    <string name="WebRtcCallView__ringing_s_and_s">Ringing %1$s and %2$s</string>
+    <plurals name="WebRtcCallView__ringing_s_s_and_d_others">
+        <item quantity="one">Ringing %1$s, %2$s, and %3$d other</item>
+        <item quantity="other">Ringing %1$s, %2$s, and %3$d others</item>
+    </plurals>
+
+    <string name="WebRtcCallView__s_is_calling_you">%1$s is calling you</string>
+    <string name="WebRtcCallView__s_is_calling_you_and_s">%1$s is calling you and %2$s</string>
+    <string name="WebRtcCallView__s_is_calling_you_s_and_s">%1$s is calling you, %2$s, and %3$s</string>
+    <plurals name="WebRtcCallView__s_is_calling_you_s_s_and_d_others">
+        <item quantity="one">%1$s is calling you, %2$s, %3$s, and %4$d other</item>
+        <item quantity="other">%1$s is calling you, %2$s, %3$s, and %4$d others</item>
+    </plurals>
+
     <string name="WebRtcCallView__no_one_else_is_here">No one else is here</string>
     <string name="WebRtcCallView__s_is_in_this_call">%1$s is in this call</string>
+    <string name="WebRtcCallView__s_are_in_this_call">%1$s are in this call</string>
     <string name="WebRtcCallView__s_and_s_are_in_this_call">%1$s and %2$s are in this call</string>
     <string name="WebRtcCallView__s_is_presenting">%1$s is presenting</string>
 
@@ -1427,6 +1459,7 @@
     <string name="WebRtcCallView__speaker">Speaker</string>
     <string name="WebRtcCallView__camera">Camera</string>
     <string name="WebRtcCallView__mute">Mute</string>
+    <string name="WebRtcCallView__ring">Ring</string>
     <string name="WebRtcCallView__end_call">End call</string>
 
     <!-- CallParticipantsListDialog -->
@@ -2458,11 +2491,13 @@
     <string name="preferences__internal_refresh_attributes_description" translatable="false">Forces a write of capabilities on to the server followed by a read.</string>
     <string name="preferences__internal_rotate_profile_key" translatable="false">Rotate profile key</string>
     <string name="preferences__internal_rotate_profile_key_description" translatable="false">Creates a new versioned profile, and triggers an update of any GV2 group you belong to.</string>
-    <string name="preferences__internal_refresh_remote_values" translatable="false">Refresh remote values</string>
-    <string name="preferences__internal_refresh_remote_values_description" translatable="false">Forces a refresh of remote values locally instead of waiting for the elapsed time</string>
-    <string name="preferences__internal_display" translatable="false">Display</string>
+    <string name="preferences__internal_refresh_remote_config" translatable="false">Refresh remote config</string>
+    <string name="preferences__internal_refresh_remote_config_description" translatable="false">Forces a refresh of the remote config locally instead of waiting for the elapsed time.</string>
+    <string name="preferences__internal_misc" translatable="false">Miscellaneous</string>
     <string name="preferences__internal_user_details" translatable="false">User Details</string>
     <string name="preferences__internal_user_details_description" translatable="false">See more information about a user when viewing conversation settings.</string>
+    <string name="preferences__internal_shake_to_report" translatable="false">Shake to Report</string>
+    <string name="preferences__internal_shake_to_report_description" translatable="false">Shake your phone to easily submit and share a debug log.</string>
     <string name="preferences__internal_storage_service" translatable="false">Storage service</string>
     <string name="preferences__internal_force_storage_service_sync" translatable="false">Overwrite remote data</string>
     <string name="preferences__internal_force_storage_service_sync_description" translatable="false">Forces remote storage to match the local device state.</string>

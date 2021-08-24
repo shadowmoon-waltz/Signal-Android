@@ -82,6 +82,7 @@ import org.thoughtcrime.securesms.jobs.RetrieveProfileJob;
 import org.thoughtcrime.securesms.jobs.SendDeliveryReceiptJob;
 import org.thoughtcrime.securesms.jobs.SenderKeyDistributionSendJob;
 import org.thoughtcrime.securesms.jobs.StickerPackDownloadJob;
+import org.thoughtcrime.securesms.jobs.ThreadUpdateJob;
 import org.thoughtcrime.securesms.jobs.TrimThreadJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
@@ -721,10 +722,13 @@ public final class MessageContentProcessor {
 
       SecurityEvent.broadcastSecurityUpdateEvent(context);
 
-      long messageId = database.insertMessageOutbox(threadId, outgoingEndSessionMessage,
-          false, message.getTimestamp(),
-          null);
+      long messageId = database.insertMessageOutbox(threadId,
+                                                    outgoingEndSessionMessage,
+                                                    false,
+                                                    message.getTimestamp(),
+                                                    null);
       database.markAsSent(messageId, true);
+      ThreadUpdateJob.enqueue(threadId);
     }
 
     return threadId;
@@ -1365,12 +1369,15 @@ public final class MessageContentProcessor {
       handleSynchronizeSentExpirationUpdate(message);
     }
 
-    long threadId  = DatabaseFactory.getThreadDatabase(context).getOrCreateThreadIdFor(recipients);
+    long threadId = DatabaseFactory.getThreadDatabase(context).getOrCreateThreadIdFor(recipients);
+
+    long                     messageId;
+    List<DatabaseAttachment> attachments;
+    List<DatabaseAttachment> stickerAttachments;
 
     database.beginTransaction();
-
     try {
-      long messageId = database.insertMessageOutbox(mediaMessage, threadId, false, GroupReceiptDatabase.STATUS_UNKNOWN, null);
+      messageId = database.insertMessageOutbox(mediaMessage, threadId, false, GroupReceiptDatabase.STATUS_UNKNOWN, null);
 
       if (recipients.isGroup()) {
         updateGroupReceiptStatus(message, messageId, recipients.requireGroupId());
@@ -1380,15 +1387,10 @@ public final class MessageContentProcessor {
 
       database.markAsSent(messageId, true);
 
-      List<DatabaseAttachment> allAttachments     = DatabaseFactory.getAttachmentDatabase(context).getAttachmentsForMessage(messageId);
-      List<DatabaseAttachment> stickerAttachments = Stream.of(allAttachments).filter(Attachment::isSticker).toList();
-      List<DatabaseAttachment> attachments        = Stream.of(allAttachments).filterNot(Attachment::isSticker).toList();
+      List<DatabaseAttachment> allAttachments = DatabaseFactory.getAttachmentDatabase(context).getAttachmentsForMessage(messageId);
 
-      forceStickerDownloadIfNecessary(messageId, stickerAttachments);
-
-      for (DatabaseAttachment attachment : attachments) {
-        ApplicationDependencies.getJobManager().add(new AttachmentDownloadJob(messageId, attachment.getAttachmentId(), false));
-      }
+      stickerAttachments = Stream.of(allAttachments).filter(Attachment::isSticker).toList();
+      attachments        = Stream.of(allAttachments).filterNot(Attachment::isSticker).toList();
 
       if (message.getMessage().getExpiresInSeconds() > 0) {
         database.markExpireStarted(messageId, message.getExpirationStartTimestamp());
@@ -1409,6 +1411,13 @@ public final class MessageContentProcessor {
     } finally {
       database.endTransaction();
     }
+
+    for (DatabaseAttachment attachment : attachments) {
+      ApplicationDependencies.getJobManager().add(new AttachmentDownloadJob(messageId, attachment.getAttachmentId(), false));
+    }
+
+    forceStickerDownloadIfNecessary(messageId, stickerAttachments);
+
     return threadId;
   }
 
@@ -1550,6 +1559,7 @@ public final class MessageContentProcessor {
       messageId = DatabaseFactory.getSmsDatabase(context).insertMessageOutbox(threadId, outgoingTextMessage, false, message.getTimestamp(), null);
       database  = DatabaseFactory.getSmsDatabase(context);
       database.markUnidentified(messageId, isUnidentified(message, recipient));
+      ThreadUpdateJob.enqueue(threadId);
     }
 
     database.markAsSent(messageId, true);
