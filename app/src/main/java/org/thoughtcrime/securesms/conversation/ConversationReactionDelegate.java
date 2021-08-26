@@ -43,9 +43,10 @@ final class ConversationReactionDelegate {
             @NonNull Recipient conversationRecipient,
             @NonNull ConversationMessage conversationMessage,
             int maskPaddingBottom,
+            boolean isNonAdminInAnnouncementGroup,
             @Nullable MotionEvent motionEvent)
   {
-    resolveOverlay().show(activity, maskTarget, conversationRecipient, conversationMessage, maskPaddingBottom, lastSeenDownPoint, motionEvent);
+    resolveOverlay().show(activity, maskTarget, conversationRecipient, conversationMessage, maskPaddingBottom, lastSeenDownPoint, isNonAdminInAnnouncementGroup, motionEvent);
   }
 
   void showMask(@NonNull MaskView.MaskTarget maskTarget, int maskPaddingTop, int maskPaddingBottom) {

@@ -1452,7 +1452,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
   private void handleVideo(final Recipient recipient) {
     if (recipient == null) return;
 
-    if (recipient.isPushV2Group() && groupViewModel.isNonAdminInAnnouncementGroup()) {
+    if (recipient.isPushV2Group() && groupCallViewModel.hasActiveGroupCall().getValue() == Boolean.FALSE && groupViewModel.isNonAdminInAnnouncementGroup()) {
       new MaterialAlertDialogBuilder(this).setTitle(R.string.ConversationActivity_cant_start_group_call)
                                           .setMessage(R.string.ConversationActivity_only_admins_of_this_group_can_start_a_call)
                                           .setPositiveButton(android.R.string.ok, (d, w) -> d.dismiss())
@@ -1695,7 +1695,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
             throw new AssertionError();
         }
 
-        if (selfMembership.isAnnouncementGroup() && selfMembership.getMemberLevel() != GroupDatabase.MemberLevel.ADMINISTRATOR) {
+        if (!leftGroup && selfMembership.isAnnouncementGroup() && selfMembership.getMemberLevel() != GroupDatabase.MemberLevel.ADMINISTRATOR) {
           canSendMessages = false;
           cannotSendInAnnouncementGroupBanner.get().setVisibility(View.VISIBLE);
           cannotSendInAnnouncementGroupBanner.get().setMovementMethod(LinkMovementMethod.getInstance());
@@ -3700,7 +3700,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
   {
     reactionDelegate.setOnToolbarItemClickedListener(toolbarListener);
     reactionDelegate.setOnHideListener(onHideListener);
-    reactionDelegate.show(this, maskTarget, recipient.get(), conversationMessage, inputAreaHeight(), motionEvent);
+    reactionDelegate.show(this, maskTarget, recipient.get(), conversationMessage, inputAreaHeight(), groupViewModel.isNonAdminInAnnouncementGroup(), motionEvent);
   }
 
   @Override

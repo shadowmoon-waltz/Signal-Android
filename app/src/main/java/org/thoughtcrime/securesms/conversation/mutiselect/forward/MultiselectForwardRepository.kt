@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.core.util.Consumer
+import io.reactivex.rxjava3.core.Single
 import org.signal.core.util.concurrent.SignalExecutors
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.DatabaseFactory
@@ -11,6 +12,7 @@ import org.thoughtcrime.securesms.database.IdentityDatabase
 import org.thoughtcrime.securesms.database.ThreadDatabase
 import org.thoughtcrime.securesms.database.identity.IdentityRecordList
 import org.thoughtcrime.securesms.recipients.Recipient
+import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.sharing.MultiShareArgs
 import org.thoughtcrime.securesms.sharing.MultiShareSender
 import org.thoughtcrime.securesms.sharing.ShareContact
@@ -34,6 +36,22 @@ class MultiselectForwardRepository(context: Context) {
       val identityRecordList: IdentityRecordList = identityDatabase.getIdentities(recipients)
 
       consumer.accept(identityRecordList.untrustedRecords)
+    }
+  }
+
+  fun canSelectRecipient(recipientId: Optional<RecipientId>): Single<Boolean> {
+    if (!recipientId.isPresent) {
+      return Single.just(true)
+    }
+
+    return Single.fromCallable {
+      val recipient = Recipient.resolved(recipientId.get())
+      if (recipient.isPushV2Group) {
+        val record = DatabaseFactory.getGroupDatabase(context).getGroup(recipient.requireGroupId())
+        !(record.isPresent && record.get().isAnnouncementGroup && !record.get().isAdmin(Recipient.self()))
+      } else {
+        true
+      }
     }
   }
 

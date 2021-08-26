@@ -212,6 +212,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private MessageRequestViewModel     messageRequestViewModel;
   private MessageCountsViewModel      messageCountsViewModel;
   private ConversationViewModel       conversationViewModel;
+  private ConversationGroupViewModel  groupViewModel;
   private SnapToTopDataObserver       snapToTopDataObserver;
   private MarkReadHelper              markReadHelper;
   private Animation                   scrollButtonInAnimation;
@@ -321,6 +322,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     setupListLayoutListeners();
 
+    this.groupViewModel         = ViewModelProviders.of(requireActivity(), new ConversationGroupViewModel.Factory()).get(ConversationGroupViewModel.class);
     this.messageCountsViewModel = ViewModelProviders.of(requireActivity()).get(MessageCountsViewModel.class);
     this.conversationViewModel  = ViewModelProviders.of(requireActivity(), new ConversationViewModel.Factory()).get(ConversationViewModel.class);
 
@@ -404,7 +406,8 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                                          MenuState.canReplyToMessage(recipient.get(),
                                                                                      MenuState.isActionMessage(conversationMessage.getMessageRecord()),
                                                                                      conversationMessage.getMessageRecord(),
-                                                                                     messageRequestViewModel.shouldShowMessageRequest()),
+                                                                                     messageRequestViewModel.shouldShowMessageRequest(),
+                                                                                     groupViewModel.isNonAdminInAnnouncementGroup()),
                                   (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage));
     } else if (SwipeActionTypes.DELETE.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
@@ -877,7 +880,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       return;
     }
 
-    MenuState menuState = MenuState.getMenuState(recipient.get(), selectedParts, messageRequestViewModel.shouldShowMessageRequest());
+    MenuState menuState = MenuState.getMenuState(recipient.get(), selectedParts, messageRequestViewModel.shouldShowMessageRequest(), groupViewModel.isNonAdminInAnnouncementGroup());
 
     menu.findItem(R.id.menu_context_forward).setVisible(menuState.shouldShowForwardAction());
     menu.findItem(R.id.menu_context_reply).setVisible(menuState.shouldShowReplyAction());
