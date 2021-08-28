@@ -28,7 +28,7 @@ import androidx.annotation.Nullable;
 import com.annimon.stream.Stream;
 import com.google.android.mms.pdu_alt.NotificationInd;
 
-import net.zetetic.database.sqlcipher.SQLiteStatement;
+import net.sqlcipher.database.SQLiteStatement;
 
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.database.documents.IdentityKeyMismatch;
@@ -1216,26 +1216,18 @@ public class SmsDatabase extends MessageDatabase {
     contentValues.put(EXPIRES_IN, message.getExpiresIn());
     contentValues.put(DELIVERY_RECEIPT_COUNT, Stream.of(earlyDeliveryReceipts.values()).mapToLong(Long::longValue).sum());
 
-    long messageId;
+    long messageId = db.insert(TABLE_NAME, null, contentValues);
 
-    db.beginTransaction();
-    try {
-      messageId = db.insert(TABLE_NAME, null, contentValues);
-
-      if (insertListener != null) {
-        insertListener.onComplete();
-      }
-
-      if (!message.isIdentityVerified() && !message.isIdentityDefault()) {
-        DatabaseFactory.getThreadDatabase(context).setLastScrolled(threadId, 0);
-        DatabaseFactory.getThreadDatabase(context).setLastSeenSilently(threadId);
-      }
-
-      DatabaseFactory.getThreadDatabase(context).setHasSentSilently(threadId, true);
-      db.setTransactionSuccessful();
-    } finally {
-      db.endTransaction();
+    if (insertListener != null) {
+      insertListener.onComplete();
     }
+
+    if (!message.isIdentityVerified() && !message.isIdentityDefault()) {
+      DatabaseFactory.getThreadDatabase(context).setLastScrolled(threadId, 0);
+      DatabaseFactory.getThreadDatabase(context).setLastSeenSilently(threadId);
+    }
+
+    DatabaseFactory.getThreadDatabase(context).setHasSentSilently(threadId, true);
 
     notifyConversationListeners(threadId);
 

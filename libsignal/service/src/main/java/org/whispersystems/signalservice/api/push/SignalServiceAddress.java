@@ -64,12 +64,12 @@ public class SignalServiceAddress {
   }
 
   public static boolean isValidAddress(String rawUuid, String e164) {
-    return (e164 != null && !e164.isEmpty()) || UuidUtil.parseOrNull(rawUuid) != null;
+    return UuidUtil.parseOrNull(rawUuid) != null;
   }
 
   public static Optional<SignalServiceAddress> fromRaw(String rawUuid, String e164) {
     if (isValidAddress(rawUuid, e164)) {
-      return Optional.of(new SignalServiceAddress(UuidUtil.parseOrNull(rawUuid), e164));
+      return Optional.of(new SignalServiceAddress(UuidUtil.parseOrThrow(rawUuid), e164));
     } else {
       return Optional.absent();
     }
