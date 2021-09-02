@@ -26,7 +26,7 @@ public class TextSecureSessionStore implements SignalServiceSessionStore {
 
   private static final Object LOCK = new Object();
 
-  @NonNull  private final Context context;
+  @NonNull private final Context context;
 
   public TextSecureSessionStore(@NonNull Context context) {
     this.context = context;
@@ -103,11 +103,12 @@ public class TextSecureSessionStore implements SignalServiceSessionStore {
   @Override
   public Set<SignalProtocolAddress> getAllAddressesWithActiveSessions(List<String> addressNames) {
     synchronized (LOCK) {
-      List<SessionDatabase.SessionRow> rows = DatabaseFactory.getSessionDatabase(context).getAllFor(addressNames);
-      return rows.stream()
-                 .filter(row -> isActive(row.getRecord()))
-                 .map(row -> new SignalProtocolAddress(row.getAddress(), row.getDeviceId()))
-                 .collect(Collectors.toSet());
+      return DatabaseFactory.getSessionDatabase(context)
+                            .getAllFor(addressNames)
+                            .stream()
+                            .filter(row -> isActive(row.getRecord()))
+                            .map(row -> new SignalProtocolAddress(row.getAddress(), row.getDeviceId()))
+                            .collect(Collectors.toSet());
     }
   }
 
@@ -164,5 +165,9 @@ public class TextSecureSessionStore implements SignalServiceSessionStore {
     return record != null &&
            record.hasSenderChain() &&
            record.getSessionVersion() == CiphertextMessage.CURRENT_VERSION;
+  }
+
+  private static boolean isValidRegistrationId(int registrationId) {
+    return (registrationId & 0x3fff) == registrationId;
   }
 }

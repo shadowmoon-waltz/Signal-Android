@@ -23,6 +23,7 @@ import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.RecipientAccessList;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.whispersystems.libsignal.InvalidKeyException;
+import org.whispersystems.libsignal.InvalidRegistrationIdException;
 import org.whispersystems.libsignal.NoSessionException;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.CancelationException;
@@ -237,7 +238,10 @@ public final class GroupSendUtil {
         Log.w(TAG, "No session. Falling back to legacy sends.", e);
         legacyTargets.addAll(senderKeyTargets);
       } catch (InvalidKeyException e) {
-        Log.w(TAG, "Invalid Key. Falling back to legacy sends.", e);
+        Log.w(TAG, "Invalid key. Falling back to legacy sends.", e);
+        legacyTargets.addAll(senderKeyTargets);
+      } catch (InvalidRegistrationIdException e) {
+        Log.w(TAG, "Invalid registrationId. Falling back to legacy sends.", e);
         legacyTargets.addAll(senderKeyTargets);
       }
     }
@@ -308,7 +312,7 @@ public final class GroupSendUtil {
                                                        @NonNull List<SignalServiceAddress> targets,
                                                        @NonNull List<UnidentifiedAccess> access,
                                                        boolean isRecipientUpdate)
-        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException;
+        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException, InvalidRegistrationIdException;
 
     @NonNull List<SendMessageResult> sendLegacy(@NonNull SignalServiceMessageSender messageSender,
                                                 @NonNull List<SignalServiceAddress> targets,
@@ -355,7 +359,7 @@ public final class GroupSendUtil {
                                                               @NonNull List<SignalServiceAddress> targets,
                                                               @NonNull List<UnidentifiedAccess> access,
                                                               boolean isRecipientUpdate)
-        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException
+        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException, InvalidRegistrationIdException
     {
       return messageSender.sendGroupDataMessage(distributionId, targets, access, isRecipientUpdate, contentHint, message);
     }
@@ -411,7 +415,7 @@ public final class GroupSendUtil {
                                                               @NonNull List<SignalServiceAddress> targets,
                                                               @NonNull List<UnidentifiedAccess> access,
                                                               boolean isRecipientUpdate)
-        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException
+        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException, InvalidRegistrationIdException
     {
       messageSender.sendGroupTyping(distributionId, targets, access, message);
       return targets.stream().map(a -> SendMessageResult.success(a, Collections.emptyList(), true, false, -1, Optional.absent())).collect(Collectors.toList());
@@ -465,7 +469,7 @@ public final class GroupSendUtil {
                                                               @NonNull List<SignalServiceAddress> targets,
                                                               @NonNull List<UnidentifiedAccess> access,
                                                               boolean isRecipientUpdate)
-        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException
+        throws NoSessionException, UntrustedIdentityException, InvalidKeyException, IOException, InvalidRegistrationIdException
     {
       return messageSender.sendCallMessage(distributionId, targets, access, message);
     }

@@ -317,7 +317,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     super.onStart();
     ConversationFragment.prepare(requireContext());
     ApplicationDependencies.getAppForegroundObserver().addListener(appForegroundObserver);
-    viewModel.onStart();
   }
 
   @Override
@@ -333,7 +332,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   public void onStop() {
     super.onStop();
     ApplicationDependencies.getAppForegroundObserver().removeListener(appForegroundObserver);
-    viewModel.onStop();
   }
 
   @Override

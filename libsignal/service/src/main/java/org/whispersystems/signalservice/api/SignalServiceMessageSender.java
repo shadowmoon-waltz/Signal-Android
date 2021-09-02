@@ -10,6 +10,7 @@ import com.google.protobuf.ByteString;
 import org.signal.libsignal.metadata.certificate.SenderCertificate;
 import org.signal.zkgroup.profiles.ClientZkProfileOperations;
 import org.whispersystems.libsignal.InvalidKeyException;
+import org.whispersystems.libsignal.InvalidRegistrationIdException;
 import org.whispersystems.libsignal.NoSessionException;
 import org.whispersystems.libsignal.SessionBuilder;
 import org.whispersystems.libsignal.SignalProtocolAddress;
@@ -249,7 +250,7 @@ public class SignalServiceMessageSender {
                               List<SignalServiceAddress>  recipients,
                               List<UnidentifiedAccess>    unidentifiedAccess,
                               SignalServiceTypingMessage  message)
-      throws IOException, UntrustedIdentityException, InvalidKeyException, NoSessionException
+      throws IOException, UntrustedIdentityException, InvalidKeyException, NoSessionException, InvalidRegistrationIdException
   {
     Content content = createTypingContent(message);
     sendGroupMessage(distributionId, recipients, unidentifiedAccess, message.getTimestamp(), content, ContentHint.IMPLICIT, message.getGroupId().orNull(), true);
@@ -289,7 +290,7 @@ public class SignalServiceMessageSender {
                                                  List<SignalServiceAddress> recipients,
                                                  List<UnidentifiedAccess> unidentifiedAccess,
                                                  SignalServiceCallMessage message)
-      throws IOException, UntrustedIdentityException, InvalidKeyException, NoSessionException
+      throws IOException, UntrustedIdentityException, InvalidKeyException, NoSessionException, InvalidRegistrationIdException
   {
     Content content = createCallContent(message);
     return sendGroupMessage(distributionId, recipients, unidentifiedAccess, message.getTimestamp().get(), content, ContentHint.IMPLICIT, message.getGroupId().get(), false);
@@ -420,7 +421,7 @@ public class SignalServiceMessageSender {
                                                       boolean                    isRecipientUpdate,
                                                       ContentHint                contentHint,
                                                       SignalServiceDataMessage   message)
-      throws IOException, UntrustedIdentityException, NoSessionException, InvalidKeyException
+      throws IOException, UntrustedIdentityException, NoSessionException, InvalidKeyException, InvalidRegistrationIdException
   {
     Log.d(TAG, "[" + message.getTimestamp() + "] Sending a group data message to " + recipients.size() + " recipients.");
 
@@ -1673,7 +1674,7 @@ public class SignalServiceMessageSender {
                                                    ContentHint                contentHint,
                                                    byte[]                     groupId,
                                                    boolean                    online)
-      throws IOException, UntrustedIdentityException, NoSessionException, InvalidKeyException
+      throws IOException, UntrustedIdentityException, NoSessionException, InvalidKeyException, InvalidRegistrationIdException
   {
     if (recipients.isEmpty()) {
       Log.w(TAG, "[sendGroupMessage] Empty recipient list!");
