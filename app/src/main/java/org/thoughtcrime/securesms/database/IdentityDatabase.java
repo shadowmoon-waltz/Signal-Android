@@ -90,6 +90,10 @@ public class IdentityDatabase extends Database {
   }
 
   public @Nullable IdentityStoreRecord getIdentityStoreRecord(@NonNull String addressName) {
+    return getIdentityStoreRecord(addressName, true);
+  }
+
+  public @Nullable IdentityStoreRecord getIdentityStoreRecord(@NonNull String addressName, boolean tryE164) {
     SQLiteDatabase database   = databaseHelper.getSignalReadableDatabase();
     String         query      = ADDRESS + " = ?";
     String[]       args       = SqlUtil.buildArgs(addressName);
@@ -114,7 +118,11 @@ public class IdentityDatabase extends Database {
 
           if (recipient.hasE164()) {
             Log.i(TAG, "Could not find identity for UUID. Attempting E164.");
-            return getIdentityStoreRecord(recipient.requireE164());
+            if (tryE164) {
+              return getIdentityStoreRecord(recipient.requireE164(), false);
+            } else {
+              Log.i(TAG, "Could not find identity for E164 either.");
+            }
           } else {
             Log.i(TAG, "Could not find identity for UUID, and our recipient doesn't have an E164.");
           }
