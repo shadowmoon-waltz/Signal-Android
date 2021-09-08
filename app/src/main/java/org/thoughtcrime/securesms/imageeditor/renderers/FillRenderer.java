@@ -17,7 +17,7 @@ import org.thoughtcrime.securesms.util.ViewUtil;
  * <p>
  * Hit tests outside of the bounds.
  */
-public final class InverseFillRenderer implements Renderer {
+public final class FillRenderer implements Renderer {
 
   private final int color;
 
@@ -39,12 +39,11 @@ public final class InverseFillRenderer implements Renderer {
     rendererContext.canvas.restore();
   }
 
-  public InverseFillRenderer(@ColorInt int color) {
+  public FillRenderer(@ColorInt int color) {
     this.color = color;
-    path.toggleInverseFillType();
   }
 
-  private InverseFillRenderer(Parcel in) {
+  private FillRenderer(Parcel in) {
     this(in.readInt());
   }
 
@@ -53,15 +52,15 @@ public final class InverseFillRenderer implements Renderer {
     return !Bounds.contains(x, y);
   }
 
-  public static final Creator<InverseFillRenderer> CREATOR = new Creator<InverseFillRenderer>() {
+  public static final Creator<FillRenderer> CREATOR = new Creator<FillRenderer>() {
     @Override
-    public InverseFillRenderer createFromParcel(Parcel in) {
-      return new InverseFillRenderer(in);
+    public FillRenderer createFromParcel(Parcel in) {
+      return new FillRenderer(in);
     }
 
     @Override
-    public InverseFillRenderer[] newArray(int size) {
-      return new InverseFillRenderer[size];
+    public FillRenderer[] newArray(int size) {
+      return new FillRenderer[size];
     }
   };
 
