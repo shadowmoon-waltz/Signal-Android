@@ -4,6 +4,10 @@
 This document has been updated for the fork
 
 
+## Fork changelog
+
+2021-09-09: Updated gradle warmer to match main gradle wrapper (the actual main gradle wrapper was updated upstream a few months back).
+
 ## TL;DR
 
 ```bash
