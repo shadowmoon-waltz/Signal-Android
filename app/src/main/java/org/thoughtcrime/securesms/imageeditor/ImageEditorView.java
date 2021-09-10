@@ -306,7 +306,13 @@ public final class ImageEditorView extends FrameLayout {
         if (editSession != null) {
           editSession.commit();
           dragDropRelease(false);
-          notifyDragEnd(editSession.getSelected(), checkTrashIntersect(getPoint(event)));
+
+          PointF  point        = getPoint(event);
+          boolean hittingTrash = event.getPointerCount() == 1 &&
+                                 checkTrashIntersect(point)   &&
+                                 model.findElementAtPoint(point, viewMatrix, new Matrix()) == editSession.getSelected();
+
+          notifyDragEnd(editSession.getSelected(), hittingTrash);
 
           editSession = null;
           model.postEdit(moreThanOnePointerUsedInSession);
@@ -328,10 +334,14 @@ public final class ImageEditorView extends FrameLayout {
     }
 
     if (model.checkTrashIntersectsPoint(point)) {
-      ((TrashRenderer) model.getTrash().getRenderer()).expand();
+      if (model.getTrash().getRenderer() instanceof TrashRenderer) {
+        ((TrashRenderer) model.getTrash().getRenderer()).expand();
+      }
       return true;
     } else {
-      ((TrashRenderer) model.getTrash().getRenderer()).shrink();
+      if (model.getTrash().getRenderer() instanceof TrashRenderer) {
+        ((TrashRenderer) model.getTrash().getRenderer()).shrink();
+      }
       return false;
     }
   }
@@ -461,7 +471,6 @@ public final class ImageEditorView extends FrameLayout {
 
   public void deleteElement(@Nullable EditorElement editorElement) {
     if (editorElement != null) {
-      model.pushUndoPoint();
       model.delete(editorElement);
       invalidate();
     }
