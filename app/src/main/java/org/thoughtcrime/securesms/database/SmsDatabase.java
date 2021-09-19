@@ -275,8 +275,8 @@ public class SmsDatabase extends MessageDatabase {
   }
 
   private @NonNull SqlUtil.Query buildMeaningfulMessagesQuery(long threadId) {
-    String query = THREAD_ID + " = ? AND (NOT " + TYPE + " & ? AND " + TYPE + " != ? AND " + TYPE + "!= ? AND NOT " + TYPE + " & ?)";
-    return SqlUtil.buildQuery(query, threadId, IGNORABLE_TYPESMASK_WHEN_COUNTING, Types.PROFILE_CHANGE_TYPE, Types.CHANGE_NUMBER_TYPE, GROUP_V2_LEAVE_BITS);
+    String query = THREAD_ID + " = ? AND (NOT " + TYPE + " & ? AND " + TYPE + " != ? AND " + TYPE + " != ? AND " + TYPE + " & " + GROUP_V2_LEAVE_BITS + " != " + GROUP_V2_LEAVE_BITS + ")";
+    return SqlUtil.buildQuery(query, threadId, IGNORABLE_TYPESMASK_WHEN_COUNTING, Types.PROFILE_CHANGE_TYPE, Types.CHANGE_NUMBER_TYPE);
   }
 
   @Override
@@ -667,7 +667,7 @@ public class SmsDatabase extends MessageDatabase {
 
     long threadId = getThreadIdForMessage(messageId);
 
-    ThreadUpdateJob.enqueue(threadId);
+    DatabaseFactory.getThreadDatabase(context).update(threadId, true);
     notifyConversationListeners(threadId);
 
     return new InsertResult(messageId, threadId);
@@ -751,7 +751,7 @@ public class SmsDatabase extends MessageDatabase {
         DatabaseFactory.getThreadDatabase(context).incrementUnread(threadId, 1);
       }
 
-      ThreadUpdateJob.enqueue(threadId);
+      DatabaseFactory.getThreadDatabase(context).update(threadId, true);
 
       db.setTransactionSuccessful();
     } finally {
@@ -828,7 +828,7 @@ public class SmsDatabase extends MessageDatabase {
         DatabaseFactory.getThreadDatabase(context).incrementUnread(threadId, 1);
       }
 
-      ThreadUpdateJob.enqueue(threadId);
+      DatabaseFactory.getThreadDatabase(context).update(threadId, true);
 
       db.setTransactionSuccessful();
     } finally {
@@ -900,7 +900,7 @@ public class SmsDatabase extends MessageDatabase {
       DatabaseFactory.getThreadDatabase(context).incrementUnread(threadId, 1);
     }
 
-    ThreadUpdateJob.enqueue(threadId);
+    DatabaseFactory.getThreadDatabase(context).update(threadId, true);
 
     notifyConversationListeners(threadId);
     TrimThreadJob.enqueueAsync(threadId);
@@ -1174,7 +1174,7 @@ public class SmsDatabase extends MessageDatabase {
       }
 
       if (!silent) {
-        ThreadUpdateJob.enqueue(threadId);
+        DatabaseFactory.getThreadDatabase(context).update(threadId, true);
       }
 
       if (message.getSubscriptionId() != -1) {
@@ -1217,7 +1217,7 @@ public class SmsDatabase extends MessageDatabase {
     long messageId = db.insert(TABLE_NAME, null, values);
 
     DatabaseFactory.getThreadDatabase(context).incrementUnread(threadId, 1);
-    ThreadUpdateJob.enqueue(threadId);
+    DatabaseFactory.getThreadDatabase(context).update(threadId, true);
 
     notifyConversationListeners(threadId);
 
@@ -1241,7 +1241,7 @@ public class SmsDatabase extends MessageDatabase {
     databaseHelper.getSignalWritableDatabase().insert(TABLE_NAME, null, values);
 
     DatabaseFactory.getThreadDatabase(context).incrementUnread(threadId, 1);
-    ThreadUpdateJob.enqueue(threadId);
+    DatabaseFactory.getThreadDatabase(context).update(threadId, true);
 
     notifyConversationListeners(threadId);
 
