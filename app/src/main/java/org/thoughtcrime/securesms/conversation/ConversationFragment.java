@@ -306,8 +306,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     typingView = (ConversationTypingView) inflater.inflate(R.layout.conversation_typing_view, container, false);
 
-    giphyMp4ProjectionRecycler = initializeGiphyMp4();
-
     SetupSwipeResult ssrRight = setupSwipe(TextSecurePreferences.getSwipeToRightAction(requireContext()), SwipeActionTypes.DEFAULT_FOR_RIGHT);
     SetupSwipeResult ssrLeft = setupSwipe(TextSecurePreferences.getSwipeToLeftAction(requireContext()), SwipeActionTypes.DEFAULT_FOR_LEFT);
 
@@ -320,6 +318,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     ).attachToRecyclerView(list);
 
     setupListLayoutListeners();
+    giphyMp4ProjectionRecycler = initializeGiphyMp4();
 
     this.groupViewModel         = ViewModelProviders.of(requireActivity(), new ConversationGroupViewModel.Factory()).get(ConversationGroupViewModel.class);
     this.messageCountsViewModel = ViewModelProviders.of(requireActivity()).get(MessageCountsViewModel.class);

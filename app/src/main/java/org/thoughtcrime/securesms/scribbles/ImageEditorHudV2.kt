@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.SeekBar
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatSeekBar
 import androidx.constraintlayout.widget.Guideline
 import androidx.core.animation.doOnEnd
@@ -92,6 +93,8 @@ class ImageEditorHudV2 @JvmOverloads constructor(
   }
 
   private fun initializeViews() {
+    colorIndicator.background = AppCompatResources.getDrawable(context, R.drawable.ic_color_preview)
+
     undoButton.setOnClickListener { listener?.onUndo() }
     clearAllButton.setOnClickListener { listener?.onClearAll() }
     cancelButton.setOnClickListener { listener?.onCancel() }
