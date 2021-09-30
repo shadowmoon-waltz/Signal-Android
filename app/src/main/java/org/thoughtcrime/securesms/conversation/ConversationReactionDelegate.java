@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
-import org.thoughtcrime.securesms.components.MaskView;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.util.views.Stub;
@@ -28,7 +27,6 @@ final class ConversationReactionDelegate {
   private ConversationReactionOverlay.OnReactionSelectedListener onReactionSelectedListener;
   private Toolbar.OnMenuItemClickListener                        onToolbarItemClickedListener;
   private ConversationReactionOverlay.OnHideListener             onHideListener;
-  private float                                                  translationY;
 
   ConversationReactionDelegate(@NonNull Stub<ConversationReactionOverlay> overlayStub) {
     this.overlayStub = overlayStub;
@@ -39,18 +37,12 @@ final class ConversationReactionDelegate {
   }
 
   void show(@NonNull Activity activity,
-            @NonNull MaskView.MaskTarget maskTarget,
             @NonNull Recipient conversationRecipient,
             @NonNull ConversationMessage conversationMessage,
-            int maskPaddingBottom,
             boolean isNonAdminInAnnouncementGroup,
             @Nullable MotionEvent motionEvent)
   {
-    resolveOverlay().show(activity, maskTarget, conversationRecipient, conversationMessage, maskPaddingBottom, lastSeenDownPoint, isNonAdminInAnnouncementGroup, motionEvent);
-  }
-
-  void showMask(@NonNull MaskView.MaskTarget maskTarget, int maskPaddingTop, int maskPaddingBottom) {
-    resolveOverlay().showMask(maskTarget, maskPaddingTop, maskPaddingBottom);
+    resolveOverlay().show(activity, conversationRecipient, conversationMessage, lastSeenDownPoint, isNonAdminInAnnouncementGroup, motionEvent);
   }
 
   void hide() {
@@ -59,10 +51,6 @@ final class ConversationReactionDelegate {
 
   void hideForReactWithAny() {
     overlayStub.get().hideForReactWithAny();
-  }
-
-  void hideMask() {
-    overlayStub.get().hideMask();
   }
 
   void setOnReactionSelectedListener(@NonNull ConversationReactionOverlay.OnReactionSelectedListener onReactionSelectedListener) {
@@ -89,14 +77,6 @@ final class ConversationReactionDelegate {
     }
   }
 
-  void setListVerticalTranslation(float translationY) {
-    this.translationY = translationY;
-
-    if (overlayStub.resolved()) {
-      overlayStub.get().setListVerticalTranslation(translationY);
-    }
-  }
-
   @NonNull MessageRecord getMessageRecord() {
     if (!overlayStub.resolved()) {
       throw new IllegalStateException("Cannot call getMessageRecord right now.");
@@ -120,7 +100,6 @@ final class ConversationReactionDelegate {
     ConversationReactionOverlay overlay = overlayStub.get();
     overlay.requestFitSystemWindows();
 
-    overlay.setListVerticalTranslation(translationY);
     overlay.setOnHideListener(onHideListener);
     overlay.setOnToolbarItemClickedListener(onToolbarItemClickedListener);
     overlay.setOnReactionSelectedListener(onReactionSelectedListener);
