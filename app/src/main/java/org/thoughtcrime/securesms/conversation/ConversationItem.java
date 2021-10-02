@@ -1754,7 +1754,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   }
 
   @Override
-  public @NonNull List<Projection> getColorizerProjections() {
+  public @NonNull List<Projection> getColorizerProjections(@NonNull ViewGroup coordinateRoot) {
     List<Projection> projections = new LinkedList<>();
 
     if (messageRecord.isOutgoing()      &&
@@ -1762,10 +1762,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         !messageRecord.isRemoteDelete() &&
         bodyBubbleCorners != null)
     {
-      Projection bodyBubbleToRoot = Projection.relativeToViewRoot(bodyBubble, bodyBubbleCorners).translateX(bodyBubble.getTranslationX());
+      Projection bodyBubbleToRoot = Projection.relativeToParent(coordinateRoot, bodyBubble, bodyBubbleCorners).translateX(bodyBubble.getTranslationX());
       Projection videoToBubble    = bodyBubble.getVideoPlayerProjection();
       if (videoToBubble != null) {
-        Projection videoToRoot = Projection.translateFromDescendantToParentCoords(videoToBubble, bodyBubble, (ViewGroup) getRootView());
+        Projection videoToRoot = Projection.translateFromDescendantToParentCoords(videoToBubble, bodyBubble, coordinateRoot);
         projections.addAll(Projection.getCapAndTail(bodyBubbleToRoot, videoToRoot));
       } else {
         projections.add(bodyBubbleToRoot);
@@ -1776,7 +1776,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         hasNoBubble(messageRecord) &&
         hasWallpaper)
     {
-      Projection footerProjection = getActiveFooter(messageRecord).getProjection();
+      Projection footerProjection = getActiveFooter(messageRecord).getProjection(coordinateRoot);
       if (footerProjection != null) {
         projections.add(footerProjection.translateX(bodyBubble.getTranslationX()));
       }
@@ -1787,7 +1787,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         quoteView != null)
     {
       bodyBubble.setQuoteViewProjection(quoteView.getProjection(bodyBubble));
-      projections.add(quoteView.getProjection((ViewGroup) getRootView()).translateX(bodyBubble.getTranslationX() + this.getTranslationX()));
+      projections.add(quoteView.getProjection(coordinateRoot).translateX(bodyBubble.getTranslationX() + this.getTranslationX()));
     }
 
     return projections;
