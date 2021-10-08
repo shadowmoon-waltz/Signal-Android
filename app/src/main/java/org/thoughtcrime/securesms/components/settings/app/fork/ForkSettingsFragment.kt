@@ -59,6 +59,13 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
+      clickPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
+        onClick = {
+          Navigation.findNavController(requireView()).navigate(R.id.action_forkSettingsFragment_to_setIdentityKeysFragment)
+        }
+      )
+
       switchPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__fast_custom_reaction_change),
         summary = DSLSettingsText.from(R.string.ForkSettingsFragment__fast_custom_reaction_change_summary),
@@ -149,10 +156,13 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         }
       )
 
-      clickPref(
-        title = DSLSettingsText.from(R.string.ForkSettingsFragment__view_set_identity_keys),
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__trash_no_prompt_for_me),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__trash_no_prompt_for_me_summary),
+        isChecked = state.trashNoPromptForMe,
         onClick = {
-          Navigation.findNavController(requireView()).navigate(R.id.action_forkSettingsFragment_to_setIdentityKeysFragment)
+          TextSecurePreferences.setTrashNoPromptForMe(requireContext(), !state.trashNoPromptForMe)
+          viewModel.setTrashNoPromptForMe(!state.trashNoPromptForMe)
         }
       )
     }

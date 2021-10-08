@@ -21,7 +21,8 @@ class ForkSettingsViewModel : ViewModel() {
       longPressMultiSelect = SignalStore.settings().isLongPressMultiSelect,
       alsoShowProfileName = SignalStore.settings().isAlsoShowProfileName,
       manageGroupTweaks = SignalStore.settings().isManageGroupTweaks,
-      SignalStore.settings().swipeToLeftAction
+      SignalStore.settings().swipeToLeftAction,
+      trashNoPromptForMe = SignalStore.settings().isTrashNoPromptForMe
     )
 
     store = Store(initialState)
@@ -87,5 +88,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setSwipeToLeftAction(swipeToLeftAction: String) {
     store.update { it.copy(swipeToLeftAction = swipeToLeftAction) }
     SignalStore.settings().swipeToLeftAction = swipeToLeftAction
+  }
+
+  fun setTrashNoPromptForMe(trashNoPromptForMe: Boolean) {
+    store.update { it.copy(trashNoPromptForMe = trashNoPromptForMe) }
+    SignalStore.settings().isTrashNoPromptForMe = trashNoPromptForMe
   }
 }

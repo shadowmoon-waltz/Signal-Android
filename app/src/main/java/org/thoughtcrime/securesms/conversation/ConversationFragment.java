@@ -409,11 +409,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     } else if (SwipeActionTypes.DELETE.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessages(conversationMessage.getMultiselectCollection().toSet()));
+                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessages(conversationMessage.getMultiselectCollection().toSet(), false));
     } else if (SwipeActionTypes.DELETE_NO_PROMPT.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessageForMe(conversationMessage.getMessageRecord()));
+                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessagesForMe2(Collections.singleton(conversationMessage.getMessageRecord()), null));
     } else if (SwipeActionTypes.COPY_TEXT.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
@@ -986,28 +986,54 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     }
   }
 
-  // TODO: may need 
-  private void handleDeleteMessageForMe(final MessageRecord messageRecord) {
-    Context       context       = requireActivity();
-    boolean       threadDeleted;
-
-    if (messageRecord.isMms()) {
-      threadDeleted = DatabaseFactory.getMmsDatabase(context).deleteMessage(messageRecord.getId());
+  private void handleDeleteMessages(final Set<MultiselectPart> multiselectParts, boolean checkPref) {
+    Set<MessageRecord> messageRecords = Stream.of(multiselectParts).map(MultiselectPart::getMessageRecord).collect(Collectors.toSet());
+    if (checkPref && TextSecurePreferences.isTrashNoPromptForMe(requireContext())) {
+      handleDeleteMessagesForMe(messageRecords, TextSecurePreferences.isRangeMultiSelect(requireContext()) ? Stream.of(multiselectParts).map(MultiselectPart::getConversationMessage).collect(Collectors.toSet()) : null);
     } else {
-      threadDeleted = DatabaseFactory.getSmsDatabase(context).deleteMessage(messageRecord.getId());
-    }
-
-    if (threadDeleted) {
-      threadId = -1;
-      conversationViewModel.clearThreadId();
-      messageCountsViewModel.clearThreadId();
-      listener.setThreadId(threadId);
+      buildRemoteDeleteConfirmationDialog(messageRecords, TextSecurePreferences.isRangeMultiSelect(requireContext()) ? Stream.of(multiselectParts).map(MultiselectPart::getConversationMessage).collect(Collectors.toSet()) : null).show();
     }
   }
 
-  private void handleDeleteMessages(final Set<MultiselectPart> multiselectParts) {
-    Set<MessageRecord> messageRecords = Stream.of(multiselectParts).map(MultiselectPart::getMessageRecord).collect(Collectors.toSet());
-    buildRemoteDeleteConfirmationDialog(messageRecords, TextSecurePreferences.isRangeMultiSelect(requireContext()) ? Stream.of(multiselectParts).map(MultiselectPart::getConversationMessage).collect(Collectors.toSet()) : null).show();
+  private void handleDeleteMessagesForMe2(Set<MessageRecord> messageRecords, @Nullable final Set<ConversationMessage> conversationMessages) {
+    Context context = requireActivity();
+    if (conversationMessages != null) {
+      getListAdapter().clearMostRecentSelectedIfNecessary(conversationMessages);
+    }
+    for (MessageRecord messageRecord : messageRecords) {
+      boolean threadDeleted;
+
+      if (messageRecord.isMms()) {
+        threadDeleted = DatabaseFactory.getMmsDatabase(context).deleteMessage(messageRecord.getId());
+      } else {
+        threadDeleted = DatabaseFactory.getSmsDatabase(context).deleteMessage(messageRecord.getId());
+      }
+
+      if (threadDeleted) {
+        threadId = -1;
+        conversationViewModel.clearThreadId();
+        messageCountsViewModel.clearThreadId();
+        listener.setThreadId(threadId);
+      }
+    }
+  }
+
+  private void handleDeleteMessagesForMe(Set<MessageRecord> messageRecords, @Nullable final Set<ConversationMessage> conversationMessages) {
+    if (messageRecords.size() > 1)
+    {
+      new ProgressDialogAsyncTask<Void, Void, Void>(getActivity(),
+                                                    R.string.ConversationFragment_deleting,
+                                                    R.string.ConversationFragment_deleting_messages)
+      {
+        @Override
+        protected Void doInBackground(Void... voids) {
+          handleDeleteMessagesForMe2(messageRecords, conversationMessages);
+          return null;
+        }
+      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    } else {
+      handleDeleteMessagesForMe2(messageRecords, conversationMessages);
+    }
   }
 
   private AlertDialog.Builder buildRemoteDeleteConfirmationDialog(Set<MessageRecord> messageRecords, @Nullable final Set<ConversationMessage> conversationMessages) {
@@ -1018,37 +1044,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     builder.setTitle(getActivity().getResources().getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messagesCount, messagesCount));
     builder.setCancelable(true);
 
-    builder.setPositiveButton(R.string.ConversationFragment_delete_for_me, (dialog, which) -> {
-      new ProgressDialogAsyncTask<Void, Void, Void>(getActivity(),
-                                                    R.string.ConversationFragment_deleting,
-                                                    R.string.ConversationFragment_deleting_messages)
-      {
-        @Override
-        protected Void doInBackground(Void... voids) {
-          if (conversationMessages != null) {
-            getListAdapter().clearMostRecentSelectedIfNecessary(conversationMessages);
-          }
-          for (MessageRecord messageRecord : messageRecords) {
-            boolean threadDeleted;
-
-            if (messageRecord.isMms()) {
-              threadDeleted = DatabaseFactory.getMmsDatabase(context).deleteMessage(messageRecord.getId());
-            } else {
-              threadDeleted = DatabaseFactory.getSmsDatabase(context).deleteMessage(messageRecord.getId());
-            }
-
-            if (threadDeleted) {
-              threadId = -1;
-              conversationViewModel.clearThreadId();
-              messageCountsViewModel.clearThreadId();
-              listener.setThreadId(threadId);
-            }
-          }
-
-          return null;
-        }
-      }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    });
+    builder.setPositiveButton(R.string.ConversationFragment_delete_for_me, (dialog, which) -> handleDeleteMessagesForMe(messageRecords, conversationMessages));
 
     if (RemoteDeleteUtil.isValidSend(messageRecords, System.currentTimeMillis())) {
       builder.setNeutralButton(R.string.ConversationFragment_delete_for_everyone, (dialog, which) -> handleDeleteForEveryone(messageRecords, conversationMessages));
@@ -1998,7 +1994,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     public boolean onMenuItemClick(MenuItem item) {
       switch (item.getItemId()) {
         case R.id.action_info:        handleDisplayDetails(conversationMessage);                                            return true;
-        case R.id.action_delete:      handleDeleteMessages(conversationMessage.getMultiselectCollection().toSet());         return true;
+        case R.id.action_delete:      handleDeleteMessages(conversationMessage.getMultiselectCollection().toSet(), true);   return true;
         case R.id.action_copy:        handleCopyMessage(conversationMessage.getMultiselectCollection().toSet());            return true;
         case R.id.action_reply:       handleReplyMessage(conversationMessage);                                              return true;
         case R.id.action_multiselect: handleEnterMultiSelect(conversationMessage);                                          return true;
@@ -2063,7 +2059,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
           actionMode.finish();
           return true;
         case R.id.menu_context_delete_message:
-          handleDeleteMessages(getListAdapter().getSelectedItems());
+          handleDeleteMessages(getListAdapter().getSelectedItems(), true);
           actionMode.finish();
           return true;
         case R.id.menu_context_details:

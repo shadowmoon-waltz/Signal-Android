@@ -3640,6 +3640,8 @@
     <string name="ForkSettingsFragment__manage_group_tweaks_summary">Hide text with prompt to add group description or number of members and move member list almost to top of view (but leaving the add members button where it usually is)</string>
     <string name="ForkSettingsFragment__swipe_to_left_action__default">Default (None)</string>
     <string name="ForkSettingsFragment__swipe_to_left_action">Swipe to Left Conversation Item Action</string>
+    <string name="ForkSettingsFragment__trash_no_prompt_for_me">Trash Button Deletes Messages For Me Without Confirmation</string>
+    <string name="ForkSettingsFragment__trash_no_prompt_for_me_summary">This does not affect the delete action in Swipe to Left or Right Conversation Item Actions (which may be helpful to access the otherwise unavailable Delete For Everyone when this is enabled, use Delete For Me (No Prompt) if you want the same behavior in the swipe actions)</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>
