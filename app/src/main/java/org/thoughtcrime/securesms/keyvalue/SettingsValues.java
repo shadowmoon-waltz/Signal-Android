@@ -12,6 +12,7 @@ import androidx.lifecycle.LiveData;
 import org.signal.core.util.concurrent.SignalExecutors;
 import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.mms.SentMediaQuality;
 import org.thoughtcrime.securesms.preferences.widgets.NotificationPrivacyPreference;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.storage.StorageSyncHelper;
@@ -64,6 +65,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final  String NOTIFY_WHEN_CONTACT_JOINS_SIGNAL        = "settings.notify.when.contact.joins.signal";
   private static final String DEFAULT_SMS                             = "settings.default_sms";
   private static final String UNIVERSAL_EXPIRE_TIMER                  = "settings.universal.expire.timer";
+  private static final String SENT_MEDIA_QUALITY                      = "settings.sentMediaQuality";
 
   public static final String HIDE_INSIGHTS                           = "settings.fork.hide.insights";
   public static final String SHOW_REACTION_TIMESTAMPS                = "settings.fork.show.reaction.timestamps";
@@ -121,6 +123,7 @@ public final class SettingsValues extends SignalStoreValues {
                          CALL_VIBRATE_ENABLED,
                          NOTIFY_WHEN_CONTACT_JOINS_SIGNAL,
                          UNIVERSAL_EXPIRE_TIMER,
+                         SENT_MEDIA_QUALITY,
                          HIDE_INSIGHTS,
                          SHOW_REACTION_TIMESTAMPS,
                          FORCE_WEBSOCKET_MODE,
@@ -409,6 +412,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public int getUniversalExpireTimer() {
     return getInteger(UNIVERSAL_EXPIRE_TIMER, 0);
+  }
+
+  public void setSentMediaQuality(@NonNull SentMediaQuality sentMediaQuality) {
+    putInteger(SENT_MEDIA_QUALITY, sentMediaQuality.getCode());
+  }
+
+  public @NonNull SentMediaQuality getSentMediaQuality() {
+    return SentMediaQuality.fromCode(getInteger(SENT_MEDIA_QUALITY, SentMediaQuality.STANDARD.getCode()));
   }
 
   private @Nullable Uri getUri(@NonNull String key) {

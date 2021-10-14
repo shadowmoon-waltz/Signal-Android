@@ -492,8 +492,10 @@ public class ConversationAdapter
    * Conversation search query updated. Allows rendering of text highlighting.
    */
   void onSearchQueryUpdated(String query) {
-    this.searchQuery = query;
-    notifyDataSetChanged();
+    if (!Objects.equals(query, this.searchQuery)) {
+      this.searchQuery = query;
+      notifyDataSetChanged();
+    }
   }
 
   /**
