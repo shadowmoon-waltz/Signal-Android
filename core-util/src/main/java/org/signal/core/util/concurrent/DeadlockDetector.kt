@@ -59,7 +59,14 @@ class DeadlockDetector(private val handler: Handler, private val pollingInterval
           .toMap()
 
         val executor: ThreadPoolExecutor = executorInfo.executor as ThreadPoolExecutor
-        Log.w(TAG, buildLogString("Found a full executor! ${executor.activeCount}/${executor.corePoolSize} threads active with ${executor.queue.size} tasks queued.", fullMap))
+        Log.w(TAG, buildLogString("Found a full executor! ${executor.activeCount}/${executor.maximumPoolSize} threads active with ${executor.queue.size} tasks queued.", fullMap))
+
+        val runnableStringBuilder = StringBuilder()
+        executor.queue.forEach { runnable ->
+          runnableStringBuilder.append(runnable.toString()).append("\n")
+        }
+
+        Log.w(TAG, "Queue:\n${runnableStringBuilder}")
       }
     }
 
@@ -81,7 +88,7 @@ class DeadlockDetector(private val handler: Handler, private val pollingInterval
 
     private val EXECUTORS: Set<ExecutorInfo> = setOf(
       ExecutorInfo(SignalExecutors.BOUNDED, "signal-bounded-"),
-      ExecutorInfo(SignalExecutors.BOUNDED_IO, "signal-bounded-io-")
+      ExecutorInfo(SignalExecutors.BOUNDED_IO, "signal-io-bounded")
     )
 
     private const val CONCERNING_QUEUE_THRESHOLD = 4

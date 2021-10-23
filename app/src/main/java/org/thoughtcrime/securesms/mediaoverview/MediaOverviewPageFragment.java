@@ -303,31 +303,34 @@ public final class MediaOverviewPageFragment extends Fragment
     FragmentActivity activity = requireActivity();
     actionMode = ((AppCompatActivity) activity).startSupportActionMode(actionModeCallback);
     ((MediaOverviewActivity) activity).onEnterMultiSelect();
-    ViewUtil.fadeIn(bottomActionBar, 250);
-
-    bottomActionBar.setItems(Arrays.asList(
-        new ActionItem(R.drawable.ic_save_24, R.string.MediaOverviewActivity_save, () -> {
-          MediaActions.handleSaveMedia(MediaOverviewPageFragment.this,
-                                       getListAdapter().getSelectedMedia(),
-                                       this::exitMultiSelect);
-        }),
-        new ActionItem(R.drawable.ic_select_24, R.string.MediaOverviewActivity_select_all, this::handleSelectAllMedia),
-        new ActionItem(R.drawable.ic_delete_24, R.string.MediaOverviewActivity_delete, () -> {
-          MediaActions.handleDeleteMedia(requireContext(), getListAdapter().getSelectedMedia());
-          exitMultiSelect();
-        })
-    ));
+    ViewUtil.animateIn(bottomActionBar, bottomActionBar.getEnterAnimation());
+    updateMultiSelect();
   }
 
   private void exitMultiSelect() {
     actionMode.finish();
     actionMode = null;
-    ViewUtil.fadeOut(bottomActionBar, 250);
+    ViewUtil.animateOut(bottomActionBar, bottomActionBar.getExitAnimation());
   }
 
   private void updateMultiSelect() {
     if (actionMode != null) {
       actionMode.setTitle(getActionModeTitle());
+
+      int selectionCount = getListAdapter().getSectionCount();
+
+      bottomActionBar.setItems(Arrays.asList(
+          new ActionItem(R.drawable.ic_save_24, getResources().getQuantityString(R.plurals.MediaOverviewActivity_save, selectionCount), () -> {
+            MediaActions.handleSaveMedia(MediaOverviewPageFragment.this,
+                                         getListAdapter().getSelectedMedia(),
+                                         this::exitMultiSelect);
+          }),
+          new ActionItem(R.drawable.ic_select_24, getString(R.string.MediaOverviewActivity_select_all), this::handleSelectAllMedia),
+          new ActionItem(R.drawable.ic_delete_24, getResources().getQuantityString(R.plurals.MediaOverviewActivity_delete, selectionCount), () -> {
+            MediaActions.handleDeleteMedia(requireContext(), getListAdapter().getSelectedMedia());
+            exitMultiSelect();
+          })
+      ));
     }
   }
 

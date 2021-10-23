@@ -83,6 +83,8 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.thoughtcrime.securesms.database.model.LiveUpdateMessage.recipientToStringAsync;
 
@@ -546,15 +548,13 @@ public final class ConversationListItem extends ConstraintLayout
         int      thumbSize = (int) DimensionUnit.SP.toPixels(20f);
         Bitmap   thumb     = glideRequests.asBitmap()
                                           .load(new DecryptableStreamUriLoader.DecryptableUri(thread.getSnippetUri()))
-                                          .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                           .override(thumbSize, thumbSize)
-                                          .downsample(DownsampleStrategy.CENTER_OUTSIDE)
                                           .transform(
                                               new OverlayTransformation(ContextCompat.getColor(context, R.color.transparent_black_08)),
                                               new CenterCrop()
                                           )
                                           .submit()
-                                          .get();
+                                          .get(1, TimeUnit.SECONDS);
 
         RoundedDrawable drawable = RoundedDrawable.fromBitmap(thumb);
         drawable.setBounds(0, 0, thumbSize, thumbSize);
@@ -586,6 +586,9 @@ public final class ConversationListItem extends ConstraintLayout
         }
 
       } catch (ExecutionException | InterruptedException e) {
+        return new SpannableString(body);
+      } catch (TimeoutException e) {
+        Log.w(TAG, "Hit a timeout when generating a thumbnail! " + thread.getSnippetUri());
         return new SpannableString(body);
       }
     } else {
