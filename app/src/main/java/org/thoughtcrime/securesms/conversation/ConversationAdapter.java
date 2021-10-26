@@ -57,6 +57,7 @@ import org.thoughtcrime.securesms.util.CachedInflater;
 import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.MessageRecordUtil;
 import org.thoughtcrime.securesms.util.Projection;
+import org.thoughtcrime.securesms.util.ProjectionList;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.ThemeUtil;
 import org.thoughtcrime.securesms.util.ViewUtil;
@@ -169,7 +170,7 @@ public class ConversationAdapter
 
   @Override
   public int getItemViewType(int position) {
-    if (hasHeader() && position == 0) {
+    if (isTypingViewEnabled() && position == 0) {
       return MESSAGE_TYPE_HEADER;
     }
 
@@ -368,7 +369,7 @@ public class ConversationAdapter
   }
 
   public @Nullable ConversationMessage getItem(int position) {
-    position = hasHeader() ? position - 1 : position;
+    position = isTypingViewEnabled() ? position - 1 : position;
 
     if (position == -1) {
       return null;
@@ -424,7 +425,7 @@ public class ConversationAdapter
    */
   @MainThread
   int getAdapterPositionForMessagePosition(int messagePosition) {
-    return hasHeader() ? messagePosition + 1 : messagePosition;
+    return isTypingViewEnabled() ? messagePosition + 1 : messagePosition;
   }
 
   /**
@@ -660,7 +661,7 @@ public class ConversationAdapter
     }
   }
 
-  public boolean hasHeader() {
+  public boolean isTypingViewEnabled() {
     return isTypingViewEnabled;
   }
 
@@ -669,7 +670,7 @@ public class ConversationAdapter
   }
 
   private boolean isHeaderPosition(int position) {
-    return hasHeader() && position == 0;
+    return isTypingViewEnabled() && position == 0;
   }
 
   private boolean isFooterPosition(int position) {
@@ -762,7 +763,7 @@ public class ConversationAdapter
     }
 
     @Override
-    public @NonNull List<Projection> getColorizerProjections(@NonNull ViewGroup coordinateRoot) {
+    public @NonNull ProjectionList getColorizerProjections(@NonNull ViewGroup coordinateRoot) {
       return getBindable().getColorizerProjections(coordinateRoot);
     }
   }
