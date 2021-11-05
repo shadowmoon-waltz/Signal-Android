@@ -108,7 +108,6 @@ import org.thoughtcrime.securesms.database.model.MmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.ReactionRecord;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4ItemDecoration;
-import org.thoughtcrime.securesms.giph.mp4.GiphyMp4Playable;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackController;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackPolicy;
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4ProjectionPlayerHolder;
@@ -177,6 +176,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
+import kotlin.Unit;
+
 @SuppressLint("StaticFieldLeak")
 public class ConversationFragment extends LoggingFragment implements MultiselectForwardFragment.Callback {
   private static final String TAG = Log.tag(ConversationFragment.class);
@@ -221,9 +222,9 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private int                         lastSeenScrollOffset;
   private View                        toolbarShadow;
   private Stopwatch                   startupStopwatch;
-  private View                        reactionsShade;
   private LayoutTransition            layoutTransition;
   private TransitionListener          transitionListener;
+  private View                        reactionsShade;
 
   private GiphyMp4ProjectionRecycler giphyMp4ProjectionRecycler;
   private Colorizer                  colorizer;
@@ -308,7 +309,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     new ConversationItemSwipeCallback(
             ssrRight.SAP(),
             ssrRight.OSL(),
-            this::onViewHolderPositionTranslated,
             ssrLeft.SAP(),
             ssrLeft.OSL()
     ).attachToRecyclerView(list);
@@ -455,7 +455,10 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     GiphyMp4ProjectionRecycler callback = new GiphyMp4ProjectionRecycler(holders);
 
     GiphyMp4PlaybackController.attach(list, callback, maxPlayback);
-    list.addItemDecoration(new GiphyMp4ItemDecoration(callback), 0);
+    list.addItemDecoration(new GiphyMp4ItemDecoration(callback, translationY -> {
+      reactionsShade.setTranslationY(translationY);
+      return Unit.INSTANCE;
+    }), 0);
 
     return callback;
   }
@@ -463,7 +466,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   public void clearFocusedItem() {
     multiselectItemDecoration.setFocusedItem(null);
     list.invalidateItemDecorations();
-    reactionsShade.setVisibility(View.INVISIBLE);
   }
 
   private void updateConversationItemTimestamps() {
@@ -575,12 +577,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
           setInlineDateDecoration(adapter);
         }
       }
-    }
-  }
-
-  private void onViewHolderPositionTranslated(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-    if (viewHolder instanceof GiphyMp4Playable) {
-      giphyMp4ProjectionRecycler.updateVideoDisplayPositionAndSize(recyclerView, (GiphyMp4Playable) viewHolder);
     }
   }
 
@@ -1165,7 +1161,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                            .submit();
     } else if (conversation.getMessageRequestData().isMessageRequestAccepted()) {
       snapToTopDataObserver.buildScrollPosition(conversation.shouldScrollToLastSeen() ? lastSeenPosition : lastScrolledPosition)
-                           .withOnPerformScroll((layoutManager, position) -> layoutManager.scrollToPositionWithOffset(position, (list.getHeight() + reactionsShade.getHeight()) - (conversation.shouldScrollToLastSeen() ? lastSeenScrollOffset : 0)))
+                           .withOnPerformScroll((layoutManager, position) -> layoutManager.scrollToPositionWithOffset(position, list.getHeight() - (conversation.shouldScrollToLastSeen() ? lastSeenScrollOffset : 0)))
                            .withOnScrollRequestComplete(afterScroll)
                            .submit();
     } else {
@@ -1469,10 +1465,10 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
             ((ConversationAdapter) list.getAdapter()).getSelectedItems().isEmpty())
         {
           multiselectItemDecoration.setFocusedItem(new MultiselectPart.Message(item.getConversationMessage()));
-          reactionsShade.setVisibility(View.VISIBLE);
           list.invalidateItemDecorations();
 
           isReacting = true;
+          reactionsShade.setVisibility(View.VISIBLE);
           // https://stackoverflow.com/questions/34960749/setlayoutfrozenboolean-and-sethasfixedsizeboolean-purpose-for-recyclerview
           // motionEvent is only sent when using show options as a swipe option; when this happens and you swipe off the edge of the screen,
           // the event that causes the message to translate back to its original position is dropped (I think) (if you don't swipe off the
@@ -1483,6 +1479,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
           }
           listener.handleReaction(item.getConversationMessage(), new ReactionsToolbarListener(item.getConversationMessage()), () -> {
             isReacting = false;
+            reactionsShade.setVisibility(View.GONE);
             if (motionEvent == null) {
               list.setLayoutFrozen(false);
             }
@@ -1643,7 +1640,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       if (getContext() == null) return;
 
       multiselectItemDecoration.setFocusedItem(multiselectPart);
-      reactionsShade.setVisibility(View.VISIBLE);
       ReactionsBottomSheetDialogFragment.create(messageId, isMms, TextSecurePreferences.isShowReactionTimeEnabled(requireContext()) ? locale : null)
                                         .show(requireFragmentManager(), null);
     }

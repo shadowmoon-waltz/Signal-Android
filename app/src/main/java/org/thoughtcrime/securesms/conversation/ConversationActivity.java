@@ -249,7 +249,6 @@ import org.thoughtcrime.securesms.search.MessageResult;
 import org.thoughtcrime.securesms.service.KeyCachingService;
 import org.thoughtcrime.securesms.sms.MessageSender;
 import org.thoughtcrime.securesms.sms.OutgoingEncryptedMessage;
-import org.thoughtcrime.securesms.sms.OutgoingEndSessionMessage;
 import org.thoughtcrime.securesms.sms.OutgoingTextMessage;
 import org.thoughtcrime.securesms.stickers.StickerEventListener;
 import org.thoughtcrime.securesms.stickers.StickerLocator;
@@ -1543,7 +1542,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
 
     sendButton.resetAvailableTransports(isMediaMessage);
 
-    if (!isSecureText && !isPushGroupConversation() && !recipient.get().isUuidOnly()) {
+    if (!isSecureText && !isPushGroupConversation() && !recipient.get().isAciOnly()) {
       sendButton.disableTransport(Type.TEXTSECURE);
     }
 
@@ -1554,7 +1553,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
     if (!recipient.get().isPushGroup() && recipient.get().isForceSmsSelection()) {
       sendButton.setDefaultTransport(Type.SMS);
     } else {
-      if (isSecureText || isPushGroupConversation() || recipient.get().isUuidOnly()) {
+      if (isSecureText || isPushGroupConversation() || recipient.get().isAciOnly()) {
         sendButton.setDefaultTransport(Type.TEXTSECURE);
       } else {
         sendButton.setDefaultTransport(Type.SMS);
@@ -2964,7 +2963,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
       return new SettableFuture<>(null);
     }
 
-    final boolean sendPush = (isSecureText && !forceSms) || recipient.get().isUuidOnly();
+    final boolean sendPush = (isSecureText && !forceSms) || recipient.get().isAciOnly();
     final long    thread   = this.threadId;
 
     if (sendPush) {
@@ -3027,7 +3026,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
     final long    thread      = this.threadId;
     final Context context     = getApplicationContext();
     final String  messageBody = getMessage();
-    final boolean sendPush    = (isSecureText && !forceSms) || recipient.get().isUuidOnly();
+    final boolean sendPush    = (isSecureText && !forceSms) || recipient.get().isAciOnly();
 
     OutgoingTextMessage message;
 

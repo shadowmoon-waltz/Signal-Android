@@ -68,6 +68,7 @@ import org.thoughtcrime.securesms.BindableConversationItem;
 import org.thoughtcrime.securesms.MediaPreviewActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment;
+import org.thoughtcrime.securesms.badges.BadgeImageView;
 import org.thoughtcrime.securesms.components.AlertView;
 import org.thoughtcrime.securesms.components.AudioView;
 import org.thoughtcrime.securesms.components.AvatarImageView;
@@ -188,6 +189,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
             private   AvatarImageView            contactPhoto;
             private   AlertView                  alertView;
             protected ReactionsConversationView  reactionsView;
+            private   BadgeImageView             badgeImageView;
 
   private @NonNull  Set<MultiselectPart>                    batchSelected = new HashSet<>();
   private @NonNull  Outliner                                outliner      = new Outliner();
@@ -271,6 +273,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     this.swipeToLeft             =                    findViewById(R.id.swipe_to_left_icon_wrapper);
     this.swipeToLeftIcon         =                    findViewById(R.id.swipe_to_left_icon);
     this.reactionsView           =                    findViewById(R.id.reactions_view);
+    this.badgeImageView          =                    findViewById(R.id.badge);
 
     setOnClickListener(new ClickListener(null));
 
@@ -1289,6 +1292,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     });
 
     contactPhoto.setAvatar(glideRequests, recipient, false);
+    badgeImageView.setBadgeFromRecipient(recipient, glideRequests);
   }
 
   private void linkifyMessageBody(@NonNull Spannable messageBody,
@@ -1525,8 +1529,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
       if (!next.isPresent() || next.get().isUpdate() || !current.getRecipient().equals(next.get().getRecipient())) {
         contactPhoto.setVisibility(VISIBLE);
+        badgeImageView.setVisibility(VISIBLE);
       } else {
         contactPhoto.setVisibility(GONE);
+        badgeImageView.setVisibility(GONE);
       }
     } else {
       if (groupSenderHolder != null) {
@@ -1535,6 +1541,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
       if (contactPhotoHolder != null) {
         contactPhotoHolder.setVisibility(GONE);
+      }
+
+      if (badgeImageView != null) {
+        badgeImageView.setVisibility(GONE);
       }
     }
   }

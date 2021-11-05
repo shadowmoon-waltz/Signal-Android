@@ -533,6 +533,12 @@ class ConversationSettingsFragment : DSLSettingsFragment(
           sectionHeaderPref(R.string.ManageProfileFragment_badges)
 
           displayBadges(requireContext(), state.recipient.badges)
+
+          textPref(
+            summary = DSLSettingsText.from(
+              R.string.ConversationSettingsFragment__get_badges
+            )
+          )
         }
 
         if (recipientSettingsState.selfHasGroups) {
