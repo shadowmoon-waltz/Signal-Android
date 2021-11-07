@@ -21,13 +21,13 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
 import org.thoughtcrime.securesms.components.settings.DSLSettingsBottomSheetFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsIcon
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
+//import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationEvent
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationExceptions
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.CurrencySelection
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.GooglePayButton
 import org.thoughtcrime.securesms.components.settings.configure
-import org.thoughtcrime.securesms.help.HelpFragment
+//import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.util.BottomSheetUtil.requireCoordinatorLayout
 import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.LifecycleDisposable
@@ -217,11 +217,11 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
       MaterialAlertDialogBuilder(requireContext())
         .setTitle(R.string.DonationsErrors__redemption_failed)
         .setMessage(R.string.DonationsErrors__please_contact_support)
-        .setPositiveButton(R.string.Subscription__contact_support) { dialog, _ ->
-          dialog.dismiss()
-          requireActivity().finish()
-          requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
-        }
+        //.setPositiveButton(R.string.Subscription__contact_support) { dialog, _ ->
+        //  dialog.dismiss()
+        //  requireActivity().finish()
+        //  requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
+        //}
         .show()
     } else {
       Log.w(TAG, "Error occurred while processing payment", throwable, true)

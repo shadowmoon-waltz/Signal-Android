@@ -24,7 +24,7 @@ import org.thoughtcrime.securesms.components.settings.app.subscription.DonationE
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.CurrencySelection
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.GooglePayButton
 import org.thoughtcrime.securesms.components.settings.configure
-import org.thoughtcrime.securesms.help.HelpFragment
+//import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.payments.FiatMoneyUtil
 import org.thoughtcrime.securesms.subscription.Subscription
 import org.thoughtcrime.securesms.util.CommunicationActions
@@ -251,11 +251,11 @@ class SubscribeFragment : DSLSettingsFragment(
       MaterialAlertDialogBuilder(requireContext())
         .setTitle(R.string.DonationsErrors__redemption_failed)
         .setMessage(R.string.DonationsErrors__please_contact_support)
-        .setPositiveButton(R.string.Subscription__contact_support) { dialog, _ ->
-          dialog.dismiss()
-          requireActivity().finish()
-          requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
-        }
+        //.setPositiveButton(R.string.Subscription__contact_support) { dialog, _ ->
+        //  dialog.dismiss()
+        //  requireActivity().finish()
+        //  requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
+        //}
         .show()
     } else {
       Log.w(TAG, "Error occurred while processing payment", throwable, true)
