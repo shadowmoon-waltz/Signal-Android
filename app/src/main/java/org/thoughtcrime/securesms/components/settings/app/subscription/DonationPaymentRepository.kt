@@ -12,6 +12,7 @@ import org.signal.donations.GooglePayApi
 import org.signal.donations.GooglePayPaymentSource
 import org.signal.donations.StripeApi
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.jobmanager.JobTracker
 import org.thoughtcrime.securesms.jobs.BoostReceiptRequestResponseJob
 import org.thoughtcrime.securesms.jobs.SubscriptionReceiptRequestResponseJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
@@ -114,15 +115,30 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
       val jobId = BoostReceiptRequestResponseJob.enqueueChain(paymentIntent)
       val countDownLatch = CountDownLatch(1)
 
+      var finalJobState: JobTracker.JobState? = null
       ApplicationDependencies.getJobManager().addListener(jobId) { _, jobState ->
         if (jobState.isComplete) {
+          finalJobState = jobState
           countDownLatch.countDown()
         }
       }
 
       try {
         if (countDownLatch.await(10, TimeUnit.SECONDS)) {
-          it.onComplete()
+          when (finalJobState) {
+            JobTracker.JobState.SUCCESS -> {
+              Log.d(TAG, "Request response job chain succeeded.", true)
+              it.onComplete()
+            }
+            JobTracker.JobState.FAILURE -> {
+              Log.d(TAG, "Request response job chain failed permanently.", true)
+              it.onError(DonationExceptions.RedemptionFailed)
+            }
+            else -> {
+              Log.d(TAG, "Request response job chain ignored due to in-progress jobs.", true)
+              it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
+            }
+          }
         } else {
           it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
         }
@@ -137,47 +153,77 @@ class DonationPaymentRepository(activity: Activity) : StripeApi.PaymentIntentFet
       .flatMapCompletable { levelUpdateOperation ->
         val subscriber = SignalStore.donationsValues().requireSubscriber()
 
-        Log.d(TAG, "Attempting to set user subscription level to $subscriptionLevel")
-
+        Log.d(TAG, "Attempting to set user subscription level to $subscriptionLevel", true)
         ApplicationDependencies.getDonationsService().updateSubscriptionLevel(
           subscriber.subscriberId,
           subscriptionLevel,
           subscriber.currencyCode,
-          levelUpdateOperation.idempotencyKey.serialize()
-        ).flatMap(ServiceResponse<EmptyResponse>::flattenResult).ignoreElement().andThen {
-          SignalStore.donationsValues().clearUserManuallyCancelled()
-          SignalStore.donationsValues().clearLevelOperation()
-          LevelUpdate.updateProcessingState(false)
-          it.onComplete()
+          levelUpdateOperation.idempotencyKey.serialize(),
+          SubscriptionReceiptRequestResponseJob.MUTEX
+        ).flatMapCompletable {
+          if (it.status == 200 || it.status == 204) {
+            Log.d(TAG, "Successfully set user subscription to level $subscriptionLevel with response code ${it.status}", true)
+            SignalStore.donationsValues().clearUserManuallyCancelled()
+            SignalStore.donationsValues().clearLevelOperations()
+            LevelUpdate.updateProcessingState(false)
+            Completable.complete()
+          } else {
+            if (it.applicationError.isPresent) {
+              Log.w(TAG, "Failed to set user subscription to level $subscriptionLevel with response code ${it.status}", it.applicationError.get(), true)
+              SignalStore.donationsValues().clearLevelOperations()
+            } else {
+              Log.w(TAG, "Failed to set user subscription to level $subscriptionLevel", it.executionError.orNull(), true)
+            }
+
+            LevelUpdate.updateProcessingState(false)
+            it.flattenResult().ignoreElement()
+          }
         }.andThen {
+          Log.d(TAG, "Enqueuing request response job chain.", true)
           val jobId = SubscriptionReceiptRequestResponseJob.enqueueSubscriptionContinuation()
           val countDownLatch = CountDownLatch(1)
 
+          var finalJobState: JobTracker.JobState? = null
           ApplicationDependencies.getJobManager().addListener(jobId) { _, jobState ->
             if (jobState.isComplete) {
+              finalJobState = jobState
               countDownLatch.countDown()
             }
           }
 
           try {
             if (countDownLatch.await(10, TimeUnit.SECONDS)) {
-              it.onComplete()
+              when (finalJobState) {
+                JobTracker.JobState.SUCCESS -> {
+                  Log.d(TAG, "Request response job chain succeeded.", true)
+                  it.onComplete()
+                }
+                JobTracker.JobState.FAILURE -> {
+                  Log.d(TAG, "Request response job chain failed permanently.", true)
+                  it.onError(DonationExceptions.RedemptionFailed)
+                }
+                else -> {
+                  Log.d(TAG, "Request response job chain ignored due to in-progress jobs.", true)
+                  it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
+                }
+              }
             } else {
+              Log.d(TAG, "Request response job timed out.", true)
               it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
             }
           } catch (e: InterruptedException) {
+            Log.w(TAG, "Request response interrupted.", e, true)
             it.onError(DonationExceptions.TimedOutWaitingForTokenRedemption)
           }
         }
       }.doOnError {
-        SignalStore.donationsValues().clearLevelOperation()
         LevelUpdate.updateProcessingState(false)
       }.subscribeOn(Schedulers.io())
   }
 
   private fun getOrCreateLevelUpdateOperation(subscriptionLevel: String): Single<LevelUpdateOperation> = Single.fromCallable {
-    val levelUpdateOperation = SignalStore.donationsValues().getLevelOperation()
-    if (levelUpdateOperation == null || subscriptionLevel != levelUpdateOperation.level) {
+    val levelUpdateOperation = SignalStore.donationsValues().getLevelOperation(subscriptionLevel)
+    if (levelUpdateOperation == null) {
       val newOperation = LevelUpdateOperation(
         idempotencyKey = IdempotencyKey.generate(),
         level = subscriptionLevel
