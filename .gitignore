@@ -27,3 +27,6 @@ obj/
 jni/libspeex/.deps/
 pkcs11.password
 dev.keystore
+
+keystore.release.properties
+*.jks

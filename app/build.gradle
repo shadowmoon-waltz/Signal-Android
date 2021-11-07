@@ -77,7 +77,7 @@ def abiPostFix = ['universal'   : 0,
                   'x86'         : 3,
                   'x86_64'      : 4]
 
-def keystores = [ 'debug'  : loadKeystoreProperties('keystore.debug.properties') ]
+def keystores = [ 'debug'  : loadKeystoreProperties('keystore.debug.properties'), 'release'  :  loadKeystoreProperties('keystore.release.properties') ]
 
 boolean signConfigExists = project.hasProperty("keystoreFile") && project.hasProperty("keystorePassword") && project.hasProperty("keystoreAlias") && project.hasProperty("keystoreAliasPassword")
 
@@ -132,7 +132,14 @@ android {
                 keyPassword keystores.debug.keyPassword
             }
         }
-        if (signConfigExists) {
+        if (keystores.release != null) {
+            release {
+                storeFile file("${project.rootDir}/${keystores.release.storeFile}")
+                storePassword keystores.release.storePassword
+                keyAlias keystores.release.keyAlias
+                keyPassword keystores.release.keyPassword
+            }
+        } else if (signConfigExists) {
             release {
                 storeFile file(project.property("keystoreFile"))
                 storePassword project.property("keystorePassword")
