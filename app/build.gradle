@@ -283,7 +283,7 @@ android {
             shrinkResources true
             proguardFiles = buildTypes.debug.proguardFiles
             buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Release\""
-            if (signConfigExists) {
+            if (keystores.release != null || signConfigExists) {
                 signingConfig signingConfigs.release
             }
         }
