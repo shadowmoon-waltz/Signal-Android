@@ -24,10 +24,14 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 //import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationEvent
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationExceptions
+import org.thoughtcrime.securesms.components.settings.app.subscription.DonationPaymentComponent
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.CurrencySelection
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.GooglePayButton
 import org.thoughtcrime.securesms.components.settings.configure
+import org.thoughtcrime.securesms.components.settings.models.Progress
+import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 //import org.thoughtcrime.securesms.help.HelpFragment
+import org.thoughtcrime.securesms.keyboard.findListener
 import org.thoughtcrime.securesms.util.BottomSheetUtil.requireCoordinatorLayout
 import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.LifecycleDisposable
@@ -41,7 +45,12 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
   layoutId = R.layout.boost_bottom_sheet
 ) {
 
-  private val viewModel: BoostViewModel by viewModels(ownerProducer = { requireActivity() })
+  private val viewModel: BoostViewModel by viewModels(
+    factoryProducer = {
+      BoostViewModel.Factory(BoostRepository(ApplicationDependencies.getDonationsService()), donationPaymentComponent.donationPaymentRepository, FETCH_BOOST_TOKEN_REQUEST_CODE)
+    }
+  )
+
   private val lifecycleDisposable = LifecycleDisposable()
 
   private lateinit var boost1AnimationView: LottieAnimationView
@@ -52,6 +61,7 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
   private lateinit var boost6AnimationView: LottieAnimationView
 
   private lateinit var processingDonationPaymentDialog: AlertDialog
+  private lateinit var donationPaymentComponent: DonationPaymentComponent
 
   private val sayThanks: CharSequence by lazy {
     SpannableStringBuilder(requireContext().getString(R.string.BoostFragment__say_thanks_and_earn, 30))
@@ -64,12 +74,14 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
   }
 
   override fun bindAdapter(adapter: DSLSettingsAdapter) {
+    donationPaymentComponent = findListener()!!
     viewModel.refresh()
 
     CurrencySelection.register(adapter)
     BadgePreview.register(adapter)
     Boost.register(adapter)
     GooglePayButton.register(adapter)
+    Progress.register(adapter)
 
     processingDonationPaymentDialog = MaterialAlertDialogBuilder(requireContext())
       .setView(R.layout.processing_payment_dialog)
@@ -151,25 +163,33 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
         )
       )
 
-      customPref(
-        Boost.SelectionModel(
-          boosts = state.boosts,
-          selectedBoost = state.selectedBoost,
-          currency = state.customAmount.currency,
-          isCustomAmountFocused = state.isCustomAmountFocused,
-          isEnabled = state.stage == BoostState.Stage.READY,
-          onBoostClick = { view, boost ->
-            startAnimationAboveSelectedBoost(view)
-            viewModel.setSelectedBoost(boost)
-          },
-          onCustomAmountChanged = {
-            viewModel.setCustomAmount(it)
-          },
-          onCustomAmountFocusChanged = {
-            viewModel.setCustomAmountFocused(it)
-          }
+      if (state.stage == BoostState.Stage.INIT) {
+        customPref(
+          Progress.Model(
+            title = DSLSettingsText.from(R.string.load_more_header__loading)
+          )
         )
-      )
+      } else {
+        customPref(
+          Boost.SelectionModel(
+            boosts = state.boosts,
+            selectedBoost = state.selectedBoost,
+            currency = state.customAmount.currency,
+            isCustomAmountFocused = state.isCustomAmountFocused,
+            isEnabled = state.stage == BoostState.Stage.READY,
+            onBoostClick = { view, boost ->
+              startAnimationAboveSelectedBoost(view)
+              viewModel.setSelectedBoost(boost)
+            },
+            onCustomAmountChanged = {
+              viewModel.setCustomAmount(it)
+            },
+            onCustomAmountFocusChanged = {
+              viewModel.setCustomAmountFocused(it)
+            }
+          )
+        )
+      }
 
       space(DimensionUnit.DP.toPixels(16f).toInt())
 
@@ -267,5 +287,6 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
 
   companion object {
     private val TAG = Log.tag(BoostFragment::class.java)
+    private const val FETCH_BOOST_TOKEN_REQUEST_CODE = 2000
   }
 }

@@ -83,6 +83,7 @@ import org.thoughtcrime.securesms.MainNavigator;
 import org.thoughtcrime.securesms.MuteDialog;
 import org.thoughtcrime.securesms.NewConversationActivity;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.badges.BadgeImageView;
 import org.thoughtcrime.securesms.badges.models.Badge;
 import org.thoughtcrime.securesms.badges.self.expired.ExpiredBadgeBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.components.RatingManager;
@@ -156,6 +157,7 @@ import org.thoughtcrime.securesms.util.views.Stub;
 import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.websocket.WebSocketConnectionState;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -213,6 +215,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private SignalBottomActionBar             bottomActionBar;
 
   protected ConversationListArchiveItemDecoration archiveDecoration;
+  protected ConversationListItemAnimator          itemAnimator;
   private   Stopwatch                             startupStopwatch;
 
   public static ConversationListFragment newInstance() {
@@ -271,9 +274,10 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     cameraFab.show();
 
     archiveDecoration = new ConversationListArchiveItemDecoration(new ColorDrawable(getResources().getColor(R.color.conversation_list_archive_background_end)));
+    itemAnimator      = new ConversationListItemAnimator();
 
     list.setLayoutManager(new LinearLayoutManager(requireActivity()));
-    list.setItemAnimator(new ConversationListItemAnimator());
+    list.setItemAnimator(itemAnimator);
     list.addOnScrollListener(new ScrollListener());
     list.addItemDecoration(archiveDecoration);
 
@@ -517,6 +521,9 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   private void initializeProfileIcon(@NonNull Recipient recipient) {
     ImageView icon = requireView().findViewById(R.id.toolbar_icon);
+
+    BadgeImageView imageView = requireView().findViewById(R.id.toolbar_badge);
+    imageView.setBadgeFromRecipient(recipient);
 
     AvatarUtil.loadIconIntoImageView(recipient, icon, getResources().getDimensionPixelSize(R.dimen.toolbar_avatar_size));
     icon.setOnClickListener(v -> getNavigator().goToAppSettings());
@@ -1271,6 +1278,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   @SuppressLint("StaticFieldLeak")
   protected void onItemSwiped(long threadId, int unreadCount) {
     archiveDecoration.onArchiveStarted();
+    itemAnimator.enable();
 
     new SnackbarAsyncTask<Long>(getViewLifecycleOwner().getLifecycle(),
                                 requireView(),
@@ -1310,7 +1318,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           ApplicationDependencies.getMessageNotifier().updateNotification(context);
         }
       }
-    }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, threadId);
+    }.executeOnExecutor(SignalExecutors.BOUNDED, threadId);
   }
 
   private class PaymentNotificationListener implements UnreadPaymentsView.Listener {
@@ -1353,14 +1361,18 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   private class ArchiveListenerCallback extends ItemTouchHelper.SimpleCallback {
 
+    private static final long SWIPE_ANIMATION_DURATION = 175;
+
     private static final float MIN_ICON_SCALE = 0.85f;
-    private static final float MAX_ICON_SCALE = 1.25f;
+    private static final float MAX_ICON_SCALE = 1f;
 
     private final int archiveColorStart;
     private final int archiveColorEnd;
 
+    private WeakReference<RecyclerView.ViewHolder> lastTouched;
+
     ArchiveListenerCallback(@ColorInt int archiveColorStart, @ColorInt int archiveColorEnd) {
-      super(0, ItemTouchHelper.RIGHT);
+      super(0, ItemTouchHelper.END);
       this.archiveColorStart = archiveColorStart;
       this.archiveColorEnd   = archiveColorEnd;
     }
@@ -1384,13 +1396,33 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         return 0;
       }
 
+      lastTouched = new WeakReference<>(viewHolder);
+
       return super.getSwipeDirs(recyclerView, viewHolder);
     }
 
-    @SuppressLint("StaticFieldLeak")
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-      if (viewHolder.itemView instanceof ConversationListItemInboxZero) return;
+      if (lastTouched != null) {
+        Log.w(TAG, "Falling back to slower onSwiped() event.");
+        onTrueSwipe(viewHolder);
+        lastTouched = null;
+      }
+    }
+
+    @Override
+    public long getAnimationDuration(@NonNull RecyclerView recyclerView, int animationType, float animateDx, float animateDy) {
+      if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_SUCCESS && lastTouched != null && lastTouched.get() != null) {
+        onTrueSwipe(lastTouched.get());
+        lastTouched = null;
+      } else if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL) {
+        lastTouched = null;
+      }
+
+      return SWIPE_ANIMATION_DURATION;
+    }
+
+    private void onTrueSwipe(RecyclerView.ViewHolder viewHolder) {
       final long threadId    = ((ConversationListItem)viewHolder.itemView).getThreadId();
       final int  unreadCount = ((ConversationListItem)viewHolder.itemView).getUnreadCount();
 
@@ -1404,24 +1436,26 @@ public class ConversationListFragment extends MainFragment implements ActionMode
                             boolean isCurrentlyActive)
     {
       if (viewHolder.itemView instanceof ConversationListItemInboxZero) return;
+      float absoluteDx = Math.abs(dX);
+
       if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
         Resources resources       = getResources();
         View      itemView        = viewHolder.itemView;
-        float     percentDx       = Math.abs(dX) / viewHolder.itemView.getWidth();
+        float     percentDx       = absoluteDx / viewHolder.itemView.getWidth();
         int       color           = ArgbEvaluatorCompat.getInstance().evaluate(Math.min(1f, percentDx * (1 / 0.25f)), archiveColorStart, archiveColorEnd);
         float     scaleStartPoint = DimensionUnit.DP.toPixels(48f);
         float     scaleEndPoint   = DimensionUnit.DP.toPixels(96f);
 
         float scale;
-        if (dX < scaleStartPoint) {
+        if (absoluteDx < scaleStartPoint) {
           scale = MIN_ICON_SCALE;
-        } else if (dX > scaleEndPoint) {
+        } else if (absoluteDx > scaleEndPoint) {
           scale = MAX_ICON_SCALE;
         } else {
-          scale = Math.min(MAX_ICON_SCALE, MIN_ICON_SCALE + ((dX - scaleStartPoint) / (scaleEndPoint - scaleStartPoint)) * (MAX_ICON_SCALE - MIN_ICON_SCALE));
+          scale = Math.min(MAX_ICON_SCALE, MIN_ICON_SCALE + ((absoluteDx - scaleStartPoint) / (scaleEndPoint - scaleStartPoint)) * (MAX_ICON_SCALE - MIN_ICON_SCALE));
         }
 
-        if (dX > 0) {
+        if (absoluteDx > 0) {
           if (archiveDrawable == null) {
             archiveDrawable = Objects.requireNonNull(AppCompatResources.getDrawable(requireContext(), getArchiveIconRes()));
             archiveDrawable.setColorFilter(new SimpleColorFilter(Color.WHITE));
@@ -1436,8 +1470,13 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           float gutter = resources.getDimension(R.dimen.dsl_settings_gutter);
           float extra  = resources.getDimension(R.dimen.conversation_list_fragment_archive_padding);
 
-          canvas.translate(itemView.getLeft() + gutter + extra,
-                           itemView.getTop() + (itemView.getBottom() - itemView.getTop() - archiveDrawable.getIntrinsicHeight()) / 2f);
+          if (ViewUtil.isLtr(requireContext())) {
+            canvas.translate(itemView.getLeft() + gutter + extra,
+                             itemView.getTop() + (itemView.getBottom() - itemView.getTop() - archiveDrawable.getIntrinsicHeight()) / 2f);
+          } else {
+            canvas.translate(itemView.getRight() - gutter - extra,
+                             itemView.getTop() + (itemView.getBottom() - itemView.getTop() - archiveDrawable.getIntrinsicHeight()) / 2f);
+          }
 
           canvas.scale(scale, scale, archiveDrawable.getIntrinsicWidth() / 2f, archiveDrawable.getIntrinsicHeight() / 2f);
 
@@ -1445,7 +1484,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           canvas.restore();
 
           ViewCompat.setElevation(viewHolder.itemView, DimensionUnit.DP.toPixels(4f));
-        } else if (dX == 0) {
+        } else if (absoluteDx == 0) {
           ViewCompat.setElevation(viewHolder.itemView, DimensionUnit.DP.toPixels(0f));
         }
 
@@ -1459,6 +1498,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
       super.clearView(recyclerView, viewHolder);
       ViewCompat.setElevation(viewHolder.itemView, 0);
+      lastTouched = null;
+      itemAnimator.postDisable(requireView().getHandler());
     }
   }
 

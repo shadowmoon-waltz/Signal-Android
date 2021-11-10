@@ -21,10 +21,15 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationEvent
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationExceptions
+import org.thoughtcrime.securesms.components.settings.app.subscription.DonationPaymentComponent
+import org.thoughtcrime.securesms.components.settings.app.subscription.SubscriptionsRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.CurrencySelection
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.GooglePayButton
 import org.thoughtcrime.securesms.components.settings.configure
+import org.thoughtcrime.securesms.components.settings.models.Progress
+import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 //import org.thoughtcrime.securesms.help.HelpFragment
+import org.thoughtcrime.securesms.keyboard.findListener
 import org.thoughtcrime.securesms.payments.FiatMoneyUtil
 import org.thoughtcrime.securesms.subscription.Subscription
 import org.thoughtcrime.securesms.util.CommunicationActions
@@ -40,8 +45,6 @@ class SubscribeFragment : DSLSettingsFragment(
   layoutId = R.layout.subscribe_fragment
 ) {
 
-  private val viewModel: SubscribeViewModel by viewModels(ownerProducer = { requireActivity() })
-
   private val lifecycleDisposable = LifecycleDisposable()
 
   private val supportTechSummary: CharSequence by lazy {
@@ -55,6 +58,13 @@ class SubscribeFragment : DSLSettingsFragment(
   }
 
   private lateinit var processingDonationPaymentDialog: AlertDialog
+  private lateinit var donationPaymentComponent: DonationPaymentComponent
+
+  private val viewModel: SubscribeViewModel by viewModels(
+    factoryProducer = {
+      SubscribeViewModel.Factory(SubscriptionsRepository(ApplicationDependencies.getDonationsService()), donationPaymentComponent.donationPaymentRepository, FETCH_SUBSCRIPTION_TOKEN_REQUEST_CODE)
+    }
+  )
 
   override fun onResume() {
     super.onResume()
@@ -62,12 +72,14 @@ class SubscribeFragment : DSLSettingsFragment(
   }
 
   override fun bindAdapter(adapter: DSLSettingsAdapter) {
+    donationPaymentComponent = findListener()!!
     viewModel.refresh()
 
     BadgePreview.register(adapter)
     CurrencySelection.register(adapter)
     Subscription.register(adapter)
     GooglePayButton.register(adapter)
+    Progress.register(adapter)
 
     processingDonationPaymentDialog = MaterialAlertDialogBuilder(requireContext())
       .setView(R.layout.processing_payment_dialog)
@@ -89,6 +101,9 @@ class SubscribeFragment : DSLSettingsFragment(
         DonationEvent.SubscriptionCancelled -> onSubscriptionCancelled()
         is DonationEvent.SubscriptionCancellationFailed -> onSubscriptionFailedToCancel(it.throwable)
       }
+    }
+    lifecycleDisposable += donationPaymentComponent.googlePayResultPublisher.subscribe {
+      viewModel.onActivityResult(it.requestCode, it.resultCode, it.data)
     }
   }
 
@@ -132,20 +147,28 @@ class SubscribeFragment : DSLSettingsFragment(
 
       space(DimensionUnit.DP.toPixels(4f).toInt())
 
-      state.subscriptions.forEach {
-        val isActive = state.activeSubscription?.activeSubscription?.level == it.level
+      if (state.stage == SubscribeState.Stage.INIT) {
         customPref(
-          Subscription.Model(
-            subscription = it,
-            isSelected = state.selectedSubscription == it,
-            isEnabled = areFieldsEnabled,
-            isActive = isActive,
-            willRenew = isActive && state.activeSubscription?.activeSubscription?.willCancelAtPeriodEnd() ?: false,
-            onClick = { viewModel.setSelectedSubscription(it) },
-            renewalTimestamp = TimeUnit.SECONDS.toMillis(state.activeSubscription?.activeSubscription?.endOfCurrentPeriod ?: 0L),
-            selectedCurrency = state.currencySelection
+          Progress.Model(
+            title = DSLSettingsText.from(R.string.load_more_header__loading)
           )
         )
+      } else {
+        state.subscriptions.forEach {
+          val isActive = state.activeSubscription?.activeSubscription?.level == it.level
+          customPref(
+            Subscription.Model(
+              subscription = it,
+              isSelected = state.selectedSubscription == it,
+              isEnabled = areFieldsEnabled,
+              isActive = isActive,
+              willRenew = isActive && state.activeSubscription?.activeSubscription?.willCancelAtPeriodEnd() ?: false,
+              onClick = { viewModel.setSelectedSubscription(it) },
+              renewalTimestamp = TimeUnit.SECONDS.toMillis(state.activeSubscription?.activeSubscription?.endOfCurrentPeriod ?: 0L),
+              selectedCurrency = state.currencySelection
+            )
+          )
+        }
       }
 
       if (state.activeSubscription?.isActive == true) {
@@ -292,5 +315,6 @@ class SubscribeFragment : DSLSettingsFragment(
 
   companion object {
     private val TAG = Log.tag(SubscribeFragment::class.java)
+    private const val FETCH_SUBSCRIPTION_TOKEN_REQUEST_CODE = 1000
   }
 }
