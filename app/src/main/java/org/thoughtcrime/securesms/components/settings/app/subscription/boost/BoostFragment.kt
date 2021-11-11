@@ -27,6 +27,7 @@ import org.thoughtcrime.securesms.components.settings.app.subscription.DonationE
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationPaymentComponent
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.CurrencySelection
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.GooglePayButton
+import org.thoughtcrime.securesms.components.settings.app.subscription.models.NetworkFailure
 import org.thoughtcrime.securesms.components.settings.configure
 import org.thoughtcrime.securesms.components.settings.models.Progress
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
@@ -82,6 +83,7 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
     Boost.register(adapter)
     GooglePayButton.register(adapter)
     Progress.register(adapter)
+    NetworkFailure.register(adapter)
 
     processingDonationPaymentDialog = MaterialAlertDialogBuilder(requireContext())
       .setView(R.layout.processing_payment_dialog)
@@ -125,6 +127,9 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
         is DonationEvent.SubscriptionCancellationFailed -> Unit
       }
     }
+    lifecycleDisposable += donationPaymentComponent.googlePayResultPublisher.subscribe {
+      viewModel.onActivityResult(it.requestCode, it.resultCode, it.data)
+    }
   }
 
   private fun getConfiguration(state: BoostState): DSLConfiguration {
@@ -163,11 +168,17 @@ class BoostFragment : DSLSettingsBottomSheetFragment(
         )
       )
 
+      @Suppress("CascadeIf")
       if (state.stage == BoostState.Stage.INIT) {
         customPref(
-          Progress.Model(
-            title = DSLSettingsText.from(R.string.load_more_header__loading)
-          )
+          Boost.LoadingModel()
+        )
+      } else if (state.stage == BoostState.Stage.FAILURE) {
+        space(DimensionUnit.DP.toPixels(20f).toInt())
+        customPref(
+          NetworkFailure.Model {
+            viewModel.retry()
+          }
         )
       } else {
         customPref(

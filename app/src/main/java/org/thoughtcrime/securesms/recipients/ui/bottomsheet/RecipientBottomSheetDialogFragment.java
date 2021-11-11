@@ -155,7 +155,11 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
         }
       });
       avatar.setAvatar(recipient);
-      badgeImageView.setBadgeFromRecipient(recipient);
+
+      if (!recipient.isSelf()) {
+        badgeImageView.setBadgeFromRecipient(recipient);
+      }
+
       if (recipient.isSelf()) {
         avatar.setOnClickListener(v -> {
           dismiss();
