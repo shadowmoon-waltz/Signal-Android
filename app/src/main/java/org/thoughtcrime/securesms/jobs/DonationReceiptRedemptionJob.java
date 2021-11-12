@@ -8,6 +8,8 @@ import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.jobmanager.Data;
 import org.thoughtcrime.securesms.jobmanager.Job;
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint;
+import org.thoughtcrime.securesms.subscription.SubscriptionNotification;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.whispersystems.signalservice.internal.EmptyResponse;
 import org.whispersystems.signalservice.internal.ServiceResponse;
 
@@ -63,6 +65,7 @@ public class DonationReceiptRedemptionJob extends BaseJob {
 
   @Override
   public void onFailure() {
+    SubscriptionNotification.RedemptionFailed.INSTANCE.show(context);
   }
 
   @Override
@@ -70,8 +73,8 @@ public class DonationReceiptRedemptionJob extends BaseJob {
     Data inputData = getInputData();
 
     if (inputData == null) {
-      Log.w(TAG, "No input data. Failing.", null, true);
-      throw new IllegalStateException("Expected a presentation object in input data.");
+      Log.w(TAG, "No input data. Exiting.", null, true);
+      return;
     }
 
     byte[] presentationBytes = inputData.getStringAsBlob(INPUT_RECEIPT_CREDENTIAL_PRESENTATION);
@@ -83,7 +86,9 @@ public class DonationReceiptRedemptionJob extends BaseJob {
     ReceiptCredentialPresentation presentation = new ReceiptCredentialPresentation(presentationBytes);
 
     ServiceResponse<EmptyResponse> response = ApplicationDependencies.getDonationsService()
-                                                                     .redeemReceipt(presentation, false, false)
+                                                                     .redeemReceipt(presentation,
+                                                                                    SignalStore.donationsValues().getDisplayBadgesOnProfile(),
+                                                                                    false)
                                                                      .blockingGet();
 
     if (response.getApplicationError().isPresent()) {
