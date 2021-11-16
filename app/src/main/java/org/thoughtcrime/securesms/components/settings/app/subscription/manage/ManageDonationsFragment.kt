@@ -13,12 +13,12 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
 import org.thoughtcrime.securesms.components.settings.DSLSettingsFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsIcon
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
+//import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.SubscriptionsRepository
 import org.thoughtcrime.securesms.components.settings.configure
 import org.thoughtcrime.securesms.components.settings.models.IndeterminateLoadingCircle
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
-import org.thoughtcrime.securesms.help.HelpFragment
+//import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.subscription.Subscription
 import org.thoughtcrime.securesms.util.LifecycleDisposable
 import java.util.concurrent.TimeUnit
@@ -118,10 +118,10 @@ class ManageDonationsFragment : DSLSettingsFragment() {
                 },
                 renewalTimestamp = TimeUnit.SECONDS.toMillis(activeSubscription.activeSubscription.endOfCurrentPeriod),
                 redemptionState = state.subscriptionRedemptionState,
-                onContactSupport = {
-                  requireActivity().finish()
-                  requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
-                }
+                //onContactSupport = {
+                //  requireActivity().finish()
+                //  requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
+                //}
               )
             )
 

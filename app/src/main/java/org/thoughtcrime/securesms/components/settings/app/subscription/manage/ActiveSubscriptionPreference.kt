@@ -5,7 +5,7 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+//import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.badges.BadgeImageView
@@ -16,7 +16,7 @@ import org.thoughtcrime.securesms.subscription.Subscription
 import org.thoughtcrime.securesms.util.DateUtils
 import org.thoughtcrime.securesms.util.MappingAdapter
 import org.thoughtcrime.securesms.util.MappingViewHolder
-import org.thoughtcrime.securesms.util.SpanUtil
+//import org.thoughtcrime.securesms.util.SpanUtil
 import org.thoughtcrime.securesms.util.visible
 import java.util.Locale
 
@@ -30,8 +30,8 @@ object ActiveSubscriptionPreference {
     val subscription: Subscription,
     val onAddBoostClick: () -> Unit,
     val renewalTimestamp: Long = -1L,
-    val redemptionState: ManageDonationsState.SubscriptionRedemptionState,
-    val onContactSupport: () -> Unit
+    val redemptionState: ManageDonationsState.SubscriptionRedemptionState //,
+    //val onContactSupport: () -> Unit
   ) : PreferenceModel<Model>() {
     override fun areItemsTheSame(newItem: Model): Boolean {
       return subscription.id == newItem.subscription.id
@@ -99,13 +99,13 @@ object ActiveSubscriptionPreference {
 
     private fun presentFailureState(model: Model) {
       expiry.text = SpannableStringBuilder(context.getString(R.string.MySupportPreference__couldnt_add_badge))
-        .append(" ")
-        .append(
-          SpanUtil.clickable(
-            context.getString(R.string.MySupportPreference__please_contact_support),
-            ContextCompat.getColor(context, R.color.signal_accent_primary)
-          ) { model.onContactSupport() }
-        )
+        //.append(" ")
+        //.append(
+        //  SpanUtil.clickable(
+        //    context.getString(R.string.MySupportPreference__please_contact_support),
+        //    ContextCompat.getColor(context, R.color.signal_accent_primary)
+        //  ) { model.onContactSupport() }
+        //)
       badge.alpha = 0.2f
       progress.visible = false
     }
