@@ -82,7 +82,7 @@ internal class AccountValues internal constructor(store: KeyValueStore) : Signal
   /** Indicates whether the user has the ability to receive FCM messages. Largely coupled to whether they have Play Service. */
   var fcmEnabled: Boolean
     @JvmName("isFcmEnabled")
-    get() = getBoolean(KEY_FCM_ENABLED, false)
+    get() = getBoolean(KEY_FCM_ENABLED, false) && !SignalStore.settings().isForceWebsocketMode()
     set(value) = putBoolean(KEY_FCM_ENABLED, value)
 
   /** The FCM token, which allows the server to send us FCM messages. */
