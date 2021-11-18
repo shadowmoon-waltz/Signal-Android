@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +20,6 @@ import org.thoughtcrime.securesms.badges.BadgeImageView;
 import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
 import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.util.FeatureFlags;
-import org.thoughtcrime.securesms.util.LifecycleRecyclerAdapter;
-import org.thoughtcrime.securesms.util.LifecycleViewHolder;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 
@@ -29,7 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberListAdapter.ViewHolder> {
+final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListAdapter.ViewHolder> {
 
   private static final int FULL_MEMBER                = 0;
   private static final int OWN_INVITE_PENDING         = 1;
@@ -42,14 +41,16 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
   private final SelectionChangeListener selectionChangeListener = new SelectionChangeListener();
 
   private final boolean                 selectable;
+  private final LifecycleOwner          lifecycleOwner;
 
   @Nullable private AdminActionsListener             adminActionsListener;
   @Nullable private RecipientClickListener           recipientClickListener;
   @Nullable private RecipientLongClickListener       recipientLongClickListener;
   @Nullable private RecipientSelectionChangeListener recipientSelectionChangeListener;
 
-  GroupMemberListAdapter(boolean selectable) {
-    this.selectable = selectable;
+  GroupMemberListAdapter(boolean selectable, @NonNull LifecycleOwner lifecycleOwner) {
+    this.selectable     = selectable;
+    this.lifecycleOwner = lifecycleOwner;
   }
 
   void updateData(@NonNull List<? extends GroupMemberEntry> recipients) {
@@ -80,6 +81,12 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
   }
 
   @Override
+  public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+    super.onViewDetachedFromWindow(holder);
+    holder.unbind();
+  }
+
+  @Override
   public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     switch (viewType) {
       case FULL_MEMBER:
@@ -89,7 +96,8 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                                         recipientLongClickListener,
                                         adminActionsListener,
                                         selectionChangeListener,
-                                        selectable);
+                                        selectable,
+                                        lifecycleOwner);
       case OWN_INVITE_PENDING:
         return new OwnInvitePendingMemberViewHolder(LayoutInflater.from(parent.getContext())
                                                                   .inflate(R.layout.group_recipient_list_item, parent, false),
@@ -97,20 +105,23 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                                                     recipientLongClickListener,
                                                     adminActionsListener,
                                                     selectionChangeListener,
-                                                    selectable);
+                                                    selectable,
+                                                    lifecycleOwner);
       case OTHER_INVITE_PENDING_COUNT:
         return new UnknownPendingMemberCountViewHolder(LayoutInflater.from(parent.getContext())
                                                                      .inflate(R.layout.group_recipient_list_item, parent, false),
                                                        adminActionsListener,
                                                        selectionChangeListener,
-                                                       selectable);
+                                                       selectable,
+                                                       lifecycleOwner);
       case NEW_GROUP_CANDIDATE:
         return new NewGroupInviteeViewHolder(LayoutInflater.from(parent.getContext())
                                                            .inflate(R.layout.group_new_candidate_recipient_list_item, parent, false),
                                              recipientClickListener,
                                              recipientLongClickListener,
                                              selectionChangeListener,
-                                             selectable);
+                                             selectable,
+                                             lifecycleOwner);
       case REQUESTING_MEMBER:
         return new RequestingMemberViewHolder(LayoutInflater.from(parent.getContext())
                                                            .inflate(R.layout.group_recipient_requesting_list_item, parent, false),
@@ -118,7 +129,8 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                                               recipientLongClickListener,
                                               adminActionsListener,
                                               selectionChangeListener,
-                                              selectable);
+                                              selectable,
+                                              lifecycleOwner);
 
       default:
         throw new AssertionError();
@@ -171,7 +183,7 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
     return data.size();
   }
 
-  static abstract class ViewHolder extends LifecycleViewHolder {
+  static abstract class ViewHolder extends RecyclerView.ViewHolder {
 
               final Context                    context;
               final AvatarImageView            avatar;
@@ -188,13 +200,19 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
     @Nullable final AdminActionsListener       adminActionsListener;
     @Nullable final RecipientLongClickListener recipientLongClickListener;
               final boolean                    selectable;
+              final LifecycleOwner             lifecycleOwner;
+              final Observer<Boolean>          busyObserver;
+
+    Runnable startListeningToBusyChanges;
+    Runnable stopListeningToBusyChanges;
 
     ViewHolder(@NonNull View itemView,
                @Nullable RecipientClickListener recipientClickListener,
                @Nullable RecipientLongClickListener recipientLongClickListener,
                @Nullable AdminActionsListener adminActionsListener,
                @NonNull SelectionChangeListener selectionChangeListener,
-               boolean selectable)
+               boolean selectable,
+               @NonNull LifecycleOwner lifecycleOwner)
     {
       super(itemView);
 
@@ -213,6 +231,19 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
       this.adminActionsListener       = adminActionsListener;
       this.selectionChangeListener    = selectionChangeListener;
       this.selectable                 = selectable;
+      this.lifecycleOwner             = lifecycleOwner;
+      this.busyObserver               = this::onBusyChanged;
+    }
+
+    private void onBusyChanged(boolean busy) {
+      busyProgress.setVisibility(busy ? View.VISIBLE : View.GONE);
+      popupMenu.setVisibility(busy ? View.GONE : View.VISIBLE);
+    }
+
+    void unbind() {
+      if (stopListeningToBusyChanges != null) {
+        stopListeningToBusyChanges.run();
+      }
     }
 
     void bindRecipient(@NonNull Recipient recipient) {
@@ -277,10 +308,8 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
 
       itemView.setOnClickListener(null);
 
-      memberEntry.getBusy().observe(this, busy -> {
-        busyProgress.setVisibility(busy ? View.VISIBLE : View.GONE);
-        popupMenu.setVisibility(busy ? View.GONE : View.VISIBLE);
-      });
+      memberEntry.getBusy().observe(lifecycleOwner, busyObserver);
+      stopListeningToBusyChanges = () -> memberEntry.getBusy().removeObserver(busyObserver);
 
       selected.setChecked(isSelected);
       if (!selectable && !isSelected) {
@@ -308,9 +337,10 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                          @Nullable RecipientLongClickListener recipientLongClickListener,
                          @Nullable AdminActionsListener adminActionsListener,
                          @NonNull SelectionChangeListener selectionChangeListener,
-                         boolean selectable)
+                         boolean selectable,
+                         @NonNull LifecycleOwner lifecycleOwner)
     {
-      super(itemView, recipientClickListener, recipientLongClickListener, adminActionsListener, selectionChangeListener, selectable);
+      super(itemView, recipientClickListener, recipientLongClickListener, adminActionsListener, selectionChangeListener, selectable, lifecycleOwner);
     }
 
     @Override
@@ -335,9 +365,10 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                               @Nullable RecipientClickListener recipientClickListener,
                               @Nullable RecipientLongClickListener recipientLongClickListener,
                               @NonNull SelectionChangeListener selectionChangeListener,
-                              boolean selectable)
+                              boolean selectable,
+                              @NonNull LifecycleOwner lifecycleOwner)
     {
-      super(itemView, recipientClickListener, recipientLongClickListener, null, selectionChangeListener, selectable);
+      super(itemView, recipientClickListener, recipientLongClickListener, null, selectionChangeListener, selectable, lifecycleOwner);
 
       smsContact = itemView.findViewById(R.id.sms_contact);
       smsWarning = itemView.findViewById(R.id.sms_warning);
@@ -364,9 +395,10 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                                      @Nullable RecipientLongClickListener recipientLongClickListener,
                                      @Nullable AdminActionsListener adminActionsListener,
                                      @NonNull SelectionChangeListener selectionChangeListener,
-                                     boolean selectable)
+                                     boolean selectable,
+                                     @NonNull LifecycleOwner lifecycleOwner)
     {
-      super(itemView, recipientClickListener, recipientLongClickListener, adminActionsListener, selectionChangeListener, selectable);
+      super(itemView, recipientClickListener, recipientLongClickListener, adminActionsListener, selectionChangeListener, selectable, lifecycleOwner);
     }
 
     @Override
@@ -397,9 +429,10 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
     UnknownPendingMemberCountViewHolder(@NonNull View itemView,
                                         @Nullable AdminActionsListener adminActionsListener,
                                         @NonNull SelectionChangeListener selectionChangeListener,
-                                        boolean selectable)
+                                        boolean selectable,
+                                        @NonNull LifecycleOwner lifecycleOwner)
     {
-      super(itemView, null, null, adminActionsListener, selectionChangeListener, selectable);
+      super(itemView, null, null, adminActionsListener, selectionChangeListener, selectable, lifecycleOwner);
     }
 
     @Override
@@ -447,9 +480,10 @@ final class GroupMemberListAdapter extends LifecycleRecyclerAdapter<GroupMemberL
                                @Nullable RecipientLongClickListener recipientLongClickListener,
                                @Nullable AdminActionsListener adminActionsListener,
                                @NonNull SelectionChangeListener selectionChangeListener,
-                               boolean selectable)
+                               boolean selectable,
+                               @NonNull LifecycleOwner lifecycleOwner)
     {
-      super(itemView, recipientClickListener, recipientLongClickListener, adminActionsListener, selectionChangeListener, selectable);
+      super(itemView, recipientClickListener, recipientLongClickListener, adminActionsListener, selectionChangeListener, selectable, lifecycleOwner);
 
       approveRequest = itemView.findViewById(R.id.request_approve);
       denyRequest    = itemView.findViewById(R.id.request_deny);

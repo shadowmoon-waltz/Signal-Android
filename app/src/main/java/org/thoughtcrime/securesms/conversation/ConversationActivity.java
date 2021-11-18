@@ -167,6 +167,7 @@ import org.thoughtcrime.securesms.database.ThreadDatabase;
 import org.thoughtcrime.securesms.database.identity.IdentityRecordList;
 import org.thoughtcrime.securesms.database.model.IdentityRecord;
 import org.thoughtcrime.securesms.database.model.Mention;
+import org.thoughtcrime.securesms.database.model.MessageId;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.database.model.MmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.ReactionRecord;
@@ -1874,7 +1875,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
     } else if (ServiceOutageReminder.isEligible(this)) {
       ApplicationDependencies.getJobManager().add(new ServiceOutageDetectionJob());
       reminderView.get().showReminder(new ServiceOutageReminder(this));
-    } else if (TextSecurePreferences.isPushRegistered(this)      &&
+    } else if (SignalStore.account().isRegistered()              &&
                TextSecurePreferences.isShowInviteReminders(this) &&
                !isSecureText                                     &&
                inviteReminder.isPresent()                        &&
@@ -2383,9 +2384,9 @@ public class ConversationActivity extends PassphraseRequiredActivity
                                        .orElse(null);
 
       if (oldRecord != null && oldRecord.getEmoji().equals(emoji)) {
-        MessageSender.sendReactionRemoval(context, messageRecord.getId(), messageRecord.isMms(), oldRecord);
+        MessageSender.sendReactionRemoval(context, new MessageId(messageRecord.getId(), messageRecord.isMms()), oldRecord);
       } else {
-        MessageSender.sendNewReaction(context, messageRecord.getId(), messageRecord.isMms(), emoji);
+        MessageSender.sendNewReaction(context, new MessageId(messageRecord.getId(), messageRecord.isMms()), emoji);
       }
     });
   }
@@ -2403,8 +2404,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
       reactionDelegate.hide();
 
       SignalExecutors.BOUNDED.execute(() -> MessageSender.sendReactionRemoval(context,
-                                                                              messageRecord.getId(),
-                                                                              messageRecord.isMms(),
+                                                                              new MessageId(messageRecord.getId(), messageRecord.isMms()),
                                                                               oldRecord));
     } else {
       reactionDelegate.hideForReactWithAny();
@@ -2756,14 +2756,6 @@ public class ConversationActivity extends PassphraseRequiredActivity
 
     Optional<GroupRecord> record = DatabaseFactory.getGroupDatabase(this).getGroup(getRecipient().getId());
     return record.isPresent() && record.get().isActive();
-  }
-
-  @SuppressWarnings("SimplifiableIfStatement")
-  private boolean isSelfConversation() {
-    if (!TextSecurePreferences.isPushRegistered(this)) return false;
-    if (recipient.get().isGroup())                     return false;
-
-    return recipient.get().isSelf();
   }
 
   private boolean isGroupConversation() {
