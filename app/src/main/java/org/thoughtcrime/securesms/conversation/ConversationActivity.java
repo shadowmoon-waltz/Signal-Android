@@ -1316,7 +1316,7 @@ public class ConversationActivity extends PassphraseRequiredActivity
     new AlertDialog.Builder(this)
       .setTitle(R.string.ConversationActivity_delete_conversation)
       .setPositiveButton(R.string.yes, (d, i) -> {
-        DatabaseFactory.getThreadDatabase(this).deleteConversation(threadId);
+        SignalDatabase.threads().deleteConversation(threadId);
         ApplicationDependencies.getMessageNotifier().updateNotification(this);
         finish();
         d.dismiss();

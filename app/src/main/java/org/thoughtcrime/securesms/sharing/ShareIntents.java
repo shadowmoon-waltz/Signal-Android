@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.thoughtcrime.securesms.database.DatabaseFactory;
+import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.mediasend.Media;
 import org.thoughtcrime.securesms.mms.Slide;
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -133,7 +133,7 @@ public final class ShareIntents {
       if (noteToSelf) {
         final Recipient recipient = Recipient.self();
         intent.putExtra(ShareActivity.EXTRA_RECIPIENT_ID, Long.toString(recipient.getId().toLong()));
-        intent.putExtra(ShareActivity.EXTRA_THREAD_ID, DatabaseFactory.getThreadDatabase(context).getThreadIdIfExistsFor(recipient.getId()));
+        intent.putExtra(ShareActivity.EXTRA_THREAD_ID, SignalDatabase.threads().getThreadIdIfExistsFor(recipient.getId()));
         intent.putExtra(ShareActivity.EXTRA_DISTRIBUTION_TYPE, 0);
       }
 

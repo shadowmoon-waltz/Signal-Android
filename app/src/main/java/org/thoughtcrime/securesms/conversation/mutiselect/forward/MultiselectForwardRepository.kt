@@ -108,7 +108,7 @@ class MultiselectForwardRepository(context: Context) {
     @JvmStatic
     fun sendNoteToSelf(activity: Activity, args: MultiselectForwardFragmentArgs) {
       val recipient = Recipient.self()
-      DatabaseFactory.getThreadDatabase(activity).getOrCreateThreadIdFor(recipient)
+      SignalDatabase.threads.getOrCreateThreadIdFor(recipient)
       MultiselectForwardRepository(activity).send(
         "",
         args.multiShareArgs,
