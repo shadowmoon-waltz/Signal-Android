@@ -240,8 +240,4 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   interface OnSwipeListener {
     void onSwipe(ConversationMessage conversationMessage, ConversationItem conversationItem, MotionEvent motionEvent);
   }
-
-  public interface OnViewHolderTranslated {
-    void onViewHolderTranslated(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder);
-  }
 }

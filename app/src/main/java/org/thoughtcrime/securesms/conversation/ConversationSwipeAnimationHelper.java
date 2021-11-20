@@ -39,13 +39,15 @@ final class ConversationSwipeAnimationHelper {
     if (!swipeToLeft) {
       updateReplyIconTransition(conversationItem.reply, dx, progress, sign);
       updateContactPhotoHolderTransition(conversationItem.contactPhotoHolder, progress, sign);
-      
+      updateContactPhotoHolderTransition(conversationItem.badgeImageView, progress, sign);
+
       updateReplyIconTransition(conversationItem.swipeToLeft, 0.0f, 0.0f, sign);
     } else {
       updateReplyIconTransition(conversationItem.swipeToLeft, dx, progress, sign);
       
       updateReplyIconTransition(conversationItem.reply, 0.0f, 0.0f, sign);
       updateContactPhotoHolderTransition(conversationItem.contactPhotoHolder, 0.0f, sign);
+      updateContactPhotoHolderTransition(conversationItem.badgeImageView, 0.0f, sign);
     }
   }
 

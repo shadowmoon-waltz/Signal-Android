@@ -89,8 +89,8 @@ import org.thoughtcrime.securesms.conversation.colors.Colorizer;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectCollection;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart;
 import org.thoughtcrime.securesms.database.AttachmentDatabase;
-import org.thoughtcrime.securesms.database.DatabaseFactory;
 import org.thoughtcrime.securesms.database.MessageDatabase;
+import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.database.model.MediaMmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.database.model.MmsMessageRecord;
@@ -189,7 +189,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
             private   AvatarImageView            contactPhoto;
             private   AlertView                  alertView;
             protected ReactionsConversationView  reactionsView;
-            private   BadgeImageView             badgeImageView;
+            protected BadgeImageView             badgeImageView;
 
   private @NonNull  Set<MultiselectPart>                    batchSelected = new HashSet<>();
   private @NonNull  Outliner                                outliner      = new Outliner();
@@ -2147,8 +2147,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     if (message > -1) builder.setMessage(message);
 
     builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-      MessageDatabase db = messageRecord.isMms() ? DatabaseFactory.getMmsDatabase(context)
-                                                 : DatabaseFactory.getSmsDatabase(context);
+      MessageDatabase db = messageRecord.isMms() ? SignalDatabase.mms()
+                                                 : SignalDatabase.sms();
 
       db.markAsInsecure(messageRecord.getId());
       db.markAsOutbox(messageRecord.getId());
@@ -2166,9 +2166,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     builder.setNegativeButton(R.string.no, (dialogInterface, i) -> {
       if (messageRecord.isMms()) {
-        DatabaseFactory.getMmsDatabase(context).markAsSentFailed(messageRecord.getId());
+        SignalDatabase.mms().markAsSentFailed(messageRecord.getId());
       } else {
-        DatabaseFactory.getSmsDatabase(context).markAsSentFailed(messageRecord.getId());
+        SignalDatabase.sms().markAsSentFailed(messageRecord.getId());
       }
     });
     builder.show();
