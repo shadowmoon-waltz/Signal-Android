@@ -203,7 +203,6 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
               final LifecycleOwner             lifecycleOwner;
               final Observer<Boolean>          busyObserver;
 
-    Runnable startListeningToBusyChanges;
     Runnable stopListeningToBusyChanges;
 
     ViewHolder(@NonNull View itemView,
@@ -258,6 +257,7 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
 
       if (this.badge != null) {
         this.badge.setBadgeFromRecipient(recipient);
+        this.badge.setClickable(false);
       }
 
       if (this.about != null) {
