@@ -22,6 +22,7 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.util.InternetConnectionObserver
 import org.thoughtcrime.securesms.util.PlatformCurrencyUtil
 import org.thoughtcrime.securesms.util.livedata.Store
+import java.lang.NumberFormatException
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -176,13 +177,14 @@ class BoostViewModel(
 
     store.update { it.copy(stage = BoostState.Stage.TOKEN_REQUEST) }
 
-    boostToPurchase = if (snapshot.isCustomAmountFocused) {
+    val boost = if (snapshot.isCustomAmountFocused) {
       Boost(snapshot.customAmount)
     } else {
       snapshot.selectedBoost
     }
 
-    donationPaymentRepository.requestTokenFromGooglePay(snapshot.selectedBoost.price, label, fetchTokenRequestCode)
+    boostToPurchase = boost
+    donationPaymentRepository.requestTokenFromGooglePay(boost.price, label, fetchTokenRequestCode)
   }
 
   fun setSelectedBoost(boost: Boost) {
@@ -200,7 +202,12 @@ class BoostViewModel(
     } else {
       val decimalFormat = DecimalFormat.getInstance() as DecimalFormat
       decimalFormat.isParseBigDecimal = true
-      decimalFormat.parse(amount) as BigDecimal
+
+      try {
+        decimalFormat.parse(amount) as BigDecimal
+      } catch (e: NumberFormatException) {
+        BigDecimal.ZERO
+      }
     }
 
     store.update { it.copy(customAmount = FiatMoney(bigDecimalAmount, it.customAmount.currency)) }

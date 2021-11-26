@@ -74,10 +74,11 @@ class StripeApi(
       "payment_method" to paymentMethodId
     )
 
-    val email = paymentSource.email()
-    if (email != null) {
-      parameters["receipt_email"] = email
-    }
+    // TODO Donation receipts
+//    val email = paymentSource.email()
+//    if (email != null) {
+//      parameters["receipt_email"] = email
+//    }
 
     postForm("payment_intents/${paymentIntent.id}/confirm", parameters)
   }.subscribeOn(Schedulers.io())
@@ -101,10 +102,11 @@ class StripeApi(
       "type" to "card",
     )
 
-    val email = paymentSource.email()
-    if (email != null) {
-      parameters["billing_details[email]"] = email
-    }
+    // TODO Donation receipts
+//    val email = paymentSource.email()
+//    if (email != null) {
+//      parameters["billing_details[email]"] = email
+//    }
 
     return postForm("payment_methods", parameters)
   }
@@ -126,7 +128,19 @@ class StripeApi(
     if (response.isSuccessful) {
       return response
     } else {
-      throw IOException("postForm failure: ${response.code()}")
+      throw IOException("postForm failed with code: ${response.code()}. errorCode: ${parseErrorCode(response.body()?.string())}")
+    }
+  }
+
+  private fun parseErrorCode(body: String?): String? {
+    if (body == null) {
+      return "No body."
+    }
+
+    return try {
+      JSONObject(body).getJSONObject("error").getString("code")
+    } catch (e: Exception) {
+      "Unable to parse error code."
     }
   }
 
