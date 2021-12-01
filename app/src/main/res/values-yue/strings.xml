@@ -1266,8 +1266,8 @@
   <string name="RegistrationActivity_play_services_error">Play 服務錯誤</string>
   <string name="RegistrationActivity_google_play_services_is_updating_or_unavailable">Google Play 服務一係更新緊，一係暫時用唔到。請您再試下啦。</string>
   <string name="RegistrationActivity_terms_and_privacy">使用條款同私隱政策</string>
-  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends">Signal 需要存取您嘅聯絡人同埋多媒體檔案，先可以同好友聯繫、互傳訊息同埋進行安全通話</string>
-  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_in_order_to_connect_with_friends">Signal 需要存取您嘅聯絡人，先可以同好友聯繫、互傳訊息同埋進行安全通話</string>
+  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends">Signal 要攞聯絡人同埋多媒體檔案權限，等您可以同好友連繫同埋傳送訊息。您嘅聯絡人會用 Signal 嘅私密聯絡人探索嚟上載，即係話會經點對點加密，唔會畀 Signal 服務睇到。</string>
+  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_in_order_to_connect_with_friends">Signal 要攞聯絡人權限，等您可以同好友連繫。您嘅聯絡人會用 Signal 嘅私密聯絡人探索嚟上載，即係話會經點對點加密，唔會畀 Signal 服務睇到。</string>
   <string name="RegistrationActivity_rate_limited_to_service">呢個冧把試過註冊太多次喇。請您晏啲再試下啦。</string>
   <string name="RegistrationActivity_unable_to_connect_to_service">無法連線到服務。請檢查下網絡連線，然後再試下啦。</string>
   <string name="RegistrationActivity_non_standard_number_format">非標準冧把格式</string>
@@ -2319,6 +2319,7 @@
   <string name="Insights__title">覺察</string>
   <string name="InsightsDashboardFragment__title">覺察</string>
   <string name="InsightsDashboardFragment__signal_protocol_automatically_protected">Signal Protocol 喺過去 %2$d 日，已經自動保護咗 %1$d%% 由您發送出去嘅訊息。Signal 使用者之間嘅對話，就幾時都係端對端加密嘅。</string>
+  <string name="InsightsDashboardFragment__spread_the_word">沒更好的小心意</string>
   <string name="InsightsDashboardFragment__not_enough_data">資料唔夠</string>
   <string name="InsightsDashboardFragment__your_insights_percentage_is_calculated_based_on">您嘅「覺察」巴仙，係用過去 %1$d 日未有消失或刪除嘅送出訊息數量計算出嚟嘅。</string>
   <string name="InsightsDashboardFragment__start_a_conversation">發起一個對話</string>

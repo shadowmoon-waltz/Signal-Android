@@ -1323,12 +1323,12 @@
   <string name="WebRtcCallView__reconnecting">Se reconectează…</string>
   <string name="WebRtcCallView__joining">Se alătură…</string>
   <string name="WebRtcCallView__disconnected">Deconectat</string>
-  <string name="WebRtcCallView__signal_will_ring_s">Signal va suna la %1$s</string>
-  <string name="WebRtcCallView__signal_will_ring_s_and_s">Signal va suna la %1$s și %2$s</string>
+  <string name="WebRtcCallView__signal_will_ring_s">Signal va suna pe %1$s</string>
+  <string name="WebRtcCallView__signal_will_ring_s_and_s">Signal va suna pe %1$s și %2$s</string>
   <plurals name="WebRtcCallView__signal_will_ring_s_s_and_d_others">
-    <item quantity="one">Signal va suna la %1$s, %2$s, și %3$d altul</item>
-    <item quantity="few">Signal va suna la %1$s, %2$s, și %3$d alții</item>
-    <item quantity="other">Signal va suna la %1$s, %2$s, și %3$d alții</item>
+    <item quantity="one">Signal va suna pe %1$s, %2$s, și %3$d altul</item>
+    <item quantity="few">Signal va suna pe %1$s, %2$s, și %3$d alții</item>
+    <item quantity="other">Signal va suna pe %1$s, %2$s, și %3$d alții</item>
   </plurals>
   <string name="WebRtcCallView__s_will_be_notified">%1$s va fi notificat</string>
   <string name="WebRtcCallView__s_and_s_will_be_notified">%1$s și %2$s vor fi notificați</string>
@@ -1411,8 +1411,8 @@ furnizat (%s) este invalid.</string>
   <string name="RegistrationActivity_play_services_error">Eroare Servicii Play</string>
   <string name="RegistrationActivity_google_play_services_is_updating_or_unavailable">Serviciile Google Play se actualizează sau sunt temporar indisponibile. Te rugăm încearcă din nou.</string>
   <string name="RegistrationActivity_terms_and_privacy">Termeni &amp; Politica de confidențialitate</string>
-  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends">Signal are nevoie de acces la contactele tale și media pentru a putea facilita comunicarea cu prietenii tăi, schimba mesaje și pentru a efectua apeluri securizate</string>
-  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_in_order_to_connect_with_friends">Signal are nevoie de acces la contactele tale pentru a putea facilita comunicarea cu prietenii tăi, schimba mesaje și pentru a efectua apeluri securizate</string>
+  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends">Signal are nevoie de permisiunea pentru contacte și media să te ajute să iei legătura cu prietenii și să trimiți mesaje. Contactele tale sunt încărcate utilizând descoperirea privată a contactelor de la Signal, ceea ce înseamnă că sunt criptate integral și nu sunt niciodată vizibile pentru serviciul Signal.</string>
+  <string name="RegistrationActivity_signal_needs_access_to_your_contacts_in_order_to_connect_with_friends">Signal are nevoie de permisiunea pentru contacte să te ajute să iei legătura cu prietenii.  Contactele tale sunt încărcate utilizând descoperirea privată a contactelor de la Signal, ceea ce înseamnă că sunt criptate integral și nu sunt niciodată vizibile pentru serviciul Signal.</string>
   <string name="RegistrationActivity_rate_limited_to_service">Ai făcut prea multe încercări de înregistrare a acestui număr. Te rugăm să încerci din nou mai târziu.</string>
   <string name="RegistrationActivity_unable_to_connect_to_service">Nu s-a putut realiza conexiunea la serviciu. Te rugăm verifică conexiunea la rețea și încearcă din nou.</string>
   <string name="RegistrationActivity_non_standard_number_format">Număr cu format non-standard</string>
@@ -2489,6 +2489,7 @@ Am primit mesajul conform căruia schimbul de chei a avut loc pentru o versiune 
   <string name="Insights__title">Statistici</string>
   <string name="InsightsDashboardFragment__title">Statistici</string>
   <string name="InsightsDashboardFragment__signal_protocol_automatically_protected">Protocolul Signal a protejat automat %1$d%% din mesajele tale expediate în ultimele %2$d zile. Conversațiile dintre utilizatorii de Signal sunt întotdeauna criptate integral.</string>
+  <string name="InsightsDashboardFragment__spread_the_word">Anunță-ți prietenii</string>
   <string name="InsightsDashboardFragment__not_enough_data">Date insuficiente</string>
   <string name="InsightsDashboardFragment__your_insights_percentage_is_calculated_based_on">Statisticile sunt calculate pe baza mesajelor expediate în ultimele %1$d zile care nu au dispărut sau au fost șterse.</string>
   <string name="InsightsDashboardFragment__start_a_conversation">Începe o conversație</string>
@@ -3155,7 +3156,7 @@ Am primit mesajul conform căruia schimbul de chei a avut loc pentru o versiune 
   <!--ExpireTimerSettingsFragment-->
   <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_new_chats_started_by_you_will_disappear_after_they_have_been_seen">Când e activată opțiunea, mesajele noi trimise și primite în conversații noi începute de tine vor dispărea după ce au fost vizualizate.</string>
   <string name="ExpireTimerSettingsFragment__when_enabled_new_messages_sent_and_received_in_this_chat_will_disappear_after_they_have_been_seen">Cu opțiunea activă, mesajele trimise și primite în conversație vor dispărea după ce sunt văzute.</string>
-  <string name="ExpireTimerSettingsFragment__off">Dezactivate</string>
+  <string name="ExpireTimerSettingsFragment__off">Dezactivat</string>
   <string name="ExpireTimerSettingsFragment__4_weeks">4 săptămâni</string>
   <string name="ExpireTimerSettingsFragment__1_week">1 săptămână</string>
   <string name="ExpireTimerSettingsFragment__1_day">1 zi</string>
@@ -3408,7 +3409,7 @@ Am primit mesajul conform căruia schimbul de chei a avut loc pentru o versiune 
   <string name="SelectFeaturedBadgeFragment__select_a_badge">Selectează o insignă</string>
   <string name="SelectFeaturedBadgeFragment__you_must_select_a_badge">Trebuie să selectezi o insignă</string>
   <string name="SelectFeaturedBadgeFragment__failed_to_update_profile">Actualizarea profilului a eșuat</string>
-  <string name="ViewBadgeBottomSheetDialogFragment__become_a_sustainer">Devino susținător</string>
+  <string name="ViewBadgeBottomSheetDialogFragment__become_a_sustainer">Fii un Susținător</string>
   <string name="ImageView__badge">Insignă</string>
   <string name="SubscribeFragment__signal_is_powered_by_people_like_you">Signal este susținut de oameni ca tine.</string>
   <string name="SubscribeFragment__support_technology_that_is_built_for_you">Sprijină tehnologia construită pentru tine—nu pentru datele tale— alăturându-te comunității de oameni care o susțin.</string>
@@ -3438,7 +3439,7 @@ Am primit mesajul conform căruia schimbul de chei a avut loc pentru o versiune 
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__youve_earned_s_badge_help_signal">Ai obținut insigna %s! Ajută Signal să crească gradul de conștientizare prin afișarea acestei insigne pe profilul tău.</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__youve_earned_a_boost_badge_help_signal">Ai obținut o insigna Boost! Ajută Signal să crească gradul de conștientizare prin afișarea acestei insigne pe profilul tău.</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__you_can_also">Poți de asemenea </string>
-  <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">deveni un Susținător lunar.</string>
+  <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">fii un Susținător lunar.</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">Afișează la profil</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Folosește ca insignă principală</string>
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">Gata</string>
