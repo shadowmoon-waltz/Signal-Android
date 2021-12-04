@@ -21,6 +21,7 @@ import org.thoughtcrime.securesms.components.settings.PreferenceModel
 import org.thoughtcrime.securesms.payments.FiatMoneyUtil
 import org.thoughtcrime.securesms.util.MappingAdapter
 import org.thoughtcrime.securesms.util.MappingViewHolder
+import org.thoughtcrime.securesms.util.StringUtil
 import org.thoughtcrime.securesms.util.ViewUtil
 import java.lang.Integer.min
 import java.text.DecimalFormatSymbols
@@ -197,9 +198,22 @@ data class Boost(
     val separator = DecimalFormatSymbols.getInstance().decimalSeparator
     val separatorCount = min(1, currency.defaultFractionDigits)
     val symbol: String = currency.getSymbol(Locale.getDefault())
-    val pattern: Pattern = "[0-9]*([$separator]){0,$separatorCount}[0-9]{0,${currency.defaultFractionDigits}}".toPattern()
+
+    /**
+     * From Character.isDigit:
+     *
+     * * '\u0030' through '\u0039', ISO-LATIN-1 digits ('0' through '9')
+     * * '\u0660' through '\u0669', Arabic-Indic digits
+     * * '\u06F0' through '\u06F9', Extended Arabic-Indic digits
+     * * '\u0966' through '\u096F', Devanagari digits
+     * * '\uFF10' through '\uFF19', Fullwidth digits
+     */
+    val digitsGroup: String = "[\\u0030-\\u0039]|[\\u0660-\\u0669]|[\\u06F0-\\u06F9]|[\\u0966-\\u096F]|[\\uFF10-\\uFF19]"
+    val zeros: String = "\\u0030|\\u0660|\\u06F0|\\u0966|\\uFF10"
+
+    val pattern: Pattern = "($digitsGroup)*([$separator]){0,$separatorCount}($digitsGroup){0,${currency.defaultFractionDigits}}".toPattern()
     val symbolPattern: Regex = """\s*${Regex.escape(symbol)}\s*""".toRegex()
-    val leadingZeroesPattern: Regex = """^0*""".toRegex()
+    val leadingZeroesPattern: Regex = """^($zeros)*""".toRegex()
 
     override fun filter(
       source: CharSequence,
@@ -211,7 +225,7 @@ data class Boost(
     ): CharSequence? {
 
       val result = dest.subSequence(0, dstart).toString() + source.toString() + dest.subSequence(dend, dest.length)
-      val resultWithoutCurrencyPrefix = result.removePrefix(symbol).removeSuffix(symbol).trim()
+      val resultWithoutCurrencyPrefix = StringUtil.stripBidiIndicator(result.removePrefix(symbol).removeSuffix(symbol).trim())
 
       if (resultWithoutCurrencyPrefix.length == 1 && !resultWithoutCurrencyPrefix.isDigitsOnly() && resultWithoutCurrencyPrefix != separator.toString()) {
         return dest.subSequence(dstart, dend)
@@ -239,7 +253,13 @@ data class Boost(
       } else if (!hasSymbol) {
         val formatter = NumberFormat.getCurrencyInstance()
         formatter.currency = currency
-        formatter.minimumFractionDigits = 0
+
+        if (s.contains(separator)) {
+          formatter.minimumFractionDigits = s.split(separator).last().length
+        } else {
+          formatter.minimumFractionDigits = 0
+        }
+
         formatter.maximumFractionDigits = currency.defaultFractionDigits
 
         val value = s.toString().toDoubleOrNull()
@@ -262,7 +282,18 @@ data class Boost(
       }
 
       val withoutSymbol = s.removePrefix(symbol).removeSuffix(symbol).trim().toString()
-      val withoutLeadingZeroes = withoutSymbol.replace(leadingZeroesPattern, "")
+      val withoutLeadingZeroes: String = try {
+        NumberFormat.getInstance().apply {
+          isGroupingUsed = false
+
+          if (s.contains(separator)) {
+            minimumFractionDigits = s.split(separator).last().length
+          }
+        }.format(withoutSymbol.toBigDecimal()) + (if (withoutSymbol.endsWith(separator)) separator else "")
+      } catch (e: NumberFormatException) {
+        withoutSymbol
+      }
+
       if (withoutSymbol != withoutLeadingZeroes) {
         text?.removeTextChangedListener(this)
 
