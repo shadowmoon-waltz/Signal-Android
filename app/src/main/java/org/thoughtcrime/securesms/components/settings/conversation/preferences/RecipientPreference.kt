@@ -24,7 +24,7 @@ object RecipientPreference {
   class Model(
     val recipient: Recipient,
     val isAdmin: Boolean = false,
-    val onClick: () -> Unit
+    val onClick: (() -> Unit)? = null
   ) : PreferenceModel<Model>() {
     override fun areItemsTheSame(newItem: Model): Boolean {
       return recipient.id == newItem.recipient.id
@@ -37,15 +37,19 @@ object RecipientPreference {
     }
   }
 
-  private class ViewHolder(itemView: View) : MappingViewHolder<Model>(itemView) {
+  class ViewHolder(itemView: View) : MappingViewHolder<Model>(itemView) {
     private val avatar: AvatarImageView = itemView.findViewById(R.id.recipient_avatar)
     private val name: TextView = itemView.findViewById(R.id.recipient_name)
-    private val about: TextView = itemView.findViewById(R.id.recipient_about)
-    private val admin: View = itemView.findViewById(R.id.admin)
+    private val about: TextView? = itemView.findViewById(R.id.recipient_about)
+    private val admin: View? = itemView.findViewById(R.id.admin)
     private val badge: BadgeImageView = itemView.findViewById(R.id.recipient_badge)
 
     override fun bind(model: Model) {
-      itemView.setOnClickListener { model.onClick() }
+      if (model.onClick != null) {
+        itemView.setOnClickListener { model.onClick.invoke() }
+      } else {
+        itemView.setOnClickListener(null)
+      }
 
       avatar.setRecipient(model.recipient)
       badge.setBadgeFromRecipient(model.recipient)
@@ -57,23 +61,24 @@ object RecipientPreference {
 
       val aboutText = model.recipient.combinedAboutAndEmoji
       if (aboutText.isNullOrEmpty()) {
+        // TODO: probably should migrate to using newer pref store
         if (TextSecurePreferences.isAlsoShowProfileName(context)) {
           val displayName2 = model.recipient.getDisplayName2(context);
           if (!displayName2.isNullOrEmpty()) {
-            about.text = displayName2
-            about.visibility = View.VISIBLE
+            about?.text = displayName2
+            about?.visibility = View.VISIBLE
           } else {
-            about.visibility = View.GONE
+            about?.visibility = View.GONE
           }
         } else {
-          about.visibility = View.GONE
+          about?.visibility = View.GONE
         }
       } else {
-        about.text = model.recipient.combinedAboutAndEmoji
-        about.visibility = View.VISIBLE
+        about?.text = model.recipient.combinedAboutAndEmoji
+        about?.visibility = View.VISIBLE
       }
 
-      admin.visible = model.isAdmin
+      admin?.visible = model.isAdmin
     }
   }
 }
