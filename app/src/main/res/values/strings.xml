@@ -411,7 +411,7 @@
     </plurals>
 
     <!-- Show in conversation list overflow menu to open selection bottom sheet -->
-    <string name="ConversationListFragment__notification_profile">Notification Profile</string>
+    <string name="ConversationListFragment__notification_profile">Notification profile</string>
     <!-- Tooltip shown after you have created your first notification profile -->
     <string name="ConversationListFragment__turn_your_notification_profile_on_or_off_here">Turn your notification profile on or off here.</string>
     <!-- Message shown in top toast to indicate the named profile is on -->
@@ -3654,7 +3654,7 @@
     <!-- Notification preference option header -->
     <string name="NotificationsSettingsFragment__profiles">Profiles</string>
     <!-- Notification preference summary text -->
-    <string name="NotificationsSettingsFragment__set_up_notification_profiles">Set up notification profiles</string>
+    <string name="NotificationsSettingsFragment__create_a_profile_to_receive_notifications_only_from_people_and_groups_you_choose">Create a profile to receive notifications only from people and groups you choose.</string>
 
     <!-- NotificationProfilesFragment -->
     <!-- Title for notification profiles screen that shows all existing profiles -->
@@ -4109,8 +4109,10 @@
     <string name="EditNotificationProfileFragment__profile_name">Profile name</string>
     <!-- Name has a max length, this shows how many characters are used out of the max -->
     <string name="EditNotificationProfileFragment__count">%1$d/%2$d</string>
-    <!-- Call to action button once the profile is named to continue to the next create step -->
+    <!-- Call to action button to continue to the next step -->
     <string name="EditNotificationProfileFragment__next">Next</string>
+    <!-- Call to action button once the profile is named to create the profile and continue to the customization steps -->
+    <string name="EditNotificationProfileFragment__create">Create</string>
     <!-- Call to action button once the profile name is edited -->
     <string name="EditNotificationProfileFragment__save">Save</string>
     <!-- Title of edit notification profile screen -->
@@ -4177,11 +4179,13 @@
     <string name="NotificationProfileDetails__notify_for_all_mentions">Notify for all mentions</string>
     <!-- Section header for showing schedule information -->
     <string name="NotificationProfileDetails__schedule">Schedule</string>
+    <!-- If member list is long, will truncate the list and show an option to then see all when tapped -->
+    <string name="NotificationProfileDetails__see_all">See all</string>
 
     <!-- Title for add schedule to profile in create flow -->
     <string name="EditNotificationProfileSchedule__add_a_schedule">Add a schedule</string>
     <!-- Descriptor text indicating what the user can do with this screen -->
-    <string name="EditNotificationProfileSchedule__turn_on_and_edit_your_schedule_to_automate_this_profile">Turn on and edit your schedule to automate this profile.</string>
+    <string name="EditNotificationProfileSchedule__set_up_a_schedule_to_enable_this_notification_profile_automatically">Set up a schedule to enable this notification profile automatically.</string>
     <!-- Text shown next to toggle switch to enable/disable schedule -->
     <string name="EditNotificationProfileSchedule__schedule">Schedule</string>
     <!-- Label for showing the start time for the schedule -->
@@ -4227,9 +4231,9 @@
     <string name="NotificationProfileCreated__your_profile_will_turn_on_and_off_automatically_according_to_your_schedule">Your profile will turn on and off automatically according to your schedule.</string>
 
     <!-- Button text shown in profile selection bottom sheet to create a new profile -->
-    <string name="NotificationProfileSelection__new_notification_profile">New notification profile</string>
+    <string name="NotificationProfileSelection__new_profile">New profile</string>
     <!-- Manual enable option to manually enable a profile for 1 hour -->
-    <string name="NotificationProfileSelection__for_1_hour">For 1 Hour</string>
+    <string name="NotificationProfileSelection__for_1_hour">For 1 hour</string>
     <!-- Manual enable option to manually enable a profile until a set time (currently 6pm or 8am depending on what is next) -->
     <string name="NotificationProfileSelection__until_s">Until %1$s</string>
     <!-- Option to view profile details -->
@@ -4244,7 +4248,7 @@
     <!-- Call to action button to create a profile from megaphone -->
     <string name="NotificationProfilesMegaphone__create_a_profile">Create a profile</string>
     <!-- Button to dismiss notification profile megaphone -->
-    <string name="NotificationProfilesMegaphone__not_now">Now now</string>
+    <string name="NotificationProfilesMegaphone__not_now">Not now</string>
 
     <!-- Displayed in a toast when we fail to open the ringtone picker -->
     <string name="NotificationSettingsFragment__failed_to_open_picker">Failed to open picker.</string>
