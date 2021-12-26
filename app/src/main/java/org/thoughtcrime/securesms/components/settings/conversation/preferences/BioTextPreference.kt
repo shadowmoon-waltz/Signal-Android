@@ -9,10 +9,11 @@ import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.PreferenceModel
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.util.MappingAdapter
-import org.thoughtcrime.securesms.util.MappingViewHolder
 import org.thoughtcrime.securesms.util.ServiceUtil
 import org.thoughtcrime.securesms.util.TextSecurePreferences
+import org.thoughtcrime.securesms.util.adapter.mapping.LayoutFactory
+import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
+import org.thoughtcrime.securesms.util.adapter.mapping.MappingViewHolder
 
 /**
  * Renders name, description, about, etc. for a given group or recipient.
@@ -20,8 +21,8 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences
 object BioTextPreference {
 
   fun register(adapter: MappingAdapter) {
-    adapter.registerFactory(RecipientModel::class.java, MappingAdapter.LayoutFactory(::RecipientViewHolder, R.layout.conversation_settings_bio_preference_item))
-    adapter.registerFactory(GroupModel::class.java, MappingAdapter.LayoutFactory(::GroupViewHolder, R.layout.conversation_settings_bio_preference_item))
+    adapter.registerFactory(RecipientModel::class.java, LayoutFactory(::RecipientViewHolder, R.layout.conversation_settings_bio_preference_item))
+    adapter.registerFactory(GroupModel::class.java, LayoutFactory(::GroupViewHolder, R.layout.conversation_settings_bio_preference_item))
   }
 
   abstract class BioTextPreferenceModel<T : BioTextPreferenceModel<T>> : PreferenceModel<T>() {
