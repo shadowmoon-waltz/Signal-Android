@@ -131,7 +131,7 @@ class AppSettingsFragment : DSLSettingsFragment(R.string.text_secure_normal__men
       clickPref(
         title = DSLSettingsText.from(R.string.preferences__fork_specific),
         onClick = {
-          Navigation.findNavController(requireView()).navigate(R.id.action_appSettingsFragment_to_forkSettingsFragment)
+          findNavController().safeNavigate(R.id.action_appSettingsFragment_to_forkSettingsFragment)
         }
       )
 
