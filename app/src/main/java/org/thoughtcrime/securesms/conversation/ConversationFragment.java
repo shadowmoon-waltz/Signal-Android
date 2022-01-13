@@ -1543,7 +1543,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         if (TextSecurePreferences.isRangeMultiSelect(requireContext())) {
           ((ConversationAdapter) list.getAdapter()).toggleFromMostRecentSelectedTo(item.getConversationMessage());
           list.invalidateItemDecorations();
-          setCorrectActionModeMenuVisibility(actionMode.getMenu());
+          setCorrectActionModeMenuVisibility();
           actionMode.setTitle(calculateSelectedItemCount());
         }
         return;
