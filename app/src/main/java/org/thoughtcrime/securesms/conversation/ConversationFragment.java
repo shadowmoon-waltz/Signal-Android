@@ -1080,7 +1080,9 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         }
       }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     } else {
-      handleDeleteMessagesForMe2(messageRecords, conversationMessages);
+      AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
+        handleDeleteMessagesForMe2(messageRecords, conversationMessages);
+      });
     }
   }
 
