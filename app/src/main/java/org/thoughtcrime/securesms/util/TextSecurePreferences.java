@@ -847,6 +847,16 @@ public class TextSecurePreferences {
     return getBooleanPreference(context, SCREEN_SECURITY_PREF, false);
   }
 
+  private static boolean tempScreenSecurity = false;
+
+  public static boolean isScreenSecurityEnabled2(Context context) {
+    return (tempScreenSecurity || getBooleanPreference(context, SCREEN_SECURITY_PREF, false));
+  }
+
+  public static void setTempScreenSecurity(boolean b) {
+    tempScreenSecurity = b;
+  }
+
   public static boolean isLegacyUseLocalApnsEnabled(Context context) {
     return getBooleanPreference(context, ENABLE_MANUAL_MMS_PREF, false);
   }

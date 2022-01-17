@@ -65,7 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity {
   }
 
   private void initializeScreenshotSecurity() {
-    if (TextSecurePreferences.isScreenSecurityEnabled(this)) {
+    if (TextSecurePreferences.isScreenSecurityEnabled2(this)) {
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
     } else {
       getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);

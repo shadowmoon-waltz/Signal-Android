@@ -23,6 +23,9 @@ import org.thoughtcrime.securesms.crypto.IdentityKeyUtil;
 
 import android.widget.Button;
 
+import android.view.Window;
+import org.thoughtcrime.securesms.util.TextSecurePreferences;
+
 public class SetIdentityKeysFragment extends Fragment {
 
   private EditText               publicKeyText;
@@ -36,7 +39,23 @@ public class SetIdentityKeysFragment extends Fragment {
 
   @Override
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    TextSecurePreferences.setTempScreenSecurity(true);
+    requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
     return inflater.inflate(R.layout.set_identity_keys_fragment, container, false);
+  }
+
+  @Override
+  public void onDestroyView() {
+    TextSecurePreferences.setTempScreenSecurity(false);
+    Window w = requireActivity().getWindow();
+    if (w != null) {
+      if (TextSecurePreferences.isScreenSecurityEnabled(requireContext())) {
+        w.addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+      } else {
+        w.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+      }
+    }
+    super.onDestroyView();
   }
 
   @Override
