@@ -226,6 +226,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_TRASH_NO_PROMPT_FOR_ME = "pref_trash_no_prompt_for_me";
 
+  private static final String PREF_PROMPT_MP4_AS_GIF = "pref_prompt_mp4_as_gif";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -252,7 +254,8 @@ public class TextSecurePreferences {
                                                               PREF_LONG_PRESS_MULTI_SELECT,
                                                               PREF_ALSO_SHOW_PROFILE_NAME,
                                                               PREF_MANAGE_GROUP_TWEAKS,
-                                                              PREF_TRASH_NO_PROMPT_FOR_ME};
+                                                              PREF_TRASH_NO_PROMPT_FOR_ME,
+                                                              PREF_PROMPT_MP4_AS_GIF};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1280,6 +1283,14 @@ public class TextSecurePreferences {
 
   public static void setTrashNoPromptForMe(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_TRASH_NO_PROMPT_FOR_ME, enabled);
+  }
+
+  public static boolean isPromptMp4AsGif(Context context) {
+    return getBooleanPreference(context, PREF_PROMPT_MP4_AS_GIF, false);
+  }
+
+  public static void setPromptMp4AsGif(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_PROMPT_MP4_AS_GIF, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

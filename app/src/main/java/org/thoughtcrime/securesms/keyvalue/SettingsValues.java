@@ -79,6 +79,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String MANAGE_GROUP_TWEAKS                     = "settings.manage.group.tweaks";
   public static final String SWIPE_TO_LEFT_ACTION                    = "settings.swipe.to.left.action";
   public static final String TRASH_NO_PROMPT_FOR_ME                  = "settings.trash.no.prompt.for.me";
+  public static final String PROMPT_MP4_AS_GIF                       = "settings.prompt.mp4.as.gif";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -135,7 +136,8 @@ public final class SettingsValues extends SignalStoreValues {
                          ALSO_SHOW_PROFILE_NAME,
                          MANAGE_GROUP_TWEAKS,
                          SWIPE_TO_LEFT_ACTION,
-                         TRASH_NO_PROMPT_FOR_ME);
+                         TRASH_NO_PROMPT_FOR_ME,
+                         PROMPT_MP4_AS_GIF);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -533,5 +535,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setTrashNoPromptForMe(boolean trashNoPromptForMe) {
     putBoolean(TRASH_NO_PROMPT_FOR_ME, trashNoPromptForMe);
+  }
+
+  public boolean isPromptMp4AsGif() {
+    return getBoolean(PROMPT_MP4_AS_GIF, TextSecurePreferences.isPromptMp4AsGif(ApplicationDependencies.getApplication()));
+  }
+
+  public void setPromptMp4AsGif(boolean promptMp4AsGif) {
+    putBoolean(PROMPT_MP4_AS_GIF, promptMp4AsGif);
   }
 }

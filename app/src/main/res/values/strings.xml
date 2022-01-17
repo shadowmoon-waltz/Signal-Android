@@ -3758,6 +3758,8 @@
     <string name="ForkSettingsFragment__swipe_to_left_action">Swipe to Left Conversation Item Action</string>
     <string name="ForkSettingsFragment__trash_no_prompt_for_me">Trash Button Deletes Messages For Me Without Confirmation</string>
     <string name="ForkSettingsFragment__trash_no_prompt_for_me_summary">This does not affect the delete action in Swipe to Left or Right Conversation Item Actions (which may be helpful to access the otherwise unavailable Delete For Everyone when this is enabled, use Delete For Me (No Prompt) if you want the same behavior in the swipe actions)</string>
+    <string name="ForkSettingsFragment__prompt_mp4_as_gif">Prompt to send videos like GIFs</string>
+    <string name="ForkSettingsFragment__prompt_mp4_as_gif_summary">When selecting a video, a prompt will appear. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio</string>
 
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>

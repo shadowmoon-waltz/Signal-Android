@@ -22,7 +22,8 @@ class ForkSettingsViewModel : ViewModel() {
       alsoShowProfileName = SignalStore.settings().isAlsoShowProfileName,
       manageGroupTweaks = SignalStore.settings().isManageGroupTweaks,
       SignalStore.settings().swipeToLeftAction,
-      trashNoPromptForMe = SignalStore.settings().isTrashNoPromptForMe
+      trashNoPromptForMe = SignalStore.settings().isTrashNoPromptForMe,
+      promptMp4AsGif = SignalStore.settings().isPromptMp4AsGif
     )
 
     store = Store(initialState)
@@ -93,5 +94,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setTrashNoPromptForMe(trashNoPromptForMe: Boolean) {
     store.update { it.copy(trashNoPromptForMe = trashNoPromptForMe) }
     SignalStore.settings().isTrashNoPromptForMe = trashNoPromptForMe
+  }
+
+  fun setPromptMp4AsGif(promptMp4AsGif: Boolean) {
+    store.update { it.copy(promptMp4AsGif = promptMp4AsGif) }
+    SignalStore.settings().isPromptMp4AsGif = promptMp4AsGif
   }
 }

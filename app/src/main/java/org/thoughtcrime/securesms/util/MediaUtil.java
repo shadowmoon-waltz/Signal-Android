@@ -50,6 +50,7 @@ import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
 import org.thoughtcrime.securesms.mediasend.Media;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class MediaUtil {
@@ -486,7 +487,7 @@ public class MediaUtil {
 
   public static void maybeMp4AsGif(@NonNull Context context, @NonNull Media media, @NonNull Mp4AsGifCallback callback)
   {
-    if (isVideo(media.getMimeType()) && !media.isVideoGif()) {
+    if (SignalStore.settings().isPromptMp4AsGif() && isVideo(media.getMimeType()) && !media.isVideoGif()) {
       new MaterialAlertDialogBuilder(context)
         .setMessage("Video autoplay/loop like GIF?")
         .setPositiveButton("GIF", (d, w) -> {

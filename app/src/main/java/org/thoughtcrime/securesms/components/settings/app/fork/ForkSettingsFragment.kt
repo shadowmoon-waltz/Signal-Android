@@ -165,6 +165,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
           viewModel.setTrashNoPromptForMe(!state.trashNoPromptForMe)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__prompt_mp4_as_gif),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__prompt_mp4_as_gif_summary),
+        isChecked = state.promptMp4AsGif,
+        onClick = {
+          TextSecurePreferences.setPromptMp4AsGif(requireContext(), !state.promptMp4AsGif)
+          viewModel.setPromptMp4AsGif(!state.promptMp4AsGif)
+        }
+      )
     }
   }
 }

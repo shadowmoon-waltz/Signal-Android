@@ -13,5 +13,6 @@ data class ForkSettingsState(
   val alsoShowProfileName: Boolean,
   val manageGroupTweaks: Boolean,
   val swipeToLeftAction: String,
-  val trashNoPromptForMe: Boolean
+  val trashNoPromptForMe: Boolean,
+  val promptMp4AsGif: Boolean
 )

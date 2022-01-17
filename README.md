@@ -32,6 +32,7 @@ Differences from stock Signal:
 * Added in support for swipe to left conversation item action. Option to customize swipe to right conversation item action has the same options as the swipe to right conversation item action
 * Upstream has added feature independently (with better UI) ~~Option to type reaction emoji, by long pressing the custom emoji bottom sheet settings button to use the keyboard to enter reaction emoji. Useful if you want to search for emojis and your keyboard supports it~~
 * Option to not prompt when deleting messages using the delete button action bar; they will only be automatically deleted for you, not everyone.
+* Option to show a prompt when sending videos to send like gifs. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio.
 
 Due to using a custom build target and not realizing a specific setting needed to add in that build target, the usual gradle build target did not perform dependency verification prior to commit 850f9bfe on 2021-06-09 (part of release 5.14.2), when it was fixed.
 
