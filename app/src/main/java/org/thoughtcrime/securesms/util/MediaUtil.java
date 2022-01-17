@@ -48,6 +48,10 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import java.util.concurrent.ExecutionException;
 
+import android.content.Context;
+import org.thoughtcrime.securesms.mediasend.Media;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class MediaUtil {
 
   private static final String TAG = Log.tag(MediaUtil.class);
@@ -474,5 +478,27 @@ public class MediaUtil {
     LONG_TEXT,
     VIEW_ONCE,
     DOCUMENT
+  }
+
+  public interface Mp4AsGifCallback {
+    void onResponse(@NonNull Media media);
+  }
+
+  public static void maybeMp4AsGif(@NonNull Context context, @NonNull Media media, @NonNull Mp4AsGifCallback callback)
+  {
+    if (isVideo(media.getMimeType()) && !media.isVideoGif()) {
+      new MaterialAlertDialogBuilder(context)
+        .setMessage("Video autoplay/loop like GIF?")
+        .setPositiveButton("GIF", (d, w) -> {
+          Media media2 = new Media(media.getUri(), media.getMimeType(), media.getDate(), media.getWidth(), media.getHeight(), media.getSize(), media.getDuration(), media.isBorderless(), true, media.getBucketId(), media.getCaption(), media.getTransformProperties());
+          callback.onResponse(media2);
+        })
+        .setNegativeButton("Video", (d, w) -> {
+          callback.onResponse(media);
+        })
+      .show();
+    } else {
+      callback.onResponse(media);
+    }
   }
 }

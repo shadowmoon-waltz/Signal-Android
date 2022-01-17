@@ -1146,8 +1146,10 @@ public class ConversationActivity extends PassphraseRequiredActivity
   @Override
   public void onAttachmentMediaClicked(@NonNull Media media) {
     linkPreviewViewModel.onUserCancel();
-    startActivityForResult(MediaSelectionActivity.editor(ConversationActivity.this, sendButton.getSelectedTransport(), Collections.singletonList(media), recipient.getId(), composeText.getTextTrimmed()), MEDIA_SENDER);
-    container.hideCurrentInput(composeText);
+    MediaUtil.maybeMp4AsGif(this, media, (m) -> {
+      startActivityForResult(MediaSelectionActivity.editor(ConversationActivity.this, sendButton.getSelectedTransport(), Collections.singletonList(m), recipient.getId(), composeText.getTextTrimmed()), MEDIA_SENDER);
+      container.hideCurrentInput(composeText);
+    });
   }
 
   @Override
