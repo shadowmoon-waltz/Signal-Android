@@ -955,7 +955,7 @@ public class ConversationParentFragment extends Fragment
 
     inflater.inflate(R.menu.conversation, menu);
 
-    if (!TextSecurePreferences.isConversationDeleteInMenu(this)) {
+    if (!TextSecurePreferences.isConversationDeleteInMenu(requireContext())) {
       hideMenuItem(menu, R.id.menu_delete_conversation);
     }
 
@@ -1324,8 +1324,8 @@ public class ConversationParentFragment extends Fragment
       .setPositiveButton(R.string.yes, (d, i) -> {
         SignalDatabase.threads().deleteConversation(threadId);
         ApplicationDependencies.getMessageNotifier().updateNotification(requireContext());
-        finish();
         d.dismiss();
+        requireActivity().finish();
       })
       .setNegativeButton(R.string.no, (d, i) -> {
         d.dismiss();
