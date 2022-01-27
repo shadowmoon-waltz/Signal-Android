@@ -15,9 +15,11 @@ import org.thoughtcrime.securesms.database.DatabaseObserver;
 import org.thoughtcrime.securesms.database.MediaDatabase;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.util.CalendarDateOnly;
+import org.thoughtcrime.securesms.util.MediaUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -66,9 +68,11 @@ public final class GroupedThreadMediaLoader extends AsyncTaskLoader<GroupedThrea
   @Override
   public GroupedThreadMedia loadInBackground() {
     Context        context        = getContext();
-    GroupingMethod groupingMethod = sorting.isRelatedToFileSize()
-                                    ? new RoughSizeGroupingMethod(context)
-                                    : new DateGroupingMethod(context, CalendarDateOnly.getInstance());
+    GroupingMethod groupingMethod = sorting.isRelatedToContentType()
+                                    ? new ContentTypeGroupingMethod(context)
+                                    : (sorting.isRelatedToFileSize()
+                                      ? new RoughSizeGroupingMethod(context)
+                                      : new DateGroupingMethod(context, CalendarDateOnly.getInstance()));
 
     PopulatedGroupedThreadMedia mediaGrouping = new PopulatedGroupedThreadMedia(groupingMethod);
 
@@ -80,7 +84,7 @@ public final class GroupedThreadMediaLoader extends AsyncTaskLoader<GroupedThrea
       }
     }
 
-    if (sorting == MediaDatabase.Sorting.Oldest || sorting == MediaDatabase.Sorting.Largest) {
+    if (sorting == MediaDatabase.Sorting.Oldest || sorting == MediaDatabase.Sorting.Largest || sorting == MediaDatabase.Sorting.ContentTypeLargest || sorting == MediaDatabase.Sorting.ContentTypeNewest) {
       return new ReversedGroupedThreadMedia(mediaGrouping);
     } else {
       return mediaGrouping;
@@ -199,6 +203,33 @@ public final class GroupedThreadMediaLoader extends AsyncTaskLoader<GroupedThrea
         case LARGE : return largeDescription;
         default: throw new AssertionError();
       }
+    }
+  }
+
+  public static class ContentTypeGroupingMethod implements GroupingMethod {
+
+    private final String defaultValue;
+    private final HashMap<String, Integer> byString = new HashMap<>();
+    private final HashMap<Integer, String> byInt = new HashMap<>();
+
+    ContentTypeGroupingMethod(@NonNull Context context) {
+      defaultValue = context.getString(R.string.MediaOverviewActivity_Files);
+    }
+
+    @Override
+    public int groupForRecord(@NonNull MediaDatabase.MediaRecord mediaRecord) {
+      final String contentType = MediaUtil.getContentTypeStringWithGif(mediaRecord.getAttachment(), defaultValue);
+      final int id = byString.getOrDefault(contentType, byString.size());
+      if (id == byString.size()) {
+        byString.put(contentType, id);
+        byInt.put(id, contentType);
+      }
+      return id;
+    }
+
+    @Override
+    public @NonNull String groupName(int groupNo) {
+      return byInt.getOrDefault(groupNo, defaultValue);
     }
   }
 

@@ -502,4 +502,15 @@ public class MediaUtil {
       callback.onResponse(media);
     }
   }
+
+  public static @NonNull String getContentTypeStringWithGif(@NonNull Attachment attachment, @NonNull String defaultValue) {
+    String contentType = attachment.getContentType().trim();
+    if (contentType.isEmpty()) {
+      contentType = defaultValue;
+    }
+    if (isVideoType(attachment.getContentType()) && attachment.isVideoGif()) {
+      contentType += " (gif)";
+    }
+    return contentType;
+  }
 }

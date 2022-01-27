@@ -3771,6 +3771,9 @@
     <string name="ForkSettingsFragment__prompt_mp4_as_gif">Prompt to send videos like GIFs</string>
     <string name="ForkSettingsFragment__prompt_mp4_as_gif_summary">When selecting a video, a prompt will appear. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio</string>
 
+    <string name="fork__content_type_largest">Type / Largest</string>
+    <string name="fork__content_type_newest">Type / Newest</string>
+
     <!-- ChatColorSelectionFragment -->
     <string name="ChatColorSelectionFragment__auto">Auto</string>
     <string name="ChatColorSelectionFragment__use_custom_colors">Use custom colors</string>

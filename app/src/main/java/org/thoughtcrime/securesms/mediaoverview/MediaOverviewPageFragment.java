@@ -128,7 +128,8 @@ public final class MediaOverviewPageFragment extends Fragment
                                               this,
                                               this,
                                               sorting.isRelatedToFileSize(),
-                                              threadId == MediaDatabase.ALL_THREADS);
+                                              threadId == MediaDatabase.ALL_THREADS,
+                                              !sorting.isRelatedToContentType());
     this.recyclerView.setAdapter(adapter);
     this.recyclerView.setLayoutManager(gridManager);
     this.recyclerView.setHasFixedSize(true);
@@ -141,6 +142,7 @@ public final class MediaOverviewPageFragment extends Fragment
         if (sorting != null) {
           this.sorting = sorting;
           adapter.setShowFileSizes(sorting.isRelatedToFileSize());
+          adapter.setShowFileType(!sorting.isRelatedToContentType());
           LoaderManager.getInstance(this).restartLoader(0, null, this);
           updateMultiSelect();
         }

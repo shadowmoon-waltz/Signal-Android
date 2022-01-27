@@ -244,7 +244,9 @@ public class MediaDatabase extends Database {
   public enum Sorting {
     Newest (AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.MMS_ID + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.DISPLAY_ORDER + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.ROW_ID + " DESC"),
     Oldest (AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.MMS_ID + " ASC, "  + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.DISPLAY_ORDER + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.ROW_ID + " ASC"),
-    Largest(AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.SIZE   + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.DISPLAY_ORDER + " DESC");
+    Largest(AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.SIZE   + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.DISPLAY_ORDER + " DESC"),
+    ContentTypeLargest(AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.CONTENT_TYPE + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.SIZE   + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.DISPLAY_ORDER + " DESC"),
+    ContentTypeNewest(AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.CONTENT_TYPE + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.MMS_ID + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.DISPLAY_ORDER + " DESC, " + AttachmentDatabase.TABLE_NAME + "." + AttachmentDatabase.ROW_ID + " DESC");
 
     private final String postFix;
 
@@ -257,7 +259,11 @@ public class MediaDatabase extends Database {
     }
 
     public boolean isRelatedToFileSize() {
-      return this == Largest;
+      return this == Largest || this == ContentTypeLargest || this == ContentTypeNewest;
+    }
+
+    public boolean isRelatedToContentType() {
+      return this == ContentTypeLargest || this == ContentTypeNewest;
     }
   }
 

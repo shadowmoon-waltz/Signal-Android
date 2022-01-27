@@ -364,6 +364,8 @@
         <item>@string/MediaOverviewActivity_Newest</item>
         <item>@string/MediaOverviewActivity_Oldest</item>
         <item>@string/MediaOverviewActivity_Storage_used</item>
+        <item>@string/fork__content_type_largest</item>
+        <item>@string/fork__content_type_newest</item>
     </string-array>
 
     <string-array name="ExpireTimerSettingsFragment__labels">
