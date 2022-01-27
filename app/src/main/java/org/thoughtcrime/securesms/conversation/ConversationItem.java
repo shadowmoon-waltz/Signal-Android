@@ -550,6 +550,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       availableWidth = bodyBubble.getMeasuredWidth() - bodyBubble.getPaddingLeft() - bodyBubble.getPaddingRight();
     }
 
+    availableWidth = Math.min(availableWidth, getMaxBubbleWidth());
+
     availableWidth -= ViewUtil.getLeftMargin(forView) + ViewUtil.getRightMargin(forView);
 
     return availableWidth;
