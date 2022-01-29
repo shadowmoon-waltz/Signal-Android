@@ -2,16 +2,41 @@
 
 This is a fork of Signal, mostly small changes for my personal use.
 
-License is unchanged (GPLv3 license). Changes from the non-fork in this repository are not made under their CLA (as I have not submitted pull requests), and you may submit a pull request to this fork without signing a CLA.
+License is unchanged (GPLv3 license). You may submit pull requests to this fork and they can be merged without signing the upstream Contributor License Agreement (CLA).
 
-Differences from stock Signal:
-* Package name is different, so the fork can be installed on the same device as stock Signal. Note that a phone number can be registered to only one Signal (non-fork or fork) instance at a time (the older one will be deregistered, and if a backup is not restored during install time on the new instance, the identity key will change, chat history will be lost, etc). The fork should be compatiable with stock Signal backups and vice versa (but not really tested).
-* Build signing code is slightly tweaked to my preferred style (note that the build target I use is assembleSwProdRelease).
-* As I may not provide support, the sending debug log feature is disabled.
-* Update check is not currently set up for the fork and is disabled.
-* Option to hide insights option when sms enabled (just tells you how much of your messages sent were encrypted).
-* Option to show read reaction timestamp.
-* Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys).
+Main gradle build command: assembleSwProdRelease
+
+## Differences from stock Signal
+
+<details open="">
+<summary>January 2022</summary>
+
+* Option to show a prompt when sending videos to send like gifs. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio.
+* Add sort media preview by content type (and then largest or newest) option
+</details>
+
+<details>
+<summary>October 2021</summary>
+
+* Option to not prompt when deleting messages using the delete button action bar; they will only be automatically deleted for you, not everyone.
+</details>
+
+<details>
+<summary>June 2021</summary>
+
+* Several new swipe to right options (see May 2021) swipe to right list of options
+* Option to enable select multiple mode when long pressing any type of conversation item (most useful when setting swipe to right conversation item action to show options)
+* Due to using a custom build target and not realizing a specific setting needed to add in that build target, the usual gradle build target did not perform dependency verification prior to commit 850f9bfe on 2021-06-09 (part of release 5.14.2), when it was fixed
+* Option to also show profile names under contact names in detailed recipient views and group member lists (when a member does not have about set), for recipients with contact entries (by default, contact names replace profile names in most views)
+* Option to enable manage group view tweaks, which include hiding text with prompt to add group description or number of members and moving member list almost to top of view (but leaving the add members button where it usually is)
+* Added in support for swipe to left conversation item action. Option to customize swipe to right conversation item action has the same options as the swipe to right conversation item action
+* Upstream has added feature independently (with better UI) ~~Option to type reaction emoji, by long pressing the custom emoji bottom sheet settings button to use the keyboard to enter reaction emoji. Useful if you want to search for emojis and your keyboard supports it~~
+</details>
+
+
+<details>
+<summary>May 2021</summary>
+
 * Can start or join group calls with just microphone permission (non-fork requires video permission)
 * Option to long-press a custom emoji previously used as a reaction in the long-press your selected reaction popup to change it to another custom emoji (so you don't have to press it once to deselect it and then select a different one; note that you still have to let go of the custom emoji after long pressing to show the custom emoji selector)
 * Option to open popup with editable text when selecting copying text for one or more messages in a conversation, which allows for easy modification and/or copying of part or all of the string
@@ -22,23 +47,30 @@ Differences from stock Signal:
     * delete message (with usual prompt or for me without prompt)
     * copy text (normal method or with popup)
     * show message details
-    * show options (show long press menu)
-    * note to self (shortcut for forward to self, only works if you have an existing note to self conversation)
-    * select multiple (select item and enter multi select mode)
+    * show options (show long press menu) (June 2021)
+    * note to self (shortcut for forward to self, only works if you have an existing note to self conversation) (June 2021)
+    * select multiple (select item and enter multi select mode) (June 2021)
 * Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)
-* Option to enable select multiple mode when long pressing any type of conversation item (most useful when setting swipe to right conversation item action to show options)
-* Option to also show profile names under contact names in detailed recipient views and group member lists (when a member does not have about set), for recipients with contact entries (by default, contact names replace profile names in most views)
-* Option to enable manage group view tweaks, which include hiding text with prompt to add group description or number of members and moving member list almost to top of view (but leaving the add members button where it usually is)
-* Added in support for swipe to left conversation item action. Option to customize swipe to right conversation item action has the same options as the swipe to right conversation item action
-* Upstream has added feature independently (with better UI) ~~Option to type reaction emoji, by long pressing the custom emoji bottom sheet settings button to use the keyboard to enter reaction emoji. Useful if you want to search for emojis and your keyboard supports it~~
-* Option to not prompt when deleting messages using the delete button action bar; they will only be automatically deleted for you, not everyone.
-* Option to show a prompt when sending videos to send like gifs. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio.
+</details>
 
-Due to using a custom build target and not realizing a specific setting needed to add in that build target, the usual gradle build target did not perform dependency verification prior to commit 850f9bfe on 2021-06-09 (part of release 5.14.2), when it was fixed.
+<details>
+<summary>April 2021</summary>
 
-The original README follows, and may not reflect changes in the fork.
+* Package name is different, so the fork can be installed on the same device as stock Signal. Note that a phone number can be registered to only one Signal (non-fork or fork) instance at a time (the older one will be deregistered, and if a backup is not restored during install time on the new instance, the identity key will change, chat history will be lost, etc). The fork should be compatiable with stock Signal backups and vice versa (but not really tested).
+* Build signing code is slightly tweaked to my preferred style (note that the build target I use is assembleSwProdRelease).
+* As I may not provide support, the sending debug log feature is disabled.
+* Update check is not currently set up for the fork and is disabled.
+* Option to hide insights option when sms is enabled (just tells you how much of your messages sent were encrypted).
+* Option to show read reaction timestamp.
+* Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys). (hides itself in recent apps screen from January 2022)
+</details>
 
-## Original README (Signal Android)
+---
+
+The Original README follows. It may not reflect changes in the fork.
+
+<details>
+<summary>Original README</summary>
 
 Signal is a messaging app for simple private communication with friends.
 
@@ -104,3 +136,4 @@ Copyright 2013-2021 Signal
 Licensed under the GPLv3: http://www.gnu.org/licenses/gpl-3.0.html
 
 Google Play and the Google Play logo are trademarks of Google LLC.
+</details>
