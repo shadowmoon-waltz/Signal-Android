@@ -172,13 +172,16 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
       }
 
       String name = recipient.isSelf() ? requireContext().getString(R.string.note_to_self)
-                                              : recipient.getDisplayName(requireContext());
+                                       : recipient.getDisplayName(requireContext());
       fullName.setText(name);
       fullName.setVisibility(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);
       if (recipient.isSystemContact() && !recipient.isSelf()) {
         fullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_profile_circle_outline_16, 0);
         fullName.setCompoundDrawablePadding(ViewUtil.dpToPx(4));
         TextViewCompat.setCompoundDrawableTintList(fullName, ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.signal_text_primary)));
+      } else if (recipient.isReleaseNotes()) {
+        fullName.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_official_28, 0);
+        fullName.setCompoundDrawablePadding(ViewUtil.dpToPx(4));
       }
 
       if (TextSecurePreferences.isAlsoShowProfileName(requireContext())) {
@@ -194,6 +197,10 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
       }
 
       String aboutText = recipient.getCombinedAboutAndEmoji();
+      if (recipient.isReleaseNotes()) {
+        aboutText = getString(R.string.ReleaseNotes__signal_release_notes_and_news);
+      }
+
       if (!Util.isEmpty(aboutText)) {
         about.setText(aboutText);
         about.setVisibility(View.VISIBLE);
@@ -226,13 +233,13 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
       }
 
       ButtonStripPreference.State  buttonStripState = new ButtonStripPreference.State(
-          /* isMessageAvailable = */ !recipient.isSelf(),
-          /* isVideoAvailable = */   recipient.isRegistered() && !recipient.isSelf(),
-          /* isAudioAvailable = */   !recipient.isSelf(),
-          /* isMuteAvailable = */    false,
-          /* isSearchAvailable = */  false,
-          /* isAudioSecure = */      recipient.isRegistered(),
-          /* isMuted = */            false
+          /* isMessageAvailable = */ !recipient.isBlocked() && !recipient.isSelf() && !recipient.isReleaseNotes(),
+          /* isVideoAvailable   = */ !recipient.isBlocked() && !recipient.isSelf() && recipient.isRegistered(),
+          /* isAudioAvailable   = */ !recipient.isBlocked() && !recipient.isSelf() && !recipient.isReleaseNotes(),
+          /* isMuteAvailable    = */ false,
+          /* isSearchAvailable  = */ false,
+          /* isAudioSecure      = */ recipient.isRegistered(),
+          /* isMuted            = */ false
       );
 
       ButtonStripPreference.Model buttonStripModel = new ButtonStripPreference.Model(
@@ -261,7 +268,11 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
 
       new ButtonStripPreference.ViewHolder(buttonStrip).bind(buttonStripModel);
 
-      if (recipient.isSystemContact() || recipient.isGroup() || recipient.isSelf()) {
+      if (recipient.isReleaseNotes()) {
+        buttonStrip.setVisibility(View.GONE);
+      }
+
+      if (recipient.isSystemContact() || recipient.isGroup() || recipient.isSelf() || recipient.isBlocked() || recipient.isReleaseNotes()) {
         addContactButton.setVisibility(View.GONE);
       } else {
         addContactButton.setVisibility(View.VISIBLE);

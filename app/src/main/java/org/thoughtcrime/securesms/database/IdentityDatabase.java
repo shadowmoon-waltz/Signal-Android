@@ -194,7 +194,7 @@ public class IdentityDatabase extends Database {
         EventBus.getDefault().post(record.get());
       }
 
-      ApplicationDependencies.getIdentityStore().invalidate(addressName);
+      ApplicationDependencies.getProtocolStore().aci().identities().invalidate(addressName);
     }
 
     if (hadEntry && !keyMatches) {

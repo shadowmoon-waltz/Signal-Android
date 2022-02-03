@@ -6,7 +6,6 @@ import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -25,7 +24,7 @@ final class ConversationReactionDelegate {
   private final PointF                            lastSeenDownPoint = new PointF();
 
   private ConversationReactionOverlay.OnReactionSelectedListener onReactionSelectedListener;
-  private Toolbar.OnMenuItemClickListener                        onToolbarItemClickedListener;
+  private ConversationReactionOverlay.OnActionSelectedListener   onActionSelectedListener;
   private ConversationReactionOverlay.OnHideListener             onHideListener;
 
   ConversationReactionDelegate(@NonNull Stub<ConversationReactionOverlay> overlayStub) {
@@ -40,9 +39,10 @@ final class ConversationReactionDelegate {
             @NonNull Recipient conversationRecipient,
             @NonNull ConversationMessage conversationMessage,
             boolean isNonAdminInAnnouncementGroup,
+            @NonNull SelectedConversationModel selectedConversationModel,
             @Nullable MotionEvent motionEvent)
   {
-    resolveOverlay().show(activity, conversationRecipient, conversationMessage, lastSeenDownPoint, isNonAdminInAnnouncementGroup, motionEvent);
+    resolveOverlay().show(activity, conversationRecipient, conversationMessage, lastSeenDownPoint, isNonAdminInAnnouncementGroup, selectedConversationModel, motionEvent);
   }
 
   void hide() {
@@ -61,11 +61,11 @@ final class ConversationReactionDelegate {
     }
   }
 
-  void setOnToolbarItemClickedListener(@NonNull Toolbar.OnMenuItemClickListener onToolbarItemClickedListener) {
-    this.onToolbarItemClickedListener = onToolbarItemClickedListener;
+  void setOnActionSelectedListener(@NonNull ConversationReactionOverlay.OnActionSelectedListener onActionSelectedListener) {
+    this.onActionSelectedListener = onActionSelectedListener;
 
     if (overlayStub.resolved()) {
-      overlayStub.get().setOnToolbarItemClickedListener(onToolbarItemClickedListener);
+      overlayStub.get().setOnActionSelectedListener(onActionSelectedListener);
     }
   }
 
@@ -101,7 +101,7 @@ final class ConversationReactionDelegate {
     overlay.requestFitSystemWindows();
 
     overlay.setOnHideListener(onHideListener);
-    overlay.setOnToolbarItemClickedListener(onToolbarItemClickedListener);
+    overlay.setOnActionSelectedListener(onActionSelectedListener);
     overlay.setOnReactionSelectedListener(onReactionSelectedListener);
 
     return overlay;
