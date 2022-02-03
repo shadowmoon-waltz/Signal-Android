@@ -403,13 +403,13 @@
         <item>@string/preferences__none</item>
         <item>@string/delete</item>
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
-        <item>@string/conversation_context__menu_copy_text</item>
+        <item>@string/ForkSettingsFragment__copy_text</item>
         <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
         <item>@string/media_preview__forward_title</item>
-        <item>@string/conversation_context__menu_message_details</item>
+        <item>@string/AndroidManifest__message_details</item>
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
-        <item>@string/conversation_context__reaction_multi_select</item>
+        <item>@string/ForkSettingsFragment__select_multiple</item>
     </string-array>
 
     <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
@@ -430,16 +430,16 @@
 
     <string-array name="ForkSettingsFragment__swipe_to_left_action__entries">
         <item>@string/ForkSettingsFragment__swipe_to_left_action__default</item>
-        <item>@string/conversation_context__menu_message_details</item>
+        <item>@string/AndroidManifest__message_details</item>
         <item>@string/MessageNotifier_reply</item>
         <item>@string/delete</item>
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
-        <item>@string/conversation_context__menu_copy_text</item>
+        <item>@string/ForkSettingsFragment__copy_text</item>
         <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
         <item>@string/media_preview__forward_title</item>
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
-        <item>@string/conversation_context__reaction_multi_select</item>
+        <item>@string/ForkSettingsFragment__select_multiple</item>
     </string-array>
 
     <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
