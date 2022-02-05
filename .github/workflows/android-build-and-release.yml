@@ -1,0 +1,40 @@
+name: Android Build and Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_name:
+        required: true
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Gradle clean
+      run: ./gradlew clean
+
+    - name: Gradle assembleSwProdRelease
+      run: ./gradlew assembleSwProdRelease
+
+    - name: Create release
+      run: gh release create "$RELEASE_NAME" "./app/build/outputs/apk/swProd/release/*.apk"
+      env:
+       GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+       RELEASE_NAME: ${{github.event.inputs.release_name}}
