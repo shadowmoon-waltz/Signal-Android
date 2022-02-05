@@ -19,20 +19,16 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-        # cache: gradle
 
     - name: Validate Gradle Wrapper
-      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+      uses: gradle/wrapper-validation-action@v1
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    #- name: Gradle assembleSwProdRelease
-    #  run: ./gradlew assembleSwProdRelease
     - name: Gradle assembleSwProdRelease
-      uses: burrunan/gradle-cache-action@cbdf4342ff988d143aa7a5aeceedffafb8c74bcf
+      uses: gradle/gradle-build-action@v2
       with:
-        job-id: android-build-and-release
         arguments: assembleSwProdRelease
 
     # https://stackoverflow.com/questions/69164423/glob-markdown-files-on-github-action-only-returns-docs-folder
