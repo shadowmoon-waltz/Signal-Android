@@ -1621,7 +1621,8 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                                                                                        focusedView);
   
             bodyBubble.setVisibility(View.INVISIBLE);
-  
+            conversationItem.reactionsView.setVisibility(View.INVISIBLE);
+
             ViewUtil.hideKeyboard(requireContext(), conversationItem);
 
             boolean showScrollButtons = conversationViewModel.getShowScrollButtons();
@@ -1660,6 +1661,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                         }
   
                                         bodyBubble.setVisibility(View.VISIBLE);
+                                        conversationItem.reactionsView.setVisibility(View.VISIBLE);
 
                                         if (showScrollButtons) {
                                           conversationViewModel.setShowScrollButtons(true);
