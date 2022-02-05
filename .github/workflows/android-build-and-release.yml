@@ -27,14 +27,14 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Gradle clean
-      run: ./gradlew clean
-
     - name: Gradle assembleSwProdRelease
       run: ./gradlew assembleSwProdRelease
 
+    - name: Debug ls
+      run: ls -R app/build/outputs
+
     - name: Create release
-      run: gh release create "$RELEASE_NAME" "./app/build/outputs/apk/swProd/release/*.apk"
+      run: gh release create "$RELEASE_NAME" "app/build/outputs/apk/swProd/release/*.apk"
       env:
        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
        RELEASE_NAME: ${{github.event.inputs.release_name}}
