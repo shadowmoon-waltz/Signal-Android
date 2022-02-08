@@ -1716,7 +1716,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
              !current.getRecipient().equals(previous.get().getRecipient());
     } else {
       return !previous.isPresent() || previous.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), previous.get().getTimestamp()) ||
-             current.isOutgoing() != previous.get().isOutgoing();
+             current.isOutgoing() != previous.get().isOutgoing() || previous.get().isSecure() != current.isSecure();
     }
   }
 
@@ -1726,7 +1726,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
              !current.getRecipient().equals(next.get().getRecipient()) || !current.getReactions().isEmpty();
     } else {
       return !next.isPresent() || next.get().isUpdate() || !DateUtils.isSameDay(current.getTimestamp(), next.get().getTimestamp()) ||
-             current.isOutgoing() != next.get().isOutgoing() || !current.getReactions().isEmpty();
+             current.isOutgoing() != next.get().isOutgoing() || !current.getReactions().isEmpty() || next.get().isSecure() != current.isSecure();
     }
   }
 
