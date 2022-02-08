@@ -49,4 +49,4 @@ jobs:
       run: find "app/build/outputs/apk/swProd/release/" -name "*.apk" -print0 | xargs -0 gh release create "$RELEASE_NAME"
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        RELEASE_NAME: "${{github.event.inputs.release_name}}""
+        RELEASE_NAME: "${{github.event.inputs.release_name}}"
