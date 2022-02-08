@@ -76,6 +76,7 @@ def postFixSize = 100
 def keystores = [ 'debug'  : loadKeystoreProperties('keystore.debug.properties'), 'release'  :  loadKeystoreProperties('keystore.release.properties') ]
 
 boolean signConfigExists = project.hasProperty("keystoreFile") && project.hasProperty("keystorePassword") && project.hasProperty("keystoreAlias") && project.hasProperty("keystoreAliasPassword")
+boolean signConfigExists2 = !signConfigExists && System.getenv("TEMP_KEYSTORE_FILE") != null && file(System.getenv("TEMP_KEYSTORE_FILE")).canRead()
 
 def selectableVariants = [
         'nightlyProdFlipper',
@@ -132,6 +133,13 @@ android {
                 storePassword project.property("keystorePassword")
                 keyAlias project.property("keystoreAlias")
                 keyPassword project.property("keystoreAliasPassword")
+            }
+        } else if (signConfigExists2) {
+            release {
+                storeFile file(System.getenv("TEMP_KEYSTORE_FILE"))
+                storePassword System.getenv("TEMP_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("TEMP_KEYSTORE_ALIAS")
+                keyPassword System.getenv("TEMP_KEYSTORE_ALIAS_PASSWORD")
             }
         }
     }
@@ -281,7 +289,7 @@ android {
             shrinkResources true
             proguardFiles = buildTypes.debug.proguardFiles
             buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Release\""
-            if (keystores.release != null || signConfigExists) {
+            if (keystores.release != null || signConfigExists || signConfigExists2) {
                 signingConfig signingConfigs.release
             }
         }
