@@ -33,6 +33,13 @@ jobs:
       run: echo -n "${KEYSTORE_BASE64}" | base64 -d > "${{runner.temp}}/temp_abr.jks"
       if: ${{env.KEYSTORE_BASE64}} != ""
 
+    # https://github.com/webiny/action-post-run
+    - name: Setup Signing Info File Cleanup
+      uses: webiny/action-post-run@ff38cac46a6928a4815b99b4482b465eb6adccbd
+      with:
+        run: rm "${{runner.temp}}/temp_abr.jks"
+        if: ${{env.KEYSTORE_BASE64}} != ""
+
     - name: Gradle assembleSwProdRelease
       uses: gradle/gradle-build-action@v2
       with:
