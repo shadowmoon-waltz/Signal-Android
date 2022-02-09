@@ -9,6 +9,12 @@ Main gradle build command: assembleSwProdRelease
 ## Differences from stock Signal
 
 <details open="">
+<summary>February 2022</summary>
+
+* Added support for building with GitHub Actions. See below the changelog for more information
+</details>
+
+<details open="">
 <summary>January 2022</summary>
 
 * Option to show a prompt when sending videos to send like gifs. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio.
@@ -64,6 +70,11 @@ Main gradle build command: assembleSwProdRelease
 * Option to show read reaction timestamp.
 * Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys). (hides itself in recent apps screen from January 2022)
 </details>
+
+---
+
+This fork also supports building with GitHub Actions. We make the upstream Android CI and Reproducible Build workflows on demand only, and add a debug build (and create artifact with universal apk) and a release build (and create release with split and universal apks) workflows. These also sign your apks (use if you're comfortable with the build server signing them). Follow the [Android developer instructions to generate a private key](https://developer.android.com/studio/build/building-cmdline#sign_cmdline) and then convert it to a base64 string with
+`openssl base64 < keystore.jks | tr -d '\n' | tee keystore.txt` in a Linux-like terminal and then put it in a GitHub Actions secret called "KEYSTORE_BASE64". Put the keystore password in a secret called "KEYSTORE_PASSWORD", the keystore key alias in "KEYSTORE_ALIAS", and the keystore key alias password in "KEYSTORE_ALIAS_PASSWORD" ([more info on Github Action secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)).
 
 ---
 
