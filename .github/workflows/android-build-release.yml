@@ -1,4 +1,4 @@
-name: Android Build and Release
+name: Android Build (release build, creates a release)
 
 on:
   workflow_dispatch:
@@ -29,6 +29,7 @@ jobs:
 
     # https://proandroiddev.com/how-to-securely-build-and-sign-your-android-app-with-github-actions-ad5323452ce
     # https://github.community/t/how-can-i-test-if-secrets-are-available-in-an-action/17911/5
+    # haven't had this issue, but keep in mind: https://github.community/t/runner-temp-being-emptied-between-jobs/18217
     - name: Write Signing Info to Temporary File
       run: echo -n "${KEYSTORE_BASE64}" | base64 -d > "${{runner.temp}}/temp_abr.jks"
       if: ${{env.KEYSTORE_BASE64}} != ""
@@ -37,8 +38,7 @@ jobs:
     - name: Setup Signing Info File Cleanup
       uses: webiny/action-post-run@ff38cac46a6928a4815b99b4482b465eb6adccbd
       with:
-        run: rm "${{runner.temp}}/temp_abr.jks"
-        if: ${{env.KEYSTORE_BASE64}} != ""
+        run: rm "${{runner.temp}}/temp_abr.jks" || true
 
     - name: Gradle assembleSwProdRelease
       uses: gradle/gradle-build-action@v2

@@ -90,6 +90,7 @@ def selectableVariants = [
         'playStagingFlipper',
         'playStagingPerf',
         'playStagingRelease',
+        'swProdDebug',
         'swProdRelease',
         'websiteProdFlipper',
         'websiteProdRelease',
@@ -127,15 +128,16 @@ android {
                 keyAlias keystores.release.keyAlias
                 keyPassword keystores.release.keyPassword
             }
-        } else if (signConfigExists) {
-            release {
+        }
+        if (signConfigExists) {
+            swSign {
                 storeFile file(project.property("keystoreFile"))
                 storePassword project.property("keystorePassword")
                 keyAlias project.property("keystoreAlias")
                 keyPassword project.property("keystoreAliasPassword")
             }
         } else if (signConfigExists2) {
-            release {
+            swSign {
                 storeFile file(System.getenv("TEMP_KEYSTORE_FILE"))
                 storePassword System.getenv("TEMP_KEYSTORE_PASSWORD")
                 keyAlias System.getenv("TEMP_KEYSTORE_ALIAS")
@@ -251,6 +253,8 @@ android {
         debug {
             if (keystores['debug'] != null) {
                 signingConfig signingConfigs.debug
+            } else if (signConfigExists || signConfigExists2) {
+                signingConfig signingConfigs.swSign
             }
             isDefault true
             minifyEnabled false
@@ -289,8 +293,10 @@ android {
             shrinkResources true
             proguardFiles = buildTypes.debug.proguardFiles
             buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Release\""
-            if (keystores.release != null || signConfigExists || signConfigExists2) {
+            if (keystores.release != null) {
                 signingConfig signingConfigs.release
+            } else if (signConfigExists || signConfigExists2) {
+                signingConfig signingConfigs.swSign
             }
         }
         perf {
