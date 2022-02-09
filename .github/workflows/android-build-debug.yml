@@ -40,7 +40,7 @@ jobs:
     - name: Gradle assembleSwProdRelease
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: assembleSwProdRelease
+        arguments: assembleSwProdDebug
       env:
         TEMP_KEYSTORE_FILE: "${{runner.temp}}/temp_abr.jks"
         TEMP_KEYSTORE_PASSWORD: ${{secrets.KEYSTORE_PASSWORD}}
