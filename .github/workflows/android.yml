@@ -1,12 +1,13 @@
 name: Android CI
 
 on:
-  pull_request:
-  push:
-    branches:
-    - 'master'
-    - '4.**'
-    - '5.**'
+  #pull_request:
+  #push:
+  #  branches:
+  #  - 'master'
+  #  - '4.**'
+  #  - '5.**'
+  workflow_dispatch
 
 jobs:
   build:
