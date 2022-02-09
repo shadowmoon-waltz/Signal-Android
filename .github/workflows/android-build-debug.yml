@@ -37,7 +37,7 @@ jobs:
       with:
         run: rm "${{runner.temp}}/temp_abr.jks" || true
 
-    - name: Gradle assembleSwProdRelease
+    - name: Gradle assembleSwProdDebug
       uses: gradle/gradle-build-action@v2
       with:
         arguments: assembleSwProdDebug
@@ -47,7 +47,10 @@ jobs:
         TEMP_KEYSTORE_ALIAS: ${{secrets.KEYSTORE_ALIAS}}
         TEMP_KEYSTORE_ALIAS_PASSWORD: ${{secrets.KEYSTORE_ALIAS_PASSWORD}}
 
-    - name: Create apk artifact
+    # all uploaded files have to be downloaded as a zip, so just create artifact with universal apk
+    # https://github.com/actions/upload-artifact/issues/101
+    - name: Create artifact with universal apk
       uses: actions/upload-artifact@v2
       with:
-        path: "app/build/outputs/apk/swProd/debug/*.apk"
+        name: "Universal APK Build Artifact"
+        path: "app/build/outputs/apk/swProd/debug/*-universal-*.apk"
