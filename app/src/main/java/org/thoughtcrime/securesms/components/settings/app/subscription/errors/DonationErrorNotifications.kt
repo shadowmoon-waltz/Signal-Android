@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
-import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.notifications.NotificationChannels
 import org.thoughtcrime.securesms.notifications.NotificationIds
 
@@ -70,13 +69,7 @@ object DonationErrorNotifications {
       )
     }
 
-    override fun onContactSupport(context: Context): DonationErrorParams.ErrorAction<PendingIntent> {
-      return createAction(
-        context = context,
-        label = R.string.Subscription__contact_support,
-        actionIntent = AppSettingsActivity.help(context, HelpFragment.DONATION_INDEX)
-      )
-    }
+    override fun onContactSupport(context: Context): DonationErrorParams.ErrorAction<PendingIntent>? = null
 
     private fun createAction(
       context: Context,

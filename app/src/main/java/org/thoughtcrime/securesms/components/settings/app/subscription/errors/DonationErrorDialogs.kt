@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
-import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.util.CommunicationActions
 
 /**
@@ -78,9 +77,7 @@ object DonationErrorDialogs {
     override fun onContactSupport(context: Context): DonationErrorParams.ErrorAction<Unit> {
       return DonationErrorParams.ErrorAction(
         label = R.string.Subscription__contact_support,
-        action = {
-          context.startActivity(AppSettingsActivity.help(context, HelpFragment.DONATION_INDEX))
-        }
+        action = {}
       )
     }
 
