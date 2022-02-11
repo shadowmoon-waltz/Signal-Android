@@ -665,7 +665,7 @@ public final class ConversationReactionOverlay extends FrameLayout {
   }
 
   private void handleUpEvent() {
-    if (selected != -1 && onReactionSelectedListener != null) {
+    if (selected != -1 && onReactionSelectedListener != null && backgroundView.getVisibility() == View.VISIBLE) {
       if (selected == customEmojiIndex) {
         onReactionSelectedListener.onCustomReactionSelected(messageRecord, emojiViews[selected].getTag() != null, System.currentTimeMillis() - selectedAtTime);
       } else {
