@@ -228,6 +228,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_PROMPT_MP4_AS_GIF = "pref_prompt_mp4_as_gif";
 
+  private static final String PREF_BACKUP_INTERVAL_IN_DAYS = "pref_backup_interval_in_days";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -265,7 +267,8 @@ public class TextSecurePreferences {
                                                              LANGUAGE_PREF,
                                                              MESSAGE_BODY_TEXT_SIZE_PREF,
                                                              PREF_SWIPE_TO_RIGHT_ACTION,
-                                                             PREF_SWIPE_TO_LEFT_ACTION};
+                                                             PREF_SWIPE_TO_LEFT_ACTION,
+                                                             PREF_BACKUP_INTERVAL_IN_DAYS};
 
   private static final String[] stringSetPreferencesToBackup = {MEDIA_DOWNLOAD_MOBILE_PREF,
                                                                 MEDIA_DOWNLOAD_WIFI_PREF,
@@ -1301,6 +1304,21 @@ public class TextSecurePreferences {
 
   public static void setPromptMp4AsGif(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_PROMPT_MP4_AS_GIF, enabled);
+  }
+
+  public static int getBackupIntervalInDays(Context context) {
+    String s = getStringPreference(context, PREF_BACKUP_INTERVAL_IN_DAYS, null);
+    if (s != null) {
+      try {
+        return Integer.parseInt(s);
+      } catch (Throwable e) { }
+    }
+    return 1;
+  }
+
+  public static void setBackupIntervalInDays(Context context, int backupIntervalInDays) {
+    int days = (backupIntervalInDays > 1) ? backupIntervalInDays : 1;
+    setStringPreference(context, PREF_BACKUP_INTERVAL_IN_DAYS, Integer.toString(days));
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

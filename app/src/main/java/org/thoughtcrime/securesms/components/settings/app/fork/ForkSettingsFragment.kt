@@ -9,6 +9,7 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.configure
 import org.thoughtcrime.securesms.util.TextSecurePreferences
+import org.thoughtcrime.securesms.util.navigation.safeNavigate
 
 class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_specific) {
 
@@ -173,6 +174,14 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         onClick = {
           TextSecurePreferences.setPromptMp4AsGif(requireContext(), !state.promptMp4AsGif)
           viewModel.setPromptMp4AsGif(!state.promptMp4AsGif)
+        }
+      )
+
+      clickPref(
+        title = DSLSettingsText.from(R.string.fork__backup_interval),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__backup_interval_in_days_summary),
+        onClick = {
+          Navigation.findNavController(requireView()).safeNavigate(R.id.action_forkSettingsFragment_to_backupsPreferenceFragment)
         }
       )
     }

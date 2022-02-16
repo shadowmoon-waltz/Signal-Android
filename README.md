@@ -12,6 +12,7 @@ Main gradle build command: assembleSwProdRelease
 <summary>February 2022</summary>
 
 * Added support for building with GitHub Actions. See below the changelog for more information
+* Added option to set backup interval to any number of days (upstream always uses 1). You can also set it to a really big number if you want to only create backups using the option in Chat Backups setting manually
 </details>
 
 <details open="">

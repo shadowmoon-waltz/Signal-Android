@@ -3784,6 +3784,16 @@
     <string name="ForkSettingsFragment__trash_no_prompt_for_me_summary">This does not affect the delete action in Swipe to Left or Right Conversation Item Actions (which may be helpful to access the otherwise unavailable Delete For Everyone when this is enabled, use Delete For Me (No Prompt) if you want the same behavior in the swipe actions)</string>
     <string name="ForkSettingsFragment__prompt_mp4_as_gif">Prompt to send videos like GIFs</string>
     <string name="ForkSettingsFragment__prompt_mp4_as_gif_summary">When selecting a video, a prompt will appear. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio</string>
+    <string name="ForkSettingsFragment__backup_interval_in_days_summary">Click here to view/set in Chat Backup settings</string>
+
+    <string name="fork__backup_interval">Backup Interval</string>
+    <plurals name="fork__backup_interval_format">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %d days</item>
+    </plurals>
+    <string name="fork__next_backup_format">Next backup: %s</string>
+    <string name="fork__backup_interval_in_days">Backup Interval in Days</string>
+    <string name="fork__backup_interval_invalid">Invalid number of days for backup interval</string>
 
     <string name="fork__content_type_largest">Type / Largest</string>
     <string name="fork__content_type_newest">Type / Newest</string>

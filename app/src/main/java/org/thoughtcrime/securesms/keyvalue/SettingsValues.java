@@ -80,6 +80,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String SWIPE_TO_LEFT_ACTION                    = "settings.swipe.to.left.action";
   public static final String TRASH_NO_PROMPT_FOR_ME                  = "settings.trash.no.prompt.for.me";
   public static final String PROMPT_MP4_AS_GIF                       = "settings.prompt.mp4.as.gif";
+  public static final String BACKUP_INTERVAL_IN_DAYS                 = "settings.backup.interval.in.days";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -137,7 +138,8 @@ public final class SettingsValues extends SignalStoreValues {
                          MANAGE_GROUP_TWEAKS,
                          SWIPE_TO_LEFT_ACTION,
                          TRASH_NO_PROMPT_FOR_ME,
-                         PROMPT_MP4_AS_GIF);
+                         PROMPT_MP4_AS_GIF,
+                         BACKUP_INTERVAL_IN_DAYS);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -539,5 +541,13 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setPromptMp4AsGif(boolean promptMp4AsGif) {
     putBoolean(PROMPT_MP4_AS_GIF, promptMp4AsGif);
+  }
+
+  public int getBackupIntervalInDays() {
+    return getInteger(BACKUP_INTERVAL_IN_DAYS, TextSecurePreferences.getBackupIntervalInDays(ApplicationDependencies.getApplication()));
+  }
+
+  public void setBackupIntervalInDays(int backupIntervalInDays) {
+    putInteger(BACKUP_INTERVAL_IN_DAYS, backupIntervalInDays);
   }
 }

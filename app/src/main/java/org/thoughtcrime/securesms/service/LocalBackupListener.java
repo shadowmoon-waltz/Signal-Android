@@ -14,8 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 public class LocalBackupListener extends PersistentAlarmManagerListener {
 
-  private static final long INTERVAL = TimeUnit.DAYS.toMillis(1);
-
   @Override
   protected long getNextScheduledExecutionTime(Context context) {
     return TextSecurePreferences.getNextBackupTime(context);
@@ -37,9 +35,16 @@ public class LocalBackupListener extends PersistentAlarmManagerListener {
   }
 
   public static long setNextBackupTimeToIntervalFromNow(@NonNull Context context) {
-    long nextTime = System.currentTimeMillis() + INTERVAL;
+    long nextTime = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(TextSecurePreferences.getBackupIntervalInDays(context));
     TextSecurePreferences.setNextBackupTime(context, nextTime);
 
     return nextTime;
+  }
+
+  public static void setNextBackupTimeToIntervalFromPrevious(@NonNull Context context, int oldInterval) {
+    int days = TextSecurePreferences.getBackupIntervalInDays(context);
+    long adjust = (days >= oldInterval) ? TimeUnit.DAYS.toMillis(days - oldInterval) : -TimeUnit.DAYS.toMillis(oldInterval - days);
+    long nextTime = TextSecurePreferences.getNextBackupTime(context) + adjust;
+    TextSecurePreferences.setNextBackupTime(context, nextTime);
   }
 }
