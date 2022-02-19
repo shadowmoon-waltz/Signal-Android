@@ -70,6 +70,7 @@ import org.thoughtcrime.securesms.permissions.Permissions;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.sharing.ShareActivity;
+import org.thoughtcrime.securesms.sharing.ShareIntents;
 import org.thoughtcrime.securesms.util.AttachmentUtil;
 import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.FullscreenHelper;
@@ -390,6 +391,9 @@ public final class MediaPreviewActivity extends PassphraseRequiredActivity
     if (mediaItem != null) {
       Intent composeIntent = new Intent(this, ShareActivity.class);
       composeIntent.putExtra(Intent.EXTRA_STREAM, mediaItem.uri);
+      if (mediaItem.attachment.isVideoGif()) {
+        composeIntent.putExtra(ShareIntents.EXTRA_VIDEO_GIF, true);
+      }
       composeIntent.setType(mediaItem.type);
       startActivity(composeIntent);
     }

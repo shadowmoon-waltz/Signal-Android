@@ -43,6 +43,7 @@ import com.annimon.stream.Stream;
 
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.ContactSelectionListFragment;
+import org.thoughtcrime.securesms.MediaPreviewActivity;
 import org.thoughtcrime.securesms.PassphraseRequiredActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.components.SearchToolbar;
@@ -609,7 +610,8 @@ public class ShareActivity extends PassphraseRequiredActivity
                                                              .withMedia(args.getExtraMedia())
                                                              .withDraftText(args.getExtraText() != null ? args.getExtraText().toString() : null)
                                                              .withStickerLocator(args.getExtraSticker())
-                                                             .asBorderless(args.isBorderless());
+                                                             .asBorderless(args.isBorderless())
+                                                             .withIsVideoGif(args.isVideoGif());
 
     if (shareData != null && shareData.isForIntent()) {
       Log.i(TAG, "Shared data is a single file.");
@@ -671,7 +673,7 @@ public class ShareActivity extends PassphraseRequiredActivity
                               0,
                               0,
                               false,
-                              false,
+                              args.isVideoGif(),
                               Optional.absent(),
                               Optional.absent(),
                               Optional.absent()));

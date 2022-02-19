@@ -33,6 +33,7 @@ public class ConversationIntents {
   private static final String EXTRA_STARTING_POSITION                = "starting_position";
   private static final String EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP = "first_time_in_group";
   private static final String EXTRA_WITH_SEARCH_OPEN                 = "with_search_open";
+  private static final String EXTRA_IS_VIDEO_GIF                     = "is_video_gif";
 
   private ConversationIntents() {
   }
@@ -72,6 +73,7 @@ public class ConversationIntents {
     private final int              startingPosition;
     private final boolean          firstTimeInSelfCreatedGroup;
     private final boolean          withSearchOpen;
+    private final boolean          isVideoGif;
 
     static Args from(@NonNull Intent intent) {
       if (isBubbleIntent(intent)) {
@@ -83,6 +85,7 @@ public class ConversationIntents {
                         false,
                         ThreadDatabase.DistributionTypes.DEFAULT,
                         -1,
+                        false,
                         false,
                         false);
       }
@@ -96,7 +99,8 @@ public class ConversationIntents {
                       intent.getIntExtra(EXTRA_DISTRIBUTION_TYPE, ThreadDatabase.DistributionTypes.DEFAULT),
                       intent.getIntExtra(EXTRA_STARTING_POSITION, -1),
                       intent.getBooleanExtra(EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP, false),
-                      intent.getBooleanExtra(EXTRA_WITH_SEARCH_OPEN, false));
+                      intent.getBooleanExtra(EXTRA_WITH_SEARCH_OPEN, false),
+                      intent.getBooleanExtra(EXTRA_IS_VIDEO_GIF, false));
     }
 
     private Args(@NonNull RecipientId recipientId,
@@ -108,7 +112,8 @@ public class ConversationIntents {
                  int distributionType,
                  int startingPosition,
                  boolean firstTimeInSelfCreatedGroup,
-                 boolean withSearchOpen)
+                 boolean withSearchOpen,
+                 boolean isVideoGif)
     {
       this.recipientId                 = recipientId;
       this.threadId                    = threadId;
@@ -120,6 +125,7 @@ public class ConversationIntents {
       this.startingPosition            = startingPosition;
       this.firstTimeInSelfCreatedGroup = firstTimeInSelfCreatedGroup;
       this.withSearchOpen              = withSearchOpen;
+      this.isVideoGif                  = isVideoGif;
     }
 
     public @NonNull RecipientId getRecipientId() {
@@ -170,6 +176,10 @@ public class ConversationIntents {
     public boolean isWithSearchOpen() {
       return withSearchOpen;
     }
+
+    public boolean isVideoGif() {
+      return isVideoGif;
+    }
   }
 
   public final static class Builder {
@@ -188,6 +198,7 @@ public class ConversationIntents {
     private String         dataType;
     private boolean        firstTimeInSelfCreatedGroup;
     private boolean        withSearchOpen;
+    private boolean        isVideoGif = false;
 
     private Builder(@NonNull Context context,
                     @NonNull RecipientId recipientId,
@@ -257,6 +268,11 @@ public class ConversationIntents {
       return this;
     }
 
+    public @NonNull Builder withIsVideoGif(boolean isVideoGif) {
+      this.isVideoGif = isVideoGif;
+      return this;
+    }
+
     public @NonNull Intent build() {
       if (stickerLocator != null && media != null) {
         throw new IllegalStateException("Cannot have both sticker and media array");
@@ -282,6 +298,10 @@ public class ConversationIntents {
       intent.putExtra(EXTRA_BORDERLESS, isBorderless);
       intent.putExtra(EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP, firstTimeInSelfCreatedGroup);
       intent.putExtra(EXTRA_WITH_SEARCH_OPEN, withSearchOpen);
+
+      if (isVideoGif) {
+        intent.putExtra(EXTRA_IS_VIDEO_GIF, isVideoGif);
+      }
 
       if (draftText != null) {
         intent.putExtra(EXTRA_TEXT, draftText);

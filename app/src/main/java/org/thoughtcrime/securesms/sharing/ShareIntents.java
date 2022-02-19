@@ -22,6 +22,7 @@ public final class ShareIntents {
   private static final String EXTRA_MEDIA      = "extra_media";
   private static final String EXTRA_BORDERLESS = "extra_borderless";
   private static final String EXTRA_STICKER    = "extra_sticker";
+  public  static final String EXTRA_VIDEO_GIF  = "extra_video_gif";
 
   private ShareIntents() {
   }
@@ -32,23 +33,27 @@ public final class ShareIntents {
     private final ArrayList<Media> extraMedia;
     private final StickerLocator   extraSticker;
     private final boolean          isBorderless;
+    private final boolean          isVideoGif;
 
     public static Args from(@NonNull Intent intent) {
       return new Args(intent.getStringExtra(Intent.EXTRA_TEXT),
                       intent.getParcelableArrayListExtra(EXTRA_MEDIA),
                       intent.getParcelableExtra(EXTRA_STICKER),
-                      intent.getBooleanExtra(EXTRA_BORDERLESS, false));
+                      intent.getBooleanExtra(EXTRA_BORDERLESS, false),
+                      intent.getBooleanExtra(EXTRA_VIDEO_GIF, false));
     }
 
     private Args(@Nullable CharSequence extraText,
                  @Nullable ArrayList<Media> extraMedia,
                  @Nullable StickerLocator extraSticker,
-                 boolean isBorderless)
+                 boolean isBorderless,
+                 boolean isVideoGif)
     {
       this.extraText    = extraText;
       this.extraMedia   = extraMedia;
       this.extraSticker = extraSticker;
       this.isBorderless = isBorderless;
+      this.isVideoGif   = isVideoGif;
     }
 
     public @Nullable ArrayList<Media> getExtraMedia() {
@@ -65,6 +70,10 @@ public final class ShareIntents {
 
     public boolean isBorderless() {
       return isBorderless;
+    }
+
+    public boolean isVideoGif() {
+      return isVideoGif;
     }
 
     public boolean isEmpty() {

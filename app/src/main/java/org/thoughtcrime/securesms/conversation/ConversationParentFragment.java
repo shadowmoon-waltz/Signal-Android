@@ -1609,6 +1609,7 @@ public class ConversationParentFragment extends Fragment
     final List<Media>    mediaList        = args.getMedia();
     final StickerLocator stickerLocator   = args.getStickerLocator();
     final boolean        borderless       = args.isBorderless();
+    final boolean        videoGif         = args.isVideoGif();
 
     if (stickerLocator != null && draftMedia != null) {
       Log.d(TAG, "Handling shared sticker.");
@@ -1619,7 +1620,7 @@ public class ConversationParentFragment extends Fragment
     if (draftMedia != null && draftContentType != null && borderless) {
       SimpleTask.run(getLifecycle(),
                      () -> getKeyboardImageDetails(draftMedia),
-                     details -> sendKeyboardImage(draftMedia, draftContentType, details));
+                     details -> sendKeyboardImage(draftMedia, draftContentType, details, videoGif));
       return new SettableFuture<>(false);
     }
 
@@ -1638,7 +1639,7 @@ public class ConversationParentFragment extends Fragment
 
     if (draftMedia != null && draftMediaType != null) {
       Log.d(TAG, "Handling shared Data.");
-      return setMedia(draftMedia, draftMediaType);
+      return setMedia(draftMedia, draftMediaType, 0, 0, false, videoGif);
     }
 
     if (draftText == null && draftMedia == null && draftMediaType == null) {
@@ -3304,7 +3305,7 @@ public class ConversationParentFragment extends Fragment
     if (MediaUtil.isGif(contentType) || MediaUtil.isImageType(contentType)) {
       SimpleTask.run(getLifecycle(),
                      () -> getKeyboardImageDetails(uri),
-                     details -> sendKeyboardImage(uri, contentType, details));
+                     details -> sendKeyboardImage(uri, contentType, details, false));
     } else if (MediaUtil.isVideoType(contentType)) {
       setMedia(uri, MediaType.VIDEO);
     } else if (MediaUtil.isAudioType(contentType)) {
@@ -3992,9 +3993,9 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void sendKeyboardImage(@NonNull Uri uri, @NonNull String contentType, @Nullable KeyboardImageDetails details) {
+  private void sendKeyboardImage(@NonNull Uri uri, @NonNull String contentType, @Nullable KeyboardImageDetails details, boolean videoGif) {
     if (details == null || !details.hasTransparency) {
-      setMedia(uri, Objects.requireNonNull(MediaType.from(contentType)));
+      setMedia(uri, Objects.requireNonNull(MediaType.from(contentType)), 0, 0, false, videoGif);
       return;
     }
 
