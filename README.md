@@ -13,6 +13,7 @@ Main gradle build command: assembleSwProdRelease
 
 * Added support for building with GitHub Actions. See below the changelog for more information
 * Added option to set backup interval to any number of days (upstream always uses 1). You can also set it to a really big number if you want to only create backups using the option in Chat Backups setting manually
+* Forwarding video GIFs from the media preview screen now retains video GIF status
 </details>
 
 <details open="">
