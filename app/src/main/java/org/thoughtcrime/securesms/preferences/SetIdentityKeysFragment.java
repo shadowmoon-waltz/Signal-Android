@@ -19,7 +19,7 @@ import org.thoughtcrime.securesms.R;
 
 import org.thoughtcrime.securesms.util.Base64;
 import org.whispersystems.libsignal.IdentityKeyPair;
-import org.thoughtcrime.securesms.crypto.IdentityKeyUtil;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 
 import android.widget.Button;
 
@@ -82,7 +82,7 @@ public class SetIdentityKeysFragment extends Fragment {
                  .setMessage("Setting these keys to incorrect values may cause app issues. Continue?")
                  .setPositiveButton("Proceed", (d, i) -> {
                    d.dismiss();
-                   IdentityKeyUtil.setIdentityKeys(requireContext(), publicKey, privateKey);
+                   SignalStore.account().setIdentityKeysManually(publicKey, privateKey);
                    new AlertDialog.Builder(requireContext())
                                   .setMessage("Identity keys set successfully.")
                                   .setPositiveButton(android.R.string.ok, (d2, i2) -> {
@@ -116,7 +116,7 @@ public class SetIdentityKeysFragment extends Fragment {
                          "and wherever else you choose to store it.")
              .setPositiveButton("Proceed", (d, i) -> {
                try {
-                 IdentityKeyPair ikp = IdentityKeyUtil.getIdentityKeyPair(requireContext());
+                 IdentityKeyPair ikp = SignalStore.account().getAciIdentityKey();
                  this.publicKeyText.setText(Base64.encodeBytes(ikp.getPublicKey().serialize()));
                  this.privateKeyText.setText(Base64.encodeBytes(ikp.getPrivateKey().serialize()));
                } catch (Exception e) {
