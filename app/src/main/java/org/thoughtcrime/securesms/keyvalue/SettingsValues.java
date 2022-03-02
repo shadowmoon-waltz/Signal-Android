@@ -65,6 +65,7 @@ public final class SettingsValues extends SignalStoreValues {
   private static final String DEFAULT_SMS                             = "settings.default_sms";
   private static final String UNIVERSAL_EXPIRE_TIMER                  = "settings.universal.expire.timer";
   private static final String SENT_MEDIA_QUALITY                      = "settings.sentMediaQuality";
+  private static final String CENSORSHIP_CIRCUMVENTION_ENABLED        = "settings.censorshipCircumventionEnabled";
 
   public static final String HIDE_INSIGHTS                           = "settings.fork.hide.insights";
   public static final String SHOW_REACTION_TIMESTAMPS                = "settings.fork.show.reaction.timestamps";
@@ -421,6 +422,14 @@ public final class SettingsValues extends SignalStoreValues {
     return SentMediaQuality.fromCode(getInteger(SENT_MEDIA_QUALITY, SentMediaQuality.STANDARD.getCode()));
   }
 
+  public @NonNull CensorshipCircumventionEnabled getCensorshipCircumventionEnabled() {
+    return CensorshipCircumventionEnabled.deserialize(getInteger(CENSORSHIP_CIRCUMVENTION_ENABLED, CensorshipCircumventionEnabled.DEFAULT.serialize()));
+  }
+
+  public void setCensorshipCircumventionEnabled(boolean enabled) {
+    putInteger(CENSORSHIP_CIRCUMVENTION_ENABLED, enabled ? CensorshipCircumventionEnabled.ENABLED.serialize() : CensorshipCircumventionEnabled.DISABLED.serialize());
+  }
+
   private @Nullable Uri getUri(@NonNull String key) {
     String uri = getString(key, "");
 
@@ -549,5 +558,28 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setBackupIntervalInDays(int backupIntervalInDays) {
     putInteger(BACKUP_INTERVAL_IN_DAYS, backupIntervalInDays);
+  }
+
+  public enum CensorshipCircumventionEnabled {
+    DEFAULT(0), ENABLED(1), DISABLED(2);
+
+    private final int value;
+
+    CensorshipCircumventionEnabled(int value) {
+      this.value = value;
+    }
+
+    public static CensorshipCircumventionEnabled deserialize(int value) {
+      switch (value) {
+        case 0: return DEFAULT;
+        case 1: return ENABLED;
+        case 2: return DISABLED;
+        default: throw new IllegalArgumentException("Bad value: " + value);
+      }
+    }
+
+    public int serialize() {
+      return value;
+    }
   }
 }
