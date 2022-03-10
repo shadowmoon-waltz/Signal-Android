@@ -7,6 +7,7 @@ import androidx.core.util.Consumer
 import io.reactivex.rxjava3.core.Single
 import org.signal.core.util.concurrent.SignalExecutors
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.ThreadDatabase
 import org.thoughtcrime.securesms.database.identity.IdentityRecordList
@@ -16,7 +17,6 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.sharing.MultiShareArgs
 import org.thoughtcrime.securesms.sharing.MultiShareSender
-import org.thoughtcrime.securesms.sharing.ShareContact
 import org.thoughtcrime.securesms.sharing.ShareContactAndThread
 import org.whispersystems.libsignal.util.guava.Optional
 
@@ -30,9 +30,11 @@ class MultiselectForwardRepository(context: Context) {
     val onAllMessagesFailed: () -> Unit
   )
 
-  fun checkForBadIdentityRecords(shareContacts: List<ShareContact>, consumer: Consumer<List<IdentityRecord>>) {
+  fun checkForBadIdentityRecords(contactSearchKeys: Set<ContactSearchKey>, consumer: Consumer<List<IdentityRecord>>) {
     SignalExecutors.BOUNDED.execute {
-      val recipients: List<Recipient> = shareContacts.map { Recipient.resolved(it.recipientId.get()) }
+      val recipients: List<Recipient> = contactSearchKeys
+        .filterIsInstance<ContactSearchKey.KnownRecipient>()
+        .map { Recipient.resolved(it.recipientId) }
       val identityRecordList: IdentityRecordList = ApplicationDependencies.getProtocolStore().aci().identities().getIdentityRecords(recipients)
 
       consumer.accept(identityRecordList.untrustedRecords)
@@ -58,7 +60,7 @@ class MultiselectForwardRepository(context: Context) {
   fun send(
     additionalMessage: String,
     multiShareArgs: List<MultiShareArgs>,
-    shareContacts: List<ShareContact>,
+    shareContacts: Set<ContactSearchKey>,
     resultHandlers: MultiselectForwardResultHandlers
   ) {
     SignalExecutors.BOUNDED.execute {
@@ -66,10 +68,13 @@ class MultiselectForwardRepository(context: Context) {
 
       val sharedContactsAndThreads: Set<ShareContactAndThread> = shareContacts
         .asSequence()
-        .distinct()
-        .filter { it.recipientId.isPresent }
-        .map { Recipient.resolved(it.recipientId.get()) }
-        .map { ShareContactAndThread(it.id, threadDatabase.getOrCreateThreadIdFor(it), it.isForceSmsSelection) }
+        .filter { it is ContactSearchKey.Story || it is ContactSearchKey.KnownRecipient }
+        .map {
+          val recipient = Recipient.resolved(it.requireShareContact().recipientId.get())
+          val isStory = it is ContactSearchKey.Story || recipient.isDistributionList
+          val thread = if (isStory) -1L else threadDatabase.getOrCreateThreadIdFor(recipient)
+          ShareContactAndThread(recipient.id, thread, recipient.isForceSmsSelection, it is ContactSearchKey.Story)
+        }
         .toSet()
 
       val mappedArgs: List<MultiShareArgs> = multiShareArgs.map { it.buildUpon(sharedContactsAndThreads).build() }
@@ -112,7 +117,7 @@ class MultiselectForwardRepository(context: Context) {
       MultiselectForwardRepository(activity).send(
         "",
         args.multiShareArgs,
-        listOf(ShareContact(Optional.of(recipient.getId()), null)),
+        setOf(ContactSearchKey.KnownRecipient(recipient.getId())),
         MultiselectForwardRepository.MultiselectForwardResultHandlers(
           onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
           onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_failed_to_send, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },

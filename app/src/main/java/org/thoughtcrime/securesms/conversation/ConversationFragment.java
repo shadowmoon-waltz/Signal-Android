@@ -95,6 +95,7 @@ import org.thoughtcrime.securesms.conversation.colors.RecyclerViewColorizer;
 import org.thoughtcrime.securesms.conversation.mutiselect.ConversationItemAnimator;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectItemDecoration;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart;
+import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardBottomSheet;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragmentArgs;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardRepository;
@@ -189,7 +190,7 @@ import java.util.concurrent.ExecutionException;
 import kotlin.Unit;
 
 @SuppressLint("StaticFieldLeak")
-public class ConversationFragment extends LoggingFragment implements MultiselectForwardFragment.Callback {
+public class ConversationFragment extends LoggingFragment implements MultiselectForwardBottomSheet.Callback {
   private static final String TAG = Log.tag(ConversationFragment.class);
 
   private static final int SCROLL_ANIMATION_THRESHOLD = 50;
@@ -227,7 +228,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private Animation                   scrollButtonOutAnimation;
   private Animation                   mentionButtonOutAnimation;
   private OnScrollListener            conversationScrollListener;
-  private int                         pulsePosition = -1;
   private int                         lastSeenScrollOffset;
   private View                        toolbarShadow;
   private Stopwatch                   startupStopwatch;
@@ -1134,7 +1134,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     MultiselectForwardFragmentArgs.create(requireContext(),
                                           multiselectParts,
-                                          args -> MultiselectForwardFragment.show(getChildFragmentManager(), args));
+                                          args -> MultiselectForwardFragment.showBottomSheet(getChildFragmentManager(), args));
   }
 
   private void handleForwardMessagePartsNoteToSelf(Set<MultiselectPart> multiselectParts) {
@@ -1184,7 +1184,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private void performSave(final MediaMmsMessageRecord message) {
     List<SaveAttachmentTask.Attachment> attachments = Stream.of(message.getSlideDeck().getSlides())
                                                             .filter(s -> s.getUri() != null && (s.hasImage() || s.hasVideo() || s.hasAudio() || s.hasDocument()))
-                                                            .map(s -> new SaveAttachmentTask.Attachment(s.getUri(), s.getContentType(), message.getDateReceived(), s.getFileName().orNull()))
+                                                            .map(s -> new SaveAttachmentTask.Attachment(s.getUri(), s.getContentType(), message.getDateSent(), s.getFileName().orNull()))
                                                             .toList();
 
     if (!Util.isEmpty(attachments)) {
@@ -1318,17 +1318,13 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                if (Math.abs(layoutManager.findFirstVisibleItemPosition() - p) < SCROLL_ANIMATION_THRESHOLD) {
                                  View child = layoutManager.findViewByPosition(position);
 
-                                 if (child != null && layoutManager.isViewPartiallyVisible(child, true, false)) {
-                                   getListAdapter().pulseAtPosition(position);
-                                 } else {
-                                   pulsePosition = position;
+                                 if (child == null || !layoutManager.isViewPartiallyVisible(child, true, false)) {
+                                   layoutManager.scrollToPositionWithOffset(p, list.getHeight() / 4);
                                  }
-
-                                 layoutManager.scrollToPositionWithOffset(p, list.getHeight() / 4);
                                } else {
                                  layoutManager.scrollToPositionWithOffset(p, list.getHeight() / 4);
-                                 getListAdapter().pulseAtPosition(position);
                                }
+                               getListAdapter().pulseAtPosition(position);
                              })
                          ))
                          .withOnInvalidPosition(() -> {
@@ -1436,6 +1432,9 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     }
   }
 
+  @Override
+  public void onDismissForwardSheet() {
+  }
 
   public interface ConversationFragmentListener extends VoiceNoteMediaControllerOwner {
     boolean isKeyboardOpen();
@@ -1507,11 +1506,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         conversationDateHeader.show();
       } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
         conversationDateHeader.hide();
-
-        if (pulsePosition != -1) {
-          getListAdapter().pulseAtPosition(pulsePosition);
-          pulsePosition = -1;
-        }
       }
     }
 
