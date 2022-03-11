@@ -9,6 +9,12 @@ Main gradle build command: assembleSwProdRelease
 ## Differences from stock Signal
 
 <details open="">
+<summary>March 2022</summary>
+
+* Further improvements to security of view/set identity keys screen (requires authentication if device has one available)
+</details>
+
+<details open="">
 <summary>February 2022</summary>
 
 * Added support for building with GitHub Actions. See below the changelog for more information
@@ -75,9 +81,13 @@ Main gradle build command: assembleSwProdRelease
 
 ---
 
-This fork also supports building with GitHub Actions. We make the upstream Android CI and Reproducible Build workflows on demand only, and add a debug build (and create artifact with universal apk) and a release build (and create release with split and universal apks) workflows. These also sign your apks (use if you're comfortable with the build server signing them). To use these workflows yourself, start by forking this repository. Follow the
+<details>
+<summary>Instructions for building with GitHub Actions</summary>
+
+We make the upstream Android CI and Reproducible Build workflows on demand only, and add a debug build (and create artifact with universal apk) and a release build (and create release with split and universal apks) workflows. These also sign your apks (use if you're comfortable with the build server signing them). To use these workflows yourself, start by forking this repository. Follow the
 [Android developer instructions to generate a private key](https://developer.android.com/studio/build/building-cmdline#sign_cmdline) and then convert it to a base64 string with `openssl base64 < keystore.jks | tr -d '\n' | tee keystore.txt` in a Linux-like terminal and then put it in a GitHub Actions secret called "KEYSTORE_BASE64". Put the keystore password in a secret called "KEYSTORE_PASSWORD", the keystore key alias in "KEYSTORE_ALIAS", and
 the keystore key alias password in "KEYSTORE_ALIAS_PASSWORD" ([more info on Github Action secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets)).
+</details>
 
 ---
 
