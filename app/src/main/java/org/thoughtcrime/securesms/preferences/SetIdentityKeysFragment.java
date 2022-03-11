@@ -26,12 +26,24 @@ import android.widget.Button;
 import android.view.Window;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricManager.Authenticators;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
+
 public class SetIdentityKeysFragment extends Fragment {
 
   private EditText               publicKeyText;
   private EditText               privateKeyText;
   private CircularProgressButton applyButton;
   private Button                 populateButton;
+
+  private char[]                 cachedPublicKey;
+  private char[]                 cachedPrivateKey;
+
+  private final int              authenticators = Authenticators.BIOMETRIC_STRONG | Authenticators.BIOMETRIC_WEAK | Authenticators.DEVICE_CREDENTIAL;
+  private boolean                hadScreenLock = true;
 
   public static SetIdentityKeysFragment newInstance() {
     return new SetIdentityKeysFragment();
@@ -55,7 +67,91 @@ public class SetIdentityKeysFragment extends Fragment {
         w.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
       }
     }
+    clearCachedKeys();
     super.onDestroyView();
+  }
+
+  // hide keys if necessary so that it won't show up on resume until user authenticates (best effort if available)
+  // references: https://stackoverflow.com/questions/63806437 and https://developer.android.com/training/sign-in/biometric-auth
+  @Override
+  public void onResume() {
+    if (BiometricManager.from(requireContext()).canAuthenticate(authenticators)
+        == BiometricManager.BIOMETRIC_SUCCESS) {
+      BiometricPrompt biometricPrompt = new BiometricPrompt(this, ContextCompat.getMainExecutor(requireContext()),
+          new BiometricPrompt.AuthenticationCallback() {
+        @Override
+        public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+          super.onAuthenticationError(errorCode, errString);
+          Navigation.findNavController(requireView()).popBackStack();
+        }
+
+        @Override
+        public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+          super.onAuthenticationSucceeded(result);
+          putBackCachedKeys();
+        }
+
+        @Override
+        public void onAuthenticationFailed() {
+          super.onAuthenticationFailed();
+          Navigation.findNavController(requireView()).popBackStack();
+        }
+      });
+
+      BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+          .setTitle("SignalSW")
+          .setSubtitle("Authenticate to view/set identity keys")
+          .setAllowedAuthenticators(authenticators)
+          .build();
+
+      biometricPrompt.authenticate(promptInfo);
+    } else {
+      if (hadScreenLock) {
+        clearCachedKeys();
+        hadScreenLock = false;
+      } else {
+        putBackCachedKeys();
+      }
+    }
+
+    super.onResume();
+  }
+
+  @Override
+  public void onPause() {
+    hadScreenLock = (BiometricManager.from(requireContext()).canAuthenticate(authenticators) == BiometricManager.BIOMETRIC_SUCCESS);
+
+    cachedPublicKey = publicKeyText.getText().toString().toCharArray();
+    cachedPrivateKey = privateKeyText.getText().toString().toCharArray();
+    publicKeyText.setText("");
+    privateKeyText.setText("");
+
+    super.onPause();
+  }
+
+  private void putBackCachedKeys() {
+    if (cachedPublicKey != null) {
+      publicKeyText.setText(cachedPublicKey, 0, cachedPublicKey.length);
+    }
+    if (cachedPrivateKey != null) {
+      privateKeyText.setText(cachedPrivateKey, 0, cachedPrivateKey.length);
+    }
+    clearCachedKeys();
+  }
+
+  private void clearCachedKeys() {
+    if (cachedPublicKey != null) {
+      for (int i = 0; i < cachedPublicKey.length; i++) {
+        cachedPublicKey[i] = 0;
+      }
+      cachedPublicKey = null;
+    }
+    if (cachedPrivateKey != null) {
+      for (int i = 0; i < cachedPrivateKey.length; i++) {
+        cachedPrivateKey[i] = 0;
+      }
+      cachedPrivateKey = null;
+    }
   }
 
   @Override
