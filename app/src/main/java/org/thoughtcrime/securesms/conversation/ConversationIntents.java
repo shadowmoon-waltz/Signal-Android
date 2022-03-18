@@ -165,7 +165,6 @@ public class ConversationIntents {
     }
 
     public @Nullable ChatWallpaper getWallpaper() {
-      // TODO [greyson][wallpaper] Is it worth it to do this beforehand?
       return Recipient.resolved(recipientId).getWallpaper();
     }
 

@@ -13,8 +13,8 @@ import org.thoughtcrime.securesms.recipients.RecipientDetails
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.util.Bitmask
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper
-import org.whispersystems.libsignal.util.guava.Optional
 import org.whispersystems.signalservice.api.push.ServiceId
+import java.util.Optional
 import java.util.UUID
 import kotlin.random.Random
 
@@ -26,7 +26,7 @@ object RecipientDatabaseTestUtils {
   fun createRecipient(
     resolved: Boolean = false,
     groupName: String? = null,
-    groupAvatarId: Optional<Long> = Optional.absent(),
+    groupAvatarId: Optional<Long> = Optional.empty(),
     systemContact: Boolean = false,
     isSelf: Boolean = false,
     participants: List<Recipient> = listOf(),
@@ -126,7 +126,6 @@ object RecipientDatabaseTestUtils {
         unidentifiedAccessMode,
         forceSmsSelection,
         capabilities,
-        Recipient.Capability.deserialize(Bitmask.read(capabilities, RecipientDatabase.Capabilities.GROUPS_V2, RecipientDatabase.Capabilities.BIT_LENGTH).toInt()),
         Recipient.Capability.deserialize(Bitmask.read(capabilities, RecipientDatabase.Capabilities.GROUPS_V1_MIGRATION, RecipientDatabase.Capabilities.BIT_LENGTH).toInt()),
         Recipient.Capability.deserialize(Bitmask.read(capabilities, RecipientDatabase.Capabilities.SENDER_KEY, RecipientDatabase.Capabilities.BIT_LENGTH).toInt()),
         Recipient.Capability.deserialize(Bitmask.read(capabilities, RecipientDatabase.Capabilities.ANNOUNCEMENT_GROUPS, RecipientDatabase.Capabilities.BIT_LENGTH).toInt()),

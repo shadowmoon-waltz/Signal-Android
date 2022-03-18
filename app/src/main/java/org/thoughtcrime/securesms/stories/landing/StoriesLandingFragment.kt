@@ -70,7 +70,7 @@ class StoriesLandingFragment :
         .ifNecessary()
         .withRationaleDialog(getString(R.string.ConversationActivity_to_capture_photos_and_video_allow_signal_access_to_the_camera), R.drawable.ic_camera_24)
         .withPermanentDenialDialog(getString(R.string.ConversationActivity_signal_needs_the_camera_permission_to_take_photos_or_video))
-        .onAllGranted { startActivity(MediaSelectionActivity.camera(requireContext())) }
+        .onAllGranted { startActivity(MediaSelectionActivity.camera(requireContext(), isStory = true)) }
         .onAnyDenied { Toast.makeText(requireContext(), R.string.ConversationActivity_signal_needs_camera_permissions_to_take_photos_or_video, Toast.LENGTH_LONG).show() }
         .execute()
     }
@@ -127,6 +127,9 @@ class StoriesLandingFragment :
       onRowClick = {
         if (it.data.storyRecipient.isMyStory) {
           startActivity(Intent(requireContext(), MyStoriesActivity::class.java))
+        } else if (it.data.primaryStory.messageRecord.isOutgoing && it.data.primaryStory.messageRecord.isFailed) {
+          lifecycleDisposable += viewModel.resend(it.data.primaryStory.messageRecord).subscribe()
+          Toast.makeText(requireContext(), R.string.message_recipients_list_item__resend, Toast.LENGTH_SHORT).show()
         } else {
           startActivity(StoryViewerActivity.createIntent(requireContext(), it.data.storyRecipient.id))
         }
@@ -143,7 +146,7 @@ class StoriesLandingFragment :
         if (!it.data.isHidden) {
           handleHideStory(it)
         } else {
-          lifecycleDisposable += viewModel.setHideStory(it.data.storyRecipient, it.data.isHidden).subscribe()
+          lifecycleDisposable += viewModel.setHideStory(it.data.storyRecipient, !it.data.isHidden).subscribe()
         }
       },
       onShareStory = {

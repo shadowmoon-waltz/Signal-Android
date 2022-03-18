@@ -92,7 +92,7 @@ class MediaSelectionRepository(context: Context) {
       val updatedMedia = oldToNewMediaMap.values.toList()
 
       for (media in updatedMedia) {
-        Log.w(TAG, media.uri.toString() + " : " + media.transformProperties.transform { t: TransformProperties -> "" + t.isVideoTrim }.or("null"))
+        Log.w(TAG, media.uri.toString() + " : " + media.transformProperties.map { t: TransformProperties -> "" + t.isVideoTrim }.orElse("null"))
       }
 
       val singleRecipient: Recipient? = singleContact?.let { Recipient.resolved(it.recipientId) }
@@ -225,6 +225,7 @@ class MediaSelectionRepository(context: Context) {
         ThreadDatabase.DistributionTypes.DEFAULT,
         storyType,
         null,
+        false,
         null,
         emptyList(),
         emptyList(),
@@ -236,7 +237,7 @@ class MediaSelectionRepository(context: Context) {
       if (isStory && preUploadResults.size > 1) {
         preUploadResults.forEach {
           val list = storyMessages[it] ?: mutableListOf()
-          list.add(OutgoingSecureMediaMessage(message))
+          list.add(OutgoingSecureMediaMessage(message).withSentTimestamp(System.currentTimeMillis()))
           storyMessages[it] = list
 
           // XXX We must do this to avoid sending out messages to the same recipient with the same

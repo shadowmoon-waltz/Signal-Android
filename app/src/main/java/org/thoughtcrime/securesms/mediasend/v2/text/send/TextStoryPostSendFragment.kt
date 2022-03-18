@@ -13,10 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import org.signal.core.util.DimensionUnit
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.contacts.HeaderAction
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchConfiguration
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchMediator
+import org.thoughtcrime.securesms.conversation.ui.error.SafetyNumberChangeDialog
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewViewModel
 import org.thoughtcrime.securesms.mediasend.v2.stories.ChooseGroupStoryBottomSheet
 import org.thoughtcrime.securesms.mediasend.v2.stories.ChooseStoryTypeBottomSheet
@@ -24,6 +24,7 @@ import org.thoughtcrime.securesms.mediasend.v2.text.TextStoryPostCreationViewMod
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.sharing.ShareSelectionAdapter
 import org.thoughtcrime.securesms.sharing.ShareSelectionMappingModel
+import org.thoughtcrime.securesms.stories.Stories
 import org.thoughtcrime.securesms.stories.dialogs.StoryDialogs
 import org.thoughtcrime.securesms.stories.settings.create.CreateStoryWithViewersFragment
 import org.thoughtcrime.securesms.stories.settings.hide.HideStoryFromDialogFragment
@@ -82,21 +83,23 @@ class TextStoryPostSendFragment : Fragment(R.layout.stories_send_text_post_fragm
     }
 
     shareConfirmButton.setOnClickListener {
-      if (viewModel.isFirstSendToAStory(contactSearchMediator.getSelectedContacts())) {
-        StoryDialogs.guardWithAddToYourStoryDialog(
-          context = requireContext(),
-          onAddToStory = { send() },
-          onEditViewers = {
-            viewModel.onSendCancelled()
-            HideStoryFromDialogFragment().show(childFragmentManager, null)
-          },
-          onCancel = {
-            viewModel.onSendCancelled()
-          }
-        )
-      } else {
-        send()
-      }
+      viewModel.onSending()
+      StoryDialogs.guardWithAddToYourStoryDialog(
+        contacts = contactSearchMediator.getSelectedContacts(),
+        context = requireContext(),
+        onAddToStory = { send() },
+        onEditViewers = {
+          viewModel.onSendCancelled()
+          HideStoryFromDialogFragment().show(childFragmentManager, null)
+        },
+        onCancel = {
+          viewModel.onSendCancelled()
+        }
+      )
+    }
+
+    disposables += viewModel.untrustedIdentities.subscribe {
+      SafetyNumberChangeDialog.show(childFragmentManager, it)
     }
 
     searchField.doAfterTextChanged {
@@ -126,10 +129,7 @@ class TextStoryPostSendFragment : Fragment(R.layout.stories_send_text_post_fragm
           ContactSearchConfiguration.Section.Stories(
             groupStories = contactSearchState.groupStories,
             includeHeader = true,
-            headerAction = getHeaderAction(),
-            expandConfig = ContactSearchConfiguration.ExpandConfig(
-              isExpanded = contactSearchState.expandedSections.contains(ContactSearchConfiguration.SectionKey.STORIES)
-            )
+            headerAction = Stories.getHeaderAction(childFragmentManager)
           )
         )
       }
@@ -158,9 +158,8 @@ class TextStoryPostSendFragment : Fragment(R.layout.stories_send_text_post_fragm
     shareConfirmButton.isEnabled = false
 
     val textStoryPostCreationState = creationViewModel.state.value
-    val linkPreviewState = linkPreviewViewModel.linkPreviewState.value
 
-    viewModel.onSend(contactSearchMediator.getSelectedContacts(), textStoryPostCreationState!!, linkPreviewState!!)
+    viewModel.onSend(contactSearchMediator.getSelectedContacts(), textStoryPostCreationState!!, linkPreviewViewModel.onSend().firstOrNull())
   }
 
   private fun animateInSelection() {
@@ -177,15 +176,6 @@ class TextStoryPostSendFragment : Fragment(R.layout.stories_send_text_post_fragm
       .translationY(DimensionUnit.DP.toPixels(48f))
     shareConfirmButton.animate()
       .alpha(0f)
-  }
-
-  private fun getHeaderAction(): HeaderAction {
-    return HeaderAction(
-      R.string.ContactsCursorLoader_new_story,
-      R.drawable.ic_plus_20
-    ) {
-      ChooseStoryTypeBottomSheet().show(childFragmentManager, BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG)
-    }
   }
 
   override fun onNewStoryClicked() {

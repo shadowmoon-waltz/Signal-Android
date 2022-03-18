@@ -63,8 +63,8 @@ ktlint {
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1024
-def canonicalVersionName = "5.33.5"
+def canonicalVersionCode = 1027
+def canonicalVersionName = "5.34.1"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -569,10 +569,7 @@ dependencies {
     testImplementation testLibs.junit.junit
     testImplementation testLibs.assertj.core
     testImplementation testLibs.mockito.core
-    testImplementation testLibs.powermock.api.mockito
-    testImplementation testLibs.powermock.module.junit4.core
-    testImplementation testLibs.powermock.module.junit4.rule
-    testImplementation testLibs.powermock.classloading.xstream
+    testImplementation testLibs.mockito.kotlin
 
     testImplementation testLibs.androidx.test.core
     testImplementation (testLibs.robolectric.robolectric) {

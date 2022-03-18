@@ -52,7 +52,6 @@ import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.sms.MessageSender;
 import org.thoughtcrime.securesms.util.Util;
-import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.groupsv2.DecryptedGroupUtil;
 import org.whispersystems.signalservice.api.groupsv2.GroupCandidate;
 import org.whispersystems.signalservice.api.groupsv2.GroupChangeReconstruct;
@@ -83,6 +82,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -139,7 +139,7 @@ final class GroupManagerV2 {
     GroupSecretParams groupSecretParams = GroupSecretParams.deriveFromMasterKey(groupMasterKey);
 
     return groupsV2Api.getGroupJoinInfo(groupSecretParams,
-                                        Optional.fromNullable(password).transform(GroupLinkPassword::serialize),
+                                        Optional.ofNullable(password).map(GroupLinkPassword::serialize),
                                         authorization.getAuthorizationForToday(selfAci, groupSecretParams));
   }
 
@@ -326,10 +326,10 @@ final class GroupManagerV2 {
     }
 
     @WorkerThread
-    @NonNull GroupManager.GroupActionResult addMembers(@NonNull Collection<RecipientId> newMembers)
+    @NonNull GroupManager.GroupActionResult addMembers(@NonNull Collection<RecipientId> newMembers, @NonNull Set<UUID> bannedMembers)
         throws GroupChangeFailedException, GroupInsufficientRightsException, IOException, GroupNotAMemberException, MembershipNotSuitableForV2Exception
     {
-      if (!GroupsV2CapabilityChecker.allHaveUuidAndSupportGroupsV2(newMembers)) {
+      if (!GroupsV2CapabilityChecker.allHaveServiceId(newMembers)) {
         throw new MembershipNotSuitableForV2Exception("At least one potential new member does not support GV2 or UUID capabilities");
       }
 
@@ -339,7 +339,7 @@ final class GroupManagerV2 {
         groupCandidates = GroupCandidate.withoutProfileKeyCredentials(groupCandidates);
       }
 
-      return commitChangeWithConflictResolution(groupOperations.createModifyGroupMembershipChange(groupCandidates, selfAci.uuid()));
+      return commitChangeWithConflictResolution(groupOperations.createModifyGroupMembershipChange(groupCandidates, bannedMembers, selfAci.uuid()));
     }
 
     @WorkerThread
@@ -428,7 +428,7 @@ final class GroupManagerV2 {
                               .map(r -> Recipient.resolved(r).requireServiceId().uuid())
                               .collect(Collectors.toSet());
 
-      return commitChangeWithConflictResolution(groupOperations.createRefuseGroupJoinRequest(uuids));
+      return commitChangeWithConflictResolution(groupOperations.createRefuseGroupJoinRequest(uuids, true));
     }
 
     @WorkerThread
@@ -455,15 +455,15 @@ final class GroupManagerV2 {
           throw new AssertionError(e);
         }
       } else {
-        return ejectMember(ServiceId.from(selfAci.uuid()), true);
+        return ejectMember(ServiceId.from(selfAci.uuid()), true, false);
       }
     }
 
     @WorkerThread
-    @NonNull GroupManager.GroupActionResult ejectMember(@NonNull ServiceId serviceId, boolean allowWhenBlocked)
+    @NonNull GroupManager.GroupActionResult ejectMember(@NonNull ServiceId serviceId, boolean allowWhenBlocked, boolean ban)
         throws GroupChangeFailedException, GroupInsufficientRightsException, IOException, GroupNotAMemberException
     {
-      return commitChangeWithConflictResolution(groupOperations.createRemoveMembersChange(Collections.singleton(serviceId.uuid())), allowWhenBlocked);
+      return commitChangeWithConflictResolution(groupOperations.createRemoveMembersChange(Collections.singleton(serviceId.uuid()), ban), allowWhenBlocked);
     }
 
     @WorkerThread
@@ -528,6 +528,14 @@ final class GroupManagerV2 {
       }
 
       return commitChangeWithConflictResolution(groupOperations.createAcceptInviteChange(groupCandidate.getProfileKeyCredential().get()));
+    }
+
+    public GroupManager.GroupActionResult ban(Set<UUID> uuids, boolean rejectJoinRequest) throws GroupChangeFailedException, GroupNotAMemberException, GroupInsufficientRightsException, IOException {
+      return commitChangeWithConflictResolution(groupOperations.createBanUuidsChange(uuids, rejectJoinRequest));
+    }
+
+    public GroupManager.GroupActionResult unban(Set<UUID> uuids) throws GroupChangeFailedException, GroupNotAMemberException, GroupInsufficientRightsException, IOException {
+      return commitChangeWithConflictResolution(groupOperations.createUnbanUuidsChange(uuids));
     }
 
     @WorkerThread
@@ -679,7 +687,7 @@ final class GroupManagerV2 {
         throws GroupNotAMemberException, GroupChangeFailedException, IOException, GroupInsufficientRightsException
     {
       try {
-        return groupsV2Api.patchGroup(change, authorization.getAuthorizationForToday(selfAci, groupSecretParams), Optional.absent());
+        return groupsV2Api.patchGroup(change, authorization.getAuthorizationForToday(selfAci, groupSecretParams), Optional.empty());
       } catch (NotInGroupException e) {
         Log.w(TAG, e);
         throw new GroupNotAMemberException(e);
@@ -717,7 +725,7 @@ final class GroupManagerV2 {
 
         try {
           return groupOperations.decryptChange(GroupChange.parseFrom(signedGroupChange), true)
-                                .orNull();
+                                .orElse(null);
         } catch (VerificationFailedException | InvalidGroupStateException | InvalidProtocolBufferException e) {
           Log.w(TAG, "Unable to verify supplied group change", e);
         }
@@ -736,7 +744,7 @@ final class GroupManagerV2 {
                                                       int disappearingMessageTimerSeconds)
       throws GroupChangeFailedException, IOException, MembershipNotSuitableForV2Exception, GroupAlreadyExistsException
   {
-    if (!GroupsV2CapabilityChecker.allAndSelfHaveUuidAndSupportGroupsV2(members)) {
+    if (!GroupsV2CapabilityChecker.allAndSelfHaveServiceId(members)) {
       throw new MembershipNotSuitableForV2Exception("At least one potential new member does not support GV2 capability or we don't have their UUID");
     }
 
@@ -755,7 +763,7 @@ final class GroupManagerV2 {
 
     GroupsV2Operations.NewGroup newGroup = groupsV2Operations.createNewGroup(groupSecretParams,
                                                                              name,
-                                                                             Optional.fromNullable(avatar),
+                                                                             Optional.ofNullable(avatar),
                                                                              self,
                                                                              candidates,
                                                                              memberRole,
@@ -976,7 +984,7 @@ final class GroupManagerV2 {
     private @NonNull GroupChange joinGroupOnServer(boolean requestToJoin, int currentRevision)
         throws GroupChangeFailedException, IOException, MembershipNotSuitableForV2Exception, GroupLinkNotActiveException, GroupJoinAlreadyAMemberException
     {
-      if (!GroupsV2CapabilityChecker.allAndSelfHaveUuidAndSupportGroupsV2(Collections.singleton(Recipient.self().getId()))) {
+      if (!GroupsV2CapabilityChecker.allAndSelfHaveServiceId(Collections.singleton(Recipient.self().getId()))) {
         throw new MembershipNotSuitableForV2Exception("Self does not support GV2 or UUID capabilities");
       }
 
@@ -1035,13 +1043,13 @@ final class GroupManagerV2 {
       throws GroupChangeFailedException, IOException, GroupLinkNotActiveException
     {
       try {
-        return groupsV2Api.patchGroup(change, authorization.getAuthorizationForToday(selfAci, groupSecretParams), Optional.fromNullable(password).transform(GroupLinkPassword::serialize));
+        return groupsV2Api.patchGroup(change, authorization.getAuthorizationForToday(selfAci, groupSecretParams), Optional.ofNullable(password).map(GroupLinkPassword::serialize));
       } catch (NotInGroupException | VerificationFailedException e) {
         Log.w(TAG, e);
         throw new GroupChangeFailedException(e);
       } catch (AuthorizationFailedException e) {
         Log.w(TAG, e);
-        throw new GroupLinkNotActiveException(e);
+        throw new GroupLinkNotActiveException(e, Optional.empty());
       }
     }
 
@@ -1094,7 +1102,7 @@ final class GroupManagerV2 {
 
       GroupChange signedGroupChange;
       try {
-        signedGroupChange = commitCancelChangeWithConflictResolution(groupOperations.createRefuseGroupJoinRequest(uuids));
+        signedGroupChange = commitCancelChangeWithConflictResolution(groupOperations.createRefuseGroupJoinRequest(uuids, false));
       } catch (GroupLinkNotActiveException e) {
         Log.d(TAG, "Unexpected unable to leave group due to group link off");
         throw new GroupChangeFailedException(e);
@@ -1199,7 +1207,7 @@ final class GroupManagerV2 {
 
       DecryptedGroupChange plainGroupChange = groupMutation.getGroupChange();
 
-      if (plainGroupChange != null && DecryptedGroupUtil.changeIsEmptyExceptForProfileKeyChanges(plainGroupChange)) {
+      if (plainGroupChange != null && DecryptedGroupUtil.changeIsSilent(plainGroupChange)) {
         if (sendToMembers) {
           ApplicationDependencies.getJobManager().add(PushGroupSilentUpdateSendJob.create(context, groupId, groupMutation.getNewGroupState(), outgoingMessage));
         }

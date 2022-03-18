@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.Sets;
@@ -24,19 +25,17 @@ import com.google.common.collect.Sets;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.BindableConversationItem;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.keyvalue.SignalStore;
-import org.thoughtcrime.securesms.util.views.AutoRounder;
-import org.thoughtcrime.securesms.util.views.Stub;
-import org.thoughtcrime.securesms.verify.VerifyIdentityActivity;
 import org.thoughtcrime.securesms.conversation.colors.Colorizer;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart;
 import org.thoughtcrime.securesms.conversation.ui.error.EnableCallNotificationSettingsDialog;
-import org.thoughtcrime.securesms.database.model.IdentityRecord;
 import org.thoughtcrime.securesms.database.model.GroupCallUpdateDetailsUtil;
+import org.thoughtcrime.securesms.database.model.IdentityRecord;
 import org.thoughtcrime.securesms.database.model.InMemoryMessageRecord;
 import org.thoughtcrime.securesms.database.model.LiveUpdateMessage;
 import org.thoughtcrime.securesms.database.model.MessageRecord;
 import org.thoughtcrime.securesms.database.model.UpdateDescription;
+import org.thoughtcrime.securesms.groups.LiveGroup;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.mms.GlideRequests;
 import org.thoughtcrime.securesms.recipients.LiveRecipient;
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -49,15 +48,19 @@ import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
 import org.thoughtcrime.securesms.util.livedata.LiveDataUtil;
-import org.whispersystems.libsignal.util.guava.Optional;
-import org.whispersystems.signalservice.api.push.ACI;
+import org.thoughtcrime.securesms.util.views.AutoRounder;
+import org.thoughtcrime.securesms.util.views.Stub;
+import org.thoughtcrime.securesms.verify.VerifyIdentityActivity;
 import org.whispersystems.signalservice.api.push.ServiceId;
 
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public final class ConversationUpdateItem extends FrameLayout
                                           implements BindableConversationItem
@@ -79,13 +82,13 @@ public final class ConversationUpdateItem extends FrameLayout
   private boolean                   isMessageRequestAccepted;
   private LiveData<SpannableString> displayBody;
   private EventListener             eventListener;
-  private boolean                   hasWallpaper;
 
   private final UpdateObserver updateObserver = new UpdateObserver();
 
   private final PresentOnChange          presentOnChange = new PresentOnChange();
   private final RecipientObserverManager senderObserver  = new RecipientObserverManager(presentOnChange);
   private final RecipientObserverManager groupObserver   = new RecipientObserverManager(presentOnChange);
+  private final GroupDataManager         groupData       = new GroupDataManager();
 
   public ConversationUpdateItem(Context context) {
     super(context);
@@ -145,7 +148,6 @@ public final class ConversationUpdateItem extends FrameLayout
                     boolean hasWallpaper,
                     boolean isMessageRequestAccepted)
   {
-    this.hasWallpaper             = hasWallpaper;
     this.conversationMessage      = conversationMessage;
     this.messageRecord            = conversationMessage.getMessageRecord();
     this.nextMessageRecord        = nextMessageRecord;
@@ -154,8 +156,9 @@ public final class ConversationUpdateItem extends FrameLayout
 
     senderObserver.observe(lifecycleOwner, messageRecord.getIndividualRecipient());
 
-    if (conversationRecipient.isActiveGroup() && conversationMessage.getMessageRecord().isGroupCall()) {
+    if (conversationRecipient.isActiveGroup() && (conversationMessage.getMessageRecord().isGroupCall() || conversationMessage.getMessageRecord().isCollapsedGroupV2JoinUpdate())) {
       groupObserver.observe(lifecycleOwner, conversationRecipient);
+      groupData.observe(lifecycleOwner, conversationRecipient);
     } else {
       groupObserver.observe(lifecycleOwner, null);
     }
@@ -267,6 +270,73 @@ public final class ConversationUpdateItem extends FrameLayout
 
     @NonNull Recipient getObservedRecipient() {
       return recipient.get();
+    }
+  }
+
+  private final class GroupDataManager {
+
+    private final Observer<Object> updater;
+
+    private LiveGroup           liveGroup;
+    private LiveData<Boolean>   liveIsSelfAdmin;
+    private LiveData<Set<UUID>> liveBannedMembers;
+    private LiveData<Set<UUID>> liveFullMembers;
+    private Recipient           conversationRecipient;
+
+    GroupDataManager() {
+      this.updater = unused -> update();
+    }
+
+    public void observe(@NonNull LifecycleOwner lifecycleOwner, @Nullable Recipient recipient) {
+      if (liveGroup != null) {
+        liveIsSelfAdmin.removeObserver(updater);
+        liveBannedMembers.removeObserver(updater);
+        liveFullMembers.removeObserver(updater);
+      }
+
+      if (recipient != null) {
+        conversationRecipient = recipient;
+        liveGroup             = new LiveGroup(recipient.requireGroupId());
+        liveIsSelfAdmin       = liveGroup.isSelfAdmin();
+        liveBannedMembers     = liveGroup.getBannedMembers();
+        liveFullMembers       = Transformations.map(liveGroup.getFullMembers(),
+                                                    members -> members.stream()
+                                                                      .map(m -> m.getMember().requireServiceId().uuid())
+                                                                      .collect(Collectors.toSet()));
+
+        liveIsSelfAdmin.observe(lifecycleOwner, updater);
+        liveBannedMembers.observe(lifecycleOwner, updater);
+        liveFullMembers.observe(lifecycleOwner, updater);
+      } else {
+        conversationRecipient = null;
+        liveGroup             = null;
+        liveBannedMembers     = null;
+        liveIsSelfAdmin       = null;
+      }
+    }
+
+    public boolean isSelfAdmin() {
+      return liveIsSelfAdmin.getValue() != null ? liveIsSelfAdmin.getValue() : false;
+    }
+
+    public boolean isBanned(Recipient recipient) {
+      Set<UUID> bannedMembers = liveBannedMembers.getValue();
+      if (bannedMembers != null) {
+        return recipient.getServiceId().isPresent() && bannedMembers.contains(recipient.requireServiceId().uuid());
+      }
+      return false;
+    }
+
+    public boolean isFullMember(Recipient recipient) {
+      Set<UUID> members = liveFullMembers.getValue();
+      if (members != null) {
+        return recipient.getServiceId().isPresent() && members.contains(recipient.requireServiceId().uuid());
+      }
+      return false;
+    }
+
+    private void update() {
+      present(conversationMessage, nextMessageRecord, conversationRecipient, isMessageRequestAccepted);
     }
   }
 
@@ -407,7 +477,7 @@ public final class ConversationUpdateItem extends FrameLayout
       actionButton.setText(R.string.ConversationUpdateItem_view);
       actionButton.setOnClickListener(v -> {
         if (eventListener != null) {
-          eventListener.onViewGroupDescriptionChange(conversationRecipient.getGroupId().orNull(), conversationMessage.getMessageRecord().getGroupV2DescriptionUpdate(), isMessageRequestAccepted);
+          eventListener.onViewGroupDescriptionChange(conversationRecipient.getGroupId().orElse(null), conversationMessage.getMessageRecord().getGroupV2DescriptionUpdate(), isMessageRequestAccepted);
         }
       });
     } else if (conversationMessage.getMessageRecord().isBadDecryptType() &&
@@ -426,6 +496,17 @@ public final class ConversationUpdateItem extends FrameLayout
       actionButton.setOnClickListener(v -> {
         if (batchSelected.isEmpty() && eventListener != null) {
           eventListener.onChangeNumberUpdateContact(conversationMessage.getMessageRecord().getIndividualRecipient());
+        }
+      });
+    } else if (conversationMessage.getMessageRecord().isCollapsedGroupV2JoinUpdate() &&
+               groupData.isSelfAdmin() &&
+               !groupData.isBanned(conversationMessage.getMessageRecord().getIndividualRecipient()) &&
+               !groupData.isFullMember(conversationMessage.getMessageRecord().getIndividualRecipient())) {
+      actionButton.setText(R.string.ConversationUpdateItem_block_request);
+      actionButton.setVisibility(VISIBLE);
+      actionButton.setOnClickListener(v -> {
+        if (batchSelected.isEmpty() && eventListener != null) {
+          eventListener.onBlockJoinRequest(conversationMessage.getMessageRecord().getIndividualRecipient());
         }
       });
     } else {

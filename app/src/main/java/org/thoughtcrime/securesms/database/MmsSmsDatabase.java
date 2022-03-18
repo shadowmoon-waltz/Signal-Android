@@ -157,7 +157,9 @@ public class MmsSmsDatabase extends Database {
 
   public int getMessagePositionOnOrAfterTimestamp(long threadId, long timestamp) {
     String[] projection = new String[] { "COUNT(*)" };
-    String   selection  = MmsSmsColumns.THREAD_ID + " = " + threadId + " AND " + MmsSmsColumns.NORMALIZED_DATE_RECEIVED + " >= " + timestamp;
+    String   selection  = MmsSmsColumns.THREAD_ID + " = " + threadId + " AND " +
+                          MmsSmsColumns.NORMALIZED_DATE_RECEIVED + " >= " + timestamp + " AND " +
+                          MmsDatabase.STORY_TYPE + " = 0 AND " + MmsDatabase.PARENT_STORY_ID + " <= 0";
 
     try (Cursor cursor = queryTables(projection, selection, null, null)) {
       if (cursor != null && cursor.moveToNext()) {
@@ -369,12 +371,12 @@ public class MmsSmsDatabase extends Database {
     else          return id;
   }
 
-  public void incrementDeliveryReceiptCounts(@NonNull List<SyncMessageId> syncMessageIds, long timestamp) {
-    incrementReceiptCounts(syncMessageIds, timestamp, MessageDatabase.ReceiptType.DELIVERY);
+  public Collection<SyncMessageId> incrementDeliveryReceiptCounts(@NonNull List<SyncMessageId> syncMessageIds, long timestamp) {
+    return incrementReceiptCounts(syncMessageIds, timestamp, MessageDatabase.ReceiptType.DELIVERY);
   }
 
-  public void incrementDeliveryReceiptCount(SyncMessageId syncMessageId, long timestamp) {
-    incrementReceiptCount(syncMessageId, timestamp, MessageDatabase.ReceiptType.DELIVERY);
+  public boolean incrementDeliveryReceiptCount(SyncMessageId syncMessageId, long timestamp) {
+    return incrementReceiptCount(syncMessageId, timestamp, MessageDatabase.ReceiptType.DELIVERY);
   }
 
   /**
@@ -595,7 +597,8 @@ public class MmsSmsDatabase extends Database {
   public int getMessagePositionInConversation(long threadId, long receivedTimestamp) {
     String order     = MmsSmsColumns.NORMALIZED_DATE_RECEIVED + " DESC";
     String selection = MmsSmsColumns.THREAD_ID + " = " + threadId + " AND " +
-                       MmsSmsColumns.NORMALIZED_DATE_RECEIVED + " > " + receivedTimestamp;
+                       MmsSmsColumns.NORMALIZED_DATE_RECEIVED + " > " + receivedTimestamp + " AND " +
+                       MmsDatabase.STORY_TYPE + " = 0 AND " + MmsDatabase.PARENT_STORY_ID + " <= 0";
 
     try (Cursor cursor = queryTables(new String[]{ "COUNT(*)" }, selection, order, null)) {
       if (cursor != null && cursor.moveToFirst()) {

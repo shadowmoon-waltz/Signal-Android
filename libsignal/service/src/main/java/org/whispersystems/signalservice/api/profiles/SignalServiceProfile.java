@@ -2,7 +2,6 @@ package org.whispersystems.signalservice.api.profiles;
 
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -11,13 +10,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.signal.zkgroup.InvalidInputException;
 import org.signal.zkgroup.profiles.ProfileKeyCredentialResponse;
 import org.whispersystems.libsignal.logging.Log;
-import org.whispersystems.signalservice.api.push.ACI;
 import org.whispersystems.signalservice.api.push.ServiceId;
 import org.whispersystems.signalservice.internal.util.JsonUtil;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 public class SignalServiceProfile {
 
@@ -176,9 +173,6 @@ public class SignalServiceProfile {
 
   public static class Capabilities {
     @JsonProperty
-    private boolean gv2;
-
-    @JsonProperty
     private boolean storage;
 
     @JsonProperty("gv1-migration")
@@ -198,10 +192,6 @@ public class SignalServiceProfile {
 
     @JsonCreator
     public Capabilities() {}
-
-    public boolean isGv2() {
-      return gv2;
-    }
 
     public boolean isStorage() {
       return storage;

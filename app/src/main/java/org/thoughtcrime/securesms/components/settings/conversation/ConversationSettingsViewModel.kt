@@ -17,6 +17,7 @@ import org.thoughtcrime.securesms.database.RecipientDatabase
 import org.thoughtcrime.securesms.database.model.StoryViewState
 import org.thoughtcrime.securesms.groups.GroupId
 import org.thoughtcrime.securesms.groups.LiveGroup
+import org.thoughtcrime.securesms.groups.v2.GroupAddMembersResult
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.recipients.RecipientUtil
@@ -26,7 +27,7 @@ import org.thoughtcrime.securesms.util.SingleLiveEvent
 import org.thoughtcrime.securesms.util.livedata.LiveDataUtil
 import org.thoughtcrime.securesms.util.livedata.Store
 import org.thoughtcrime.securesms.util.TextSecurePreferences
-import org.whispersystems.libsignal.util.guava.Optional
+import java.util.Optional
 
 sealed class ConversationSettingsViewModel(
   private val repository: ConversationSettingsRepository,
@@ -66,22 +67,22 @@ sealed class ConversationSettingsViewModel(
           openedMediaCursors.add(cursor.get())
         }
 
-        val ids: List<Long> = cursor.transform<List<Long>> {
+        val ids: List<Long> = cursor.map<List<Long>> {
           val result = mutableListOf<Long>()
           while (it.moveToNext()) {
             result.add(CursorUtil.requireLong(it, AttachmentDatabase.ROW_ID))
           }
           result
-        }.or(listOf())
+        }.orElse(listOf())
 
         state.copy(
-          sharedMedia = cursor.orNull(),
+          sharedMedia = cursor.orElse(null),
           sharedMediaIds = ids,
           sharedMediaLoaded = true,
           displayInternalRecipientDetails = repository.isInternalRecipientDetailsEnabled()
         )
       } else {
-        cursor.orNull().ensureClosed()
+        cursor.orElse(null).ensureClosed()
         state.copy(sharedMedia = null)
       }
     }

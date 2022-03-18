@@ -21,18 +21,19 @@ import org.thoughtcrime.securesms.groups.GroupChangeFailedException;
 import org.thoughtcrime.securesms.groups.GroupManager;
 import org.thoughtcrime.securesms.jobs.MultiDeviceBlockedUpdateJob;
 import org.thoughtcrime.securesms.jobs.MultiDeviceMessageRequestResponseJob;
+import org.thoughtcrime.securesms.jobs.RefreshOwnProfileJob;
 import org.thoughtcrime.securesms.jobs.RotateProfileKeyJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.mms.OutgoingExpirationUpdateMessage;
 import org.thoughtcrime.securesms.sms.MessageSender;
 import org.thoughtcrime.securesms.storage.StorageSyncHelper;
-import org.whispersystems.libsignal.util.guava.Optional;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.push.exceptions.NotFoundException;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class RecipientUtil {
 
@@ -62,7 +63,7 @@ public class RecipientUtil {
     }
 
     if (recipient.hasServiceId()) {
-      return new SignalServiceAddress(recipient.requireServiceId(), Optional.fromNullable(recipient.resolve().getE164().orNull()));
+      return new SignalServiceAddress(recipient.requireServiceId(), Optional.ofNullable(recipient.resolve().getE164().orElse(null)));
     } else {
       throw new NotFoundException(recipient.getId() + " is not registered!");
     }
@@ -81,7 +82,7 @@ public class RecipientUtil {
 
     return Stream.of(recipients)
                  .map(Recipient::resolve)
-                 .map(r -> new SignalServiceAddress(r.requireServiceId(), r.getE164().orNull()))
+                 .map(r -> new SignalServiceAddress(r.requireServiceId(), r.getE164().orElse(null)))
                  .toList();
   }
 
@@ -160,8 +161,11 @@ public class RecipientUtil {
     SignalDatabase.recipients().setBlocked(recipient.getId(), true);
 
     if (recipient.isSystemContact() || recipient.isProfileSharing() || isProfileSharedViaGroup(context, recipient)) {
-      ApplicationDependencies.getJobManager().add(new RotateProfileKeyJob());
       SignalDatabase.recipients().setProfileSharing(recipient.getId(), false);
+
+      ApplicationDependencies.getJobManager().startChain(new RefreshOwnProfileJob())
+                                             .then(new RotateProfileKeyJob())
+                                             .enqueue();
     }
 
     ApplicationDependencies.getJobManager().add(new MultiDeviceBlockedUpdateJob());

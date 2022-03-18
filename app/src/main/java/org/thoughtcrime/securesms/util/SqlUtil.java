@@ -11,14 +11,14 @@ import com.annimon.stream.Stream;
 import net.zetetic.database.sqlcipher.SQLiteDatabase;
 
 import org.thoughtcrime.securesms.database.model.DatabaseId;
-import org.thoughtcrime.securesms.recipients.RecipientId;
-import org.whispersystems.libsignal.util.guava.Preconditions;
+import org.whispersystems.signalservice.api.util.Preconditions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -123,8 +123,14 @@ public final class SqlUtil {
 
     for (Map.Entry<String, Object> entry : valueSet) {
       if (entry.getValue() != null) {
-        qualifier.append(entry.getKey()).append(" != ? OR ").append(entry.getKey()).append(" IS NULL");
-        fullArgs.add(String.valueOf(entry.getValue()));
+        if (entry.getValue() instanceof byte[]) {
+          byte[] data = (byte[]) entry.getValue();
+          qualifier.append("hex(").append(entry.getKey()).append(") != ? OR ").append(entry.getKey()).append(" IS NULL");
+          fullArgs.add(Hex.toStringCondensed(data).toUpperCase(Locale.US));
+        } else {
+          qualifier.append(entry.getKey()).append(" != ? OR ").append(entry.getKey()).append(" IS NULL");
+          fullArgs.add(String.valueOf(entry.getValue()));
+        }
       } else {
         qualifier.append(entry.getKey()).append(" NOT NULL");
       }
