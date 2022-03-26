@@ -223,6 +223,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_ALT_COLLAPSE_MEDIA_KEYBOARD = "pref_alt_collapse_media_keyboard";
 
+  private static final String PREF_ALT_CLOSE_MEDIA_SELECTION = "pref_alt_close_media_selection";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -251,7 +253,8 @@ public class TextSecurePreferences {
                                                               PREF_MANAGE_GROUP_TWEAKS,
                                                               PREF_TRASH_NO_PROMPT_FOR_ME,
                                                               PREF_PROMPT_MP4_AS_GIF,
-                                                              PREF_ALT_COLLAPSE_MEDIA_KEYBOARD};
+                                                              PREF_ALT_COLLAPSE_MEDIA_KEYBOARD,
+                                                              PREF_ALT_CLOSE_MEDIA_SELECTION};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1281,6 +1284,14 @@ public class TextSecurePreferences {
   public static void setBackupIntervalInDays(Context context, int backupIntervalInDays) {
     int days = (backupIntervalInDays > 1) ? backupIntervalInDays : 1;
     setStringPreference(context, PREF_BACKUP_INTERVAL_IN_DAYS, Integer.toString(days));
+  }
+
+  public static boolean isAltCloseMediaSelection(Context context) {
+    return getBooleanPreference(context, PREF_ALT_CLOSE_MEDIA_SELECTION, false);
+  }
+
+  public static void setAltCloseMediaSelection(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_ALT_CLOSE_MEDIA_SELECTION, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

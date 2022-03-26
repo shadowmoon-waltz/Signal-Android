@@ -24,7 +24,8 @@ class ForkSettingsViewModel : ViewModel() {
       SignalStore.settings().swipeToLeftAction,
       trashNoPromptForMe = SignalStore.settings().isTrashNoPromptForMe,
       promptMp4AsGif = SignalStore.settings().isPromptMp4AsGif,
-      altCollapseMediaKeyboard = SignalStore.settings().isAltCollapseMediaKeyboard
+      altCollapseMediaKeyboard = SignalStore.settings().isAltCollapseMediaKeyboard,
+      altCloseMediaSelection = SignalStore.settings().isAltCloseMediaSelection
     )
 
     store = Store(initialState)
@@ -105,5 +106,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setAltCollapseMediaKeyboard(altCollapseMediaKeyboard: Boolean) {
     store.update { it.copy(altCollapseMediaKeyboard = altCollapseMediaKeyboard) }
     SignalStore.settings().isAltCollapseMediaKeyboard = altCollapseMediaKeyboard
+  }
+
+  fun setAltCloseMediaSelection(altCloseMediaSelection: Boolean) {
+    store.update { it.copy(altCloseMediaSelection = altCloseMediaSelection) }
+    SignalStore.settings().isAltCloseMediaSelection = altCloseMediaSelection
   }
 }

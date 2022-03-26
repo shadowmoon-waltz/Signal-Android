@@ -27,6 +27,7 @@ import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.contacts.paged.RecipientSearchKey
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragmentArgs
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.mediasend.MediaSendActivityResult
 import org.thoughtcrime.securesms.mediasend.v2.HudCommand
 import org.thoughtcrime.securesms.mediasend.v2.MediaAnimations
@@ -216,6 +217,13 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment) {
         }
       }
     )
+    recipientDisplay.setOnLongClickListener { _ ->
+      if (SignalStore.settings().isAltCloseMediaSelection()) {
+        findNavController().popBackStack()
+        callback.onPopFromReview()
+      }
+      false
+    }
   }
 
   override fun onResume() {

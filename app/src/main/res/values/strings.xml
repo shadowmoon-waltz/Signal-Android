@@ -3852,6 +3852,8 @@
     <string name="ForkSettingsFragment__backup_interval_in_days_summary">Click here to view/set in Chat Backup settings</string>
     <string name="ForkSettingsFragment__alt_collapse_media_keyboard">Long-press emoji/sticker/gif buttons to hide media keyboard</string>
     <string name="ForkSettingsFragment__alt_collapse_media_keyboard_summary">Refers to buttons at the top of media keyboard used to select emoji/sticker/gif. Works around possible bug where it is otherwise difficult to close the media keyboard in conversation bubbles</string>
+    <string name="ForkSettingsFragment__alt_close_media_selection">Long-press recipient label while selecting media to close media selection</string>
+    <string name="ForkSettingsFragment__alt_close_media_selection_summary">Refers to recipient label that appears above media while adding/editing media to send in a conversation. Works around possible bug where it is otherwise difficult to close/go back from media selection while in conversation bubbles</string>
 
     <string name="fork__backup_interval">Backup Interval</string>
     <plurals name="fork__backup_interval_format">

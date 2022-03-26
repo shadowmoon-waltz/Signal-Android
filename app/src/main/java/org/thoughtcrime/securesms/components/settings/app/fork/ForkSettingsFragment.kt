@@ -194,6 +194,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
           viewModel.setAltCollapseMediaKeyboard(!state.altCollapseMediaKeyboard)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__alt_close_media_selection),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__alt_close_media_selection_summary),
+        isChecked = state.altCloseMediaSelection,
+        onClick = {
+          TextSecurePreferences.setAltCloseMediaSelection(requireContext(), !state.altCloseMediaSelection)
+          viewModel.setAltCloseMediaSelection(!state.altCloseMediaSelection)
+        }
+      )
     }
   }
 }
