@@ -58,6 +58,10 @@ public final class ImageEditorStickerSelectActivity extends AppCompatActivity im
   }
 
   @Override
+  public void onToggleLongPress() {
+  }
+
+  @Override
   public void onStickerSelected(@NonNull StickerRecord sticker) {
     Intent intent = new Intent();
     intent.setData(sticker.getUri());

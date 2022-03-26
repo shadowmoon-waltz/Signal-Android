@@ -14,5 +14,6 @@ data class ForkSettingsState(
   val manageGroupTweaks: Boolean,
   val swipeToLeftAction: String,
   val trashNoPromptForMe: Boolean,
-  val promptMp4AsGif: Boolean
+  val promptMp4AsGif: Boolean,
+  val altCollapseMediaKeyboard: Boolean
 )

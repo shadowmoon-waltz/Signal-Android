@@ -184,6 +184,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
           Navigation.findNavController(requireView()).safeNavigate(R.id.action_forkSettingsFragment_to_backupsPreferenceFragment)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__alt_collapse_media_keyboard),
+        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__alt_collapse_media_keyboard_summary),
+        isChecked = state.altCollapseMediaKeyboard,
+        onClick = {
+          TextSecurePreferences.setAltCollapseMediaKeyboard(requireContext(), !state.altCollapseMediaKeyboard)
+          viewModel.setAltCollapseMediaKeyboard(!state.altCollapseMediaKeyboard)
+        }
+      )
     }
   }
 }

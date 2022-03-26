@@ -23,7 +23,8 @@ class ForkSettingsViewModel : ViewModel() {
       manageGroupTweaks = SignalStore.settings().isManageGroupTweaks,
       SignalStore.settings().swipeToLeftAction,
       trashNoPromptForMe = SignalStore.settings().isTrashNoPromptForMe,
-      promptMp4AsGif = SignalStore.settings().isPromptMp4AsGif
+      promptMp4AsGif = SignalStore.settings().isPromptMp4AsGif,
+      altCollapseMediaKeyboard = SignalStore.settings().isAltCollapseMediaKeyboard
     )
 
     store = Store(initialState)
@@ -99,5 +100,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setPromptMp4AsGif(promptMp4AsGif: Boolean) {
     store.update { it.copy(promptMp4AsGif = promptMp4AsGif) }
     SignalStore.settings().isPromptMp4AsGif = promptMp4AsGif
+  }
+
+  fun setAltCollapseMediaKeyboard(altCollapseMediaKeyboard: Boolean) {
+    store.update { it.copy(altCollapseMediaKeyboard = altCollapseMediaKeyboard) }
+    SignalStore.settings().isAltCollapseMediaKeyboard = altCollapseMediaKeyboard
   }
 }

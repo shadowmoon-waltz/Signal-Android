@@ -3850,6 +3850,8 @@
     <string name="ForkSettingsFragment__prompt_mp4_as_gif">Prompt to send videos like GIFs</string>
     <string name="ForkSettingsFragment__prompt_mp4_as_gif_summary">When selecting a video, a prompt will appear. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio</string>
     <string name="ForkSettingsFragment__backup_interval_in_days_summary">Click here to view/set in Chat Backup settings</string>
+    <string name="ForkSettingsFragment__alt_collapse_media_keyboard">Long-press emoji/sticker/gif buttons to hide media keyboard</string>
+    <string name="ForkSettingsFragment__alt_collapse_media_keyboard_summary">Refers to buttons at the top of media keyboard used to select emoji/sticker/gif. Works around possible bug where it is otherwise difficult to close the media keyboard in conversation bubbles</string>
 
     <string name="fork__backup_interval">Backup Interval</string>
     <plurals name="fork__backup_interval_format">

@@ -82,6 +82,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String TRASH_NO_PROMPT_FOR_ME                  = "settings.trash.no.prompt.for.me";
   public static final String PROMPT_MP4_AS_GIF                       = "settings.prompt.mp4.as.gif";
   public static final String BACKUP_INTERVAL_IN_DAYS                 = "settings.backup.interval.in.days";
+  public static final String ALT_COLLAPSE_MEDIA_KEYBOARD             = "settings.alt.collapse.media.keyboard";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -140,7 +141,8 @@ public final class SettingsValues extends SignalStoreValues {
                          SWIPE_TO_LEFT_ACTION,
                          TRASH_NO_PROMPT_FOR_ME,
                          PROMPT_MP4_AS_GIF,
-                         BACKUP_INTERVAL_IN_DAYS);
+                         BACKUP_INTERVAL_IN_DAYS,
+                         ALT_COLLAPSE_MEDIA_KEYBOARD);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -559,6 +561,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setBackupIntervalInDays(int backupIntervalInDays) {
     putInteger(BACKUP_INTERVAL_IN_DAYS, backupIntervalInDays);
+  }
+
+  public boolean isAltCollapseMediaKeyboard() {
+    return getBoolean(ALT_COLLAPSE_MEDIA_KEYBOARD, TextSecurePreferences.isAltCollapseMediaKeyboard(ApplicationDependencies.getApplication()));
+  }
+
+  public void setAltCollapseMediaKeyboard(boolean altCollapseMediaKeyboard) {
+    putBoolean(ALT_COLLAPSE_MEDIA_KEYBOARD, altCollapseMediaKeyboard);
   }
 
   public enum CensorshipCircumventionEnabled {

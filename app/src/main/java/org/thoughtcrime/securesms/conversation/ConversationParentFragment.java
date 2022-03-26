@@ -3450,6 +3450,13 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
+  public void onToggleLongPress() {
+    if (SignalStore.settings().isAltCollapseMediaKeyboard()) {
+      container.hideCurrentInput(composeText);
+    }
+  }
+
+  @Override
   public void onEmojiSelected(String emoji) {
     if (inputPanel != null) {
       inputPanel.onEmojiSelected(emoji);

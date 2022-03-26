@@ -221,6 +221,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_BACKUP_INTERVAL_IN_DAYS = "pref_backup_interval_in_days";
 
+  private static final String PREF_ALT_COLLAPSE_MEDIA_KEYBOARD = "pref_alt_collapse_media_keyboard";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -248,7 +250,8 @@ public class TextSecurePreferences {
                                                               PREF_ALSO_SHOW_PROFILE_NAME,
                                                               PREF_MANAGE_GROUP_TWEAKS,
                                                               PREF_TRASH_NO_PROMPT_FOR_ME,
-                                                              PREF_PROMPT_MP4_AS_GIF};
+                                                              PREF_PROMPT_MP4_AS_GIF,
+                                                              PREF_ALT_COLLAPSE_MEDIA_KEYBOARD};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1265,6 +1268,14 @@ public class TextSecurePreferences {
       } catch (Throwable e) { }
     }
     return 1;
+  }
+
+  public static boolean isAltCollapseMediaKeyboard(Context context) {
+    return getBooleanPreference(context, PREF_ALT_COLLAPSE_MEDIA_KEYBOARD, false);
+  }
+
+  public static void setAltCollapseMediaKeyboard(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_ALT_COLLAPSE_MEDIA_KEYBOARD, enabled);
   }
 
   public static void setBackupIntervalInDays(Context context, int backupIntervalInDays) {

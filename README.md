@@ -12,6 +12,7 @@ Main gradle build command: assembleSwProdRelease
 <summary>March 2022</summary>
 
 * Further improvements to security of view/set identity keys screen (requires authentication if device has one available)
+* Long-press emoji/sticker/gif buttons at top of media keyboard to hide media keyboard. Works around possible bug where it is otherwise difficult to close the media keyboard in conversation bubbles
 </details>
 
 <details open="">

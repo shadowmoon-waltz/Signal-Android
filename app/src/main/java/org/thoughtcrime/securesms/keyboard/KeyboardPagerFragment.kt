@@ -49,6 +49,10 @@ class KeyboardPagerFragment : Fragment() {
     emojiButton.setOnClickListener { viewModel.switchToPage(KeyboardPage.EMOJI) }
     stickerButton.setOnClickListener { viewModel.switchToPage(KeyboardPage.STICKER) }
     gifButton.setOnClickListener { viewModel.switchToPage(KeyboardPage.GIF) }
+
+    emojiButton.setOnLongClickListener { _ -> findListener<MediaKeyboard.MediaKeyboardListener>()?.onToggleLongPress(); false }
+    stickerButton.setOnLongClickListener { _ -> findListener<MediaKeyboard.MediaKeyboardListener>()?.onToggleLongPress(); false }
+    gifButton.setOnLongClickListener { _ -> findListener<MediaKeyboard.MediaKeyboardListener>()?.onToggleLongPress(); false }
   }
 
   @Suppress("DEPRECATION")
