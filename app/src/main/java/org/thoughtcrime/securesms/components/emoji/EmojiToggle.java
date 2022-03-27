@@ -104,8 +104,4 @@ public class EmojiToggle extends AppCompatImageButton implements MediaKeyboard.M
         break;
     }
   }
-
-  @Override
-  public void onToggleLongPress() {
-  }
 }

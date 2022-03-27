@@ -185,7 +185,6 @@ public class MediaKeyboard extends FrameLayout implements InputView {
     void onShown();
     void onHidden();
     void onKeyboardChanged(@NonNull KeyboardPage page);
-    void onToggleLongPress();
   }
 
   private enum State {

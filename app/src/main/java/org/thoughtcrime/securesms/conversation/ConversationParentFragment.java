@@ -2231,6 +2231,26 @@ public class ConversationParentFragment extends Fragment
     toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
 
     if (isInBubble()) {
+      toolbar.setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+        private boolean set = false;
+
+        @Override
+        public void onChildViewAdded(View parent, View child) {
+          if (!set && parent == toolbar && child instanceof ImageButton) {
+            child.setOnLongClickListener(unused -> {
+              if (SignalStore.settings().isAltCollapseMediaKeyboard()) {
+                container.hideCurrentInput(composeText);
+              }
+              return true;
+            });
+            set = true;
+          }
+        }
+
+        @Override
+        public void onChildViewRemoved(View parent, View child) {
+        }
+      });
       toolbar.setNavigationIcon(DrawableUtil.tint(ContextUtil.requireDrawable(requireContext(), R.drawable.ic_notification),
                                                   ContextCompat.getColor(requireContext(), R.color.signal_accent_primary)));
       toolbar.setNavigationOnClickListener(unused -> startActivity(MainActivity.clearTop(requireContext())));
@@ -3446,13 +3466,6 @@ public class ConversationParentFragment extends Fragment
   public void onKeyboardChanged(@NonNull KeyboardPage page) {
     if (inputPanel != null) {
       inputPanel.getMediaKeyboardListener().onKeyboardChanged(page);
-    }
-  }
-
-  @Override
-  public void onToggleLongPress() {
-    if (SignalStore.settings().isAltCollapseMediaKeyboard()) {
-      container.hideCurrentInput(composeText);
     }
   }
 
