@@ -219,7 +219,6 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment) {
     )
     recipientDisplay.setOnLongClickListener { _ ->
       if (SignalStore.settings().isAltCloseMediaSelection()) {
-        findNavController().popBackStack()
         callback.onPopFromReview()
       }
       false
