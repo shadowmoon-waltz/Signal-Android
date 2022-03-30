@@ -863,10 +863,6 @@ public final class ConversationReactionOverlay extends FrameLayout {
                                                      })
                                                      .toList());
 
-    Animator overlayHideAnim = AnimatorInflaterCompat.loadAnimator(getContext(), android.R.animator.fade_out);
-    overlayHideAnim.setDuration(duration);
-    animators.add(overlayHideAnim);
-
     Animator backgroundHideAnim = AnimatorInflaterCompat.loadAnimator(getContext(), android.R.animator.fade_out);
     backgroundHideAnim.setTarget(backgroundView);
     backgroundHideAnim.setDuration(duration);

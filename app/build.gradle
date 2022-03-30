@@ -63,8 +63,8 @@ ktlint {
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1030
-def canonicalVersionName = "5.34.4"
+def canonicalVersionCode = 1032
+def canonicalVersionName = "5.34.6"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -500,8 +500,9 @@ dependencies {
     implementation project(':device-transfer')
     implementation project(':image-editor')
     implementation project(':donations')
+    implementation project(':contacts')
 
-    implementation libs.signal.client.android
+    implementation libs.libsignal.android
     implementation libs.google.protobuf.javalite
 
     implementation(libs.mobilecoin) {
@@ -596,7 +597,7 @@ dependencies {
     implementation libs.rxjava3.rxkotlin
     implementation libs.rxdogtag
 
-    androidTestUtil 'androidx.test:orchestrator:1.4.0'
+    androidTestUtil 'androidx.test:orchestrator:1.4.1'
 }
 
 def getLastCommitTimestamp() {
