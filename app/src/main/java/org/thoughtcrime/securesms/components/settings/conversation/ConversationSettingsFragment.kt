@@ -405,8 +405,8 @@ class ConversationSettingsFragment : DSLSettingsFragment(
       }
 
       var enabled = !state.recipient.isBlocked
-      state.withGroupSettingsState {
-        enabled = it.canEditGroupAttributes && !state.recipient.isBlocked
+      state.withGroupSettingsState { groupState ->
+        enabled = groupState.canEditGroupAttributes && !state.recipient.isBlocked
 
         if (manageGroupTweaks) {
           val memberCount = groupState.allMembers.size

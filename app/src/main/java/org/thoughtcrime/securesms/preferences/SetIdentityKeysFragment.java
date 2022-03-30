@@ -18,7 +18,7 @@ import com.dd.CircularProgressButton;
 import org.thoughtcrime.securesms.R;
 
 import org.thoughtcrime.securesms.util.Base64;
-import org.whispersystems.libsignal.IdentityKeyPair;
+import org.signal.libsignal.protocol.IdentityKeyPair;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 
 import android.widget.Button;
