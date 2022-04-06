@@ -32,7 +32,7 @@
   <string name="ApplicationPreferencesActivity_Off">Uit</string>
   <string name="ApplicationPreferencesActivity_sms_mms_summary">Sms %1$s, mms %2$s</string>
   <string name="ApplicationPreferencesActivity_privacy_summary">Appvergrendeling %1$s, Registratievergrendeling %2$s</string>
-  <string name="ApplicationPreferencesActivity_appearance_summary">Thema %1$s, Taal %2$s</string>
+  <string name="ApplicationPreferencesActivity_appearance_summary">Thema %1$s, taal %2$s</string>
   <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">Je pincode wordt gebruikt voor registratievergrendeling. Om je pincode uit te schakelen moet je eerst de registratievergrendeling uitzetten.</string>
   <string name="ApplicationPreferencesActivity_pin_created">Pincode aangemaakt.</string>
   <string name="ApplicationPreferencesActivity_pin_disabled">Pincode uitgeschakeld.</string>
@@ -40,7 +40,7 @@
   <string name="ApplicationPreferencesActivity_hide_reminder">Herinnering verbergen?</string>
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Herstel-zin voor overschrijvingen vastleggen</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Zin vastleggen</string>
-  <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Je moet een herstel-zin opnemen voordat je overschrijvingen kan uitschakelen, zodat het mogelijk wordt om je overschrijvingen-account te herstellen.</string>
+  <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Je moet een herstel-zin vastleggen voordat je overschrijvingen kan uitschakelen, zodat het mogelijk wordt om je overschrijvingen-account te herstellen.</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d minuut</item>
@@ -392,7 +392,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
     <item quantity="other">%d geselecteerd</item>
   </plurals>
   <!--Show in conversation list overflow menu to open selection bottom sheet-->
-  <string name="ConversationListFragment__notification_profile">Meldingsprofiel</string>
+  <string name="ConversationListFragment__notification_profile">Meldingsprofielen</string>
   <!--Tooltip shown after you have created your first notification profile-->
   <string name="ConversationListFragment__turn_your_notification_profile_on_or_off_here">Schakel hier je meldingsprofiel in of uit.</string>
   <!--Message shown in top toast to indicate the named profile is on-->
@@ -467,8 +467,8 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="DateUtils_today">Vandaag</string>
   <string name="DateUtils_yesterday">Gisteren</string>
   <!--DecryptionFailedDialog-->
-  <string name="DecryptionFailedDialog_chat_session_refreshed">Gespreksessie vernieuwd</string>
-  <string name="DecryptionFailedDialog_signal_uses_end_to_end_encryption">Omdat Signal geavanceerde eind-tot-eind-versluteling gebruikt, kan het soms nodig zijn om je gespreksessie te vernieuwen. Dit heeft geen invloed op de beveiliging van je gesprek, maar het is mogelijk dat je een bericht van je contactpersoon hebt gemist. Vraag je contactpersoon eventueel om zijn of haar meest recente berichten opnieuw te zenden.</string>
+  <string name="DecryptionFailedDialog_chat_session_refreshed">Gesprekssessie vernieuwd</string>
+  <string name="DecryptionFailedDialog_signal_uses_end_to_end_encryption">Het kan soms nodig zijn om je gesprekssessie te vernieuwen. Dit heeft geen invloed op de beveiliging van je gesprek, maar het is mogelijk dat je een bericht van je contactpersoon hebt gemist. Vraag je contactpersoon eventueel om zijn of haar meest recente berichten opnieuw te zenden.</string>
   <!--DeviceListActivity-->
   <string name="DeviceListActivity_unlink_s">‘%s’ ontkoppelen?</string>
   <string name="DeviceListActivity_by_unlinking_this_device_it_will_no_longer_be_able_to_send_or_receive">Door dit apparaat te ontkoppelen kan het niet langer berichten verzenden en ontvangen.</string>
@@ -964,7 +964,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="MessageRecord_disappearing_message_time_set_to_s">De tijdsspanne voor verlopende berichten is op %1$s ingesteld.</string>
   <string name="MessageRecord_this_group_was_updated_to_a_new_group">Deze groep is omgezet in een nieuwe-stijl groep.</string>
   <string name="MessageRecord_you_couldnt_be_added_to_the_new_group_and_have_been_invited_to_join">Je kon niet toegevoegd worden aan de nieuwe groep en je hebt daarom een uitnodiging gekregen om opnieuw lid te worden.</string>
-  <string name="MessageRecord_chat_session_refreshed">Gespreksessie vernieuwd</string>
+  <string name="MessageRecord_chat_session_refreshed">Gesprekssessie vernieuwd</string>
   <plurals name="MessageRecord_members_couldnt_be_added_to_the_new_group_and_have_been_invited">
     <item quantity="one">Een groepslid kon niet direct toegevoegd worden tot de nieuwe groep en heeft daarom een uitnodiging gekregen om toe te treden.</item>
     <item quantity="other">%1$s groepsleden konden niet direct toegevoegd worden tot de nieuwe groep en hebben daarom een uitnodiging gekregen om toe te treden.</item>
@@ -1126,7 +1126,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="MessageRecord_s_started_a_group_call_s">%1$s heeft een groepsoproep gestart · %2$s</string>
   <string name="MessageRecord_s_is_in_the_group_call_s">%1$s is in deze groepsoproep aanwezig · %2$s</string>
   <string name="MessageRecord_you_are_in_the_group_call_s1">Je neemt deel aan een groepsoproep · %1$s</string>
-  <string name="MessageRecord_s_and_s_are_in_the_group_call_s1">%1$s, %2$s zijn in deze groepsoproep aanwezig · %3$s</string>
+  <string name="MessageRecord_s_and_s_are_in_the_group_call_s1">%1$s en %2$s zijn in deze groepsoproep aanwezig · %3$s</string>
   <string name="MessageRecord_group_call_s">Groepsoproep · %1$s</string>
   <string name="MessageRecord_s_started_a_group_call">%1$s heeft een groepsoproep gestart</string>
   <string name="MessageRecord_s_is_in_the_group_call">%1$s is in deze groepsoproep aanwezig</string>
@@ -1177,7 +1177,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <!--PassphraseChangeActivity-->
   <string name="PassphraseChangeActivity_passphrases_dont_match_exclamation">Wachtwoorden komen niet overeen!</string>
   <string name="PassphraseChangeActivity_incorrect_old_passphrase_exclamation">Incorrect oud wachtwoord!</string>
-  <string name="PassphraseChangeActivity_enter_new_passphrase_exclamation">Voer nieuw wachtwoord in!</string>
+  <string name="PassphraseChangeActivity_enter_new_passphrase_exclamation">Voer een nieuw wachtwoord in!</string>
   <!--DeviceProvisioningActivity-->
   <string name="DeviceProvisioningActivity_link_this_device">Dit apparaat koppelen?</string>
   <string name="DeviceProvisioningActivity_continue">DOORGAAN</string>
@@ -1219,7 +1219,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <!--PlayServicesProblemFragment-->
   <string name="PlayServicesProblemFragment_the_version_of_google_play_services_you_have_installed_is_not_functioning">De versie van Google Play Services die je in gebruik hebt werkt niet zoals het hoort. Installeer Google Play Services opnieuw en probeer het nog eens.</string>
   <!--PinRestoreEntryFragment-->
-  <string name="PinRestoreEntryFragment_incorrect_pin">Incorrecte pincode</string>
+  <string name="PinRestoreEntryFragment_incorrect_pin">Foutieve pincode</string>
   <string name="PinRestoreEntryFragment_skip_pin_entry">Pincode invoeren overslaan?</string>
   <string name="PinRestoreEntryFragment_need_help">Hulp nodig?</string>
   <string name="PinRestoreEntryFragment_your_pin_is_a_d_digit_code">Je pincode is een code welke je zelf hebt aangemaakt en welke bestaat uit %1$d of meer cijfers of een combinatie van cijfers en letters. Als je je je pincode niet kunt herinneren, dan kun je een nieuwe pincode aanmaken. Je kunt Signal dan wel weer registreren met dit telefoonnummer, maar sommige instellingen zoals je profielnaam, -foto en -omschrijving zullen dan verloren gaan.</string>
@@ -1229,8 +1229,8 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="PinRestoreEntryFragment_cancel">Annuleren</string>
   <string name="PinRestoreEntryFragment_skip">Overslaan</string>
   <plurals name="PinRestoreEntryFragment_you_have_d_attempt_remaining">
-    <item quantity="one">Je hebt nog %1$d poging resterend. Als je geen pogingen meer over hebt, dan kun je nog wel een nieuwe pincode aanmaken. Je kunt Signal dan wel weer registreren met dit telefoonnummer, maar sommige instellingen zoals je profielnaam, -foto en -omschrijving zullen dan verloren gaan.</item>
-    <item quantity="other">Je hebt nog %1$d pogingen resterend. Als je geen pogingen meer over hebt, dan kun je nog wel een nieuwe pincode aanmaken. Je kunt Signal dan wel weer registreren met dit telefoonnummer, maar sommige instellingen zoals je profielnaam, -foto en -omschrijving zullen dan verloren gaan.</item>
+    <item quantity="one">Je hebt nog %1$d poging resterend. Wanneer je geen pogingen meer over hebt, dan kun je nog wel een nieuwe pincode aanmaken. Je kunt Signal dan wel weer registreren met dit telefoonnummer, maar sommige instellingen zoals je profielnaam, -foto en -omschrijving zullen dan verloren gaan.</item>
+    <item quantity="other">Je hebt nog %1$d pogingen resterend. Wanneer je geen pogingen meer over hebt, dan kun je nog wel een nieuwe pincode aanmaken. Je kunt Signal dan wel weer registreren met dit telefoonnummer, maar sommige instellingen zoals je profielnaam, -foto en -omschrijving zullen dan verloren gaan.</item>
   </plurals>
   <string name="PinRestoreEntryFragment_signal_registration_need_help_with_pin">Signal-registratratie - Ik heb hulp nodig bij de Signal-pincode op een Android apparaat</string>
   <string name="PinRestoreEntryFragment_enter_alphanumeric_pin">Alfanumerieke pincode invoeren</string>
@@ -1256,9 +1256,9 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <!--ReactionsRecipientAdapter-->
   <string name="ReactionsRecipientAdapter_you">Jij</string>
   <!--RecaptchaRequiredBottomSheetFragment-->
-  <string name="RecaptchaRequiredBottomSheetFragment_verify_to_continue_messaging">Je moet je telefoonnummer verifiëren om door te kunnen gaan met het verzenden van berichten</string>
-  <string name="RecaptchaRequiredBottomSheetFragment_to_help_prevent_spam_on_signal">Om Signal te helpen spam te voorkomen is het nodig dat je je telefoonnummer verifieert.</string>
-  <string name="RecaptchaRequiredBottomSheetFragment_after_verifying_you_can_continue_messaging">Je kunt doorgaan met het verzenden van berichten nadat je je telefoonnummer hebt geverifieerd. Enig bericht waarvan verzending is gepauzeerd zal dan automatisch verzonden worden.</string>
+  <string name="RecaptchaRequiredBottomSheetFragment_verify_to_continue_messaging">Je moet verifiëren dat je geen robot bent om door te kunnen gaan met het verzenden van berichten</string>
+  <string name="RecaptchaRequiredBottomSheetFragment_to_help_prevent_spam_on_signal">Om Signal te helpen spam te voorkomen is het nodig dat je verifieert dat je geen robot bent.</string>
+  <string name="RecaptchaRequiredBottomSheetFragment_after_verifying_you_can_continue_messaging">Je kunt doorgaan met het verzenden van berichten nadat je hebt geverifieerd dat je geen robot bent. Enig bericht waarvan verzending is gepauzeerd zal dan automatisch verzonden worden.</string>
   <!--Recipient-->
   <string name="Recipient_you">Jij</string>
   <!--Name of recipient representing user\'s \'My Story\'-->
@@ -1411,7 +1411,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="RegistrationActivity_enter_your_phone_number_to_get_started">Voer je telefoonnummer in om te beginnen</string>
   <string name="RegistrationActivity_enter_your_phone_number">Voer je telefoonnummer in</string>
   <string name="RegistrationActivity_you_will_receive_a_verification_code">Je zult een verificatiecode ontvangen.</string>
-  <string name="RegistrationActivity_enter_the_code_we_sent_to_s">Voer de code in die we naar %s hebben verzonden</string>
+  <string name="RegistrationActivity_enter_the_code_we_sent_to_s">Vul de code in die we per sms naar %s hebben verzonden</string>
   <string name="RegistrationActivity_make_sure_your_phone_has_a_cellular_signal">Verzeker je ervan dat je telefoon netwerkbereik heeft zodat je een sms of oproep kunt ontvangen</string>
   <string name="RegistrationActivity_phone_number_description">Telefoonnummer</string>
   <string name="RegistrationActivity_country_code_description">Landcode</string>
@@ -1515,27 +1515,27 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="ThreadRecord_missed_video_call">Video-oproep gemist</string>
   <string name="ThreadRecord_media_message">Mediabericht</string>
   <string name="ThreadRecord_sticker">Sticker</string>
-  <string name="ThreadRecord_view_once_photo">Eenmaligeweergave-afbeelding</string>
-  <string name="ThreadRecord_view_once_video">Eenmaligeweergave-video</string>
-  <string name="ThreadRecord_view_once_media">Eenmaligeweergave-media</string>
+  <string name="ThreadRecord_view_once_photo">Eenmalige­weergave-afbeelding</string>
+  <string name="ThreadRecord_view_once_video">Eenmalige­weergave-video</string>
+  <string name="ThreadRecord_view_once_media">Eenmalige­weergave-media</string>
   <string name="ThreadRecord_this_message_was_deleted">Dit bericht is gewist.</string>
   <string name="ThreadRecord_you_deleted_this_message">Je hebt dit bericht gewist.</string>
   <string name="ThreadRecord_s_is_on_signal">%s is bereikbaar via Signal.</string>
   <string name="ThreadRecord_disappearing_messages_disabled">Verlopende berichten uitgeschakeld</string>
   <string name="ThreadRecord_disappearing_message_time_updated_to_s">Verlopende berichten op %s ingesteld</string>
-  <string name="ThreadRecord_safety_number_changed">Veiligheidsnummer is veranderd</string>
-  <string name="ThreadRecord_your_safety_number_with_s_has_changed">Je veiligheidsnummer met %s is veranderd.</string>
+  <string name="ThreadRecord_safety_number_changed">Veiligheids­nummer is veranderd</string>
+  <string name="ThreadRecord_your_safety_number_with_s_has_changed">Je veiligheids­nummer met %s is veranderd.</string>
   <string name="ThreadRecord_you_marked_verified">Door jou als geverifieerd gemarkeerd</string>
   <string name="ThreadRecord_you_marked_unverified">Door jou als niet geverifieerd gemarkeerd</string>
   <string name="ThreadRecord_message_could_not_be_processed">Bericht kon niet worden verwerkt</string>
-  <string name="ThreadRecord_delivery_issue">Afleveringsprobleem</string>
-  <string name="ThreadRecord_message_request">Gespreksverzoek</string>
+  <string name="ThreadRecord_delivery_issue">Afleverings­probleem</string>
+  <string name="ThreadRecord_message_request">Gespreks­verzoek</string>
   <string name="ThreadRecord_photo">Afbeelding</string>
   <string name="ThreadRecord_gif">GIF</string>
   <string name="ThreadRecord_voice_message">Audiobericht</string>
   <string name="ThreadRecord_file">Bestand</string>
   <string name="ThreadRecord_video">Video</string>
-  <string name="ThreadRecord_chat_session_refreshed">Gespreksessie vernieuwd</string>
+  <string name="ThreadRecord_chat_session_refreshed">Gespreks­sessie vernieuwd</string>
   <!--UpdateApkReadyListener-->
   <string name="UpdateApkReadyListener_Signal_update">Nieuwe versie van Signal</string>
   <string name="UpdateApkReadyListener_a_new_version_of_signal_is_available_tap_to_update">Er is een nieuwe versie van Signal beschikbaar. Tik hier om bij te werken</string>
@@ -1601,7 +1601,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="MediaPreviewActivity_media_delete_confirmation_message">Dit bericht zal alleen voor jou onherroepelijk worden gewist, maar dus niet voor je gesprekspartner(s).</string>
   <string name="MediaPreviewActivity_s_to_s">%1$s naar %2$s</string>
   <!--All media preview title when viewing media send by you to another recipient (allows changing of \'You\' based on context)-->
-  <string name="MediaPreviewActivity_you_to_s">Van jou naar %1$s</string>
+  <string name="MediaPreviewActivity_you_to_s">Jij naar %1$s</string>
   <!--All media preview title when viewing media sent by another recipient to you (allows changing of \'You\' based on context)-->
   <string name="MediaPreviewActivity_s_to_you">%1$s naar jou</string>
   <string name="MediaPreviewActivity_media_no_longer_available">Media niet langer beschikbaar.</string>
@@ -1807,11 +1807,11 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="QuoteView_you">Jij</string>
   <string name="QuoteView_original_missing">Oorspronkelijk bericht niet gevonden</string>
   <!--Author formatting for group stories-->
-  <string name="QuoteView_s_story"> Verhaal van %1$s</string>
+  <string name="QuoteView_s_story">Verhaal van %1$s</string>
   <!--Label indicating that a quote is for a reply to a story you created-->
   <string name="QuoteView_your_story">Jouw verhaal</string>
   <!--Label indicating that the story being replied to no longer exists-->
-  <string name="QuoteView_no_longer_available">Verhaal niet langer beschikbaar</string>
+  <string name="QuoteView_no_longer_available">Niet langer beschikbaar</string>
   <!--conversation_fragment-->
   <string name="conversation_fragment__scroll_to_the_bottom_content_description">Scroll naar bodem</string>
   <!--BubbleOptOutTooltip-->
@@ -2346,7 +2346,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <!--PaymentsTransferFragment-->
   <string name="PaymentsTransferFragment__transfer">Overschrijven</string>
   <string name="PaymentsTransferFragment__scan_qr_code">QR-code scannen</string>
-  <string name="PaymentsTransferFragment__to_scan_or_enter_wallet_address">Naar: Scan de QR-code of vul het portomonnee-adres in</string>
+  <string name="PaymentsTransferFragment__to_scan_or_enter_wallet_address">Naar: Scan de QR-code of voer het portomonnee-adres in</string>
   <string name="PaymentsTransferFragment__you_can_transfer">Je kunt MobileCoin overschrijven door een deel van je krediet te sturen naar het adres van de portemonnee die je via de beurs hebt gekregen. Dat adres bestaat uit nummers en letters en je vindt het meestal onder de QR-code.</string>
   <string name="PaymentsTransferFragment__next">Volgende</string>
   <string name="PaymentsTransferFragment__invalid_address">Adres ongeldig</string>
@@ -2594,7 +2594,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="RegistrationLockFragment__enter_numeric_pin">Voer numerieke pincode in.</string>
   <string name="RegistrationLockFragment__incorrect_pin_try_again">Foutieve pincode, probeer het opnieuw.</string>
   <string name="RegistrationLockFragment__forgot_pin">Pincode vergeten?</string>
-  <string name="RegistrationLockFragment__incorrect_pin">Incorrecte pincode</string>
+  <string name="RegistrationLockFragment__incorrect_pin">Foutieve pincode</string>
   <string name="RegistrationLockFragment__forgot_your_pin">Pincode vergeten?</string>
   <string name="RegistrationLockFragment__not_many_tries_left">Weinig pogingen resterend.</string>
   <string name="RegistrationLockFragment__signal_registration_need_help_with_pin_for_android_v1_pin">Signal-registratie - Hulp nodig met de pincode voor Signal-Android (pincode versie 1)</string>
@@ -2604,12 +2604,12 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
     <item quantity="other">Om je privacy en beveiliging te beschermen is er geen mogelijkheid om je pincode terug te zien. Als je je je pincode niet kunt herinneren dan kun je je, na %1$d dagen waarin Signal voor dit telefoonnummer niet wordt gebruikt, opnieuw verifiëren via sms. In dat geval zal alle inhoud worden gewist.</item>
   </plurals>
   <plurals name="RegistrationLockFragment__incorrect_pin_d_attempts_remaining">
-    <item quantity="one">Pincode foutief. %1$d poging resterend.</item>
-    <item quantity="other">Pincode foutief. %1$d pogingen resterend.</item>
+    <item quantity="one">Foutieve pincode. %1$d poging resterend.</item>
+    <item quantity="other">Foutieve pincode. %1$d pogingen resterend.</item>
   </plurals>
   <plurals name="RegistrationLockFragment__if_you_run_out_of_attempts_your_account_will_be_locked_for_d_days">
-    <item quantity="one">Als je geen pogingen meer over hebt dan zal Signal voor dit telefoonnummer worden vergrendeld voor %1$d dag. Na %1$d dag waarin Signal voor dit telefoonnummer niet wordt gebruikt, kun je je telefoonnummer zonder je pincode opnieuw registreren, maar als je opnieuw registreert zonder je pincode te gebruiken dan zal alle inhoud worden gewist.</item>
-    <item quantity="other">Als je geen pogingen meer over hebt dan zal Signal voor dit telefoonnummer worden vergrendeld voor %1$d dagen. Na %1$d dagen waarin Signal voor dit telefoonnummer niet wordt gebruikt, kun je je telefoonnummer zonder je pincode opnieuw registreren, maar als je opnieuw registreert zonder je pincode te gebruiken dan zal alle inhoud worden gewist.</item>
+    <item quantity="one">Als je geen pogingen meer over hebt dan zal Signal voor dit telefoonnummer voor %1$d dag worden vergrendeld. Na %1$d dag waarin Signal voor dit telefoonnummer niet wordt gebruikt, kun je je telefoonnummer zonder je pincode opnieuw registreren. Als je er dan voor kiest om zonder pincode opnieuw te registreren, dan wordt de Signal-app gereset en alle inhoud wordt gewist.</item>
+    <item quantity="other">Als je geen pogingen meer over hebt dan zal Signal voor dit telefoonnummer voor %1$d dagen worden vergrendeld. Na %1$d dagen waarin Signal voor dit telefoonnummer niet wordt gebruikt, kun je je telefoonnummer zonder je pincode opnieuw registreren. Als je er dan voor kiest om zonder pincode opnieuw te registreren, dan wordt de Signal-app gereset en alle inhoud wordt gewist.</item>
   </plurals>
   <plurals name="RegistrationLockFragment__you_have_d_attempts_remaining">
     <item quantity="one">Je hebt %1$d poging resterend.</item>
@@ -2939,7 +2939,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <string name="DeleteAccountFragment__enter_your_phone_number">Voer je telefoonnummer in</string>
   <string name="DeleteAccountFragment__delete_account">Al je gegevens wissen</string>
   <string name="DeleteAccountFragment__delete_your_account_info_and_profile_photo">zullen al je instellingen, lijst van (geblokkeerde) contactpersonen, profielnaam, -foto en -omschrijving worden gewist</string>
-  <string name="DeleteAccountFragment__delete_all_your_messages">zullen alle berichten worden gewist</string>
+  <string name="DeleteAccountFragment__delete_all_your_messages">zullen alle berichten op je eigen apparaat worden gewist</string>
   <string name="DeleteAccountFragment__delete_s_in_your_payments_account">%1$s wissen van je overschrijvingsaccount</string>
   <string name="DeleteAccountFragment__no_country_code">Er is geen landcode gespecificeerd</string>
   <string name="DeleteAccountFragment__no_number">Er is geen telefoonnummer ingevuld</string>
@@ -3656,7 +3656,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <!--Descriptor text indicating what the user can do with this screen-->
   <string name="EditNotificationProfileSchedule__set_up_a_schedule_to_enable_this_notification_profile_automatically">Stel eventueel een tijdsplanning in zodat dit meldingsprofiel automatisch op bepaalde momenten wordt geactiveerd en gedeactiveerd.</string>
   <!--Text shown next to toggle switch to enable/disable schedule-->
-  <string name="EditNotificationProfileSchedule__schedule">Tijdsplanning</string>
+  <string name="EditNotificationProfileSchedule__schedule">Tijdsplanning gebruiken</string>
   <!--Label for showing the start time for the schedule-->
   <string name="EditNotificationProfileSchedule__start">Beginnen</string>
   <!--Label for showing the end time for the schedule-->
@@ -3984,7 +3984,7 @@ In groepen zullen jouw berichten niet zichtbaar zijn voor personen die je hebt g
   <!--Label for a button in a notification at the bottom of the chat list to turn off censorship circumvention-->
   <string name="TurnOffCircumventionMegaphone_turn_off">Uitschakelen</string>
   <!--Conversation Item label for reactions to a story-->
-  <string name="ConversationItem__s_dot_story">%1$s · Verhaal</string>
+  <string name="ConversationItem__s_dot_story">Verhaal van %1$s</string>
   <!--Conversation Item label for reactions to an unavailable story-->
   <string name="ConversationItem__reacted_to_a_story">Reageerde op een verhaal</string>
   <!--endregion-->
