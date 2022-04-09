@@ -139,6 +139,7 @@ import org.thoughtcrime.securesms.storage.StorageSyncHelper;
 import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
+import org.thoughtcrime.securesms.util.ConversationUtil;
 import org.thoughtcrime.securesms.util.PlayStoreUtil;
 import org.thoughtcrime.securesms.util.ServiceUtil;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
@@ -150,7 +151,7 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
-import org.thoughtcrime.securesms.util.concurrent.SimpleTask;
+import org.signal.core.util.concurrent.SimpleTask;
 import org.thoughtcrime.securesms.util.task.SnackbarAsyncTask;
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog;
 import org.thoughtcrime.securesms.util.views.Stub;
@@ -338,21 +339,32 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     Badge                              expiredBadge                       = SignalStore.donationsValues().getExpiredBadge();
     String                             subscriptionCancellationReason     = SignalStore.donationsValues().getUnexpectedSubscriptionCancelationReason();
     UnexpectedSubscriptionCancellation unexpectedSubscriptionCancellation = UnexpectedSubscriptionCancellation.fromStatus(subscriptionCancellationReason);
+    boolean                            isDisplayingSubscriptionFailure    = false;
+    long                               subscriptionFailureTimestamp       = SignalStore.donationsValues().getUnexpectedSubscriptionCancelationTimestamp();
+    long                               subscriptionFailureWatermark       = SignalStore.donationsValues().getUnexpectedSubscriptionCancelationWatermark();
+    boolean                            isWatermarkPriorToTimestamp        = subscriptionFailureWatermark < subscriptionFailureTimestamp;
 
-    if (expiredBadge != null) {
+    if (unexpectedSubscriptionCancellation != null               &&
+        !SignalStore.donationsValues().isUserManuallyCancelled() &&
+        SignalStore.donationsValues().showCantProcessDialog()    &&
+        isWatermarkPriorToTimestamp) {
+      Log.w(TAG, "Displaying bottom sheet for unexpected cancellation: " + unexpectedSubscriptionCancellation, true);
+      new CantProcessSubscriptionPaymentBottomSheetDialogFragment().show(getChildFragmentManager(), BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG);
+      SignalStore.donationsValues().setUnexpectedSubscriptionCancelationWatermark(subscriptionFailureTimestamp);
+      isDisplayingSubscriptionFailure = true;
+    } else if (unexpectedSubscriptionCancellation != null && SignalStore.donationsValues().isUserManuallyCancelled()) {
+      Log.w(TAG, "Unexpected cancellation detected but not displaying dialog because user manually cancelled their subscription: " + unexpectedSubscriptionCancellation, true);
+    } else if (unexpectedSubscriptionCancellation != null && !SignalStore.donationsValues().showCantProcessDialog()) {
+      Log.w(TAG, "Unexpected cancellation detected but not displaying dialog because user has silenced it.", true);
+    }
+
+    if (expiredBadge != null && !isDisplayingSubscriptionFailure) {
       SignalStore.donationsValues().setExpiredBadge(null);
 
       if (expiredBadge.isBoost() || !SignalStore.donationsValues().isUserManuallyCancelled()) {
         Log.w(TAG, "Displaying bottom sheet for an expired badge", true);
         ExpiredBadgeBottomSheetDialogFragment.show(expiredBadge, unexpectedSubscriptionCancellation, getParentFragmentManager());
       }
-    } else if (unexpectedSubscriptionCancellation != null && !SignalStore.donationsValues().isUserManuallyCancelled() && SignalStore.donationsValues().getShowCantProcessDialog()) {
-      Log.w(TAG, "Displaying bottom sheet for unexpected cancellation: " + unexpectedSubscriptionCancellation, true);
-      new CantProcessSubscriptionPaymentBottomSheetDialogFragment().show(getChildFragmentManager(), BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG);
-    } else if (unexpectedSubscriptionCancellation != null && SignalStore.donationsValues().isUserManuallyCancelled()) {
-      Log.w(TAG, "Unexpected cancellation detected but not displaying dialog because user manually cancelled their subscription: " + unexpectedSubscriptionCancellation, true);
-    } else if (unexpectedSubscriptionCancellation != null && !SignalStore.donationsValues().getShowCantProcessDialog()) {
-      Log.w(TAG, "Unexpected cancellation detected but not displaying dialog because user has silenced it.", true);
     }
   }
 
@@ -951,6 +963,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       ThreadDatabase db = SignalDatabase.threads();
 
       db.pinConversations(toPin);
+      ConversationUtil.refreshRecipientShortcuts();
 
       return null;
     }, unused -> {
@@ -963,6 +976,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       ThreadDatabase db = SignalDatabase.threads();
 
       db.unpinConversations(ids);
+      ConversationUtil.refreshRecipientShortcuts();
 
       return null;
     }, unused -> {
@@ -1017,6 +1031,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     if (megaphoneContainer.resolved()) {
       ViewUtil.fadeOut(megaphoneContainer.get(), 250);
     }
+    requireCallback().onMultiSelectStarted();
   }
 
   private void endActionModeIfActive() {
@@ -1034,6 +1049,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     if (megaphoneContainer.resolved()) {
       ViewUtil.fadeIn(megaphoneContainer.get(), 250);
     }
+    requireCallback().onMultiSelectFinished();
   }
 
   void updateEmptyState(boolean isConversationEmpty) {
@@ -1295,6 +1311,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           ApplicationDependencies.getMessageNotifier().updateNotification(context);
           MarkReadReceiver.process(context, messageIds);
         }
+
+        ConversationUtil.refreshRecipientShortcuts();
       }
 
       @Override
@@ -1308,6 +1326,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           threadDatabase.incrementUnread(threadId, unreadCount);
           ApplicationDependencies.getMessageNotifier().updateNotification(context);
         }
+
+        ConversationUtil.refreshRecipientShortcuts();
       }
     }.executeOnExecutor(SignalExecutors.BOUNDED, threadId);
   }
@@ -1563,6 +1583,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     void updateProxyStatus(@NonNull WebSocketConnectionState state);
     void onSearchOpened();
     void onSearchClosed();
+    void onMultiSelectStarted();
+    void onMultiSelectFinished();
   }
 }
 

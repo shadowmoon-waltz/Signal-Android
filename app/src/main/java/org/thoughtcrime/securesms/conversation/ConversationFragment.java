@@ -71,8 +71,11 @@ import com.annimon.stream.Stream;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jetbrains.annotations.NotNull;
 import org.signal.core.util.DimensionUnit;
+import org.signal.core.util.StreamUtil;
 import org.signal.core.util.concurrent.SignalExecutors;
+import org.signal.core.util.concurrent.SimpleTask;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.LoggingFragment;
 import org.thoughtcrime.securesms.R;
@@ -124,7 +127,6 @@ import org.thoughtcrime.securesms.groups.ui.managegroup.dialogs.GroupDescription
 import org.thoughtcrime.securesms.groups.ui.migration.GroupsV1MigrationInfoBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.groups.v2.GroupBlockJoinRequestResult;
 import org.thoughtcrime.securesms.groups.v2.GroupDescriptionUtil;
-import org.thoughtcrime.securesms.groups.v2.GroupManagementRepository;
 import org.thoughtcrime.securesms.jobs.DirectoryRefreshJob;
 import org.thoughtcrime.securesms.jobs.MultiDeviceViewOnceOpenJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
@@ -137,6 +139,7 @@ import org.thoughtcrime.securesms.mms.GlideApp;
 import org.thoughtcrime.securesms.mms.OutgoingMediaMessage;
 import org.thoughtcrime.securesms.mms.PartAuthority;
 import org.thoughtcrime.securesms.mms.Slide;
+import org.thoughtcrime.securesms.mms.TextSlide;
 import org.thoughtcrime.securesms.notifications.profiles.NotificationProfile;
 import org.thoughtcrime.securesms.permissions.Permissions;
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter;
@@ -174,7 +177,6 @@ import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
-import org.thoughtcrime.securesms.util.concurrent.SimpleTask;
 import org.thoughtcrime.securesms.util.task.ProgressDialogAsyncTask;
 import org.thoughtcrime.securesms.verify.VerifyIdentityActivity;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
@@ -1011,41 +1013,61 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     handleCopyMessage(multiselectParts, TextSecurePreferences.isCopyTextOpensPopup(requireContext()));
   }
 
-  private void handleCopyMessage(final Set<MultiselectPart> multiselectParts, boolean popup) {
-    CharSequence bodies = Stream.of(multiselectParts)
-                                .sortBy(m -> m.getMessageRecord().getDateReceived())
-                                .map(MultiselectPart::getConversationMessage)
-                                .distinct()
-                                .map(m -> m.getDisplayBody(requireContext()))
-                                .filterNot(TextUtils::isEmpty)
-                                .collect(SpannableStringBuilder::new, (bodyBuilder, body) -> {
-                                  if (bodyBuilder.length() > 0) {
-                                    bodyBuilder.append('\n');
-                                  }
-                                  bodyBuilder.append(body);
-                                });
+  private void handleCopyMessage(final Set<MultiselectPart> multiselectParts, boolean popup) {  
+    SimpleTask.run(() -> extractBodies(multiselectParts),
+                   bodies -> {
+                     if (!Util.isEmpty(bodies)) {
+                       if (popup) {
+                        // https://stackoverflow.com/questions/7197939/copy-text-from-android-alertdialog
+                        EditText v = new EditText(getActivity());
+                        v.setText(bodies);
+                        new MaterialAlertDialogBuilder(getActivity())
+                          .setView(v)
+                          .setPositiveButton("Close", (d, i) -> {
+                            d.dismiss();
+                          })
+                          .setNegativeButton("Copy All", (d, i) -> {
+                            Util.copyToClipboard(requireContext(), bodies);
+                            d.dismiss();
+                          })
+                          .show();
+                       } else {
+                         Util.copyToClipboard(requireContext(), bodies);
+                       }
+                     }
+                   });
+  }
 
-    if (!TextUtils.isEmpty(bodies)) {
-      if (popup) {
-        // https://stackoverflow.com/questions/7197939/copy-text-from-android-alertdialog
-        //TextView v = new TextView(getActivity());
-        //v.setTextIsSelectable(true);
-        EditText v = new EditText(getActivity());
-        v.setText(bodies);
-        new AlertDialog.Builder(getActivity())
-          .setView(v)
-          .setPositiveButton("Close", (d, i) -> {
-             d.dismiss();
-           })
-           .setNegativeButton("Copy All", (d, i) -> {
-             Util.copyToClipboard(requireContext(), bodies);
-             d.dismiss();
-           })
-           .show();
-      } else {
-        Util.copyToClipboard(requireContext(), bodies);
-      }
-    }
+  private @NotNull CharSequence extractBodies(final Set<MultiselectPart> multiselectParts) {
+    return Stream.of(multiselectParts)
+                 .sortBy(m -> m.getMessageRecord().getDateReceived())
+                 .map(MultiselectPart::getConversationMessage)
+                 .distinct()
+                 .map(message -> {
+                   if (MessageRecordUtil.hasTextSlide(message.getMessageRecord())) {
+                     TextSlide textSlide = MessageRecordUtil.requireTextSlide(message.getMessageRecord());
+                     if (textSlide.getUri() == null) {
+                       return message.getDisplayBody(requireContext());
+                     }
+
+                     try (InputStream stream = PartAuthority.getAttachmentStream(requireContext(), textSlide.getUri())) {
+                       String body = StreamUtil.readFullyAsString(stream);
+                       return ConversationMessage.ConversationMessageFactory.createWithUnresolvedData(requireContext(), message.getMessageRecord(), body)
+                                                                            .getDisplayBody(requireContext());
+                     } catch (IOException e) {
+                       Log.w(TAG, "Failed to read text slide data.");
+                     }
+                   }
+
+                   return message.getDisplayBody(requireContext());
+                 })
+                 .filterNot(Util::isEmpty)
+                 .collect(SpannableStringBuilder::new, (bodyBuilder, body) -> {
+                   if (bodyBuilder.length() > 0) {
+                     bodyBuilder.append('\n');
+                   }
+                   bodyBuilder.append(body);
+                 });
   }
 
   private void handleDeleteMessages(final Set<MultiselectPart> multiselectParts, boolean checkPref) {
@@ -1103,7 +1125,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private AlertDialog.Builder buildRemoteDeleteConfirmationDialog(Set<MessageRecord> messageRecords, @Nullable final Set<ConversationMessage> conversationMessages) {
     Context             context       = requireActivity();
     int                 messagesCount = messageRecords.size();
-    AlertDialog.Builder builder       = new AlertDialog.Builder(getActivity());
+    AlertDialog.Builder builder       = new MaterialAlertDialogBuilder(getActivity());
 
     builder.setTitle(getActivity().getResources().getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messagesCount, messagesCount));
     builder.setCancelable(true);
@@ -1133,7 +1155,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     if (SignalStore.uiHints().hasConfirmedDeleteForEveryoneOnce()) {
       deleteForEveryone.run();
     } else {
-      new AlertDialog.Builder(requireActivity())
+      new MaterialAlertDialogBuilder(requireActivity())
                      .setMessage(R.string.ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation)
                      .setPositiveButton(R.string.ConversationFragment_delete_for_everyone, (dialog, which) -> {
                        SignalStore.uiHints().markHasConfirmedDeleteForEveryoneOnce();
