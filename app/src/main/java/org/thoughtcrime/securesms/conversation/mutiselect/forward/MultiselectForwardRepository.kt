@@ -94,7 +94,7 @@ class MultiselectForwardRepository(context: Context) {
       MultiselectForwardRepository(activity).send(
         "",
         args.multiShareArgs,
-        setOf(ContactSearchKey.KnownRecipient(recipient.getId())),
+        setOf(ContactSearchKey.RecipientSearchKey.KnownRecipient(recipient.getId())),
         MultiselectForwardRepository.MultiselectForwardResultHandlers(
           onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
           onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_failed_to_send, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
