@@ -104,6 +104,7 @@ public class ConversationAdapter
 
   private static final int PAYLOAD_TIMESTAMP   = 0;
   public  static final int PAYLOAD_NAME_COLORS = 1;
+  public  static final int PAYLOAD_SELECTED    = 2;
 
   private final ItemClickListener clickListener;
   private final Context           context;
@@ -232,7 +233,7 @@ public class ConversationAdapter
   }
 
   private boolean containsValidPayload(@NonNull List<Object> payloads) {
-    return payloads.contains(PAYLOAD_TIMESTAMP) || payloads.contains(PAYLOAD_NAME_COLORS);
+    return payloads.contains(PAYLOAD_TIMESTAMP) || payloads.contains(PAYLOAD_NAME_COLORS) || payloads.contains(PAYLOAD_SELECTED);
   }
 
   @Override
@@ -251,6 +252,10 @@ public class ConversationAdapter
 
           if (payloads.contains(PAYLOAD_NAME_COLORS)) {
             conversationViewHolder.getBindable().updateContactNameColor();
+          }
+
+          if (payloads.contains(PAYLOAD_SELECTED)) {
+            conversationViewHolder.getBindable().updateSelectedState();
           }
 
         default:
@@ -525,6 +530,7 @@ public class ConversationAdapter
 
   public void removeFromSelection(@NonNull Set<MultiselectPart> parts) {
     selected.removeAll(parts);
+    updateSelected();
   }
 
   /**
@@ -533,6 +539,7 @@ public class ConversationAdapter
   void clearSelection() {
     mostRecentSelected = null;
     selected.clear();
+    updateSelected();
   }
 
   /**
@@ -546,6 +553,11 @@ public class ConversationAdapter
       mostRecentSelected = multiselectPart.getConversationMessage();
       selected.add(multiselectPart);
     }
+    updateSelected();
+  }
+
+  private void updateSelected() {
+    notifyItemRangeChanged(0, getItemCount(), PAYLOAD_SELECTED);
   }
 
   void toggleFromMostRecentSelectedTo(@NonNull ConversationMessage conversationMessage) {

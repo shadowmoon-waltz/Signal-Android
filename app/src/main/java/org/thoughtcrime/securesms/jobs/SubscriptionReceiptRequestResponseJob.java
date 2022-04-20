@@ -138,19 +138,26 @@ public class SubscriptionReceiptRequestResponseJob extends BaseJob {
   }
 
   private void doRun() throws Exception {
-    ActiveSubscription.Subscription subscription = getLatestSubscriptionInformation();
+    ActiveSubscription              activeSubscription = getLatestSubscriptionInformation();
+    ActiveSubscription.Subscription subscription       = activeSubscription.getActiveSubscription();
+
     if (subscription == null) {
       Log.w(TAG, "Subscription is null.", true);
       throw new RetryableException();
     } else if (subscription.isFailedPayment()) {
+      ActiveSubscription.ChargeFailure chargeFailure = activeSubscription.getChargeFailure();
+      if (chargeFailure != null) {
+        Log.w(TAG, "Subscription payment charge failure code: " + chargeFailure.getCode() + ", message: " + chargeFailure.getMessage(), true);
+      }
+
       Log.w(TAG, "Subscription payment failure in active subscription response (status = " + subscription.getStatus() + ").", true);
-      onPaymentFailure(subscription.getStatus(), subscription.getEndOfCurrentPeriod());
+      onPaymentFailure(subscription.getStatus(), chargeFailure, subscription.getEndOfCurrentPeriod());
       throw new Exception("Subscription has a payment failure: " + subscription.getStatus());
     } else if (!subscription.isActive()) {
       Log.w(TAG, "Subscription is not yet active. Status: " + subscription.getStatus(), true);
       throw new RetryableException();
     } else {
-      Log.i(TAG, "Recording end of period from active subscription.", true);
+      Log.i(TAG, "Recording end of period from active subscription: " + subscription.getStatus(), true);
       SignalStore.donationsValues().setLastEndOfPeriod(subscription.getEndOfCurrentPeriod());
       MultiDeviceSubscriptionSyncRequestJob.enqueue();
     }
@@ -184,13 +191,13 @@ public class SubscriptionReceiptRequestResponseJob extends BaseJob {
     }
   }
 
-  private @Nullable ActiveSubscription.Subscription getLatestSubscriptionInformation() throws Exception {
+  private @NonNull ActiveSubscription getLatestSubscriptionInformation() throws Exception {
     ServiceResponse<ActiveSubscription> activeSubscription = ApplicationDependencies.getDonationsService()
                                                                                     .getSubscription(subscriberId)
                                                                                     .blockingGet();
 
     if (activeSubscription.getResult().isPresent()) {
-      return activeSubscription.getResult().get().getActiveSubscription();
+      return activeSubscription.getResult().get();
     } else if (activeSubscription.getApplicationError().isPresent()) {
       Log.w(TAG, "Unrecoverable error getting the user's current subscription. Failing.", activeSubscription.getApplicationError().get(), true);
       DonationError.routeDonationError(context, DonationError.genericBadgeRedemptionFailure(getErrorSource()));
@@ -233,9 +240,8 @@ public class SubscriptionReceiptRequestResponseJob extends BaseJob {
         DonationError.routeDonationError(context, DonationError.genericBadgeRedemptionFailure(getErrorSource()));
         throw new Exception(response.getApplicationError().get());
       case 402:
-        Log.w(TAG, "Subscription payment failure in credential response.", response.getApplicationError().get(), true);
-        onPaymentFailure(null, 0L);
-        throw new Exception(response.getApplicationError().get());
+        Log.w(TAG, "Payment looks like a failure but may be retried.", response.getApplicationError().get(), true);
+        throw new RetryableException();
       case 403:
         Log.w(TAG, "SubscriberId password mismatch or account auth was present.", response.getApplicationError().get(), true);
         DonationError.routeDonationError(context, DonationError.genericBadgeRedemptionFailure(getErrorSource()));
@@ -253,11 +259,12 @@ public class SubscriptionReceiptRequestResponseJob extends BaseJob {
     }
   }
 
-  private void onPaymentFailure(@Nullable String status, long timestamp) {
+  private void onPaymentFailure(@Nullable String status, @Nullable ActiveSubscription.ChargeFailure chargeFailure, long timestamp) {
     SignalStore.donationsValues().setShouldCancelSubscriptionBeforeNextSubscribeAttempt(true);
     if (status == null) {
       DonationError.routeDonationError(context, DonationError.genericPaymentFailure(getErrorSource()));
     } else {
+      SignalStore.donationsValues().setUnexpectedSubscriptionCancelationChargeFailure(chargeFailure);
       SignalStore.donationsValues().setUnexpectedSubscriptionCancelationReason(status);
       SignalStore.donationsValues().setUnexpectedSubscriptionCancelationTimestamp(timestamp);
       MultiDeviceSubscriptionSyncRequestJob.enqueue();

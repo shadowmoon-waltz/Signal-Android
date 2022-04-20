@@ -140,6 +140,7 @@ import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.ConversationUtil;
+import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.PlayStoreUtil;
 import org.thoughtcrime.securesms.util.ServiceUtil;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
@@ -210,6 +211,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private Stub<FrameLayout>              voiceNotePlayerViewStub;
   private VoiceNotePlayerView            voiceNotePlayerView;
   private SignalBottomActionBar          bottomActionBar;
+  private SignalContextMenu              activeContextMenu;
 
   protected ConversationListArchiveItemDecoration archiveDecoration;
   protected ConversationListItemAnimator          itemAnimator;
@@ -246,8 +248,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     coordinator               = view.findViewById(R.id.coordinator);
     list                      = view.findViewById(R.id.list);
-    fab                       = view.findViewById(R.id.fab);
-    cameraFab                 = view.findViewById(R.id.camera_fab);
     searchEmptyState          = view.findViewById(R.id.search_no_results);
     toolbarShadow             = view.findViewById(R.id.conversation_list_toolbar_shadow);
     bottomActionBar           = view.findViewById(R.id.conversation_list_bottom_action_bar);
@@ -256,6 +256,17 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     megaphoneContainer        = new Stub<>(view.findViewById(R.id.megaphone_container));
     paymentNotificationView   = new Stub<>(view.findViewById(R.id.payments_notification));
     voiceNotePlayerViewStub   = new Stub<>(view.findViewById(R.id.voice_note_player));
+
+    if (FeatureFlags.internalUser()) {
+      fab       = view.findViewById(R.id.fab_new);
+      cameraFab = view.findViewById(R.id.camera_fab_new);
+
+      fab.setVisibility(View.VISIBLE);
+      cameraFab.setVisibility(View.VISIBLE);
+    } else {
+      fab       = view.findViewById(R.id.fab_old);
+      cameraFab = view.findViewById(R.id.camera_fab_old);
+    }
 
     Toolbar toolbar = getToolbar(view);
     toolbar.setVisibility(View.VISIBLE);
@@ -421,8 +432,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     return false;
   }
 
+  private boolean isSearchOpen() {
+    return (requireCallback().getSearchToolbar().resolved() && requireCallback().getSearchToolbar().get().isVisible()) || activeAdapter == searchAdapter;
+  }
+
   private boolean closeSearchIfOpen() {
-    if ((requireCallback().getSearchToolbar().resolved() && requireCallback().getSearchToolbar().get().isVisible()) || activeAdapter == searchAdapter) {
+    if (isSearchOpen()) {
       list.removeItemDecoration(searchAdapterDecoration);
       setAdapter(defaultAdapter);
       requireCallback().getSearchToolbar().get().collapse();
@@ -547,6 +562,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   private void initializeSearchListener() {
     requireCallback().getSearchAction().setOnClickListener(v -> {
+      fadeOutButtonsAndMegaphone(250);
       requireCallback().onSearchOpened();
       requireCallback().getSearchToolbar().get().display(requireCallback().getSearchAction().getX() + (requireCallback().getSearchAction().getWidth() / 2.0f),
                                                          requireCallback().getSearchAction().getY() + (requireCallback().getSearchAction().getHeight() / 2.0f));
@@ -577,6 +593,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           list.removeItemDecoration(searchAdapterDecoration);
           setAdapter(defaultAdapter);
           requireCallback().onSearchClosed();
+          fadeInButtonsAndMegaphone(250);
         }
       });
     });
@@ -755,7 +772,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     if (view != null) {
       megaphoneContainer.get().addView(view);
-      megaphoneContainer.get().setVisibility(View.VISIBLE);
+      if (isSearchOpen() || actionMode != null) {
+        megaphoneContainer.get().setVisibility(View.GONE);
+      } else {
+        megaphoneContainer.get().setVisibility(View.VISIBLE);
+      }
     } else {
       megaphoneContainer.get().setVisibility(View.GONE);
 
@@ -1023,6 +1044,22 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     });
   }
 
+  private void fadeOutButtonsAndMegaphone(int fadeDuration) {
+    ViewUtil.fadeOut(fab, fadeDuration);
+    ViewUtil.fadeOut(cameraFab, fadeDuration);
+    if (megaphoneContainer.resolved()) {
+      ViewUtil.fadeOut(megaphoneContainer.get(), fadeDuration);
+    }
+  }
+
+  private void fadeInButtonsAndMegaphone(int fadeDuration) {
+    ViewUtil.fadeIn(fab, fadeDuration);
+    ViewUtil.fadeIn(cameraFab, fadeDuration);
+    if (megaphoneContainer.resolved()) {
+      ViewUtil.fadeIn(megaphoneContainer.get(), fadeDuration);
+    }
+  }
+
   private void startActionMode() {
     actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(ConversationListFragment.this);
     ViewUtil.animateIn(bottomActionBar, bottomActionBar.getEnterAnimation());
@@ -1102,6 +1139,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       return true;
     }
 
+    if (activeContextMenu != null) {
+      Log.w(TAG, "Already showing a context menu.");
+      return true;
+    }
+
     view.setSelected(true);
 
     Collection<Long> id = Collections.singleton(conversation.getThreadRecord().getThreadId());
@@ -1141,10 +1183,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     items.add(new ActionItem(R.drawable.ic_delete_24, getResources().getQuantityString(R.plurals.ConversationListFragment_delete_plural, 1), () -> handleDelete(id)));
 
-    new SignalContextMenu.Builder(view, list)
+    activeContextMenu = new SignalContextMenu.Builder(view, list)
         .offsetX(ViewUtil.dpToPx(12))
         .offsetY(ViewUtil.dpToPx(12))
         .onDismiss(() -> {
+          activeContextMenu = null;
           view.setSelected(false);
           list.suppressLayout(false);
         })
