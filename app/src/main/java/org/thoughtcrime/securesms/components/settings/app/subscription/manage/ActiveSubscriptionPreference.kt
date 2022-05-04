@@ -4,7 +4,6 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.google.android.material.button.MaterialButton
 import org.signal.core.util.money.FiatMoney
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.badges.BadgeImageView
@@ -29,7 +28,6 @@ object ActiveSubscriptionPreference {
   class Model(
     val price: FiatMoney,
     val subscription: Subscription,
-    val onAddBoostClick: () -> Unit,
     val renewalTimestamp: Long = -1L,
     val redemptionState: ManageDonationsState.SubscriptionRedemptionState,
     val activeSubscription: ActiveSubscription.Subscription //,
@@ -55,7 +53,6 @@ object ActiveSubscriptionPreference {
     val title: TextView = itemView.findViewById(R.id.my_support_title)
     val price: TextView = itemView.findViewById(R.id.my_support_price)
     val expiry: TextView = itemView.findViewById(R.id.my_support_expiry)
-    val boost: MaterialButton = itemView.findViewById(R.id.my_support_boost)
     val progress: ProgressBar = itemView.findViewById(R.id.my_support_progress)
 
     override fun bind(model: Model) {
@@ -76,10 +73,6 @@ object ActiveSubscriptionPreference {
         ManageDonationsState.SubscriptionRedemptionState.NONE -> presentRenewalState(model)
         ManageDonationsState.SubscriptionRedemptionState.IN_PROGRESS -> presentInProgressState()
         ManageDonationsState.SubscriptionRedemptionState.FAILED -> presentFailureState(model)
-      }
-
-      boost.setOnClickListener {
-        model.onAddBoostClick()
       }
     }
 

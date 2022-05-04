@@ -154,7 +154,15 @@ public class SubscriptionReceiptRequestResponseJob extends BaseJob {
       onPaymentFailure(subscription.getStatus(), chargeFailure, subscription.getEndOfCurrentPeriod());
       throw new Exception("Subscription has a payment failure: " + subscription.getStatus());
     } else if (!subscription.isActive()) {
+      ActiveSubscription.ChargeFailure chargeFailure = activeSubscription.getChargeFailure();
+      if (chargeFailure != null) {
+        Log.w(TAG, "Subscription payment charge failure code: " + chargeFailure.getCode() + ", message: " + chargeFailure.getMessage(), true);
+      }
+
       Log.w(TAG, "Subscription is not yet active. Status: " + subscription.getStatus(), true);
+      throw new RetryableException();
+    } else if (subscription.isCanceled()) {
+      Log.w(TAG, "Subscription is marked as cancelled, but it's possible that the user cancelled and then later tried to resubscribe. Scheduling a retry.", true);
       throw new RetryableException();
     } else {
       Log.i(TAG, "Recording end of period from active subscription: " + subscription.getStatus(), true);
@@ -289,11 +297,11 @@ public class SubscriptionReceiptRequestResponseJob extends BaseJob {
    * - level should match the current subscription level and be the same level you signed up for at the time the subscription was last updated
    * - expiration time should have the following characteristics:
    * - expiration_time mod 86400 == 0
-   * - expiration_time is between now and 60 days from now
+   * - expiration_time is between now and 90 days from now
    */
   private static boolean isCredentialValid(@NonNull ActiveSubscription.Subscription subscription, @NonNull ReceiptCredential receiptCredential) {
     long    now                     = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-    long    maxExpirationTime       = now + TimeUnit.DAYS.toSeconds(60);
+    long    maxExpirationTime       = now + TimeUnit.DAYS.toSeconds(90);
     boolean isSameLevel             = subscription.getLevel() == receiptCredential.getReceiptLevel();
     boolean isExpirationAfterSub    = subscription.getEndOfCurrentPeriod() < receiptCredential.getReceiptExpirationTime();
     boolean isExpiration86400       = receiptCredential.getReceiptExpirationTime() % 86400 == 0;

@@ -7,6 +7,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.thoughtcrime.securesms.badges.models.Badge;
 import org.thoughtcrime.securesms.conversation.colors.ChatColors;
 import org.thoughtcrime.securesms.database.ThreadDatabase;
 import org.thoughtcrime.securesms.mediasend.Media;
@@ -33,6 +34,7 @@ public class ConversationIntents {
   private static final String EXTRA_STARTING_POSITION                = "starting_position";
   private static final String EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP = "first_time_in_group";
   private static final String EXTRA_WITH_SEARCH_OPEN                 = "with_search_open";
+  private static final String EXTRA_GIFT_BADGE                       = "gift_badge";
   private static final String EXTRA_IS_VIDEO_GIF                     = "is_video_gif";
 
   private ConversationIntents() {
@@ -73,6 +75,7 @@ public class ConversationIntents {
     private final int              startingPosition;
     private final boolean          firstTimeInSelfCreatedGroup;
     private final boolean          withSearchOpen;
+    private final Badge            giftBadge;
     private final boolean          isVideoGif;
 
     static Args from(@NonNull Intent intent) {
@@ -87,6 +90,7 @@ public class ConversationIntents {
                         -1,
                         false,
                         false,
+                        null,
                         false);
       }
 
@@ -100,6 +104,7 @@ public class ConversationIntents {
                       intent.getIntExtra(EXTRA_STARTING_POSITION, -1),
                       intent.getBooleanExtra(EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP, false),
                       intent.getBooleanExtra(EXTRA_WITH_SEARCH_OPEN, false),
+                      intent.getParcelableExtra(EXTRA_GIFT_BADGE),
                       intent.getBooleanExtra(EXTRA_IS_VIDEO_GIF, false));
     }
 
@@ -113,6 +118,7 @@ public class ConversationIntents {
                  int startingPosition,
                  boolean firstTimeInSelfCreatedGroup,
                  boolean withSearchOpen,
+                 @Nullable Badge giftBadge,
                  boolean isVideoGif)
     {
       this.recipientId                 = recipientId;
@@ -125,6 +131,7 @@ public class ConversationIntents {
       this.startingPosition            = startingPosition;
       this.firstTimeInSelfCreatedGroup = firstTimeInSelfCreatedGroup;
       this.withSearchOpen              = withSearchOpen;
+      this.giftBadge                   = giftBadge;
       this.isVideoGif                  = isVideoGif;
     }
 
@@ -176,6 +183,10 @@ public class ConversationIntents {
       return withSearchOpen;
     }
 
+    public @Nullable Badge getGiftBadge() {
+      return giftBadge;
+    }
+
     public boolean isVideoGif() {
       return isVideoGif;
     }
@@ -197,6 +208,7 @@ public class ConversationIntents {
     private String         dataType;
     private boolean        firstTimeInSelfCreatedGroup;
     private boolean        withSearchOpen;
+    private Badge          giftBadge;
     private boolean        isVideoGif = false;
 
     private Builder(@NonNull Context context,
@@ -267,6 +279,11 @@ public class ConversationIntents {
       return this;
     }
 
+    public Builder withGiftBadge(@NonNull Badge badge) {
+      this.giftBadge = badge;
+      return this;
+    }
+
     public @NonNull Builder withIsVideoGif(boolean isVideoGif) {
       this.isVideoGif = isVideoGif;
       return this;
@@ -297,6 +314,7 @@ public class ConversationIntents {
       intent.putExtra(EXTRA_BORDERLESS, isBorderless);
       intent.putExtra(EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP, firstTimeInSelfCreatedGroup);
       intent.putExtra(EXTRA_WITH_SEARCH_OPEN, withSearchOpen);
+      intent.putExtra(EXTRA_GIFT_BADGE, giftBadge);
 
       if (isVideoGif) {
         intent.putExtra(EXTRA_IS_VIDEO_GIF, isVideoGif);

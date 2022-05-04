@@ -19,6 +19,7 @@ import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.jobmanager.Data;
 import org.thoughtcrime.securesms.jobmanager.Job;
 import org.thoughtcrime.securesms.jobmanager.impl.NetworkOrCellServiceConstraint;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.phonenumbers.NumberUtil;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.service.SmsDeliveryListener;
@@ -116,6 +117,8 @@ public class SmsSendJob extends SendJob {
 
     if (threadId != -1 && recipient != null) {
       ApplicationDependencies.getMessageNotifier().notifyMessageDeliveryFailed(context, recipient, threadId);
+    } else {
+      Log.w(TAG, "Could not find message! threadId: " + threadId + ", recipient: " + (recipient != null ? recipient.getId().toString() : "null"));
     }
   }
 
@@ -186,7 +189,7 @@ public class SmsSendJob extends SendJob {
   }
 
   private ArrayList<PendingIntent> constructDeliveredIntents(long messageId, long type, ArrayList<String> messages) {
-    if (!TextSecurePreferences.isSmsDeliveryReportsEnabled(context)) {
+    if (!SignalStore.settings().isSmsDeliveryReportsEnabled()) {
       return null;
     }
 
