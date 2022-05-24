@@ -90,7 +90,7 @@ class MultiselectForwardRepository {
     fun sendNoteToSelf(activity: Activity, args: MultiselectForwardFragmentArgs) {
       val recipient = Recipient.self()
       SignalDatabase.threads.getOrCreateThreadIdFor(recipient)
-      MultiselectForwardRepository(activity).send(
+      MultiselectForwardRepository().send(
         "",
         args.multiShareArgs,
         setOf(ContactSearchKey.RecipientSearchKey.KnownRecipient(recipient.getId())),
