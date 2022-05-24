@@ -450,6 +450,44 @@ public class MmsDatabase extends MessageDatabase {
   }
 
   @Override
+  public @NonNull List<MarkedMessageInfo>
+  setOutgoingGiftsRevealed(@NonNull List<Long> messageIds) {
+    String[]                projection = SqlUtil.buildArgs(ID, RECIPIENT_ID, DATE_SENT, THREAD_ID);
+    String                  where      = ID + " IN (" + Util.join(messageIds, ",") + ") AND (" + getOutgoingTypeClause() + ") AND (" + getTypeField() + " & " + Types.SPECIAL_TYPES_MASK + " = " + Types.SPECIAL_TYPE_GIFT_BADGE + ") AND " + VIEWED_RECEIPT_COUNT + " = 0";
+    List<MarkedMessageInfo> results    = new LinkedList<>();
+
+    getWritableDatabase().beginTransaction();
+    try (Cursor cursor = getWritableDatabase().query(TABLE_NAME, projection, where, null, null, null, null)) {
+      while (cursor.moveToNext()) {
+        long          messageId     = CursorUtil.requireLong(cursor, ID);
+        long          threadId      = CursorUtil.requireLong(cursor, THREAD_ID);
+        RecipientId   recipientId   = RecipientId.from(CursorUtil.requireLong(cursor, RECIPIENT_ID));
+        long          dateSent      = CursorUtil.requireLong(cursor, DATE_SENT);
+        SyncMessageId syncMessageId = new SyncMessageId(recipientId, dateSent);
+
+        results.add(new MarkedMessageInfo(threadId, syncMessageId, new MessageId(messageId, true), null));
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(VIEWED_RECEIPT_COUNT, 1);
+        contentValues.put(RECEIPT_TIMESTAMP, System.currentTimeMillis());
+
+        getWritableDatabase().update(TABLE_NAME, contentValues, ID_WHERE, SqlUtil.buildArgs(messageId));
+      }
+      getWritableDatabase().setTransactionSuccessful();
+    } finally {
+      getWritableDatabase().endTransaction();
+    }
+
+    Set<Long> threadsUpdated = Stream.of(results)
+                                     .map(MarkedMessageInfo::getThreadId)
+                                     .collect(Collectors.toSet());
+
+    notifyConversationListeners(threadsUpdated);
+
+    return results;
+  }
+
+  @Override
   public @NonNull Pair<Long, Long> insertReceivedCall(@NonNull RecipientId address, boolean isVideoOffer) {
     throw new UnsupportedOperationException();
   }
@@ -696,6 +734,22 @@ public class MmsDatabase extends MessageDatabase {
   }
 
   @Override
+  public boolean isOutgoingStoryAlreadyInDatabase(@NonNull RecipientId recipientId, long sentTimestamp) {
+    SQLiteDatabase database   = databaseHelper.getSignalReadableDatabase();
+    String[]       projection = new String[]{"COUNT(*)"};
+    String         where      = RECIPIENT_ID + " = ? AND " + STORY_TYPE + " > 0 AND " + DATE_SENT + " = ? AND (" + getOutgoingTypeClause() + ")";
+    String[]       whereArgs  = SqlUtil.buildArgs(recipientId, sentTimestamp);
+
+    try (Cursor cursor = database.query(TABLE_NAME, projection, where, whereArgs, null, null, null, "1")) {
+      if (cursor != null && cursor.moveToFirst()) {
+        return cursor.getInt(0) > 0;
+      }
+    }
+
+    return false;
+  }
+
+  @Override
   public @NonNull MessageId getStoryId(@NonNull RecipientId authorId, long sentTimestamp) throws NoSuchMessageException {
     SQLiteDatabase database   = databaseHelper.getSignalReadableDatabase();
     String[]       projection = new String[]{ID, RECIPIENT_ID};
@@ -785,7 +839,7 @@ public class MmsDatabase extends MessageDatabase {
     String   where     = PARENT_STORY_ID + " = ?";
     String[] whereArgs = SqlUtil.buildArgs(parentStoryId);
 
-    return rawQuery(where, whereArgs, true, 0);
+    return rawQuery(where, whereArgs, false, 0);
   }
 
   @Override
@@ -818,6 +872,18 @@ public class MmsDatabase extends MessageDatabase {
     String[]       columns   = new String[]{"COUNT(*)"};
     String         where     = PARENT_STORY_ID + " = ? AND (" + getOutgoingTypeClause() + ")";
     String[]       whereArgs = SqlUtil.buildArgs(-parentStoryId);
+
+    try (Cursor cursor = db.query(TABLE_NAME, columns, where, whereArgs, null, null, null, null)) {
+      return cursor != null && cursor.moveToNext() && cursor.getInt(0) > 0;
+    }
+  }
+
+  @Override
+  public boolean hasSelfReplyInGroupStory(long parentStoryId) {
+    SQLiteDatabase db        = databaseHelper.getSignalReadableDatabase();
+    String[]       columns   = new String[]{"COUNT(*)"};
+    String         where     = PARENT_STORY_ID + " = ? AND (" + getOutgoingTypeClause() + ")";
+    String[]       whereArgs = SqlUtil.buildArgs(parentStoryId);
 
     try (Cursor cursor = db.query(TABLE_NAME, columns, where, whereArgs, null, null, null, null)) {
       return cursor != null && cursor.moveToNext() && cursor.getInt(0) > 0;
@@ -1362,6 +1428,15 @@ public class MmsDatabase extends MessageDatabase {
       return setMessagesRead(THREAD_ID + " = ? AND " + STORY_TYPE + " = 0 AND " + PARENT_STORY_ID + " <= 0 AND (" + READ + " = 0 OR (" + REACTIONS_UNREAD + " = 1 AND (" + getOutgoingTypeClause() + ")))", new String[] { String.valueOf(threadId)});
     } else {
       return setMessagesRead(THREAD_ID + " = ? AND " + STORY_TYPE + " = 0 AND " + PARENT_STORY_ID + " <= 0 AND (" + READ + " = 0 OR (" + REACTIONS_UNREAD + " = 1 AND ( " + getOutgoingTypeClause() + " ))) AND " + DATE_RECEIVED + " <= ?", new String[]{ String.valueOf(threadId), String.valueOf(sinceTimestamp)});
+    }
+  }
+
+  @Override
+  public @NonNull List<MarkedMessageInfo> setGroupStoryMessagesReadSince(long threadId, long groupStoryId, long sinceTimestamp) {
+    if (sinceTimestamp == -1) {
+      return setMessagesRead(THREAD_ID + " = ? AND " + STORY_TYPE + " = 0 AND " + PARENT_STORY_ID + " = ? AND (" + READ + " = 0 OR (" + REACTIONS_UNREAD + " = 1 AND (" + getOutgoingTypeClause() + ")))", SqlUtil.buildArgs(threadId, groupStoryId));
+    } else {
+      return setMessagesRead(THREAD_ID + " = ? AND " + STORY_TYPE + " = 0 AND " + PARENT_STORY_ID + " = ? AND (" + READ + " = 0 OR (" + REACTIONS_UNREAD + " = 1 AND ( " + getOutgoingTypeClause() + " ))) AND " + DATE_RECEIVED + " <= ?", SqlUtil.buildArgs(threadId, groupStoryId, sinceTimestamp));
     }
   }
 

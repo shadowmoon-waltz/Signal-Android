@@ -1,7 +1,6 @@
 package org.thoughtcrime.securesms.conversation.mutiselect.forward
 
 import android.app.Activity
-import android.content.Context
 import android.widget.Toast
 import io.reactivex.rxjava3.core.Single
 import org.signal.core.util.concurrent.SignalExecutors
@@ -14,7 +13,7 @@ import org.thoughtcrime.securesms.sharing.MultiShareArgs
 import org.thoughtcrime.securesms.sharing.MultiShareSender
 import java.util.Optional
 
-class MultiselectForwardRepository(context: Context) {
+class MultiselectForwardRepository {
 
   class MultiselectForwardResultHandlers(
     val onAllMessageSentSuccessfully: () -> Unit,

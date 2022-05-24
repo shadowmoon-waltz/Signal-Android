@@ -658,6 +658,11 @@ public class SmsDatabase extends MessageDatabase {
     return Collections.emptyList();
   }
 
+  @Override
+  public @NonNull List<MarkedMessageInfo> setOutgoingGiftsRevealed(@NonNull List<Long> messageIds) {
+    throw new UnsupportedOperationException();
+  }
+
   private InsertResult updateMessageBodyAndType(long messageId, String body, long maskOff, long maskOn) {
     SQLiteDatabase db = databaseHelper.getSignalWritableDatabase();
     db.execSQL("UPDATE " + TABLE_NAME + " SET " + BODY + " = ?, " +
@@ -1417,6 +1422,10 @@ public class SmsDatabase extends MessageDatabase {
     throw new UnsupportedOperationException();
   }
 
+  public boolean isOutgoingStoryAlreadyInDatabase(@NonNull RecipientId recipientId, long sentTimestamp) {
+    throw new UnsupportedOperationException();
+  }
+
   @Override
   public @NonNull MessageId getStoryId(@NonNull RecipientId authorId, long sentTimestamp) throws NoSuchMessageException {
     throw new UnsupportedOperationException();
@@ -1439,6 +1448,11 @@ public class SmsDatabase extends MessageDatabase {
 
   @Override
   public boolean hasSelfReplyInStory(long parentStoryId) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean hasSelfReplyInGroupStory(long parentStoryId) {
     throw new UnsupportedOperationException();
   }
 
@@ -1474,6 +1488,11 @@ public class SmsDatabase extends MessageDatabase {
 
   @Override
   public @Nullable ParentStoryId.GroupReply getParentStoryIdForGroupReply(long messageId) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public @NonNull List<MarkedMessageInfo> setGroupStoryMessagesReadSince(long threadId, long groupStoryId, long sinceTimestamp) {
     throw new UnsupportedOperationException();
   }
 

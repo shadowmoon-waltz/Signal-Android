@@ -1333,6 +1333,7 @@
     <string name="MessageRequestBottomView_this_legacy_group_can_no_longer_be_used">This Legacy Group can no longer be used because it is too large. The maximum group size is %1$d.</string>
     <string name="MessageRequestBottomView_continue_your_conversation_with_s_and_share_your_name_and_photo">Continue your conversation with %1$s and share your name and photo with them?</string>
     <string name="MessageRequestBottomView_do_you_want_to_join_this_group_they_wont_know_youve_seen_their_messages_until_you_accept">Join this group and share your name and photo with its members? They won\'t know you\'ve seen their messages until you accept.</string>
+    <string name="MessageRequestBottomView_do_you_want_to_join_this_group_you_wont_see_their_messages">Join this group and share your name and photo with its members? You won\'t see their messages until you accept.</string>
     <string name="MessageRequestBottomView_join_this_group_they_wont_know_youve_seen_their_messages_until_you_accept">Join this group? They won’t know you’ve seen their messages until you accept.</string>
     <string name="MessageRequestBottomView_unblock_this_group_and_share_your_name_and_photo_with_its_members">Unblock this group and share your name and photo with its members? You won\'t receive any messages until you unblock them.</string>
     <string name="MessageRequestBottomView_legacy_learn_more_url" translatable="false">https://support.signal.org/hc/articles/360007459591</string>
@@ -1952,6 +1953,8 @@
     <string name="SingleRecipientNotificationBuilder_new_message">New message</string>
     <string name="SingleRecipientNotificationBuilder_message_request">Message request</string>
     <string name="SingleRecipientNotificationBuilder_you">You</string>
+    <!-- Notification subtext for group stories -->
+    <string name="SingleRecipientNotificationBuilder__s_dot_story">%1$s &#8226; Story</string>
 
     <!-- ThumbnailView -->
     <string name="ThumbnailView_Play_video_description">Play video</string>
@@ -2735,6 +2738,7 @@
     <string name="preferences__internal_calling_disable_telecom" translatable="false">Disable Telecom integration</string>
     <string name="preferences__internal_badges" translatable="false">Badges</string>
     <string name="preferences__internal_badges_enqueue_redemption" translatable="false">Enqueue redemption.</string>
+    <string name="preferences__internal_badges_enqueue_keep_alive" translatable="false">Enqueue keep-alive.</string>
     <string name="preferences__internal_release_channel" translatable="false">Release channel</string>
     <string name="preferences__internal_fetch_release_channel" translatable="false">Fetch release channel</string>
     <string name="preferences__internal_release_channel_set_last_version" translatable="false">Set last version seen back 10 versions</string>
@@ -4619,6 +4623,8 @@
     <string name="StoryViewerPageFragment__s_to_s">%1$s to %2$s</string>
     <!-- Displayed when viewing a post from another user with no replies -->
     <string name="StoryViewerPageFragment__reply">Reply</string>
+    <!-- Displayed when viewing a group post from another user with no replies -->
+    <string name="StoryViewerPageFragment__reply_to_group">Reply to group</string>
     <!-- Displayed when a story has no views -->
     <string name="StoryViewsFragment__no_views_yet">No views yet</string>
     <!-- Displayed when a story has no replies yet -->
@@ -4813,6 +4819,8 @@
     <string name="ExpandModel__view_more">View more</string>
     <string name="StoriesLinkPopup__visit_link">Visit link</string>
 
+    <!-- Duration and price information -->
+    <string name="GiftRowItem__s_dot_d_day_duration">%1$s · %2$d day duration</string>
     <!-- Tagline for gift row items -->
     <string name="GiftRowItem__send_a_gift_badge">Send a gift badge</string>
     <!-- Headline text on start fragment for gifting a badge -->
@@ -4873,6 +4881,23 @@
         <item quantity="one">Group Story · %1$d viewer</item>
         <item quantity="other">Group Story · %1$d viewers</item>
     </plurals>
+    <!-- Gift expiry days remaining -->
+    <plurals name="Gifts__d_days_remaining">
+        <item quantity="one">%1$d days remaining</item>
+        <item quantity="other">%1$d days remaining</item>
+    </plurals>
+    <!-- Gift expiry hours remaining -->
+    <plurals name="Gifts__d_hours_remaining">
+        <item quantity="one">%1$d hours remaining</item>
+        <item quantity="other">%1$d hours remaining</item>
+    </plurals>
+    <!-- Gift expiry minutes remaining -->
+    <plurals name="Gifts__d_minutes_remaining">
+        <item quantity="one">%1$d minute remaining</item>
+        <item quantity="other">%1$d minutes remaining</item>
+    </plurals>
+    <!-- Gift expiry expired -->
+    <string name="Gifts__expired">Expired</string>
 
     <!-- EOF -->
 
