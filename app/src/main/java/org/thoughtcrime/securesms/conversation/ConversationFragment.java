@@ -1168,7 +1168,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
           getListAdapter().clearMostRecentSelectedIfNecessary(conversationMessages);
         }
         for (MessageRecord message : messageRecords) {
-          MessageSender.sendRemoteDelete(ApplicationDependencies.getApplication(), message.getId(), message.isMms());
+          MessageSender.sendRemoteDelete(message.getId(), message.isMms());
         }
       });
     };
