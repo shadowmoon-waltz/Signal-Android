@@ -49,7 +49,6 @@
 
   <Button
       android:id="@+id/set_identity_keys_populate"
-      style="@style/Button.Borderless"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="15dp"
@@ -70,11 +69,7 @@
       app:elevation="4dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:cpb_colorIndicator="@color/white"
-      app:cpb_colorProgress="?colorAccent"
-      app:cpb_cornerRadius="28dp"
-      app:cpb_selectorIdle="@drawable/progress_button_state"
-      app:cpb_textIdle="Apply" />
+      app:circularProgressMaterialButton__label="Apply" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

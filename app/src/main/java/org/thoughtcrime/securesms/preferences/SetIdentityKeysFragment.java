@@ -13,11 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.dd.CircularProgressButton;
-
 import org.thoughtcrime.securesms.R;
 
 import org.thoughtcrime.securesms.util.Base64;
+import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
 import org.signal.libsignal.protocol.IdentityKeyPair;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 
@@ -36,7 +35,7 @@ public class SetIdentityKeysFragment extends Fragment {
 
   private EditText               publicKeyText;
   private EditText               privateKeyText;
-  private CircularProgressButton applyButton;
+  private CircularProgressMaterialButton applyButton;
   private Button                 populateButton;
 
   private char[]                 cachedPublicKey;
