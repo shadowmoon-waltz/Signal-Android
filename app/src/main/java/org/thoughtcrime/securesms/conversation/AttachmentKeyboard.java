@@ -78,6 +78,8 @@ public class AttachmentKeyboard extends FrameLayout implements InputAwareLayout.
     mediaList.setAdapter(mediaAdapter);
     buttonList.setAdapter(buttonAdapter);
 
+    buttonAdapter.registerAdapterDataObserver(new AttachmentButtonCenterHelper(buttonList));
+
     mediaList.setLayoutManager(new GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false));
     buttonList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
@@ -115,7 +117,7 @@ public class AttachmentKeyboard extends FrameLayout implements InputAwareLayout.
 
   public void setWallpaperEnabled(boolean wallpaperEnabled) {
     if (wallpaperEnabled) {
-      container.setBackgroundColor(getContext().getResources().getColor(R.color.wallpaper_compose_background));
+      container.setBackground(null);
     } else {
       container.setBackgroundColor(getContext().getResources().getColor(R.color.signal_background_primary));
     }

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-  <string name="yes">അതെ</string>
-  <string name="no">അല്ല</string>
+  <string name="yes">അതെ/ഉവ്വ്</string>
+  <string name="no">അല്ല/ഇല്ല</string>
   <string name="delete">ഇല്ലാതാക്കൂ</string>
   <string name="please_wait">കാത്തിരിക്കൂ…</string>
   <string name="save">സംരക്ഷിക്കൂ</string>
@@ -15,12 +15,12 @@
   <string name="ApplicationPreferencesActivity_currently_s">ഇപ്പോൾ:%s</string>
   <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">നിങ്ങൾ ഒരു രഹസ്യവാചകം ഇതു വരെ ക്രമീകരിച്ചിട്ടില്ല!</string>
   <string name="ApplicationPreferencesActivity_disable_passphrase">രഹസ്യവാചകം പ്രവർത്തനരഹിതമാക്കണോ?</string>
-  <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">ഇത്  Signal സന്ദേശ അറിയിപ്പുകളെ എന്നന്നേയ്ക്കുമായി അൺലോക്കുചെയ്യും.</string>
+  <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">ഇത്  Signal, സന്ദേശ അറിയിപ്പുകളെ അൺലോക്ക് ചെയ്യും.</string>
   <string name="ApplicationPreferencesActivity_disable">പ്രവർത്തനരഹിതമാക്കുക</string>
-  <string name="ApplicationPreferencesActivity_unregistering">അൺരെജിസ്റ്റർ ചെയ്യുന്നു</string>
+  <string name="ApplicationPreferencesActivity_unregistering">അൺരജിസ്റ്റർ ചെയ്യുന്നു</string>
   <string name="ApplicationPreferencesActivity_unregistering_from_signal_messages_and_calls">Signal സന്ദേശങ്ങളിൽ നിന്നും കോളുകളിൽ നിന്നും അൺരജിസ്റ്റർ ചെയ്യുന്നു…</string>
   <string name="ApplicationPreferencesActivity_disable_signal_messages_and_calls">Signal സന്ദേശങ്ങളും കോളുകളും പ്രവർത്തനരഹിതമാക്കണോ?</string>
-  <string name="ApplicationPreferencesActivity_disable_signal_messages_and_calls_by_unregistering">സെർവറിൽ നിന്ന് അൺരജിസ്റ്റർ ചെയ്ത് Signal സന്ദേശങ്ങളും കോളുകളും അപ്രാപ്തമാക്കുക. ഭാവിയിൽ നിങ്ങളുടെ ഫോൺ നമ്പർ വീണ്ടും ഉപയോഗിക്കുന്നതിന് നിങ്ങൾ വീണ്ടും രജിസ്റ്റർ ചെയ്യേണ്ടതുണ്ട്.</string>
+  <string name="ApplicationPreferencesActivity_disable_signal_messages_and_calls_by_unregistering">സെർവറിൽ നിന്ന് അൺരജിസ്റ്റർ ചെയ്ത് Signal സന്ദേശങ്ങളും കോളുകളും പ്രവർത്തനരഹിതമാക്കുക. ഭാവിയിൽ നിങ്ങളുടെ ഫോൺ നമ്പർ വീണ്ടും ഉപയോഗിക്കുന്നതിന് നിങ്ങൾ വീണ്ടും രജിസ്റ്റർ ചെയ്യേണ്ടതുണ്ട്.</string>
   <string name="ApplicationPreferencesActivity_error_connecting_to_server">സെർവറിലേക്ക് കണക്റ്റുചെയ്യുന്നതിൽ പിശക്!</string>
   <string name="ApplicationPreferencesActivity_sms_enabled">SMS പ്രവർത്തനക്ഷമമാക്കി</string>
   <string name="ApplicationPreferencesActivity_touch_to_change_your_default_sms_app">നിങ്ങളുടെ സ്ഥിരം SMS അപ്ലിക്കേഷൻ മാറ്റാൻ തൊടുക</string>
@@ -91,7 +91,9 @@
   <!--Text that is shown when unblocking a Signal contact-->
   <string name="BlockUnblockDialog_you_will_be_able_to_call_and_message_each_other">നിങ്ങൾക്ക് പരസ്പരം സന്ദേശമയയ്‌ക്കാനും വിളിക്കാനും കഴിയും ഒപ്പം നിങ്ങളുടെ പേരും ഫോട്ടോയും അവരുമായി പങ്കിടും.</string>
   <!--Text that is shown when unblocking an SMS contact-->
+  <string name="BlockUnblockDialog_you_will_be_able_to_message_each_other">നിങ്ങൾക്ക് പരസ്‌പരം സന്ദേശം അയയ്ക്കാൻ കഴിയും.</string>
   <string name="BlockUnblockDialog_blocked_people_wont_be_able_to_call_you_or_send_you_messages">ബ്ലോക്ക് ചെയ്ത ആളുകൾക്ക് നിങ്ങളെ വിളിക്കാനോ സന്ദേശങ്ങൾ അയയ്ക്കാനോ കഴിയില്ല.</string>
+  <string name="BlockUnblockDialog_blocked_people_wont_be_able_to_send_you_messages">നിങ്ങൾക്ക് സന്ദേശങ്ങൾ അയയ്ക്കാൻ തടയപ്പെട്ടിരിക്കുന്നവർക്ക് സാധിക്കില്ല.</string>
   <!--Message shown on block dialog when blocking the Signal release notes recipient-->
   <string name="BlockUnblockDialog_block_getting_signal_updates_and_news">Signal അപ്ഡേറ്റുകളും വാർത്തകളും ലഭിക്കുന്നത് തടയുക.</string>
   <!--Message shown on unblock dialog when unblocking the Signal release notes recipient-->
@@ -430,6 +432,7 @@
   <!--Couldn\'t read the selected backup-->
   <string name="RestoreBackupFragment__backup_could_not_be_read">ബാക്കപ്പ് വായിക്കാൻ കഴിയുന്നില്ല.</string>
   <!--Backup has an unsupported file extension-->
+  <string name="RestoreBackupFragment__backup_has_a_bad_extension">ബാക്കപ്പിനൊരു മോശം എക്സ്റ്റെൻഷനുണ്ട്.</string>
   <!--BackupsPreferenceFragment-->
   <string name="BackupsPreferenceFragment__chat_backups">ചാറ്റ് ബാക്കപ്പുകൾ</string>
   <string name="BackupsPreferenceFragment__backups_are_encrypted_with_a_passphrase">ഒരു രഹസ്യവാക്യം ഉപയോഗിച്ച് ബാക്കപ്പുകൾ എൻക്രിപ്റ്റുചെയ്‌ത് നിങ്ങളുടെ ഉപകരണത്തിൽ സംഭരിക്കുന്നു.</string>
@@ -649,8 +652,8 @@
   <string name="AddGroupDetailsFragment__this_field_is_required">ഈ ഫീൽഡ് പൂരിപ്പിക്കേണ്ടതുണ്ട്.</string>
   <string name="AddGroupDetailsFragment__group_creation_failed">ഗ്രൂപ്പ് സൃഷ്ടിക്കൽ പരാജയപ്പെട്ടു.</string>
   <string name="AddGroupDetailsFragment__try_again_later">പിന്നീട് വീണ്ടും ശ്രമിക്കുക.</string>
-  <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt">Signal ഗ്രൂപ്പുകളെ പിന്തുണയ്‌ക്കാത്ത ഒരു കോൺ‌ടാക്റ്റ് നിങ്ങൾ തിരഞ്ഞെടുത്തു, അതിനാൽ ഈ ഗ്രൂപ്പ് MMS ആയിരിക്കും.</string>
-  <string name="AddGroupDetailsFragment_custom_mms_group_names_and_photos_will_only_be_visible_to_you">ഇഷ്‌ടാനുസൃത MMS (എംഎംഎസ് ) ഗ്രൂപ്പ് പേരുകളും ഫോട്ടോകളും നിങ്ങൾക്ക് മാത്രമേ ദൃശ്യമാകൂ.</string>
+  <!-- Removed by excludeNonTranslatables <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt">Signal ഗ്രൂപ്പുകളെ പിന്തുണയ്‌ക്കാത്ത ഒരു കോൺ‌ടാക്റ്റ് നിങ്ങൾ തിരഞ്ഞെടുത്തു, അതിനാൽ ഈ ഗ്രൂപ്പ് MMS ആയിരിക്കും.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="AddGroupDetailsFragment_custom_mms_group_names_and_photos_will_only_be_visible_to_you">ഇഷ്‌ടാനുസൃത MMS (എംഎംഎസ് ) ഗ്രൂപ്പ് പേരുകളും ഫോട്ടോകളും നിങ്ങൾക്ക് മാത്രമേ ദൃശ്യമാകൂ.</string> -->
   <string name="AddGroupDetailsFragment__remove">നീക്കംചെയ്യൂ</string>
   <string name="AddGroupDetailsFragment__sms_contact">SMS കോൺടാക്റ്റ്</string>
   <string name="AddGroupDetailsFragment__remove_s_from_this_group">ഈ ഗ്രൂപ്പിൽ നിന്ന് %1$s-നെ നീക്കംചെയ്യണോ?</string>
@@ -1957,10 +1960,10 @@
   <string name="webrtc_answer_decline_button__swipe_down_to_reject">നിരസിക്കാൻ താഴേക്ക് സ്വൈപ്പുചെയ്യുക</string>
   <!--message_details_header-->
   <string name="message_details_header__issues_need_your_attention">ചില പ്രശ്‌നങ്ങൾക്ക് നിങ്ങളുടെ ശ്രദ്ധ ആവശ്യമാണ്.</string>
-  <string name="message_details_header__sent">അയച്ചത്:</string>
-  <string name="message_details_header__received">സ്വീകരിച്ചത്:</string>
-  <string name="message_details_header__disappears">അപ്രത്യക്ഷമാകുന്നത്:</string>
-  <string name="message_details_header__via">വഴി:</string>
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__sent">അയച്ചത്:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__received">സ്വീകരിച്ചത്:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__disappears">അപ്രത്യക്ഷമാകുന്നത്:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__via">വഴി:</string> -->
   <!--message_details_recipient_header-->
   <string name="message_details_recipient_header__pending_send">ശേഷിക്കുന്നു</string>
   <string name="message_details_recipient_header__sent_to">അയച്ചത്</string>

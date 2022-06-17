@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.thoughtcrime.securesms.R;
@@ -79,21 +80,21 @@ class AttachmentKeyboardButtonAdapter extends RecyclerView.Adapter<AttachmentKey
     public ButtonViewHolder(@NonNull View itemView) {
       super(itemView);
 
-      this.image = itemView.findViewById(R.id.attachment_button_image);
-      this.title = itemView.findViewById(R.id.attachment_button_title);
+      this.image = itemView.findViewById(R.id.icon);
+      this.title = itemView.findViewById(R.id.label);
     }
 
     void bind(@NonNull AttachmentKeyboardButton button, boolean wallpaperEnabled, @NonNull Listener listener) {
       image.setImageResource(button.getIconRes());
       title.setText(button.getTitleRes());
 
-      itemView.setOnClickListener(v -> listener.onClick(button));
-
       if (wallpaperEnabled) {
-        itemView.setBackgroundResource(R.drawable.attachment_keyboard_button_wallpaper_background);
+        title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.signal_colorOnCustom));
       } else {
-        itemView.setBackgroundResource(R.drawable.attachment_keyboard_button_background);
+        title.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.signal_colorOnBackground));
       }
+
+      itemView.setOnClickListener(v -> listener.onClick(button));
     }
 
     void recycle() {

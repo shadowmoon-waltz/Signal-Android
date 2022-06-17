@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -68,6 +69,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -81,11 +84,14 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.graphics.drawable.IconCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.SimpleColorFilter;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -110,7 +116,6 @@ import org.thoughtcrime.securesms.MuteDialog;
 import org.thoughtcrime.securesms.PromptMmsActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.ShortcutLauncherActivity;
-import org.thoughtcrime.securesms.TransportOption;
 import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.TombstoneAttachment;
 import org.thoughtcrime.securesms.audio.AudioRecorder;
@@ -212,6 +217,7 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewRepository;
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewViewModel;
+import org.thoughtcrime.securesms.main.Material3OnScrollHelperBinder;
 import org.thoughtcrime.securesms.maps.PlacePickerActivity;
 import org.thoughtcrime.securesms.mediaoverview.MediaOverviewActivity;
 import org.thoughtcrime.securesms.mediasend.Media;
@@ -282,6 +288,7 @@ import org.thoughtcrime.securesms.util.DrawableUtil;
 import org.thoughtcrime.securesms.util.FullscreenHelper;
 import org.thoughtcrime.securesms.util.IdentityUtil;
 import org.thoughtcrime.securesms.util.LifecycleDisposable;
+import org.thoughtcrime.securesms.util.Material3OnScrollHelper;
 import org.thoughtcrime.securesms.util.MediaUtil;
 import org.thoughtcrime.securesms.util.MessageRecordUtil;
 import org.thoughtcrime.securesms.util.MessageUtil;
@@ -319,7 +326,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.thoughtcrime.securesms.TransportOption.Type;
 import static org.thoughtcrime.securesms.database.GroupDatabase.GroupRecord;
 
 /**
@@ -349,7 +355,9 @@ public class ConversationParentFragment extends Fragment
                GifKeyboardPageFragment.Host,
                EmojiKeyboardPageFragment.Callback,
                EmojiSearchFragment.Callback,
-               StickerKeyboardPageFragment.Callback
+               StickerKeyboardPageFragment.Callback,
+               Material3OnScrollHelperBinder,
+               MessageDetailsFragment.Callback
 {
 
   private static final int SHORTCUT_ICON_SIZE = Build.VERSION.SDK_INT >= 26 ? ViewUtil.dpToPx(72) : ViewUtil.dpToPx(48 + 16 * 2);
@@ -419,6 +427,7 @@ public class ConversationParentFragment extends Fragment
   private   ImageView                wallpaper;
   private   View                     wallpaperDim;
   private   Toolbar                  toolbar;
+  private   View                     toolbarBackground;
   private   BroadcastReceiver        pinnedShortcutReceiver;
 
   private LinkPreviewViewModel         linkPreviewViewModel;
@@ -433,7 +442,7 @@ public class ConversationParentFragment extends Fragment
   private DraftViewModel               draftViewModel;
   private VoiceNoteMediaController     voiceNoteMediaController;
   private VoiceNotePlayerView          voiceNotePlayerView;
-
+  private Material3OnScrollHelper      material3OnScrollHelper;
 
   private LiveRecipient recipient;
   private long          threadId;
@@ -578,6 +587,8 @@ public class ConversationParentFragment extends Fragment
     if (isSearchRequested && savedInstanceState == null) {
       onCreateOptionsMenu(toolbar.getMenu(), requireActivity().getMenuInflater());
     }
+
+    sendButton.post(() -> sendButton.triggerSelectedChangedEvent());
   }
 
   // TODO [alex] LargeScreenSupport -- This needs to be fed a stream of intents
@@ -660,7 +671,7 @@ public class ConversationParentFragment extends Fragment
     EventBus.getDefault().register(this);
     initializeMmsEnabledCheck();
     initializeIdentityRecords();
-    composeText.setTransport(sendButton.getSelectedTransport());
+    composeText.setMessageSendType(sendButton.getSelectedSendType());
 
     Recipient recipientSnapshot = recipient.get();
 
@@ -706,6 +717,7 @@ public class ConversationParentFragment extends Fragment
     fragment.setLastSeen(System.currentTimeMillis());
     markLastSeen();
     EventBus.getDefault().unregister(this);
+    material3OnScrollHelper.setColorImmediate();
   }
 
   @Override
@@ -719,7 +731,7 @@ public class ConversationParentFragment extends Fragment
   public void onConfigurationChanged(Configuration newConfig) {
     Log.i(TAG, "onConfigurationChanged(" + newConfig.orientation + ")");
     super.onConfigurationChanged(newConfig);
-    composeText.setTransport(sendButton.getSelectedTransport());
+    composeText.setMessageSendType(sendButton.getSelectedSendType());
 
     if (emojiDrawerStub.resolved() && container.getCurrentInput() == emojiDrawerStub.get()) {
       container.hideAttachedInput(true);
@@ -811,7 +823,7 @@ public class ConversationParentFragment extends Fragment
         return;
       }
 
-      sendButton.setTransport(result.getTransport());
+      sendButton.setSendType(result.getMessageSendType());
 
       if (result.isPushPreUpload()) {
         sendMediaMessage(result);
@@ -819,7 +831,7 @@ public class ConversationParentFragment extends Fragment
       }
 
       long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-      int        subscriptionId = sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1);
+      int        subscriptionId = sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1);
       boolean    initiating     = threadId == -1;
       QuoteModel quote          = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
       SlideDeck  slideDeck      = new SlideDeck();
@@ -840,7 +852,7 @@ public class ConversationParentFragment extends Fragment
       final Context context = requireContext().getApplicationContext();
 
       sendMediaMessage(result.getRecipientId(),
-                       result.getTransport().isSms(),
+                       result.getMessageSendType().usesSmsTransport(),
                        result.getBody(),
                        slideDeck,
                        quote,
@@ -1118,6 +1130,9 @@ public class ConversationParentFragment extends Fragment
     }
 
     super.onCreateOptionsMenu(menu, inflater);
+
+    int toolbarTextAndIconColor = getResources().getColor(wallpaper.getDrawable() != null ? R.color.signal_colorNeutralInverse : R.color.signal_colorOnSurface);
+    setToolbarActionItemTint(toolbar, toolbarTextAndIconColor);
   }
 
   public void invalidateOptionsMenu() {
@@ -1223,7 +1238,7 @@ public class ConversationParentFragment extends Fragment
   public void onAttachmentMediaClicked(@NonNull Media media) {
     linkPreviewViewModel.onUserCancel();
     MediaUtil.maybeMp4AsGif(requireContext(), media, (m) -> {
-      startActivityForResult(MediaSelectionActivity.editor(requireActivity(), sendButton.getSelectedTransport(), Collections.singletonList(m), recipient.getId(), composeText.getTextTrimmed()), MEDIA_SENDER);
+      startActivityForResult(MediaSelectionActivity.editor(requireActivity(), sendButton.getSelectedSendType(), Collections.singletonList(m), recipient.getId(), composeText.getTextTrimmed()), MEDIA_SENDER);
       container.hideCurrentInput(composeText);
     });
   }
@@ -1232,7 +1247,7 @@ public class ConversationParentFragment extends Fragment
   public void onAttachmentSelectorClicked(@NonNull AttachmentKeyboardButton button) {
     switch (button) {
       case GALLERY:
-        AttachmentManager.selectGallery(this, MEDIA_SENDER, recipient.get(), composeText.getTextTrimmed(), sendButton.getSelectedTransport(), inputPanel.getQuote().isPresent());
+        AttachmentManager.selectGallery(this, MEDIA_SENDER, recipient.get(), composeText.getTextTrimmed(), sendButton.getSelectedSendType(), inputPanel.getQuote().isPresent());
         break;
       case FILE:
         AttachmentManager.selectDocument(this, PICK_DOCUMENT);
@@ -1639,21 +1654,21 @@ public class ConversationParentFragment extends Fragment
     boolean smsEnabled = true;
 
     if (recipient.get().isPushGroup() || (!recipient.get().isMmsGroup() && !recipient.get().hasSmsAddress())) {
-      sendButton.disableTransport(Type.SMS);
+      sendButton.disableTransportType(MessageSendType.TransportType.SMS);
       smsEnabled = false;
     }
 
     if (!isSecureText && !isPushGroupConversation() && !recipient.get().isServiceIdOnly() && !recipient.get().isReleaseNotes() && smsEnabled) {
-      sendButton.disableTransport(Type.TEXTSECURE);
+      sendButton.disableTransportType(MessageSendType.TransportType.SIGNAL);
     }
 
     if (!recipient.get().isPushGroup() && recipient.get().isForceSmsSelection() && smsEnabled) {
-      sendButton.setDefaultTransport(Type.SMS);
+      sendButton.setDefaultTransport(MessageSendType.TransportType.SMS);
     } else {
       if (isSecureText || isPushGroupConversation() || recipient.get().isServiceIdOnly() || recipient.get().isReleaseNotes() || !smsEnabled) {
-        sendButton.setDefaultTransport(Type.TEXTSECURE);
+        sendButton.setDefaultTransport(MessageSendType.TransportType.SIGNAL);
       } else {
-        sendButton.setDefaultTransport(Type.SMS);
+        sendButton.setDefaultTransport(MessageSendType.TransportType.SMS);
       }
     }
 
@@ -1691,7 +1706,7 @@ public class ConversationParentFragment extends Fragment
 
     if (!Util.isEmpty(mediaList)) {
       Log.d(TAG, "Handling shared Media.");
-      Intent sendIntent = MediaSelectionActivity.editor(requireContext(), sendButton.getSelectedTransport(), mediaList, recipient.getId(), draftText);
+      Intent sendIntent = MediaSelectionActivity.editor(requireContext(), sendButton.getSelectedSendType(), mediaList, recipient.getId(), draftText);
       startActivityForResult(sendIntent, MEDIA_SENDER);
       return new SettableFuture<>(false);
     }
@@ -1769,7 +1784,10 @@ public class ConversationParentFragment extends Fragment
         }
       }
 
-      noLongerMemberBanner.setVisibility(leftGroup ? View.VISIBLE : View.GONE);
+      if (messageRequestBottomView.getVisibility() == View.GONE) {
+        noLongerMemberBanner.setVisibility(leftGroup ? View.VISIBLE : View.GONE);
+      }
+
       requestingMemberBanner.setVisibility(canCancelRequest ? View.VISIBLE : View.GONE);
 
       if (canCancelRequest) {
@@ -2037,7 +2055,7 @@ public class ConversationParentFragment extends Fragment
 
   private void updateDefaultSubscriptionId(Optional<Integer> defaultSubscriptionId) {
     Log.i(TAG, "updateDefaultSubscriptionId(" + defaultSubscriptionId.orElse(null) + ")");
-    sendButton.setDefaultSubscriptionId(defaultSubscriptionId);
+    sendButton.setDefaultSubscriptionId(defaultSubscriptionId.orElse(null));
   }
 
   private void initializeMmsEnabledCheck() {
@@ -2118,6 +2136,7 @@ public class ConversationParentFragment extends Fragment
 
   private void initializeViews(View view) {
     toolbar                  = view.findViewById(R.id.toolbar);
+    toolbarBackground        = view.findViewById(R.id.toolbar_background);
     titleView                = view.findViewById(R.id.conversation_title_view);
     buttonToggle             = view.findViewById(R.id.button_toggle);
     sendButton               = view.findViewById(R.id.send_button);
@@ -2150,13 +2169,14 @@ public class ConversationParentFragment extends Fragment
     Stub<ConversationReactionOverlay> reactionOverlayStub = ViewUtil.findStubById(view, R.id.conversation_reaction_scrubber_stub);
     reactionDelegate = new ConversationReactionDelegate(reactionOverlayStub);
 
-
     noLongerMemberBanner                = view.findViewById(R.id.conversation_no_longer_member_banner);
     cannotSendInAnnouncementGroupBanner = ViewUtil.findStubById(view, R.id.conversation_cannot_send_announcement_stub);
     requestingMemberBanner              = view.findViewById(R.id.conversation_requesting_banner);
     cancelJoinRequest                   = view.findViewById(R.id.conversation_cancel_request);
     releaseChannelUnmute                = ViewUtil.findStubById(view, R.id.conversation_release_notes_unmute_stub);
     joinGroupCallButton                 = view.findViewById(R.id.conversation_group_call_join);
+
+    sendButton.setPopupContainer((ViewGroup) view);
 
     container.setIsBubble(isInBubble());
     container.addOnKeyboardShownListener(this);
@@ -2176,16 +2196,20 @@ public class ConversationParentFragment extends Fragment
     attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
     sendButton.setOnClickListener(sendButtonListener);
     sendButton.setEnabled(true);
-    sendButton.addOnTransportChangedListener((newTransport, manuallySelected) -> {
+    sendButton.addOnSelectionChangedListener((newMessageSendType, manuallySelected) -> {
+      if (getContext() == null) {
+        Log.w(TAG, "onSelectionChanged called in detached state. Ignoring.");
+        return;
+      }
+
       calculateCharactersRemaining();
       updateLinkPreviewState();
-      linkPreviewViewModel.onTransportChanged(newTransport.isSms());
-      composeText.setTransport(newTransport);
+      linkPreviewViewModel.onTransportChanged(newMessageSendType.usesSmsTransport());
+      composeText.setMessageSendType(newMessageSendType);
 
-      buttonToggle.getBackground().setColorFilter(newTransport.getBackgroundColor(), PorterDuff.Mode.MULTIPLY);
-      buttonToggle.getBackground().invalidateSelf();
+      updateSendButtonColor(newMessageSendType);
 
-      if (manuallySelected) recordTransportPreference(newTransport);
+      if (manuallySelected) recordTransportPreference(newMessageSendType);
     });
 
     titleView.setOnStoryRingClickListener(v -> handleStoryRingClick());
@@ -2226,6 +2250,33 @@ public class ConversationParentFragment extends Fragment
     });
 
     voiceNoteMediaController.getVoiceNotePlaybackState().observe(getViewLifecycleOwner(), inputPanel.getPlaybackStateObserver());
+
+    material3OnScrollHelper = new Material3OnScrollHelper(requireActivity(), Collections.singletonList(toolbarBackground), Collections.emptyList()) {
+      @Override
+      public @NonNull ColorSet getActiveColorSet() {
+        return new ColorSet(getActiveToolbarColor(wallpaper.getDrawable() != null));
+      }
+
+      @Override
+      public @NonNull ColorSet getInactiveColorSet() {
+        return new ColorSet(getInactiveToolbarColor(wallpaper.getDrawable() != null));
+      }
+    };
+  }
+
+  private void updateSendButtonColor(MessageSendType newMessageSendType) {
+    buttonToggle.getBackground().setColorFilter(getSendButtonColor(newMessageSendType), PorterDuff.Mode.MULTIPLY);
+    buttonToggle.getBackground().invalidateSelf();
+  }
+
+  private @ColorInt int getSendButtonColor(MessageSendType newTransport) {
+    if (newTransport.usesSmsTransport()) {
+      return getResources().getColor(newTransport.getBackgroundColorRes());
+    } else if (recipient != null) {
+      return getRecipient().getChatColors().asSingleColor();
+    } else {
+      return getResources().getColor(newTransport.getBackgroundColorRes());
+    }
   }
 
   private @NonNull VoiceNotePlayerView requireVoiceNotePlayerView() {
@@ -2247,12 +2298,10 @@ public class ConversationParentFragment extends Fragment
         attachmentKeyboardStub.get().setWallpaperEnabled(true);
       }
 
-      int toolbarColor = getResources().getColor(R.color.conversation_toolbar_color_wallpaper);
-      toolbar.setBackgroundColor(toolbarColor);
-      // TODO [alex] LargeScreenSupport -- statusBarBox
-      if (Build.VERSION.SDK_INT > 23) {
-        WindowUtil.setStatusBarColor(requireActivity().getWindow(), toolbarColor);
-      }
+      material3OnScrollHelper.setColorImmediate();
+      int toolbarTextAndIconColor = getResources().getColor(R.color.signal_colorNeutralInverse);
+      toolbar.setTitleTextColor(toolbarTextAndIconColor);
+      setToolbarActionItemTint(toolbar, toolbarTextAndIconColor);
     } else {
       wallpaper.setImageDrawable(null);
       wallpaperDim.setVisibility(View.GONE);
@@ -2261,14 +2310,38 @@ public class ConversationParentFragment extends Fragment
         attachmentKeyboardStub.get().setWallpaperEnabled(false);
       }
 
-      int toolbarColor = getResources().getColor(R.color.conversation_toolbar_color);
-      toolbar.setBackgroundColor(toolbarColor);
-      // TODO [alex] LargeScreenSupport -- statusBarBox
-      if (Build.VERSION.SDK_INT > 23) {
-        WindowUtil.setStatusBarColor(requireActivity().getWindow(), toolbarColor);
-      }
+      material3OnScrollHelper.setColorImmediate();
+      int toolbarTextAndIconColor = getResources().getColor(R.color.signal_colorOnSurface);
+      toolbar.setTitleTextColor(toolbarTextAndIconColor);
+      setToolbarActionItemTint(toolbar, toolbarTextAndIconColor);
     }
     fragment.onWallpaperChanged(chatWallpaper);
+    messageRequestBottomView.setWallpaperEnabled(chatWallpaper != null);
+  }
+
+  private static @ColorRes int getActiveToolbarColor(boolean hasWallpaper) {
+    return hasWallpaper ? R.color.conversation_toolbar_color_wallpaper_scrolled
+                        : R.color.signal_colorSurface2;
+  }
+
+  private static @ColorRes int getInactiveToolbarColor(boolean hasWallpaper) {
+    return hasWallpaper ? R.color.conversation_toolbar_color_wallpaper
+                        : R.color.signal_colorBackground;
+  }
+
+  private void setToolbarActionItemTint(@NonNull Toolbar toolbar, @ColorInt int tint) {
+    for (int i = 0; i < toolbar.getMenu().size(); i++) {
+      MenuItem menuItem = toolbar.getMenu().getItem(i);
+      MenuItemCompat.setIconTintList(menuItem, ColorStateList.valueOf(tint));
+    }
+
+    if (toolbar.getNavigationIcon() != null) {
+      toolbar.getNavigationIcon().setColorFilter(new SimpleColorFilter(tint));
+    }
+
+    if (toolbar.getOverflowIcon() != null) {
+      toolbar.getOverflowIcon().setColorFilter(new SimpleColorFilter(tint));
+    }
   }
 
   protected void initializeActionBar() {
@@ -2607,6 +2680,7 @@ public class ConversationParentFragment extends Fragment
     updateReminders();
     updateDefaultSubscriptionId(recipient.getDefaultSubscriptionId());
     updatePaymentsAvailable();
+    updateSendButtonColor(sendButton.getSelectedSendType());
     initializeSecurity(isSecureText, isDefaultSms);
 
     if (searchViewItem == null || !searchViewItem.isActionViewExpanded()) {
@@ -2702,7 +2776,7 @@ public class ConversationParentFragment extends Fragment
       }
 
       Media media = new Media(uri, mimeType, 0, width, height, 0, 0, borderless, videoGif, Optional.empty(), Optional.empty(), Optional.empty());
-      startActivityForResult(MediaSelectionActivity.editor(requireContext(), sendButton.getSelectedTransport(), Collections.singletonList(media), recipient.getId(), composeText.getTextTrimmed()), MEDIA_SENDER);
+      startActivityForResult(MediaSelectionActivity.editor(requireContext(), sendButton.getSelectedSendType(), Collections.singletonList(media), recipient.getId(), composeText.getTextTrimmed()), MEDIA_SENDER);
       return new SettableFuture<>(false);
     } else {
       return attachmentManager.setMedia(glideRequests, uri, mediaType, getCurrentMediaConstraints(), width, height);
@@ -2723,7 +2797,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void sendSharedContact(List<Contact> contacts) {
-    int        subscriptionId = sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1);
+    int        subscriptionId = sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1);
     long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
     boolean    initiating     = threadId == -1;
 
@@ -2883,8 +2957,8 @@ public class ConversationParentFragment extends Fragment
 
   private void calculateCharactersRemaining() {
     String          messageBody     = composeText.getTextTrimmed().toString();
-    TransportOption transportOption = sendButton.getSelectedTransport();
-    CharacterState  characterState  = transportOption.calculateCharacters(messageBody);
+    MessageSendType sendType        = sendButton.getSelectedSendType();
+    CharacterState  characterState  = sendType.calculateCharacters(messageBody);
 
     if (characterState.charactersRemaining <= 15 || characterState.messagesSpent > 1) {
       charactersLeft.setText(String.format(Locale.getDefault(),
@@ -2942,7 +3016,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private boolean isSmsForced() {
-    return sendButton.isManualSelection() && sendButton.getSelectedTransport().isSms();
+    return sendButton.isManualSelection() && sendButton.getSelectedSendType().usesSmsTransport();
   }
 
   protected Recipient getRecipient() {
@@ -2963,9 +3037,9 @@ public class ConversationParentFragment extends Fragment
   }
 
   private MediaConstraints getCurrentMediaConstraints() {
-    return sendButton.getSelectedTransport().getType() == Type.TEXTSECURE
+    return sendButton.getSelectedSendType().usesSignalTransport()
            ? MediaConstraints.getPushMediaConstraints()
-           : MediaConstraints.getMmsMediaConstraints(sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1));
+           : MediaConstraints.getMmsMediaConstraints(sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1));
   }
 
   private void markLastSeen() {
@@ -3024,12 +3098,12 @@ public class ConversationParentFragment extends Fragment
       }
 
       String          message        = getMessage();
-      TransportOption transport      = sendButton.getSelectedTransport();
-      boolean         forceSms       = (recipient.isForceSmsSelection() || sendButton.isManualSelection()) && transport.isSms();
-      int             subscriptionId = sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1);
+      MessageSendType sendType       = sendButton.getSelectedSendType();
+      boolean         forceSms       = (recipient.isForceSmsSelection() || sendButton.isManualSelection()) && sendType.usesSmsTransport();
+      int             subscriptionId = sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1);
       long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.getExpiresInSeconds());
       boolean         initiating     = threadId == -1;
-      boolean         needsSplit     = !transport.isSms() && message.length() > transport.calculateCharacters(message).maxPrimaryMessageSize;
+      boolean         needsSplit     = !sendType.usesSmsTransport() && message.length() > sendType.calculateCharacters(message).maxPrimaryMessageSize;
       boolean         isMediaMessage = attachmentManager.isAttachmentPresent() ||
                                        recipient.isGroup()                     ||
                                        recipient.getEmail().isPresent()        ||
@@ -3134,7 +3208,7 @@ public class ConversationParentFragment extends Fragment
     final long    thread   = this.threadId;
 
     if (sendPush) {
-      MessageUtil.SplitResult splitMessage = MessageUtil.getSplitMessage(requireContext(), body, sendButton.getSelectedTransport().calculateCharacters(body).maxPrimaryMessageSize);
+      MessageUtil.SplitResult splitMessage = MessageUtil.getSplitMessage(requireContext(), body, sendButton.getSelectedSendType().calculateCharacters(body).maxPrimaryMessageSize);
       body = splitMessage.getBody();
 
       if (splitMessage.getTextSlide().isPresent()) {
@@ -3268,7 +3342,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void updateLinkPreviewState() {
-    if (SignalStore.settings().isLinkPreviewsEnabled() && isSecureText && !sendButton.getSelectedTransport().isSms() && !attachmentManager.isAttachmentPresent() && getContext() != null) {
+    if (SignalStore.settings().isLinkPreviewsEnabled() && isSecureText && !sendButton.getSelectedSendType().usesSmsTransport() && !attachmentManager.isAttachmentPresent() && getContext() != null) {
       linkPreviewViewModel.onEnabled();
       linkPreviewViewModel.onTextChanged(requireContext(), composeText.getTextTrimmed().toString(), composeText.getSelectionStart(), composeText.getSelectionEnd());
     } else {
@@ -3276,16 +3350,16 @@ public class ConversationParentFragment extends Fragment
     }
   }
 
-  private void recordTransportPreference(TransportOption transportOption) {
+  private void recordTransportPreference(MessageSendType sendType) {
     new AsyncTask<Void, Void, Void>() {
       @Override
       protected Void doInBackground(Void... params) {
         RecipientDatabase recipientDatabase = SignalDatabase.recipients();
 
-        recipientDatabase.setDefaultSubscriptionId(recipient.getId(), transportOption.getSimSubscriptionId().orElse(-1));
+        recipientDatabase.setDefaultSubscriptionId(recipient.getId(), sendType.getSimSubscriptionIdOr(-1));
 
         if (!recipient.resolve().isPushGroup()) {
-          recipientDatabase.setForceSmsSelection(recipient.getId(), recipient.get().getRegistered() == RegisteredState.REGISTERED && transportOption.isSms());
+          recipientDatabase.setForceSmsSelection(recipient.getId(), recipient.get().getRegistered() == RegisteredState.REGISTERED && sendType.usesSmsTransport());
         }
 
         return null;
@@ -3420,9 +3494,9 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void sendVoiceNote(@NonNull Uri uri, long size) {
-    boolean    forceSms       = sendButton.isManualSelection() && sendButton.getSelectedTransport().isSms();
+    boolean    forceSms       = sendButton.isManualSelection() && sendButton.getSelectedSendType().usesSmsTransport();
     boolean    initiating     = threadId == -1;
-    int        subscriptionId = sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1);
+    int        subscriptionId = sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1);
     long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
     AudioSlide audioSlide     = new AudioSlide(requireContext(), uri, size, MediaUtil.AUDIO_AAC, true);
     SlideDeck  slideDeck      = new SlideDeck();
@@ -3461,23 +3535,23 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void sendSticker(@NonNull StickerLocator stickerLocator, @NonNull String contentType, @NonNull Uri uri, long size, boolean clearCompose) {
-    if (sendButton.getSelectedTransport().isSms()) {
+    if (sendButton.getSelectedSendType().usesSmsTransport()) {
       Media  media  = new Media(uri, contentType, System.currentTimeMillis(), StickerSlide.WIDTH, StickerSlide.HEIGHT, size, 0, false, false, Optional.empty(), Optional.empty(), Optional.empty());
-      Intent intent = MediaSelectionActivity.editor(requireContext(), sendButton.getSelectedTransport(), Collections.singletonList(media), recipient.getId(), composeText.getTextTrimmed());
+      Intent intent = MediaSelectionActivity.editor(requireContext(), sendButton.getSelectedSendType(), Collections.singletonList(media), recipient.getId(), composeText.getTextTrimmed());
       startActivityForResult(intent, MEDIA_SENDER);
       return;
     }
 
     long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    int             subscriptionId = sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1);
+    int             subscriptionId = sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1);
     boolean         initiating     = threadId == -1;
-    TransportOption transport      = sendButton.getSelectedTransport();
+    MessageSendType sendType       = sendButton.getSelectedSendType();
     SlideDeck       slideDeck      = new SlideDeck();
     Slide           stickerSlide   = new StickerSlide(requireContext(), uri, size, stickerLocator, contentType);
 
     slideDeck.addSlide(stickerSlide);
 
-    sendMediaMessage(recipient.getId(), transport.isSms(), "", slideDeck, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), expiresIn, false, subscriptionId, initiating, clearCompose, null);
+    sendMediaMessage(recipient.getId(), sendType.usesSmsTransport(), "", slideDeck, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList(), expiresIn, false, subscriptionId, initiating, clearCompose, null);
   }
 
   private void silentlySetComposeText(String text) {
@@ -3532,7 +3606,7 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void openGifSearch() {
-    AttachmentManager.selectGif(this, ConversationParentFragment.PICK_GIF, recipient.getId(), sendButton.getSelectedTransport(), isMms(), composeText.getTextTrimmed());
+    AttachmentManager.selectGif(this, ConversationParentFragment.PICK_GIF, recipient.getId(), sendButton.getSelectedSendType(), isMms(), composeText.getTextTrimmed());
   }
 
   @Override
@@ -3593,6 +3667,16 @@ public class ConversationParentFragment extends Fragment
     StickerSearchDialogFragment.show(getChildFragmentManager());
   }
 
+  @Override
+  public void bindScrollHelper(@NonNull RecyclerView recyclerView) {
+    material3OnScrollHelper.attach(recyclerView);
+  }
+
+  @Override
+  public void onMessageDetailsFragmentDismissed() {
+    material3OnScrollHelper.setColorImmediate();
+  }
+
   // Listeners
 
   private final class DeleteCanceledVoiceNoteListener implements ListenableFuture.Listener<VoiceNoteDraft> {
@@ -3615,7 +3699,7 @@ public class ConversationParentFragment extends Fragment
                  .withPermanentDenialDialog(getString(R.string.ConversationActivity_signal_needs_the_camera_permission_to_take_photos_or_video))
                  .onAllGranted(() -> {
                    composeText.clearFocus();
-                   startActivityForResult(MediaSelectionActivity.camera(requireActivity(), sendButton.getSelectedTransport(), recipient.getId(), inputPanel.getQuote().isPresent()), MEDIA_SENDER);
+                   startActivityForResult(MediaSelectionActivity.camera(requireActivity(), sendButton.getSelectedSendType(), recipient.getId(), inputPanel.getQuote().isPresent()), MEDIA_SENDER);
                    requireActivity().overridePendingTransition(R.anim.camera_slide_from_bottom, R.anim.stationary);
                  })
                  .onAnyDenied(() -> Toast.makeText(requireContext(), R.string.ConversationActivity_signal_needs_camera_permissions_to_take_photos_or_video, Toast.LENGTH_LONG).show())
@@ -3997,6 +4081,12 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void onMessageActionToolbarOpened() {
     searchViewItem.collapseActionView();
+    toolbar.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void onMessageActionToolbarClosed() {
+    toolbar.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -4105,7 +4195,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     long       expiresIn      = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
-    int        subscriptionId = sendButton.getSelectedTransport().getSimSubscriptionId().orElse(-1);
+    int        subscriptionId = sendButton.getSelectedSendType().getSimSubscriptionIdOr(-1);
     boolean    initiating     = threadId == -1;
     SlideDeck  slideDeck      = new SlideDeck();
 
@@ -4253,18 +4343,23 @@ public class ConversationParentFragment extends Fragment
     {
       Log.d(TAG, "[presentMessageRequestState] Have extra, so ignoring provided state.");
       messageRequestBottomView.setVisibility(View.GONE);
+      inputPanel.setHideForMessageRequestState(false);
     } else if (isPushGroupV1Conversation() && !isActiveGroup()) {
       Log.d(TAG, "[presentMessageRequestState] Inactive push group V1, so ignoring provided state.");
       messageRequestBottomView.setVisibility(View.GONE);
+      inputPanel.setHideForMessageRequestState(false);
     } else if (messageData == null) {
       Log.d(TAG, "[presentMessageRequestState] Null messageData. Ignoring.");
     } else if (messageData.getMessageState() == MessageRequestState.NONE) {
       Log.d(TAG, "[presentMessageRequestState] No message request necessary.");
       messageRequestBottomView.setVisibility(View.GONE);
+      inputPanel.setHideForMessageRequestState(false);
     } else {
       Log.d(TAG, "[presentMessageRequestState] " + messageData.getMessageState());
       messageRequestBottomView.setMessageData(messageData);
       messageRequestBottomView.setVisibility(View.VISIBLE);
+      noLongerMemberBanner.setVisibility(View.GONE);
+      inputPanel.setHideForMessageRequestState(true);
     }
 
     invalidateOptionsMenu();

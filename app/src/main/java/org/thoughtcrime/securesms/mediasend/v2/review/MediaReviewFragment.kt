@@ -26,8 +26,8 @@ import androidx.viewpager2.widget.ViewPager2
 import app.cash.exhaustive.Exhaustive
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.TransportOption
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
+import org.thoughtcrime.securesms.conversation.MessageSendType
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragmentArgs
 import org.thoughtcrime.securesms.keyvalue.SignalStore
@@ -201,7 +201,7 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment) {
         state.selectedMedia.map { MediaReviewSelectedItem.Model(it, state.focusedMedia == it) } + MediaReviewAddItem.Model
       )
 
-      presentSendButton(state.transportOption)
+      presentSendButton(state.sendType)
       presentPager(state)
       presentAddMessageEntry(state.message)
       presentImageQualityToggle(state.quality)
@@ -296,8 +296,8 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment) {
     )
   }
 
-  private fun presentSendButton(transportOption: TransportOption) {
-    val sendButtonTint = if (transportOption.type == TransportOption.Type.TEXTSECURE) {
+  private fun presentSendButton(sendType: MessageSendType) {
+    val sendButtonTint = if (sendType.usesSignalTransport) {
       R.color.core_ultramarine
     } else {
       R.color.core_grey_50

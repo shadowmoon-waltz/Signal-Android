@@ -2,6 +2,7 @@ package org.signal.qr
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Size
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.camera.core.Camera
@@ -73,20 +74,17 @@ internal class ScannerView21 constructor(
     val preview = Preview.Builder().build()
 
     val imageAnalysis = ImageAnalysis.Builder()
+      .setTargetResolution(Size(1920, 1080))
       .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
       .build()
 
     imageAnalysis.setAnalyzer(analyzerExecutor) { proxy ->
-      val buffer = proxy.planes[0].buffer
-      val bytes = ByteArray(buffer.capacity())
-      buffer.get(bytes)
-
-      val data: String? = qrProcessor.getScannedData(bytes, proxy.width, proxy.height)
-      if (data != null) {
-        listener.onQrDataFound(data)
+      proxy.use {
+        val data: String? = qrProcessor.getScannedData(it)
+        if (data != null) {
+          listener.onQrDataFound(data)
+        }
       }
-
-      proxy.close()
     }
 
     cameraProvider.unbindAll()

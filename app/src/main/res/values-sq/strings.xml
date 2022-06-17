@@ -3,7 +3,7 @@
   <string name="yes">Po</string>
   <string name="no">Jo</string>
   <string name="delete">Fshije</string>
-  <string name="please_wait">Ju lutemi, pritni…</string>
+  <string name="please_wait">Ju lutemi, prisni…</string>
   <string name="save">Ruaje</string>
   <string name="note_to_self">Shënim për Veten</string>
   <!--AbstractNotificationBuilder-->
@@ -13,7 +13,7 @@
   <string name="ApplicationMigrationActivity__signal_is_updating">Signal-i po përditësohet…</string>
   <!--ApplicationPreferencesActivity-->
   <string name="ApplicationPreferencesActivity_currently_s">I tanishmi: %s</string>
-  <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">S\’keni caktuar ende frazëkalim!</string>
+  <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Nuk keni caktuar ende një frazëkalimi!</string>
   <string name="ApplicationPreferencesActivity_disable_passphrase">Të çaktivizohet frazëkalimi?</string>
   <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Kjo do të shkyçë në mënyrë të përhershme njoftime Signal-i dhe mesazhesh.</string>
   <string name="ApplicationPreferencesActivity_disable">Çaktivizoje</string>
@@ -653,8 +653,8 @@ grupit dhe s\’do të marrë mesazhe grupi përpara se ta pranojë:</item>
   <string name="AddGroupDetailsFragment__this_field_is_required">Kjo fushë është e domosdoshme.</string>
   <string name="AddGroupDetailsFragment__group_creation_failed">Krijimi i grupit dështoi.</string>
   <string name="AddGroupDetailsFragment__try_again_later">Riprovoni më vonë.</string>
-  <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt">Keni përzgjedhur një kontakt që nuk mbulon grupe Signal, kështu që ky grup do të jetë MMS.</string>
-  <string name="AddGroupDetailsFragment_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Emra dhe foto vetjake grupesh MMS do të jenë të dukshme vetëm për ju.</string>
+  <!-- Removed by excludeNonTranslatables <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt">Keni përzgjedhur një kontakt që nuk mbulon grupe Signal, kështu që ky grup do të jetë MMS.</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="AddGroupDetailsFragment_custom_mms_group_names_and_photos_will_only_be_visible_to_you">Emra dhe foto vetjake grupesh MMS do të jenë të dukshme vetëm për ju.</string> -->
   <string name="AddGroupDetailsFragment__remove">Hiqe</string>
   <string name="AddGroupDetailsFragment__sms_contact">Kontakt SMS</string>
   <string name="AddGroupDetailsFragment__remove_s_from_this_group">Të hiqet %1$s prej këtij grupi?</string>
@@ -2004,10 +2004,10 @@ grupit dhe s\’do të marrë mesazhe grupi përpara se ta pranojë:</item>
   <string name="webrtc_answer_decline_button__swipe_down_to_reject">Për ta hedhur tej, fërkojeni për poshtë</string>
   <!--message_details_header-->
   <string name="message_details_header__issues_need_your_attention">Disa çështje lypin vëmendjen tuaj.</string>
-  <string name="message_details_header__sent">U dërgua:</string>
-  <string name="message_details_header__received">U mor:</string>
-  <string name="message_details_header__disappears">Zhduket më:</string>
-  <string name="message_details_header__via">Përmes:</string>
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__sent">U dërgua:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__received">U mor:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__disappears">Zhduket më:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="message_details_header__via">Përmes:</string> -->
   <!--message_details_recipient_header-->
   <string name="message_details_recipient_header__pending_send">Pezull</string>
   <string name="message_details_recipient_header__sent_to">Dërguar te</string>

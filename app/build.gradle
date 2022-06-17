@@ -11,12 +11,6 @@ apply from: 'static-ips.gradle'
 
 repositories {
     maven {
-        url "https://raw.github.com/signalapp/maven/master/circular-progress-button/releases/"
-        content {
-            includeGroupByRegex "com\\.github\\.dmytrodanylyk\\.circular-progress-button\\.*"
-        }
-    }
-    maven {
         url "https://raw.github.com/signalapp/maven/master/sqlcipher/release/"
         content {
             includeGroupByRegex "org\\.signal.*"
@@ -63,8 +57,8 @@ ktlint {
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1061
-def canonicalVersionName = "5.40.1"
+def canonicalVersionCode = 1069
+def canonicalVersionName = "5.41.4"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -186,6 +180,8 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
         exclude 'META-INF/proguard/androidx-annotations.pro'
+        exclude 'libsignal_jni.dylib'
+        exclude 'signal_jni.dll'
     }
 
 
@@ -527,7 +523,6 @@ dependencies {
     implementation libs.materialish.progress
     implementation libs.greenrobot.eventbus
     implementation libs.waitingdots
-    implementation libs.floatingactionbutton
     implementation libs.google.zxing.android.integration
     implementation libs.time.duration.picker
     implementation libs.google.zxing.core
@@ -553,7 +548,6 @@ dependencies {
     implementation libs.lottie
 
     implementation libs.stickyheadergrid
-    implementation libs.circular.progress.button
 
     implementation libs.signal.android.database.sqlcipher
     implementation libs.androidx.sqlite
