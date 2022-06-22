@@ -1554,6 +1554,8 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
   public interface ConversationFragmentListener extends VoiceNoteMediaControllerOwner {
     boolean isKeyboardOpen();
+    boolean isAttachmentKeyboardOpen();
+    void    openAttachmentKeyboard();
     void    setThreadId(long threadId);
     void    handleReplyMessage(ConversationMessage conversationMessage);
     void    onMessageActionToolbarOpened();
@@ -1741,7 +1743,9 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
             if (showScrollButtons) {
               conversationViewModel.setShowScrollButtons(false);
             }
-  
+
+            boolean isAttachmentKeyboardOpen = listener.isAttachmentKeyboardOpen();
+
             final boolean layoutFrozen = (motionEvent == null);
 
             listener.handleReaction(item.getConversationMessage(),
@@ -1777,6 +1781,10 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
                                         if (showScrollButtons) {
                                           conversationViewModel.setShowScrollButtons(true);
+                                        }
+
+                                        if (isAttachmentKeyboardOpen) {
+                                          listener.openAttachmentKeyboard();
                                         }
                                       }
                                     }, motionEvent);
