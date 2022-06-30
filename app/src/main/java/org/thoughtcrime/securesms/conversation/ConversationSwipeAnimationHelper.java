@@ -37,7 +37,6 @@ final class ConversationSwipeAnimationHelper {
 
     updateBodyBubbleTransition(conversationItem.bodyBubble, dx, sign);
     updateReactionsTransition(conversationItem.reactionsView, dx, sign);
-    // TODO: see if updateQuotedIndicatorTransition should be in the if block (SW)
     updateQuotedIndicatorTransition(conversationItem.quotedIndicator, dx, progress, sign);
     if (!swipeToLeft) {
       updateReplyIconTransition(conversationItem.reply, dx, progress, sign);
