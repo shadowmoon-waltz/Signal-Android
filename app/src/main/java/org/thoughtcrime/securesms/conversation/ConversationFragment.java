@@ -1757,6 +1757,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
             bodyBubble.setVisibility(View.INVISIBLE);
             conversationItem.reactionsView.setVisibility(View.INVISIBLE);
 
+            boolean quotedIndicatorVisible = conversationItem.quotedIndicator != null && conversationItem.quotedIndicator.getVisibility() == View.VISIBLE;
+            if (quotedIndicatorVisible && conversationItem.quotedIndicator != null) {
+              ViewUtil.fadeOut(conversationItem.quotedIndicator, 150, View.INVISIBLE);
+            }
+
             ViewUtil.hideKeyboard(requireContext(), conversationItem);
 
             boolean showScrollButtons = conversationViewModel.getShowScrollButtons();
@@ -1798,6 +1803,9 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   
                                         bodyBubble.setVisibility(View.VISIBLE);
                                         conversationItem.reactionsView.setVisibility(View.VISIBLE);
+                                        if (quotedIndicatorVisible && conversationItem.quotedIndicator != null) {
+                                          ViewUtil.fadeIn(conversationItem.quotedIndicator, 150);
+                                        }
 
                                         if (showScrollButtons) {
                                           conversationViewModel.setShowScrollButtons(true);
@@ -2179,16 +2187,12 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
     @Override
     public void onDonateClicked() {
-      if (SignalStore.donationsValues().isLikelyASustainer()) {
-        NavHostFragment navHostFragment = NavHostFragment.create(R.navigation.boosts);
+      NavHostFragment navHostFragment = NavHostFragment.create(R.navigation.boosts);
 
-        requireActivity().getSupportFragmentManager()
-                         .beginTransaction()
-                         .add(navHostFragment, "boost_nav")
-                         .commitNow();
-      } else {
-        startActivity(AppSettingsActivity.subscriptions(requireContext()));
-      }
+      requireActivity().getSupportFragmentManager()
+                       .beginTransaction()
+                       .add(navHostFragment, "boost_nav")
+                       .commitNow();
     }
 
     @Override

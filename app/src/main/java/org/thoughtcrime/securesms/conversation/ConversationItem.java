@@ -439,6 +439,11 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   }
 
   @Override
+  public void updateSelectedState() {
+    setHasBeenQuoted(conversationMessage);
+  }
+
+  @Override
   public void updateTimestamps() {
     getActiveFooter(messageRecord).setMessageRecord(messageRecord, locale);
   }
@@ -981,11 +986,11 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   }
 
   private boolean hasExtraText(MessageRecord messageRecord) {
-    return MessageRecordUtil.hasExtraText(messageRecord) || isContentCondensed();
+    return MessageRecordUtil.hasExtraText(messageRecord) || (!messageRecord.isDisplayBodyEmpty(context) && isContentCondensed());
   }
 
   private boolean hasQuote(MessageRecord messageRecord) {
-    return MessageRecordUtil.hasQuote(messageRecord) && (!isCondensedMode || !previousMessage.isPresent());
+    return MessageRecordUtil.hasQuote(messageRecord);
   }
 
   private boolean hasSharedContact(MessageRecord messageRecord) {
@@ -1272,8 +1277,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       List<Slide> thumbnailSlides = ((MmsMessageRecord) messageRecord).getSlideDeck().getThumbnailSlides();
       mediaThumbnailStub.require().setMinimumThumbnailWidth(readDimen(isCaptionlessMms(messageRecord) ? R.dimen.media_bubble_min_width_solo
                                                                                                       : R.dimen.media_bubble_min_width_with_content));
-      mediaThumbnailStub.require().setMaximumThumbnailHeight(readDimen(isCondensedMode ? R.dimen.media_bubble_max_height_condensed
-                                                                                       : R.dimen.media_bubble_max_height));
+      mediaThumbnailStub.require().setMaximumThumbnailHeight(readDimen(isContentCondensed() ? R.dimen.media_bubble_max_height_condensed
+                                                                                            : R.dimen.media_bubble_max_height));
       mediaThumbnailStub.require().setImageResource(glideRequests,
                                                     thumbnailSlides,
                                                     showControls,
@@ -1646,6 +1651,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     } else if (current.isOutgoing()) {
       ViewUtil.setPaddingStart(this, readDimen(R.dimen.conversation_individual_left_gutter));
       ViewUtil.setPaddingEnd(this, readDimen(R.dimen.conversation_individual_right_gutter));
+    } else {
+      ViewUtil.setPaddingStart(this, readDimen(R.dimen.conversation_individual_received_left_gutter));
+      ViewUtil.setPaddingEnd(this, readDimen(R.dimen.conversation_individual_right_gutter));
     }
   }
 
@@ -1731,7 +1739,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   }
 
   private void setHasBeenQuoted(@NonNull ConversationMessage message) {
-    if (message.hasBeenQuoted() && quotedIndicator != null) {
+    if (message.hasBeenQuoted() && !isCondensedMode && quotedIndicator != null && batchSelected.isEmpty()) {
       quotedIndicator.setVisibility(VISIBLE);
       quotedIndicator.setOnClickListener(quotedIndicatorClickListener);
     } else if (quotedIndicator != null) {
