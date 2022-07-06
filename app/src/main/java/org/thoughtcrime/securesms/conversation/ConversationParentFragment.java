@@ -1426,13 +1426,28 @@ public class ConversationParentFragment extends Fragment
   private void handleDeleteConversation() {
     final long threadId = viewModel.getArgs().getThreadId();
 
+    // may help avoid a crash if you try to delete the release notes conversation
+    if (threadId == -1) {
+      Toast.makeText(requireContext(), "Failed to delete conversation", Toast.LENGTH_LONG).show();
+      return;
+    }
+
     new AlertDialog.Builder(requireContext())
       .setTitle(R.string.ConversationActivity_delete_conversation)
       .setPositiveButton(R.string.yes, (d, i) -> {
-        SignalDatabase.threads().deleteConversation(threadId);
-        ApplicationDependencies.getMessageNotifier().updateNotification(requireContext());
+        // may help avoid a crash if you try to delete the release notes conversation
+        boolean okay = true;
+        try {
+          SignalDatabase.threads().deleteConversation(threadId);
+        } catch (Throwable ignored) {
+          okay = false;
+          Toast.makeText(requireContext(), "Failed to delete conversation", Toast.LENGTH_LONG).show();
+        }
         d.dismiss();
-        requireActivity().finish();
+        if (okay) {
+          ApplicationDependencies.getMessageNotifier().updateNotification(requireContext());
+          requireActivity().finish();
+        }
       })
       .setNegativeButton(R.string.no, (d, i) -> {
         d.dismiss();
