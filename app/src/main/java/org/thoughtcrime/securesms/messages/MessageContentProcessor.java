@@ -234,7 +234,7 @@ public final class MessageContentProcessor {
     if (messageState == MessageState.DECRYPTED_OK) {
 
       if (content != null) {
-        Recipient senderRecipient = Recipient.externalHighTrustPush(context, content.getSender());
+        Recipient senderRecipient = Recipient.externalPush(content.getSender());
 
         handleMessage(content, timestamp, senderRecipient, optionalSmsMessageId);
 
@@ -325,10 +325,14 @@ public final class MessageContentProcessor {
                                                      .enqueue();
             } else if (!threadRecipient.isGroup()) {
               Log.i(TAG, "Message was to a 1:1. Ensuring this user has our profile key.");
-              ApplicationDependencies.getJobManager()
-                                     .startChain(new RefreshAttributesJob(false))
-                                     .then(ProfileKeySendJob.create(context, SignalDatabase.threads().getOrCreateThreadIdFor(threadRecipient), true))
-                                     .enqueue();
+              ProfileKeySendJob profileSendJob = ProfileKeySendJob.create(SignalDatabase.threads().getOrCreateThreadIdFor(threadRecipient), true);
+
+              if (profileSendJob != null) {
+                ApplicationDependencies.getJobManager()
+                                       .startChain(new RefreshAttributesJob(false))
+                                       .then(profileSendJob)
+                                       .enqueue();
+              }
             }
           }
         }
@@ -1098,8 +1102,8 @@ public final class MessageContentProcessor {
     if (response.getPerson().isPresent()) {
       recipient = Recipient.externalPush(response.getPerson().get());
     } else if (response.getGroupId().isPresent()) {
-      GroupId groupId = GroupId.v1(response.getGroupId().get());
-      recipient = Recipient.externalPossiblyMigratedGroup(context, groupId);
+      GroupId groupId = GroupId.push(response.getGroupId().get());
+      recipient = Recipient.externalPossiblyMigratedGroup(groupId);
     } else {
       warn("Message request response was missing a thread recipient! Skipping.");
       return;
@@ -1474,7 +1478,7 @@ public final class MessageContentProcessor {
     }
 
     if (insertResult.isPresent()) {
-      Stories.enqueueNextStoriesForDownload(threadRecipient.getId(), false);
+      Stories.enqueueNextStoriesForDownload(threadRecipient.getId(), false, FeatureFlags.storiesAutoDownloadMaximum());
       ApplicationDependencies.getExpireStoriesManager().scheduleIfNecessary();
     }
   }
@@ -1558,7 +1562,7 @@ public final class MessageContentProcessor {
     database.beginTransaction();
 
     try {
-      RecipientId   storyAuthorRecipient = RecipientId.from(storyContext.getAuthorServiceId(), null);
+      RecipientId   storyAuthorRecipient = RecipientId.from(storyContext.getAuthorServiceId());
       ParentStoryId parentStoryId;
       QuoteModel    quoteModel           = null;
       long          expiresInMillis      = 0;
@@ -1652,7 +1656,7 @@ public final class MessageContentProcessor {
     database.beginTransaction();
 
     try {
-      RecipientId   storyAuthorRecipient = RecipientId.from(storyContext.getAuthorServiceId(), null);
+      RecipientId   storyAuthorRecipient = RecipientId.from(storyContext.getAuthorServiceId());
       ParentStoryId parentStoryId;
       QuoteModel    quoteModel           = null;
       long          expiresInMillis      = 0L;
@@ -1933,7 +1937,7 @@ public final class MessageContentProcessor {
       Recipient                                   recipient            = getSyncMessageDestination(message);
       QuoteModel                                  quoteModel           = null;
       long                                        expiresInMillis      = 0L;
-      RecipientId                                 storyAuthorRecipient = RecipientId.from(storyContext.getAuthorServiceId(), null);
+      RecipientId                                 storyAuthorRecipient = RecipientId.from(storyContext.getAuthorServiceId());
       MessageId                                   storyMessageId       = database.getStoryId(storyAuthorRecipient, storyContext.getSentTimestamp());
       MmsMessageRecord                            story                = (MmsMessageRecord) database.getMessageRecord(storyMessageId.getId());
       Recipient                                   threadRecipient      = SignalDatabase.threads().getRecipientForThreadId(story.getThreadId());
@@ -2301,7 +2305,7 @@ public final class MessageContentProcessor {
     }
 
     List<org.signal.libsignal.protocol.util.Pair<RecipientId, Boolean>> unidentifiedStatus = Stream.of(members)
-                                                                                                  .map(m -> new org.signal.libsignal.protocol.util.Pair<>(m.getId(), message.isUnidentified(m.requireServiceId().toString())))
+                                                                                                  .map(m -> new org.signal.libsignal.protocol.util.Pair<>(m.getId(), message.isUnidentified(m.requireServiceId())))
                                                                                                   .toList();
     receiptDatabase.setUnidentified(unidentifiedStatus, messageId);
   }
@@ -2401,9 +2405,8 @@ public final class MessageContentProcessor {
       messageId = SignalDatabase.sms().insertMessageOutbox(threadId, outgoingTextMessage, false, message.getTimestamp(), null);
       database  = SignalDatabase.sms();
       database.markUnidentified(messageId, isUnidentified(message, recipient));
-      SignalDatabase.threads().update(threadId, true);
     }
-
+    SignalDatabase.threads().update(threadId, true);
     database.markAsSent(messageId, true);
 
     if (expiresInMillis > 0) {
@@ -2548,7 +2551,7 @@ public final class MessageContentProcessor {
                                           @NonNull SignalServiceDataMessage message,
                                           @NonNull MessageId messageId)
   {
-    ApplicationDependencies.getJobManager().add(new SendDeliveryReceiptJob(RecipientId.fromHighTrust(content.getSender()), message.getTimestamp(), messageId));
+    ApplicationDependencies.getJobManager().add(new SendDeliveryReceiptJob(RecipientId.from(content.getSender()), message.getTimestamp(), messageId));
   }
 
   private void handleViewedReceipt(@NonNull SignalServiceContent content,
@@ -2662,7 +2665,7 @@ public final class MessageContentProcessor {
         return;
       }
 
-      Recipient groupRecipient = Recipient.externalPossiblyMigratedGroup(context, groupId);
+      Recipient groupRecipient = Recipient.externalPossiblyMigratedGroup(groupId);
 
       threadId = SignalDatabase.threads().getOrCreateThreadIdFor(groupRecipient);
     } else {
@@ -2986,7 +2989,7 @@ public final class MessageContentProcessor {
     List<Mention> mentions = new ArrayList<>(signalServiceMentions.size());
 
     for (SignalServiceDataMessage.Mention mention : signalServiceMentions) {
-      mentions.add(new Mention(Recipient.externalPush(mention.getServiceId(), null, false).getId(), mention.getStart(), mention.getLength()));
+      mentions.add(new Mention(Recipient.externalPush(mention.getServiceId()).getId(), mention.getStart(), mention.getLength()));
     }
 
     return mentions;
@@ -3022,14 +3025,14 @@ public final class MessageContentProcessor {
 
   private Recipient getMessageDestination(@NonNull SignalServiceContent content) throws BadGroupIdException {
     SignalServiceDataMessage message = content.getDataMessage().orElse(null);
-    return getGroupRecipient(message != null ? message.getGroupContext() : Optional.empty()).orElseGet(() -> Recipient.externalHighTrustPush(context, content.getSender()));
+    return getGroupRecipient(message != null ? message.getGroupContext() : Optional.empty()).orElseGet(() -> Recipient.externalPush(content.getSender()));
   }
 
   private Optional<Recipient> getGroupRecipient(Optional<SignalServiceGroupContext> message)
       throws BadGroupIdException
   {
     if (message.isPresent()) {
-      return Optional.of(Recipient.externalPossiblyMigratedGroup(context, GroupUtil.idFromGroupContext(message.get())));
+      return Optional.of(Recipient.externalPossiblyMigratedGroup(GroupUtil.idFromGroupContext(message.get())));
     }
     return Optional.empty();
   }
@@ -3089,7 +3092,7 @@ public final class MessageContentProcessor {
 
       if (content.getTypingMessage().get().getGroupId().isPresent()) {
         GroupId   groupId        = GroupId.push(content.getTypingMessage().get().getGroupId().get());
-        Recipient groupRecipient = Recipient.externalPossiblyMigratedGroup(context, groupId);
+        Recipient groupRecipient = Recipient.externalPossiblyMigratedGroup(groupId);
 
         if (groupRecipient.isBlocked() || !groupRecipient.isActiveGroup()) {
           return true;
@@ -3128,16 +3131,11 @@ public final class MessageContentProcessor {
   }
 
   private static boolean isUnidentified(@NonNull SentTranscriptMessage message, @NonNull Recipient recipient) {
-    boolean unidentified = false;
-
-    if (recipient.hasE164()) {
-      unidentified |= message.isUnidentified(recipient.requireE164());
-    }
     if (recipient.hasServiceId()) {
-      unidentified |= message.isUnidentified(recipient.requireServiceId());
+      return message.isUnidentified(recipient.requireServiceId());
+    } else {
+      return false;
     }
-
-    return unidentified;
   }
 
   private static void log(@NonNull String message) {

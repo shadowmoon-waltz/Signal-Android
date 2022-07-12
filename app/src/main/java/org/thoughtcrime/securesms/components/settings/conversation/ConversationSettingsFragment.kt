@@ -465,7 +465,7 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         }
       }
 
-      if (!state.recipient.isReleaseNotes) {
+      if (!state.recipient.isReleaseNotes && !state.recipient.isBlocked) {
         clickPref(
           title = DSLSettingsText.from(R.string.ConversationSettingsFragment__disappearing_messages),
           summary = summary,
@@ -602,15 +602,17 @@ class ConversationSettingsFragment : DSLSettingsFragment(
             )
           )
 
-          customPref(
-            LargeIconClickPreference.Model(
-              title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_to_a_group),
-              icon = DSLSettingsIcon.from(R.drawable.add_to_a_group, NO_TINT),
-              onClick = {
-                viewModel.onAddToGroup()
-              }
+          if (!state.recipient.isBlocked) {
+            customPref(
+              LargeIconClickPreference.Model(
+                title = DSLSettingsText.from(R.string.ConversationSettingsFragment__add_to_a_group),
+                icon = DSLSettingsIcon.from(R.drawable.add_to_a_group, NO_TINT),
+                onClick = {
+                  viewModel.onAddToGroup()
+                }
+              )
             )
-          )
+          }
 
           for (group in recipientSettingsState.groupsInCommon) {
             customPref(
