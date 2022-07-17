@@ -46,7 +46,7 @@ class SafetyNumberChangeDialogPreviewer {
     othersRecipients.forEach { other ->
       SignalDatabase.recipients.setProfileName(other.id, ProfileName.fromParts("My", "Name"))
 
-      harness.setVerified(other, IdentityDatabase.VerifiedStatus.VERIFIED)
+      harness.setVerified(other, IdentityDatabase.VerifiedStatus.DEFAULT)
       harness.changeIdentityKey(other)
     }
 

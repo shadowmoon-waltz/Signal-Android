@@ -4212,7 +4212,7 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <!--Dialog title for deleting a private story-->
   <string name="ContactSearchMediator__delete_story">Poista tarina?</string>
   <!--Dialog message for deleting a private story-->
-  <string name="ContactSearchMediator__delete_the_private">Poistetaanko yksityinen tarina \"%1$s\"?</string>
+  <string name="ContactSearchMediator__delete_the_private">Poistetaanko yksityinen tarina %1$s?</string>
   <!--Dialog action item for deleting a private story-->
   <string name="ContactSearchMediator__delete">Poista</string>
   <!--Gift expiry days remaining-->
@@ -4248,6 +4248,7 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <!--Message of safety number changes bottom sheet when showing individual records-->
   <!--Title of safety number changes bottom sheet when not showing individual records-->
   <!--Title of safety number changes bottom sheet when not showing individual records and user has seen review screen-->
+  <!--Message of safety number changes bottom sheet when not showing individual records and user has seen review screen-->
   <!--Message of safety number changes bottom sheet when not showing individual records-->
   <!--Menu action to launch safety number verification screen-->
   <string name="SafetyNumberBottomSheetFragment__verify_safety_number">Varmenna turvanumero</string>
