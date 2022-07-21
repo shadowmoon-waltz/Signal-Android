@@ -13,7 +13,6 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
@@ -70,11 +69,11 @@ public class CameraXFragment extends LoggingFragment implements CameraFragment {
   private static final String TAG              = Log.tag(CameraXFragment.class);
   private static final String IS_VIDEO_ENABLED = "is_video_enabled";
 
-  private SignalCameraView       camera;
-  private ViewGroup              controlsContainer;
-  private Controller             controller;
-  private View                   selfieFlash;
-  private MemoryFileDescriptor   videoFileDescriptor;
+  private SignalCameraView     camera;
+  private ViewGroup            controlsContainer;
+  private Controller           controller;
+  private View                 selfieFlash;
+  private MemoryFileDescriptor videoFileDescriptor;
 
   private final Observer<Optional<Media>> thumbObserver = this::presentRecentItemThumbnail;
   private boolean isThumbAvailable;
@@ -156,8 +155,6 @@ public class CameraXFragment extends LoggingFragment implements CameraFragment {
     super.onResume();
 
     camera.bindToLifecycle(getViewLifecycleOwner(),  this::handleCameraInitializationError);
-    requireActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-    requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
     requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
   }
 

@@ -210,6 +210,8 @@
     <string name="ContactsDatabase_signal_call_s">Signal Call %s</string>
 
     <!-- ContactNameEditActivity -->
+    <!-- Toolbar title for contact name edit activity -->
+    <string name="ContactNameEditActivity__edit_name">Edit name</string>
     <string name="ContactNameEditActivity_given_name">Given name</string>
     <string name="ContactNameEditActivity_family_name">Family name</string>
     <string name="ContactNameEditActivity_prefix">Prefix</string>
@@ -217,11 +219,17 @@
     <string name="ContactNameEditActivity_middle_name">Middle name</string>
 
     <!-- ContactShareEditActivity -->
+    <!-- ContactShareEditActivity toolbar title -->
+    <string name="ContactShareEditActivity__send_contact">Send contact</string>
     <string name="ContactShareEditActivity_type_home">Home</string>
     <string name="ContactShareEditActivity_type_mobile">Mobile</string>
     <string name="ContactShareEditActivity_type_work">Work</string>
     <string name="ContactShareEditActivity_type_missing">Other</string>
     <string name="ContactShareEditActivity_invalid_contact">Selected contact was invalid</string>
+    <!-- Content descrption for name edit button on contact share edit activity -->
+    <string name="ContactShareEditActivity__edit_name">Edit name</string>
+    <!-- Content description for user avatar in edit activity -->
+    <string name="ContactShareEditActivity__avatar">Avatar</string>
 
     <!-- ConversationItem -->
     <string name="ConversationItem_error_not_sent_tap_for_details">Not sent, tap for details</string>
@@ -2671,6 +2679,8 @@
     <string name="configurable_single_select__customize_option">Customize option</string>
 
     <!-- Internal only preferences -->
+    <string name="preferences__internal_clear_onboarding_state" translatable="false">Clear onboarding state</string>
+    <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string>
     <string name="preferences__internal_preferences" translatable="false">Internal Preferences</string>
     <string name="preferences__internal_preferences_groups_v2" translatable="false">Groups V2</string>
     <string name="preferences__internal_preferences_groups_v1_migration" translatable="false">Groups V1 Migration</string>
@@ -3528,6 +3538,10 @@
     <string name="CallParticipant__you">You</string>
     <string name="CallParticipant__you_on_another_device">You (on another device)</string>
     <string name="CallParticipant__s_on_another_device">%1$s (on another device)</string>
+
+    <!-- WifiToCellularPopupWindow -->
+    <!-- Message shown during a call when the WiFi network is unusable, and cellular data starts to be used for the call instead. -->
+    <string name="WifiToCellularPopupWindow__weak_wifi_switched_to_cellular">Weak Wi-Fi. Switched to cellular.</string>
 
     <!-- DeleteAccountFragment -->
     <string name="DeleteAccountFragment__deleting_your_account_will">Deleting your account will:</string>
@@ -4599,6 +4613,8 @@
     <string name="StoriesLandingItem__share">Share…</string>
     <!-- Context menu option to go to story chat -->
     <string name="StoriesLandingItem__go_to_chat">Go to chat</string>
+    <!-- Context menu option to go to story info -->
+    <string name="StoriesLandingItem__info">Info</string>
     <!-- Label when a story is pending sending -->
     <string name="StoriesLandingItem__sending">Sending…</string>
     <!-- Label when multiple stories are pending sending -->
@@ -4877,7 +4893,7 @@
     <string name="ExpandModel__view_more">View more</string>
     <string name="StoriesLinkPopup__visit_link">Visit link</string>
 
-    <!-- Duration and price information -->
+    <!-- Gift price and duration, formatted as: {price} dot {n} day duration -->
     <plurals name="GiftRowItem_s_dot_d_day_duration">
         <item quantity="one">%1$s · %2$d day duration</item>
         <item quantity="other">%1$s · %2$d day duration</item>
@@ -5021,7 +5037,10 @@
     <!-- Title of safety number review fragment -->
     <string name="SafetyNumberReviewConnectionsFragment__safety_number_changes">Safety number changes</string>
     <!-- Message of safety number review fragment -->
-    <string name="SafetyNumberReviewConnectionsFragment__d_recipients_may_have">%1$d recipients may have reinstalled Signal or changed devices. Tap a recipient to confirm the new safety number. This is optional.</string>
+    <plurals name="SafetyNumberReviewConnectionsFragment__d_recipients_may_have">
+        <item quantity="one">%1$d recipient may have reinstalled Signal or changed devices. Tap a recipient to confirm the new safety number. This is optional.</item>
+        <item quantity="other">%1$d recipients may have reinstalled Signal or changed devices. Tap a recipient to confirm the new safety number. This is optional.</item>
+    </plurals>
     <!-- Section header for 1:1 contacts in review fragment -->
     <string name="SafetyNumberBucketRowItem__contacts">Contacts</string>
     <!-- Context menu label for distribution list headers in review fragment -->
@@ -5039,6 +5058,19 @@
     <string name="ChooseInitialMyStoryMembershipFragment__all_signal_connections_except">All Signal connections except…</string>
     <!-- Only with selected connections option for initial My Story settings configuration shown when sending to My Story for the first time -->
     <string name="ChooseInitialMyStoryMembershipFragment__only_share_with">Only share with…</string>
+
+    <!-- Story info header sent heading -->
+    <string name="StoryInfoHeader__sent">Sent</string>
+    <!-- Story info header received heading -->
+    <string name="StoryInfoHeader__received">Received</string>
+    <!-- Story info header file size heading -->
+    <string name="StoryInfoHeader__file_size">File size</string>
+    <!-- Story info "Sent to" header -->
+    <string name="StoryInfoBottomSheetDialogFragment__sent_to">Sent to</string>
+    <!-- Story info "Sent from" header -->
+    <string name="StoryInfoBottomSheetDialogFragment__sent_from">Sent from</string>
+    <!-- Story Info context menu label -->
+    <string name="StoryInfoBottomSheetDialogFragment__info">Info</string>
 
     <!-- EOF -->
 

@@ -123,10 +123,8 @@ object Stories {
   @WorkerThread
   private fun enqueueAttachmentsFromStoryForDownloadSync(record: MmsMessageRecord, ignoreAutoDownloadConstraints: Boolean) {
     SignalDatabase.attachments.getAttachmentsForMessage(record.id).filterNot { it.isSticker }.forEach {
-      if (it.transferState == AttachmentDatabase.TRANSFER_PROGRESS_PENDING) {
-        val job = AttachmentDownloadJob(record.id, it.attachmentId, ignoreAutoDownloadConstraints)
-        ApplicationDependencies.getJobManager().add(job)
-      }
+      val job = AttachmentDownloadJob(record.id, it.attachmentId, ignoreAutoDownloadConstraints)
+      ApplicationDependencies.getJobManager().add(job)
     }
 
     if (record.hasLinkPreview()) {
@@ -184,6 +182,23 @@ object Stories {
        * Valid to send because the content does not have a duration.
        */
       object None : DurationResult()
+    }
+
+    @JvmStatic
+    @WorkerThread
+    fun canPreUploadMedia(media: Media): Boolean {
+      return if (MediaUtil.isVideo(media.mimeType)) {
+        getSendRequirements(media) != SendRequirements.REQUIRES_CLIP
+      } else {
+        !hasHighQualityTransform(media)
+      }
+    }
+
+    /**
+     * Checkst to see if the given media has the "High Quality" toggled in its transform properties.
+     */
+    fun hasHighQualityTransform(media: Media): Boolean {
+      return MediaUtil.isImageType(media.mimeType) && media.transformProperties.map { it.sentMediaQuality == SentMediaQuality.HIGH.code }.orElse(false)
     }
 
     @JvmStatic

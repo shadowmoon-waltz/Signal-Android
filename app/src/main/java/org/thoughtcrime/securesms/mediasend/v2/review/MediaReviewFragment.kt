@@ -290,8 +290,8 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment) {
   private fun presentImageQualityToggle(quality: SentMediaQuality) {
     qualityButton.setImageResource(
       when (quality) {
-        SentMediaQuality.STANDARD -> R.drawable.ic_sq_36
-        SentMediaQuality.HIGH -> R.drawable.ic_hq_36
+        SentMediaQuality.STANDARD -> R.drawable.ic_sq_24
+        SentMediaQuality.HIGH -> R.drawable.ic_hq_24
       }
     )
   }
@@ -455,7 +455,7 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment) {
   private fun computeQualityButtonAnimators(state: MediaSelectionState): List<Animator> {
     val slide = listOf(MediaReviewAnimatorController.getSlideInAnimator(qualityButton))
 
-    return slide + if (state.isTouchEnabled && state.selectedMedia.any { MediaUtil.isImageType(it.mimeType) }) {
+    return slide + if (state.isTouchEnabled && !state.isStory && state.selectedMedia.any { MediaUtil.isImageType(it.mimeType) }) {
       listOf(MediaReviewAnimatorController.getFadeInAnimator(qualityButton))
     } else {
       listOf(MediaReviewAnimatorController.getFadeOutAnimator(qualityButton))
