@@ -128,7 +128,7 @@ public class ConversationIntents {
                       arguments.getBoolean(EXTRA_FIRST_TIME_IN_SELF_CREATED_GROUP, false),
                       arguments.getBoolean(EXTRA_WITH_SEARCH_OPEN, false),
                       arguments.getParcelable(EXTRA_GIFT_BADGE),
-                      arguments.getBooleanExtra(EXTRA_IS_VIDEO_GIF, false));
+                      arguments.getBoolean(EXTRA_IS_VIDEO_GIF, false));
     }
 
     private Args(@NonNull RecipientId recipientId,
