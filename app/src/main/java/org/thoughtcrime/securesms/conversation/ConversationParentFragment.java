@@ -453,10 +453,7 @@ public class ConversationParentFragment extends Fragment
   private LiveRecipient recipient;
   private long          threadId;
   private int           distributionType;
-  private boolean       isSecureText;
-  private boolean       isDefaultSms;
   private int           reactWithAnyEmojiStartPage    = -1;
-  private boolean       isSecurityInitialized         = false;
   private boolean       isSearchRequested             = false;
   private boolean       hasProcessedShareData         = false;
 
@@ -503,7 +500,6 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    isDefaultSms             = Util.isDefaultSmsProvider(requireContext());
     voiceNoteMediaController = new VoiceNoteMediaController(requireActivity());
     voiceRecorderWakeLock    = new VoiceRecorderWakeLock(requireActivity());
 
@@ -549,12 +545,10 @@ public class ConversationParentFragment extends Fragment
     initializePendingRequestsBanner();
     initializeGroupV1MigrationsBanners();
 
-    Flowable<ConversationSecurityInfo> observableSecurityInfo = viewModel.getConversationState()
-                                                                         .map(ConversationState::getSecurityInfo)
-                                                                         .filter(ConversationSecurityInfo::isInitialized);
+    Flowable<ConversationSecurityInfo> observableSecurityInfo = viewModel.getConversationSecurityInfo(args.getRecipientId());
 
-    disposables.add(observableSecurityInfo.subscribe(securityInfo -> handleSecurityChange(securityInfo.isPushAvailable(), securityInfo.isDefaultSmsApplication())));
-    disposables.add(viewModel.getConversationSecurityInfo(args.getRecipientId()).firstOrError().subscribe(unused -> onInitialSecurityConfigurationLoaded()));
+    disposables.add(observableSecurityInfo.subscribe(this::handleSecurityChange));
+    disposables.add(observableSecurityInfo.firstOrError().subscribe(unused -> onInitialSecurityConfigurationLoaded()));
 
     initializeInsightObserver();
     initializeActionBar();
@@ -591,7 +585,7 @@ public class ConversationParentFragment extends Fragment
     Recipient recipientSnapshot = recipient.get();
 
     titleView.setTitle(glideRequests, recipientSnapshot);
-    setBlockedUserState(recipientSnapshot, isSecureText, isDefaultSms);
+    setBlockedUserState(recipientSnapshot, viewModel.getConversationStateSnapshot().getSecurityInfo());
     calculateCharactersRemaining();
 
     if (recipientSnapshot.getGroupId().isPresent() && recipientSnapshot.getGroupId().get().isV2() && !recipientSnapshot.isBlocked()) {
@@ -690,7 +684,7 @@ public class ConversationParentFragment extends Fragment
       setMedia(data.getData(), MediaType.AUDIO);
       break;
     case PICK_CONTACT:
-      if (isSecureText && !isSmsForced()) {
+      if (viewModel.isPushAvailable() && !isSmsForced()) {
         openContactShareEditor(data.getData());
       } else {
         addAttachmentContactInfo(data.getData());
@@ -705,7 +699,7 @@ public class ConversationParentFragment extends Fragment
       onRecipientChanged(recipientSnapshot);
       titleView.setTitle(glideRequests, recipientSnapshot);
       NotificationChannels.updateContactChannelName(requireContext(), recipientSnapshot);
-      setBlockedUserState(recipientSnapshot, isSecureText, isDefaultSms);
+      setBlockedUserState(recipientSnapshot, viewModel.getConversationStateSnapshot().getSecurityInfo());
       invalidateOptionsMenu();
       break;
     case TAKE_PHOTO:
@@ -815,8 +809,9 @@ public class ConversationParentFragment extends Fragment
 
   private void onInitialSecurityConfigurationLoaded() {
     Log.d(TAG, "Initial security configuration loaded.");
-    if (isDetached()) {
-      Log.w(TAG, "Fragment has become detached. Ignoring configuration call.");
+    if (getContext() == null) {
+      Log.w(TAG, "Fragment has become detached from context. Ignoring configuration call.");
+      return;
     }
 
     initializeProfiles();
@@ -826,6 +821,12 @@ public class ConversationParentFragment extends Fragment
     initializeDraft(viewModel.getArgs()).addListener(new AssertedSuccessListener<Boolean>() {
       @Override
       public void onSuccess(Boolean loadedDraft) {
+        Log.d(TAG, "Initial security configuration loaded.");
+        if (getContext() == null) {
+          Log.w(TAG, "Fragment has become detached from context. Ignoring draft load.");
+          return;
+        }
+
         if (loadedDraft != null && loadedDraft) {
           Log.i(TAG, "Finished loading draft");
           ThreadUtil.runOnMain(() -> {
@@ -837,7 +838,7 @@ public class ConversationParentFragment extends Fragment
           });
         }
 
-        if (TextSecurePreferences.isTypingIndicatorsEnabled(requireContext())) {
+        if (TextSecurePreferences.isTypingIndicatorsEnabled(ApplicationDependencies.getApplication())) {
           composeText.addTextChangedListener(typingTextWatcher);
         }
         composeText.setSelection(composeText.length(), composeText.length());
@@ -907,7 +908,7 @@ public class ConversationParentFragment extends Fragment
       super.onCreateOptionsMenu(menu, inflater);
     }
 
-    if (isSecureText) {
+    if (viewModel.isPushAvailable()) {
       if (recipient.get().getExpiresInSeconds() > 0) {
         if (!isInActiveGroup) {
           inflater.inflate(R.menu.conversation_expiring_on, menu);
@@ -922,7 +923,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     if (isSingleConversation()) {
-      if (isSecureText)                           inflater.inflate(R.menu.conversation_callable_secure, menu);
+      if (viewModel.isPushAvailable())            inflater.inflate(R.menu.conversation_callable_secure, menu);
       else if (!recipient.get().isReleaseNotes()) inflater.inflate(R.menu.conversation_callable_insecure, menu);
     } else if (isGroupConversation()) {
       if (isActiveV2Group && Build.VERSION.SDK_INT > 19) {
@@ -957,7 +958,7 @@ public class ConversationParentFragment extends Fragment
       hideMenuItem(menu, R.id.menu_conversation_settings);
     }
 
-    if (isSingleConversation() && !isSecureText && !recipient.get().isReleaseNotes()) {
+    if (isSingleConversation() && !viewModel.isPushAvailable() && !recipient.get().isReleaseNotes()) {
       inflater.inflate(R.menu.conversation_insecure, menu);
     }
 
@@ -969,7 +970,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     if (recipient != null && recipient.get().isSelf()) {
-      if (isSecureText) {
+      if (viewModel.isPushAvailable()) {
         hideMenuItem(menu, R.id.menu_call_secure);
         hideMenuItem(menu, R.id.menu_video_secure);
       } else {
@@ -980,7 +981,7 @@ public class ConversationParentFragment extends Fragment
     }
 
     if (recipient != null && recipient.get().isBlocked()) {
-      if (isSecureText) {
+      if (viewModel.isPushAvailable()) {
         hideMenuItem(menu, R.id.menu_call_secure);
         hideMenuItem(menu, R.id.menu_video_secure);
         hideMenuItem(menu, R.id.menu_expiring_messages);
@@ -1065,7 +1066,7 @@ public class ConversationParentFragment extends Fragment
         searchNav.setVisibility(View.GONE);
         inputPanel.setHideForSearch(false);
         viewModel.setSearchQuery(null);
-        setBlockedUserState(recipient.get(), isSecureText, isDefaultSms);
+        setBlockedUserState(recipient.get(), viewModel.getConversationStateSnapshot().getSecurityInfo());
         invalidateOptionsMenu();
         return true;
       }
@@ -1307,7 +1308,7 @@ public class ConversationParentFragment extends Fragment
   private void handleInviteLink() {
     String inviteText = getString(R.string.ConversationActivity_lets_switch_to_signal, getString(R.string.install_url));
 
-    if (isDefaultSms) {
+    if (viewModel.isDefaultSmsApplication()) {
       composeText.appendInvite(inviteText);
     } else {
       Intent intent = new Intent(Intent.ACTION_SENDTO);
@@ -1529,7 +1530,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void handleAddAttachment() {
-    if (viewModel.getConversationStateSnapshot().isMmsEnabled() || isSecureText) {
+    if (viewModel.getConversationStateSnapshot().isMmsEnabled() || viewModel.isPushAvailable()) {
       viewModel.getRecentMedia().removeObservers(this);
 
       if (attachmentKeyboardStub.resolved() && container.isInputOpen() && container.getCurrentInput() == attachmentKeyboardStub.get()) {
@@ -1603,14 +1604,11 @@ public class ConversationParentFragment extends Fragment
   @Override
   public void onCanceled() { }
 
-  private void handleSecurityChange(boolean isSecureText, boolean isDefaultSms) {
-    Log.i(TAG, "handleSecurityChange(" + isSecureText + ", " + isDefaultSms + ")");
+  private void handleSecurityChange(@NonNull ConversationSecurityInfo conversationSecurityInfo) {
+    Log.i(TAG, "handleSecurityChange(" + conversationSecurityInfo + ")");
 
-    this.isSecureText          = isSecureText;
-    this.isDefaultSms          = isDefaultSms;
-    this.isSecurityInitialized = true;
-
-    boolean isMediaMessage = recipient.get().isMmsGroup() || attachmentManager.isAttachmentPresent();
+    boolean isPushAvailable = conversationSecurityInfo.isPushAvailable();
+    boolean isMediaMessage  = recipient.get().isMmsGroup() || attachmentManager.isAttachmentPresent();
 
     sendButton.resetAvailableTransports(isMediaMessage);
 
@@ -1621,14 +1619,14 @@ public class ConversationParentFragment extends Fragment
       smsEnabled = false;
     }
 
-    if (!isSecureText && !isPushGroupConversation() && !recipient.get().isServiceIdOnly() && !recipient.get().isReleaseNotes() && smsEnabled) {
+    if (!isPushAvailable && !isPushGroupConversation() && !recipient.get().isServiceIdOnly() && !recipient.get().isReleaseNotes() && smsEnabled) {
       sendButton.disableTransportType(MessageSendType.TransportType.SIGNAL);
     }
 
     if (!recipient.get().isPushGroup() && recipient.get().isForceSmsSelection() && smsEnabled) {
       sendButton.setDefaultTransport(MessageSendType.TransportType.SMS);
     } else {
-      if (isSecureText || isPushGroupConversation() || recipient.get().isServiceIdOnly() || recipient.get().isReleaseNotes() || !smsEnabled) {
+      if (isPushAvailable || isPushGroupConversation() || recipient.get().isServiceIdOnly() || recipient.get().isReleaseNotes() || !smsEnabled) {
         sendButton.setDefaultTransport(MessageSendType.TransportType.SIGNAL);
       } else {
         sendButton.setDefaultTransport(MessageSendType.TransportType.SMS);
@@ -1637,7 +1635,7 @@ public class ConversationParentFragment extends Fragment
 
     calculateCharactersRemaining();
     invalidateOptionsMenu();
-    setBlockedUserState(recipient.get(), isSecureText, isDefaultSms);
+    setBlockedUserState(recipient.get(), conversationSecurityInfo);
     onSecurityUpdated();
   }
 
@@ -1919,7 +1917,7 @@ public class ConversationParentFragment extends Fragment
       reminderView.get().showReminder(new ServiceOutageReminder(context));
     } else if (SignalStore.account().isRegistered()                 &&
                TextSecurePreferences.isShowInviteReminders(context) &&
-               !isSecureText                                        &&
+               !viewModel.isPushAvailable()                         &&
                inviteReminder.isPresent()                           &&
                !recipient.get().isGroup()) {
       reminderView.get().setOnActionClickListener(this::handleReminderAction);
@@ -2029,7 +2027,7 @@ public class ConversationParentFragment extends Fragment
           unverifiedBannerView.get().hide();
         }
 
-        titleView.setVerified(isSecureText && identityRecords.isVerified() && !recipient.get().isSelf());
+        titleView.setVerified(viewModel.isPushAvailable() && identityRecords.isVerified() && !recipient.get().isSelf());
 
         future.set(true);
       }
@@ -2562,7 +2560,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void initializeProfiles() {
-    if (!isSecureText) {
+    if (!viewModel.isPushAvailable()) {
       Log.i(TAG, "SMS contact, no profile fetch needed.");
       return;
     }
@@ -2583,7 +2581,7 @@ public class ConversationParentFragment extends Fragment
     Log.i(TAG, "onModified(" + recipient.getId() + ") " + recipient.getRegistered());
     titleView.setTitle(glideRequests, recipient);
     titleView.setVerified(identityRecords.isVerified() && !recipient.isSelf());
-    setBlockedUserState(recipient, isSecureText, isDefaultSms);
+    setBlockedUserState(recipient, viewModel.getConversationStateSnapshot().getSecurityInfo());
     updateReminders();
     updateDefaultSubscriptionId(recipient.getDefaultSubscriptionId());
     updatePaymentsAvailable();
@@ -2672,7 +2670,7 @@ public class ConversationParentFragment extends Fragment
       return new SettableFuture<>(false);
     }
 
-    if (MediaType.VCARD.equals(mediaType) && isSecureText) {
+    if (MediaType.VCARD.equals(mediaType) && viewModel.isPushAvailable()) {
       openContactShareEditor(uri);
       return new SettableFuture<>(false);
     } else if (MediaType.IMAGE.equals(mediaType) || MediaType.GIF.equals(mediaType) || MediaType.VIDEO.equals(mediaType)) {
@@ -2822,13 +2820,18 @@ public class ConversationParentFragment extends Fragment
     return future;
   }
 
-  private void setBlockedUserState(Recipient recipient, boolean isSecureText, boolean isDefaultSms) {
-    if (!isSecureText && isPushGroupConversation()) {
+  private void setBlockedUserState(Recipient recipient, @NonNull ConversationSecurityInfo conversationSecurityInfo) {
+    if (!conversationSecurityInfo.isInitialized()) {
+      Log.i(TAG, "Ignoring blocked state update for uninitialized security info.");
+      return;
+    }
+
+    if (!conversationSecurityInfo.isPushAvailable() && isPushGroupConversation()) {
       unblockButton.setVisibility(View.GONE);
       inputPanel.setHideForBlockedState(true);
       makeDefaultSmsButton.setVisibility(View.GONE);
       registerButton.setVisibility(View.VISIBLE);
-    } else if (!isSecureText && !isDefaultSms && recipient.hasSmsAddress()) {
+    } else if (!conversationSecurityInfo.isPushAvailable() && !conversationSecurityInfo.isDefaultSmsApplication() && recipient.hasSmsAddress()) {
       unblockButton.setVisibility(View.GONE);
       inputPanel.setHideForBlockedState(true);
       makeDefaultSmsButton.setVisibility(View.VISIBLE);
@@ -3100,7 +3103,7 @@ public class ConversationParentFragment extends Fragment
                                                   final boolean clearComposeBox,
                                                   final @Nullable String metricId)
   {
-    if (!isDefaultSms && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
+    if (!viewModel.isDefaultSmsApplication() && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
       showDefaultSmsPrompt();
       return new SettableFuture<>(null);
     }
@@ -3160,7 +3163,7 @@ public class ConversationParentFragment extends Fragment
   private void sendTextMessage(@NonNull MessageSendType sendType, final long expiresIn, final boolean initiating, final @Nullable String metricId)
       throws InvalidMessageException
   {
-    if (!isDefaultSms && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
+    if (!viewModel.isDefaultSmsApplication() && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
       showDefaultSmsPrompt();
       return;
     }
@@ -3243,7 +3246,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void updateLinkPreviewState() {
-    if (SignalStore.settings().isLinkPreviewsEnabled() && isSecureText && !sendButton.getSelectedSendType().usesSmsTransport() && !attachmentManager.isAttachmentPresent() && getContext() != null) {
+    if (SignalStore.settings().isLinkPreviewsEnabled() && viewModel.isPushAvailable() && !sendButton.getSelectedSendType().usesSmsTransport() && !attachmentManager.isAttachmentPresent() && getContext() != null) {
       linkPreviewViewModel.onEnabled();
       linkPreviewViewModel.onTextChanged(requireContext(), composeText.getTextTrimmed().toString(), composeText.getSelectionStart(), composeText.getSelectionEnd());
     } else {
@@ -3518,7 +3521,7 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public boolean isMms() {
-    return !isSecureText;
+    return !viewModel.isPushAvailable();
   }
 
   @Override
@@ -3705,7 +3708,7 @@ public class ConversationParentFragment extends Fragment
 
     @Override
     public void onTextChanged(String text) {
-      if (enabled && threadId > 0 && isSecureText && !isSmsForced() && !recipient.get().isBlocked() && !recipient.get().isSelf()) {
+      if (enabled && threadId > 0 && viewModel.isPushAvailable() && !isSmsForced() && !recipient.get().isBlocked() && !recipient.get().isSelf()) {
         TypingStatusSender typingStatusSender = ApplicationDependencies.getTypingStatusSender();
 
         if (text.length() == 0) {
@@ -4029,7 +4032,7 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void onAttachmentChanged() {
-    handleSecurityChange(isSecureText, isDefaultSms);
+    handleSecurityChange(viewModel.getConversationStateSnapshot().getSecurityInfo());
     updateToggleButtonState();
     updateLinkPreviewState();
   }
