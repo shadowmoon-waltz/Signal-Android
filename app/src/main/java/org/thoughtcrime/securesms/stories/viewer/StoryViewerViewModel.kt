@@ -51,6 +51,8 @@ class StoryViewerViewModel(
   var hasConsumedInitialState = false
     private set
 
+  val isChildScrolling: Observable<Boolean> = childScrollStatePublisher.distinctUntilChanged()
+
   init {
     refresh()
   }
@@ -87,7 +89,8 @@ class StoryViewerViewModel(
     } else {
       repository.getStories(
         hiddenStories = storyViewerArgs.isInHiddenStoryMode,
-        unviewedOnly = storyViewerArgs.isUnviewedOnly
+        unviewedOnly = storyViewerArgs.isUnviewedOnly,
+        isOutgoingOnly = storyViewerArgs.isFromMyStories
       )
     }
   }

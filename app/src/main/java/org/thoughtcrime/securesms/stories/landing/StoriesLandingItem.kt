@@ -43,6 +43,7 @@ object StoriesLandingItem {
 
   class Model(
     val data: StoriesLandingItemData,
+    val onAvatarClick: () -> Unit,
     val onRowClick: (Model, View) -> Unit,
     val onHideStory: (Model) -> Unit,
     val onForwardStory: (Model) -> Unit,
@@ -104,6 +105,7 @@ object StoriesLandingItem {
     private val date: TextView = itemView.findViewById(R.id.date)
     private val icon: ImageView = itemView.findViewById(R.id.icon)
     private val errorIndicator: View = itemView.findViewById(R.id.error_indicator)
+    private val addToStoriesView: View = itemView.findViewById(R.id.add_to_story)
 
     override fun bind(model: Model) {
 
@@ -116,7 +118,7 @@ object StoriesLandingItem {
 
       if (model.data.storyRecipient.isMyStory) {
         avatarView.displayProfileAvatar(Recipient.self())
-        badgeView.setBadgeFromRecipient(Recipient.self())
+        badgeView.setBadgeFromRecipient(null)
       } else {
         avatarView.displayProfileAvatar(model.data.storyRecipient)
         badgeView.setBadgeFromRecipient(model.data.storyRecipient)
@@ -233,20 +235,23 @@ object StoriesLandingItem {
 
       if (model.data.storyRecipient.isMyStory) {
         itemView.setOnLongClickListener(null)
+        avatarView.setOnClickListener {
+          model.onAvatarClick()
+        }
+        addToStoriesView.visible = true
       } else {
         itemView.setOnLongClickListener {
           displayContext(model)
           true
         }
+        avatarView.setOnClickListener(null)
+        avatarView.isClickable = false
+        addToStoriesView.visible = false
       }
     }
 
     private fun getGroupPresentation(model: Model): String {
-      return context.getString(
-        R.string.StoryViewerPageFragment__s_to_s,
-        getIndividualPresentation(model),
-        model.data.storyRecipient.getDisplayName(context)
-      )
+      return model.data.storyRecipient.getDisplayName(context)
     }
 
     private fun getReleaseNotesPresentation(model: Model): CharSequence {
@@ -256,14 +261,6 @@ object StoriesLandingItem {
       SpanUtil.appendCenteredImageSpan(name, official, 20, 20)
 
       return name
-    }
-
-    private fun getIndividualPresentation(model: Model): String {
-      return if (model.data.primaryStory.messageRecord.isOutgoing) {
-        context.getString(R.string.Recipient_you)
-      } else {
-        model.data.individualRecipient.getDisplayName(context)
-      }
     }
 
     private fun displayContext(model: Model) {

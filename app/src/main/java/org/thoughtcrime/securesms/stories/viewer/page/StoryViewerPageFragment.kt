@@ -115,6 +115,7 @@ class StoryViewerPageFragment :
         storyRecipientId,
         initialStoryId,
         isUnviewedOnly,
+        isOutgoingOnly,
         StoryViewerPageRepository(
           requireContext()
         ),
@@ -149,6 +150,9 @@ class StoryViewerPageFragment :
 
   private val isUnviewedOnly: Boolean
     get() = requireArguments().getBoolean(ARG_IS_UNVIEWED_ONLY, false)
+
+  private val isOutgoingOnly: Boolean
+    get() = requireArguments().getBoolean(ARG_IS_OUTGOING_ONLY, false)
 
   private val isFromInfoContextMenuAction: Boolean
     get() = requireArguments().getBoolean(ARG_IS_FROM_INFO_CONTEXT_MENU_ACTION, false)
@@ -235,6 +239,7 @@ class StoryViewerPageFragment :
         if ((canCloseFromHorizontalSlide || canCloseFromVerticalSlide) && event.actionMasked == MotionEvent.ACTION_UP) {
           requireActivity().onBackPressed()
         } else {
+          sharedViewModel.setIsChildScrolling(false)
           requireView().animate()
             .setInterpolator(StoryGestureListener.INTERPOLATOR)
             .setDuration(100)
@@ -292,6 +297,10 @@ class StoryViewerPageFragment :
 
     sharedViewModel.isScrolling.observe(viewLifecycleOwner) { isScrolling ->
       viewModel.setIsUserScrollingParent(isScrolling)
+    }
+
+    lifecycleDisposable += sharedViewModel.isChildScrolling.subscribe {
+      viewModel.setIsUserScrollingChild(it)
     }
 
     lifecycleDisposable += storyVolumeViewModel.state.distinctUntilChanged().observeOn(AndroidSchedulers.mainThread()).subscribe { volumeState ->
@@ -858,11 +867,13 @@ class StoryViewerPageFragment :
     if (Recipient.self() == post.sender) {
       if (isReceiptsEnabled) {
         if (post.replyCount == 0) {
-          viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_24)
+          viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_bold_16)
+          viewsAndReplies.iconSize = DimensionUnit.DP.toPixels(16f).toInt()
           viewsAndReplies.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
           viewsAndReplies.text = views
         } else {
-          viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_24)
+          viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_bold_16)
+          viewsAndReplies.iconSize = DimensionUnit.DP.toPixels(16f).toInt()
           viewsAndReplies.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
           viewsAndReplies.text = getString(R.string.StoryViewerFragment__s_s, views, replies)
         }
@@ -871,21 +882,25 @@ class StoryViewerPageFragment :
           viewsAndReplies.icon = null
           viewsAndReplies.setText(R.string.StoryViewerPageFragment__views_off)
         } else {
-          viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_24)
+          viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_bold_16)
+          viewsAndReplies.iconSize = DimensionUnit.DP.toPixels(16f).toInt()
           viewsAndReplies.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
           viewsAndReplies.text = replies
         }
       }
     } else if (post.replyCount > 0) {
-      viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_24)
+      viewsAndReplies.setIconResource(R.drawable.ic_chevron_end_bold_16)
+      viewsAndReplies.iconSize = DimensionUnit.DP.toPixels(16f).toInt()
       viewsAndReplies.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_END
       viewsAndReplies.text = replies
     } else if (post.group != null) {
       viewsAndReplies.setIconResource(R.drawable.ic_reply_24_outline)
+      viewsAndReplies.iconSize = DimensionUnit.DP.toPixels(24f).toInt()
       viewsAndReplies.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_START
       viewsAndReplies.setText(R.string.StoryViewerPageFragment__reply_to_group)
     } else {
       viewsAndReplies.setIconResource(R.drawable.ic_reply_24_outline)
+      viewsAndReplies.iconSize = DimensionUnit.DP.toPixels(24f).toInt()
       viewsAndReplies.iconGravity = MaterialButton.ICON_GRAVITY_TEXT_START
       viewsAndReplies.setText(R.string.StoryViewerPageFragment__reply)
     }
@@ -974,6 +989,7 @@ class StoryViewerPageFragment :
     private const val ARG_IS_FROM_NOTIFICATION = "is_from_notification"
     private const val ARG_GROUP_REPLY_START_POSITION = "group_reply_start_position"
     private const val ARG_IS_UNVIEWED_ONLY = "is_unviewed_only"
+    private const val ARG_IS_OUTGOING_ONLY = "is_outgoing_only"
     private const val ARG_IS_FROM_INFO_CONTEXT_MENU_ACTION = "is_from_info_context_menu_action"
 
     fun create(
@@ -982,6 +998,7 @@ class StoryViewerPageFragment :
       isFromNotification: Boolean,
       groupReplyStartPosition: Int,
       isUnviewedOnly: Boolean,
+      isOutgoingOnly: Boolean,
       isFromInfoContextMenuAction: Boolean
     ): Fragment {
       return StoryViewerPageFragment().apply {
@@ -991,7 +1008,8 @@ class StoryViewerPageFragment :
           ARG_IS_FROM_NOTIFICATION to isFromNotification,
           ARG_GROUP_REPLY_START_POSITION to groupReplyStartPosition,
           ARG_IS_UNVIEWED_ONLY to isUnviewedOnly,
-          ARG_IS_FROM_INFO_CONTEXT_MENU_ACTION to isFromInfoContextMenuAction
+          ARG_IS_OUTGOING_ONLY to isOutgoingOnly,
+          ARG_IS_FROM_INFO_CONTEXT_MENU_ACTION to isFromInfoContextMenuAction,
         )
       }
     }
