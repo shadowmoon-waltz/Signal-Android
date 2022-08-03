@@ -6,7 +6,7 @@ dependencyResolutionManagement {
         libs {
             version('libsignal-client', '0.18.1')
             version('exoplayer', '2.15.0')
-            version('androidx-camera', '1.0.0-beta11')
+            version('androidx-camera', '1.1.0')
             version('androidx-lifecycle', '2.3.1')
             version('mp4parser', '1.9.39')
             version('kotlin', '1.6.21')
@@ -42,7 +42,7 @@ dependencyResolutionManagement {
             alias('androidx-camera-core').to('androidx.camera', 'camera-core').versionRef('androidx-camera')
             alias('androidx-camera-camera2').to('androidx.camera', 'camera-camera2').versionRef('androidx-camera')
             alias('androidx-camera-lifecycle').to('androidx.camera', 'camera-lifecycle').versionRef('androidx-camera')
-            alias('androidx-camera-view').to('androidx.camera:camera-view:1.0.0-alpha18')
+            alias('androidx-camera-view').to('androidx.camera', 'camera-view').versionRef('androidx-camera')
             alias('androidx-concurrent-futures').to('androidx.concurrent:concurrent-futures:1.0.0')
             alias('androidx-autofill').to('androidx.autofill:autofill:1.0.0')
             alias('androidx-biometric').to('androidx.biometric:biometric:1.1.0')
@@ -77,7 +77,7 @@ dependencyResolutionManagement {
             alias('libsignal-android').to('org.signal', 'libsignal-android').versionRef('libsignal-client')
             alias('signal-aesgcmprovider').to('org.signal:aesgcmprovider:0.0.3')
             alias('signal-argon2').to('org.signal:argon2:13.1')
-            alias('signal-ringrtc').to('org.signal:ringrtc-android:2.20.12')
+            alias('signal-ringrtc').to('org.signal:ringrtc-android:2.20.13')
             alias('signal-android-database-sqlcipher').to('org.signal:android-database-sqlcipher:4.4.3-S8')
 
             // Third Party
@@ -92,7 +92,7 @@ dependencyResolutionManagement {
             alias('rxjava3-rxkotlin').to('io.reactivex.rxjava3:rxkotlin:3.0.1')
             alias('rxdogtag').to('com.uber.rxdogtag2:rxdogtag:2.0.1')
             alias('conscrypt-android').to('org.conscrypt:conscrypt-android:2.0.0')
-            alias('mobilecoin').to('com.mobilecoin:android-sdk:1.1.0')
+            alias('mobilecoin').to('com.mobilecoin:android-sdk:1.2.2.1')
             alias('leolin-shortcutbadger').to('me.leolin:ShortcutBadger:1.1.22')
             alias('emilsjolander-stickylistheaders').to('se.emilsjolander:stickylistheaders:2.7.0')
             alias('jpardogo-materialtabstrip').to('com.jpardogo.materialtabstrip:library:1.0.9')

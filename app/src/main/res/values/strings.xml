@@ -59,6 +59,20 @@
     <string name="ApplicationPreferencesActivity_record_phrase">Record phrase</string>
     <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Before you can disable your PIN, you must record your payments recovery phrase to ensure you can recover your payments account.</string>
 
+    <!-- NumericKeyboardView -->
+    <string name="NumericKeyboardView__1" translatable="false">1</string>
+    <string name="NumericKeyboardView__2" translatable="false">2</string>
+    <string name="NumericKeyboardView__3" translatable="false">3</string>
+    <string name="NumericKeyboardView__4" translatable="false">4</string>
+    <string name="NumericKeyboardView__5" translatable="false">5</string>
+    <string name="NumericKeyboardView__6" translatable="false">6</string>
+    <string name="NumericKeyboardView__7" translatable="false">7</string>
+    <string name="NumericKeyboardView__8" translatable="false">8</string>
+    <string name="NumericKeyboardView__9" translatable="false">9</string>
+    <string name="NumericKeyboardView__0" translatable="false">0</string>
+    <!-- Back button on numeric keyboard -->
+    <string name="NumericKeyboardView__backspace">Backspace</string>
+
     <!-- AppProtectionPreferenceFragment -->
     <plurals name="AppProtectionPreferenceFragment_minutes">
         <item quantity="one">%d minute</item>
@@ -2684,7 +2698,7 @@
 
     <!-- Internal only preferences -->
     <string name="preferences__internal_clear_onboarding_state" translatable="false">Clear onboarding state</string>
-    <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string>
+    <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories" translatable="false">Clears onboarding flag and triggers download of onboarding stories.</string>
     <string name="preferences__internal_preferences" translatable="false">Internal Preferences</string>
     <string name="preferences__internal_preferences_groups_v2" translatable="false">Groups V2</string>
     <string name="preferences__internal_preferences_groups_v1_migration" translatable="false">Groups V1 Migration</string>
@@ -4682,6 +4696,14 @@
     <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Enable read receipts to see who\'s viewed your stories.</string>
     <!-- Button label displayed when user has disabled receipts -->
     <string name="StoryViewsFragment__go_to_settings">Go to settings</string>
+    <!-- Dialog action to remove viewer from a story -->
+    <string name="StoryViewsFragment__remove">Remove</string>
+    <!-- Dialog title when removing a viewer from a story -->
+    <string name="StoryViewsFragment__remove_viewer">Remove viewer?</string>
+    <!-- Dialog message when removing a viewer from a story -->
+    <string name="StoryViewsFragment__s_will_still_be_able">%1$s will still be able to view this post, but will not be able to view any future posts you share to %2$s.</string>
+    <!-- Story View context menu action to remove them from a story -->
+    <string name="StoryViewItem__remove_viewer">Remove viewer</string>
     <!-- Displayed when a story has no replies yet -->
     <string name="StoryGroupReplyFragment__no_replies_yet">No replies yet</string>
     <!-- Displayed for each user that reacted to a story when viewing replies -->

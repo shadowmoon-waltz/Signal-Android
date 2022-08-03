@@ -33,7 +33,8 @@ message Envelope {
   optional bytes  content         = 8; // Contains an encrypted Content
   optional string serverGuid      = 9;
   optional uint64 serverTimestamp = 10;
-  // NEXT ID: 14
+  optional bool   urgent          = 14 [default = true];
+  // NEXT ID: 15
 }
 
 message Content {
@@ -313,7 +314,7 @@ message DataMessage {
 
   optional string             body                    = 1;
   repeated AttachmentPointer  attachments             = 2;
-  optional GroupContext       group                   = 3;
+  reserved                  /*groupV1*/                 3;
   optional GroupContextV2     groupV2                 = 15;
   optional uint32             flags                   = 4;
   optional uint32             expireTimer             = 5;
@@ -433,7 +434,7 @@ message SyncMessage {
       optional bool   isAllowedToReply    = 3;
     }
 
-    reserved                          /*destinationE164*/          1;
+    optional string                     destinationE164          = 1;
     optional string                     destinationUuid          = 7;
     optional uint64                     timestamp                = 2;
     optional DataMessage                message                  = 3;
