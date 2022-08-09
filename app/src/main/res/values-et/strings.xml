@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Salvesta maksete kontroll-lause</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Salvesta lause</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Enne kui saad oma PIN-koodi desaktiveerida, pead salvestama oma maksete kontroll-lause, tagamaks, et saad oma maksekonto taastada.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Backspace</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d minut</item>
@@ -1519,6 +1522,12 @@
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Muuda</string>
   <string name="SubmitDebugLogActivity_done">Tehtud</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Salvesta</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Salvestamine nurjus</string>
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Salvestatud</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Rea kustutamiseks koputa sellel</string>
   <string name="SubmitDebugLogActivity_submit">Postita</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Silumislogi postitamine ei õnnestunud</string>
@@ -2321,7 +2330,6 @@
   <string name="preferences_enter_proxy_address">Sisesta puhverserveri aadress</string>
   <string name="configurable_single_select__customize_option">Kohanda valikut</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">Kõik toimingud</string>
   <string name="PaymentsAllActivityFragment__all">Kõik</string>
@@ -3947,6 +3955,14 @@
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Lülita lugemiskinnitused sisse, et teada, kes on sinu lugusid näinud.</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">Mine sätetesse</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Eemalda</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">Kas eemaldada vaataja?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s näeb endiselt seda postitust, kuid ei näe ühtki tulevast postitust, mida sa loos %2$s jagad.</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">Eemalda vaataja</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Vastuseid veel pole</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

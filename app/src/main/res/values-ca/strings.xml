@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Registra la frase de recuperació de pagaments</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Registra la frase</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Abans de poder desactivar el PIN, heu de registrar la frase de recuperació de pagaments per assegurar-vos que podeu recuperar el compte de pagaments.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Retrocés</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d minute</item>
@@ -1513,6 +1516,10 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Edita</string>
   <string name="SubmitDebugLogActivity_done">Fet</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Desats</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Toqueu una línia per suprimir-la</string>
   <string name="SubmitDebugLogActivity_submit">Envia</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Ha fallat enviar els registres.</string>
@@ -2315,7 +2322,6 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="preferences_enter_proxy_address">Introduïu l\'adreça del servidor intermediari</string>
   <string name="configurable_single_select__customize_option">Opció de personalització</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">Tota l\'activitat</string>
   <string name="PaymentsAllActivityFragment__all">Tot</string>
@@ -3941,6 +3947,14 @@ S\'ha rebut un missatge d\'intercanvi de claus per a una versió del protocol no
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Activa les confirmacions de lectura per veure qui ha visualitzat les teves històries.</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">Anar a ajustos</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Suprimeix</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">Eliminar espectador?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s Encara podràs veure aquesta publicació, però no podràs veure cap futura publicació que comparteixis amb %2$s</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">Eliminar espectador </string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Encara no té respostes</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

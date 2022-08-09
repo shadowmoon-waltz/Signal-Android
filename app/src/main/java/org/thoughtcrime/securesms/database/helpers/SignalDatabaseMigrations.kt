@@ -26,6 +26,7 @@ import org.thoughtcrime.securesms.conversation.colors.ChatColors
 import org.thoughtcrime.securesms.conversation.colors.ChatColorsMapper.entrySet
 import org.thoughtcrime.securesms.database.KeyValueDatabase
 import org.thoughtcrime.securesms.database.RecipientDatabase
+import org.thoughtcrime.securesms.database.helpers.migration.MyStoryMigration
 import org.thoughtcrime.securesms.database.helpers.migration.UrgentMslFlagMigration
 import org.thoughtcrime.securesms.database.model.databaseprotos.ReactionList
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
@@ -205,8 +206,10 @@ object SignalDatabaseMigrations {
   private const val MY_STORY_PRIVACY_MODE = 148
   private const val EXPIRING_PROFILE_CREDENTIALS = 149
   private const val URGENT_FLAG = 150
+  private const val MY_STORY_MIGRATION = 151
+  private const val STORY_GROUP_TYPES = 152
 
-  const val DATABASE_VERSION = 150
+  const val DATABASE_VERSION = 152
 
   @JvmStatic
   fun migrate(context: Application, db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -2668,6 +2671,20 @@ object SignalDatabaseMigrations {
 
     if (oldVersion < URGENT_FLAG) {
       UrgentMslFlagMigration.migrate(context, db, oldVersion, newVersion)
+    }
+
+    if (oldVersion < MY_STORY_MIGRATION) {
+      MyStoryMigration.migrate(context, db, oldVersion, newVersion)
+    }
+
+    if (oldVersion < STORY_GROUP_TYPES) {
+      db.execSQL(
+        """
+        UPDATE recipient
+        SET group_type = 4
+        WHERE distribution_list_id IS NOT NULL
+        """.trimIndent()
+      )
     }
   }
 

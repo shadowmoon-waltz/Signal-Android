@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">পেমেন্ট রিকভারি ফ্রেজ রেকর্ড করুন</string>
   <string name="ApplicationPreferencesActivity_record_phrase">বাক্যাংশ সংরক্ষণ</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">আপনি আপনার পিনটি নিষ্ক্রিয় করার পূর্বে, আপনার পেমেন্ট অ্যাকাউন্টটি পুনরুদ্ধার করতে সক্ষম কিনা  তা নিশ্চিত করতে আপনাকে অবশ্যই আপনার পেমেন্টের তথ্য পুনরুদ্ধারের ফ্রেজ সংরক্ষণ করতে হবে।</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">ব্যাকস্পেস</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d মিনিট</item>
@@ -1513,6 +1516,12 @@
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">সম্পাদনা</string>
   <string name="SubmitDebugLogActivity_done">শেষ</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">সংরক্ষণ করুন</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">সেভ করা সফল হয়নি</string>
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">সেভ সম্পন্ন হয়েছে</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">লাইনটিকে মুছে ফেলতে লাইনের উপর চাপুন</string>
   <string name="SubmitDebugLogActivity_submit">সাবমিট</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">বিবরণীসমূহ জমাদিতে ব্যার্থ</string>
@@ -2315,7 +2324,6 @@
   <string name="preferences_enter_proxy_address">প্রক্সি ঠিকানা লিখুন</string>
   <string name="configurable_single_select__customize_option">বিকল্পগুলি কাস্টমাইজ করুন</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">সমস্ত ক্রিয়াকলাপ</string>
   <string name="PaymentsAllActivityFragment__all">সব</string>
@@ -3942,6 +3950,14 @@
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">কে আপনার স্টোরি দেখেছে তা দেখতে রিড রিসিপ্ট চালু করুন৷</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">সেটিংস-এ যান</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">সরান</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">দর্শককে বাদ দেবেন?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s এখনও এই পোস্টটি দেখতে সক্ষম হবেন, তবে ভবিষ্যতে %2$s-এর সাথে শেয়ার করা আপনার কোনো পোস্ট দেখতে পারবেন না৷</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">দর্শককে বাদ দিন</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">এখন পর্যন্ত কোন রিপ্লাই নেই</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

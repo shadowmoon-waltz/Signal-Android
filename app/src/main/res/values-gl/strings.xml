@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Gardar frase de recuperación de pagamento.</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Gardar frase.</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Antes de poder desactivar o PIN, tes que gardar a túa frase de recuperación de pagamentos para asegurarte de que podes recuperar a conta de pagamentos.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Retroceder</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d minuto</item>
@@ -1519,6 +1522,10 @@
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Editar</string>
   <string name="SubmitDebugLogActivity_done">Feito</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Gardar</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Toca unha liña para eliminala</string>
   <string name="SubmitDebugLogActivity_submit">Enviar</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Fallo ao enviar o rexistro</string>
@@ -2321,7 +2328,6 @@
   <string name="preferences_enter_proxy_address">Escribe o enderezo do proxy</string>
   <string name="configurable_single_select__customize_option">Personalizar opción</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">Toda a actividade</string>
   <string name="PaymentsAllActivityFragment__all">Todo</string>
@@ -3947,6 +3953,14 @@
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Activar confirmacións de lectura para ver quen viu as túas historias.</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">Ir a Configuración</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Eliminar</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">Eliminar espectador?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s poderá seguir vendo esta publicación, mais non verá as seguintes publicacións que compartas en %2$s.</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">Eliminar espectador</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Sen respostas</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

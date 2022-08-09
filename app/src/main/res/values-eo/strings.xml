@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Registri la restarigan frazon pri pagoj</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Registri frazon</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Antaŭ ol vi povas malŝalti vian PIN-on, vi devas registri vian restarigan frazon pri pagoj por certigi, ke vi povos restarigi vian pagokonton.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Retropaŝo</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d minuto</item>
@@ -1510,6 +1513,10 @@ Ricevis mesaĝon pri interŝanĝo de ŝlosiloj por nevalida protokola versio.
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Modifi</string>
   <string name="SubmitDebugLogActivity_done">Farita</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Konservi</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Tuŝetu linion por forigi ĝin</string>
   <string name="SubmitDebugLogActivity_submit">Sendi</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Malsukcesa sendo de la protokoloj</string>
@@ -3916,6 +3923,11 @@ Ricevis mesaĝon pri interŝanĝo de ŝlosiloj por nevalida protokola versio.
   <string name="StoryViewsFragment__no_views_yet">Neniu vido</string>
   <!--Displayed when user has disabled receipts-->
   <!--Button label displayed when user has disabled receipts-->
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Forviŝi</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <!--Dialog message when removing a viewer from a story-->
+  <!--Story View context menu action to remove them from a story-->
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Neniu respondo</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

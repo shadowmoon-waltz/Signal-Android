@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">ថតឃ្លាសង្គ្រោះការទូទាត់</string>
   <string name="ApplicationPreferencesActivity_record_phrase">ថតឃ្លា</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">មុនពេលអ្នកអាចបិទលេខកូដ PIN របស់អ្នក អ្នកត្រូវរក្សាទុកឃ្លាស្តារការទូទាត់របស់អ្នក ដើម្បីប្រាកដថាអ្នកអាចស្តារគណនីទូទាត់របស់អ្នកបាន។</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">ផ្នែកខាងក្រោយ</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="other">%d នាទី</item>
@@ -1440,6 +1443,12 @@
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">កែប្រែ</string>
   <string name="SubmitDebugLogActivity_done">បញ្ចប់</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">រក្សាទុក</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">មិនអាចរក្សាទុក</string>
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">បានរក្សាទុក</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">ចុចលើបន្ទាត់ដើម្បីលុបវា</string>
   <string name="SubmitDebugLogActivity_submit">បញ្ជូន</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">បរាជ័យក្នុងការបញ្ជូនកំណត់ត្រា</string>
@@ -2229,7 +2238,6 @@
   <string name="preferences_enter_proxy_address">បញ្ចូលអាសយដ្ឋានប្រូកស៊ី</string>
   <string name="configurable_single_select__customize_option">ជម្រើសធ្វើផ្សេង</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">សកម្មភាពទាំងអស់</string>
   <string name="PaymentsAllActivityFragment__all">ទាំងអស់</string>
@@ -3834,6 +3842,14 @@
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">បើកមុខងារអានសារដើម្បីមើលថាអ្នកណាដែលបានមើលរឿងរ៉ាវរបស់អ្នក។</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">ចូលទៅកាន់ការកំណត់</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">លុបចេញ</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">ដកអ្នកមើលចេញឬ?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s នៅតែអាចមើលសារបង្ហោះនេះបាន ប៉ុន្តែនឹងមិនអាចមើលសារបង្ហោះណាមួយដែល​អ្នកចែករំលែកទៅ %2$s នាពេលអនាគតទេ។</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">ដកអ្នកមើលចេញ</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">មិនទាន់មានការឆ្លើយតបទេ</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

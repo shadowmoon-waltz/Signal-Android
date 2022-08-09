@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">記錄付款回復短語</string>
   <string name="ApplicationPreferencesActivity_record_phrase">紀錄短語</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">在停用PIN碼之前，你必須記錄你的付款回復詞語以確保可以回復你的付款帳戶。</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">退格鍵</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="other">%d 分鐘</item>
@@ -1442,6 +1445,10 @@
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">編輯</string>
   <string name="SubmitDebugLogActivity_done">完成</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">儲存</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">點擊一行以將其刪除</string>
   <string name="SubmitDebugLogActivity_submit">上傳</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">傳送紀錄失敗</string>
@@ -2231,7 +2238,6 @@
   <string name="preferences_enter_proxy_address">輸入代理伺服器位址</string>
   <string name="configurable_single_select__customize_option">自定義選項</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">所有活動</string>
   <string name="PaymentsAllActivityFragment__all">全部</string>
@@ -3836,6 +3842,14 @@
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">啟用已讀標記，即可查看誰瀏覽了你的限動。</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">前往「設定」</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">移除</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">要移除瀏覽者嗎？</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s 仍可瀏覽這則貼文，但無法瀏覽未來你分享至「%2$s」的任何貼文。</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">移除瀏覽者</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">未有回覆</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

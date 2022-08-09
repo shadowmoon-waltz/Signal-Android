@@ -46,13 +46,17 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.thoughtcrime.securesms.database.MentionUtil.MENTION_STARTER;
 
 public class ComposeText extends EmojiEditText {
 
   private static final char EMOJI_STARTER       = ':';
-  private static final long EMOJI_KEYWORD_DELAY = TimeUnit.SECONDS.toMillis(1);
+  private static final long EMOJI_KEYWORD_DELAY = 1500;
+
+  private static final Pattern TIME_PATTERN = Pattern.compile("^[0-9]{1,2}:[0-9]{1,2}$");
 
   private CharSequence            hint;
   private SpannableString         subHint;
@@ -322,11 +326,9 @@ public class ComposeText extends EmojiEditText {
   }
 
   private void doAfterCursorChange(@NonNull Editable text) {
-    removeCallbacks(keywordSearchRunnable);
     if (enoughToFilter(text, false)) {
       performFiltering(text, false);
     } else {
-      postDelayed(keywordSearchRunnable, EMOJI_KEYWORD_DELAY);
       clearInlineQuery();
     }
   }
@@ -429,9 +431,35 @@ public class ComposeText extends EmojiEditText {
     }
 
     if (delimiterSearchIndex >= 0 && text.charAt(delimiterSearchIndex) == starter) {
-      return delimiterSearchIndex + 1;
+      if (couldBeTimeEntry(text, delimiterSearchIndex)) {
+        return -1;
+      } else {
+        return delimiterSearchIndex + 1;
+      }
     }
     return -1;
+  }
+
+  /**
+   * Return true if we think the user may be inputting a time.
+   */
+  private static boolean couldBeTimeEntry(@NonNull CharSequence text, int startIndex) {
+    if (startIndex <= 0 || startIndex + 1 >= text.length()) {
+      return false;
+    }
+
+    int startOfToken = startIndex;
+    while (startOfToken > 0 && !Character.isWhitespace(text.charAt(startOfToken))) {
+      startOfToken--;
+    }
+    startOfToken++;
+
+    int endOfToken = startIndex;
+    while (endOfToken < text.length() && !Character.isWhitespace(text.charAt(endOfToken))) {
+      endOfToken++;
+    }
+
+    return TIME_PATTERN.matcher(text.subSequence(startOfToken, endOfToken)).find();
   }
 
   private static class CommitContentListener implements InputConnectionCompat.OnCommitContentListener {

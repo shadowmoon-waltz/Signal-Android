@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Сними фразу опоравка за уплату</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Сними фразу</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Пре него што онемогућите свој PIN, морате да снимите фразу за опоравак уплате да бисте осигурали да можете да вратите свој налог за уплате.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Backspace</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d минут</item>
@@ -1590,6 +1593,10 @@
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Уреди</string>
   <string name="SubmitDebugLogActivity_done">Готово</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Сачувај</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Додирните линију да је обришете</string>
   <string name="SubmitDebugLogActivity_submit">Пошаљи</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Неуспех слања извештаја</string>
@@ -2406,7 +2413,6 @@
   <string name="preferences_enter_proxy_address">Унети адресу проксија</string>
   <string name="configurable_single_select__customize_option">Прилагодите опцију</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">Сва активност</string>
   <string name="PaymentsAllActivityFragment__all">Сви</string>
@@ -4054,6 +4060,14 @@
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Aktivirajte potvrde o čitanju da biste znali ko je video vaše priče.</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">Idite na podešavanja</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Уклони</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">Želite li da uklonite gledaoca?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s će i dalje moći da vidi ovu objavu, ali neće moći da vidi buduće objave koje podelite u priči %2$s.</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">Ukloni gledaoca</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Без одговора</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Neem betalingherwinningsfrase op</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Neem frase op</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Voor jy jou PIN kan deaktiveer moet jy jou betalingsherwinfrase opneem om te verseker dat jy jou betalingsrekening kan herwin.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Trutoets</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d minuut</item>
@@ -1517,6 +1520,10 @@ ontvang!</string>
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Wysig</string>
   <string name="SubmitDebugLogActivity_done">Klaar</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Stoor</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Tik op \'n lyn om dit te skrap</string>
   <string name="SubmitDebugLogActivity_submit">Dien in</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Kon nie logs indien nie.</string>
@@ -2319,7 +2326,6 @@ ontvang!</string>
   <string name="preferences_enter_proxy_address">Sleutel tussengangeradres in</string>
   <string name="configurable_single_select__customize_option">Pasmaak-opsie</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">Alle aktiwiteit</string>
   <string name="PaymentsAllActivityFragment__all">Alle</string>
@@ -3946,6 +3952,14 @@ Tik op + om iets by jou storie te voeg.</string>
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Aktiveer leesbewyse om te sien wie het na jou stories gekyk.</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">Gaan na instellings</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Verwyder</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">Verwyder kyker?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s sal steeds hierdie plasing kan sien, maar sal geen toekomstige plasings kan sien wat jy in %2$s deel nie.</string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">Verwyder kyker.</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Nog geen antwoorde nie</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->

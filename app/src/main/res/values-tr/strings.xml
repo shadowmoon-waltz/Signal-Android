@@ -41,6 +41,9 @@
   <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Ödemeleri kurtarma parolasını kaydet</string>
   <string name="ApplicationPreferencesActivity_record_phrase">Parolayı kaydet</string>
   <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">PIN\'inizi devre dışı bırakmadan önce, ödemeler hesabınızın kurtarılmasını güvence altına almak için ödemeler kurtarma parolanızı kaydetmeniz gerekiyor.</string>
+  <!--NumericKeyboardView-->
+  <!--Back button on numeric keyboard-->
+  <string name="NumericKeyboardView__backspace">Geri silme</string>
   <!--AppProtectionPreferenceFragment-->
   <plurals name="AppProtectionPreferenceFragment_minutes">
     <item quantity="one">%d dakika</item>
@@ -1517,6 +1520,10 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <!--SubmitDebugLogActivity-->
   <string name="SubmitDebugLogActivity_edit">Düzenle</string>
   <string name="SubmitDebugLogActivity_done">Tamam</string>
+  <!--Menu option to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save">Kaydet</string>
+  <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <!--Toast that is show to notify that we have saved the debug log file to disk.-->
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Silmek istediğiniz dizeye tıklayın</string>
   <string name="SubmitDebugLogActivity_submit">Gönder</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Günlükler gönderilemedi</string>
@@ -2319,7 +2326,6 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <string name="preferences_enter_proxy_address">Vekil sunucu adresi girin</string>
   <string name="configurable_single_select__customize_option">Seçeneği düzenle</string>
   <!--Internal only preferences-->
-  <!-- Removed by excludeNonTranslatables <string name="preferences__internal_clears_onboarding_flag_and_triggers_download_of_onboarding_stories">Clears onboarding flag and triggers download of onboarding stories.</string> -->
   <!--Payments-->
   <string name="PaymentsActivityFragment__all_activity">Tüm faaliyet</string>
   <string name="PaymentsAllActivityFragment__all">Tümü</string>
@@ -3945,6 +3951,14 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">Hikayelerini kimlerin görüntülediğini görmek için okundu bilgisini etkinleştir.</string>
   <!--Button label displayed when user has disabled receipts-->
   <string name="StoryViewsFragment__go_to_settings">Ayarlara git</string>
+  <!--Dialog action to remove viewer from a story-->
+  <string name="StoryViewsFragment__remove">Kaldır</string>
+  <!--Dialog title when removing a viewer from a story-->
+  <string name="StoryViewsFragment__remove_viewer">Görüntüleyen kaldırılsın mı?</string>
+  <!--Dialog message when removing a viewer from a story-->
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s bu gönderiyi görmeye devam edebilecek, ancak gelecekte %2$s ile paylaşacağınız gönderileri göremeyecek. </string>
+  <!--Story View context menu action to remove them from a story-->
+  <string name="StoryViewItem__remove_viewer">Görüntüleyeni kaldır</string>
   <!--Displayed when a story has no replies yet-->
   <string name="StoryGroupReplyFragment__no_replies_yet">Henüz yanıt yok</string>
   <!--Displayed for each user that reacted to a story when viewing replies-->
