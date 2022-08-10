@@ -4,7 +4,7 @@
 dependencyResolutionManagement {
     versionCatalogs {
         libs {
-            version('libsignal-client', '0.18.1')
+            version('libsignal-client', '0.19.3')
             version('exoplayer', '2.15.0')
             version('androidx-camera', '1.1.0')
             version('androidx-lifecycle', '2.3.1')
@@ -48,6 +48,7 @@ dependencyResolutionManagement {
             alias('androidx-biometric').to('androidx.biometric:biometric:1.1.0')
             alias('androidx-sharetarget').to('androidx.sharetarget:sharetarget:1.1.0')
             alias('androidx-sqlite').to('androidx.sqlite:sqlite:2.1.0')
+            alias('androidx-core-role').to('androidx.core:core-role:1.0.0')
 
             // Material
             alias('material-material').to('com.google.android.material:material:1.5.0')
@@ -131,13 +132,15 @@ dependencyResolutionManagement {
             alias('androidx-test-ext-junit').to('androidx.test.ext:junit:1.1.1')
             alias('androidx-test-ext-junit-ktx').to('androidx.test.ext:junit-ktx:1.1.1')
             alias('espresso-core').to('androidx.test.espresso:espresso-core:3.4.0')
-            alias('mockito-core').to('org.mockito:mockito-inline:4.4.0')
+            alias('mockito-core').to('org.mockito:mockito-inline:4.6.1')
             alias('mockito-kotlin').to('org.mockito.kotlin:mockito-kotlin:4.0.0')
+            alias('mockito-android').to('org.mockito:mockito-android:4.6.1')
             alias('robolectric-robolectric').to('org.robolectric', 'robolectric').versionRef('robolectric')
             alias('robolectric-shadows-multidex').to('org.robolectric', 'shadows-multidex').versionRef('robolectric')
             alias('bouncycastle-bcprov-jdk15on').to('org.bouncycastle:bcprov-jdk15on:1.70')
             alias('hamcrest-hamcrest').to('org.hamcrest:hamcrest:2.2')
             alias('assertj-core').to('org.assertj:assertj-core:3.11.1')
+            alias('square-okhttp-mockserver').to('com.squareup.okhttp3:mockwebserver:3.12.13')
 
             alias('conscrypt-openjdk-uber').to('org.conscrypt:conscrypt-openjdk-uber:2.0.0')
         }

@@ -29,7 +29,7 @@ import androidx.camera.core.ImageProxy;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.util.BitmapDecodingException;
 import org.thoughtcrime.securesms.util.BitmapUtil;
-import org.thoughtcrime.securesms.util.Stopwatch;
+import org.signal.core.util.Stopwatch;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -106,7 +106,7 @@ public class CameraXUtil {
   }
 
   public static boolean isSupported() {
-    return Build.VERSION.SDK_INT >= 21 && !CameraXModelBlacklist.isBlacklisted();
+    return Build.VERSION.SDK_INT >= 21 && !CameraXModelBlocklist.isBlocklisted();
   }
 
   @RequiresApi(21)

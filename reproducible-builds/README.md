@@ -29,7 +29,7 @@ cd ..
 docker run --rm -v $(pwd):/project -w /project signal-android ./gradlew clean assembleSwProdRelease
 
 # Verify the APKs (you compare against GitHub release apks, since we don't publish to Play Store at the moment)
-python3 apkdiff/apkdiff.py build/outputs/apks/project-release-unsigned.apk path/to/SignalFromGitHubReleases.apk
+python3 apkdiff/apkdiff.py app/build/outputs/apks/project-release-unsigned.apk path/to/SignalFromGitHubReleases.apk
 ```
 
 ***

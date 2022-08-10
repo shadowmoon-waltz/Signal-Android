@@ -1056,6 +1056,8 @@ public class Recipient {
   public @Nullable ChatWallpaper getWallpaper() {
     if (wallpaper != null) {
       return wallpaper;
+    } else if (isReleaseNotes()) {
+      return null;
     } else {
       return SignalStore.wallpaper().getWallpaper();
     }

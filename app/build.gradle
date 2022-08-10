@@ -57,8 +57,8 @@ ktlint {
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1103
-def canonicalVersionName = "5.45.5"
+def canonicalVersionCode = 1106
+def canonicalVersionName = "5.46.1"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -187,6 +187,9 @@ android {
         exclude 'signal_jni.dll'
     }
 
+    buildFeatures {
+        viewBinding true
+    }
 
     defaultConfig {
         versionCode canonicalVersionCode * postFixSize
@@ -200,6 +203,8 @@ android {
         vectorDrawables.useSupportLibrary = true
         project.ext.set("archivesBaseName", "Signal");
 
+        manifestPlaceholders = [mapsKey:"AIzaSyCSx9xea86GwDKGznCAULE9Y5a8b-TfN9U"]
+
         buildConfigField "long", "BUILD_TIMESTAMP", getLastCommitTimestamp() + "L"
         buildConfigField "String", "GIT_HASH", "\"${getGitHash()}\""
         buildConfigField "String", "SIGNAL_URL", "\"https://chat.signal.org\""
@@ -207,7 +212,7 @@ android {
         buildConfigField "String", "SIGNAL_CDN_URL", "\"https://cdn.signal.org\""
         buildConfigField "String", "SIGNAL_CDN2_URL", "\"https://cdn2.signal.org\""
         buildConfigField "String", "SIGNAL_CONTACT_DISCOVERY_URL", "\"https://api.directory.signal.org\""
-        buildConfigField "String", "SIGNAL_CDSI_URL", "\"https://cdsi.staging.signal.org\""
+        buildConfigField "String", "SIGNAL_CDSI_URL", "\"https://cdsi.signal.org\""
         buildConfigField "String", "SIGNAL_SERVICE_STATUS_URL", "\"uptime.signal.org\""
         buildConfigField "String", "SIGNAL_KEY_BACKUP_URL", "\"https://api.backup.signal.org\""
         buildConfigField "String", "SIGNAL_SFU_URL", "\"https://sfu.voip.signal.org\""
@@ -224,8 +229,8 @@ android {
         buildConfigField "String[]", "SIGNAL_SFU_IPS", sfu_ips
         buildConfigField "String[]", "SIGNAL_CONTENT_PROXY_IPS", content_proxy_ips
         buildConfigField "String", "SIGNAL_AGENT", "\"OWA\""
-        buildConfigField "String", "CDS_MRENCLAVE", "\"c98e00a4e3ff977a56afefe7362a27e4961e4f19e211febfbb19b897e6b80b15\""
-        buildConfigField "String", "CDSI_MRENCLAVE", "\"e5eaa62da3514e8b37ccabddb87e52e7f319ccf5120a13f9e1b42b87ec9dd3dd\""
+        buildConfigField "String", "CDS_MRENCLAVE", "\"74778bb0f93ae1f78c26e67152bab0bbeb693cd56d1bb9b4e9244157acc58081\""
+        buildConfigField "String", "CDSI_MRENCLAVE", "\"7b75dd6e862decef9b37132d54be082441917a7790e82fe44f9cf653de03a75f\""
         buildConfigField "org.thoughtcrime.securesms.KbsEnclave", "KBS_ENCLAVE", "new org.thoughtcrime.securesms.KbsEnclave(\"0cedba03535b41b67729ce9924185f831d7767928a1d1689acb689bc079c375f\", " +
                                                                                                                            "\"187d2739d22be65e74b65f0055e74d31310e4267e5fac2b1246cc8beba81af39\", " +
                                                                                                                            "\"ee19f1965b1eefa3dc4204eb70c04f397755f771b8c1909d080c04dad2a6a9ba\")"
@@ -260,7 +265,7 @@ android {
             }
         }
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "org.thoughtcrime.securesms.testing.SignalTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
     }
 
@@ -293,6 +298,8 @@ android {
                     'proguard/proguard.cfg'
             testProguardFiles 'proguard/proguard-automation.pro',
                     'proguard/proguard.cfg'
+
+            manifestPlaceholders = [mapsKey:getMapsKey()]
 
             buildConfigField "String", "BUILD_VARIANT_TYPE", "\"Debug\""
         }
@@ -389,8 +396,9 @@ android {
             buildConfigField "String", "SIGNAL_CDN_URL", "\"https://cdn-staging.signal.org\""
             buildConfigField "String", "SIGNAL_CDN2_URL", "\"https://cdn2-staging.signal.org\""
             buildConfigField "String", "SIGNAL_CONTACT_DISCOVERY_URL", "\"https://api-staging.directory.signal.org\""
+            buildConfigField "String", "SIGNAL_CDSI_URL", "\"https://cdsi.staging.signal.org\""
             buildConfigField "String", "SIGNAL_KEY_BACKUP_URL", "\"https://api-staging.backup.signal.org\""
-            buildConfigField "String", "CDS_MRENCLAVE", "\"c98e00a4e3ff977a56afefe7362a27e4961e4f19e211febfbb19b897e6b80b15\""
+            buildConfigField "String", "CDS_MRENCLAVE", "\"74778bb0f93ae1f78c26e67152bab0bbeb693cd56d1bb9b4e9244157acc58081\""
             buildConfigField "org.thoughtcrime.securesms.KbsEnclave", "KBS_ENCLAVE", "new org.thoughtcrime.securesms.KbsEnclave(\"dd6f66d397d9e8cf6ec6db238e59a7be078dd50e9715427b9c89b409ffe53f99\", " +
                                                                                                                                "\"4200003414528c151e2dccafbc87aa6d3d66a5eb8f8c05979a6e97cb33cd493a\", " +
                                                                                                                                "\"ee19f1965b1eefa3dc4204eb70c04f397755f771b8c1909d080c04dad2a6a9ba\")"
@@ -589,6 +597,9 @@ dependencies {
     androidTestImplementation testLibs.androidx.test.core
     androidTestImplementation testLibs.androidx.test.core.ktx
     androidTestImplementation testLibs.androidx.test.ext.junit.ktx
+    androidTestImplementation testLibs.mockito.android
+    androidTestImplementation testLibs.mockito.kotlin
+    androidTestImplementation testLibs.square.okhttp.mockserver
 
     testImplementation testLibs.espresso.core
 
@@ -678,4 +689,12 @@ def getDateSuffix() {
     def date = new Date()
     def formattedDate = date.format('yyyy-MM-dd-HH:mm')
     return formattedDate
+}
+
+def getMapsKey() {
+    def mapKey = file("${project.rootDir}/maps.key")
+    if (mapKey.exists()) {
+        return mapKey.readLines()[0]
+    }
+    return "AIzaSyCSx9xea86GwDKGznCAULE9Y5a8b-TfN9U"
 }

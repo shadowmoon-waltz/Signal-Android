@@ -96,9 +96,11 @@ public final class FeatureFlags {
   private static final String USE_FCM_FOREGROUND_SERVICE        = "android.useFcmForegroundService.3";
   private static final String STORIES_AUTO_DOWNLOAD_MAXIMUM     = "android.stories.autoDownloadMaximum";
   private static final String GIFT_BADGE_RECEIVE_SUPPORT        = "android.giftBadges.receiving";
-  private static final String GIFT_BADGE_SEND_SUPPORT           = "android.giftBadges.sending.2";
+  private static final String GIFT_BADGE_SEND_SUPPORT           = "android.giftBadges.sending.3";
   private static final String TELECOM_MANUFACTURER_ALLOWLIST    = "android.calling.telecomAllowList";
   private static final String TELECOM_MODEL_BLOCKLIST           = "android.calling.telecomModelBlockList";
+  private static final String CAMERAX_MODEL_BLOCKLIST           = "android.cameraXModelBlockList";
+  private static final String RECIPIENT_MERGE_V2                = "android.recipientMergeV2";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
@@ -150,7 +152,9 @@ public final class FeatureFlags {
       GIFT_BADGE_RECEIVE_SUPPORT,
       GIFT_BADGE_SEND_SUPPORT,
       TELECOM_MANUFACTURER_ALLOWLIST,
-      TELECOM_MODEL_BLOCKLIST
+      TELECOM_MODEL_BLOCKLIST,
+      CAMERAX_MODEL_BLOCKLIST,
+      RECIPIENT_MERGE_V2
   );
 
   @VisibleForTesting
@@ -211,7 +215,9 @@ public final class FeatureFlags {
       PAYMENTS_COUNTRY_BLOCKLIST,
       USE_FCM_FOREGROUND_SERVICE,
       TELECOM_MANUFACTURER_ALLOWLIST,
-      TELECOM_MODEL_BLOCKLIST
+      TELECOM_MODEL_BLOCKLIST,
+      CAMERAX_MODEL_BLOCKLIST,
+      RECIPIENT_MERGE_V2
   );
 
   /**
@@ -334,7 +340,7 @@ public final class FeatureFlags {
    * IMPORTANT: This is under active development. Enabling this *will* break your contacts in terrible, irreversible ways.
    */
   public static boolean phoneNumberPrivacy() {
-    return getBoolean(PHONE_NUMBER_PRIVACY, false) && Environment.IS_STAGING;
+    return getBoolean(PHONE_NUMBER_PRIVACY, false);
   }
 
   /** Whether to use the custom streaming muxer or built in android muxer. */
@@ -492,6 +498,11 @@ public final class FeatureFlags {
     return getString(TELECOM_MODEL_BLOCKLIST, "");
   }
 
+  /** A comma-separated list of manufacturers that should *not* use CameraX. */
+  public static @NonNull String cameraXModelBlocklist() {
+    return getString(CAMERAX_MODEL_BLOCKLIST, "");
+  }
+
   /** Whether or not hardware AEC should be used for calling on devices older than API 29. */
   public static boolean useHardwareAecIfOlderThanApi29() {
     return getBoolean(USE_HARDWARE_AEC_IF_OLD, false);
@@ -525,6 +536,13 @@ public final class FeatureFlags {
    */
   public static boolean giftBadgeSendSupport() {
     return giftBadgeReceiveSupport() && getBoolean(GIFT_BADGE_SEND_SUPPORT, Environment.IS_STAGING);
+  }
+
+  /**
+   * Whether or not we should use the new recipient merging strategy.
+   */
+  public static boolean recipientMergeV2() {
+    return getBoolean(RECIPIENT_MERGE_V2, false);
   }
 
   /** Only for rendering debug info. */
