@@ -442,6 +442,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">백업을 복원하려면 Signal의 새 사본을 설치하세요. 앱을 열고 \'백업 복원\'을 탭한 후 백업 파일을 찾으세요. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">더 알아보기</string>
   <string name="BackupsPreferenceFragment__in_progress">진행 중…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">백업을 확인하는 중…</string>
   <string name="BackupsPreferenceFragment__d_so_far">지금까지 %1$d…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% 진행중…</string>
@@ -1452,7 +1454,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">저장</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">저장에 실패함</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">저장 성공</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">줄을 탭하여 삭제하세요</string>
   <string name="SubmitDebugLogActivity_submit">제출</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">로그를 제출하는데 실패했습니다.</string>
@@ -1531,7 +1535,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">사용자 이름은 숫자로 시작할 수 없습니다.</string>
   <string name="UsernameEditFragment_username_is_invalid">잘못된 사용자 이름입니다.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">사용자 이름은 %1$d~%2$d자여야 합니다. </string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal의 사용자 이름은 선택 사항입니다. 사용자 이름을 만들면 다른 Signal 사용자가 사용자 이름으로 나를 찾고 전화번호를 몰라도 연락할 수 있습니다.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal의 사용자 이름은 선택 사항입니다. 사용자 이름을 만들면 다른 Signal 사용자가 사용자 이름으로 나를 찾고 전화번호를 몰라도 연락할 수 있습니다.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="other">Signal에 연락처가 %d개 있습니다!</item>
   </plurals>
@@ -2638,10 +2642,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">백업 암호가 성공적으로 입력됨</string>
   <string name="BackupDialog_passphrase_was_not_correct">암호가 올바르지 않음</string>
   <string name="LocalBackupJob_creating_signal_backup">Signal 백업 만드는 중…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Signal 백업을 확인하는 중…</string>
   <string name="LocalBackupJobApi29_backup_failed">백업을 실패했습니다.</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">백업 경로가 삭제되었거나 이동했습니다.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">백업 파일이 너무 커서 이 볼륨에 저장할 수 없습니다.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">백업을 저장할 공간이 충분하지 않습니다.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">최신 백업을 만들고 확인하지 못했습니다. 새로운 백업을 만드세요.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">백업에 대용량 파일이 포함되어 있습니다. 이 파일을 삭제하고 새로운 백업을 만드세요.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">탭하여 백업을 관리하세요.</string>
   <string name="ProgressPreference_d_messages_so_far">현재 메시지 %d개 처리됨</string>
   <string name="RegistrationActivity_wrong_number">잘못된 번호</string>
@@ -3771,7 +3781,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">내 스토리</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">스토리 추가</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">스토리 추가</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">표시할 최근 업데이트가 없습니다. + 아이콘을 탭하여 스토리를 추가하세요.</string>
   <!--Context menu option to hide a story-->
@@ -3873,13 +3883,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">삭제</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">스토리 설정</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">스토리 설정</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">비공개 스토리</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">비공개 스토리</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">비공개 스토리는 본인이 직접 추가하는 사용자만 볼 수 있습니다. 사용자 본인만 스토리 이름을 볼 수 있습니다.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">비공개 스토리는 본인이 직접 추가하는 사용자만 볼 수 있습니다. 사용자 본인만 스토리 이름을 볼 수 있습니다.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">새 비공개 스토리</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">새 비공개 스토리</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">내 스토리</string>
   <!--Section heading for story visibility-->

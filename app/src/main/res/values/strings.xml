@@ -11,6 +11,7 @@
     <string name="sustainer_boost_and_badges" translatable="false">https://support.signal.org/hc/articles/4408365318426</string>
     <string name="google_pay_url" translatable="false">https://pay.google.com</string>
     <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string>
+    <string name="signal_me_url" translatable="false">https://signal.me/%1$s</string>
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -503,6 +504,20 @@
     <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Your profile is end-to-end encrypted. Your profile and changes to it will be visible to your contacts, when you initiate or accept new conversations, and when you join new groups.</string>
     <string name="CreateProfileActivity_set_avatar_description">Set avatar</string>
 
+    <!-- ProfileCreateFragment -->
+    <!-- Displayed at the top of the screen and explains how profiles can be viewed. -->
+    <string name="ProfileCreateFragment__profiles_are_only_visible_to_people_you_message">Profiles are only visible to people you message.</string>
+    <!-- Title of clickable row to select phone number privacy settings -->
+    <string name="ProfileCreateFragment__who_can_find_me">Who can find me by number?</string>
+
+    <!-- WhoCanSeeMyPhoneNumberFragment -->
+    <!-- Toolbar title for this screen -->
+    <string name="WhoCanSeeMyPhoneNumberFragment__who_can_find_me_by_number">Who can find me by number?</string>
+    <!-- Description for radio item stating anyone can see your phone number -->
+    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has">Anyone who has your phone number in their contacts will see you as a contact on Signal. Others will be able to find you with your number in search.</string>
+    <!-- Description for radio item stating no one will be able to see your phone number -->
+    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_on_signal">Nobody on Signal will be able to find you with your phone number.</string>
+
     <!-- ChooseBackupFragment -->
     <string name="ChooseBackupFragment__restore_from_backup">Restore from backup?</string>
     <string name="ChooseBackupFragment__restore_your_messages_and_media">Restore your messages and media from a local backup. If you don\'t restore now, you won\'t be able to restore later.</string>
@@ -856,6 +871,11 @@
     <string name="ManageProfileFragment_failed_to_set_avatar">Failed to set avatar</string>
     <string name="ManageProfileFragment_badges">Badges</string>
     <string name="ManageProfileFragment__edit_photo">Edit photo</string>
+    <!-- Snackbar message after creating username -->
+    <string name="ManageProfileFragment__username_created">Username created</string>
+    <!-- Snackbar message after copying username -->
+    <string name="ManageProfileFragment__username_copied">Username copied</string>
+
 
     <!-- ManageRecipientActivity -->
     <string name="ManageRecipientActivity_no_groups_in_common">No groups in common</string>
@@ -1851,6 +1871,8 @@
     <string name="UnverifiedSendDialog_send">Send</string>
 
     <!-- UsernameEditFragment -->
+    <!-- Instructional text at the top of the username edit screen -->
+    <string name="UsernameEditFragment__choose_your_username">Choose your username</string>
     <string name="UsernameEditFragment_username">Username</string>
     <string name="UsernameEditFragment_delete">Delete</string>
     <string name="UsernameEditFragment_successfully_set_username">Successfully set username.</string>
@@ -1862,12 +1884,20 @@
     <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Usernames cannot begin with a number.</string>
     <string name="UsernameEditFragment_username_is_invalid">Username is invalid.</string>
     <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Usernames must be between %1$d and %2$d characters.</string>
-    <string name="UsernameEditFragment_usernames_on_signal_are_optional">Usernames on Signal are optional. If you choose to create a username, other Signal users will be able to find you by this username and contact you without knowing your phone number.</string>
+    <!-- Explanation about what usernames provide -->
+    <string name="UsernameEditFragment__usernames_let_others_message">Usernames let others message you without needing your phone number. They are paired with a set of digits to help keep your address private.</string>
+    <!-- Dialog title for explanation about numbers at the end of the username -->
+    <string name="UsernameEditFragment__what_is_this_number">What is this number?</string>
+    <string name="UsernameEditFragment__these_digits_help_keep">These digits help keep your username private so you can avoid unwanted messages. Share your username with only the people and groups you\'d like to chat with. If you change usernames you\'ll get a new set of digits.</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%d contact is on Signal!</item>
         <item quantity="other">%d contacts are on Signal!</item>
     </plurals>
+
+    <!-- UsernameShareBottomSheet -->
+    <!-- Explanation of what the sheet enables the user to do -->
+    <string name="UsernameShareBottomSheet__copy_or_share_a_username_link">Copy or share a username link</string>
 
     <!-- VerifyIdentityActivity -->
     <string name="VerifyIdentityActivity_your_contact_is_running_an_old_version_of_signal">Your contact is running an old version of Signal. Please ask them to update before verifying your safety number.</string>
@@ -2567,6 +2597,8 @@
     <!-- Preference label for making one-time donations to Signal -->
     <string name="preferences__one_time_donation">One-time Donation</string>
     <string name="preferences__privacy">Privacy</string>
+    <!-- Preference label for stories -->
+    <string name="preferences__stories">Stories</string>
     <string name="preferences__mms_user_agent">MMS User Agent</string>
     <string name="preferences__advanced_mms_access_point_names">Manual MMS settings</string>
     <string name="preferences__mmsc_url">MMSC URL</string>
@@ -2790,6 +2822,7 @@
     <string name="preferences__internal_release_channel" translatable="false">Release channel</string>
     <string name="preferences__internal_fetch_release_channel" translatable="false">Fetch release channel</string>
     <string name="preferences__internal_release_channel_set_last_version" translatable="false">Set last version seen back 10 versions</string>
+    <string name="preferences__internal_reset_donation_megaphone" translatable="false">Reset donation megaphone</string>
     <string name="preferences__internal_add_sample_note" translatable="false">Add sample note</string>
     <string name="preferences__internal_disable_stories" translatable="false">Disable stories</string>
     <string name="preferences__internal_cds" translatable="false">CDS</string>
@@ -3620,6 +3653,8 @@
     <string name="ShareActivity__send">Send</string>
     <string name="ShareActivity__comma_s">, %1$s</string>
     <string name="ShareActivity__sharing_to_multiple_chats_is">Sharing to multiple chats is only supported for Signal messages</string>
+    <!-- Toast when the incoming intent is invalid -->
+    <string name="ShareActivity__could_not_get_share_data_from_intent">Could not get share data from intent.</string>
 
     <!-- MultiShareDialogs -->
     <string name="MultiShareDialogs__failed_to_send_to_some_users">Failed to send to some users</string>
@@ -3889,6 +3924,8 @@
     <string name="PrivacySettingsFragment__signal_message_and_calls">Signal messages and calls, always relay calls, and sealed sender</string>
     <string name="PrivacySettingsFragment__default_timer_for_new_changes">Default timer for new chats</string>
     <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Set a default disappearing message timer for all new chats started by you.</string>
+    <!-- Summary for stories preference to launch into story privacy settings -->
+    <string name="PrivacySettingsFragment__manage_your_stories">Manage your stories and who can view them</string>
 
     <!-- AdvancedPrivacySettingsFragment -->
     <string name="AdvancedPrivacySettingsFragment__sealed_sender_link" translatable="false">https://signal.org/blog/sealed-sender</string>
@@ -4069,6 +4106,8 @@
     <string name="NotificationsSettingsFragment__unknown_ringtone">Unknown ringtone</string>
 
     <!-- ConversationSettingsFragment -->
+    <!-- Error toasted when no activity can handle the add contact intent -->
+    <string name="ConversationSettingsFragment__contacts_app_not_found">Contacts app not found</string>
     <string name="ConversationSettingsFragment__send_message">Send message</string>
     <string name="ConversationSettingsFragment__start_video_call">Start video call</string>
     <string name="ConversationSettingsFragment__start_audio_call">Start audio call</string>
@@ -4629,10 +4668,12 @@
     <string name="ConversationListTabs__stories">Stories</string>
     <!-- String for counts above 99 in conversation list tabs -->
     <string name="ConversationListTabs__99p">99+</string>
+    <!-- Menu item on stories landing page -->
+    <string name="StoriesLandingFragment__story_privacy">Story privacy</string>
     <!-- Title for "My Stories" row item in Stories landing page -->
     <string name="StoriesLandingFragment__my_stories">My Stories</string>
     <!-- Subtitle for "My Stories" row item when user has not added stories -->
-    <string name="StoriesLandingFragment__add_a_story">Add a story</string>
+    <string name="StoriesLandingFragment__tap_to_add_a_story">Tap to add a story</string>
     <!-- Displayed when there are no stories to display -->
     <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">No recent updates to show right now. Tap + to add to your story.</string>
     <!-- Context menu option to hide a story -->
@@ -4736,14 +4777,6 @@
     <string name="StoryGroupReplyItem__copy">Copy</string>
     <!-- Context menu item to delete a story response -->
     <string name="StoryGroupReplyItem__delete">Delete</string>
-    <!-- Story settings page title -->
-    <string name="StorySettingsFragment__story_settings">Story settings</string>
-    <!-- Story settings private stories heading -->
-    <string name="StorySettingsFragment__private_stories">Private stories</string>
-    <!-- Note at bottom of story settings regarding who can see private stories. -->
-    <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Private stories can only be viewed by the people you add to them. Only you can see the story name.</string>
-    <!-- Option label for creating a new private story -->
-    <string name="StorySettingsFragment__new_private_story">New private story</string>
     <!-- Page title for My Story options -->
     <string name="MyStorySettingsFragment__my_story">My Story</string>
     <!-- Section heading for story visibility -->
@@ -4998,6 +5031,11 @@
         <item quantity="one">Group Story · %1$d viewer</item>
         <item quantity="other">Group Story · %1$d viewers</item>
     </plurals>
+    <!-- Label under name for my story -->
+    <plurals name="ContactSearchItems__my_story_s_dot_d_viewers">
+        <item quantity="one">%1$s · %2$d viewer</item>
+        <item quantity="other">%1$s · %2$d viewers</item>
+    </plurals>
     <!-- Label under name for My Story when first sending to my story -->
     <string name="ContactSearchItems__tap_to_choose_your_viewers">Tap to choose your viewers</string>
     <!-- Label for context menu item to open story settings -->
@@ -5111,6 +5149,35 @@
     <string name="StoryInfoBottomSheetDialogFragment__sent_from">Sent from</string>
     <!-- Story Info context menu label -->
     <string name="StoryInfoBottomSheetDialogFragment__info">Info</string>
+
+    <!-- StoriesPrivacySettingsFragment -->
+    <!-- Explanation about how stories are deleted and managed -->
+    <string name="StoriesPrivacySettingsFragment__stories_automatically_disappear">Stories automatically disappear after 24 hours. Choose who can view your story or create new stories with specific viewers or groups.</string>
+    <!-- Preference title to turn off stories -->
+    <string name="StoriesPrivacySettingsFragment__turn_off_stories">Turn off stories</string>
+    <!-- Preference summary to turn off stories -->
+    <string name="StoriesPrivacySettingsFragment__if_you_opt_out">If you opt out of stories you will no longer be able to share or view stories.</string>
+    <!-- Preference title to turn on stories -->
+    <string name="StoriesPrivacySettingsFragment__turn_on_stories">Turn on stories</string>
+    <!-- Preference summary to turn on stories -->
+    <string name="StoriesPrivacySettingsFragment__share_and_view">Share and view stories from others. Stories automatically disappear after 24 hours.</string>
+    <!-- Dialog title to turn off stories -->
+    <string name="StoriesPrivacySettingsFragment__turn_off_stories_question">Turn off stories?</string>
+    <!-- Dialog message to turn off stories -->
+    <string name="StoriesPrivacySettingsFragment__you_will_no_longer_be_able_to">You will no longer be able to share or view stories. Any stories you have recently sent will still be visible by others until they expire.</string>
+    <!-- Page title when launched from stories landing screen -->
+    <string name="StoriesPrivacySettingsFragment__story_privacy">Story privacy</string>
+
+    <!-- GroupStorySettingsFragment -->
+    <!-- Section header for who can view a group story -->
+    <string name="GroupStorySettingsFragment__who_can_view_this_story">Who can view this story</string>
+    <!-- Explanation of who can view a group story -->
+    <string name="GroupStorySettingsFragment__members_of_the_group_s">Members of the group "%1$s" can view and reply to this story. You can update the membership for this chat in the group.</string>
+    <!-- Preference label for removing this group story -->
+    <string name="GroupStorySettingsFragment__remove_group_story">Remove group story</string>
+
+    <!-- Generic title for overflow menus -->
+    <string name="OverflowMenu__overflow_menu">Overflow menu</string>
 
     <!-- EOF -->
 

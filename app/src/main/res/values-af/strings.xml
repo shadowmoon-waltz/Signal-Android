@@ -463,6 +463,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Om \'n rugsteun te herwin, installeer \'n nuwe kopie van Signal. Maak die toepassing oop, tik op \"Herwin vanaf rugsteun\" en spoor dan \'n rugsteunlêer op. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Vind meer uit</string>
   <string name="BackupsPreferenceFragment__in_progress">Aan die gang…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Besig om rugsteun te verifieer…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d tot dusver…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% tot dusver…</string>
@@ -1523,7 +1525,9 @@ ontvang!</string>
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Stoor</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Kon nie stoor nie</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Storing voltooi</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Tik op \'n lyn om dit te skrap</string>
   <string name="SubmitDebugLogActivity_submit">Dien in</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Kon nie logs indien nie.</string>
@@ -1602,7 +1606,7 @@ ontvang!</string>
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Gebruikersname kan nie met \'n syfer begin nie.</string>
   <string name="UsernameEditFragment_username_is_invalid">Ongeldige gebruikersnaam.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Gebruikersname moet tussen %1$d en %2$d karakters lank wees.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Gebruikersname op Signal is opsioneel. As jy kies om ’n gebruikersaam te skep, sal ander Signal-gebruikers jou d.m.v. hierdie gebruikersnaam kan vind en jou kontak sonder om jou foonnommer te ken.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Gebruikersname op Signal is opsioneel. As jy kies om ’n gebruikersaam te skep, sal ander Signal-gebruikers jou d.m.v. hierdie gebruikersnaam kan vind en jou kontak sonder om jou foonnommer te ken.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d kontak is op Signal!</item>
     <item quantity="other">%d kontakte is op Signal!</item>
@@ -2730,10 +2734,16 @@ ontvang!</string>
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Jy het jou wagwoordfrase suksesvol ingevoer</string>
   <string name="BackupDialog_passphrase_was_not_correct">Wagwoordfrase verkeerd</string>
   <string name="LocalBackupJob_creating_signal_backup">Skep tans Signal-rugsteun…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Besig om Signal-rugsteun te verifieer…</string>
   <string name="LocalBackupJobApi29_backup_failed">Rugsteun het misluk</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Jou rugsteungids is geskrap of verskuif.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Jou rugsteunlêer is te groot om in hierdie volume te stoor.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Daar is nie genoeg ruimte om jou rugsteun te stoor nie.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Jou onlangse rugsteun kon nie geskep en geverifieer word nie. Skep asb. \'n nuwe een.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Jou rugsteun bevat \'n baie groot lêer wat nie gerugsteun kan word nie. Skrap dit asb. en skep \'n nuwe rugsteun.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Tik om rugsteunkopieë te bestuur.</string>
   <string name="ProgressPreference_d_messages_so_far">%d boodskappe tot dusver</string>
   <string name="RegistrationActivity_wrong_number">Verkeerde nommer</string>
@@ -3873,7 +3883,7 @@ ontvang!</string>
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">My Stories</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Voeg \'n storie by</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Voeg \'n storie by</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Geen onlangse bywerkings om te wys nie.
 Tik op + om iets by jou storie te voeg.</string>
@@ -3979,13 +3989,13 @@ Tik op + om iets by jou storie te voeg.</string>
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Skrap</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Storie-instellings</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Storie-instellings</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Privaatstories</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Privaatstories</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Privaatstories kan slegs gesien word deur mense wat jy daar byvoeg. Slegs jy kan die strorie se naam sien.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Privaatstories kan slegs gesien word deur mense wat jy daar byvoeg. Slegs jy kan die strorie se naam sien.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Nuwe privaatstorie</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Nuwe privaatstorie</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">My Storie</string>
   <!--Section heading for story visibility-->

@@ -505,6 +505,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Чтобы восстановить из резервной копии, установите новую копию Signal. Откройте приложение и нажмите «Восстановить резервную копию», затем выберите файл резервной копии. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Узнать больше</string>
   <string name="BackupsPreferenceFragment__in_progress">В процессе…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Проверяем резервную копию…</string>
   <string name="BackupsPreferenceFragment__d_so_far">Уже %1$d…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">Уже %1$s%%…</string>
@@ -1664,7 +1666,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Сохранить</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Не удалось сохранить</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Сохранение завершено</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Нажмите на строку, чтобы удалить её</string>
   <string name="SubmitDebugLogActivity_submit">Отправить</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Не удалось отправить журналы</string>
@@ -1743,7 +1747,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Имена пользователей не могут начинаться с цифр.</string>
   <string name="UsernameEditFragment_username_is_invalid">Имя пользователя недействительно.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Имена пользователей должны содержать от %1$d до %2$d символов.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Имена пользователей в Signal необязательны. Если вы решите создать имя пользователя, другие пользователи Signal смогут найти вас по нему и связаться с вами, не зная вашего номера телефона.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Имена пользователей в Signal необязательны. Если вы решите создать имя пользователя, другие пользователи Signal смогут найти вас по нему и связаться с вами, не зная вашего номера телефона.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d ваш контакт уже в Signal!</item>
     <item quantity="few">%d ваших контакта уже в Signal!</item>
@@ -2913,10 +2917,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Вы успешно ввели парольную фразу своей резервной копии</string>
   <string name="BackupDialog_passphrase_was_not_correct">Парольная фраза была неправильной</string>
   <string name="LocalBackupJob_creating_signal_backup">Создаём резервную копию Signal…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Проверяем резервную копию Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">Резервное копирование не удалось</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Ваша папка для резервных копий была удалена или перемещена.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Ваш файл резервной копии слишком большой для хранения на этом носителе.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Недостаточно места, чтобы сохранить вашу резервную копию.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Не удалось создать и проверить вашу недавнюю резервную копию. Пожалуйста, создайте новую.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Ваша резервная копия содержит очень большой файл, резервное копирование которого невозможно. Пожалуйста, удалите его и создайте новую резервную копию.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Нажмите, чтобы управлять резервным копированием.</string>
   <string name="ProgressPreference_d_messages_so_far">Уже %d сообщений</string>
   <string name="RegistrationActivity_wrong_number">Неправильный номер</string>
@@ -4076,7 +4086,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Мои истории</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Добавьте историю</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Добавьте историю</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Нет недавних историй. Нажмите «+», чтобы добавить в вашу историю.</string>
   <!--Context menu option to hide a story-->
@@ -4187,13 +4197,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Удалить</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Настройки историй</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Настройки историй</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Частные истории</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Частные истории</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Частные истории видны только тем людям, которых вы добавили в эти истории. Только вы можете видеть название истории.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Частные истории видны только тем людям, которых вы добавили в эти истории. Только вы можете видеть название истории.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Новая частная история</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Новая частная история</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Моя история</string>
   <!--Section heading for story visibility-->

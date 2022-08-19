@@ -484,6 +484,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Para poder restaurar uma cópia de segurança, instale uma nova cópia do Signal. Abra a aplicação e toque em \"Restaurar cópia de segurança\", aqui localize o ficheiro com a cópia de segurança. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Saber mais</string>
   <string name="BackupsPreferenceFragment__in_progress">Em progresso…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">A verificar cópia de segurança…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d até ao momento…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% até agora…</string>
@@ -1597,7 +1599,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Guardar</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Falha ao guardar</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Guardado com sucesso</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Toque numa linha para a eliminar</string>
   <string name="SubmitDebugLogActivity_submit">Submeter</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Ocorreu um erro ao tentar enviar os históricos</string>
@@ -1676,7 +1680,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Os nomes de utilizadores não podem começar com um número.</string>
   <string name="UsernameEditFragment_username_is_invalid">Nome de utilizador inválido.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Os nomes de utilizadores devem ter entre %1$d e %2$d caracteres.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Os nomes de utilizadores no Signal são opcionais. Se escolher criar um nome de utilizador, os outros utilizadores do Signal serão capazes de encontrá-lo através desse nome de utilizador e contactá-lo sem saber o seu número de telefone.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Os nomes de utilizadores no Signal são opcionais. Se escolher criar um nome de utilizador, os outros utilizadores do Signal serão capazes de encontrá-lo através desse nome de utilizador e contactá-lo sem saber o seu número de telefone.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d contacto está no Signal!</item>
     <item quantity="many">%d contactos estão no Signal!</item>
@@ -2825,10 +2829,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Introduziu com sucesso a sua frase-chave de segurança</string>
   <string name="BackupDialog_passphrase_was_not_correct">Frase-chave incorreta</string>
   <string name="LocalBackupJob_creating_signal_backup">A criar cópia de segurança…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">A verificar cópia de segurança do Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">Falha ao fazer cópia de segurança</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">A sua diretoria da cópia de segurança foi eliminada ou movida.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">O seu ficheiro de cópia de segurança é demasiado grande para ser guardada neste volume.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Não existe espaço suficiente para guardar a sua cópia de segurança.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Não foi possível criar e verificar a sua cópia de segurança recente. Crie uma nova.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">A sua cópia de segurança contém um ficheiro muito grande que não pode ser copiado. Elimine esse ficheiro e crie uma nova cópia de segurança.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Toque para gerir as cópias de segurança.</string>
   <string name="ProgressPreference_d_messages_so_far">%d mensagens até à data</string>
   <string name="RegistrationActivity_wrong_number">Número errado</string>
@@ -3978,7 +3988,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">As minhas histórias</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Adicionar uma história</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Adicionar uma história</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Não existe atualmente nenhuma atualização recente para mostrar. Toque em \"+\" para adicionar algo à sua história.</string>
   <!--Context menu option to hide a story-->
@@ -4086,13 +4096,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Eliminar</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Definições de histórias</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Definições de histórias</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Histórias privadas</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Histórias privadas</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">As histórias privadas apenas podem ser vistas pelas pessoas que você adicionar. Apenas você poderá ver o nome da história.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">As histórias privadas apenas podem ser vistas pelas pessoas que você adicionar. Apenas você poderá ver o nome da história.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Nova história privada</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Nova história privada</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">A minha história</string>
   <!--Section heading for story visibility-->

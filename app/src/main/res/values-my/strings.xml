@@ -442,6 +442,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">အရန်ကူးခြင်းတစ်ခုကို ပြန်ယူလိုလျှင် Signal မိတ္တူအသစ်ကိုထည့်သွင်းပါ။ အက်ပ်ကိုဖွင့်၍ \"အရန်ကူးထားခြင်းကိုပြန်ယူပါ\" ကို နှိပ်ပြီး အရန်ဖိုင်ကို ရှာဖွေရွေးပေးပါ။ %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">ထပ်မံလေ့လာရန်</string>
   <string name="BackupsPreferenceFragment__in_progress">ဆောင်ရွက်ဆဲ</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">ဘက်ခ်အပ် အတည်ပြုနေဆဲ…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d ထိလုပ်ဆောင်ပြီး…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% လုပ်ဆောင်ပြီး…</string>
@@ -1446,7 +1448,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">သိမ်းရန်</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">သိမ်းရန် မအောင်မြင်ခဲ့ပါ</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">သိမ်းပြီးပါပြီ</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">၎င်းကိုဖျက်ရန် မျဉ်းတစ်ကြောင်းနှိပ်ပါ</string>
   <string name="SubmitDebugLogActivity_submit">တင်မယ်</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">မှတ်တမ်းများတင်သွင်းရန်မအောင်မြင်ပါ</string>
@@ -1525,7 +1529,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">အသုံးပြုသူအမည်များသည်ည် နံပါတ်နှင့် စတင်၍ မရပါ။</string>
   <string name="UsernameEditFragment_username_is_invalid">အသုံးပြုသူအမည် မမှန်ကန်ပါ</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">အသုံးပြုသူအမည်များသည် %1$d နှင့် %2$d ကြား အက္ခရာလုံး အရေတွက်ရှိရပါမည် ။</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal ပေါ်တွင် အသုံးပြုသူအမည်များသည် မဖြစ်မနေ သတ်မှတ်ရမည်မဟုတ်ပါ။ သင်မှ​ အသုံးပြုသူအမည်ကို ဖန်တီးရန်ရွေးချယ်ပါက အခြား Signal အသုံးပြုသူများသည် သင့်ကို သင်၏ဖုန်းနံပါတ်မသိဘဲ သင်၏ အသုံးပြုသူအမည်သုံး၍ သင့်ကို ရှာဖွေနိုင်ပါသည်။</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal ပေါ်တွင် အသုံးပြုသူအမည်များသည် မဖြစ်မနေ သတ်မှတ်ရမည်မဟုတ်ပါ။ သင်မှ​ အသုံးပြုသူအမည်ကို ဖန်တီးရန်ရွေးချယ်ပါက အခြား Signal အသုံးပြုသူများသည် သင့်ကို သင်၏ဖုန်းနံပါတ်မသိဘဲ သင်၏ အသုံးပြုသူအမည်သုံး၍ သင့်ကို ရှာဖွေနိုင်ပါသည်။</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="other">အဆက်အသွယ် %d ဦးသည် Signal ပေါ်ရှိပါသည်!</item>
   </plurals>
@@ -2633,10 +2637,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">သင်၏အရန်ကူးထားသောစကားဝှက်ကို အောင်မြင်စွာထည့်ပြီးပါပြီ</string>
   <string name="BackupDialog_passphrase_was_not_correct">စကားဝှက်သည်မမှန်ပါ</string>
   <string name="LocalBackupJob_creating_signal_backup">Signal ဘက်ခ်အပ် ဖန်တီးနေဆဲ…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Signal ဘက်ခ်အပ် အတည်ပြုနေဆဲ…</string>
   <string name="LocalBackupJobApi29_backup_failed">အရန်သိမ်းဆည်းမှုများ မအောင်မြင်ပါ</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">သင်၏ အရန်သိမ်းဆည်းမှုများ၏ လမ်းညွှန်အား ဖျက်ထားသည် သို့မဟုတ် ပြောင်းရွှေ့သွားသည်</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">သင်၏ အရန်သိမ်းဆည်းထားသောဖိုင်ကို သိမ်းဆည်းရန် အလွန်ကြီးမားသည်</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">သင်၏ အရန်သိမ်းဆည်းမှုများကို သိမ်းဆည်းရန် နေရာမလုံလောက်ပါ</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">သင်၏ မကြာသေးမီက ဘက်ခ်အပ်ကို ဖန်တီး၍ မရနိုင်ခဲ့သည်အပြင် အတည်ပြု၍ မရခဲ့ပါ။ အသစ်တစ်ခု ဖန်တီးပေးပါ။</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">သင့်ဘက်ခ်အပ်တွင် ဘက်ခ်အပ်လုပ်၍ မရနိုင်သည့် အလွန်ကြီးသော ဖိုင်တစ်ဖိုင် ပါဝင်နေပါသည်။ ၎င်းကို ဖျက်ပြီး ဘက်ခ်အပ်အသစ် ဖန်တီးပါ။</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">အရန်ကူးခြင်းများကိုစီမံရန် နှိပ်ပါ</string>
   <string name="ProgressPreference_d_messages_so_far">လက်ရှိအချိန်အထိ %d စာ ရှိပါသည်</string>
   <string name="RegistrationActivity_wrong_number">နံပါတ်မှားယွင်းနေပါသည်</string>
@@ -3766,7 +3776,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">ကျွန်ုပ်၏ စတိုရီများ</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">စတိုရီ ပေါင်းထည့်ရန်</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">စတိုရီ ပေါင်းထည့်ရန်</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">ယခု ပြသရန် လတ်တလော အပ်ဒိတ်များ မရှိပါ။ သင့်စတိုရီတွင် ပေါင်းထည့်ရန် + ကို နှိပ်ပါ။</string>
   <!--Context menu option to hide a story-->
@@ -3868,13 +3878,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">ဖျက်မယ်</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">စတိုရီ ဆက်တင်</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">စတိုရီ ဆက်တင်</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">သီးသန့် စတိုရီများ</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">သီးသန့် စတိုရီများ</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">သီးသန့် စတိုရီများကို သင် ပေါင်းထည့်ထားသူများသာ မြင်ရပါမည်။ စတိုရီအမည်ကို သင်တစ်ဦးတည်းသာ မြင်ရပါမည်။</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">သီးသန့် စတိုရီများကို သင် ပေါင်းထည့်ထားသူများသာ မြင်ရပါမည်။ စတိုရီအမည်ကို သင်တစ်ဦးတည်းသာ မြင်ရပါမည်။</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">သီးသန့် စတိုရီ အသစ်</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">သီးသန့် စတိုရီ အသစ်</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">ကျွန်ုပ်၏ စတိုရီ</string>
   <!--Section heading for story visibility-->

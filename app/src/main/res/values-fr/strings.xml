@@ -484,6 +484,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Pour restaurer une sauvegarde, installez un nouvel exemplaire de Signal. Ouvrez l’appli, touchez « Restaurer la sauvegarde », puis trouvez un fichier de sauvegarde. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">En apprendre davantage</string>
   <string name="BackupsPreferenceFragment__in_progress">En cours…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Vérification de la sauvegarde…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d jusqu’à présent…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% jusqu’à présent…</string>
@@ -1589,7 +1591,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Enregistrer</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Échec de la sauvegarde</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Sauvegarde terminée</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Toucher une ligne pour la supprimer</string>
   <string name="SubmitDebugLogActivity_submit">Envoyer</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Échec d’envoi des journaux</string>
@@ -1668,7 +1672,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Les noms d’utilisateur ne peuvent pas commencer par un numéro.</string>
   <string name="UsernameEditFragment_username_is_invalid">Le nom d’utilisateur est invalide.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Les noms d’utilisateur doivent comporter entre %1$d et %2$d caractères.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Sur Signal, les noms d’utilisateur sont facultatifs. Si vous choisissez de créer un nom d’utilisateur, les autres utilisateurs de Signal pourront vous trouver avec ce nom d’utilisateur et vous contacter sans connaître votre numéro de téléphone.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Sur Signal, les noms d’utilisateur sont facultatifs. Si vous choisissez de créer un nom d’utilisateur, les autres utilisateurs de Signal pourront vous trouver avec ce nom d’utilisateur et vous contacter sans connaître votre numéro de téléphone.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d contact est sur Signal</item>
     <item quantity="many">%d contacts sont sur Signal</item>
@@ -2817,10 +2821,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Vous avez saisi avec succès la phrase de passe de votre sauvegarde</string>
   <string name="BackupDialog_passphrase_was_not_correct">La phrase de passe était erronée</string>
   <string name="LocalBackupJob_creating_signal_backup">Création de la sauvegarde de Signal…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Vérification de la sauvegarde Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">La sauvegarde a échoué</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Votre répertoire de sauvegarde a été supprimé ou déplacé.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Votre fichier de sauvegarde est trop gros pour être enregistré sur ce volume.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Il manque d’espace pour enregistrer votre sauvegarde.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">La création et la vérification de votre dernière sauvegarde ont échoué. Veuillez réessayer.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Votre sauvegarde contient un fichier trop volumineux. Veuillez le supprimer et créer une nouvelle sauvegarde.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Toucher pour gérer les sauvegardes</string>
   <string name="ProgressPreference_d_messages_so_far">%d messages jusqu’à présent</string>
   <string name="RegistrationActivity_wrong_number">Mauvais numéro</string>
@@ -3974,7 +3984,7 @@ Nouvelle tentative…</string>
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Mes histoires</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Ajouter une histoire</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Ajouter une histoire</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Aucune mise à jour récente à afficher actuellement. Toucher + plus pour ajouter à votre histoire.</string>
   <!--Context menu option to hide a story-->
@@ -4082,13 +4092,13 @@ Nouvelle tentative…</string>
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Supprimer</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Paramètres des histoires</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Paramètres des histoires</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Histoires privées</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Histoires privées</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Les histoires privées ne peuvent être vues que par les personnes que vous y avez ajoutées. Vous seul pouvez voir le nom de l’histoire.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Les histoires privées ne peuvent être vues que par les personnes que vous y avez ajoutées. Vous seul pouvez voir le nom de l’histoire.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Nouvelle histoire privée</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Nouvelle histoire privée</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Mon histoire</string>
   <!--Section heading for story visibility-->
@@ -4279,9 +4289,9 @@ Nouvelle tentative…</string>
   <string name="StoriesLinkPopup__visit_link">Visitez le lien</string>
   <!--Gift price and duration, formatted as: {price} dot {n} day duration-->
   <plurals name="GiftRowItem_s_dot_d_day_duration">
-    <item quantity="one">Durée de %1$sà %2$d jours</item>
-    <item quantity="many">Durée de %1$s à %2$d jours</item>
-    <item quantity="other">Durée de %1$s à %2$d jours</item>
+    <item quantity="one">%1$s · %2$d jour</item>
+    <item quantity="many">%1$s · %2$d jours</item>
+    <item quantity="other">%1$s · %2$d jours</item>
   </plurals>
   <!--Tagline for gift row items-->
   <string name="GiftRowItem__send_a_gift_badge">Envoyer un macaron cadeau</string>

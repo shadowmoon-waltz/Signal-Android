@@ -463,6 +463,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">برای بازگردانی یک پشتیبان، یک نسخهٔ جدید سیگنال را نصب کنید. برنامه را باز کرده و روی «بازگردانی پشتیبان» ضربه بزنید، سپس فایل پشتیبان را مشخص کنید. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">بیشتر یاد بگیرید</string>
   <string name="BackupsPreferenceFragment__in_progress">در حال پیشرفت…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">در حال تایید پشتیبان…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d تا بحال…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% تا کنون…</string>
@@ -1523,7 +1525,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">ذخیره</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">ذخیره ناموفق بود</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">ذخیره کامل شد</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">برای حذف هر خط روی آن ضربه بزنید</string>
   <string name="SubmitDebugLogActivity_submit">ارسال</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">ارسال گزارش ناموفق بود</string>
@@ -1602,7 +1606,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">نام‌های کاربری نمی‌توانند با عدد آغاز شوند.</string>
   <string name="UsernameEditFragment_username_is_invalid">نام کاربری نامعتبر است.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">نام‌های کاربری باید بین %1$d و %2$d نویسه باشند.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">نام‌های کاربری در سیگنال انتخابی هستند. اگر یک نام کاربری ایجاد کنید، دیگر کاربران سیگنال قادر خواهند بود تا شما را با این نام کاربری پیدا کنند و با شما بدون دانستن شماره‌تلفن شما ارتباط برقرار کنند.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">نام‌های کاربری در سیگنال انتخابی هستند. اگر یک نام کاربری ایجاد کنید، دیگر کاربران سیگنال قادر خواهند بود تا شما را با این نام کاربری پیدا کنند و با شما بدون دانستن شماره‌تلفن شما ارتباط برقرار کنند.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d مخاطب در سیگنال هست!</item>
     <item quantity="other">%d مخاطب در سیگنال هستند!</item>
@@ -2730,10 +2734,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">گذرواژهٔ پشتیبان با موفقیت وارد شد</string>
   <string name="BackupDialog_passphrase_was_not_correct">گذرواژه نادرست بود</string>
   <string name="LocalBackupJob_creating_signal_backup">در حال ایجاد پشتیبان سیگنال…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">در حال تایید پشتیبان Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">پشتیبان‌گیری ناموفق بود</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">آدرس ذخیره‌سازی پشتیبان شما حذف شده یا به جای دیگری انتقال یافته است.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">حجم فایل پشتیبان شما برای نگهداری در این محل زیاد است.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">فضای کافی برای نگهداری پشتیبان شما وجود ندارد.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">نسخه پشتیبان اخیر شما ایجاد و تأیید نشد. لطفا یک نسخه جدید ایجاد کنید.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">نسخه پشتیبان شما دارای یک فایل بسیار حجیم است که نمی‌توان از آن نسخه پشتیبان تهیه کرد. لطفا آن را حذف کنید و یک نسخه پشتیبان جدید ایجاد کنید.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">برای مدیریت پشتیبان‌ها ضربه بزنید.</string>
   <string name="ProgressPreference_d_messages_so_far">%d پیام تا به حال</string>
   <string name="RegistrationActivity_wrong_number">شمارهٔ اشتباه</string>
@@ -3873,7 +3883,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">داستان‌های من</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">یک استوری اضافه کنید</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">یک استوری اضافه کنید</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">اکنون به‌روزرسانی جدیدی برای نمایش دادن وجود ندارد. برای افزودن استوری خود، روی + ضربه بزنید.</string>
   <!--Context menu option to hide a story-->
@@ -3978,13 +3988,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">حذف</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">تنظیمات استوری</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">تنظیمات استوری</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">استوری‌های خصوصی</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">استوری‌های خصوصی</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">استوری‌های خصوصی را فقط افرادی می‌توانند مشاهده کنند که آن‌ها را به آن‌ استوری‌ها اضافه می‌کنید. فقط شما می‌توانید نام آن استوری را مشاهده کنید.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">استوری‌های خصوصی را فقط افرادی می‌توانند مشاهده کنند که آن‌ها را به آن‌ استوری‌ها اضافه می‌کنید. فقط شما می‌توانید نام آن استوری را مشاهده کنید.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">استوری خصوصی جدید</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">استوری خصوصی جدید</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">استوری من</string>
   <!--Section heading for story visibility-->

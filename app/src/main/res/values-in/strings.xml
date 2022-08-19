@@ -442,6 +442,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Untuk memulihkan sebuah cadangan, pasang ulang Signal. Buka aplikasinya dan ketuk \"Pulihkan cadangan\", lalu arahkan ke berkas cadangan. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Pelajari lebih lanjut</string>
   <string name="BackupsPreferenceFragment__in_progress">Sedang berjalan…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Memverifikasi pencadangan…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d sejauh ini…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% sejauh ini…</string>
@@ -1452,7 +1454,9 @@ Menerima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Simpan</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Gagal menyimpan</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Penyimpanan selesai</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Ketuk pecakapan untuk menghapus</string>
   <string name="SubmitDebugLogActivity_submit">Kirimkan</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Gagal mengirimkan catatan</string>
@@ -1531,7 +1535,7 @@ Menerima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Nama pengguna tidak boleh dimulai dengan angka.</string>
   <string name="UsernameEditFragment_username_is_invalid">Nama pengguna tidak valid.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Nama pengguna harus terdiri antara %1$d dan %2$d karakter.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Nama pengguna di Signal bersifat opsional. Jika Anda membuat nama pengguna, pengguna Signal lain akan dapat menemukan Anda dengan nama pengguna ini serta dapat menghubungi Anda tanpa perlu tahu nomor telepon.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Nama pengguna di Signal bersifat opsional. Jika Anda membuat nama pengguna, pengguna Signal lain akan dapat menemukan Anda dengan nama pengguna ini serta dapat menghubungi Anda tanpa perlu tahu nomor telepon.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="other">%d kontak ada di Signal!</item>
   </plurals>
@@ -2638,10 +2642,16 @@ Menerima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Anda sukses memasukkan frasa sandi cadangan</string>
   <string name="BackupDialog_passphrase_was_not_correct">Frasa sandi salah</string>
   <string name="LocalBackupJob_creating_signal_backup">Membuat cadangan Signal…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Memverifikasi pencadangan Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">Cadangan gagal</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Direktori berkas cadangan telah terhapus atau dipindahkan.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Berkas cadangan kamu terlalu besar untuk disimpan pada lokasi ini.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Penyimpanan tidak cukup untuk menyimpan cadangan Anda.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Pencadangan terbaru Anda tidak dapat dibuat dan diverifikasi. Harap buat yang baru.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Pencadangan Anda berisi file sangat besar yang tidak dapat dicadangkan. Hapus file dan buat pencadangan baru.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Tekan untuk mengatur cadangan.</string>
   <string name="ProgressPreference_d_messages_so_far">%d pesan sejauh ini…</string>
   <string name="RegistrationActivity_wrong_number">Nomor salah</string>
@@ -3771,7 +3781,7 @@ Menerima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Cerita saya</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Tambahkan sebuah cerita</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Tambahkan sebuah cerita</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Tidak ada pembaruan untuk diperlihatkan sekarang. Ketuk + untuk menambahkan cerita Anda.</string>
   <!--Context menu option to hide a story-->
@@ -3873,13 +3883,13 @@ Menerima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Hapus</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Pengaturan cerita</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Pengaturan cerita</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Cerita privat</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Cerita privat</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Cerita privat hanya bisa dilihat oleh orang yang Anda tambahkan ke cerita Anda. Hanya Anda yang dapat melihat nama cerita.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Cerita privat hanya bisa dilihat oleh orang yang Anda tambahkan ke cerita Anda. Hanya Anda yang dapat melihat nama cerita.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Cerita privat baru</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Cerita privat baru</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Cerita saya</string>
   <!--Section heading for story visibility-->
@@ -4065,7 +4075,7 @@ Menerima pesan pertukaran kunci untuk versi protokol yang tidak valid.
   <string name="StoriesLinkPopup__visit_link">Kunjungi tautan</string>
   <!--Gift price and duration, formatted as: {price} dot {n} day duration-->
   <plurals name="GiftRowItem_s_dot_d_day_duration">
-    <item quantity="other">Durasi %1$s · %2$d hari</item>
+    <item quantity="other">%1$s · Durasi %2$d hari</item>
   </plurals>
   <!--Tagline for gift row items-->
   <string name="GiftRowItem__send_a_gift_badge">Kirim lencana hadiah</string>

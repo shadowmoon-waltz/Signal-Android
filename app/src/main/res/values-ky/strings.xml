@@ -442,6 +442,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Камдык көчүрмөдөн калыбына келтирүү үчүн Signal\'дын жаңы көчүрмөсүн орнотуңуз. Колдонмону ачып, \"Камдык көчүрмөнү калыбына келтирүү\" дегенди басып, камдык көчүрмөнүн файлын тандаңыз. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Кененирээк маалымат</string>
   <string name="BackupsPreferenceFragment__in_progress">Иштелип жатат…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Камдык көчүрмө ырасталууда…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d болуп калды …</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% болуп калды…</string>
@@ -501,7 +503,7 @@
   <string name="GiphyFragmentPagerAdapter_stickers">Стикерлер</string>
   <!--AddToGroupActivity-->
   <string name="AddToGroupActivity_add_member">Мүчө кошосузбу?</string>
-  <string name="AddToGroupActivity_add_s_to_s">\"%1$s\" адамды \"%2$s\" тобуна кошосузбу?</string>
+  <string name="AddToGroupActivity_add_s_to_s">Бул адамды \"%1$s\" \"%2$s\" тобуна кошосузбу?</string>
   <string name="AddToGroupActivity_s_added_to_s">\"%1$s\" \"%2$s\" тобуна кошулду.</string>
   <string name="AddToGroupActivity_add_to_group">Топко кошуу</string>
   <string name="AddToGroupActivity_add_to_groups">Топторго кошуу</string>
@@ -803,7 +805,7 @@
   <string name="InviteActivity_no_app_to_share_to">Бөлүшө турган колдонмолоруңуз жок окшойт.</string>
   <!--LearnMoreTextView-->
   <string name="LearnMoreTextView_learn_more">Кененирээк маалымат</string>
-  <string name="SpanUtil__read_more">Кененирээк маалымат</string>
+  <string name="SpanUtil__read_more">Дагы</string>
   <!--LongMessageActivity-->
   <string name="LongMessageActivity_unable_to_find_message">Билдирүү табылган жок</string>
   <string name="LongMessageActivity_message_from_s">%1$s жөнөткөн билдирүү</string>
@@ -1273,10 +1275,10 @@
   <string name="WebRtcCallView__reconnecting">Кайра байланышып жатасыз…</string>
   <string name="WebRtcCallView__joining">Кошулуп жатасыз…</string>
   <string name="WebRtcCallView__disconnected">Өчүк</string>
-  <string name="WebRtcCallView__signal_will_ring_s">Signal %1$s чалат</string>
-  <string name="WebRtcCallView__signal_will_ring_s_and_s">Сигнал %1$s жана %2$s чалат</string>
+  <string name="WebRtcCallView__signal_will_ring_s">Signal чалат: %1$s</string>
+  <string name="WebRtcCallView__signal_will_ring_s_and_s">Signal чалат: %1$s менен %2$s </string>
   <plurals name="WebRtcCallView__signal_will_ring_s_s_and_d_others">
-    <item quantity="other">Signal %1$s, %2$s жана %3$d чалат</item>
+    <item quantity="other">Signal чалат: %1$s, %2$s жана башка %3$d</item>
   </plurals>
   <string name="WebRtcCallView__s_will_be_notified">%1$s билдирме алат</string>
   <string name="WebRtcCallView__s_and_s_will_be_notified">%1$s менен %2$s билдирме алышат</string>
@@ -1451,7 +1453,7 @@
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_failed_to_save">Сакталбай калды</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
-  <string name="SubmitDebugLogActivity_save_complete">Сактоо аяктады</string>
+  <string name="SubmitDebugLogActivity_save_complete">Сакталды</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Өчүрүлө турган сапты басыңыз</string>
   <string name="SubmitDebugLogActivity_submit">Тапшыруу</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Журналдар тапшырылган жок</string>
@@ -1506,9 +1508,9 @@
   <!--Displayed in the notification when the user has opened a received gift-->
   <string name="ThreadRecord__you_redeemed_a_gift_badge">Белекке төшбелги алдыңыз</string>
   <!--Displayed in the conversation list when someone reacted to your story-->
-  <string name="ThreadRecord__reacted_s_to_your_story">Окуяңызга %1$s реакция кылды</string>
+  <string name="ThreadRecord__reacted_s_to_your_story">Окуяңызга %1$s деген сезимин билдирди</string>
   <!--Displayed in the conversation list when you reacted to someone\'s story-->
-  <string name="ThreadRecord__reacted_s_to_their_story">%1$s окуясына реакция кылды</string>
+  <string name="ThreadRecord__reacted_s_to_their_story">Окуясына %1$s деген сезимин билдирди</string>
   <!--UpdateApkReadyListener-->
   <string name="UpdateApkReadyListener_Signal_update">Signal\'ды жаңыртуу</string>
   <string name="UpdateApkReadyListener_a_new_version_of_signal_is_available_tap_to_update">Signal\'дын жаңы версиясы чыкты, жаңыртуу үчүн басып коюңуз</string>
@@ -1530,7 +1532,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Колдонуучунун аты сандан башталбайт.</string>
   <string name="UsernameEditFragment_username_is_invalid">Колдонуучунун аты туура эмес.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Колдонуучунун аты %1$d баштап %2$d чейин белгиден турушу керек.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal\'да колдонуучунун атын койбой деле койсоңуз болот. Колдонуучунун атын коем десеңиз, Signal\'дагы башка колдонуучулар телефон номериңизди билишпесе да, сизди колдонуучу атыңыз аркылуу таба алышат.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal\'да колдонуучунун атын койбой деле койсоңуз болот. Колдонуучунун атын коем десеңиз, Signal\'дагы башка колдонуучулар телефон номериңизди билишпесе да, сизди колдонуучу атыңыз аркылуу таба алышат.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="other">Signal\'да %dбайланышыңыз бар!</item>
   </plurals>
@@ -2044,7 +2046,7 @@
   <string name="arrays__extra_large">Өтө чоң</string>
   <string name="arrays__default">Демейки</string>
   <string name="arrays__high">Шашылыш</string>
-  <string name="arrays__max">Максималдуу</string>
+  <string name="arrays__max">Өтө</string>
   <!--plurals.xml-->
   <plurals name="hours_ago">
     <item quantity="other">%dc</item>
@@ -2072,18 +2074,18 @@
   <string name="preferences__disable_screen_security_to_allow_screen_shots">Акыркы колдонмолор тизмесинде жана колдонмолордун ичинде скриншотторду кулпулайсыз</string>
   <string name="preferences__auto_lock_signal_after_a_specified_time_interval_of_inactivity">Белгилүү бир убакыт бою эч нерсе жасалбаса, Signal автоматтык түрдө кулпуланат</string>
   <string name="preferences__inactivity_timeout_passphrase">Эч нерсе жасалбагандагы сыр сөз айкашы</string>
-  <string name="preferences__inactivity_timeout_interval">Аракетсиздик убакыты</string>
+  <string name="preferences__inactivity_timeout_interval">Аракетсиздик мезгили</string>
   <string name="preferences__notifications">Билдирмелер</string>
   <string name="preferences__led_color">LED түсү</string>
   <string name="preferences__led_color_unknown">Белгисиз</string>
-  <string name="preferences__pref_led_blink_title">LED жарыгынын үлгүсү</string>
+  <string name="preferences__pref_led_blink_title">LED кантип бүлбүлдөйт</string>
   <string name="preferences__customize">Тууралоо</string>
   <string name="preferences__change_sound_and_vibration">Үн менен дирилдөөнү өзгөртүү</string>
   <string name="preferences__sound">Үн</string>
   <string name="preferences__silent">Үнсүз</string>
   <string name="preferences__default">Демейки</string>
-  <string name="preferences__repeat_alerts">Билдирмелерди кайталоо</string>
-  <string name="preferences__never">Эч качан</string>
+  <string name="preferences__repeat_alerts">Билдирмелер канча жолу кайталанат</string>
+  <string name="preferences__never">Кайталанбайт</string>
   <string name="preferences__one_time">Бир жолу</string>
   <string name="preferences__two_times">Эки жолу</string>
   <string name="preferences__three_times">Үч жолу</string>
@@ -2103,28 +2105,28 @@
   <string name="preferences__slow">Жай</string>
   <string name="preferences__help">Жардам</string>
   <string name="preferences__advanced">Өркүндөтүлгөн</string>
-  <string name="preferences__donate_to_signal">Signal\'ды колдоо</string>
+  <string name="preferences__donate_to_signal">Signal\'га колдоо көрсөтүү</string>
   <!--Preference label for making one-time donations to Signal-->
   <string name="preferences__one_time_donation">Бир жолу колдоо көрсөтүү</string>
   <string name="preferences__privacy">Купуялык</string>
   <string name="preferences__mms_user_agent">MMS колдонуучу агенти</string>
   <string name="preferences__advanced_mms_access_point_names">Кол менен MMS тууралоо</string>
   <string name="preferences__mmsc_url">MMSC URL</string>
-  <string name="preferences__mms_proxy_host">MMS-прокси дареги</string>
+  <string name="preferences__mms_proxy_host">MMS прокси дареги</string>
   <string name="preferences__mms_proxy_port">MMS прокси порту</string>
   <string name="preferences__mmsc_username">MMSC колдонуучу аты</string>
   <string name="preferences__mmsc_password">MMSC сырсөзү</string>
-  <string name="preferences__sms_delivery_reports">SMS жеткирүү отчеттору</string>
-  <string name="preferences__request_a_delivery_report_for_each_sms_message_you_send">Ар бир жөнөткөн SMS билдирүүңүз үчүн жеткирүү отчетун сураңыз</string>
-  <string name="preferences__data_and_storage">Берилмелер жана сактагыч</string>
+  <string name="preferences__sms_delivery_reports">SMS жеткенин кабарлоо</string>
+  <string name="preferences__request_a_delivery_report_for_each_sms_message_you_send">Ар бир жөнөтүлгөн SMS билдирүүңүздүн жеткенин билип турасыз</string>
+  <string name="preferences__data_and_storage">Маалыматтар жана сактагыч</string>
   <string name="preferences__storage">Сактагыч</string>
   <string name="preferences__payments">Төлөмдөр</string>
   <string name="preferences__payments_beta">Төлөмдөр (Бета)</string>
-  <string name="preferences__conversation_length_limit">Сүйлөшүүнүн узундук чеги</string>
+  <string name="preferences__conversation_length_limit">Сүйлөшүүнүн узундугу</string>
   <string name="preferences__keep_messages">Билдирүүлөрдү сактоо</string>
-  <string name="preferences__clear_message_history">Билдирүү таржымалын тазалоо</string>
+  <string name="preferences__clear_message_history">Билдирүүлөр таржымалын тазалоо</string>
   <string name="preferences__linked_devices">Байланышкан түзмөктөр</string>
-  <string name="preferences__light_theme">Жарык</string>
+  <string name="preferences__light_theme">Ачык</string>
   <string name="preferences__dark_theme">Күңүрт</string>
   <string name="preferences__appearance">Тышкы көрүнүшү</string>
   <string name="preferences__theme">Тема</string>
@@ -2133,11 +2135,11 @@
   <string name="preferences__disable_pin">PIN кодду өчүрүү</string>
   <string name="preferences__enable_pin">PIN кодду иштетүү</string>
   <string name="preferences__if_you_disable_the_pin_you_will_lose_all_data">PIN кодду өчүрүп салсаңыз, Signal колдонмосун кайра орноткондо аккаунтуңуздагы бардык нерселер өчүп калат (эгер алардын көчүрмөсүн кол менен башка жерге сактап койбосоңуз). PIN код өчүк болгондо, Катталууга жол бербөө функциясын иштете албай каласыз.</string>
-  <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">PIN код Signal\'да сакталган маалыматты шифрленген формада сактайт, андыктан ага сиз гана кире аласыз. Профилиңиз, тууралоолоруңуз жана байланыштарыңыз кайра орнотулгандан кийин калыбына келтирилет. Колдонмону ачуу үчүн сизге PIN коддун кереги жок.</string>
-  <string name="preferences__system_default">Система демейкиси</string>
+  <string name="preferences__pins_keep_information_stored_with_signal_encrypted_so_only_you_can_access_it">PIN коддор Signal\'да сакталган маалыматты шифрлеп, аны өзүңүз гана көрө аласыз. Signal\'ды кайра орнотсоңуз, профилиңиз, параметрлериңиз жана байланыштарыңыз калыбына келтирилет. Колдонмону ачуу үчүн PIN коддун кереги жок.</string>
+  <string name="preferences__system_default">Демейки</string>
   <string name="preferences__language">Тил</string>
   <string name="preferences__signal_messages_and_calls">Signal билдирүүлөрү жана чалуулары</string>
-  <string name="preferences__advanced_pin_settings">Өркүндөтүлгөн PIN тууралоолору</string>
+  <string name="preferences__advanced_pin_settings">Өркүндөтүлгөн PIN параметрлери</string>
   <string name="preferences__free_private_messages_and_calls">Signal колдонуучуларына акысыз жеке билдирүүлөр жана чалуулар</string>
   <string name="preferences__submit_debug_log">Мүчүлүштүктөр журналын жөнөтүү</string>
   <string name="preferences__delete_account">Аккаунтту жок кылуу</string>
@@ -2637,10 +2639,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Сиз камдык купуя сөз айкашыңызды ийгиликтүү киргиздиңиз</string>
   <string name="BackupDialog_passphrase_was_not_correct">Купуя сөз айкашы туура эмес</string>
   <string name="LocalBackupJob_creating_signal_backup">Signal\'дын камдык көчүрмөсү түзүлүүдө…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Signal камдык көчүрмөсү ырасталууда…</string>
   <string name="LocalBackupJobApi29_backup_failed">Камдык көчүрмө сакталган жок</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Камдык папкаңыз жок кылынды же жылдырылды.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Камдык файлыңыз бул томдо сактоо үчүн өтө чоң.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Камдык көчүрмөңүздү сактоо үчүн орун жетишсиз.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Соңку камдык көчүрмөңүз түзүлгөн да жок, ырасталган да жок. Жаңысын түзүңүз.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Камдык көчүрмөңүздө өтө көлөмдүү файл болгондуктан, ал түзүлгөн жок. Аны өчүрүп туруп, жаңысын түзүңүз.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Камдык көчүрмөлөрдү башкаруу үчүн басыңыз.</string>
   <string name="ProgressPreference_d_messages_so_far">Азырынча %d билдирүү</string>
   <string name="RegistrationActivity_wrong_number">Туура эмес номер</string>
@@ -3444,7 +3452,7 @@
   <string name="Subscription__s_per_month_dot_renews_s">%1$s/айына · %2$s жаңырат</string>
   <string name="Subscription__s_per_month_dot_expires_s">%1$s/айына · %2$s мөөнөтү бүтөт</string>
   <!--First small text blurb on learn more sheet-->
-  <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal - эч кандай жарнакчылар же инвесторлор жок коммерциялык эмес долбоор. Аны колдонгон жана баалаган адамдар тарабынан иштейт. Ай сайын колдоо көрсөтүп, профилиңизден төшбелгилерге ээ болуп, башкалар менен бөлүшүңүз.</string>
+  <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal - эч кандай жарнамачылары же инвесторлору жок коммерциялык эмес долбоор. Signal аны колдонгон жана баалаган адамдардын колдоосу менен иштейт. Ай сайын колдоо көрсөтүп, профилиңизден төшбелгилерге ээ болуп, башкалар менен бөлүшүңүз.</string>
   <string name="SubscribeLearnMoreBottomSheetDialogFragment__why_donate">Эмне үчүн колдоо керек?</string>
   <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_committed_to_developing">Сигнал ар кимге өз оюн айтууга жана дүйнө жүзү боюнча адамдар менен коопсуз баарлашууга мүмкүндүк берген ачык булактуу купуялык технологиясын иштеп чыгууга багытталган.</string>
   <string name="SubscribeLearnMoreBottomSheetDialogFragment__your_donation">Сиздин демөөрчүлүгүңүз бул максатты ишке ашырууга жана миллиондогон адамдар жеке мамилелерди куруу жана аны иштетүү үчүн колдонгон колдонмону сактап калууга жардам берет. Жарнамалар жок. Трекерлер жок. Бул тамаша эмес.</string>
@@ -3459,7 +3467,7 @@
   <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">Бүттү</string>
   <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Эгер сизде бирден ашык төшбелги болсо, профилиңизде башкаларга көрсөтүү үчүн бирин тандай аласыз.</string>
   <string name="BecomeASustainerFragment__get_badges">Signal\'ды колдоо менен профилиңизге төшбелги алыңыз.</string>
-  <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal – бул сизге окшогон адамдар тарабынан гана колдоого алынган, эч кандай жарнакчылар же инвесторлор жок коммерциялык эмес долбоор.</string>
+  <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal – сизге окшогон адамдардын колдоосу менен иштеген, эч кандай жарнамачылары же инвесторлору жок коммерциялык эмес уюм.</string>
   <!--Button label for creating a monthly donation-->
   <string name="ManageDonationsFragment__make_a_monthly_donation">Ай сайын колдоо көрсөтүңүз</string>
   <!--Heading for more area of manage subscriptions page-->
@@ -3770,7 +3778,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Менин окуяларым</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Окуя кошуу</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Окуя кошуу</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Учурда көрсөтүлө турган акыркы жаңыртуулар жок. Окуяңызга кошуу үчүн + баскычын басыңыз.</string>
   <!--Context menu option to hide a story-->
@@ -3848,9 +3856,9 @@
   <!--Dialog action to remove viewer from a story-->
   <string name="StoryViewsFragment__remove">Алып салуу</string>
   <!--Dialog title when removing a viewer from a story-->
-  <string name="StoryViewsFragment__remove_viewer">Көрүүчү алынып салынсынбы?</string>
+  <string name="StoryViewsFragment__remove_viewer">Көрүүчүнү алып саласызбы?</string>
   <!--Dialog message when removing a viewer from a story-->
-  <string name="StoryViewsFragment__s_will_still_be_able">%1$s дагы эле бул постту көрө алат, бирок сиз %2$s менен бөлүшкөн келечектеги постторду көрө албайт.</string>
+  <string name="StoryViewsFragment__s_will_still_be_able">%1$s бул постту көрө берет, бирок келечекте сиз %2$s менен бөлүшө турган постторуңузду көрө албайт.</string>
   <!--Story View context menu action to remove them from a story-->
   <string name="StoryViewItem__remove_viewer">Көрүүчүнү алып салуу</string>
   <!--Displayed when a story has no replies yet-->
@@ -3872,13 +3880,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Өчүрүү</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Окуя орнотуулары</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Окуя орнотуулары</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Жеке окуялар</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Жеке окуялар</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Жеке окуяларды сиз тандаган адамдар гана көрө алышат. Окуянын атын сиз гана көрө аласыз.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Жеке окуяларды сиз тандаган адамдар гана көрө алышат. Окуянын атын сиз гана көрө аласыз.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Жаңы жеке окуя</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Жаңы жеке окуя</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Менин окуям</string>
   <!--Section heading for story visibility-->

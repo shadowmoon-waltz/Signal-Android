@@ -463,6 +463,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Bir yedeği geri yüklemek için, yeni bir Signal kopyası kurun ve \"Yedeği geri yükle\" dokunun ve yedek dosyasını seçin. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Dahasını öğrenin</string>
   <string name="BackupsPreferenceFragment__in_progress">Devam ediyor…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Yedekleme doğrulanıyor…</string>
   <string name="BackupsPreferenceFragment__d_so_far">Şu ana kadar %1$d…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">Şu ana kadar %1$s%% …</string>
@@ -1523,7 +1525,9 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Kaydet</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Kaydetme işlemi başarısız</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Kaydetme işlemi tamamlandı</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Silmek istediğiniz dizeye tıklayın</string>
   <string name="SubmitDebugLogActivity_submit">Gönder</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Günlükler gönderilemedi</string>
@@ -1602,7 +1606,7 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Kullanıcı adları rakam ile başlayamaz.</string>
   <string name="UsernameEditFragment_username_is_invalid">Kullanıcı adı geçersiz.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Kullanıcı adları %1$d ve %2$d karakter aralığında olmalıdır.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal\'de kullanıcı adları tamamen isteğe bağlıdır. Eğer kullanıcı adı oluşturursanız diğer Signal kullanıcıları bu kullanıcı adı ile sizi bulup telefon numaranızı bilmeden size ulaşabileceklerdir.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal\'de kullanıcı adları tamamen isteğe bağlıdır. Eğer kullanıcı adı oluşturursanız diğer Signal kullanıcıları bu kullanıcı adı ile sizi bulup telefon numaranızı bilmeden size ulaşabileceklerdir.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d kişi Signal\'e katıldı!</item>
     <item quantity="other">%d kişi Signal\'e katıldı!</item>
@@ -2730,10 +2734,16 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Yedek parolanızı doğru girdiniz</string>
   <string name="BackupDialog_passphrase_was_not_correct">Parolanız doğru değil</string>
   <string name="LocalBackupJob_creating_signal_backup">Signal yedeği yaratılıyor…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Signal yedeklemesi doğrulanıyor…</string>
   <string name="LocalBackupJobApi29_backup_failed">Yedekleme başarısız oldu</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Yedekleme dizininiz silindi veya taşındı.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Yedek dosyası bu sürücüde saklanmak için çok büyük.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Yedeğinizi kaydetmek için yereli disk alanı yok.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Son yedekleme oluşturulamadı ve doğrulanamadı. Lütfen yeni bir tane oluştur.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Yedekleme işlemi, çok büyük bir dosya içeriyor ve yedeklenemiyor. Lütfen bu dosyayı sil ve yeni bir yedekleme oluştur.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Yedekleri yönetmek için dokunun.</string>
   <string name="ProgressPreference_d_messages_so_far">Şimdiye kadar %d ileti</string>
   <string name="RegistrationActivity_wrong_number">Yanlış numara</string>
@@ -3873,7 +3883,7 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Hikayelerim</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Bir hikaye ekle</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Bir hikaye ekle</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Şu anda gösterilecek yeni güncelleme yok. Hikayenize eklemek için + simgesine dokunun.</string>
   <!--Context menu option to hide a story-->
@@ -3978,13 +3988,13 @@ Geçersiz protokol sürümünde anahtar değişim iletisi alındı.</string>
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Sil</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Hikaye ayarları</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Hikaye ayarları</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Özel hikayeler</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Özel hikayeler</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Özel hikayeler yalnızca onlara eklediğiniz kişiler tarafından görüntülenebilir. Hikaye adını yalnızca siz görebilirsiniz.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Özel hikayeler yalnızca onlara eklediğiniz kişiler tarafından görüntülenebilir. Hikaye adını yalnızca siz görebilirsiniz.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Yeni özel hikaye</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Yeni özel hikaye</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Hikayem</string>
   <!--Section heading for story visibility-->

@@ -442,6 +442,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">เพื่อกู้คืนข้อมูลสำรอง คุณต้องติดตั้ง Signal ใหม่ เปิดแอป แตะ \"กู้คืนข้อมูลสำรอง\" และระบุแฟ้มสำรองข้อมูล %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">เรียนรู้เพิ่มเติม</string>
   <string name="BackupsPreferenceFragment__in_progress">อยู่ระหว่างดำเนินการ…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">กำลังตรวจยืนยันข้อมูลสำรอง…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d แล้ว…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% ในตอนนี้…</string>
@@ -1452,7 +1454,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">บันทึก</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">บันทึกไม่สำเร็จ</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">บันทึกสำเร็จ</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">แตะที่เส้นเพื่อลบมัน</string>
   <string name="SubmitDebugLogActivity_submit">ส่ง</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">การส่งปูมล้มเหลว</string>
@@ -1531,7 +1535,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">ชื่อผู้ใช้ไม่สามารถเริ่มต้นด้วยตัวเลข</string>
   <string name="UsernameEditFragment_username_is_invalid">ชื่อผู้ใช้ไม่ถูกต้อง</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">ชื่อผู้ใช้จะต้องมี %1$dถึง %2$d ตัวอักษร</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">ชื่อผู้ใช้ใน Signal นั้นจะมีหรือไม่ก็ได้ ถ้าคุณเลือกสร้างชื่อผู้ใช้ ผู้ใช้ Signal คนอื่นจะสามารถหาและติดต่อคุณได้จากชื่อผู้ใช้นี้โดยไม่จำเป็นต้องรู้หมายเลขโทรศัพท์ของคุณ</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">ชื่อผู้ใช้ใน Signal นั้นจะมีหรือไม่ก็ได้ ถ้าคุณเลือกสร้างชื่อผู้ใช้ ผู้ใช้ Signal คนอื่นจะสามารถหาและติดต่อคุณได้จากชื่อผู้ใช้นี้โดยไม่จำเป็นต้องรู้หมายเลขโทรศัพท์ของคุณ</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="other">มีผู้ติดต่อ %d คนใช้งาน Signal!</item>
   </plurals>
@@ -2638,10 +2642,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">คุณได้ป้อนวลีรหัสผ่านสำหรับข้อมูลสำรองของคุณเสร็จแล้ว</string>
   <string name="BackupDialog_passphrase_was_not_correct">วลีรหัสผ่านไม่ถูกต้อง</string>
   <string name="LocalBackupJob_creating_signal_backup">กำลังสร้างข้อมูลสำรอง Signal…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">กำลังตรวจยืนยันข้อมูลสำรอง Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">สำรองข้อมูลไม่สำเร็จ</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">ไดเรกทอรีสำหรับข้อมูลสำรองของคุณได้ถูกย้ายหรือลบ</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">แฟ้มสำรองของคุณใหญ่เกินที่จะจัดเก็บไว้ในนี้ได้</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">พื้นที่ไม่เพียงพอสำหรับจัดเก็บข้อมูลสำรองของคุณ</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">ไม่สามารถสร้างและตรวจยืนยันข้อมูลสำรองล่าสุดของคุณได้ กรุณาสร้างข้อมูลสำรองใหม่</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">ข้อมูลสำรองของคุณมีไฟล์ขนาดใหญ่ที่ไม่สามารถเก็บสำรองได้ กรุณาลบไฟล์ดังกล่าวและสร้างข้อมูลสำรองใหม่</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">แตะเพื่อจัดการข้อมูลสำรอง</string>
   <string name="ProgressPreference_d_messages_so_far">%d ข้อความจนถึงตอนนี้</string>
   <string name="RegistrationActivity_wrong_number">หมายเลขไม่ถูกต้อง</string>
@@ -3772,7 +3782,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">สตอรี่ของฉัน</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">เพิ่มสตอรี่</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">เพิ่มสตอรี่</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">ไม่มีการอัปเดตล่าสุดแสดงในตอนนี้ แตะ + เพื่อเพิ่มสตอรี่ของคุณ</string>
   <!--Context menu option to hide a story-->
@@ -3874,13 +3884,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">ลบ</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">การตั้งค่าสตอรี่</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">การตั้งค่าสตอรี่</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">สตอรี่ส่วนตัว</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">สตอรี่ส่วนตัว</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">สตอรี่ส่วนตัวจะสามารถดูได้เฉพาะคนที่คุณเพิ่มเข้าไปให้เท่านั้น มีเพียงคุณที่เห็นชื่อสตอรี่</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">สตอรี่ส่วนตัวจะสามารถดูได้เฉพาะคนที่คุณเพิ่มเข้าไปให้เท่านั้น มีเพียงคุณที่เห็นชื่อสตอรี่</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">สตอรี่ส่วนตัวใหม่</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">สตอรี่ส่วนตัวใหม่</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">สตอรี่ของฉัน</string>
   <!--Section heading for story visibility-->

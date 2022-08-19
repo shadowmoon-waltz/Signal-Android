@@ -463,6 +463,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">மறுபிரதியை மீட்டமைக்க, சிக்னலின் புதிய நகலை நிறுவவும். பயன்பாட்டைத் திறந்து \"மறுபிரதியை மீட்டமை\" என்பதைத் தட்டவும், பின்னர் மறுபிரதி கோப்பைக் கண்டறியவும்.%1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">மேலும் அறிக</string>
   <string name="BackupsPreferenceFragment__in_progress">செயல்நிலையில் உள்ளது…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">காப்புப்பிரதியைச் சரிபார்க்கிறது…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$dஇதுவரை…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">இதுவரை %1$s%%… </string>
@@ -1522,7 +1524,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">சேமி</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">சேமித்தல் தோல்வியடைந்தது</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">சேமித்தல் முடிந்தது</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">வரியை நீக்க ஒரு வரியைத் தட்டவும்</string>
   <string name="SubmitDebugLogActivity_submit">சமர்ப்பி</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">பதிவுகளை சமர்ப்பிப்பதில் தோல்வி</string>
@@ -1601,7 +1605,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">பயனர்பெயர்கள் எண்ணுடன் தொடங்க முடியாது.</string>
   <string name="UsernameEditFragment_username_is_invalid">பயனர்பெயர் தவறானது.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">பயனர்பெயர்கள் %1$d மற்றும் %2$d  எழுத்துக்களுக்கு இடையில் இருக்க வேண்டும்.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal-லில் உள்ள பயனர்பெயர்கள் விருப்பத்தேர்வானவை. பயனர்பெயரை உருவாக்க நீங்கள் தேர்வு செய்தால், பிற Signal பயனர்கள் இந்த பயனர்பெயர் மூலம் உங்களை கண்டுபிடித்து, உங்கள் தொலைபேசி எண்ணை அறியாத வகையில் உங்களை தொடர்பு கொள்ள முடியும்.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal-லில் உள்ள பயனர்பெயர்கள் விருப்பத்தேர்வானவை. பயனர்பெயரை உருவாக்க நீங்கள் தேர்வு செய்தால், பிற Signal பயனர்கள் இந்த பயனர்பெயர் மூலம் உங்களை கண்டுபிடித்து, உங்கள் தொலைபேசி எண்ணை அறியாத வகையில் உங்களை தொடர்பு கொள்ள முடியும்.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d தொடர்பு Signal-இல் உள்ளார்!</item>
     <item quantity="other">%d தொடர்புகள் Signal-இல் உள்ளார்கள்!</item>
@@ -2723,10 +2727,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">உங்கள் காப்புப்பிரதி கடவுச்சொற்றொடரை வெற்றிகரமாக உள்ளிட்டுள்ளீர்கள்</string>
   <string name="BackupDialog_passphrase_was_not_correct">கடவுச்சொல் சரியாக இல்லை</string>
   <string name="LocalBackupJob_creating_signal_backup">சிக்னல் காப்புநகலை உருவாக்குகிறது…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">சிக்னல் காப்புப்பிரதியைச் சரிபார்க்கிறது…</string>
   <string name="LocalBackupJobApi29_backup_failed">மறுபிரதி தோல்வியுற்றது</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">உங்கள் மறுபிரதி கோப்புறை நீக்கப்பட்டது அல்லது வேறு இடத்திற்கு நகர்த்தப்பட்டது.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">உங்கள் மறுபிரதி கோப்பின் அளவு இந்த தொகுதியில் சேமிக்க முடியாத அளவுக்கு பெரியது.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">உங்கள் காப்புப்பிரதியை சேமிக்க போதுமான இடம் இல்லை.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">உங்கள் சமீபத்திய காப்புப்பிரதியை உருவாக்கி சரிபார்க்க முடியவில்லை. தயவுசெய்து புதிய ஒன்றை உருவாக்கவும்.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">உங்கள் காப்புப்பிரதியில் நகலெடுக்க முடியாத மிகப் பெரிய கோப்பு ஒன்று உள்ளது. தயவுசெய்து அதை நீக்கிவிட்டு ஒரு புதிய காப்புப்பிரதியை உருவாக்கவும்.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">மறுபிரதிகளை நிர்வகிக்க தட்டவும்</string>
   <string name="ProgressPreference_d_messages_so_far">இதுவரை 1%d செய்திகள்</string>
   <string name="RegistrationActivity_wrong_number">தவறான எண்</string>
@@ -3869,7 +3879,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">எனது ஸ்டோரீஸ்</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">ஒரு ஸ்டோரியைச் சேர்க்கவும்</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">ஒரு ஸ்டோரியைச் சேர்க்கவும்</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">தற்போது காண்பிக்க சமீபத்திய புதுப்பிப்புகள் ஏதும் இல்லை. உங்கள் ஸ்டோரியில் சேர்க்க + என்பதைத் தட்டவும்.</string>
   <!--Context menu option to hide a story-->
@@ -3974,13 +3984,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">நீக்கு</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">ஸ்டோரி அமைப்புகள்</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">ஸ்டோரி அமைப்புகள்</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">தனிப்பட்ட ஸ்டோரீக்கள்</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">தனிப்பட்ட ஸ்டோரீக்கள்</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">தனிப்பட்ட ஸ்டோரீக்களை நீங்கள் சேர்க்கும் நபர்களால் மட்டுமே பார்க்க முடியும். ஸ்டோரியின் பெயரை நீங்கள் மட்டுமே பார்க்க முடியும்.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">தனிப்பட்ட ஸ்டோரீக்களை நீங்கள் சேர்க்கும் நபர்களால் மட்டுமே பார்க்க முடியும். ஸ்டோரியின் பெயரை நீங்கள் மட்டுமே பார்க்க முடியும்.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">புதிய தனிப்பட்ட ஸ்டோரி</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">புதிய தனிப்பட்ட ஸ்டோரி</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">எனது ஸ்டோரி</string>
   <!--Section heading for story visibility-->

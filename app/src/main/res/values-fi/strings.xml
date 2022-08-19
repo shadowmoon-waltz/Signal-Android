@@ -463,6 +463,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Palauta varmuuskopio asentamalla Signal uudelleen tai uuteen laitteeseen. Avaa sovellus, napauta Palauta varmuuskopio ja etsi sitten varmuuskopiotiedosto. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Lue lisää</string>
   <string name="BackupsPreferenceFragment__in_progress">Käsitellään…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Vahvistetaan varmuuskopiota…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d tähän mennessä…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% tähän mennessä…</string>
@@ -1519,7 +1521,9 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Tallenna</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Tallennus epäonnistui</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Tallennus valmis</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Poista rivi napauttamalla sitä</string>
   <string name="SubmitDebugLogActivity_submit">Lähetä</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Lokin lähettäminen epäonnistui</string>
@@ -1598,7 +1602,7 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Käyttäjätunnus ei voi alkaa numerolla.</string>
   <string name="UsernameEditFragment_username_is_invalid">Käyttäjätunnus on virheellinen.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Käyttäjätunnuksen on oltava %1$d–%2$d merkkiä pitkä.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Käyttäjätunnukset ovat valinnaisia Signalissa. Jos päätät luoda käyttäjätunnuksen, muut Signal-käyttäjät voivat löytää sinut käyttäjätunnuksen perusteella ilman puhelinnumeroasi.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Käyttäjätunnukset ovat valinnaisia Signalissa. Jos päätät luoda käyttäjätunnuksen, muut Signal-käyttäjät voivat löytää sinut käyttäjätunnuksen perusteella ilman puhelinnumeroasi.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">Signalissa on %d kontakti!</item>
     <item quantity="other">Signalissa on %d yhteystietoasi!</item>
@@ -2726,10 +2730,16 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Varmuuskopion salalauseen syöttö onnistui</string>
   <string name="BackupDialog_passphrase_was_not_correct">Salalause ei ollut oikea</string>
   <string name="LocalBackupJob_creating_signal_backup">Luodaan Signal-varmuuskopiota…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Vahvistetaan Signal-varmuuskopiota…</string>
   <string name="LocalBackupJobApi29_backup_failed">Varmuuskopio epäonnistui</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Varmuuskopiohakemisto on poistettu tai siirretty.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Varmuuskopiotiedosto on liian suuri tallennettavaksi tähän tallennustilaan.</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Varmuuskopion tallentamiseen ei ole tarpeeksi tilaa.</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Viimeisintä varmuuskopiota ei voitu luoda ja vahvistaa. Luo uusi varmuuskopio.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Varmuuskopiosi sisältää erittäin suuren tiedoston, jota ei voi varmuuskopioida. Poista se ja luo uusi varmuuskopio.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Hallitse varmuuskopioita napauttamalla.</string>
   <string name="ProgressPreference_d_messages_so_far">%d viestiä tähän mennessä</string>
   <string name="RegistrationActivity_wrong_number">Väärä numero</string>
@@ -3869,7 +3879,7 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Omat tarinat</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Lisää tarina</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Lisää tarina</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Uusia näytettäviä päivityksiä ei ole tällä hetkellä. Napsauta + lisätäksesi tarinasi.</string>
   <!--Context menu option to hide a story-->
@@ -3974,13 +3984,13 @@ Vastaanotetiin avaintenvaihtoviesti, joka kuuluu väärälle protokollaversiolle
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Poista</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Tarinan asetukset</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Tarinan asetukset</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Yksityiset tarinat</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Yksityiset tarinat</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Yksityisiä tarinoita voivat tarkastella vain niihin lisäämäsi ihmiset. Vain sinä näet tarinan nimen.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Yksityisiä tarinoita voivat tarkastella vain niihin lisäämäsi ihmiset. Vain sinä näet tarinan nimen.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Uusi yksityinen tarina</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Uusi yksityinen tarina</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Minun tarinani</string>
   <!--Section heading for story visibility-->

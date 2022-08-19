@@ -442,6 +442,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">如要還原備份，在全新安裝 Signal 後，請開啟應用程式並輕觸「還原備份」，然後找出備份檔案位置。%1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">了解更多</string>
   <string name="BackupsPreferenceFragment__in_progress">進行中…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">正在驗證備份…</string>
   <string name="BackupsPreferenceFragment__d_so_far">目前進度 %1$d…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">目前進度 %1$s%%…</string>
@@ -1451,7 +1453,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">儲存</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">無法儲存</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">儲存完成</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">輕觸以刪除該行</string>
   <string name="SubmitDebugLogActivity_submit">提交</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">提交記錄檔失敗</string>
@@ -1530,7 +1534,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">使用者名稱不得以數字開首。</string>
   <string name="UsernameEditFragment_username_is_invalid">使用者名稱無效。</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">使用者名稱長度必須介乎 %1$d 和 %2$d 個字元。</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal 上的使用者名稱為選用。若您選擇建立使用者名稱，其他 Signal 使用者將可使用此使用者名稱找到您並與您聯絡，而不需知道您的電話號碼。</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Signal 上的使用者名稱為選用。若您選擇建立使用者名稱，其他 Signal 使用者將可使用此使用者名稱找到您並與您聯絡，而不需知道您的電話號碼。</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="other">%d 個聯絡人現已使用 Signal！</item>
   </plurals>
@@ -2637,10 +2641,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">您已成功輸入您的備份密碼</string>
   <string name="BackupDialog_passphrase_was_not_correct">密碼不正確</string>
   <string name="LocalBackupJob_creating_signal_backup">正在建立 Signal 備份…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">正在驗證 Signal 備份…</string>
   <string name="LocalBackupJobApi29_backup_failed">備份失敗</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">您的備份目錄已被刪除或移動。</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">您的備份檔太大，無法在此磁碟機中儲存。</string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">空間不足，無法儲存您的備份。</string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">系統無法建立和驗證你最近的備份。請建立新的備份。</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">你的備份包含一個非常大型的檔案，而且無法進行備份。請刪除該檔案，並建立新的備份。</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">輕觸以管理備份。</string>
   <string name="ProgressPreference_d_messages_so_far">目前為止 %d 則訊息</string>
   <string name="RegistrationActivity_wrong_number">號碼錯誤</string>
@@ -3770,7 +3780,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">我的限時動態</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">新增限時動態</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">新增限時動態</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">目前沒有可顯示的近況更新。輕觸 + 以新增至您的限時動態。</string>
   <!--Context menu option to hide a story-->
@@ -3872,13 +3882,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">刪除</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">限時動態設定</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">限時動態設定</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">個人限時動態</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">個人限時動態</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">個人限時動態僅限您新增的人觀看。只有您見到限時動態名稱。</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">個人限時動態僅限您新增的人觀看。只有您見到限時動態名稱。</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">新增個人限時動態</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">新增個人限時動態</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">我的限時動態</string>
   <!--Section heading for story visibility-->

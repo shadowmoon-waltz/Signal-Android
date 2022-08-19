@@ -505,6 +505,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">Щоб відновити з резервної копії, встановіть нову копію Signal. Відкрийте програму та натисніть \"Відновити резервну копію\", потім виберіть файл резервної копії. %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">Дізнатись більше</string>
   <string name="BackupsPreferenceFragment__in_progress">В процесі…</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">Перевіряємо резервну копію…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d на цей час…</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">%1$s%% на цей час…</string>
@@ -1671,7 +1673,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">Зберегти</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">Не вдалося зберегти</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">Збережено</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">Торкніться рядка, щоб видалити його</string>
   <string name="SubmitDebugLogActivity_submit">Надіслати</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">Не вдалось передати логи</string>
@@ -1750,7 +1754,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">Псевдонім не може починатися з цифри.</string>
   <string name="UsernameEditFragment_username_is_invalid">Псевдонім невірний.</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">Псевдонім складається з символів кількістю від %1$d до %2$d.</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">Псевдоніми в Signal необов\'язкові. Якщо ви вирішите створити псевдонім, інші користувачі Signal зможуть знайти вас під цим псевдонімом та зв\'язатися з вами, не знаючи ваш номер телефону.</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">Псевдоніми в Signal необов\'язкові. Якщо ви вирішите створити псевдонім, інші користувачі Signal зможуть знайти вас під цим псевдонімом та зв\'язатися з вами, не знаючи ваш номер телефону.</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d контакт у Signal!</item>
     <item quantity="few">%d контактів у Signal!</item>
@@ -2922,10 +2926,16 @@
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Ви успішно ввели фразу-пароль своєї резервної копії </string>
   <string name="BackupDialog_passphrase_was_not_correct">Фраза-пароль була неправильна</string>
   <string name="LocalBackupJob_creating_signal_backup">Створення резервної копії Signal…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Перевіряємо резервну копію Signal…</string>
   <string name="LocalBackupJobApi29_backup_failed">Створення резервної копії не вдалось</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">Ваша папка для резервних копій була видалена або переміщена.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">Ваш файл резервної копії занадто великий для зберігання на цьому носії. </string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">Недостатньо місця, щоб зберегти вашу резервну копію. </string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">Не вдалося створити і перевірити останню резервну копію. Будь ласка, створіть ще одну.</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">Резервна копія містить великий файл, який неможливо зберегти. Будь ласка, видаліть його і створіть нову резервну копію.</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">Натисніть, щоб керувати резервним копіюванням. </string>
   <string name="ProgressPreference_d_messages_so_far">Залишилось %d повідомлень</string>
   <string name="RegistrationActivity_wrong_number">Недоступний номер</string>
@@ -4085,7 +4095,7 @@
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">Мої історії</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">Додати історію</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">Додати історію</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">Немає нещодавніх оновлень. Клацніть + для додання своєї історії.</string>
   <!--Context menu option to hide a story-->
@@ -4196,13 +4206,13 @@
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">Видалити</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">Налаштування історії</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">Налаштування історії</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">Приватні історії</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">Приватні історії</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Тільки обрані вами користувачі можуть переглядати приватні сторіз. Назву сторіз бачите тільки ви.</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">Тільки обрані вами користувачі можуть переглядати приватні сторіз. Назву сторіз бачите тільки ви.</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">Нова приватна історія</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">Нова приватна історія</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Моя історія</string>
   <!--Section heading for story visibility-->

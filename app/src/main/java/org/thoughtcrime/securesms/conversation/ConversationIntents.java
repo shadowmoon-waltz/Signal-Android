@@ -86,7 +86,7 @@ public class ConversationIntents {
     return bundle;
   }
 
-  private static boolean isBubbleIntentUri(@Nullable Uri uri) {
+  static boolean isBubbleIntentUri(@Nullable Uri uri) {
     return uri != null && Objects.equals(uri.getAuthority(), BUBBLE_AUTHORITY);
   }
 

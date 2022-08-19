@@ -30,9 +30,8 @@ import org.thoughtcrime.securesms.database.RecipientDatabase
 import org.thoughtcrime.securesms.database.helpers.migration.MyStoryMigration
 import org.thoughtcrime.securesms.database.helpers.migration.UrgentMslFlagMigration
 import org.thoughtcrime.securesms.database.model.databaseprotos.ReactionList
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.groups.GroupId
-import org.thoughtcrime.securesms.jobs.RefreshPreKeysJob
+import org.thoughtcrime.securesms.jobs.PreKeysSyncJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.notifications.NotificationChannels
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter
@@ -208,8 +207,9 @@ object SignalDatabaseMigrations {
   private const val URGENT_FLAG = 150
   private const val MY_STORY_MIGRATION = 151
   private const val STORY_GROUP_TYPES = 152
+  private const val MY_STORY_MIGRATION_2 = 153
 
-  const val DATABASE_VERSION = 152
+  const val DATABASE_VERSION = 153
 
   @JvmStatic
   fun migrate(context: Application, db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -223,7 +223,7 @@ object SignalDatabaseMigrations {
       db.execSQL("CREATE TABLE one_time_prekeys (_id INTEGER PRIMARY KEY, key_id INTEGER UNIQUE, public_key TEXT NOT NULL, private_key TEXT NOT NULL)")
 
       if (!PreKeyMigrationHelper.migratePreKeys(context, db)) {
-        ApplicationDependencies.getJobManager().add(RefreshPreKeysJob())
+        PreKeysSyncJob.enqueue()
       }
     }
 
@@ -2685,6 +2685,10 @@ object SignalDatabaseMigrations {
         WHERE distribution_list_id IS NOT NULL
         """.trimIndent()
       )
+    }
+
+    if (oldVersion < MY_STORY_MIGRATION_2) {
+      MyStoryMigration.migrate(context, db, oldVersion, newVersion)
     }
   }
 

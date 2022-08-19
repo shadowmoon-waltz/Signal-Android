@@ -54,6 +54,7 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -375,10 +376,12 @@ public class FullBackupExporter extends FullBackupBase {
       }
     }
 
+    EventBus.getDefault().post(new BackupEvent(BackupEvent.Type.PROGRESS, ++count, estimatedCount));
     if (!TextUtils.isEmpty(data) && size > 0) {
       try (InputStream inputStream = openAttachmentStream(attachmentSecret, random, data)) {
-        EventBus.getDefault().post(new BackupEvent(BackupEvent.Type.PROGRESS, ++count, estimatedCount));
         outputStream.write(new AttachmentId(rowId, uniqueId), inputStream, size);
+      } catch (FileNotFoundException e) {
+        Log.w(TAG, "Missing attachment: " + e.getMessage());
       }
     }
 
@@ -402,6 +405,8 @@ public class FullBackupExporter extends FullBackupBase {
       EventBus.getDefault().post(new BackupEvent(BackupEvent.Type.PROGRESS, ++count, estimatedCount));
       try (InputStream inputStream = ModernDecryptingPartInputStream.createFor(attachmentSecret, random, new File(data), 0)) {
         outputStream.writeSticker(rowId, inputStream, size);
+      } catch (FileNotFoundException e) {
+        Log.w(TAG, "Missing sticker: " + e.getMessage());
       }
     }
 
@@ -418,6 +423,8 @@ public class FullBackupExporter extends FullBackupBase {
       while ((read = inputStream.read(buffer, 0, buffer.length)) != -1) {
         result += read;
       }
+    } catch (FileNotFoundException e) {
+      Log.w(TAG, "Missing attachment: " + e.getMessage());
     }
 
     return result;

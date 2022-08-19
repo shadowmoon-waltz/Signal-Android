@@ -463,6 +463,8 @@
   <string name="BackupsPreferenceFragment__to_restore_a_backup">किसी बैकअप को बहाल करने के लिए, Signal की एक नई कॉपी इंस्टॉल करें। ऐप को खोलें और \"बैकअप को बहाल करें\" पर टैप करें, और फिर बैकअप फाइल को ढूँढें। %1$s</string>
   <string name="BackupsPreferenceFragment__learn_more">अधिक जानें</string>
   <string name="BackupsPreferenceFragment__in_progress">प्रगति में</string>
+  <!--Status text shown in backup preferences when verifying a backup-->
+  <string name="BackupsPreferenceFragment__verifying_backup">बैकअप सत्यापित किया जा रहा है…</string>
   <string name="BackupsPreferenceFragment__d_so_far">%1$d अब तक</string>
   <!--Show percentage of completion of backup-->
   <string name="BackupsPreferenceFragment__s_so_far">अब तक %1$s%%…  </string>
@@ -1517,7 +1519,9 @@
   <!--Menu option to save a debug log file to disk.-->
   <string name="SubmitDebugLogActivity_save">सेव करें</string>
   <!--Error that is show in a toast when we fail to save a debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_failed_to_save">सेव नहीं किया जा सका</string>
   <!--Toast that is show to notify that we have saved the debug log file to disk.-->
+  <string name="SubmitDebugLogActivity_save_complete">सेव करना पूरा हुआ</string>
   <string name="SubmitDebugLogActivity_tap_a_line_to_delete_it">किसी लाइन को मिटाने के लिए उस पर टैप करें</string>
   <string name="SubmitDebugLogActivity_submit">सबमिट</string>
   <string name="SubmitDebugLogActivity_failed_to_submit_logs">लॉग जमा करना असफल रहा</string>
@@ -1596,7 +1600,7 @@
   <string name="UsernameEditFragment_usernames_cannot_begin_with_a_number">उपयोगकर्ता नाम एक संख्या से शुरू नहीं हो सकते हैं।</string>
   <string name="UsernameEditFragment_username_is_invalid">उपयोगकर्ता का नाम अमान्य है।</string>
   <string name="UsernameEditFragment_usernames_must_be_between_a_and_b_characters">उपयोगकर्ता नाम %1$d और %2$d वर्णों के बीच होना चाहिए।</string>
-  <string name="UsernameEditFragment_usernames_on_signal_are_optional">उपयोगकर्ता नाम Signal में वैकल्पिक हैं। अगर आप अपना उपयोगकर्ता नाम बनाते हैं, तो अन्य Signal उपयोगकर्ता आपको आपके उपयोगकर्ता नाम से खोज तथा बिना आपके फोन नंबर को जाने आपसे संपर्क कर पाएंगे।</string>
+  <!-- Removed by excludeNonTranslatables <string name="UsernameEditFragment_usernames_on_signal_are_optional">उपयोगकर्ता नाम Signal में वैकल्पिक हैं। अगर आप अपना उपयोगकर्ता नाम बनाते हैं, तो अन्य Signal उपयोगकर्ता आपको आपके उपयोगकर्ता नाम से खोज तथा बिना आपके फोन नंबर को जाने आपसे संपर्क कर पाएंगे।</string> -->
   <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
     <item quantity="one">%d संपर्क सिग्नल पर है!</item>
     <item quantity="other">%d संपर्क Signal पर उपलब्ध हैं!</item>
@@ -2725,10 +2729,16 @@ href=\"https://signal.org/redirect/safety-numbers\">ज़्यादा जा
   <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">आप अपना बैकअप पासफ्रेज दर्ज करने में सफल रहे हैं </string>
   <string name="BackupDialog_passphrase_was_not_correct">पासफ्रेज गलत </string>
   <string name="LocalBackupJob_creating_signal_backup">Signal बैकअप बनाया जा रहा है…</string>
+  <!--Title for progress notification shown in a system notification while verifying a recent backup.-->
+  <string name="LocalBackupJob_verifying_signal_backup">Signal बैकअप सत्यापित किया जा रहा है…</string>
   <string name="LocalBackupJobApi29_backup_failed">बैकअप विफल</string>
   <string name="LocalBackupJobApi29_your_backup_directory_has_been_deleted_or_moved">आपकी बैकअप डायरेक्टरी या तो मिटा दी गयी है या यहाँ से कहीं और हटा दी गयी है.</string>
   <string name="LocalBackupJobApi29_your_backup_file_is_too_large">इस वॉल्यूम में आपकी बैकअप फाइल को संगृहीत करने के लिए पर्याप्त जगह नहीं है।  </string>
   <string name="LocalBackupJobApi29_there_is_not_enough_space">आपके बैकअप को संगृहीत करने के लिए पर्याप्त जगह नहीं है. </string>
+  <!--Error message shown if a newly created backup could not be verified as accurate-->
+  <string name="LocalBackupJobApi29_your_backup_could_not_be_verified">आपका हाल का बैकअप बनाया और सत्यापित नहीं किया जा सका। कृपया एक नया बैकअप बनाएँ।</string>
+  <!--Error message shown if a very large attachment is encountered during the backup creation and causes the backup to fail-->
+  <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">आपके बैकअप में एक बहुत बड़ी फ़ाइल है जिसका बैकअप नहीं किया जा सकता। कृपया उसे डिलीट करके एक नया बैकअप बनाएँ।</string>
   <string name="LocalBackupJobApi29_tap_to_manage_backups">बैकअप प्रबंधन के लिए टैप करें </string>
   <string name="ProgressPreference_d_messages_so_far">अब तक %d मेसेज</string>
   <string name="RegistrationActivity_wrong_number">गलत नंबर</string>
@@ -3868,7 +3878,7 @@ href=\"https://signal.org/redirect/safety-numbers\">ज़्यादा जा
   <!--Title for "My Stories" row item in Stories landing page-->
   <string name="StoriesLandingFragment__my_stories">मेरी स्टोरीज़</string>
   <!--Subtitle for "My Stories" row item when user has not added stories-->
-  <string name="StoriesLandingFragment__add_a_story">कोई स्टोरी जोड़ें</string>
+  <!-- Removed by excludeNonTranslatables <string name="StoriesLandingFragment__add_a_story">कोई स्टोरी जोड़ें</string> -->
   <!--Displayed when there are no stories to display-->
   <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now_tap_plus_to_add_to_your_story">अभी दिखाने के लिए कोई हालिया अपडेट नहीं है। अपनी स्टोरी में जोड़ने के लिए + को टैप करें।</string>
   <!--Context menu option to hide a story-->
@@ -3973,13 +3983,13 @@ href=\"https://signal.org/redirect/safety-numbers\">ज़्यादा जा
   <!--Context menu item to delete a story response-->
   <string name="StoryGroupReplyItem__delete">डिलीट करें</string>
   <!--Story settings page title-->
-  <string name="StorySettingsFragment__story_settings">स्टोरी सेटिंग्स</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__story_settings">स्टोरी सेटिंग्स</string> -->
   <!--Story settings private stories heading-->
-  <string name="StorySettingsFragment__private_stories">निजी स्टोरीज़</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories">निजी स्टोरीज़</string> -->
   <!--Note at bottom of story settings regarding who can see private stories.-->
-  <string name="StorySettingsFragment__private_stories_can_only_be_viewed">निजी स्टोरीज़ को केवल वे लोग देख सकते हैं जिन्हें आपने उनमें जोड़ा हो। स्टोरी का नाम केवल आप देख सकते हैं।</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__private_stories_can_only_be_viewed">निजी स्टोरीज़ को केवल वे लोग देख सकते हैं जिन्हें आपने उनमें जोड़ा हो। स्टोरी का नाम केवल आप देख सकते हैं।</string> -->
   <!--Option label for creating a new private story-->
-  <string name="StorySettingsFragment__new_private_story">नई निजी स्टोरी</string>
+  <!-- Removed by excludeNonTranslatables <string name="StorySettingsFragment__new_private_story">नई निजी स्टोरी</string> -->
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">मेरी स्टोरी</string>
   <!--Section heading for story visibility-->
