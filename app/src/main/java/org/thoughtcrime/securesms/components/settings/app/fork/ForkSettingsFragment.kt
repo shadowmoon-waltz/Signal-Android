@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.DSLConfiguration
-import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
 import org.thoughtcrime.securesms.components.settings.DSLSettingsFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.configure
+import org.thoughtcrime.securesms.util.adapter.mapping.MappingAdapter
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
 
@@ -21,7 +21,7 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
   private val swipeToLeftActionLabels by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_left_action__entries) }
   private val swipeToLeftActionValues by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_left_action__values) }
 
-  override fun bindAdapter(adapter: DSLSettingsAdapter) {
+  override fun bindAdapter(adapter: MappingAdapter) {
     viewModel = ViewModelProviders.of(this)[ForkSettingsViewModel::class.java]
 
     viewModel.state.observe(viewLifecycleOwner) { state ->
