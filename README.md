@@ -6,9 +6,11 @@ License is unchanged (GPLv3 license). You may submit pull requests to this fork 
 
 Main gradle build command: assembleSwProdRelease
 
+Releases prior to and including v5.44.1-0 were locally compiled, locally signed (using my regular signing key), and uploaded to a release (with a signed description using my GPG key), using the Docker instructions for reproducible builds. Later releases are remotely compiled with GitHub Actions, remotely signed with GitHub Actions (using a different signing key than before that I use only for GitHub Actions), and added to a release, use the android-build-release.yml GitHub Actions workflow.
+
 ## Differences from stock Signal
 
-<details open="">
+<details>
 <summary>March 2022</summary>
 
 * Further improvements to security of view/set identity keys screen (requires authentication if device has one available)
@@ -16,7 +18,7 @@ Main gradle build command: assembleSwProdRelease
 * Long-press recipient label that appears above media while adding/editing media (to send in a conversation) to close media selection. Works around possible bug where it is otherwise difficult to close/go back from media selection while in conversation bubbles
 </details>
 
-<details open="">
+<details>
 <summary>February 2022</summary>
 
 * Added support for building with GitHub Actions. See below the changelog for more information
