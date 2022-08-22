@@ -38,7 +38,7 @@ jobs:
     - name: Setup Signing Info File Cleanup
       uses: webiny/action-post-run@ff38cac46a6928a4815b99b4482b465eb6adccbd
       with:
-        run: rm "${{runner.temp}}/temp_abr.jks" || true
+        run: rm -f "${{runner.temp}}/temp_abr.jks"
 
     - name: Gradle assembleSwProdRelease
       uses: gradle/gradle-build-action@v2
