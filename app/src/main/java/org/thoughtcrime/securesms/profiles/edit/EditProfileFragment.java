@@ -53,6 +53,9 @@ import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.NEXT_
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.NEXT_INTENT;
 import static org.thoughtcrime.securesms.profiles.edit.EditProfileActivity.SHOW_TOOLBAR;
 
+/**
+ * Used for profile creation during registration.
+ */
 public class EditProfileFragment extends LoggingFragment {
 
   private static final String TAG                        = Log.tag(EditProfileFragment.class);
@@ -288,7 +291,7 @@ public class EditProfileFragment extends LoggingFragment {
   private void handleUpload() {
     viewModel.getUploadResult().observe(getViewLifecycleOwner(), uploadResult -> {
       if (uploadResult == EditProfileRepository.UploadResult.SUCCESS) {
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21 && !viewModel.isGroup()) {
           handleFinishedLollipop();
         }
         else {
