@@ -172,7 +172,7 @@
   <!--Label for my stories when selecting who to send media to-->
   <string name="ContactsCursorLoader_my_stories">Моје приче</string>
   <!--Action for creating a new story-->
-  <string name="ContactsCursorLoader_new_story">Нова прича</string>
+  <string name="ContactsCursorLoader_new_story">Nova priča</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Порука за %s</string>
   <string name="ContactsDatabase_signal_call_s">Позови %s преко Signal-a</string>
@@ -4167,7 +4167,7 @@
   <!--Page title for My Story options-->
   <string name="MyStorySettingsFragment__my_story">Моја прича</string>
   <!--Section heading for story visibility-->
-  <string name="MyStorySettingsFragment__who_can_see_this_story">Ко може да види ову причу</string>
+  <!-- Removed by excludeNonTranslatables <string name="MyStorySettingsFragment__who_can_see_this_story">Ко може да види ову причу</string> -->
   <!--Clickable option for selecting people to hide your story from-->
   <string name="MyStorySettingsFragment__hide_story_from">Сакриј причу од</string>
   <!--Privacy setting title for sending stories to all your signal connections-->
@@ -4175,7 +4175,7 @@
   <!--Privacy setting description for sending stories to all your signal connections-->
   <string name="MyStorySettingsFragment__share_with_all_connections">Podelite sa svim vezama</string>
   <!--Privacy setting title for sending stories to all except the specified connections-->
-  <string name="MyStorySettingsFragment__all_signal_connections_except">Sve Signal veze osim…</string>
+  <!-- Removed by excludeNonTranslatables <string name="MyStorySettingsFragment__all_signal_connections_except">Sve Signal veze osim…</string> -->
   <!--Privacy setting description for sending stories to all except the specified connections-->
   <string name="MyStorySettingsFragment__hide_your_story_from_specific_people">Sakrijite priču od određenih ljudi</string>
   <!--Summary of clickable option displaying how many people you have excluded from your story-->
@@ -4409,17 +4409,7 @@
   <!--Expired gift sheet not now button-->
   <string name="ExpiredGiftSheetConfiguration__not_now">Не сада</string>
   <!--Label under name for private stories-->
-  <plurals name="ContactSearchItems__private_story_d_viewers">
-    <item quantity="one">Privatna priča · %1$d gledalac</item>
-    <item quantity="few">Privatna priča · %1$d gledaoca</item>
-    <item quantity="other">Privatna priča · %1$d gledalaca</item>
-  </plurals>
   <!--Label under name for group stories-->
-  <plurals name="ContactSearchItems__group_story_d_viewers">
-    <item quantity="one">Grupna priča · %1$d gledalac</item>
-    <item quantity="few">Grupna priča · %1$d gledaoca</item>
-    <item quantity="other">Grupna priča · %1$d gledalaca</item>
-  </plurals>
   <!--Label under name for my story-->
   <plurals name="ContactSearchItems__my_story_s_dot_d_viewers">
     <item quantity="one">%1$s · %2$d gledalac</item>
@@ -4525,7 +4515,7 @@
   <!--All connections option for initial My Story settings configuration shown when sending to My Story for the first time-->
   <string name="ChooseInitialMyStoryMembershipFragment__all_signal_connections">Sve Signal veze</string>
   <!--All connections except option for initial My Story settings configuration shown when sending to My Story for the first time-->
-  <string name="ChooseInitialMyStoryMembershipFragment__all_signal_connections_except">Sve Signal veze osim…</string>
+  <!-- Removed by excludeNonTranslatables <string name="ChooseInitialMyStoryMembershipFragment__all_signal_connections_except">Sve Signal veze osim…</string> -->
   <!--Only with selected connections option for initial My Story settings configuration shown when sending to My Story for the first time-->
   <string name="ChooseInitialMyStoryMembershipFragment__only_share_with">Samo podelite sa…</string>
   <!--Story info header sent heading-->
