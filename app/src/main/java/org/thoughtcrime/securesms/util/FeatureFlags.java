@@ -16,6 +16,7 @@ import org.thoughtcrime.securesms.BuildConfig;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.groups.SelectionLimits;
 import org.thoughtcrime.securesms.jobs.RefreshAttributesJob;
+import org.thoughtcrime.securesms.jobs.RefreshOwnProfileJob;
 import org.thoughtcrime.securesms.jobs.RemoteConfigRefreshJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.messageprocessingalarm.MessageProcessReceiver;
@@ -103,7 +104,7 @@ public final class FeatureFlags {
   private static final String RECIPIENT_MERGE_V2                = "android.recipientMergeV2";
   private static final String CDS_V2_LOAD_TEST                  = "android.cdsV2LoadTest";
   private static final String SMS_EXPORTER                      = "android.sms.exporter";
-  private static final String CDS_V2_COMPAT                     = "android.cdsV2Compat";
+  private static final String CDS_V2_COMPAT                     = "android.cdsV2Compat.2";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
@@ -225,7 +226,8 @@ public final class FeatureFlags {
       CAMERAX_MODEL_BLOCKLIST,
       RECIPIENT_MERGE_V2,
       CDS_V2_LOAD_TEST,
-      CDS_V2_COMPAT
+      CDS_V2_COMPAT,
+      STORIES
   );
 
   /**
@@ -249,9 +251,9 @@ public final class FeatureFlags {
    */
   private static final Map<String, OnFlagChange> FLAG_CHANGE_LISTENERS = new HashMap<String, OnFlagChange>() {{
     put(MESSAGE_PROCESSOR_ALARM_INTERVAL, change -> MessageProcessReceiver.startOrUpdateAlarm(ApplicationDependencies.getApplication()));
-    put(SENDER_KEY, change -> ApplicationDependencies.getJobManager().add(new RefreshAttributesJob()));
-    put(STORIES, change -> ApplicationDependencies.getJobManager().add(new RefreshAttributesJob()));
-    put(GIFT_BADGE_RECEIVE_SUPPORT, change -> ApplicationDependencies.getJobManager().add(new RefreshAttributesJob()));
+    put(SENDER_KEY, change -> ApplicationDependencies.getJobManager().startChain(new RefreshAttributesJob()).then(new RefreshOwnProfileJob()).enqueue());
+    put(STORIES, change -> ApplicationDependencies.getJobManager().startChain(new RefreshAttributesJob()).then(new RefreshOwnProfileJob()).enqueue());
+    put(GIFT_BADGE_RECEIVE_SUPPORT, change -> ApplicationDependencies.getJobManager().startChain(new RefreshAttributesJob()).then(new RefreshOwnProfileJob()).enqueue());
   }};
 
   private static final Map<String, Object> REMOTE_VALUES = new TreeMap<>();

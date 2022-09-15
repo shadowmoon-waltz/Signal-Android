@@ -40,15 +40,18 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.window.DisplayFeature;
-import androidx.window.FoldingFeature;
-import androidx.window.WindowLayoutInfo;
+import androidx.window.java.layout.WindowInfoTrackerCallbackAdapter;
+import androidx.window.layout.DisplayFeature;
+import androidx.window.layout.FoldingFeature;
+import androidx.window.layout.WindowInfoTracker;
+import androidx.window.layout.WindowLayoutInfo;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.signal.core.util.ThreadUtil;
 import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.logging.Log;
 import org.signal.libsignal.protocol.IdentityKey;
@@ -113,15 +116,15 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   private WifiToCellularPopupWindow             wifiToCellularPopupWindow;
   private DeviceOrientationMonitor              deviceOrientationMonitor;
 
-  private FullscreenHelper              fullscreenHelper;
-  private WebRtcCallView                callScreen;
-  private TooltipPopup                  videoTooltip;
-  private WebRtcCallViewModel           viewModel;
-  private boolean                       enableVideoIfAvailable;
-  private boolean                       hasWarnedAboutBluetooth;
-  private androidx.window.WindowManager windowManager;
-  private WindowLayoutInfoConsumer      windowLayoutInfoConsumer;
-  private ThrottledDebouncer            requestNewSizesThrottle;
+  private FullscreenHelper                 fullscreenHelper;
+  private WebRtcCallView                   callScreen;
+  private TooltipPopup                     videoTooltip;
+  private WebRtcCallViewModel              viewModel;
+  private boolean                          enableVideoIfAvailable;
+  private boolean                          hasWarnedAboutBluetooth;
+  private WindowLayoutInfoConsumer         windowLayoutInfoConsumer;
+  private WindowInfoTrackerCallbackAdapter windowInfoTrackerCallbackAdapter;
+  private ThrottledDebouncer               requestNewSizesThrottle;
 
   private Disposable ephemeralStateDisposable = Disposable.empty();
 
@@ -159,10 +162,10 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     enableVideoIfAvailable = getIntent().getBooleanExtra(EXTRA_ENABLE_VIDEO_IF_AVAILABLE, false);
     getIntent().removeExtra(EXTRA_ENABLE_VIDEO_IF_AVAILABLE);
 
-    windowManager            = new androidx.window.WindowManager(this);
     windowLayoutInfoConsumer = new WindowLayoutInfoConsumer();
 
-    windowManager.registerLayoutChangeCallback(SignalExecutors.BOUNDED, windowLayoutInfoConsumer);
+    windowInfoTrackerCallbackAdapter = new WindowInfoTrackerCallbackAdapter(WindowInfoTracker.getOrCreate(this));
+    windowInfoTrackerCallbackAdapter.addWindowLayoutInfoListener(this, SignalExecutors.BOUNDED, windowLayoutInfoConsumer);
 
     requestNewSizesThrottle = new ThrottledDebouncer(TimeUnit.SECONDS.toMillis(1));
   }
@@ -185,6 +188,20 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
 
     if (!EventBus.getDefault().isRegistered(this)) {
       EventBus.getDefault().register(this);
+    }
+
+    WebRtcViewModel rtcViewModel = EventBus.getDefault().getStickyEvent(WebRtcViewModel.class);
+    if (rtcViewModel == null) {
+      Log.w(TAG, "Activity resumed without service event, perform delay destroy");
+      ThreadUtil.runOnMainDelayed(() -> {
+        WebRtcViewModel delayRtcViewModel = EventBus.getDefault().getStickyEvent(WebRtcViewModel.class);
+        if (delayRtcViewModel == null) {
+          Log.w(TAG, "Activity still without service event, finishing activity");
+          finish();
+        } else {
+          Log.i(TAG, "Event found after delay");
+        }
+      }, TimeUnit.SECONDS.toMillis(1));
     }
   }
 
@@ -235,7 +252,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    windowManager.unregisterLayoutChangeCallback(windowLayoutInfoConsumer);
+    windowInfoTrackerCallbackAdapter.removeWindowLayoutInfoListener(windowLayoutInfoConsumer);
     EventBus.getDefault().unregister(this);
   }
 
@@ -258,7 +275,8 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   @Override
-  public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
+  public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+    super.onPictureInPictureModeChanged(isInPictureInPictureMode);
     viewModel.setIsInPipMode(isInPictureInPictureMode);
     participantUpdateWindow.setEnabled(!isInPictureInPictureMode);
   }

@@ -169,7 +169,7 @@ Geblokkeerde personen kunnen in groepsgesprekken de berichten die jij stuurt nie
   <string name="ContactsCursorLoader_contacts">Contacten</string>
   <string name="ContactsCursorLoader_groups">Groepen</string>
   <string name="ContactsCursorLoader_phone_number_search">Zoeken op telefoonnummer</string>
-  <string name="ContactsCursorLoader_username_search">Zoeken op gebruikersnaam</string>
+  <!-- Removed by excludeNonTranslatables <string name="ContactsCursorLoader_username_search">Zoeken op gebruikersnaam</string> -->
   <!--Label for my stories when selecting who to send media to-->
   <string name="ContactsCursorLoader_my_stories">Mijn verhalen</string>
   <!--Action for creating a new story-->
@@ -750,9 +750,9 @@ Geblokkeerde personen kunnen in groepsgesprekken de berichten die jij stuurt nie
   <string name="ManageProfileFragment_badges">Badges</string>
   <string name="ManageProfileFragment__edit_photo">Profielfoto aanpassen</string>
   <!--Snackbar message after creating username-->
-  <string name="ManageProfileFragment__username_created">Gebruikersnaam gecreëerd. </string>
+  <string name="ManageProfileFragment__username_created">Gebruikersnaam gecreëerd.</string>
   <!--Snackbar message after copying username-->
-  <string name="ManageProfileFragment__username_copied">Gebruikersnaam gekopieerd. </string>
+  <string name="ManageProfileFragment__username_copied">Gebruikersnaam gekopieerd.</string>
   <!--ManageRecipientActivity-->
   <string name="ManageRecipientActivity_no_groups_in_common">Geen gemeenschappelijke groepen</string>
   <plurals name="ManageRecipientActivity_d_groups_in_common">
@@ -4311,7 +4311,15 @@ Geblokkeerde personen kunnen in groepsgesprekken de berichten die jij stuurt nie
   <!--My Story label designating that we will only share with the selected viewers.-->
   <string name="ContactSearchItems__only_share_with">Alleen delen met</string>
   <!--Label under name for private stories-->
+  <plurals name="ContactSearchItems__private_story_d_viewers">
+    <item quantity="one">Privéverhaal · door %1$d persoon gezien</item>
+    <item quantity="other">Privéverhaal · door %1$d personen gezien</item>
+  </plurals>
   <!--Label under name for group stories-->
+  <plurals name="ContactSearchItems__group_story_d_viewers">
+    <item quantity="one">Groepsverhaal · door %1$d persoon gezien</item>
+    <item quantity="other">Groepsverhaal · door %1$d personen gezien</item>
+  </plurals>
   <!--Label under name for my story-->
   <plurals name="ContactSearchItems__my_story_s_dot_d_viewers">
     <item quantity="one">%1$s · %2$d keer bekeken.</item>
@@ -4482,6 +4490,7 @@ Geblokkeerde personen kunnen in groepsgesprekken de berichten die jij stuurt nie
   <string name="RemoveSmsMessagesDialogFragment__you_have_changed">Je hebt de standaard sms-app veranderd, wil je sms\'jes uit Signal verwijderen?</string>
   <!--SetSignalAsDefaultSmsAppFragment-->
   <!--Title of the screen-->
+  <string name="SetSignalAsDefaultSmsAppFragment__first_set_signal_as_the_default_sms_app">Allereerst, stel Signal in als standaardapp voor SMS</string>
   <!--Button label to start export-->
   <string name="SetSignalAsDefaultSmsAppFragment__next">Volgende</string>
   <!--EOF-->

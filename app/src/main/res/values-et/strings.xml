@@ -167,7 +167,7 @@
   <string name="ContactsCursorLoader_contacts">Kontaktid</string>
   <string name="ContactsCursorLoader_groups">Grupid</string>
   <string name="ContactsCursorLoader_phone_number_search">Telefoninumbri otsing</string>
-  <string name="ContactsCursorLoader_username_search">Kasutajanime otsing</string>
+  <!-- Removed by excludeNonTranslatables <string name="ContactsCursorLoader_username_search">Kasutajanime otsing</string> -->
   <!--Label for my stories when selecting who to send media to-->
   <string name="ContactsCursorLoader_my_stories">Minu lood</string>
   <!--Action for creating a new story-->
@@ -4485,6 +4485,7 @@
   <string name="RemoveSmsMessagesDialogFragment__you_have_changed">Muutsid vaikimisi SMSi-äppi. Kas tahad SMS-sõnumeid Signalist eemaldada?</string>
   <!--SetSignalAsDefaultSmsAppFragment-->
   <!--Title of the screen-->
+  <string name="SetSignalAsDefaultSmsAppFragment__first_set_signal_as_the_default_sms_app">Kõigepealt muuda Signal SMSi vaikerakenduseks.</string>
   <!--Button label to start export-->
   <string name="SetSignalAsDefaultSmsAppFragment__next">Edasi</string>
   <!--EOF-->

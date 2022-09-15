@@ -169,11 +169,11 @@
   <string name="ContactsCursorLoader_contacts">Stiki</string>
   <string name="ContactsCursorLoader_groups">Skupine</string>
   <string name="ContactsCursorLoader_phone_number_search">Iskanje po telefonskih številkah</string>
-  <string name="ContactsCursorLoader_username_search">Iskanje po uporabniških imenih</string>
+  <!-- Removed by excludeNonTranslatables <string name="ContactsCursorLoader_username_search">Iskanje po uporabniških imenih</string> -->
   <!--Label for my stories when selecting who to send media to-->
   <string name="ContactsCursorLoader_my_stories">Moje zgodbe</string>
   <!--Action for creating a new story-->
-  <string name="ContactsCursorLoader_new_story">Nova Zgodba</string>
+  <string name="ContactsCursorLoader_new_story">Nova zgodba</string>
   <!--ContactsDatabase-->
   <string name="ContactsDatabase_message_s">Sporočilo %s</string>
   <string name="ContactsDatabase_signal_call_s">Klic Signal: %s</string>
