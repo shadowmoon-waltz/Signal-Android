@@ -360,7 +360,7 @@ public class CommunicationActions {
     activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         .putExtra(WebRtcCallActivity.EXTRA_ENABLE_VIDEO_IF_AVAILABLE, true);
 
-    activity.startActivity(activityIntent);  
+    callContext.startActivity(activityIntent);  
   }
 
   private static void startVideoCallInternal(@NonNull CallContext callContext, @NonNull Recipient recipient) {
@@ -378,7 +378,7 @@ public class CommunicationActions {
                                     R.drawable.ic_video_solid_24_tinted)
                .withPermanentDenialDialog(callContext.getContext().getString(R.string.ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s, recipient.getDisplayName(callContext.getContext())))
                .onAllGranted(() -> {
-                 startVideoCallInternal2(activity, recipient);
+                 startVideoCallInternal2(callContext, recipient);
                })
                .execute();
   }
