@@ -1148,7 +1148,7 @@ public class Recipient {
   }
 
   public @NonNull List<Badge> getBadges() {
-    return FeatureFlags.displayDonorBadges() || isSelf() ? badges : Collections.emptyList();
+    return badges;
   }
 
   public @Nullable Badge getFeaturedBadge() {
