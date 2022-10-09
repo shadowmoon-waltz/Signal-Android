@@ -225,6 +225,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_ALT_CLOSE_MEDIA_SELECTION = "pref_alt_close_media_selection";
 
+  private static final String PREF_STICKER_MRU_LONG_PRESS_TO_PACK = "pref_sticker_mru_long_press_to_pack";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -254,7 +256,8 @@ public class TextSecurePreferences {
                                                               PREF_TRASH_NO_PROMPT_FOR_ME,
                                                               PREF_PROMPT_MP4_AS_GIF,
                                                               PREF_ALT_COLLAPSE_MEDIA_KEYBOARD,
-                                                              PREF_ALT_CLOSE_MEDIA_SELECTION};
+                                                              PREF_ALT_CLOSE_MEDIA_SELECTION,
+                                                              PREF_STICKER_MRU_LONG_PRESS_TO_PACK};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1294,6 +1297,14 @@ public class TextSecurePreferences {
 
   public static void setAltCloseMediaSelection(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_ALT_CLOSE_MEDIA_SELECTION, enabled);
+  }
+
+  public static boolean isStickerMruLongPressToPack(Context context) {
+    return getBooleanPreference(context, PREF_STICKER_MRU_LONG_PRESS_TO_PACK, false);
+  }
+
+  public static void setStickerMruLongPressToPack(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_STICKER_MRU_LONG_PRESS_TO_PACK, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

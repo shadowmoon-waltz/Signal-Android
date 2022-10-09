@@ -25,7 +25,8 @@ class ForkSettingsViewModel : ViewModel() {
       trashNoPromptForMe = SignalStore.settings().isTrashNoPromptForMe,
       promptMp4AsGif = SignalStore.settings().isPromptMp4AsGif,
       altCollapseMediaKeyboard = SignalStore.settings().isAltCollapseMediaKeyboard,
-      altCloseMediaSelection = SignalStore.settings().isAltCloseMediaSelection
+      altCloseMediaSelection = SignalStore.settings().isAltCloseMediaSelection,
+      stickerMruLongPressToPack = SignalStore.settings().isStickerMruLongPressToPack
     )
 
     store = Store(initialState)
@@ -111,5 +112,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setAltCloseMediaSelection(altCloseMediaSelection: Boolean) {
     store.update { it.copy(altCloseMediaSelection = altCloseMediaSelection) }
     SignalStore.settings().isAltCloseMediaSelection = altCloseMediaSelection
+  }
+
+  fun setStickerMruLongPressToPack(stickerMruLongPressToPack: Boolean) {
+    store.update { it.copy(stickerMruLongPressToPack = stickerMruLongPressToPack) }
+    SignalStore.settings().isStickerMruLongPressToPack = stickerMruLongPressToPack
   }
 }

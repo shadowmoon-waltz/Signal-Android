@@ -10,6 +10,12 @@ Releases prior to and including v5.44.1-0 were locally compiled, locally signed 
 
 ## Differences from stock Signal
 
+<details open="">
+<summary>October 2022</summary>
+
+* (Option) Long-press a sticker in the recent sticker list to jump to the pack that sticker belongs to (normally this enlarges the sticker and shows you what emoji it corresponds to)
+</details>
+
 <details>
 <summary>March 2022</summary>
 

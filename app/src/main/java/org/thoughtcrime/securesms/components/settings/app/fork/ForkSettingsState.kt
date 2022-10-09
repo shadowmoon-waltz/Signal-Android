@@ -16,5 +16,6 @@ data class ForkSettingsState(
   val trashNoPromptForMe: Boolean,
   val promptMp4AsGif: Boolean,
   val altCollapseMediaKeyboard: Boolean,
-  val altCloseMediaSelection: Boolean
+  val altCloseMediaSelection: Boolean,
+  val stickerMruLongPressToPack: Boolean
 )

@@ -204,6 +204,15 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
           viewModel.setAltCloseMediaSelection(!state.altCloseMediaSelection)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__sticker_mru_long_press_to_pack),
+        isChecked = state.stickerMruLongPressToPack,
+        onClick = {
+          TextSecurePreferences.setStickerMruLongPressToPack(requireContext(), !state.stickerMruLongPressToPack)
+          viewModel.setStickerMruLongPressToPack(!state.stickerMruLongPressToPack)
+        }
+      )
     }
   }
 }

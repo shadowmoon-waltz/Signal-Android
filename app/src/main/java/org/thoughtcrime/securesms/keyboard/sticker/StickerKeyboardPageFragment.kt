@@ -16,6 +16,7 @@ import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.DatabaseObserver
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.keyboard.emoji.KeyboardPageSearchView
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.mms.GlideApp
 import org.thoughtcrime.securesms.stickers.StickerEventListener
 import org.thoughtcrime.securesms.stickers.StickerRolloverTouchListener
@@ -178,7 +179,12 @@ class StickerKeyboardPageFragment :
   }
 
   override fun onStickerLongClicked(sticker: KeyboardStickerListAdapter.Sticker) {
-    listTouchListener.enterHoverMode(stickerList, sticker)
+    if (sticker.packId == RECENT_PACK_ID && SignalStore.settings().isStickerMruLongPressToPack()) {
+      scrollTo(sticker.stickerRecord.packId)
+      viewModel.selectPack(sticker.stickerRecord.packId)
+    } else {
+      listTouchListener.enterHoverMode(stickerList, sticker)
+    }
   }
 
   override fun getStickerDataFromView(view: View): Pair<Any, String>? {

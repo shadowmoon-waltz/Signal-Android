@@ -11,7 +11,8 @@ import org.thoughtcrime.securesms.database.model.StickerRecord
 import java.util.function.Consumer
 
 private const val RECENT_LIMIT = 24
-private const val RECENT_PACK_ID = "RECENT"
+// SW public so we can check if long press of sticker is a recent one for possibly different behavior
+public const val RECENT_PACK_ID = "RECENT"
 
 class StickerKeyboardRepository(private val stickerDatabase: StickerDatabase) {
   fun getStickerPacks(consumer: Consumer<List<KeyboardStickerPack>>) {

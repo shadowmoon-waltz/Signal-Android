@@ -87,6 +87,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String BACKUP_INTERVAL_IN_DAYS                 = "settings.backup.interval.in.days";
   public static final String ALT_COLLAPSE_MEDIA_KEYBOARD             = "settings.alt.collapse.media.keyboard";
   public static final String ALT_CLOSE_MEDIA_SELECTION               = "settings.alt.close.media.selection";
+  public static final String STICKER_MRU_LONG_PRESS_TO_PACK          = "settings.sticker.mru.long.press.to.pack";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -148,7 +149,8 @@ public final class SettingsValues extends SignalStoreValues {
                          PROMPT_MP4_AS_GIF,
                          BACKUP_INTERVAL_IN_DAYS,
                          ALT_COLLAPSE_MEDIA_KEYBOARD,
-                         ALT_CLOSE_MEDIA_SELECTION);
+                         ALT_CLOSE_MEDIA_SELECTION,
+                         STICKER_MRU_LONG_PRESS_TO_PACK);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -619,6 +621,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setAltCloseMediaSelection(boolean altCloseMediaSelection) {
     putBoolean(ALT_CLOSE_MEDIA_SELECTION, altCloseMediaSelection);
+  }
+
+  public boolean isStickerMruLongPressToPack() {
+    return getBoolean(STICKER_MRU_LONG_PRESS_TO_PACK, TextSecurePreferences.isStickerMruLongPressToPack(ApplicationDependencies.getApplication()));
+  }
+
+  public void setStickerMruLongPressToPack(boolean stickerMruLongPressToPack) {
+    putBoolean(STICKER_MRU_LONG_PRESS_TO_PACK, stickerMruLongPressToPack);
   }
 
   public enum CensorshipCircumventionEnabled {
