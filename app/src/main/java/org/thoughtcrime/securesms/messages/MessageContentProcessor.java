@@ -312,7 +312,7 @@ public final class MessageContentProcessor {
         if (content.isNeedsReceipt() && messageId != null) {
           handleNeedsDeliveryReceipt(content, message, messageId);
         } else if (!content.isNeedsReceipt()) {
-          if (RecipientUtil.shouldHaveProfileKey(context, threadRecipient)) {
+          if (RecipientUtil.shouldHaveProfileKey(threadRecipient)) {
             Log.w(TAG, "Received an unsealed sender message from " + senderRecipient.getId() + ", but they should already have our profile key. Correcting.");
 
             if (groupId.isPresent() && groupId.get().isV2()) {
@@ -2536,21 +2536,18 @@ public final class MessageContentProcessor {
                                    @NonNull SignalServiceReceiptMessage message,
                                    @NonNull Recipient senderRecipient)
   {
-    boolean shouldOnlyProcessStories = Stories.isFeatureFlagEnabled() && !SignalStore.storyValues().isFeatureDisabled() && !TextSecurePreferences.isReadReceiptsEnabled(context);
-
-    if (!TextSecurePreferences.isReadReceiptsEnabled(context) && !shouldOnlyProcessStories) {
+    if (!TextSecurePreferences.isReadReceiptsEnabled(context)) {
       log("Ignoring viewed receipts for IDs: " + Util.join(message.getTimestamps(), ", "));
       return;
     }
 
-    log(TAG, "Processing viewed receipts. Sender: " +  senderRecipient.getId() + ", Device: " + content.getSenderDevice() + ", Only Stories: " + shouldOnlyProcessStories + ", Timestamps: " + Util.join(message.getTimestamps(), ", "));
+    log(TAG, "Processing viewed receipts. Sender: " +  senderRecipient.getId() + ", Device: " + content.getSenderDevice() + ", Timestamps: " + Util.join(message.getTimestamps(), ", "));
 
     List<SyncMessageId> ids = Stream.of(message.getTimestamps())
                                     .map(t -> new SyncMessageId(senderRecipient.getId(), t))
                                     .toList();
 
-    Collection<SyncMessageId> unhandled = shouldOnlyProcessStories ? SignalDatabase.mmsSms().incrementViewedStoryReceiptCounts(ids, content.getTimestamp())
-                                                                   : SignalDatabase.mmsSms().incrementViewedReceiptCounts(ids, content.getTimestamp());
+    Collection<SyncMessageId> unhandled = SignalDatabase.mmsSms().incrementViewedReceiptCounts(ids, content.getTimestamp());
 
     Set<SyncMessageId> handled = new HashSet<>(ids);
     handled.removeAll(unhandled);
@@ -3011,8 +3008,13 @@ public final class MessageContentProcessor {
   }
 
   private Recipient getMessageDestination(@NonNull SignalServiceContent content) throws BadGroupIdException {
-    SignalServiceDataMessage message = content.getDataMessage().orElse(null);
-    return getGroupRecipient(message != null ? message.getGroupContext() : Optional.empty()).orElseGet(() -> Recipient.externalPush(content.getSender()));
+    if (content.getStoryMessage().isPresent()) {
+      SignalServiceStoryMessage message = content.getStoryMessage().get();
+      return getGroupRecipient(message.getGroupContext()).orElseGet(() -> Recipient.externalPush(content.getSender()));
+    } else {
+      SignalServiceDataMessage message = content.getDataMessage().orElse(null);
+      return getGroupRecipient(message != null ? message.getGroupContext() : Optional.empty()).orElseGet(() -> Recipient.externalPush(content.getSender()));
+    }
   }
 
   private Optional<Recipient> getGroupRecipient(Optional<SignalServiceGroupV2> message) {

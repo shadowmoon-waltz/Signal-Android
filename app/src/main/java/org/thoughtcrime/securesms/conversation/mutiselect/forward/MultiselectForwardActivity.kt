@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.color.ViewColorSet
 import org.thoughtcrime.securesms.components.FragmentWrapperActivity
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment.Companion.RESULT_SELECTION
@@ -35,21 +35,7 @@ open class MultiselectForwardActivity : FragmentWrapperActivity(), MultiselectFo
   }
 
   override fun getFragment(): Fragment {
-    return MultiselectForwardFragment.create(
-      args.let {
-        if (it.sendButtonColors == null) {
-          args.withSendButtonTint(ContextCompat.getColor(this, R.color.signal_colorPrimary))
-          args.copy(
-            sendButtonColors = ViewColorSet(
-              foreground = ViewColorSet.ViewColor.ColorResource(R.color.signal_colorOnPrimary),
-              background = ViewColorSet.ViewColor.ColorResource(R.color.signal_colorPrimary)
-            )
-          )
-        } else {
-          args
-        }
-      }
-    )
+    return MultiselectForwardFragment.create(args)
   }
 
   override fun onFinishForwardAction() {
@@ -58,7 +44,7 @@ open class MultiselectForwardActivity : FragmentWrapperActivity(), MultiselectFo
 
   override fun exitFlow() {
     Log.d(TAG, "Exiting flow...")
-    onBackPressedDispatcher.onBackPressed()
+    ActivityCompat.finishAfterTransition(this)
   }
 
   override fun onSearchInputFocused() = Unit

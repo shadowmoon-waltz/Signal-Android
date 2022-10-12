@@ -82,7 +82,7 @@ public final class FeatureFlags {
   private static final String RETRY_RECEIPTS                    = "android.retryReceipts";
   private static final String MAX_GROUP_CALL_RING_SIZE          = "global.calling.maxGroupCallRingSize";
   private static final String GROUP_CALL_RINGING                = "android.calling.groupCallRinging";
-  private static final String STORIES                           = "android.stories.3";
+  private static final String STORIES                           = "android.stories.4";
   private static final String STORIES_TEXT_FUNCTIONS            = "android.stories.text.functions";
   private static final String HARDWARE_AEC_BLOCKLIST_MODELS     = "android.calling.hardwareAecBlockList";
   private static final String SOFTWARE_AEC_BLOCKLIST_MODELS     = "android.calling.softwareAecBlockList";
@@ -100,7 +100,7 @@ public final class FeatureFlags {
   private static final String CAMERAX_MIXED_MODEL_BLOCKLIST     = "android.cameraXMixedModelBlockList";
   private static final String RECIPIENT_MERGE_V2                = "android.recipientMergeV2";
   private static final String CDS_V2_LOAD_TEST                  = "android.cdsV2LoadTest";
-  private static final String SMS_EXPORTER                      = "android.sms.exporter";
+  private static final String SMS_EXPORTER                      = "android.sms.exporter.2";
   private static final String CDS_V2_COMPAT                     = "android.cdsV2Compat.4";
   public  static final String STORIES_LOCALE                    = "android.stories.locale";
   private static final String HIDE_CONTACTS                     = "android.hide.contacts";
