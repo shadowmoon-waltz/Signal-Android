@@ -10,7 +10,6 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.media.AudioManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
@@ -18,6 +17,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -71,11 +71,11 @@ import org.thoughtcrime.securesms.stories.dialogs.StoryDialogs
 import org.thoughtcrime.securesms.stories.viewer.StoryViewerViewModel
 import org.thoughtcrime.securesms.stories.viewer.StoryVolumeViewModel
 import org.thoughtcrime.securesms.stories.viewer.info.StoryInfoBottomSheetDialogFragment
+import org.thoughtcrime.securesms.stories.viewer.post.StoryPostFragment
 import org.thoughtcrime.securesms.stories.viewer.reply.direct.StoryDirectReplyDialogFragment
 import org.thoughtcrime.securesms.stories.viewer.reply.group.StoryGroupReplyBottomSheetDialogFragment
 import org.thoughtcrime.securesms.stories.viewer.reply.reaction.OnReactionSentView
 import org.thoughtcrime.securesms.stories.viewer.reply.tabs.StoryViewsAndRepliesDialogFragment
-import org.thoughtcrime.securesms.stories.viewer.text.StoryTextPostPreviewFragment
 import org.thoughtcrime.securesms.stories.viewer.views.StoryViewsBottomSheetDialogFragment
 import org.thoughtcrime.securesms.util.AvatarUtil
 import org.thoughtcrime.securesms.util.BottomSheetUtil
@@ -95,10 +95,9 @@ import kotlin.math.min
 
 class StoryViewerPageFragment :
   Fragment(R.layout.stories_viewer_fragment_page),
-  MediaPreviewFragment.Events,
+  StoryPostFragment.Callback,
   MultiselectForwardBottomSheet.Callback,
   StorySlateView.Callback,
-  StoryTextPostPreviewFragment.Callback,
   StoryFirstTimeNavigationView.Callback,
   StoryInfoBottomSheetDialogFragment.OnInfoSheetDismissedListener,
   SafetyNumberBottomSheet.Callbacks {
@@ -211,12 +210,17 @@ class StoryViewerPageFragment :
       requireActivity().onBackPressed()
     }
 
+    val singleTapHandler = SingleTapHandler(
+      cardWrapper,
+      viewModel::goToNextPost,
+      viewModel::goToPreviousPost,
+    )
+
     val gestureDetector = GestureDetectorCompat(
       requireContext(),
       StoryGestureListener(
         cardWrapper,
-        viewModel::goToNextPost,
-        viewModel::goToPreviousPost,
+        singleTapHandler,
         this::startReply,
         requireListener<Callback>()::onContentTranslation,
         sharedViewModel = sharedViewModel
@@ -232,7 +236,7 @@ class StoryViewerPageFragment :
       scaleListener
     )
 
-    cardWrapper.setOnInterceptTouchEventListener { !storySlate.state.hasClickableContent && childFragmentManager.findFragmentById(R.id.story_content_container) !is StoryTextPostPreviewFragment }
+    cardWrapper.setOnInterceptTouchEventListener { !storySlate.state.hasClickableContent && viewModel.getPost()?.content?.isText() != true }
     cardWrapper.setOnTouchListener { _, event ->
       scaleDetector.onTouchEvent(event)
       val result = if (scaleDetector.isInProgress || scaleListener.isPerformingEndAnimation) {
@@ -244,6 +248,10 @@ class StoryViewerPageFragment :
       if (event.actionMasked == MotionEvent.ACTION_DOWN) {
         viewModel.setIsUserTouching(true)
       } else if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
+        if (event.actionMasked == MotionEvent.ACTION_UP) {
+          singleTapHandler.onActionUp(event)
+        }
+
         viewModel.setIsUserTouching(false)
 
         val canCloseFromHorizontalSlide = requireView().translationX > DimensionUnit.DP.toPixels(56f)
@@ -711,16 +719,6 @@ class StoryViewerPageFragment :
   }
 
   private fun presentStory(post: StoryPost, index: Int) {
-    val fragment = childFragmentManager.findFragmentById(R.id.story_content_container)
-    if (fragment != null && fragment.requireArguments().getParcelable<Uri>(MediaPreviewFragment.DATA_URI) == post.content.uri) {
-      progressBar.setPosition(index)
-      return
-    }
-
-    if (fragment is MediaPreviewFragment) {
-      fragment.cleanUp()
-    }
-
     if (post.content.uri == null) {
       progressBar.setPosition(index)
       progressBar.invalidate()
@@ -728,9 +726,6 @@ class StoryViewerPageFragment :
       progressBar.setPosition(index)
       storySlate.moveToState(StorySlateView.State.HIDDEN, post.id)
       viewModel.setIsDisplayingSlate(false)
-      childFragmentManager.beginTransaction()
-        .replace(R.id.story_content_container, createFragmentForPost(post))
-        .commitNow()
     }
   }
 
@@ -1012,21 +1007,6 @@ class StoryViewerPageFragment :
     }
   }
 
-  private fun createFragmentForPost(storyPost: StoryPost): Fragment {
-    return when (storyPost.content) {
-      is StoryPost.Content.AttachmentContent -> createFragmentForAttachmentContent(storyPost.content)
-      is StoryPost.Content.TextContent -> StoryTextPostPreviewFragment.create(storyPost.content)
-    }
-  }
-
-  private fun createFragmentForAttachmentContent(attachmentContent: StoryPost.Content.AttachmentContent): Fragment {
-    return if (attachmentContent.isVideo()) {
-      MediaPreviewFragment.newInstance(attachmentContent.attachment, false)
-    } else {
-      StoryImageContentFragment.create(attachmentContent.attachment)
-    }
-  }
-
   override fun setIsDisplayingLinkPreviewTooltip(isDisplayingLinkPreviewTooltip: Boolean) {
     viewModel.setIsDisplayingLinkPreviewTooltip(isDisplayingLinkPreviewTooltip)
   }
@@ -1081,6 +1061,72 @@ class StoryViewerPageFragment :
         showInfo(it)
       }
     )
+  }
+
+  class SingleTapHandler(
+    private val container: View,
+    private val onGoToNext: () -> Unit,
+    private val onGoToPrevious: () -> Unit
+  ) {
+
+    companion object {
+      private const val BOUNDARY_NEXT = 0.80f
+      private const val BOUNDARY_PREV = 1f - BOUNDARY_NEXT
+    }
+
+    private var tapStart: Long = 0L
+
+    fun onGestureHappened() {
+      tapStart = 0L
+    }
+
+    fun onDown() {
+      tapStart = System.currentTimeMillis()
+    }
+
+    fun onActionUp(e: MotionEvent) {
+      if (System.currentTimeMillis() - tapStart > ViewConfiguration.getTapTimeout()) {
+        return
+      }
+
+      if (e.x < container.measuredWidth * getLeftBoundary()) {
+        performLeftAction()
+      } else if (e.x > container.measuredWidth - (container.measuredWidth * getRightBoundary())) {
+        performRightAction()
+      }
+    }
+
+    private fun performLeftAction() {
+      if (container.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+        onGoToNext()
+      } else {
+        onGoToPrevious()
+      }
+    }
+
+    private fun performRightAction() {
+      if (container.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+        onGoToPrevious()
+      } else {
+        onGoToNext()
+      }
+    }
+
+    private fun getLeftBoundary(): Float {
+      return if (container.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+        BOUNDARY_PREV
+      } else {
+        BOUNDARY_NEXT
+      }
+    }
+
+    private fun getRightBoundary(): Float {
+      return if (container.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+        BOUNDARY_NEXT
+      } else {
+        BOUNDARY_PREV
+      }
+    }
   }
 
   companion object {
@@ -1153,8 +1199,7 @@ class StoryViewerPageFragment :
 
   private class StoryGestureListener(
     private val container: View,
-    private val onGoToNext: () -> Unit,
-    private val onGoToPrevious: () -> Unit,
+    private val singleTapHandler: SingleTapHandler,
     private val onReplyToPost: () -> Unit,
     private val onContentTranslation: (Float, Float) -> Unit,
     private val viewToTranslate: View = container.parent as View,
@@ -1162,15 +1207,13 @@ class StoryViewerPageFragment :
   ) : GestureDetector.SimpleOnGestureListener() {
 
     companion object {
-      private const val BOUNDARY_NEXT = 0.80f
-      private const val BOUNDARY_PREV = 1f - BOUNDARY_NEXT
-
       val INTERPOLATOR: Interpolator = PathInterpolatorCompat.create(0.4f, 0f, 0.2f, 1f)
     }
 
     private val maxSlide = DimensionUnit.DP.toPixels(56f * 2)
 
     override fun onDown(e: MotionEvent): Boolean {
+      singleTapHandler.onDown()
       return true
     }
 
@@ -1209,6 +1252,7 @@ class StoryViewerPageFragment :
 
       onContentTranslation(viewToTranslate.translationX, viewToTranslate.translationY)
 
+      singleTapHandler.onGestureHappened()
       return true
     }
 
@@ -1230,51 +1274,8 @@ class StoryViewerPageFragment :
         onReplyToPost()
       }
 
+      singleTapHandler.onGestureHappened()
       return true
-    }
-
-    private fun getLeftBoundary(): Float {
-      return if (container.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-        BOUNDARY_PREV
-      } else {
-        BOUNDARY_NEXT
-      }
-    }
-
-    private fun getRightBoundary(): Float {
-      return if (container.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-        BOUNDARY_NEXT
-      } else {
-        BOUNDARY_PREV
-      }
-    }
-
-    override fun onSingleTapUp(e: MotionEvent): Boolean {
-      if (e.x < container.measuredWidth * getLeftBoundary()) {
-        performLeftAction()
-        return true
-      } else if (e.x > container.measuredWidth - (container.measuredWidth * getRightBoundary())) {
-        performRightAction()
-        return true
-      }
-
-      return false
-    }
-
-    private fun performLeftAction() {
-      if (container.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-        onGoToNext()
-      } else {
-        onGoToPrevious()
-      }
-    }
-
-    private fun performRightAction() {
-      if (container.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-        onGoToPrevious()
-      } else {
-        onGoToNext()
-      }
     }
   }
 
@@ -1306,15 +1307,11 @@ class StoryViewerPageFragment :
     }
   }
 
-  override fun singleTapOnMedia(): Boolean {
-    return false
-  }
-
-  override fun onMediaReady() {
+  override fun onContentReady() {
     sharedViewModel.setContentIsReady()
   }
 
-  override fun mediaNotAvailable() {
+  override fun onContentNotAvailable() {
     sharedViewModel.setContentIsReady()
   }
 

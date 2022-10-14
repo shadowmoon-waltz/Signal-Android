@@ -11,6 +11,7 @@
     <string name="sustainer_boost_and_badges" translatable="false">https://support.signal.org/hc/articles/4408365318426</string>
     <string name="google_pay_url" translatable="false">https://pay.google.com</string>
     <string name="donation_decline_code_error_url" translatable="false">https://support.signal.org/hc/articles/4408365318426#errors</string>
+    <string name="sms_export_url" translatable="false">https://support.signal.org/hc/articles/360007321171</string>
     <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string>
     <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string>
 
@@ -220,7 +221,7 @@
     <!-- Label for my stories when selecting who to send media to -->
     <string name="ContactsCursorLoader_my_stories">எனது ஸ்டோரீஸ்</string>
     <!-- Action for creating a new story -->
-    <string name="ContactsCursorLoader_new_story">புதிய ஸ்டோரி</string>
+    <string name="ContactsCursorLoader_add_to">Add to…</string>
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">செய்தி %1$s</string>
@@ -342,6 +343,17 @@
     <string name="ConversationActivity_error_sending_media">மீடியா அனுப்புவதில் பிழை</string>
 
     <string name="ConversationActivity__reported_as_spam_and_blocked">என புகாரளிக்கப்பட்டது ஸ்பேம் மற்றும் தடுக்கப்பட்டது.</string>
+
+    <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
+    <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_you_can_export_your_messages_to_another_app_on_your_phone">SMS messaging is no longer supported in Signal. You can export your messages to another app on your phone.</string>
+    <!-- Action button shown when in sms conversation, sms is disabled, and unexported sms messages are present -->
+    <string name="ConversationActivity__export_sms_messages">Export SMS messages</string>
+    <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
+    <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">SMS messaging is no longer supported in Signal. Invite %1$s to Signal to keep the conversation here.</string>
+    <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
+    <string name="ConversationActivity__invite_to_signal">Invite to Signal</string>
+    <!-- Snackbar message shown after dismissing the full screen sms export megaphone indicating we'll do it again soon -->
+    <string name="ConversationActivity__you_will_be_reminded_again_soon">You will be reminded again soon.</string>
 
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
@@ -802,11 +814,11 @@
     <string name="AddGroupDetailsFragment__this_field_is_required">இந்த தகவல் தேவை.</string>
     <string name="AddGroupDetailsFragment__group_creation_failed">குழு உருவாக்கம் தோல்வியடைந்தது.</string>
     <string name="AddGroupDetailsFragment__try_again_later">பின்னர் மீண்டும் முயற்சிக்கவும்.</string>
-    <!-- Displayed when adding group details to an MMS Group -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">சிக்னல் குழுக்களை ஆதரிக்காத ஒரு தொடர்பை நீங்கள் தேர்ந்தெடுத்துள்ளீர்கள், எனவே இந்தக் குழு எம்.எம்.எஸ் ஆக இருக்கும். தனிப்பயன் எம்.எம்.எஸ் குழுப் பெயர்கள் மற்றும் புகைப்படங்கள் உங்களுக்கு மட்டுமே தெரியப்படும்.</string>
     <string name="AddGroupDetailsFragment__remove">நீக்கு</string>
     <string name="AddGroupDetailsFragment__sms_contact">SMS தொடர்பு</string>
     <string name="AddGroupDetailsFragment__remove_s_from_this_group">இந்த குழுவிலிருந்து %1$s ஐ அகற்றவா?</string>
+    <!-- Displayed when adding group details to an MMS Group -->
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that dosen\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">உறுப்பினர் கோரிக்கைகள் மற்றும் அழைப்புகள்</string>
@@ -990,6 +1002,8 @@
 
     <!-- InputPanel -->
     <string name="InputPanel_tap_and_hold_to_record_a_voice_message_release_to_send">குரல் செய்தியைப் பதிவுசெய்ய தட்டவும், பிடிக்கவும். வெளியீடு செய்ய அனுப்பவும் </string>
+    <!-- Message shown if the user tries to switch a conversation from Signal to SMS -->
+    <string name="InputPanel__sms_messaging_is_no_longer_supported_in_signal">SMS messaging is no longer supported in Signal.</string>
 
     <!-- InviteActivity -->
     <string name="InviteActivity_share">பகிர்</string>
@@ -1374,6 +1388,11 @@
         <item quantity="one">%1$s, %2$s, மற்றும் %3$dகூடுதலாக குழு உறுப்பினர்கள் அழைப்பில் உள்ளனர்</item>
         <item quantity="other">%1$s, %2$s, மற்றும் கூடுதலாக %3$d குழு உறுப்பினர்கள் அழைப்பில் உள்ளனர்</item>
     </plurals>
+
+    <!-- In-conversation update message to indicate that the current contact is sms only and will need to migrate to signal to continue the conversation in signal. -->
+    <string name="MessageRecord__you_will_on_longer_be_able_to_send_sms_messages_from_signal_soon">You will on longer be able to send SMS messages from Signal soon. Invite %1$s to Signal to keep the conversation here.</string>
+    <!-- In-conversation update message to indicate that the current contact is sms only and will need to migrate to signal to continue the conversation in signal. -->
+    <string name="MessageRecord__you_can_no_longer_send_sms_messages_in_signal">You can no longer send SMS messages in Signal. Invite %1$s to Signal to keep the conversation here.</string>
 
     <!-- MessageRequestBottomView -->
     <string name="MessageRequestBottomView_accept">ஒப்புக்கொள்</string>
@@ -2012,6 +2031,9 @@
     <string name="NotificationChannel_background_connection">பின்னணி இணைப்பு</string>
     <!-- Notification channel name for showing call status information (like connection, ongoing, etc.) Not ringing. -->
     <string name="NotificationChannel_call_status">அழைப்பு நிலை</string>
+    <!-- Notification channel name for occasional alerts to the user -->
+    <string name="NotificationChannel_critical_app_alerts">Critical app alerts</string>
+
     <!-- ProfileEditNameFragment -->
 
     <!-- QuickResponseService -->
@@ -3971,6 +3993,12 @@
     <string name="SmsSettingsFragment__removing_sms_messages_from_signal">சிக்னலில் இருந்து எஸ்.எம்.எஸ் செய்திகளை அகற்றுகிறது…</string>
     <!-- Snackbar text to indicate can delete later -->
     <string name="SmsSettingsFragment__you_can_remove_sms_messages_from_signal_in_settings">நீங்கள் எந்த நேரத்திலும் அமைப்புகளில் சென்று சிக்னலில் இருந்து எஸ்.எம்.எஸ் செய்திகளை அகற்றலாம்.</string>
+    <!-- Description for export sms preference -->
+    <string name="SmsSettingsFragment__you_can_export_your_sms_messages_to_your_phones_sms_database">You can export your SMS messages to your phone\'s SMS database</string>
+    <!-- Description for remove sms preference -->
+    <string name="SmsSettingsFragment__remove_sms_messages_from_signal_to_clear_up_storage_space">Remove SMS messages from Signal to clear up storage space.</string>
+    <!-- Information message shown at the top of sms settings to indicate it is being removed soon. -->
+    <string name="SmsSettingsFragment__sms_support_will_be_removed_soon_to_focus_on_encrypted_messaging">SMS support will be removed soon to focus on encrypted messaging.</string>
 
     <!-- NotificationsSettingsFragment -->
     <string name="NotificationsSettingsFragment__messages">செய்திகள்</string>
@@ -4001,7 +4029,7 @@
     <string name="PrivacySettingsFragment__default_timer_for_new_changes">இயல்புநிலை நேரக்குறிப்பான் புதிய அரட்டைகளுக்கு</string>
     <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">நீங்கள் தொடங்கும் அனைத்து புதிய அரட்டைகளுக்கும் இயல்புநிலை காணாமல் போகும் செய்திகள் நேரக்குறிப்பானை அமைக்கவும்.</string>
     <!-- Summary for stories preference to launch into story privacy settings -->
-    <string name="PrivacySettingsFragment__manage_your_stories">உங்கள் ஸ்டோரீக்களையும் மற்றும் அவற்றை யார் பார்வையிடலாம் என்பதையும் நிர்வகிக்கவும்</string>
+    <string name="PrivacySettingsFragment__manage_your_stories">உங்கள் ஸ்டோரீஸ்-ஐயும் மற்றும் அவற்றை யார் பார்வையிடலாம் என்பதையும் நிர்வகிக்கவும்</string>
     <string name="PrivacySettingsFragment__payment_lock_require_lock">நிதியை மாற்ற ஆண்ட்ராய்டு திரைப் பூட்டு அல்லது கைரேகை தேவை</string>
     <!-- Alert dialog title when payment lock cannot be enabled -->
     <string name="PrivacySettingsFragment__cant_enable_title">கட்டண பூட்டை இயக்க முடியவில்லை</string>
@@ -4231,6 +4259,8 @@
     <string name="NewConversationActivity__this_person_is_saved_to_your">இந்த நபர் உங்கள் சாதனத்தின் தொடர்புகளில் சேமிக்கப்பட்டுள்ளார். உங்கள் தொடர்புகளில் இருந்து அவர்களை நீக்கிவிட்டு மீண்டும் முயற்சிக்கவும்.</string>
     <!-- Dialog action to view contact when they can't be removed otherwise -->
     <string name="NewConversationActivity__view_contact">தொடர்பைக் காண்க</string>
+    <!-- Error message shown when looking up a person by phone number and that phone number is not associated with a signal account -->
+    <string name="NewConversationActivity__s_is_not_a_signal_user">%1$s is not a Signal user</string>
 
     <!-- ContactFilterView -->
     <string name="ContactFilterView__search_name_or_number">தேடல் பெயர் அல்லது எண்</string>
@@ -4281,9 +4311,9 @@
     <string name="MultiselectForwardFragment__add_a_message">கூட்டு ஒரு செய்தி</string>
     <string name="MultiselectForwardFragment__faster_forwards">வேகமான முன்னோக்கிகள்</string>
     <!-- Displayed when user selects a video that will be clipped before sharing to a story -->
-    <string name="MultiselectForwardFragment__videos_will_be_trimmed">வீடியோக்கள் 30 நொடிகளுக்கான கிளிப்களாக ட்ரிம் செய்யப்பட்டு பல ஸ்டோரீக்களாக அனுப்பப்படும்.</string>
+    <string name="MultiselectForwardFragment__videos_will_be_trimmed">வீடியோக்கள் 30 நொடிகளுக்கான கிளிப்களாக ட்ரிம் செய்யப்பட்டு பல ஸ்டோரீஸ்-களாக அனுப்பப்படும்.</string>
     <!-- Displayed when user selects a video that cannot be sent as a story -->
-    <string name="MultiselectForwardFragment__videos_sent_to_stories_cant">ஸ்டோரீக்களுக்கு அனுப்பப்படும் வீடியோக்கள் 30 வினாடிகளுக்கு மேல் இருக்கக்கூடாது.</string>
+    <string name="MultiselectForwardFragment__videos_sent_to_stories_cant">ஸ்டோரீஸ்-இல் அனுப்பப்படும் வீடியோக்கள் 30 வினாடிகளுக்கு மேல் இருக்கக்கூடாது.</string>
     <string name="MultiselectForwardFragment__forwarded_messages_are_now">முன்னனுப்பப்பட்ட செய்திகள் இப்போது உடனடியாக அனுப்பப்படுகின்றன.</string>
     <plurals name="MultiselectForwardFragment_send_d_messages">
         <item quantity="one">%1$d செய்தி அனுப்பவும்</item>
@@ -4760,13 +4790,13 @@
     <!-- Title of dialog confirming decision to hide a story -->
     <string name="StoriesLandingFragment__hide_story">ஸ்டோரியை மறைப்பதா?</string>
     <!-- Message of dialog confirming decision to hide a story -->
-    <string name="StoriesLandingFragment__new_story_updates">%1$s -இடமிருந்து புதிய ஸ்டோரி புதுப்பிப்புகள் இனி ஸ்டோரீக்கள் பட்டியலின் மேலே தோன்றாது.</string>
+    <string name="StoriesLandingFragment__new_story_updates">%1$s -இடமிருந்து புதிய ஸ்டோரி புதுப்பிப்புகள் இனி ஸ்டோரீஸ்-இன் பட்டியலின் மேலே தோன்றாது.</string>
     <!-- Positive action of dialog confirming decision to hide a story -->
     <string name="StoriesLandingFragment__hide">மறை</string>
     <!-- Displayed in Snackbar after story is hidden -->
     <string name="StoriesLandingFragment__story_hidden">ஸ்டோரி மறைக்கப்பட்டது</string>
     <!-- Section header for hidden stories -->
-    <string name="StoriesLandingFragment__hidden_stories">மறைக்கப்பட்ட ஸ்டோரீக்கள்</string>
+    <string name="StoriesLandingFragment__hidden_stories">மறைக்கப்பட்ட ஸ்டோரீஸ்</string>
     <!-- Displayed on each sent story under My Stories -->
     <plurals name="MyStories__d_views">
         <item quantity="one">%1$d பார்வை</item>
@@ -4811,7 +4841,7 @@
     <!-- Displayed when a story has no views -->
     <string name="StoryViewsFragment__no_views_yet">இதுவரை பார்வைகள் ஏதுமில்லை</string>
     <!-- Displayed when user has disabled receipts -->
-    <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">உங்கள் ஸ்டோரீஸ் -ஐ யார் பார்வையிட்டனர் என்பதைக் காண, வாசித்ததற்கான அறிவிப்புகளை இயக்கவும்.</string>
+    <string name="StoryViewsFragment__enable_read_receipts_to_see_whos_viewed_your_story">உங்கள் ஸ்டோரீஸ்-ஐ யார் பார்வையிட்டனர் என்பதைக் காண, வாசித்ததற்கான அறிவிப்புகளை இயக்கவும்.</string>
     <!-- Button label displayed when user has disabled receipts -->
     <string name="StoryViewsFragment__go_to_settings">அமைப்புகளுக்குச் செல்</string>
     <!-- Dialog action to remove viewer from a story -->
@@ -4878,7 +4908,7 @@
         <item quantity="other">%1$d நபர்கள்</item>
     </plurals>
     <!-- My story privacy fine print about what the privacy settings are for -->
-    <string name="MyStorySettingsFragment__choose_who_can_view_your_story">உங்கள் ஸ்டோரியை யார் பார்வையிடலாம் என்பதைத் தேர்வுசெய்யவும். நீங்கள் ஏற்கனவே அனுப்பிய ஸ்டோரீக்களை மாற்றங்கள் பாதிக்காது.</string>
+    <string name="MyStorySettingsFragment__choose_who_can_view_your_story">உங்கள் ஸ்டோரியை யார் பார்வையிடலாம் என்பதைத் தேர்வுசெய்யவும். நீங்கள் ஏற்கனவே அனுப்பிய ஸ்டோரீஸ்-ஐ மாற்றங்கள் பாதிக்காது.</string>
     <!-- Section header for options related to replies and reactions -->
     <string name="MyStorySettingsFragment__replies_amp_reactions">பதில்கள் &amp;ஆம்ப்; எதிர்வினைகள்</string>
     <!-- Switchable option for allowing replies and reactions on your stories -->
@@ -4974,9 +5004,9 @@
     <!-- Action button for turning off stories when stories are present on the device -->
     <string name="StoryDialogs__turn_off_and_delete">ஆஃப் செய்துவிட்டு நீக்கவும்</string>
     <!-- Privacy Settings toggle title for stories -->
-    <string name="PrivacySettingsFragment__share_and_view_stories">ஸ்டோரீக்களை பகிரவும் மற்றும் பார்வையிடவும்</string>
+    <string name="PrivacySettingsFragment__share_and_view_stories">ஸ்டோரீஸ்-ஐ பகிரவும் மற்றும் பார்வையிடவும்</string>
     <!-- Privacy Settings toggle summary for stories -->
-    <string name="PrivacySettingsFragment__you_will_no_longer_be_able">இந்த விருப்பத்தேர்வு முடக்கப்பட்டிருக்கும் போது உங்களால் இனி ஸ்டோரீக்களைப் பகிரவும் பார்வையிடவும் முடியாது.</string>
+    <string name="PrivacySettingsFragment__you_will_no_longer_be_able">இந்த விருப்பத்தேர்வு முடக்கப்பட்டிருக்கும் போது உங்களால் இனி ஸ்டோரீஸ்-ஐ பகிரவும் பார்வையிடவும் முடியாது.</string>
     <!-- New story viewer selection screen title -->
     <string name="CreateStoryViewerSelectionFragment__choose_viewers">பார்வையாளர்களைத் தேர்ந்தெடுக்கவும்</string>
     <!-- New story viewer selection action button label -->
@@ -5142,7 +5172,7 @@
     <!-- Dialog title for removing a group story -->
     <string name="ContactSearchMediator__remove_group_story">குழு ஸ்டோரியை அகற்றுவதா?</string>
     <!-- Dialog message for removing a group story -->
-    <string name="ContactSearchMediator__this_will_remove">இது இந்த பட்டியலிலிருந்து ஸ்டோரியை அகற்றும். இந்தக் குழுவின் ஸ்டோரீக்களை நீங்கள் இன்னும் பார்வையிடவும் முடியும்.</string>
+    <string name="ContactSearchMediator__this_will_remove">இது இந்த பட்டியலிலிருந்து ஸ்டோரியை அகற்றும். இந்தக் குழுவின் ஸ்டோரீஸ்-ஐ நீங்கள் இன்னும் பார்வையிடவும் முடியும்.</string>
     <!-- Dialog action item for removing a group story -->
     <string name="ContactSearchMediator__remove">நீக்கு</string>
     <!-- Dialog title for deleting a private story -->
@@ -5224,7 +5254,7 @@
     <!-- Title of initial My Story settings configuration shown when sending to My Story for the first time -->
     <string name="ChooseInitialMyStoryMembershipFragment__my_story_privacy">எனது ஸ்டோரி தனியுரிமை</string>
     <!-- Subtitle of initial My Story settings configuration shown when sending to My Story for the first time -->
-    <string name="ChooseInitialMyStoryMembershipFragment__choose_who_can_see_posts_to_my_story_you_can_always_make_changes_in_settings">எனது ஸ்டோரிக்கான இடுகைகளை யார் பார்க்கலாம் என்பதைத் தேர்ந்தெடுக்கவும். நீங்கள் எப்போதும் அமைப்புகளில் மாற்றங்களைச் செய்யலாம்.</string>
+    <string name="ChooseInitialMyStoryMembershipFragment__choose_who_can_see_posts_to_my_story_you_can_always_make_changes_in_settings">எனது ஸ்டோரிக்கான போஸ்டுகளை யார் பார்க்கலாம் என்பதைத் தேர்ந்தெடுக்கவும். நீங்கள் எப்போதும் அமைப்புகளில் மாற்றங்களைச் செய்யலாம்.</string>
     <!-- All connections option for initial My Story settings configuration shown when sending to My Story for the first time -->
     <string name="ChooseInitialMyStoryMembershipFragment__all_signal_connections">அனைத்து சிக்னல் இணைப்புகள்</string>
     <!-- All connections except option for initial My Story settings configuration shown when sending to My Story for the first time -->
@@ -5249,21 +5279,26 @@
 
     <!-- StoriesPrivacySettingsFragment -->
     <!-- Explanation about how stories are deleted and managed -->
-    <string name="StoriesPrivacySettingsFragment__stories_automatically_disappear">24 மணிநேரத்திற்குப் பிறகு ஸ்டோரீக்கள் தானாகவே மறைந்துவிடும். உங்கள் ஸ்டோரியை யார் பார்வையிடலாம் அல்லது குறிப்பிட்ட பார்வையாளர்கள் அல்லது குழுக்களுடன் புதிய கதைகளை உருவாக்கவும்.</string>
+    <string name="StoriesPrivacySettingsFragment__stories_automatically_disappear">24 மணிநேரத்திற்குப் பிறகு ஸ்டோரீஸ் தானாகவே மறைந்துவிடும். உங்கள் ஸ்டோரியை யார் பார்வையிடலாம் அல்லது குறிப்பிட்ட பார்வையாளர்கள் அல்லது குழுக்களுடன் புதிய ஸ்டோரீஸ்-ஐ உருவாக்கவும்.</string>
     <!-- Preference title to turn off stories -->
-    <string name="StoriesPrivacySettingsFragment__turn_off_stories">ஸ்டோரீக்களை முடக்கவும்</string>
+    <string name="StoriesPrivacySettingsFragment__turn_off_stories">ஸ்டோரீஸ்-ஐ முடக்கவும்</string>
     <!-- Preference summary to turn off stories -->
-    <string name="StoriesPrivacySettingsFragment__if_you_opt_out">நீங்கள் ஸ்டோரீக்களில் இருந்து விலகினால், இனி உங்களால் ஸ்டோரீக்களைப் பகிரவோ அல்லது பார்க்கவோ முடியாது.</string>
+    <string name="StoriesPrivacySettingsFragment__if_you_opt_out">நீங்கள் ஸ்டோரீஸ்-இல் இருந்து விலகினால், இனி உங்களால் ஸ்டோரீஸ்-ஐ பகிரவோ அல்லது பார்க்கவோ முடியாது.</string>
     <!-- Preference title to turn on stories -->
-    <string name="StoriesPrivacySettingsFragment__turn_on_stories">ஸ்டோரீக்களை இயக்கவும்</string>
+    <string name="StoriesPrivacySettingsFragment__turn_on_stories">ஸ்டோரீஸ்-ஐ இயக்கவும்</string>
     <!-- Preference summary to turn on stories -->
-    <string name="StoriesPrivacySettingsFragment__share_and_view">மற்றவர்களின் ஸ்டோரீக்களைப் பகிரவும் மற்றும் பார்வையிடவும். 24 மணிநேரத்திற்குப் பிறகு ஸ்டோரீக்கள் தானாகவே மறைந்துவிடும்.</string>
+    <string name="StoriesPrivacySettingsFragment__share_and_view">மற்றவர்களின் ஸ்டோரீஸ்-ஐ பகிரவும் மற்றும் பார்வையிடவும். 24 மணிநேரத்திற்குப் பிறகு ஸ்டோரீஸ் தானாகவே மறைந்துவிடும்.</string>
     <!-- Dialog title to turn off stories -->
-    <string name="StoriesPrivacySettingsFragment__turn_off_stories_question">ஸ்டோரீக்களை முடக்குவதா?</string>
+    <string name="StoriesPrivacySettingsFragment__turn_off_stories_question">ஸ்டோரீஸ்-ஐ முடக்குவதா?</string>
     <!-- Dialog message to turn off stories -->
     <string name="StoriesPrivacySettingsFragment__you_will_no_longer_be_able_to_share">இனி உங்களால் ஸ்டோரீக்களைப் பகிரவோ பார்க்கவோ முடியாது. சமீபத்தில் நீங்கள் பகிர்ந்த ஸ்டோரி புதுப்பிப்புகளும் நீக்கப்படும்.</string>
     <!-- Page title when launched from stories landing screen -->
     <string name="StoriesPrivacySettingsFragment__story_privacy">ஸ்டோரி தனியுரிமை</string>
+    <!-- Header for section that lists out stories -->
+    <string name="StoriesPrivacySettingsFragment__stories">Stories</string>
+
+    <!-- NewStoryItem -->
+    <string name="NewStoryItem__new_story">New story</string>
 
     <!-- GroupStorySettingsFragment -->
     <!-- Section header for who can view a group story -->
@@ -5279,6 +5314,10 @@
     <!-- SMS Export Service -->
     <!-- Displayed in the notification while export is running -->
     <string name="SignalSmsExportService__exporting_messages">செய்திகளை ஏற்றுமதி செய்கிறது…</string>
+    <!-- Displayed in the notification title when export completes -->
+    <string name="SignalSmsExportService__signal_sms_export_complete">Signal SMS Export Complete</string>
+    <!-- Displayed in the notification message when export completes -->
+    <string name="SignalSmsExportService__tap_to_return_to_signal">Tap to return to Signal</string>
 
     <!-- ExportYourSmsMessagesFragment -->
     <!-- Title of the screen -->
@@ -5291,6 +5330,8 @@
     <!-- ExportingSmsMessagesFragment -->
     <!-- Title of the screen -->
     <string name="ExportingSmsMessagesFragment__exporting_sms_messages">எஸ்.எம்.எஸ் செய்திகளை ஏற்றுமதி செய்கிறது</string>
+    <!-- Message of the screen when exporting sms messages -->
+    <string name="ExportingSmsMessagesFragment__this_may_take_awhile">This may take awhile</string>
     <!-- Progress indicator for export -->
     <string name="ExportingSmsMessagesFragment__exporting_d_of_d">%2$d இல் %1$d- ஐ ஏற்றுமதி செய்கிறது…</string>
 
@@ -5339,6 +5380,53 @@
     <string name="SetSignalAsDefaultSmsAppFragment__to_export_your_sms_messages">உங்கள் எஸ்.எம்.எஸ் செய்திகளை ஏற்றுமதி செய்ய, இயல்புநிலை எஸ்.எம்.எஸ் பயன்பாடாக சிக்னலை அமைக்க வேண்டும்.</string>
     <!-- Button label to start export -->
     <string name="SetSignalAsDefaultSmsAppFragment__next">அடுத்தது</string>
+
+    <!-- BackupSchedulePermission Megaphone -->
+    <!-- Can't backup chats megaphone title -->
+    <string name="BackupSchedulePermissionMegaphone__cant_back_up_chats">Can\'t back up chats</string>
+    <!-- Can't backup chats megaphone message -->
+    <string name="BackupSchedulePermissionMegaphone__your_chats_are_no_longer_being_automatically_backed_up">Your chats are no longer being automatically backed up.</string>
+    <!-- Can't backup chats megaphone button text to take steps to re-enable -->
+    <string name="BackupSchedulePermissionMegaphone__back_up_chats">Back up chats</string>
+    <!-- Can't backup chats megaphone button to snooze megaphone and be reshown later -->
+    <string name="BackupSchedulePermissionMegaphone__not_now">Not now</string>
+    <!-- Re-enable backup permission bottom sheet title -->
+    <string name="BackupSchedulePermissionMegaphone__to_reenable_backups">To re-enable backups:</string>
+    <!-- Re-enable backups permission bottom sheet instruction 1 text -->
+    <string name="BackupSchedulePermissionMegaphone__tap_the_go_to_settings_button_below">Tap the \"Go to settings\" button below</string>
+    <!-- Re-enable backups permission bottom sheet instruction 2 text -->
+    <string name="BackupSchedulePermissionMegaphone__turn_on_allow_settings_alarms_and_reminders">Turn on \"Allow settings alarms and reminders.\"</string>
+    <!-- Re-enable backups permission bottom sheet call to action button to open settings -->
+    <string name="BackupSchedulePermissionMegaphone__go_to_settings">Go to settings</string>
+
+    <!-- SmsExportMegaphoneActivity -->
+    <!-- Phase 2 title of full screen megaphone indicating sms will no longer be supported in the near future -->
+    <string name="SmsExportMegaphoneActivity__signal_will_no_longer_support_sms">Signal will no longer support SMS</string>
+    <!-- Phase 3 title of full screen megaphone indicating sms is longer supported  -->
+    <string name="SmsExportMegaphoneActivity__signal_no_longer_supports_sms">Signal no longer supports SMS</string>
+    <!-- Phase 2 message describing that sms is going away soon -->
+    <string name="SmsExportMegaphoneActivity__signal_will_soon_remove_support_for_sending_sms_messages">Signal will soon remove support for sending SMS messages because Signal messages provide end-to-end encryption and strong privacy that SMS messages don\'t. This will also allow us to improve the Signal messaging experience.</string>
+    <!-- Phase 3 message describing that sms has gone away -->
+    <string name="SmsExportMegaphoneActivity__signal_has_removed_support_for_sending_sms_messages">Signal has removed support for sending SMS messages because Signal messages provide end-to-end encryption and strong privacy that SMS messages don\'t. This will also allow us to improve the Signal messaging experience.</string>
+    <!-- Button on full screen megaphone that takes the user to the export messages flow -->
+    <string name="SmsExportMegaphoneActivity__export_sms">Export SMS</string>
+    <!-- Button on full screen megaphone that dismiss the megaphone and it'll be shown again at a later time -->
+    <string name="SmsExportMegaphoneActivity__remind_me_later">Remind me later</string>
+    <!-- Button on full screen megaphone that navigates to a web article on sms removal -->
+    <string name="SmsExportMegaphoneActivity__learn_more">Learn more</string>
+
+    <!-- Phase 1 Small megaphone title indicating sms is going away -->
+    <string name="SmsExportMegaphone__sms_support_going_away">SMS support going away</string>
+    <!-- Phase 1 small megaphone description indicating sms is going away -->
+    <string name="SmsExportMegaphone__sms_support_will_be_removed_soon_to_focus_on_encrypted_messaging">SMS support will be removed soon to focus on encrypted messaging.</string>
+    <!-- Phase 1 small megaphone button that takes the user to the sms export flow -->
+    <string name="SmsExportMegaphone__export_sms">Export SMS</string>
+    <!-- Title for screen shown after sms export has completed -->
+    <string name="ExportSmsCompleteFragment__export_complete">Export Complete</string>
+    <!-- Button to continue to next screen -->
+    <string name="ExportSmsCompleteFragment__next">Next</string>
+    <!-- Message showing summary of sms export counts -->
+    <string name="ExportSmsCompleteFragment__d_of_d_messages_exported">%1$d of %2$d messages exported</string>
 
     <!-- EOF -->
 

@@ -579,6 +579,11 @@ public class MmsDatabase extends MessageDatabase {
   }
 
   @Override
+  public void insertSmsExportMessage(@NonNull RecipientId recipientId, long threadId) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public void endTransaction(SQLiteDatabase database) {
     database.endTransaction();
   }
@@ -1841,6 +1846,8 @@ public class MmsDatabase extends MessageDatabase {
 
     ContentValues contentValues = new ContentValues();
 
+    boolean silentUpdate = (mailbox & Types.GROUP_UPDATE_BIT) > 0;
+
     contentValues.put(DATE_SENT, retrieved.getSentTimeMillis());
     contentValues.put(DATE_SERVER, retrieved.getServerTimeMillis());
     contentValues.put(RECIPIENT_ID, retrieved.getFrom().serialize());
@@ -1857,7 +1864,7 @@ public class MmsDatabase extends MessageDatabase {
     contentValues.put(VIEW_ONCE, retrieved.isViewOnce() ? 1 : 0);
     contentValues.put(STORY_TYPE, retrieved.getStoryType().getCode());
     contentValues.put(PARENT_STORY_ID, retrieved.getParentStoryId() != null ? retrieved.getParentStoryId().serialize() : 0);
-    contentValues.put(READ, retrieved.isExpirationUpdate() ? 1 : 0);
+    contentValues.put(READ, (silentUpdate || retrieved.isExpirationUpdate()) ? 1 : 0);
     contentValues.put(UNIDENTIFIED, retrieved.isUnidentified());
     contentValues.put(SERVER_GUID, retrieved.getServerGuid());
 
@@ -2452,17 +2459,6 @@ public class MmsDatabase extends MessageDatabase {
         false,
         limit
     );
-  }
-
-  @Override
-  public int getInsecureMessageCount() {
-    try (Cursor cursor = getWritableDatabase().query(TABLE_NAME, SqlUtil.COUNT, getInsecureMessageClause(), null, null, null, null)) {
-      if (cursor.moveToFirst()) {
-        return cursor.getInt(0);
-      }
-    }
-
-    return 0;
   }
 
   @Override
