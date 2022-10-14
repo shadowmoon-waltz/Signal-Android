@@ -8,6 +8,7 @@ import org.thoughtcrime.securesms.database.StickerDatabase.StickerPackRecordRead
 import org.thoughtcrime.securesms.database.StickerDatabase.StickerRecordReader
 import org.thoughtcrime.securesms.database.model.StickerPackRecord
 import org.thoughtcrime.securesms.database.model.StickerRecord
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import java.util.function.Consumer
 
 private const val RECENT_LIMIT = 24
@@ -18,8 +19,9 @@ class StickerKeyboardRepository(private val stickerDatabase: StickerDatabase) {
   fun getStickerPacks(consumer: Consumer<List<KeyboardStickerPack>>) {
     SignalExecutors.BOUNDED.execute {
       val packs: MutableList<KeyboardStickerPack> = mutableListOf()
+      val cursorMru = if (SignalStore.settings().isStickerKeyboardPackMru()) stickerDatabase.installedStickerPacksMru else null
 
-      StickerPackRecordReader(stickerDatabase.installedStickerPacks).use { reader ->
+      StickerPackRecordReader(stickerDatabase.installedStickerPacks, cursorMru).use { reader ->
         var pack: StickerPackRecord? = reader.next
         while (pack != null) {
           packs += KeyboardStickerPack(packId = pack.packId, title = pack.title.orElse(null), coverUri = pack.cover.uri)

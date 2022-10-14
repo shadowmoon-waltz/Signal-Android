@@ -148,6 +148,15 @@ public class StickerDatabase extends Database {
     return databaseHelper.getSignalReadableDatabase().query(TABLE_NAME, null, selection, args, null, null, PACK_ORDER + " ASC");
   }
 
+  public @Nullable Cursor getInstalledStickerPacksMru() {
+    // SW alternate approach would be to use a sql query like: select * from sticker s1 join ( select s0.pack_id,max(s0.last_used) from sticker s0
+    // where s0.last_used > 0 and s0.cover = 0 group by s0.pack_id ) s2 on s1.cover = 1 and s1.installed = 1 and s1.pack_id = s2.pack_id;
+    String   query = "SELECT * FROM " + TABLE_NAME + " WHERE " + LAST_USED + " > ? AND " + COVER + " = ? GROUP BY " + PACK_ID + " ORDER BY MAX(" + LAST_USED + ") DESC";
+    String[] args  = new String[] { "0", "0" };
+
+    return databaseHelper.getSignalReadableDatabase().rawQuery(query, args);
+  }
+        
   public @Nullable Cursor getStickersByEmoji(@NonNull String emoji) {
     String   selection = EMOJI + " LIKE ? AND " + COVER + " = ?";
     String[] args      = new String[] { "%"+emoji+"%", "0" };
@@ -483,15 +492,41 @@ public class StickerDatabase extends Database {
 
   public static final class StickerPackRecordReader implements Closeable {
 
+    private final Set<Pair<String, String>> installed;
     private final Cursor cursor;
+
+    public StickerPackRecordReader(@Nullable Cursor cursor, @Nullable Cursor cursorMru) {
+      if (cursor == null || cursorMru == null) {
+        this.cursor = cursor;
+        installed = null;
+      } else {
+        this.cursor = cursorMru;
+        installed = new HashSet<Pair<String, String>>();
+        try (Cursor c = cursor) {
+          while (c.moveToNext()) {
+            installed.add(new Pair(c.getString(c.getColumnIndexOrThrow(PACK_ID)), c.getString(c.getColumnIndexOrThrow(PACK_KEY))));
+          }
+        }
+      }
+    }
 
     public StickerPackRecordReader(@Nullable Cursor cursor) {
       this.cursor = cursor;
+      installed = null;
     }
 
     public @Nullable StickerPackRecord getNext() {
       if (cursor == null || !cursor.moveToNext()) {
         return null;
+      }
+
+      if (installed != null) {
+        // SW TODO calls getString and getColumnIndexOrThrow an extra time
+        while (!installed.contains(new Pair(cursor.getString(cursor.getColumnIndexOrThrow(PACK_ID)), cursor.getString(cursor.getColumnIndexOrThrow(PACK_KEY))))) {
+          if (!cursor.moveToNext()) {
+            return null;
+          }
+        }
       }
 
       return getCurrent();

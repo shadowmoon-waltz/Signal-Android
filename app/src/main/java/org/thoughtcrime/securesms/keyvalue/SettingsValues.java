@@ -88,6 +88,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String ALT_COLLAPSE_MEDIA_KEYBOARD             = "settings.alt.collapse.media.keyboard";
   public static final String ALT_CLOSE_MEDIA_SELECTION               = "settings.alt.close.media.selection";
   public static final String STICKER_MRU_LONG_PRESS_TO_PACK          = "settings.sticker.mru.long.press.to.pack";
+  public static final String STICKER_KEYBOARD_PACK_MRU               = "settings.sticker.keyboard.pack.mru";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -150,7 +151,8 @@ public final class SettingsValues extends SignalStoreValues {
                          BACKUP_INTERVAL_IN_DAYS,
                          ALT_COLLAPSE_MEDIA_KEYBOARD,
                          ALT_CLOSE_MEDIA_SELECTION,
-                         STICKER_MRU_LONG_PRESS_TO_PACK);
+                         STICKER_MRU_LONG_PRESS_TO_PACK,
+                         STICKER_KEYBOARD_PACK_MRU);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -629,6 +631,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setStickerMruLongPressToPack(boolean stickerMruLongPressToPack) {
     putBoolean(STICKER_MRU_LONG_PRESS_TO_PACK, stickerMruLongPressToPack);
+  }
+
+  public boolean isStickerKeyboardPackMru() {
+    return getBoolean(STICKER_KEYBOARD_PACK_MRU, TextSecurePreferences.isStickerKeyboardPackMru(ApplicationDependencies.getApplication()));
+  }
+
+  public void setStickerKeyboardPackMru(boolean stickerKeyboardPackMru) {
+    putBoolean(STICKER_KEYBOARD_PACK_MRU, stickerKeyboardPackMru);
   }
 
   public enum CensorshipCircumventionEnabled {

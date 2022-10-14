@@ -227,6 +227,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_STICKER_MRU_LONG_PRESS_TO_PACK = "pref_sticker_mru_long_press_to_pack";
 
+  private static final String PREF_STICKER_KEYBOARD_PACK_MRU = "pref_sticker_keyboard_pack_mru";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -257,7 +259,8 @@ public class TextSecurePreferences {
                                                               PREF_PROMPT_MP4_AS_GIF,
                                                               PREF_ALT_COLLAPSE_MEDIA_KEYBOARD,
                                                               PREF_ALT_CLOSE_MEDIA_SELECTION,
-                                                              PREF_STICKER_MRU_LONG_PRESS_TO_PACK};
+                                                              PREF_STICKER_MRU_LONG_PRESS_TO_PACK,
+                                                              PREF_STICKER_KEYBOARD_PACK_MRU};
 
   private static final String[] stringPreferencesToBackup = {LED_COLOR_PREF,
                                                              LED_BLINK_PREF,
@@ -1305,6 +1308,14 @@ public class TextSecurePreferences {
 
   public static void setStickerMruLongPressToPack(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_STICKER_MRU_LONG_PRESS_TO_PACK, enabled);
+  }
+
+  public static boolean isStickerKeyboardPackMru(Context context) {
+    return getBooleanPreference(context, PREF_STICKER_KEYBOARD_PACK_MRU, false);
+  }
+
+  public static void setStickerKeyboardPackMru(Context context, boolean enabled) {
+    setBooleanPreference(context, PREF_STICKER_KEYBOARD_PACK_MRU, enabled);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

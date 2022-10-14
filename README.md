@@ -14,6 +14,7 @@ Releases prior to and including v5.44.1-0 were locally compiled, locally signed 
 <summary>October 2022</summary>
 
 * (Option) Long-press a sticker in the recent sticker list to jump to the pack that sticker belongs to (normally this enlarges the sticker and shows you what emoji it corresponds to)
+* (Option) Sort packs in sticker keyboard by most recently used pack order
 </details>
 
 <details>

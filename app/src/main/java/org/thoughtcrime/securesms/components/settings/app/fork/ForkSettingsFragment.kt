@@ -213,6 +213,15 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
           viewModel.setStickerMruLongPressToPack(!state.stickerMruLongPressToPack)
         }
       )
+
+      switchPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__sticker_keyboard_pack_mru),
+        isChecked = state.stickerKeyboardPackMru,
+        onClick = {
+          TextSecurePreferences.setStickerKeyboardPackMru(requireContext(), !state.stickerKeyboardPackMru)
+          viewModel.setStickerKeyboardPackMru(!state.stickerKeyboardPackMru)
+        }
+      )
     }
   }
 }

@@ -4132,6 +4132,7 @@
     <string name="ForkSettingsFragment__alt_close_media_selection">Long-press recipient label while selecting media to close media selection</string>
     <string name="ForkSettingsFragment__alt_close_media_selection_summary">Refers to recipient label that appears above media while adding/editing media to send in a conversation. Works around possible bug where it is otherwise difficult to close/go back from media selection while in conversation bubbles</string>
     <string name="ForkSettingsFragment__sticker_mru_long_press_to_pack">Long-press sticker in recent list in sticker keyboard to jump to the pack</string>
+    <string name="ForkSettingsFragment__sticker_keyboard_pack_mru">Show packs on sticker keyboard in recently used order</string>
 
     <string name="fork__backup_interval">Backup Interval</string>
     <plurals name="fork__backup_interval_format">

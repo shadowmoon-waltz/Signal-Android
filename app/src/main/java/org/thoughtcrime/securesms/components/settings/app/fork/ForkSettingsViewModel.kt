@@ -26,7 +26,8 @@ class ForkSettingsViewModel : ViewModel() {
       promptMp4AsGif = SignalStore.settings().isPromptMp4AsGif,
       altCollapseMediaKeyboard = SignalStore.settings().isAltCollapseMediaKeyboard,
       altCloseMediaSelection = SignalStore.settings().isAltCloseMediaSelection,
-      stickerMruLongPressToPack = SignalStore.settings().isStickerMruLongPressToPack
+      stickerMruLongPressToPack = SignalStore.settings().isStickerMruLongPressToPack,
+      stickerKeyboardPackMru = SignalStore.settings().isStickerKeyboardPackMru
     )
 
     store = Store(initialState)
@@ -117,5 +118,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setStickerMruLongPressToPack(stickerMruLongPressToPack: Boolean) {
     store.update { it.copy(stickerMruLongPressToPack = stickerMruLongPressToPack) }
     SignalStore.settings().isStickerMruLongPressToPack = stickerMruLongPressToPack
+  }
+
+  fun setStickerKeyboardPackMru(stickerKeyboardPackMru: Boolean) {
+    store.update { it.copy(stickerKeyboardPackMru = stickerKeyboardPackMru) }
+    SignalStore.settings().isStickerKeyboardPackMru = stickerKeyboardPackMru
   }
 }
