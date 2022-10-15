@@ -151,8 +151,8 @@ public class StickerDatabase extends Database {
   public @Nullable Cursor getInstalledStickerPacksMru() {
     // SW alternate approach would be to use a sql query like: select * from sticker s1 join ( select s0.pack_id,max(s0.last_used) from sticker s0
     // where s0.last_used > 0 and s0.cover = 0 group by s0.pack_id ) s2 on s1.cover = 1 and s1.installed = 1 and s1.pack_id = s2.pack_id;
-    String   query = "SELECT * FROM " + TABLE_NAME + " WHERE " + LAST_USED + " > ? AND " + COVER + " = ? GROUP BY " + PACK_ID + " ORDER BY MAX(" + LAST_USED + ") DESC";
-    String[] args  = new String[] { "0", "0" };
+    String   query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COVER + " = ? GROUP BY " + PACK_ID + ", " + PACK_KEY + " ORDER BY MAX(" + LAST_USED + ") DESC, " + PACK_ORDER + " ASC";
+    String[] args  = new String[] { "0" };
 
     return databaseHelper.getSignalReadableDatabase().rawQuery(query, args);
   }
