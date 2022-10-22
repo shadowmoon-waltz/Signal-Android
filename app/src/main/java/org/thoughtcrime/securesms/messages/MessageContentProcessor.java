@@ -100,6 +100,7 @@ import org.thoughtcrime.securesms.jobs.SenderKeyDistributionSendJob;
 import org.thoughtcrime.securesms.jobs.StickerPackDownloadJob;
 import org.thoughtcrime.securesms.jobs.TrimThreadJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
+import org.thoughtcrime.securesms.keyvalue.StoryValues;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewUtil;
 import org.thoughtcrime.securesms.mms.IncomingMediaMessage;
@@ -1376,7 +1377,7 @@ public final class MessageContentProcessor {
   private void handleStoryMessage(@NonNull SignalServiceContent content, @NonNull SignalServiceStoryMessage message, @NonNull Recipient senderRecipient, @NonNull Recipient threadRecipient) throws StorageFailedException {
     log(content.getTimestamp(), "Story message.");
 
-    if (!Stories.isFeatureAvailable()) {
+    if (!Stories.isFeatureFlagEnabled()) {
       warn(content.getTimestamp(), "Dropping unsupported story.");
       return;
     }
@@ -1518,7 +1519,7 @@ public final class MessageContentProcessor {
   private @Nullable MessageId handleStoryReaction(@NonNull SignalServiceContent content, @NonNull SignalServiceDataMessage message, @NonNull Recipient senderRecipient) throws StorageFailedException {
     log(content.getTimestamp(), "Story reaction.");
 
-    if (!Stories.isFeatureAvailable()) {
+    if (!Stories.isFeatureFlagEnabled()) {
       warn(content.getTimestamp(), "Dropping unsupported story reaction.");
       return null;
     }
@@ -1619,7 +1620,7 @@ public final class MessageContentProcessor {
   private @Nullable MessageId handleStoryReply(@NonNull SignalServiceContent content, @NonNull SignalServiceDataMessage message, @NonNull Recipient senderRecipient, long receivedTime) throws StorageFailedException {
     log(content.getTimestamp(), "Story reply.");
 
-    if (!Stories.isFeatureAvailable()) {
+    if (!Stories.isFeatureFlagEnabled()) {
       warn(content.getTimestamp(), "Dropping unsupported story reply.");
       return null;
     }
@@ -1900,7 +1901,7 @@ public final class MessageContentProcessor {
   private long handleSynchronizeSentStoryReply(@NonNull SentTranscriptMessage message, long envelopeTimestamp)
     throws MmsException, BadGroupIdException {
 
-    if (!Stories.isFeatureAvailable()) {
+    if (!Stories.isFeatureFlagEnabled()) {
       warn(envelopeTimestamp, "Dropping unsupported story reply sync message.");
       return -1L;
     }
@@ -2536,18 +2537,28 @@ public final class MessageContentProcessor {
                                    @NonNull SignalServiceReceiptMessage message,
                                    @NonNull Recipient senderRecipient)
   {
-    if (!TextSecurePreferences.isReadReceiptsEnabled(context)) {
+    boolean readReceipts        = TextSecurePreferences.isReadReceiptsEnabled(context);
+    boolean storyViewedReceipts = SignalStore.storyValues().getViewedReceiptsEnabled();
+
+    if (!readReceipts && !storyViewedReceipts) {
       log("Ignoring viewed receipts for IDs: " + Util.join(message.getTimestamps(), ", "));
       return;
     }
 
-    log(TAG, "Processing viewed receipts. Sender: " +  senderRecipient.getId() + ", Device: " + content.getSenderDevice() + ", Timestamps: " + Util.join(message.getTimestamps(), ", "));
+    log(TAG, "Processing viewed receipts. Sender: " +  senderRecipient.getId() + ", Device: " + content.getSenderDevice() + ", Only Stories: " + (!readReceipts && storyViewedReceipts) + ", Timestamps: " + Util.join(message.getTimestamps(), ", "));
 
     List<SyncMessageId> ids = Stream.of(message.getTimestamps())
                                     .map(t -> new SyncMessageId(senderRecipient.getId(), t))
                                     .toList();
 
-    Collection<SyncMessageId> unhandled = SignalDatabase.mmsSms().incrementViewedReceiptCounts(ids, content.getTimestamp());
+    final Collection<SyncMessageId> unhandled;
+    if (readReceipts && storyViewedReceipts) {
+      unhandled = SignalDatabase.mmsSms().incrementViewedReceiptCounts(ids, content.getTimestamp());
+    } else if (readReceipts) {
+      unhandled = SignalDatabase.mmsSms().incrementViewedNonStoryReceiptCounts(ids, content.getTimestamp());
+    } else {
+      unhandled = SignalDatabase.mmsSms().incrementViewedStoryReceiptCounts(ids, content.getTimestamp());
+    }
 
     Set<SyncMessageId> handled = new HashSet<>(ids);
     handled.removeAll(unhandled);

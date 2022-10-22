@@ -17,7 +17,6 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import android.view.ViewConfiguration
 import android.view.animation.Interpolator
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -227,6 +226,8 @@ class StoryViewerPageFragment :
       )
     )
 
+    gestureDetector.setOnDoubleTapListener(null)
+
     val scaleListener = StoryScaleListener(
       viewModel, sharedViewModel, card
     )
@@ -248,10 +249,6 @@ class StoryViewerPageFragment :
       if (event.actionMasked == MotionEvent.ACTION_DOWN) {
         viewModel.setIsUserTouching(true)
       } else if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
-        if (event.actionMasked == MotionEvent.ACTION_UP) {
-          singleTapHandler.onActionUp(event)
-        }
-
         viewModel.setIsUserTouching(false)
 
         val canCloseFromHorizontalSlide = requireView().translationX > DimensionUnit.DP.toPixels(56f)
@@ -1074,40 +1071,10 @@ class StoryViewerPageFragment :
       private const val BOUNDARY_PREV = 1f - BOUNDARY_NEXT
     }
 
-    private var tapStart: Long = 0L
-
-    fun onGestureHappened() {
-      tapStart = 0L
-    }
-
-    fun onDown() {
-      tapStart = System.currentTimeMillis()
-    }
-
     fun onActionUp(e: MotionEvent) {
-      if (System.currentTimeMillis() - tapStart > ViewConfiguration.getTapTimeout()) {
-        return
-      }
-
       if (e.x < container.measuredWidth * getLeftBoundary()) {
-        performLeftAction()
+        onGoToPrevious()
       } else if (e.x > container.measuredWidth - (container.measuredWidth * getRightBoundary())) {
-        performRightAction()
-      }
-    }
-
-    private fun performLeftAction() {
-      if (container.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-        onGoToNext()
-      } else {
-        onGoToPrevious()
-      }
-    }
-
-    private fun performRightAction() {
-      if (container.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-        onGoToPrevious()
-      } else {
         onGoToNext()
       }
     }
@@ -1213,7 +1180,11 @@ class StoryViewerPageFragment :
     private val maxSlide = DimensionUnit.DP.toPixels(56f * 2)
 
     override fun onDown(e: MotionEvent): Boolean {
-      singleTapHandler.onDown()
+      return true
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+      singleTapHandler.onActionUp(e)
       return true
     }
 
@@ -1252,7 +1223,6 @@ class StoryViewerPageFragment :
 
       onContentTranslation(viewToTranslate.translationX, viewToTranslate.translationY)
 
-      singleTapHandler.onGestureHappened()
       return true
     }
 
@@ -1274,7 +1244,6 @@ class StoryViewerPageFragment :
         onReplyToPost()
       }
 
-      singleTapHandler.onGestureHappened()
       return true
     }
   }
