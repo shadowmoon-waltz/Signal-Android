@@ -101,10 +101,10 @@ public class AttachmentManager {
   private @NonNull  Optional<Slide> slide   = Optional.empty();
   private @Nullable Uri             captureUri;
 
-  public AttachmentManager(@NonNull Activity activity, @NonNull AttachmentListener listener) {
-    this.context            = activity;
+  public AttachmentManager(@NonNull Context context, @NonNull View rootView, @NonNull AttachmentListener listener) {
+    this.context            = context;
     this.attachmentListener = listener;
-    this.attachmentViewStub = ViewUtil.findStubById(activity, R.id.attachment_editor_stub);
+    this.attachmentViewStub = ViewUtil.findStubById(rootView, R.id.attachment_editor_stub);
   }
 
   private void inflateStub() {
@@ -478,6 +478,7 @@ public class AttachmentManager {
           slide.getContentType(),
           slide.asAttachment().getSize(),
           slide.getCaption().orElse(null),
+          false,
           false,
           false,
           false,

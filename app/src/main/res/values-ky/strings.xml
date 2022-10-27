@@ -124,6 +124,33 @@
     <string name="BlockedUsersActivity__do_you_want_to_unblock_s">\"%1$s\" бөгөттөн чыгарасызбы?</string>
     <string name="BlockedUsersActivity__unblock">Бөгөттөн чыгаруу</string>
 
+    <!-- CreditCardFragment -->
+    <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <!-- Displayed as a hint in the card number text field -->
+    <string name="CreditCardFragment__card_number">Card number</string>
+    <!-- Displayed as a hint in the card expiry text field -->
+    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <!-- Displayed as a hint in the card cvv text field -->
+    <string name="CreditCardFragment__cvv">CVV</string>
+    <!-- Error displayed under the card number text field when there is an invalid card number entered -->
+    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <!-- Error displayed under the card expiry text field when the card is expired -->
+    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too short -->
+    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too long -->
+    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <!-- Error displayed under the card cvv text field when the cvv is invalid -->
+    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
+    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
+    <string name="CreditCardFragment__year_required">Year required</string>
+    <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
+    <string name="CreditCardFragment__invalid_year">Invalid year</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">Бөгөттөп туруп, %1$s чыгып кетесизби?</string>
@@ -221,7 +248,7 @@
     <!-- Label for my stories when selecting who to send media to -->
     <string name="ContactsCursorLoader_my_stories">Менин окуяларым</string>
     <!-- Text for a button that brings up a bottom sheet to create a new story. -->
-    <string name="ContactsCursorLoader_new">New</string>
+    <string name="ContactsCursorLoader_new">Жаңы</string>
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">Билдирүү %1$s</string>
@@ -345,13 +372,13 @@
     <string name="ConversationActivity__reported_as_spam_and_blocked">Спам деп кабарланып, колдонуучу бөгөттөлдү.</string>
 
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">SMS messaging is currently disabled. You can export your messages to another app on your phone.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">SMS жазышуу мүмкүнчүлүгү учурда өчүрүлгөн. Билдирүүлөрүңүздү телефонуңуздагы башка колдонмого өткөрсөңүз болот.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_you_can_export_your_messages_to_another_app_on_your_phone">Signal кызматында мындан ары SMS менен жазыша албайсыз. Билдирүүлөрүңүздү телефонуңуздагы башка колдонмого өткөрүңүз.</string>
     <!-- Action button shown when in sms conversation, sms is disabled, and unexported sms messages are present -->
     <string name="ConversationActivity__export_sms_messages">SMS билдирүүлөрүн өткөрүп берүү</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">SMS messaging is currently disabled. Invite %1$s to Signal to keep the conversation here.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">SMS жазышуу мүмкүнчүлүгү учурда өчүрүлгөн. %1$s менен бул жерден сүйлөшө берүү үчүн аны Signal\'га чакырыңыз.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">Signal кызматында мындан ары SMS менен жазыша албайсыз. %1$s менен бул жерден сүйлөшө берүү үчүн аны Signal\'га чакырыңыз.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
@@ -2437,7 +2464,7 @@
         <item>Башка</item>
         <item>Төлөмдөр (MobileCoin)</item>
         <item>Салым кошуу жана төшбелгилер</item>
-        <item>SMS Export</item>
+        <item>SMS экспорттоо</item>
     </string-array>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
@@ -3118,6 +3145,8 @@
     <string name="media_preview__forward_title">Багыттоо</string>
     <string name="media_preview__share_title">Бөлүшүү</string>
     <string name="media_preview__all_media_title">Бардык медиафайлдар</string>
+    <string name="media_preview__edit_title">Edit</string>
+
 
     <!-- media_preview_activity -->
     <string name="media_preview_activity__media_content_description">Медиафайлды алдын ала карап көрүү</string>
@@ -4289,10 +4318,8 @@
 
     <string name="ImageView__badge">Төшбелги</string>
 
-    <string name="SubscribeFragment__signal_is_powered_by_people_like_you">Signal сиздей адамдардын колдоосу менен иштеген компания.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you">Берилмелериңиз үчүн эмес, Сиз үчүн курулган технологияны колдоп, аны колдогон адамдардын коомчулугуна кошулуңуз.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you_not">Signal\'ды колдогон коомчулукка кошулуу менен, берилмелериңиз үчүн эмес, сиз үчүн түзүлгөн технологияга колдоо көрсөтүңүз.</string>
-    <string name="SubscribeFragment__make_a_recurring_monthly_donation">Берилмелериңиз үчүн эмес, Cиз үчүн курулган технологияны колдоо үчүн Signal\'га ай сайын колдоо көрсөтүңүз.</string>
     <string name="SubscribeFragment__currency">Валюта</string>
     <string name="SubscribeFragment__more_payment_options">Башка төлөм опциялары</string>
     <string name="SubscribeFragment__cancel_subscription">Жазылуудан баш тартуу</string>
@@ -4307,8 +4334,10 @@
     <string name="SubscribeFragment__you_will_be_charged_the_full_amount_s_of">Бүгүн сизден жаңы жазылуу баасынын толук суммасы (%1$s) алынат. Жазылууңуз ай сайын жаңырып турат.</string>
 
     <string name="Subscription__s_per_month">%1$s/айына</string>
-    <string name="Subscription__s_per_month_dot_renews_s">%1$s/айына · %2$s жаңырат</string>
-    <string name="Subscription__s_per_month_dot_expires_s">%1$s/айына · %2$s мөөнөтү бүтөт</string>
+    <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
+    <string name="Subscription__renews_s">Renews %1$s</string>
+    <!-- Shown when a subscription is active and is going to expire at the end of the term -->
+    <string name="Subscription__expires_s">Expires %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal - эч кандай жарнамачылары же инвесторлору жок коммерциялык эмес долбоор. Signal аны колдонгон жана баалаган адамдардын колдоосу менен иштейт. Ай сайын колдоо көрсөтүп, профилиңизден төшбелгилерге ээ болуп, башкалар менен бөлүшүңүз.</string>
@@ -4330,14 +4359,14 @@
     <string name="BecomeASustainerFragment__get_badges">Signal\'ды колдоо менен профилиңизге төшбелги алыңыз.</string>
     <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal – сизге окшогон адамдардын колдоосу менен иштеген, эч кандай жарнамачылары же инвесторлору жок коммерциялык эмес уюм.</string>
 
-    <!-- Button label for creating a monthly donation -->
-    <string name="ManageDonationsFragment__make_a_monthly_donation">Ай сайын колдоо көрсөтүңүз</string>
+    <!-- Button label for creating a donation -->
+    <string name="ManageDonationsFragment__donate_to_signal">Signal\'га колдоо көрсөтүү</string>
     <!-- Heading for more area of manage subscriptions page -->
     <string name="ManageDonationsFragment__more">Дагы</string>
     <!-- Heading for receipts area of manage subscriptions page -->
     <string name="ManageDonationsFragment__receipts">Дүмүрчөктөр</string>
     <!-- Heading for my subscription area of manage subscriptions page -->
-    <string name="ManageDonationsFragment__my_subscription">Менин жазылуум</string>
+    <string name="ManageDonationsFragment__my_support">My support</string>
     <string name="ManageDonationsFragment__manage_subscription">Жазылууну башкаруу</string>
     <!-- Label for Donation Receipts button -->
     <string name="ManageDonationsFragment__donation_receipts">Колдоо дүмүрчөктөрү</string>
@@ -4348,10 +4377,6 @@
     <string name="ManageDonationsFragment__other_ways_to_give">Берүүнүн башка жолдору</string>
     <!-- Preference label to launch badge gifting -->
     <string name="ManageDonationsFragment__gift_a_badge">Белекке төшбелги берүү</string>
-
-    <string name="BoostFragment__give_signal_a_boost">Signal\'ды өркүндөтүү</string>
-    <!-- Description text in boost sheet -->
-    <string name="BoostFragment__make_a_one_time">Бир жолу колдоо көрсөтүп, %1$d күн бою Boost төшбелгисине ээ болуңуз.</string>
 
     <string name="Boost__enter_custom_amount">Ыңгайлаштырылган сумманы киргизүү</string>
     <string name="Boost__one_time_contribution">Бир жолку салым</string>
@@ -4393,7 +4418,7 @@
 
     <string name="Subscription__please_contact_support_for_more_information">Көбүрөөк маалымат алуу үчүн кардарларды колдоо кызматына кайрылыңыз.</string>
     <string name="Subscription__contact_support">Кардарларды колдоо кызматына кайрылуу</string>
-    <string name="Subscription__earn_a_s_badge">%1$s төшбелгисне ээ болуңуз</string>
+    <string name="Subscription__get_a_s_badge">Get a %1$s badge</string>
 
     <string name="SubscribeFragment__processing_payment">Төлөм иштетилүүдө…</string>
     <!-- Displayed in notification when user payment fails to process on Stripe -->
@@ -4666,7 +4691,7 @@
     <!-- Title for "My Stories" row item in Stories landing page -->
     <string name="StoriesLandingFragment__my_stories">Менин окуяларым</string>
     <!-- Subtitle for "My Stories" row item when user has not added stories -->
-    <string name="StoriesLandingFragment__tap_to_add">Tap to add</string>
+    <string name="StoriesLandingFragment__tap_to_add">Кошуу үчүн басыңыз</string>
     <!-- Displayed when there are no stories to display -->
     <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now">Азырынча жаңылык жок.</string>
     <!-- Context menu option to hide a story -->
@@ -4828,7 +4853,7 @@
     <!-- Clickable option to add a viewer to a custom story -->
     <string name="PrivateStorySettingsFragment__add_viewer">Көрүүчү кошуу</string>
     <!-- Clickable option to delete a custom story -->
-    <string name="PrivateStorySettingsFragment__delete_custom_story">Delete custom story</string>
+    <string name="PrivateStorySettingsFragment__delete_custom_story">Жеке окуяны өчүрүү</string>
     <!-- Dialog title when attempting to remove someone from a custom story -->
     <string name="PrivateStorySettingsFragment__remove_s">%1$s алынып салынсынбы?</string>
     <!-- Dialog message when attempting to remove someone from a custom story -->
@@ -4866,7 +4891,7 @@
     <!-- Toast shown when an unexpected error occurs while sending a text story -->
     <string name="TextStoryPostSendFragment__an_unexpected_error_occurred_try_again">Күтүлбөгөн ката кетти</string>
     <!-- Toast shown when a trying to add a link preview to a text story post and the link/url is not valid (e.g., missing .com at the end) -->
-    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Please enter a valid link.</string>
+    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Жарактуу шилтемени киргизиңиз.</string>
     <!-- Title for screen allowing user to exclude "My Story" entries from specific people -->
     <string name="ChangeMyStoryMembershipFragment__all_except">Ушул адамдан башкалардын баары…</string>
     <!-- Title for screen allowing user to only share "My Story" entries with specific people -->
@@ -4880,7 +4905,7 @@
     <!-- Dialog positive action for removing a group story -->
     <string name="StoryDialogs__remove">Өчүрүү</string>
     <!-- Dialog title for deleting a custom story -->
-    <string name="StoryDialogs__delete_custom_story">Delete custom story?</string>
+    <string name="StoryDialogs__delete_custom_story">Жеке окуяны өчүрөсүзбү?</string>
     <!-- Dialog message for deleting a custom story -->
     <string name="StoryDialogs__s_and_updates_shared">\"%1$s\" жана ушул окуяда бөлүшүлгөн жаңылыктар да өчүп калат.</string>
     <!-- Dialog positive action for deleting a custom story -->
@@ -4918,7 +4943,7 @@
     <!-- Name story screen title -->
     <string name="CreateStoryWithViewersFragment__name_story">Окуяны атоо</string>
     <!-- Name story screen note under text field -->
-    <string name="CreateStoryWithViewersFragment__only_you_can">Only you can see the name of this story.</string>
+    <string name="CreateStoryWithViewersFragment__only_you_can">Бул окуянын аталышы өзүңүзгө гана көрүнөт.</string>
     <!-- Name story screen label hint -->
     <string name="CreateStoryWithViewersFragment__story_name_required">Окуянын аталышы (талап кылынат)</string>
     <!-- Name story screen viewers subheading -->
@@ -4934,7 +4959,7 @@
     <!-- Choose story type bottom sheet title -->
     <string name="ChooseStoryTypeBottomSheet__choose_your_story_type">Окуяңыздын түрүн тандаңыз</string>
     <!-- Choose story type bottom sheet new story row title -->
-    <string name="ChooseStoryTypeBottomSheet__new_custom_story">New custom story</string>
+    <string name="ChooseStoryTypeBottomSheet__new_custom_story">Жаңы жеке окуя</string>
     <!-- Choose story type bottom sheet new story row summary -->
     <string name="ChooseStoryTypeBottomSheet__visible_only_to">Белгилүү адамдарга гана көрүнөт</string>
     <!-- Choose story type bottom sheet group story title -->
@@ -5043,7 +5068,7 @@
     <string name="ContactSearchItems__only_share_with">Ким менен бөлүшөсүз:</string>
     <!-- Label under name for custom stories -->
     <plurals name="ContactSearchItems__custom_story_d_viewers">
-        <item quantity="other">Custom story · %1$d viewers</item>
+        <item quantity="other">Жеке окуя · %1$d адам көрдү</item>
     </plurals>
     <!-- Label under name for group stories -->
     <plurals name="ContactSearchItems__group_story_d_viewers">
@@ -5074,7 +5099,7 @@
     <!-- Dialog title for deleting a custom story -->
     <string name="ContactSearchMediator__delete_story">Окуяны өчүрөсүзбү?</string>
     <!-- Dialog message for deleting a custom story -->
-    <string name="ContactSearchMediator__delete_the_custom">Delete the custom story \"%1$s\"?</string>
+    <string name="ContactSearchMediator__delete_the_custom">Жеке окуяны (\"%1$s\") өчүрөсүзбү?</string>
     <!-- Dialog action item for deleting a custom story -->
     <string name="ContactSearchMediator__delete">Өчүрүү</string>
     <!-- Gift expiry days remaining -->
@@ -5171,7 +5196,7 @@
 
     <!-- StoriesPrivacySettingsFragment -->
     <!-- Explanation about how stories are deleted and managed -->
-    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Story updates automatically disappear after 24 hours. Choose who can view your story or create new stories with specific viewers or groups.</string>
+    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Окуяларга байланыштуу жаңылыктар автоматтык түрдө 24 сааттан кийин өчүп калат. Окуяңызды кимдер көрө аларын тандайсыз же белгилүү бир адамдар же топтор гана көрө турган жаңы окуяларды түзөсүз.</string>
     <!-- Preference title to turn off stories -->
     <string name="StoriesPrivacySettingsFragment__turn_off_stories">Окуяларды өчүрүү</string>
     <!-- Preference summary to turn off stories -->
@@ -5189,11 +5214,11 @@
     <!-- Header for section that lists out stories -->
     <string name="StoriesPrivacySettingsFragment__stories">Окуялар</string>
     <!-- Story views header -->
-    <string name="StoriesPrivacySettingsFragment__story_views">Story views</string>
+    <string name="StoriesPrivacySettingsFragment__story_views">Окуяны көргөндөр</string>
     <!-- Story view receipts toggle title -->
-    <string name="StoriesPrivacySettingsFragment__view_receipts">View receipts</string>
+    <string name="StoriesPrivacySettingsFragment__view_receipts">Окуялардын көрүлгөнүн кабарлоо</string>
     <!-- Story view receipts toggle message -->
-    <string name="StoriesPrivacySettingsFragment__see_and_share">See and share when stories are viewed. If disabled, you won\'t see when others view your story.</string>
+    <string name="StoriesPrivacySettingsFragment__see_and_share">Окуялардын көрүлгөнү тууралуу билдирме алып, бөлүшө аласыз. Эгер өчүрүп койсоңуз, окуяңызды кимдер көргөнүн билбейсиз.</string>
 
     <!-- NewStoryItem -->
     <string name="NewStoryItem__new_story">Жаңы окуя</string>
@@ -5221,7 +5246,7 @@
     <!-- Title of the screen -->
     <string name="ExportYourSmsMessagesFragment__export_your_sms_messages">SMS билдирүүлөрүңүздү өткөрүп бериңиз</string>
     <!-- Message of the screen -->
-    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">You can export your SMS messages to your phone\'s SMS database and you\'ll have the option to keep or remove them from Signal. This allows other SMS apps on your phone to import them. This does not create a shareable file of your SMS history.</string>
+    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">SMS билдирүүлөрүн телефонуңуздагы SMS маалыматтар базасына өткөрүп, аларды Signal\'да сактап же өчүрө аласыз. Ушуну менен, телефонуңуздагы башка SMS колдонмолору аларды импорттой алат. SMS билдирүүлөрүңүздүн таржымалынан башкалар менен бөлүшүүгө мүмкүн болгон файл түзө албайсыз.</string>
     <!-- Button label to begin export -->
     <string name="ExportYourSmsMessagesFragment__continue">Улантуу</string>
 
@@ -5235,11 +5260,11 @@
         <item quantity="other">%2$d ичинен %1$d өткөрүлүүдө …</item>
     </plurals>
     <!-- Alert dialog title shown when we think a user may not have enough local storage available to export sms messages -->
-    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">You may not have enough disk space</string>
+    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">Дискиңизде орун жетишсиз окшойт</string>
     <!-- Alert dialog message shown when we think a user may not have enough local storage available to export sms messages, placeholder is the file size, e.g., 128kB -->
-    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">You need approximately %1$s to export your messages, ensure you have enough space before continuing.</string>
+    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">Билдирүүлөрүңүздү өткөрүү үчүн болжол менен %1$s керек. Улантуудан мурун, дискте орун жетишүү экенин текшериңиз.</string>
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
-    <string name="ExportingSmsMessagesFragment__continue_anyway">Continue anyway</string>
+    <string name="ExportingSmsMessagesFragment__continue_anyway">Баары бир уланта берем</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
     <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
 
@@ -5339,24 +5364,51 @@
     </plurals>
 
     <!-- Title of screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__export_partially_complete">Export partially complete</string>
+    <string name="ExportSmsPartiallyComplete__export_partially_complete">Айрым билдирүүлөр өткөн жок</string>
     <!-- Debug step 1 on screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Ensure you have an additional %1$s free on your phone to export your messages</string>
+    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Билдирүүлөрүңүздү өткөрүү үчүн телефонуңузда дагы %1$s бош орун болушу керек</string>
     <!-- Debug step 2 on screen shown when some sms messages dit not export -->
-    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Retry export, which will only retry messages that have not yet been exported</string>
+    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Кайра кайталап көрүңүз. Өтпөй калган билдирүүлөр кайра өткөрүлөт</string>
     <!-- Partial sentence for Debug step 3 on screen shown when some sms messages did not export, is combined with 'contact us' -->
-    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">If the problem persists, </string>
+    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">Көйгөй кайталана берсе, </string>
     <!-- Partial sentence for deubg step 3 on screen shown when some sms messages did not export, combined with 'If the problem persists', link text to open contact support view -->
     <string name="ExportSmsPartiallyComplete__contact_us">Биз менен байланышыңыз</string>
     <!-- Button text to retry sms export -->
     <string name="ExportSmsPartiallyComplete__retry">Кайра аракет кылуу</string>
     <!-- Button text to continue sms export flow and not retry failed message exports -->
-    <string name="ExportSmsPartiallyComplete__continue_anyway">Continue anyway</string>
+    <string name="ExportSmsPartiallyComplete__continue_anyway">Баары бир уланта берем</string>
     <!-- Title of screen shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__error_exporting_sms_messages">Error exporting SMS messages</string>
+    <string name="ExportSmsFullError__error_exporting_sms_messages">SMS билдирүүлөрдү өткөрүп берүүдө ката кетти</string>
     <!-- Helper text shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Please try again. If the problem persists, </string>
+    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Кайталап көрүңүз. Көйгөй кайталана берсе, </string>
 
+
+    <!-- DonateToSignalFragment -->
+    <!-- Title below avatar -->
+    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <!-- Continue button label -->
+    <string name="DonateToSignalFragment__continue">Улантуу</string>
+    <!-- Description below title -->
+    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <!-- Donation pill toggle monthly text -->
+    <string name="DonationPillToggle__monthly">Monthly</string>
+    <!-- Donation pill toggle one-time text -->
+    <string name="DonationPillToggle__one_time">Бир жолку</string>
+
+    <!-- GatewaySelectorBottomSheet -->
+    <!-- Sheet title when subscribing -->
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <!-- Sheet summary when subscribing -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge">Get a %1$s badge</string>
+    <!-- Sheet title when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <!-- Sheet summary when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <!-- Button label for paying with a credit card -->
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+
+    <!-- StripePaymentInProgressFragment -->
+    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
 
     <!-- EOF -->
 

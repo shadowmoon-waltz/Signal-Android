@@ -127,6 +127,33 @@
     <string name="BlockedUsersActivity__do_you_want_to_unblock_s">Želite odbloirati uporabnika_co \"%1$s\"?</string>
     <string name="BlockedUsersActivity__unblock">Odblokiraj</string>
 
+    <!-- CreditCardFragment -->
+    <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <!-- Displayed as a hint in the card number text field -->
+    <string name="CreditCardFragment__card_number">Card number</string>
+    <!-- Displayed as a hint in the card expiry text field -->
+    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <!-- Displayed as a hint in the card cvv text field -->
+    <string name="CreditCardFragment__cvv">CVV</string>
+    <!-- Error displayed under the card number text field when there is an invalid card number entered -->
+    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <!-- Error displayed under the card expiry text field when the card is expired -->
+    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too short -->
+    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too long -->
+    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <!-- Error displayed under the card cvv text field when the cvv is invalid -->
+    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
+    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
+    <string name="CreditCardFragment__year_required">Year required</string>
+    <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
+    <string name="CreditCardFragment__invalid_year">Invalid year</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">Blokiram in zapustim skupino %1$s?</string>
@@ -224,7 +251,7 @@
     <!-- Label for my stories when selecting who to send media to -->
     <string name="ContactsCursorLoader_my_stories">Moje zgodbe</string>
     <!-- Text for a button that brings up a bottom sheet to create a new story. -->
-    <string name="ContactsCursorLoader_new">New</string>
+    <string name="ContactsCursorLoader_new">Novo</string>
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">Sporočilo %1$s</string>
@@ -348,13 +375,13 @@
     <string name="ConversationActivity__reported_as_spam_and_blocked">Označeno kot neželeno in blokirano.</string>
 
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">SMS messaging is currently disabled. You can export your messages to another app on your phone.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">SMS sporočila so trenutno onemogočena. Svoja sporočila lahko izvozite v drugo aplikacijo v telefonu.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_you_can_export_your_messages_to_another_app_on_your_phone">SMS sporočila niso več podprta v Signalu. Svoja sporočila lahko izvozite v drugo aplikacijo v telefonu.</string>
     <!-- Action button shown when in sms conversation, sms is disabled, and unexported sms messages are present -->
     <string name="ConversationActivity__export_sms_messages">Izvoz SMS sporočil</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">SMS messaging is currently disabled. Invite %1$s to Signal to keep the conversation here.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">SMS sporočila so trenutno onemogočena. Povabite stik %1$s v Signal, da ohranite pogovor tukaj.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">SMS sporočila niso več podprta v Signalu. Povabite stik %1$s v Signal, da ohranite pogovor tukaj.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
@@ -2692,7 +2719,7 @@
         <item>Drugo</item>
         <item>Plačila (MobileCoin)</item>
         <item>Podporniki_ce &amp; Značke</item>
-        <item>SMS Export</item>
+        <item>Izvoz SMS-ov</item>
     </string-array>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
@@ -3379,6 +3406,8 @@
     <string name="media_preview__forward_title">Posreduj</string>
     <string name="media_preview__share_title">Deli</string>
     <string name="media_preview__all_media_title">Vsa večpredstavnostna sporočila</string>
+    <string name="media_preview__edit_title">Edit</string>
+
 
     <!-- media_preview_activity -->
     <string name="media_preview_activity__media_content_description">Ogled medija</string>
@@ -4598,10 +4627,8 @@
 
     <string name="ImageView__badge">Značka</string>
 
-    <string name="SubscribeFragment__signal_is_powered_by_people_like_you">Signal podpirajo ljudje, kot ste vi.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you">Podprite tehnologijo, ki je bila izdelana zaradi vas -- ne zaradi vaših osebnih podatkov -- in se pridružite skupnosti podpornikov_ic.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you_not">Podprite tehnologijo, ki je bila izdelana zaradi vas in ne zaradi vaših osebnih podatkov, ter se pridružite skupnosti podpornikov_ic Signala.</string>
-    <string name="SubscribeFragment__make_a_recurring_monthly_donation">Prispevajte enkrat mesečno znesek po izbiri za Signal in podprli boste tehnologijo, ki je bila ustvarjena zaradi vas, ne zaradi vaših podatkov.</string>
     <string name="SubscribeFragment__currency">Valuta</string>
     <string name="SubscribeFragment__more_payment_options">Več opcij za plačilo</string>
     <string name="SubscribeFragment__cancel_subscription">Prekini naročnino</string>
@@ -4616,8 +4643,10 @@
     <string name="SubscribeFragment__you_will_be_charged_the_full_amount_s_of">Zaračunan vam bo celoten znesek (%1$s) nove naročnine. Naročnina se bo obnavljala mesečno.</string>
 
     <string name="Subscription__s_per_month">%1$s/mesec</string>
-    <string name="Subscription__s_per_month_dot_renews_s">%1$s/mesec · Obnovitev: %2$s</string>
-    <string name="Subscription__s_per_month_dot_expires_s">%1$s/mesec · Poteče %2$s</string>
+    <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
+    <string name="Subscription__renews_s">Renews %1$s</string>
+    <!-- Shown when a subscription is active and is going to expire at the end of the term -->
+    <string name="Subscription__expires_s">Expires %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal je neprofitna organizacija, brez podpore oglaševalcev ali vlagateljev, financirajo jo zgolj običajni ljudje, ki jo cenijo. Odločite se za mesečno podporo Signalu in prejmite bedž podpornika_ce, ki bo viden na vašem profilu.</string>
@@ -4639,14 +4668,14 @@
     <string name="BecomeASustainerFragment__get_badges">S podporo Signalu si pridobite bedž za profil.</string>
     <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal je neprofitna organizacija brez oglaševalcev in investitorjev, podpirajo pa jo ljudje, kot ste vi.</string>
 
-    <!-- Button label for creating a monthly donation -->
-    <string name="ManageDonationsFragment__make_a_monthly_donation">Mesečna donacija</string>
+    <!-- Button label for creating a donation -->
+    <string name="ManageDonationsFragment__donate_to_signal">Podprite Signal</string>
     <!-- Heading for more area of manage subscriptions page -->
     <string name="ManageDonationsFragment__more">Več</string>
     <!-- Heading for receipts area of manage subscriptions page -->
     <string name="ManageDonationsFragment__receipts">Računi</string>
     <!-- Heading for my subscription area of manage subscriptions page -->
-    <string name="ManageDonationsFragment__my_subscription">Moja naročnina</string>
+    <string name="ManageDonationsFragment__my_support">Moja podpora</string>
     <string name="ManageDonationsFragment__manage_subscription">Upravljanje naročnine</string>
     <!-- Label for Donation Receipts button -->
     <string name="ManageDonationsFragment__donation_receipts">Računi donacij</string>
@@ -4657,10 +4686,6 @@
     <string name="ManageDonationsFragment__other_ways_to_give">Drugi načini podpore</string>
     <!-- Preference label to launch badge gifting -->
     <string name="ManageDonationsFragment__gift_a_badge">Podari bedž</string>
-
-    <string name="BoostFragment__give_signal_a_boost">Dajte Signalu pospešek</string>
-    <!-- Description text in boost sheet -->
-    <string name="BoostFragment__make_a_one_time">Enkratni prispevek z bedžem Pospešek Signalu za %1$d dni.</string>
 
     <string name="Boost__enter_custom_amount">Vnesite znesek po vašem izboru</string>
     <string name="Boost__one_time_contribution">Enkratna podpora</string>
@@ -4702,7 +4727,7 @@
 
     <string name="Subscription__please_contact_support_for_more_information">Za več informacij se obrnite na podporo uporabnikom.</string>
     <string name="Subscription__contact_support">Kontaktiraj center za podporo</string>
-    <string name="Subscription__earn_a_s_badge">Prisluži si bedž %1$s</string>
+    <string name="Subscription__get_a_s_badge">Podari značko uporabniku_ci %1$s</string>
 
     <string name="SubscribeFragment__processing_payment">Obdelava plačila …</string>
     <!-- Displayed in notification when user payment fails to process on Stripe -->
@@ -4978,7 +5003,7 @@
     <!-- Title for "My Stories" row item in Stories landing page -->
     <string name="StoriesLandingFragment__my_stories">Moje zgodbe</string>
     <!-- Subtitle for "My Stories" row item when user has not added stories -->
-    <string name="StoriesLandingFragment__tap_to_add">Tap to add</string>
+    <string name="StoriesLandingFragment__tap_to_add">Tapnite za dodajanje</string>
     <!-- Displayed when there are no stories to display -->
     <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now">Trenutno ni nobenih posodobitev.</string>
     <!-- Context menu option to hide a story -->
@@ -5158,7 +5183,7 @@
     <!-- Clickable option to add a viewer to a custom story -->
     <string name="PrivateStorySettingsFragment__add_viewer">Dodaj gledalca_ko</string>
     <!-- Clickable option to delete a custom story -->
-    <string name="PrivateStorySettingsFragment__delete_custom_story">Delete custom story</string>
+    <string name="PrivateStorySettingsFragment__delete_custom_story">Izbriši zgodbo po meri</string>
     <!-- Dialog title when attempting to remove someone from a custom story -->
     <string name="PrivateStorySettingsFragment__remove_s">Želite izbrisati %1$s?</string>
     <!-- Dialog message when attempting to remove someone from a custom story -->
@@ -5196,7 +5221,7 @@
     <!-- Toast shown when an unexpected error occurs while sending a text story -->
     <string name="TextStoryPostSendFragment__an_unexpected_error_occurred_try_again">Zgodila se je nepričakovana napaka</string>
     <!-- Toast shown when a trying to add a link preview to a text story post and the link/url is not valid (e.g., missing .com at the end) -->
-    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Please enter a valid link.</string>
+    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Vnesite veljavno povezavo.</string>
     <!-- Title for screen allowing user to exclude "My Story" entries from specific people -->
     <string name="ChangeMyStoryMembershipFragment__all_except">Vsi, razen …</string>
     <!-- Title for screen allowing user to only share "My Story" entries with specific people -->
@@ -5210,7 +5235,7 @@
     <!-- Dialog positive action for removing a group story -->
     <string name="StoryDialogs__remove">Odstrani</string>
     <!-- Dialog title for deleting a custom story -->
-    <string name="StoryDialogs__delete_custom_story">Delete custom story?</string>
+    <string name="StoryDialogs__delete_custom_story">Želite izbrisati zgodbo po meri?</string>
     <!-- Dialog message for deleting a custom story -->
     <string name="StoryDialogs__s_and_updates_shared">»%1$s« in posodobitve v skupni rabi te zgodbe bodo izbrisane.</string>
     <!-- Dialog positive action for deleting a custom story -->
@@ -5251,7 +5276,7 @@
     <!-- Name story screen title -->
     <string name="CreateStoryWithViewersFragment__name_story">Poimenujte zgodbo</string>
     <!-- Name story screen note under text field -->
-    <string name="CreateStoryWithViewersFragment__only_you_can">Only you can see the name of this story.</string>
+    <string name="CreateStoryWithViewersFragment__only_you_can">Samo vi lahko vidite ime te zgodbe.</string>
     <!-- Name story screen label hint -->
     <string name="CreateStoryWithViewersFragment__story_name_required">Ime zgodbe (zahtevano)</string>
     <!-- Name story screen viewers subheading -->
@@ -5267,7 +5292,7 @@
     <!-- Choose story type bottom sheet title -->
     <string name="ChooseStoryTypeBottomSheet__choose_your_story_type">Izberite tip svoje zgodbe</string>
     <!-- Choose story type bottom sheet new story row title -->
-    <string name="ChooseStoryTypeBottomSheet__new_custom_story">New custom story</string>
+    <string name="ChooseStoryTypeBottomSheet__new_custom_story">Nova zgodba po meri</string>
     <!-- Choose story type bottom sheet new story row summary -->
     <string name="ChooseStoryTypeBottomSheet__visible_only_to">Vidna le določenim ljudem</string>
     <!-- Choose story type bottom sheet group story title -->
@@ -5379,10 +5404,10 @@
     <string name="ContactSearchItems__only_share_with">Deli le s/z</string>
     <!-- Label under name for custom stories -->
     <plurals name="ContactSearchItems__custom_story_d_viewers">
-        <item quantity="one">Custom story · %1$d viewer</item>
-        <item quantity="two">Custom story · %1$d viewers</item>
-        <item quantity="few">Custom story · %1$d viewers</item>
-        <item quantity="other">Custom story · %1$d viewers</item>
+        <item quantity="one">Zgodba po meri · %1$d gledalec</item>
+        <item quantity="two">Zgodba po meri · %1$d gledalca</item>
+        <item quantity="few">Zgodba po meri · %1$d gledalci</item>
+        <item quantity="other">Zgodba po meri · %1$d gledalcev</item>
     </plurals>
     <!-- Label under name for group stories -->
     <plurals name="ContactSearchItems__group_story_d_viewers">
@@ -5422,7 +5447,7 @@
     <!-- Dialog title for deleting a custom story -->
     <string name="ContactSearchMediator__delete_story">Želite izbrisati zgodbo?</string>
     <!-- Dialog message for deleting a custom story -->
-    <string name="ContactSearchMediator__delete_the_custom">Delete the custom story \"%1$s\"?</string>
+    <string name="ContactSearchMediator__delete_the_custom">Želite izbrisati zgodbo po meri »%1$s«?</string>
     <!-- Dialog action item for deleting a custom story -->
     <string name="ContactSearchMediator__delete">Izbriši</string>
     <!-- Gift expiry days remaining -->
@@ -5531,7 +5556,7 @@
 
     <!-- StoriesPrivacySettingsFragment -->
     <!-- Explanation about how stories are deleted and managed -->
-    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Story updates automatically disappear after 24 hours. Choose who can view your story or create new stories with specific viewers or groups.</string>
+    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Posodobitve zgodb samodejno izginejo po 24 urah. Izberite, kdo si lahko ogleda vašo zgodbo, ali ustvarite nove zgodbe z določenimi gledalci ali skupinami.</string>
     <!-- Preference title to turn off stories -->
     <string name="StoriesPrivacySettingsFragment__turn_off_stories">Izklopite zgodbe</string>
     <!-- Preference summary to turn off stories -->
@@ -5549,11 +5574,11 @@
     <!-- Header for section that lists out stories -->
     <string name="StoriesPrivacySettingsFragment__stories">Zgodbe</string>
     <!-- Story views header -->
-    <string name="StoriesPrivacySettingsFragment__story_views">Story views</string>
+    <string name="StoriesPrivacySettingsFragment__story_views">Ogledi zgodb</string>
     <!-- Story view receipts toggle title -->
-    <string name="StoriesPrivacySettingsFragment__view_receipts">View receipts</string>
+    <string name="StoriesPrivacySettingsFragment__view_receipts">Kdo gleda zgodbe</string>
     <!-- Story view receipts toggle message -->
-    <string name="StoriesPrivacySettingsFragment__see_and_share">See and share when stories are viewed. If disabled, you won\'t see when others view your story.</string>
+    <string name="StoriesPrivacySettingsFragment__see_and_share">Oglejte si in delite, ko si kdo ogleda vaše zgodbe. Če je onemogočeno, ne boste videli, ko si drugi ogledajo vašo zgodbo.</string>
 
     <!-- NewStoryItem -->
     <string name="NewStoryItem__new_story">Nova zgodba</string>
@@ -5581,7 +5606,7 @@
     <!-- Title of the screen -->
     <string name="ExportYourSmsMessagesFragment__export_your_sms_messages">Izvozi SMS sporočila</string>
     <!-- Message of the screen -->
-    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">You can export your SMS messages to your phone\'s SMS database and you\'ll have the option to keep or remove them from Signal. This allows other SMS apps on your phone to import them. This does not create a shareable file of your SMS history.</string>
+    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">Svoja SMS sporočila lahko izvozite v zbirko podatkov SMS v telefonu in tako imeli boste možnost, da jih obdržite ali odstranite iz Signala. To omogoča drugim aplikacijam za SMS-e v vašem telefonu, da jih uvozijo. S tem ne ustvarite datoteke zgodovine SMS sporočil, ki jo je mogoče deliti.</string>
     <!-- Button label to begin export -->
     <string name="ExportYourSmsMessagesFragment__continue">Nadaljuj</string>
 
@@ -5598,11 +5623,11 @@
         <item quantity="other">Izvažanje %1$d od %2$d …</item>
     </plurals>
     <!-- Alert dialog title shown when we think a user may not have enough local storage available to export sms messages -->
-    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">You may not have enough disk space</string>
+    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">Morda nimate dovolj prostora na disku</string>
     <!-- Alert dialog message shown when we think a user may not have enough local storage available to export sms messages, placeholder is the file size, e.g., 128kB -->
-    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">You need approximately %1$s to export your messages, ensure you have enough space before continuing.</string>
+    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">Za izvoz sporočil potrebujete približno %1$s. Preden nadaljujete, se prepričajte, da imate dovolj prostora.</string>
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
-    <string name="ExportingSmsMessagesFragment__continue_anyway">Continue anyway</string>
+    <string name="ExportingSmsMessagesFragment__continue_anyway">Vseeno nadaljuj</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
     <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
 
@@ -5705,24 +5730,51 @@
     </plurals>
 
     <!-- Title of screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__export_partially_complete">Export partially complete</string>
+    <string name="ExportSmsPartiallyComplete__export_partially_complete">Izvoz delno končan</string>
     <!-- Debug step 1 on screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Ensure you have an additional %1$s free on your phone to export your messages</string>
+    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Prepričajte se, da imate v telefonu še dodatnih %1$s za izvoz sporočil</string>
     <!-- Debug step 2 on screen shown when some sms messages dit not export -->
-    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Retry export, which will only retry messages that have not yet been exported</string>
+    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Ponovni poskus izvoza sporočil, ki še niso bila izvožena</string>
     <!-- Partial sentence for Debug step 3 on screen shown when some sms messages did not export, is combined with 'contact us' -->
-    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">If the problem persists, </string>
+    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">Če se težava nadaljuje, </string>
     <!-- Partial sentence for deubg step 3 on screen shown when some sms messages did not export, combined with 'If the problem persists', link text to open contact support view -->
     <string name="ExportSmsPartiallyComplete__contact_us">Kontaktirajte nas</string>
     <!-- Button text to retry sms export -->
     <string name="ExportSmsPartiallyComplete__retry">Ponovno</string>
     <!-- Button text to continue sms export flow and not retry failed message exports -->
-    <string name="ExportSmsPartiallyComplete__continue_anyway">Continue anyway</string>
+    <string name="ExportSmsPartiallyComplete__continue_anyway">Vseeno nadaljuj</string>
     <!-- Title of screen shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__error_exporting_sms_messages">Error exporting SMS messages</string>
+    <string name="ExportSmsFullError__error_exporting_sms_messages">Napaka pri izvozu SMS sporočil</string>
     <!-- Helper text shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Please try again. If the problem persists, </string>
+    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Prosimo poskusite znova. Če se težava nadaljuje, </string>
 
+
+    <!-- DonateToSignalFragment -->
+    <!-- Title below avatar -->
+    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <!-- Continue button label -->
+    <string name="DonateToSignalFragment__continue">Nadaljuj</string>
+    <!-- Description below title -->
+    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <!-- Donation pill toggle monthly text -->
+    <string name="DonationPillToggle__monthly">Monthly</string>
+    <!-- Donation pill toggle one-time text -->
+    <string name="DonationPillToggle__one_time">Enkraten</string>
+
+    <!-- GatewaySelectorBottomSheet -->
+    <!-- Sheet title when subscribing -->
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <!-- Sheet summary when subscribing -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge">Podari značko uporabniku_ci %1$s</string>
+    <!-- Sheet title when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <!-- Sheet summary when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <!-- Button label for paying with a credit card -->
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+
+    <!-- StripePaymentInProgressFragment -->
+    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
 
     <!-- EOF -->
 

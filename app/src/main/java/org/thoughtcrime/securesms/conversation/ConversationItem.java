@@ -2369,6 +2369,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
             false,
             false,
             false,
+            false,
             MediaDatabase.Sorting.Newest.ordinal(),
             slide.isVideoGif());
         context.startActivity(MediaIntentFactory.create(context, args));

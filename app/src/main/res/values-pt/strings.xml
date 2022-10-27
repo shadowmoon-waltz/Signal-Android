@@ -125,6 +125,33 @@
     <string name="BlockedUsersActivity__do_you_want_to_unblock_s">Deseja desbloquear \"%1$s\"?</string>
     <string name="BlockedUsersActivity__unblock">Desbloquear</string>
 
+    <!-- CreditCardFragment -->
+    <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <!-- Displayed as a hint in the card number text field -->
+    <string name="CreditCardFragment__card_number">Card number</string>
+    <!-- Displayed as a hint in the card expiry text field -->
+    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <!-- Displayed as a hint in the card cvv text field -->
+    <string name="CreditCardFragment__cvv">CVV</string>
+    <!-- Error displayed under the card number text field when there is an invalid card number entered -->
+    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <!-- Error displayed under the card expiry text field when the card is expired -->
+    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too short -->
+    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too long -->
+    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <!-- Error displayed under the card cvv text field when the cvv is invalid -->
+    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
+    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
+    <string name="CreditCardFragment__year_required">Year required</string>
+    <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
+    <string name="CreditCardFragment__invalid_year">Invalid year</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">Bloquear e abandonar %1$s?</string>
@@ -222,7 +249,7 @@
     <!-- Label for my stories when selecting who to send media to -->
     <string name="ContactsCursorLoader_my_stories">As minhas histórias</string>
     <!-- Text for a button that brings up a bottom sheet to create a new story. -->
-    <string name="ContactsCursorLoader_new">New</string>
+    <string name="ContactsCursorLoader_new">Nova</string>
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">Mensagem %1$s</string>
@@ -346,13 +373,13 @@
     <string name="ConversationActivity__reported_as_spam_and_blocked">Reportado como spam e bloqueado.</string>
 
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">SMS messaging is currently disabled. You can export your messages to another app on your phone.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">As mensagens SMS estão atualmente desativadas. Pode exportar as suas mensagens para outra app no seu telemóvel.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_you_can_export_your_messages_to_another_app_on_your_phone">As mensagens SMS já não são suportadas pelo Signal. Pode exportar as suas mensagens para outra app no seu telemóvel.</string>
     <!-- Action button shown when in sms conversation, sms is disabled, and unexported sms messages are present -->
     <string name="ConversationActivity__export_sms_messages">Exportar mensagens SMS</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">SMS messaging is currently disabled. Invite %1$s to Signal to keep the conversation here.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">As mensagens SMS estão atualmente desativadas. Convide %1$s para o Signal para manter a conversa aqui.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">As mensagens SMS já não são suportadas pelo Signal. Convide %1$s para o Signal para manter a conversa aqui.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
@@ -2522,7 +2549,7 @@
         <item>Outro</item>
         <item>Pagamentos (MobileCoin)</item>
         <item>Doações e crachás</item>
-        <item>SMS Export</item>
+        <item>Exportação de SMS</item>
     </string-array>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
@@ -3205,6 +3232,8 @@
     <string name="media_preview__forward_title">Reencaminhar</string>
     <string name="media_preview__share_title">Partilhar</string>
     <string name="media_preview__all_media_title">Toda a multimédia</string>
+    <string name="media_preview__edit_title">Edit</string>
+
 
     <!-- media_preview_activity -->
     <string name="media_preview_activity__media_content_description">Pré-visualização de multimédia</string>
@@ -4392,10 +4421,8 @@
 
     <string name="ImageView__badge">Crachá</string>
 
-    <string name="SubscribeFragment__signal_is_powered_by_people_like_you">O Signal é feito por pessoas como você.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you">Apoie a tecnologia desenvolvida para si (não para os seus dados) juntando-se à comunidade de pessoas que a sustentam.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you_not">Apoie a tecnologia desenvolvida para si (não para os seus dados) juntando-se à comunidade de pessoas que sustentam o Signal.</string>
-    <string name="SubscribeFragment__make_a_recurring_monthly_donation">Faça uma doação mensal recorrente para o Signal de forma a suportar a tecnologia criada para si, não para os seus dados.</string>
     <string name="SubscribeFragment__currency">Moeda</string>
     <string name="SubscribeFragment__more_payment_options">Mais opções de pagamento</string>
     <string name="SubscribeFragment__cancel_subscription">Cancelar assinatura</string>
@@ -4410,8 +4437,10 @@
     <string name="SubscribeFragment__you_will_be_charged_the_full_amount_s_of">Ser-lhe-á cobrado o valor total (%1$s) do novo preço da assinatura aos dias de hoje. A sua assinatura será renovada mensalmente.</string>
 
     <string name="Subscription__s_per_month">%1$s/mês</string>
-    <string name="Subscription__s_per_month_dot_renews_s">%1$s/mês · Renovações %2$s</string>
-    <string name="Subscription__s_per_month_dot_expires_s">%1$s/mês · Expira %2$s</string>
+    <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
+    <string name="Subscription__renews_s">Renews %1$s</string>
+    <!-- Shown when a subscription is active and is going to expire at the end of the term -->
+    <string name="Subscription__expires_s">Expires %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">A Signal é uma organização sem fins lucrativos, sem anunciantes ou investidores, sustentada apenas pelas pessoas que a utilizam e valorizam. Faça uma doação mensal recorrente e receba um crachá de perfil para partilhar o seu apoio.</string>
@@ -4433,14 +4462,14 @@
     <string name="BecomeASustainerFragment__get_badges">Obtenha crachás para o seu perfil ao apoiar o Signal.</string>
     <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal é uma organização sem fins lucrativos, sem anunciantes ou investidores, sustentada apenas por pessoas como você.</string>
 
-    <!-- Button label for creating a monthly donation -->
-    <string name="ManageDonationsFragment__make_a_monthly_donation">Fazer uma doação mensal</string>
+    <!-- Button label for creating a donation -->
+    <string name="ManageDonationsFragment__donate_to_signal">Doar ao Signal</string>
     <!-- Heading for more area of manage subscriptions page -->
     <string name="ManageDonationsFragment__more">Mais</string>
     <!-- Heading for receipts area of manage subscriptions page -->
     <string name="ManageDonationsFragment__receipts">Recibos</string>
     <!-- Heading for my subscription area of manage subscriptions page -->
-    <string name="ManageDonationsFragment__my_subscription">A minha assinatura</string>
+    <string name="ManageDonationsFragment__my_support">O meu apoio</string>
     <string name="ManageDonationsFragment__manage_subscription">Gerir assinatura</string>
     <!-- Label for Donation Receipts button -->
     <string name="ManageDonationsFragment__donation_receipts">Recibos de doações</string>
@@ -4451,10 +4480,6 @@
     <string name="ManageDonationsFragment__other_ways_to_give">Outras formas de doar</string>
     <!-- Preference label to launch badge gifting -->
     <string name="ManageDonationsFragment__gift_a_badge">Doar um crachá</string>
-
-    <string name="BoostFragment__give_signal_a_boost">Dê um Apoio ao Signal</string>
-    <!-- Description text in boost sheet -->
-    <string name="BoostFragment__make_a_one_time">Faça uma doação única e ganhe o crachá de \'Apoio\' durante %1$d dias.</string>
 
     <string name="Boost__enter_custom_amount">Introduzir montante personalizado</string>
     <string name="Boost__one_time_contribution">Contribuição única</string>
@@ -4496,7 +4521,7 @@
 
     <string name="Subscription__please_contact_support_for_more_information">Por favor, contacte o \'Suporte\' para mais informações.</string>
     <string name="Subscription__contact_support">Contactar o Suporte</string>
-    <string name="Subscription__earn_a_s_badge">Ganhe um crachá %1$s</string>
+    <string name="Subscription__get_a_s_badge">Obter um crachá %1$s</string>
 
     <string name="SubscribeFragment__processing_payment">A processar pagamento…</string>
     <!-- Displayed in notification when user payment fails to process on Stripe -->
@@ -4770,7 +4795,7 @@
     <!-- Title for "My Stories" row item in Stories landing page -->
     <string name="StoriesLandingFragment__my_stories">As minhas histórias</string>
     <!-- Subtitle for "My Stories" row item when user has not added stories -->
-    <string name="StoriesLandingFragment__tap_to_add">Tap to add</string>
+    <string name="StoriesLandingFragment__tap_to_add">Toque para adicionar</string>
     <!-- Displayed when there are no stories to display -->
     <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now">De momento não existem atualizações para exibir.</string>
     <!-- Context menu option to hide a story -->
@@ -4938,7 +4963,7 @@
     <!-- Clickable option to add a viewer to a custom story -->
     <string name="PrivateStorySettingsFragment__add_viewer">Adicionar visualizador</string>
     <!-- Clickable option to delete a custom story -->
-    <string name="PrivateStorySettingsFragment__delete_custom_story">Delete custom story</string>
+    <string name="PrivateStorySettingsFragment__delete_custom_story">Eliminar história personalizada</string>
     <!-- Dialog title when attempting to remove someone from a custom story -->
     <string name="PrivateStorySettingsFragment__remove_s">Remover %1$s?</string>
     <!-- Dialog message when attempting to remove someone from a custom story -->
@@ -4976,7 +5001,7 @@
     <!-- Toast shown when an unexpected error occurs while sending a text story -->
     <string name="TextStoryPostSendFragment__an_unexpected_error_occurred_try_again">Ocorreu um erro inesperado</string>
     <!-- Toast shown when a trying to add a link preview to a text story post and the link/url is not valid (e.g., missing .com at the end) -->
-    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Please enter a valid link.</string>
+    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Introduza um link válido</string>
     <!-- Title for screen allowing user to exclude "My Story" entries from specific people -->
     <string name="ChangeMyStoryMembershipFragment__all_except">Todos exceto…</string>
     <!-- Title for screen allowing user to only share "My Story" entries with specific people -->
@@ -4990,7 +5015,7 @@
     <!-- Dialog positive action for removing a group story -->
     <string name="StoryDialogs__remove">Remover</string>
     <!-- Dialog title for deleting a custom story -->
-    <string name="StoryDialogs__delete_custom_story">Delete custom story?</string>
+    <string name="StoryDialogs__delete_custom_story">Eliminar história personalizada?</string>
     <!-- Dialog message for deleting a custom story -->
     <string name="StoryDialogs__s_and_updates_shared">\"%1$s\" e atualizações partilhadas com esta história serão removidos.</string>
     <!-- Dialog positive action for deleting a custom story -->
@@ -5029,7 +5054,7 @@
     <!-- Name story screen title -->
     <string name="CreateStoryWithViewersFragment__name_story">Nome da história</string>
     <!-- Name story screen note under text field -->
-    <string name="CreateStoryWithViewersFragment__only_you_can">Only you can see the name of this story.</string>
+    <string name="CreateStoryWithViewersFragment__only_you_can">Só você pode ver o nome desta história.</string>
     <!-- Name story screen label hint -->
     <string name="CreateStoryWithViewersFragment__story_name_required">Nome da história (obrigatório)</string>
     <!-- Name story screen viewers subheading -->
@@ -5045,7 +5070,7 @@
     <!-- Choose story type bottom sheet title -->
     <string name="ChooseStoryTypeBottomSheet__choose_your_story_type">Escolha o tipo da sua história</string>
     <!-- Choose story type bottom sheet new story row title -->
-    <string name="ChooseStoryTypeBottomSheet__new_custom_story">New custom story</string>
+    <string name="ChooseStoryTypeBottomSheet__new_custom_story">Nova história personalizada</string>
     <!-- Choose story type bottom sheet new story row summary -->
     <string name="ChooseStoryTypeBottomSheet__visible_only_to">Visível apenas para pessoas específicas</string>
     <!-- Choose story type bottom sheet group story title -->
@@ -5155,8 +5180,8 @@
     <string name="ContactSearchItems__only_share_with">Partilhar apenas com</string>
     <!-- Label under name for custom stories -->
     <plurals name="ContactSearchItems__custom_story_d_viewers">
-        <item quantity="one">Custom story · %1$d viewer</item>
-        <item quantity="other">Custom story · %1$d viewers</item>
+        <item quantity="one">História personalizada · %1$d visualizador</item>
+        <item quantity="other">História personalizada · %1$d visualizadores</item>
     </plurals>
     <!-- Label under name for group stories -->
     <plurals name="ContactSearchItems__group_story_d_viewers">
@@ -5190,7 +5215,7 @@
     <!-- Dialog title for deleting a custom story -->
     <string name="ContactSearchMediator__delete_story">Eliminar história?</string>
     <!-- Dialog message for deleting a custom story -->
-    <string name="ContactSearchMediator__delete_the_custom">Delete the custom story \"%1$s\"?</string>
+    <string name="ContactSearchMediator__delete_the_custom">Eliminar a história personalizada \"%1$s\"?</string>
     <!-- Dialog action item for deleting a custom story -->
     <string name="ContactSearchMediator__delete">Eliminar</string>
     <!-- Gift expiry days remaining -->
@@ -5291,7 +5316,7 @@
 
     <!-- StoriesPrivacySettingsFragment -->
     <!-- Explanation about how stories are deleted and managed -->
-    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Story updates automatically disappear after 24 hours. Choose who can view your story or create new stories with specific viewers or groups.</string>
+    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">As atualizações das histórias desaparecem automaticamente após 24 horas. Escolha quem pode ver a sua história ou crie novas histórias com visualizadores ou grupos específicos.</string>
     <!-- Preference title to turn off stories -->
     <string name="StoriesPrivacySettingsFragment__turn_off_stories">Desativar histórias</string>
     <!-- Preference summary to turn off stories -->
@@ -5309,11 +5334,11 @@
     <!-- Header for section that lists out stories -->
     <string name="StoriesPrivacySettingsFragment__stories">Histórias</string>
     <!-- Story views header -->
-    <string name="StoriesPrivacySettingsFragment__story_views">Story views</string>
+    <string name="StoriesPrivacySettingsFragment__story_views">Visualizações da história</string>
     <!-- Story view receipts toggle title -->
-    <string name="StoriesPrivacySettingsFragment__view_receipts">View receipts</string>
+    <string name="StoriesPrivacySettingsFragment__view_receipts">Confirmações de leitura</string>
     <!-- Story view receipts toggle message -->
-    <string name="StoriesPrivacySettingsFragment__see_and_share">See and share when stories are viewed. If disabled, you won\'t see when others view your story.</string>
+    <string name="StoriesPrivacySettingsFragment__see_and_share">Veja e partilhe quando as histórias estão a ser vistas. Se desativado, não saberá quando os outros virem a sua história.</string>
 
     <!-- NewStoryItem -->
     <string name="NewStoryItem__new_story">Nova história</string>
@@ -5341,7 +5366,7 @@
     <!-- Title of the screen -->
     <string name="ExportYourSmsMessagesFragment__export_your_sms_messages">Exportar as tuas mensagens SMS</string>
     <!-- Message of the screen -->
-    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">You can export your SMS messages to your phone\'s SMS database and you\'ll have the option to keep or remove them from Signal. This allows other SMS apps on your phone to import them. This does not create a shareable file of your SMS history.</string>
+    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">Pode exportar as suas mensagens SMS para a base de dados SMS do seu telemóvel, e terá a opção de as manter ou remover do Signal. Isto permite que as outras apps SMS no seu telemóvel as importem. Isto não cria um ficheiro partilhável do seu histórico de SMS.</string>
     <!-- Button label to begin export -->
     <string name="ExportYourSmsMessagesFragment__continue">Continuar</string>
 
@@ -5356,9 +5381,9 @@
         <item quantity="other">A exportar %1$d de %2$d…</item>
     </plurals>
     <!-- Alert dialog title shown when we think a user may not have enough local storage available to export sms messages -->
-    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">You may not have enough disk space</string>
+    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">Poderá não ter espaço suficiente no disco</string>
     <!-- Alert dialog message shown when we think a user may not have enough local storage available to export sms messages, placeholder is the file size, e.g., 128kB -->
-    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">You need approximately %1$s to export your messages, ensure you have enough space before continuing.</string>
+    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">Precisa de aproximadamente %1$s para exportar as suas mensagens. Certifique-se de que tem espaço suficiente antes de continuar.</string>
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">Continuar mesmo assim</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
@@ -5461,13 +5486,13 @@
     </plurals>
 
     <!-- Title of screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__export_partially_complete">Export partially complete</string>
+    <string name="ExportSmsPartiallyComplete__export_partially_complete">Exportação parcialmente completa</string>
     <!-- Debug step 1 on screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Ensure you have an additional %1$s free on your phone to export your messages</string>
+    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Certifique-se de que tem %1$s livres no seu telemóvel para exportar as suas mensagens</string>
     <!-- Debug step 2 on screen shown when some sms messages dit not export -->
-    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Retry export, which will only retry messages that have not yet been exported</string>
+    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Voltar a tentar exportação, o que apenas irá repetir as mensagens que ainda não foram exportadas</string>
     <!-- Partial sentence for Debug step 3 on screen shown when some sms messages did not export, is combined with 'contact us' -->
-    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">If the problem persists, </string>
+    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">Se o problema persistir, </string>
     <!-- Partial sentence for deubg step 3 on screen shown when some sms messages did not export, combined with 'If the problem persists', link text to open contact support view -->
     <string name="ExportSmsPartiallyComplete__contact_us">Contacte-nos</string>
     <!-- Button text to retry sms export -->
@@ -5475,10 +5500,37 @@
     <!-- Button text to continue sms export flow and not retry failed message exports -->
     <string name="ExportSmsPartiallyComplete__continue_anyway">Continuar mesmo assim</string>
     <!-- Title of screen shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__error_exporting_sms_messages">Error exporting SMS messages</string>
+    <string name="ExportSmsFullError__error_exporting_sms_messages">Erro ao exportar mensagens SMS</string>
     <!-- Helper text shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Please try again. If the problem persists, </string>
+    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Tente novamente. Se o problema persistir, </string>
 
+
+    <!-- DonateToSignalFragment -->
+    <!-- Title below avatar -->
+    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <!-- Continue button label -->
+    <string name="DonateToSignalFragment__continue">Continuar</string>
+    <!-- Description below title -->
+    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <!-- Donation pill toggle monthly text -->
+    <string name="DonationPillToggle__monthly">Mensal</string>
+    <!-- Donation pill toggle one-time text -->
+    <string name="DonationPillToggle__one_time">Uma única vez</string>
+
+    <!-- GatewaySelectorBottomSheet -->
+    <!-- Sheet title when subscribing -->
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <!-- Sheet summary when subscribing -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge">Obter um crachá %1$s</string>
+    <!-- Sheet title when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <!-- Sheet summary when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <!-- Button label for paying with a credit card -->
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+
+    <!-- StripePaymentInProgressFragment -->
+    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
 
     <!-- EOF -->
 

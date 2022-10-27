@@ -2,7 +2,6 @@ package org.thoughtcrime.securesms.service;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class LocalBackupListener extends PersistentAlarmManagerListener {
 
   @Override
-  protected boolean scheduleExact() {
+  protected boolean shouldScheduleExact() {
     return Build.VERSION.SDK_INT >= 31;
   }
 
@@ -30,7 +29,7 @@ public class LocalBackupListener extends PersistentAlarmManagerListener {
   @Override
   protected long onAlarm(Context context, long scheduledTime) {
     if (SignalStore.settings().isBackupEnabled()) {
-      LocalBackupJob.enqueue(scheduleExact());
+      LocalBackupJob.enqueue(shouldScheduleExact());
     }
 
     return setNextBackupTimeToIntervalFromNow(context);
@@ -38,7 +37,7 @@ public class LocalBackupListener extends PersistentAlarmManagerListener {
 
   public static void schedule(Context context) {
     if (SignalStore.settings().isBackupEnabled()) {
-      new LocalBackupListener().onReceive(context, new Intent());
+      new LocalBackupListener().onReceive(context, getScheduleIntent());
     }
   }
 

@@ -19,15 +19,12 @@ package org.thoughtcrime.securesms.video;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.TypedArrayKt;
-import androidx.core.content.res.TypedArrayUtils;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -45,6 +42,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.mediapreview.MediaPreviewPlayerControlView;
 import org.thoughtcrime.securesms.mms.VideoSlide;
 
 import java.util.Objects;
@@ -56,10 +54,10 @@ public class VideoPlayer extends FrameLayout {
   private static final String TAG = Log.tag(VideoPlayer.class);
 
   private final PlayerView                exoView;
-  private final PlayerControlView         exoControls;
   private final DefaultMediaSourceFactory mediaSourceFactory;
 
   private ExoPlayer                           exoPlayer;
+  private PlayerControlView                   exoControls;
   private Window                              window;
   private PlayerStateCallback                 playerStateCallback;
   private PlayerPositionDiscontinuityCallback playerPositionDiscontinuityCallback;
@@ -90,8 +88,7 @@ public class VideoPlayer extends FrameLayout {
     this.mediaSourceFactory = new DefaultMediaSourceFactory(context);
 
     this.exoView     = findViewById(R.id.video_view);
-    this.exoControls = new PlayerControlView(getContext());
-    this.exoControls.setShowTimeoutMs(-1);
+    this.exoControls = createPlayerControls(getContext());
 
     this.exoPlayerListener = new ExoPlayerListener();
     this.playerListener    = new Player.Listener() {
@@ -127,6 +124,14 @@ public class VideoPlayer extends FrameLayout {
         }
       }
     };
+  }
+
+  private PlayerControlView createPlayerControls(Context context) {
+    final PlayerControlView playerControlView = new PlayerControlView(context);
+    playerControlView.setShowTimeoutMs(-1);
+    playerControlView.setShowNextButton(false);
+    playerControlView.setShowPreviousButton(false);
+    return playerControlView;
   }
 
   private MediaItem mediaItem;
@@ -222,8 +227,13 @@ public class VideoPlayer extends FrameLayout {
     super.setOnClickListener(l);
   }
 
-  public @Nullable View getControlView() {
+  public @Nullable PlayerControlView getControlView() {
     return this.exoControls;
+  }
+
+  public void setControlView(MediaPreviewPlayerControlView controller) {
+    exoControls = controller;
+    exoControls.setPlayer(exoPlayer);
   }
 
   public void stop() {
@@ -234,6 +244,8 @@ public class VideoPlayer extends FrameLayout {
   }
 
   public void cleanup() {
+    stop();
+
     if (this.exoPlayer != null) {
       exoView.setPlayer(null);
       exoControls.setPlayer(null);

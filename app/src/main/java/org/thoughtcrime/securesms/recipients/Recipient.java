@@ -1018,10 +1018,6 @@ public class Recipient {
     return forceSmsSelection;
   }
 
-  public @NonNull Capability getChangeNumberCapability() {
-    return capabilities.getChangeNumberCapability();
-  }
-
   public @NonNull Capability getStoriesCapability() {
     return capabilities.getStoriesCapability();
   }

@@ -125,6 +125,33 @@
     <string name="BlockedUsersActivity__do_you_want_to_unblock_s">Κατάργηση αποκλεισμού του/της «%1$s»;</string>
     <string name="BlockedUsersActivity__unblock">Κατάργηση αποκλεισμού</string>
 
+    <!-- CreditCardFragment -->
+    <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
+    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <!-- Displayed as a hint in the card number text field -->
+    <string name="CreditCardFragment__card_number">Card number</string>
+    <!-- Displayed as a hint in the card expiry text field -->
+    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <!-- Displayed as a hint in the card cvv text field -->
+    <string name="CreditCardFragment__cvv">CVV</string>
+    <!-- Error displayed under the card number text field when there is an invalid card number entered -->
+    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <!-- Error displayed under the card expiry text field when the card is expired -->
+    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too short -->
+    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <!-- Error displayed under the card cvv text field when the cvv is too long -->
+    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <!-- Error displayed under the card cvv text field when the cvv is invalid -->
+    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
+    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
+    <string name="CreditCardFragment__year_required">Year required</string>
+    <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
+    <string name="CreditCardFragment__invalid_year">Invalid year</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">Αποκλεισμός και αποχώρηση από %1$s;</string>
@@ -222,7 +249,7 @@
     <!-- Label for my stories when selecting who to send media to -->
     <string name="ContactsCursorLoader_my_stories">Οι ιστορίες μου</string>
     <!-- Text for a button that brings up a bottom sheet to create a new story. -->
-    <string name="ContactsCursorLoader_new">New</string>
+    <string name="ContactsCursorLoader_new">Νέα</string>
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">Μήνυμα %1$s</string>
@@ -346,13 +373,13 @@
     <string name="ConversationActivity__reported_as_spam_and_blocked">Αναφέρθηκε ως ανεπιθύμητο και έχει αποκλειστεί</string>
 
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">SMS messaging is currently disabled. You can export your messages to another app on your phone.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone">Η ανταλλαγή μηνυμάτων SMS είναι προς το παρόν απενεργοποιημένη. Μπορείς να εξαγάγεις τα μηνύματά σου σε άλλη εφαρμογή στο τηλέφωνό σου.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and they have unexported sms messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_you_can_export_your_messages_to_another_app_on_your_phone">Η ανταλλαγή μηνυμάτων SMS δεν υποστηρίζεται πλέον στο Signal. Μπορείς να εξαγάγεις τα μηνύματά σου σε άλλη εφαρμογή στο τηλέφωνό σου.</string>
     <!-- Action button shown when in sms conversation, sms is disabled, and unexported sms messages are present -->
     <string name="ConversationActivity__export_sms_messages">Εξαγωγή μηνυμάτων SMS</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
-    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">SMS messaging is currently disabled. Invite %1$s to Signal to keep the conversation here.</string>
+    <string name="ConversationActivity__sms_messaging_is_currently_disabled_invite_s_to_to_signal_to_keep_the_conversation_here">Η ανταλλαγή μηνυμάτων SMS είναι προς το παρόν απενεργοποιημένη. Προσκάλεσε τον χρήστη %1$s στο Signal για να κρατήσεις εδώ τη συνομιλία.</string>
     <!-- Message shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_invite_s_to_to_signal_to_keep_the_conversation_here">Η ανταλλαγή μηνυμάτων SMS δεν υποστηρίζεται πλέον στο Signal. Προσκάλεσε τον χρήστη %1$s στο Signal για να κρατήσεις εδώ τη συνομιλία.</string>
     <!-- Action button shown when opening an SMS conversation with SMS disabled and there are no exported messages -->
@@ -2522,7 +2549,7 @@
         <item>Άλλο</item>
         <item>Πληρωμές (MobileCoin)</item>
         <item>Δωρεές και Σήματα</item>
-        <item>SMS Export</item>
+        <item>Εξαγωγή SMS</item>
     </string-array>
 
     <!-- ReactWithAnyEmojiBottomSheetDialogFragment -->
@@ -3205,6 +3232,8 @@
     <string name="media_preview__forward_title">Προώθηση</string>
     <string name="media_preview__share_title">Μοιράσου</string>
     <string name="media_preview__all_media_title">Όλα τα πολυμέσα</string>
+    <string name="media_preview__edit_title">Edit</string>
+
 
     <!-- media_preview_activity -->
     <string name="media_preview_activity__media_content_description">Προεπισκόπιση</string>
@@ -4392,10 +4421,8 @@
 
     <string name="ImageView__badge">Έμβλημα</string>
 
-    <string name="SubscribeFragment__signal_is_powered_by_people_like_you">Το Signal στηρίζεται σε άτομα σαν κι εσένα.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you">Στήριξε τεχνολογίες που έχουν φτιαχτεί για εσένα - όχι για τα δεδομένα σου. Έλα στη κοινότητα ανθρώπων που το στηρίζουν.</string>
     <string name="SubscribeFragment__support_technology_that_is_built_for_you_not">Στήριξε τεχνολογίες που έχουν φτιαχτεί για εσένα, όχι για τα δεδομένα σου. Έλα στη κοινότητα ανθρώπων που το στηρίζουν το Signal.</string>
-    <string name="SubscribeFragment__make_a_recurring_monthly_donation">Κάνε μια επαναλαμβανόμενη μηνιαία δωρεά στο Signal, για να υποστηρίξεις τη τεχνολογία που φτιάχνεται για σένα, όχι για τα δεδομένα σου.</string>
     <string name="SubscribeFragment__currency">Νόμισμα</string>
     <string name="SubscribeFragment__more_payment_options">Περισσότεροι τρόποι πληρωμής</string>
     <string name="SubscribeFragment__cancel_subscription">Ακύρωση συνδρομής</string>
@@ -4410,8 +4437,10 @@
     <string name="SubscribeFragment__you_will_be_charged_the_full_amount_s_of">Θα χρεωθείς το πλήρες ποσό (%1$s) της τιμής νέας συνδρομής σήμερα. Η συνδρομή σου θα ανανεώνεται μηνιαία.</string>
 
     <string name="Subscription__s_per_month">%1$s/μήνα</string>
-    <string name="Subscription__s_per_month_dot_renews_s">%1$s/μήνα · Ανανεώνεται %2$s</string>
-    <string name="Subscription__s_per_month_dot_expires_s">%1$s/μήνα · Λήγει %2$s</string>
+    <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
+    <string name="Subscription__renews_s">Renews %1$s</string>
+    <!-- Shown when a subscription is active and is going to expire at the end of the term -->
+    <string name="Subscription__expires_s">Expires %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Το Signal είναι μια ΜΚΟ χωρις διαφημίσεις και επενδυτές, που συντηρείται μόνο από τα άτομα που το χρησιμοποιούν και το θεωρούν σημαντικό. Με μια επαναλαμβανόμενη μηνιαία δωρεά παίρνεις ένα έμβλημα για το προφίλ σου, για να δείξεις την υποστήριξή σου.</string>
@@ -4433,14 +4462,14 @@
     <string name="BecomeASustainerFragment__get_badges">Στηρίζοντας το Signal παίρνεις εμβλήματα για το προφίλ σου.</string>
     <string name="BecomeASustainerFragment__signal_is_a_non_profit">Το Signal είναι μια μη κερδοσκοπική οργάνωση, χωρίς διαφημιστές και επενδυτές, που υποστηρίζεται από άτομα σαν κι εσένα.</string>
 
-    <!-- Button label for creating a monthly donation -->
-    <string name="ManageDonationsFragment__make_a_monthly_donation">Κάνε μηνιαία δωρεά</string>
+    <!-- Button label for creating a donation -->
+    <string name="ManageDonationsFragment__donate_to_signal">Κάνε μια δωρεά στο Signal</string>
     <!-- Heading for more area of manage subscriptions page -->
     <string name="ManageDonationsFragment__more">Περισσότερα</string>
     <!-- Heading for receipts area of manage subscriptions page -->
     <string name="ManageDonationsFragment__receipts">Αποδείξεις</string>
     <!-- Heading for my subscription area of manage subscriptions page -->
-    <string name="ManageDonationsFragment__my_subscription">Η συνδρομή μου</string>
+    <string name="ManageDonationsFragment__my_support">Η υποστήριξή μου</string>
     <string name="ManageDonationsFragment__manage_subscription">Διαχείριση συνδρομής</string>
     <!-- Label for Donation Receipts button -->
     <string name="ManageDonationsFragment__donation_receipts">Αποδείξεις δωρεών</string>
@@ -4451,10 +4480,6 @@
     <string name="ManageDonationsFragment__other_ways_to_give">Άλλοι τρόποι δωρεάς</string>
     <!-- Preference label to launch badge gifting -->
     <string name="ManageDonationsFragment__gift_a_badge">Κάνε δώρο ένα έμβλημα</string>
-
-    <string name="BoostFragment__give_signal_a_boost">Δώσε Ενίσχυση στο Signal</string>
-    <!-- Description text in boost sheet -->
-    <string name="BoostFragment__make_a_one_time">Κάνε μια μοναδική δωρεά και κέρδισε το έμβλημα Eνίσχυσης για %1$d ημέρες.</string>
 
     <string name="Boost__enter_custom_amount">Εισαγωγή προσαρμοσμένου ποσού</string>
     <string name="Boost__one_time_contribution">Υποστήριξη μια φορά</string>
@@ -4496,7 +4521,7 @@
 
     <string name="Subscription__please_contact_support_for_more_information">Παρακαλούμε επικοινώνησε με την υποστήριξη για περισσότερες πληροφορίες.</string>
     <string name="Subscription__contact_support">Επικοινωνία με την υποστήριξη</string>
-    <string name="Subscription__earn_a_s_badge">Κέρδισε ένα έμβλημα %1$s</string>
+    <string name="Subscription__get_a_s_badge">Πάρε ένα έμβλημα %1$s</string>
 
     <string name="SubscribeFragment__processing_payment">Επεξεργασία πληρωμής…</string>
     <!-- Displayed in notification when user payment fails to process on Stripe -->
@@ -4770,7 +4795,7 @@
     <!-- Title for "My Stories" row item in Stories landing page -->
     <string name="StoriesLandingFragment__my_stories">Οι ιστορίες μου</string>
     <!-- Subtitle for "My Stories" row item when user has not added stories -->
-    <string name="StoriesLandingFragment__tap_to_add">Tap to add</string>
+    <string name="StoriesLandingFragment__tap_to_add">Πάτα για προσθήκη</string>
     <!-- Displayed when there are no stories to display -->
     <string name="StoriesLandingFragment__no_recent_updates_to_show_right_now">Δεν υπάρχουν πρόσφατες ιστορίες αυτή τη στιγμή.</string>
     <!-- Context menu option to hide a story -->
@@ -4938,7 +4963,7 @@
     <!-- Clickable option to add a viewer to a custom story -->
     <string name="PrivateStorySettingsFragment__add_viewer">Προσθήκη θεατή</string>
     <!-- Clickable option to delete a custom story -->
-    <string name="PrivateStorySettingsFragment__delete_custom_story">Delete custom story</string>
+    <string name="PrivateStorySettingsFragment__delete_custom_story">Διαγραφή προσαρμοσμένης ιστορίας</string>
     <!-- Dialog title when attempting to remove someone from a custom story -->
     <string name="PrivateStorySettingsFragment__remove_s">Αφαίρεση του/της %1$s;</string>
     <!-- Dialog message when attempting to remove someone from a custom story -->
@@ -4976,7 +5001,7 @@
     <!-- Toast shown when an unexpected error occurs while sending a text story -->
     <string name="TextStoryPostSendFragment__an_unexpected_error_occurred_try_again">Παρουσιάστηκε απρόσμενο σφάλμα</string>
     <!-- Toast shown when a trying to add a link preview to a text story post and the link/url is not valid (e.g., missing .com at the end) -->
-    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Please enter a valid link.</string>
+    <string name="TextStoryPostSendFragment__please_enter_a_valid_link">Εισαγάγετε έναν έγκυρο σύνδεσμο.</string>
     <!-- Title for screen allowing user to exclude "My Story" entries from specific people -->
     <string name="ChangeMyStoryMembershipFragment__all_except">Όλες εκτός από…</string>
     <!-- Title for screen allowing user to only share "My Story" entries with specific people -->
@@ -4990,7 +5015,7 @@
     <!-- Dialog positive action for removing a group story -->
     <string name="StoryDialogs__remove">Αφαίρεση</string>
     <!-- Dialog title for deleting a custom story -->
-    <string name="StoryDialogs__delete_custom_story">Delete custom story?</string>
+    <string name="StoryDialogs__delete_custom_story">Διαγραφή προσαρμοσμένης ιστορίας;</string>
     <!-- Dialog message for deleting a custom story -->
     <string name="StoryDialogs__s_and_updates_shared">Οι ιστορίες \"%1$s\" και οι ενημερώσεις που κοινοποιούνται σε αυτή θα διαγραφούν.</string>
     <!-- Dialog positive action for deleting a custom story -->
@@ -5029,7 +5054,7 @@
     <!-- Name story screen title -->
     <string name="CreateStoryWithViewersFragment__name_story">Όνομα ιστορίας</string>
     <!-- Name story screen note under text field -->
-    <string name="CreateStoryWithViewersFragment__only_you_can">Only you can see the name of this story.</string>
+    <string name="CreateStoryWithViewersFragment__only_you_can">Μόνο εσύ μπορείς να δεις το όνομα αυτής της ιστορίας.</string>
     <!-- Name story screen label hint -->
     <string name="CreateStoryWithViewersFragment__story_name_required">Όνομα ιστορίας (υποχρεωτικό)</string>
     <!-- Name story screen viewers subheading -->
@@ -5045,7 +5070,7 @@
     <!-- Choose story type bottom sheet title -->
     <string name="ChooseStoryTypeBottomSheet__choose_your_story_type">Επίλεξε τον τύπο της ιστορίας σου</string>
     <!-- Choose story type bottom sheet new story row title -->
-    <string name="ChooseStoryTypeBottomSheet__new_custom_story">New custom story</string>
+    <string name="ChooseStoryTypeBottomSheet__new_custom_story">Νέα προσαρμοσμένη ιστορία</string>
     <!-- Choose story type bottom sheet new story row summary -->
     <string name="ChooseStoryTypeBottomSheet__visible_only_to">Ορατή μόνο σε συγκεκριμένα άτομα</string>
     <!-- Choose story type bottom sheet group story title -->
@@ -5155,8 +5180,8 @@
     <string name="ContactSearchItems__only_share_with">Κοινοποίηση μόνο σε</string>
     <!-- Label under name for custom stories -->
     <plurals name="ContactSearchItems__custom_story_d_viewers">
-        <item quantity="one">Custom story · %1$d viewer</item>
-        <item quantity="other">Custom story · %1$d viewers</item>
+        <item quantity="one">Προσαρμοσμένη ιστορία · %1$d θεατής</item>
+        <item quantity="other">Προσαρμοσμένη ιστορία · %1$d θεατές</item>
     </plurals>
     <!-- Label under name for group stories -->
     <plurals name="ContactSearchItems__group_story_d_viewers">
@@ -5190,7 +5215,7 @@
     <!-- Dialog title for deleting a custom story -->
     <string name="ContactSearchMediator__delete_story">Διαγραφή ιστορίας;</string>
     <!-- Dialog message for deleting a custom story -->
-    <string name="ContactSearchMediator__delete_the_custom">Delete the custom story \"%1$s\"?</string>
+    <string name="ContactSearchMediator__delete_the_custom">Διαγραφή της προσαρμοσμένης ιστορίας \"%1$s\";</string>
     <!-- Dialog action item for deleting a custom story -->
     <string name="ContactSearchMediator__delete">Διαγραφή</string>
     <!-- Gift expiry days remaining -->
@@ -5291,7 +5316,7 @@
 
     <!-- StoriesPrivacySettingsFragment -->
     <!-- Explanation about how stories are deleted and managed -->
-    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Story updates automatically disappear after 24 hours. Choose who can view your story or create new stories with specific viewers or groups.</string>
+    <string name="StoriesPrivacySettingsFragment__story_updates_automatically_disappear">Οι ενημερώσεις ιστοριών εξαφανίζονται αυτόματα μετά από 24 ώρες. Επίλεξε ποια άτομα μπορούν να δουν την ιστορία σου ή δημιούργησε νέες ιστορίες για συγκεκριμένους θεατές ή ομάδες.</string>
     <!-- Preference title to turn off stories -->
     <string name="StoriesPrivacySettingsFragment__turn_off_stories">Απενεργοποίηση ιστοριών</string>
     <!-- Preference summary to turn off stories -->
@@ -5309,11 +5334,11 @@
     <!-- Header for section that lists out stories -->
     <string name="StoriesPrivacySettingsFragment__stories">Ιστορίες</string>
     <!-- Story views header -->
-    <string name="StoriesPrivacySettingsFragment__story_views">Story views</string>
+    <string name="StoriesPrivacySettingsFragment__story_views">Προβολές ιστορίας</string>
     <!-- Story view receipts toggle title -->
-    <string name="StoriesPrivacySettingsFragment__view_receipts">View receipts</string>
+    <string name="StoriesPrivacySettingsFragment__view_receipts">Προβολή αποδεικτικών ανάγνωσης</string>
     <!-- Story view receipts toggle message -->
-    <string name="StoriesPrivacySettingsFragment__see_and_share">See and share when stories are viewed. If disabled, you won\'t see when others view your story.</string>
+    <string name="StoriesPrivacySettingsFragment__see_and_share">Δες και μοιράσου όταν προβάλλονται ιστορίες. Εάν είναι απενεργοποιημένο, δεν θα βλέπεις πότε οι άλλοι βλέπουν την ιστορία σου.</string>
 
     <!-- NewStoryItem -->
     <string name="NewStoryItem__new_story">Νέα ιστορία</string>
@@ -5341,7 +5366,7 @@
     <!-- Title of the screen -->
     <string name="ExportYourSmsMessagesFragment__export_your_sms_messages">Εξαγωγή μηνυμάτων SMS</string>
     <!-- Message of the screen -->
-    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">You can export your SMS messages to your phone\'s SMS database and you\'ll have the option to keep or remove them from Signal. This allows other SMS apps on your phone to import them. This does not create a shareable file of your SMS history.</string>
+    <string name="ExportYourSmsMessagesFragment__you_can_export_your_sms_messages_to_your_phones_sms_database_and_youll_have_the_option_to_keep_or_remove_them_from_signal">Μπορείς να εξαγάγεις τα μηνύματα SMS σου στη βάση δεδομένων SMS του τηλεφώνου σου και θα έχεις την επιλογή να τα διατηρήσεις ή να τα αφαιρέσεις από το Signal. Με αυτόν τον τρόπο, άλλες εφαρμογές SMS στο τηλέφωνό σου μπορούν να τα εισαγάγουν. Έτσι, δεν δημιουργείται ένα κοινόχρηστο αρχείο του ιστορικού μηνυμάτων SMS.</string>
     <!-- Button label to begin export -->
     <string name="ExportYourSmsMessagesFragment__continue">Συνέχεια</string>
 
@@ -5356,9 +5381,9 @@
         <item quantity="other">Εξαγωγή %1$d από %2$d…</item>
     </plurals>
     <!-- Alert dialog title shown when we think a user may not have enough local storage available to export sms messages -->
-    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">You may not have enough disk space</string>
+    <string name="ExportingSmsMessagesFragment__you_may_not_have_enough_disk_space">Μπορεί να μην έχεις αρκετό αποθηκευτικό χώρο</string>
     <!-- Alert dialog message shown when we think a user may not have enough local storage available to export sms messages, placeholder is the file size, e.g., 128kB -->
-    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">You need approximately %1$s to export your messages, ensure you have enough space before continuing.</string>
+    <string name="ExportingSmsMessagesFragment__you_need_approximately_s_to_export_your_messages_ensure_you_have_enough_space_before_continuing">Χρειάζεσαι περίπου %1$s για να εξαγάγεις τα μηνύματά σου, βεβαιώσου ότι έχεις αρκετό χώρο πριν συνεχίσεις.</string>
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">Συνέχεια παρ\' όλα αυτά</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
@@ -5461,13 +5486,13 @@
     </plurals>
 
     <!-- Title of screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__export_partially_complete">Export partially complete</string>
+    <string name="ExportSmsPartiallyComplete__export_partially_complete">Η εξαγωγή ολοκληρώθηκε εν μέρει</string>
     <!-- Debug step 1 on screen shown when some sms messages did not export -->
-    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Ensure you have an additional %1$s free on your phone to export your messages</string>
+    <string name="ExportSmsPartiallyComplete__ensure_you_have_an_additional_s_free_on_your_phone_to_export_your_messages">Βεβαιώσου ότι έχεις επιπλέον %1$s δωρεάν στο τηλέφωνό σου για να εξαγάγεις τα μηνύματά σου</string>
     <!-- Debug step 2 on screen shown when some sms messages dit not export -->
-    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Retry export, which will only retry messages that have not yet been exported</string>
+    <string name="ExportSmsPartiallyComplete__retry_export_which_will_only_retry_messages_that_have_not_yet_been_exported">Δοκίμασε ξανά την εξαγωγή, η οποία θα δοκιμάσει ξανά μόνο μηνύματα που δεν έχουν ακόμη εξαχθεί</string>
     <!-- Partial sentence for Debug step 3 on screen shown when some sms messages did not export, is combined with 'contact us' -->
-    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">If the problem persists, </string>
+    <string name="ExportSmsPartiallyComplete__if_the_problem_persists">Εάν το πρόβλημα παραμένει, </string>
     <!-- Partial sentence for deubg step 3 on screen shown when some sms messages did not export, combined with 'If the problem persists', link text to open contact support view -->
     <string name="ExportSmsPartiallyComplete__contact_us">Επικοινώνησε μαζί μας</string>
     <!-- Button text to retry sms export -->
@@ -5475,10 +5500,37 @@
     <!-- Button text to continue sms export flow and not retry failed message exports -->
     <string name="ExportSmsPartiallyComplete__continue_anyway">Συνέχεια παρ\' όλα αυτά</string>
     <!-- Title of screen shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__error_exporting_sms_messages">Error exporting SMS messages</string>
+    <string name="ExportSmsFullError__error_exporting_sms_messages">Σφάλμα στην εξαγωγή μηνυμάτων SMS</string>
     <!-- Helper text shown when all sms messages failed to export -->
-    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Please try again. If the problem persists, </string>
+    <string name="ExportSmsFullError__please_try_again_if_the_problem_persists">Δοκίμασε ξανά. Εάν το πρόβλημα παραμένει, </string>
 
+
+    <!-- DonateToSignalFragment -->
+    <!-- Title below avatar -->
+    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <!-- Continue button label -->
+    <string name="DonateToSignalFragment__continue">Συνέχεια</string>
+    <!-- Description below title -->
+    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <!-- Donation pill toggle monthly text -->
+    <string name="DonationPillToggle__monthly">Monthly</string>
+    <!-- Donation pill toggle one-time text -->
+    <string name="DonationPillToggle__one_time">Μια φορά</string>
+
+    <!-- GatewaySelectorBottomSheet -->
+    <!-- Sheet title when subscribing -->
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <!-- Sheet summary when subscribing -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge">Πάρε ένα έμβλημα %1$s</string>
+    <!-- Sheet title when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <!-- Sheet summary when giving a one-time donation -->
+    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <!-- Button label for paying with a credit card -->
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+
+    <!-- StripePaymentInProgressFragment -->
+    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
 
     <!-- EOF -->
 
