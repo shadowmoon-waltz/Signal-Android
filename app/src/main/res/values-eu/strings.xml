@@ -105,6 +105,14 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">Signal aplikazioak Gordailurako baimena behar du argazkiak, bideoak edo audioak bidaltzeko, baina ukatu egin diozu. Joan aplikazioaren ezarpenetara, aukeratu \"Baimenak\" eta aktibatu \"Gordailua\".</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">Signal aplikazioak Kontaktuetarako baimena behar du kontaktuak atzitu ahal izateko, baina ukatu egin diozu. Joan aplikazioaren ezarpenetara, aukeratu \"Baimenak\" eta aktibatu \"Kontaktuak\".</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">Signal aplikazioak Kokapenerako baimena behar du kokalekuak bidali ahal izateko baina ukatu egin diozu. Joan aplikazioaren ezarpenetara, aukeratu \"Baimenak\" eta aktibatu \"Kokalekua\".</string>
+    <!-- Alert dialog title to show the recipient has not activated payments -->
+    <string name="AttachmentManager__not_activated_payments">%1$s hasn\'t activated Payments </string>
+    <!-- Alert dialog description to send the recipient a request to activate payments -->
+    <string name="AttachmentManager__request_to_activate_payments">Do you want to send them a request to activate Payments?</string>
+    <!-- Alert dialog button to send request -->
+    <string name="AttachmentManager__send_request">Send request</string>
+    <!-- Alert dialog button to cancel dialog -->
+    <string name="AttachmentManager__cancel">Utzi</string>
 
     <!-- AttachmentUploadJob -->
     <string name="AttachmentUploadJob_uploading_media">Multimedia igotzen…</string>
@@ -127,31 +135,33 @@
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <string name="CreditCardFragment__donation_amount_s">Dohaintzaren zenbatekoa: %1$s</string>
     <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <string name="CreditCardFragment__enter_your_card_information_below">Idatzi txartelaren informazioa behean</string>
     <!-- Displayed as a hint in the card number text field -->
-    <string name="CreditCardFragment__card_number">Card number</string>
+    <string name="CreditCardFragment__card_number">Txartel-zenbakia</string>
     <!-- Displayed as a hint in the card expiry text field -->
-    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <string name="CreditCardFragment__mm_yy">HH/UU</string>
     <!-- Displayed as a hint in the card cvv text field -->
-    <string name="CreditCardFragment__cvv">CVV</string>
+    <string name="CreditCardFragment__cvv">CVVa</string>
     <!-- Error displayed under the card number text field when there is an invalid card number entered -->
-    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <string name="CreditCardFragment__invalid_card_number">Txartel-zenbaki baliogabea</string>
     <!-- Error displayed under the card expiry text field when the card is expired -->
-    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <string name="CreditCardFragment__card_has_expired">Txartela iraungita dago</string>
     <!-- Error displayed under the card cvv text field when the cvv is too short -->
-    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <string name="CreditCardFragment__code_is_too_short">Kodea laburregia da</string>
     <!-- Error displayed under the card cvv text field when the cvv is too long -->
-    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <string name="CreditCardFragment__code_is_too_long">Kodea luzeegia da</string>
     <!-- Error displayed under the card cvv text field when the cvv is invalid -->
-    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <string name="CreditCardFragment__invalid_code">Kode baliogabea</string>
     <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
-    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <string name="CreditCardFragment__invalid_month">Hilabete baliogabea</string>
     <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
-    <string name="CreditCardFragment__year_required">Year required</string>
+    <string name="CreditCardFragment__year_required">Urtea beharrezkoa da</string>
     <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
-    <string name="CreditCardFragment__invalid_year">Invalid year</string>
+    <string name="CreditCardFragment__invalid_year">Urte baliogabea</string>
+    <!-- Button label to confirm credit card input and proceed with payment -->
+    <string name="CreditCardFragment__continue">Jarraitu</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">%1$s blokeatu eta irten?</string>
@@ -298,17 +308,17 @@
     <string name="ConversationItem_this_message_was_deleted">Mezu hau ezabatu da.</string>
     <string name="ConversationItem_you_deleted_this_message">Mezu hau ezabatu duzu.</string>
     <!-- Dialog error message shown when user can't download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Can\'t download message. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Ezin da deskargatu mezua. %1$s(e)k berriro bidali beharko du.</string>
     <!-- Dialog error message shown when user can't download an image message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Can\'t download image. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Ezin da deskargatu irudia. %1$s(e)k berriro bidali beharko du.</string>
     <!-- Dialog error message shown when user can't download a video message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Can\'t download video. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Ezin da deskargatu bideoa. %1$s(e)k berriro bidali beharko du.</string>
     <!-- Dialog error message shown when user can't download a their own message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Can\'t download message. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Ezin da deskargatu mezua. Berriro bidali beharko duzu.</string>
     <!-- Dialog error message shown when user can't download a their own image message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Can\'t download image. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Ezin da deskargatu irudia. Berriro bidali beharko duzu.</string>
     <!-- Dialog error message shown when user can't download a their own video message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Can\'t download video. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Ezin da deskargatu bideoa. Berriro bidali beharko duzu.</string>
 
     <!-- ConversationActivity -->
     <string name="ConversationActivity_add_attachment">Eranskina gehitu</string>
@@ -864,7 +874,7 @@
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group -->
     <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">Signal-eko taldeak onartzen ez dituen kontaktu bat hautatu duzu; beraz, talde hau MMS bidezkoa izango da. MMS taldeen izen pertsonalizatu eta argazkiak zuk bakarrik ikusi ahalko dituzu.</string>
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Aukeratu duzun kontaktua ez da gai Signal-eko taldeak erabiltzeko; beraz, talde hau MMS bidezkoa izango da. MMS bidezko taldeen izen pertsonalizatuak eta irudiak zuk bakarrik ikusi ahalko dituzu. Laster, MMS bidezko taldeak erabiltzeko aukera emateari utzi, eta mezu enkriptatuetan jarriko dugu arreta osoa.</string>
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that doesn\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">Kideen eskaera &amp; gonbidapenak</string>
@@ -1409,6 +1419,14 @@
     <string name="MessageRecord_your_message_history_with_s_and_their_number_s_has_been_merged">%1$s(r)ekin eta %2$s zenbakiarekin izandako mezuen historiak bateratu egin dira.</string>
     <!-- Update item message shown when we merge two threads together and we don't know the phone number of the other thread -->
     <string name="MessageRecord_your_message_history_with_s_and_another_chat_has_been_merged">%1$s(r)ekin izandako mezuen historia eta hari zegokion beste txat bat bateratu egin dira.</string>
+    <!-- Message to notify sender that activate payments request has been sent to the recipient -->
+    <string name="MessageRecord_you_sent_request">You sent %1$s a request to activate Payments</string>
+    <!-- Request message from recipient to activate payments -->
+    <string name="MessageRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments. Only send payments to people you trust.</string>
+    <!-- Message to inform user that payments was activated-->
+    <string name="MessageRecord_you_activated_payments">You activated Payments</string>
+    <!-- Message to inform sender that recipient can now accept payments -->
+    <string name="MessageRecord_can_accept_payments">%1$s can now accept Payments</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$s erabiltzaileak talde-deia hasi du %2$s</string>
@@ -1897,6 +1915,14 @@
     <string name="ThreadRecord_view_once_media">Behi ikusteko multimedia</string>
     <string name="ThreadRecord_this_message_was_deleted">Mezu hau ezabatu da.</string>
     <string name="ThreadRecord_you_deleted_this_message">Mezu hau ezabatu duzu.</string>
+    <!-- Displayed in the notification when the user sends a request to activate payments -->
+    <string name="ThreadRecord_you_sent_request">You sent a request to activate Payments</string>
+    <!-- Displayed in the notification when the recipient wants to activate payments -->
+    <string name="ThreadRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments</string>
+    <!-- Displayed in the notification when the user activates payments -->
+    <string name="ThreadRecord_you_activated_payments">You activated Payments</string>
+    <!-- Displayed in the notification when the recipient can accept payments -->
+    <string name="ThreadRecord_can_accept_payments">%1$s can now accept Payments</string>
     <string name="ThreadRecord_s_is_on_signal">%1$s Signal-en dago!</string>
     <string name="ThreadRecord_disappearing_messages_disabled">Mezuen desagerpena ezgaituta dago</string>
     <string name="ThreadRecord_disappearing_message_time_updated_to_s">Desagertzen diren mezuen denbora %1$s-tan ezarrita</string>
@@ -2026,7 +2052,7 @@
     <string name="MediaPreviewActivity_media_no_longer_available">Medioa jada ez dago eskuragarri.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Ez da topatu multimedia eduki hau partekatzeko gai den aplikaziorik.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">Itxi</string>
-    <string name="MediaPreviewFragment_edit_media_error">Media Error</string>
+    <string name="MediaPreviewFragment_edit_media_error">Multimedia-errorea</string>
 
     <!-- MessageNotifier -->
     <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d mezu berri %2$d solasalditan</string>
@@ -2123,6 +2149,12 @@
     <!-- UnauthorizedReminder -->
     <string name="UnauthorizedReminder_device_no_longer_registered">Gailua ez dago erregistratuta</string>
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">Ziurrenik zure telefono-zenbakia beste gailu batean erregistratu duzulako gertatu da hori. Sakatu berriz erregistratzeko.</string>
+
+    <!-- EnclaveFailureReminder -->
+    <!-- Banner message to update app to use payments -->
+    <string name="EnclaveFailureReminder_update_signal">Update Signal to continue using payments. Your balance may not be up-to-date.</string>
+    <!-- Banner button to update now -->
+    <string name="EnclaveFailureReminder_update_now">Eguneratu orain</string>
 
     <!-- WebRtcCallActivity -->
     <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">Deiari erantzuteko, eman Signal-i mikrofonoa atzitzeko baimena.</string>
@@ -2253,6 +2285,11 @@
     <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">Mezuak bidaltzen dizkiozunean, %1$s-an ezarriko da desagertzen diren mezuen tenporizadorea.</string>
     <!-- Update item button text to show to boost a feature -->
     <string name="ConversationUpdateItem_donate">Dohaintza egin</string>
+    <!-- Update item button text to send payment -->
+    <string name="ConversationUpdateItem_send_payment">Send Payment</string>
+    <!-- Update item button text to activate payments -->
+    <string name="ConversationUpdateItem_activate_payments">Aktibatu Ordainketak</string>
+
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Erreproduzitu … Pausatu</string>
@@ -2628,6 +2665,10 @@
     <string name="preferences__pressing_the_enter_key_will_send_text_messages">Enter tekla sakatzeak testu mezuak bidaliko ditu</string>
     <string name="preferences__pref_use_address_book_photos">Erabili kontaktuen-zerrendako irudiak</string>
     <string name="preferences__display_contact_photos_from_your_address_book_if_available">Erakutsi sistemaren kontaktuen irudiak, baldin badaude</string>
+    <!-- Preference menu item title for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__pref_keep_muted_chats_archived">Utzi txat mututuak artxibatuta</string>
+    <!-- Preference menu item description for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__muted_chats_that_are_archived_will_remain_archived">Mezu berriak jasotzean, artxibatutako txat mututuek artxibatuta jarraituko dute.</string>
     <string name="preferences__generate_link_previews">Sortu esteken aurrebistak</string>
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">Eskuratu esteken aurrebistak zuzenean webguneetatik eta erabili bidaltzen dituzun mezuetan.</string>
     <string name="preferences__choose_identity">Aukeratu nortasuna</string>
@@ -2978,6 +3019,14 @@
     <string name="PaymentsHomeFragment__enable">Aktibatu</string>
     <!-- Alert dialog button to not enable payment lock for now -->
     <string name="PaymentsHomeFragment__not_now">Orain ez</string>
+    <!-- Alert dialog title which shows up to update app to send payments -->
+    <string name="PaymentsHomeFragment__update_required">Update required</string>
+    <!-- Alert dialog description that app update is required to send payments-->
+    <string name="PaymentsHomeFragment__an_update_is_required">An update is required to continue sending and receiving payments, and to view your up-to-date payment balance.</string>
+    <!-- Alert dialog button to cancel -->
+    <string name="PaymentsHomeFragment__cancel">Utzi</string>
+    <!-- Alert dialog button to update now -->
+    <string name="PaymentsHomeFragment__update_now">Eguneratu orain</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -3870,7 +3919,10 @@
     <!-- Title in save recovery phrase screen -->
     <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">Gorde berreskuratze-esaldia</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">Sartu berreskuratzeko esaldia</string>
-    <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">Zure saldoa automatikoki berrezartuko da Signal berriro instalatzen duzunean zure Signal PINa berresten baduzu. Zure oreka berrezar dezakezu berreskuratzeko esaldi bat erabiliz, hau da, zuretzako berezia den %1$d-hitz esaldi bat. Idatzi eta gorde leku seguru batean.</string>
+    <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
+        <item quantity="one">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="other">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+    </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
     <string name="PaymentsRecoveryStartFragment__got_balance">Saldoa duzu! Gorde berreskuratze-esaldi bat; hots, saldoa berrezartzeko erabil daitekeen 24 hitzeko gako bat.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
@@ -4453,7 +4505,7 @@
     <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
     <string name="Subscription__renews_s">%1$s berritzen du</string>
     <!-- Shown when a subscription is active and is going to expire at the end of the term -->
-    <string name="Subscription__expires_s">Expires %1$s</string>
+    <string name="Subscription__expires_s">Iraungitze-data: %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal irabazi-asmorik gabeko iragarlerik edo inbertitzailerik gabekoa da, erabiltzen eta baloratzen duten pertsonek soilik sostengatzen dute. Egin hilero behin eta berriz dohaintza bat eta jaso profileko bereizgarri bat zure laguntza partekatzeko.</string>
@@ -4469,7 +4521,7 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">Bilaka zaitez hileroko sostengatzaile</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">Erakutsi profilean</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Sortu bereizgarri aipagarria</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">Eginda</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Jarraitu</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Bereizgarri bat baino gehiago dituzunean, besteek zure profilean ikus dezaten agertzeko bat aukera dezakezu.</string>
 
     <string name="BecomeASustainerFragment__get_badges">Lortu bereizgarriak zure profilerako Signal-en laguntzarekin.</string>
@@ -5101,7 +5153,7 @@
     <!-- Displayed in the viewer when a story is no longer available -->
     <string name="StorySlateView__this_story_is_no_longer_available">Istorio hau jada ez dago erabilgarri.</string>
     <!-- Displayed in the viewer when a story has permanently failed to download. -->
-    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Can\'t download story. %1$s will need to share it again.</string>
+    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Ezin da deskargatu istorioa. %1$s(e)k berriro partekatu beharko du.</string>
     <!-- Displayed in the viewer when the network is not available -->
     <string name="StorySlateView__no_internet_connection">Ez dago Interneteko konexiorik</string>
     <!-- Displayed in the viewer when network is available but content could not be downloaded -->
@@ -5402,7 +5454,7 @@
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">Jarraitu hala ere</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
-    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
+    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal-ek SMS mezuak atzitzeko baimena behar du SMS mezuak esportatu ahal izateko.</string>
 
     <!-- ChooseANewDefaultSmsAppFragment -->
     <!-- Title of the screen -->
@@ -5522,30 +5574,33 @@
 
     <!-- DonateToSignalFragment -->
     <!-- Title below avatar -->
-    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <string name="DonateToSignalFragment__powered_by">Zu bezalako pertsonek ahalbidetua.</string>
     <!-- Continue button label -->
     <string name="DonateToSignalFragment__continue">Jarraitu</string>
     <!-- Description below title -->
-    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <string name="DonateToSignalFragment__support_technology">Bat egin Signal sostengatzen duen komunitatearekin eta lagundu zu (ez zure datuak) erdigunean jartzen zaituen teknologiari.</string>
     <!-- Donation pill toggle monthly text -->
-    <string name="DonationPillToggle__monthly">Monthly</string>
+    <string name="DonationPillToggle__monthly">Hilero</string>
     <!-- Donation pill toggle one-time text -->
     <string name="DonationPillToggle__one_time">Behin</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
-    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Eman %1$s hilabetean Signal-i</string>
     <!-- Sheet summary when subscribing -->
     <string name="GatewaySelectorBottomSheet__get_a_s_badge">Get a %1$s badge</string>
     <!-- Sheet title when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Eman %1$s Signal-i</string>
     <!-- Sheet summary when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <plurals name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">
+        <item quantity="one">Get a %1$s badge for %2$d day</item>
+        <item quantity="other">Get a %1$s badge for %2$d days</item>
+    </plurals>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Kreditu- edo zordunketa-txartela</string>
 
     <!-- StripePaymentInProgressFragment -->
-    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
+    <string name="StripePaymentInProgressFragment__cancelling">Bertan behera uzten…</string>
 
     <!-- EOF -->
 

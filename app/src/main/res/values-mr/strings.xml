@@ -105,6 +105,14 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">फोटो, व्हिडिओ, किंवा ऑडिओ, संलग्न करण्यासाठी Signal ला संचयन परवानगीची आवश्यकता असते, पण ती कायमची नाकारली गेली आहे. कृपया अॅप सेटिंग मेनू मध्ये सुरू ठेवा, \"परवानग्या\" निवडा, आणि \"संचयन\" सक्षम करा.</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">संपर्क माहिती संलग्न करण्यासाठी Signal ला संपर्क परवानगीची आवश्यकता असते, पण ती कायमची नाकारली गेली आहे. कृपया अॅप सेटिंग मेनू मध्ये सुरू ठेवा, \"परवानग्या\" निवडा, आणि \"संपर्क\" सक्षम करा.</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">स्थान संलग्न करण्यासाठी Signal ला स्थान परवानगीची आवश्यकता असते, पण ती कायमची नाकारली गेली आहे. कृपया अॅप सेटिंग मेनू मध्ये सुरू ठेवा, \"परवानग्या\" निवडा, आणि \"स्थान\" सक्षम करा.</string>
+    <!-- Alert dialog title to show the recipient has not activated payments -->
+    <string name="AttachmentManager__not_activated_payments">%1$s hasn\'t activated Payments </string>
+    <!-- Alert dialog description to send the recipient a request to activate payments -->
+    <string name="AttachmentManager__request_to_activate_payments">Do you want to send them a request to activate Payments?</string>
+    <!-- Alert dialog button to send request -->
+    <string name="AttachmentManager__send_request">Send request</string>
+    <!-- Alert dialog button to cancel dialog -->
+    <string name="AttachmentManager__cancel">रद्द करा</string>
 
     <!-- AttachmentUploadJob -->
     <string name="AttachmentUploadJob_uploading_media">मिडिया अपलोड करत आहे…</string>
@@ -127,31 +135,33 @@
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <string name="CreditCardFragment__donation_amount_s">देणगी रक्कम: %1$s</string>
     <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <string name="CreditCardFragment__enter_your_card_information_below">खाली आपली कार्ड माहिती प्रविष्ट करा</string>
     <!-- Displayed as a hint in the card number text field -->
-    <string name="CreditCardFragment__card_number">Card number</string>
+    <string name="CreditCardFragment__card_number">कार्ड क्रमांक</string>
     <!-- Displayed as a hint in the card expiry text field -->
-    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <string name="CreditCardFragment__mm_yy">मम/वव</string>
     <!-- Displayed as a hint in the card cvv text field -->
     <string name="CreditCardFragment__cvv">CVV</string>
     <!-- Error displayed under the card number text field when there is an invalid card number entered -->
-    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <string name="CreditCardFragment__invalid_card_number">अवैध कार्ड क्रमांक</string>
     <!-- Error displayed under the card expiry text field when the card is expired -->
-    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <string name="CreditCardFragment__card_has_expired">कार्ड कालबाह्य झाले आहे</string>
     <!-- Error displayed under the card cvv text field when the cvv is too short -->
-    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <string name="CreditCardFragment__code_is_too_short">कोड अतिशय लहान आहे</string>
     <!-- Error displayed under the card cvv text field when the cvv is too long -->
-    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <string name="CreditCardFragment__code_is_too_long">कोड अतिशय मोठा आहे</string>
     <!-- Error displayed under the card cvv text field when the cvv is invalid -->
-    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <string name="CreditCardFragment__invalid_code">अवैध कोड</string>
     <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
-    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <string name="CreditCardFragment__invalid_month">अवैध महिना</string>
     <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
-    <string name="CreditCardFragment__year_required">Year required</string>
+    <string name="CreditCardFragment__year_required">वर्ष आवश्यक आहे</string>
     <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
-    <string name="CreditCardFragment__invalid_year">Invalid year</string>
+    <string name="CreditCardFragment__invalid_year">अवैध वर्ष</string>
+    <!-- Button label to confirm credit card input and proceed with payment -->
+    <string name="CreditCardFragment__continue">सुरू ठेवा</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">%1$s अवरोधित करायचे आणि सोडायचे ?</string>
@@ -298,17 +308,17 @@
     <string name="ConversationItem_this_message_was_deleted">हा संदेश हटविला गेला.</string>
     <string name="ConversationItem_you_deleted_this_message">आपण हा संदेश हटविला.</string>
     <!-- Dialog error message shown when user can't download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Can\'t download message. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">संदेश डाउनलोड करु शकत नाही. %1$s ला तो पुन्हा पाठवण्याची गरज आहे.</string>
     <!-- Dialog error message shown when user can't download an image message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Can\'t download image. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">प्रतिमा डाउनलोड करु शकत नाही. %1$s ला तो पुन्हा पाठवण्याची गरज आहे.</string>
     <!-- Dialog error message shown when user can't download a video message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Can\'t download video. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">व्हिडिओ डाउनलोड करु शकत नाही. %1$s ला तो पुन्हा पाठवण्याची गरज आहे.</string>
     <!-- Dialog error message shown when user can't download a their own message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Can\'t download message. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">संदेश डाउनलोड करु शकत नाही. आपणाला तो पुन्हा पाठवण्याची गरज आहे.</string>
     <!-- Dialog error message shown when user can't download a their own image message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Can\'t download image. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">प्रतिमा डाउनलोड करु शकत नाही. आपणाला तो पुन्हा पाठवण्याची गरज आहे.</string>
     <!-- Dialog error message shown when user can't download a their own video message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Can\'t download video. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">व्हिडिओ डाउनलोड करु शकत नाही. आपणाला तो पुन्हा पाठवण्याची गरज आहे.</string>
 
     <!-- ConversationActivity -->
     <string name="ConversationActivity_add_attachment">संलग्न जोडा</string>
@@ -864,7 +874,7 @@
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group -->
     <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">आपण Signal गट समर्थन देत नसलेला संपर्क निवडला आहे, त्यामुळे हा गट MMS असेल. सानुकूलित MMS गटाची नावे आणि फोटो हे फक्त आपणाला दृश्यमान असतील.</string>
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">आपण Signal ग्रुप्सना समर्थन न करणारा संपर्क निवडला आहे, म्हणून हा MMS ग्रुप होईल. सानुकूलित MMS ग्रुपची नावं आणि फोटो फक्त आपल्याला दृश्यमान असतील. एन्क्रिप्टेड संदेशनावर लक्ष केंद्रित करण्यासाठी MMS ग्रुप्ससाठीचे समर्थन लवकरच काढले जाईल.</string>
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that doesn\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">सदस्य विनंत्या &amp; आमंत्रणे</string>
@@ -1409,6 +1419,14 @@
     <string name="MessageRecord_your_message_history_with_s_and_their_number_s_has_been_merged">आपला %1$s यांच्यासह असलेला संदेश इतिहास आणि त्यांचा नंबर %2$s एकत्रित करण्यात आला आहे.</string>
     <!-- Update item message shown when we merge two threads together and we don't know the phone number of the other thread -->
     <string name="MessageRecord_your_message_history_with_s_and_another_chat_has_been_merged">आपला %1$s यांच्यासह संदेश इतिहास आणि त्यांच्याशी संबंधित असलेले अन्य चॅट एकत्रित करण्यात आले आहेत.</string>
+    <!-- Message to notify sender that activate payments request has been sent to the recipient -->
+    <string name="MessageRecord_you_sent_request">You sent %1$s a request to activate Payments</string>
+    <!-- Request message from recipient to activate payments -->
+    <string name="MessageRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments. Only send payments to people you trust.</string>
+    <!-- Message to inform user that payments was activated-->
+    <string name="MessageRecord_you_activated_payments">You activated Payments</string>
+    <!-- Message to inform sender that recipient can now accept payments -->
+    <string name="MessageRecord_can_accept_payments">%1$s can now accept Payments</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$s ने गट कॉल चालू केला · %2$s</string>
@@ -1897,6 +1915,14 @@
     <string name="ThreadRecord_view_once_media">एकदा-बघा मिडिया</string>
     <string name="ThreadRecord_this_message_was_deleted">हा संदेश हटविला गेला.</string>
     <string name="ThreadRecord_you_deleted_this_message">आपण हा संदेश हटविला.</string>
+    <!-- Displayed in the notification when the user sends a request to activate payments -->
+    <string name="ThreadRecord_you_sent_request">You sent a request to activate Payments</string>
+    <!-- Displayed in the notification when the recipient wants to activate payments -->
+    <string name="ThreadRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments</string>
+    <!-- Displayed in the notification when the user activates payments -->
+    <string name="ThreadRecord_you_activated_payments">You activated Payments</string>
+    <!-- Displayed in the notification when the recipient can accept payments -->
+    <string name="ThreadRecord_can_accept_payments">%1$s can now accept Payments</string>
     <string name="ThreadRecord_s_is_on_signal">%1$s Signal वर आहे!</string>
     <string name="ThreadRecord_disappearing_messages_disabled">हरवणारे संदेश अक्षम केले</string>
     <string name="ThreadRecord_disappearing_message_time_updated_to_s">हरवणारा संदेश वेळ %1$s वर सेट केली</string>
@@ -2026,7 +2052,7 @@
     <string name="MediaPreviewActivity_media_no_longer_available">मिडिया आता उपलब्ध नाही.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">हे मिडिया शेअर करण्यासाठी सक्षम असे अॅप सापडू शकले नाही.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">बंद करा</string>
-    <string name="MediaPreviewFragment_edit_media_error">Media Error</string>
+    <string name="MediaPreviewFragment_edit_media_error">मिडिया त्रुटी</string>
 
     <!-- MessageNotifier -->
     <string name="MessageNotifier_d_new_messages_in_d_conversations">%2$d संभाषणांमध्ये %1$d नवीन संदेश</string>
@@ -2123,6 +2149,12 @@
     <!-- UnauthorizedReminder -->
     <string name="UnauthorizedReminder_device_no_longer_registered">डिव्हाईस आता नोंदवलेला नाही</string>
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">हे असे असू शकते कारण आपण आपला Signal सोबतचा फोन नंबर वेगळ्या डिव्हाईस वरून नोंदवला आहे. पुन्हा नोंदणी करण्यासाठी टॅप करा.</string>
+
+    <!-- EnclaveFailureReminder -->
+    <!-- Banner message to update app to use payments -->
+    <string name="EnclaveFailureReminder_update_signal">पेमेंट्स वापरणे पुढे सुरु ठेवण्यासाठी Signal ला अद्ययावत करा. आपली शिल्लक कदाचित अद्ययावत नसेल.</string>
+    <!-- Banner button to update now -->
+    <string name="EnclaveFailureReminder_update_now">आता अद्यतनित करा</string>
 
     <!-- WebRtcCallActivity -->
     <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">कॉलला उत्तर देण्यासाठी, Signal ला तुमच्या मायक्रोफोनचा अॅक्सेस द्या.</string>
@@ -2253,6 +2285,11 @@
     <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">आपण त्यांना संदेश पाठवल्यावर हरवणाऱ्या संदेशाची वेळ %1$s वर सेट केली गेली जाईल.</string>
     <!-- Update item button text to show to boost a feature -->
     <string name="ConversationUpdateItem_donate">दान करा</string>
+    <!-- Update item button text to send payment -->
+    <string name="ConversationUpdateItem_send_payment">पेमेंट पाठवा</string>
+    <!-- Update item button text to activate payments -->
+    <string name="ConversationUpdateItem_activate_payments">पेमेंट सक्रिय करा</string>
+
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">प्ले करा … विराम द्या</string>
@@ -2628,6 +2665,10 @@
     <string name="preferences__pressing_the_enter_key_will_send_text_messages">प्रविष्ट करा की दाबल्याने मजकूर संदेश पाठविले जातील</string>
     <string name="preferences__pref_use_address_book_photos">अॅड्रेस बुक फोटो वापरा</string>
     <string name="preferences__display_contact_photos_from_your_address_book_if_available">उपलब्ध असल्यास आपल्या अॅड्रेस बुकमधून संपर्क फोटो दाखवा</string>
+    <!-- Preference menu item title for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__pref_keep_muted_chats_archived">म्यूट केलेले आर्काईव्ह केलेले चॅटस् ठेवा</string>
+    <!-- Preference menu item description for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__muted_chats_that_are_archived_will_remain_archived">नवीन संदेश येईल तेव्हा आर्काईव्ह केलेले म्यूट केलेले चॅट्स हे आर्काईव्ह केलेलेच राहतील.</string>
     <string name="preferences__generate_link_previews">लिंक पुनरावलोकन उत्पन्न करा</string>
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">तुम्ही पाठवलेल्या संदेशांसाठी थेट कोणत्याही वेबसाइटवरून लिंक पूर्वावलोकने प्राप्त करू शकता.</string>
     <string name="preferences__choose_identity">ओळख निवडा</string>
@@ -2978,6 +3019,14 @@
     <string name="PaymentsHomeFragment__enable">चालू करा</string>
     <!-- Alert dialog button to not enable payment lock for now -->
     <string name="PaymentsHomeFragment__not_now">आता नाही</string>
+    <!-- Alert dialog title which shows up to update app to send payments -->
+    <string name="PaymentsHomeFragment__update_required">अद्यतन आवश्यक आहे</string>
+    <!-- Alert dialog description that app update is required to send payments-->
+    <string name="PaymentsHomeFragment__an_update_is_required">पेमेंट्स पाठवणे आणि प्राप्त करण्यासाठी, आणि आपली अद्ययावत पेमेंट्स शिल्लक पाहण्यासाठी अद्यतन आवश्यक आहे.</string>
+    <!-- Alert dialog button to cancel -->
+    <string name="PaymentsHomeFragment__cancel">रद्द करा</string>
+    <!-- Alert dialog button to update now -->
+    <string name="PaymentsHomeFragment__update_now">आता अद्यतनित करा</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -3870,7 +3919,10 @@
     <!-- Title in save recovery phrase screen -->
     <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">पुनर्प्राप्त वाक्यांश जतन करा</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">रिकव्हरी फ्रेझ प्रविष्ट करा</string>
-    <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">आपण आपल्या Signal PIN ची पुष्टी केल्यास, आपण Signal पुन्हा स्थापित केल्यावर आपला बॅलंस स्वयंचलितपणे पुनर्स्थापित होईल. आपण आपला बॅलंस रिकव्हरी फ्रेझ वापरून देखील पुनर्स्थापित करू शकता, जी %1$d-शब्द फ्रेझ आपल्यासाठी ऐकमेव आहे. ती लिहून ठेवा आणि त्यास एका सुरक्षित जागेवर ठेवा.</string>
+    <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
+        <item quantity="one">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="other">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+    </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
     <string name="PaymentsRecoveryStartFragment__got_balance">आपण संतुलन साधले आहे! आपला पुनर्प्राप्त वाक्यांश जतन करण्यासाठी वेळ—एक 24-शब्दांची की संतुलन पुर्नस्थित करण्यासाठी वापरू शकता.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
@@ -4453,7 +4505,7 @@
     <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
     <string name="Subscription__renews_s">नूतनीकरण %1$s</string>
     <!-- Shown when a subscription is active and is going to expire at the end of the term -->
-    <string name="Subscription__expires_s">Expires %1$s</string>
+    <string name="Subscription__expires_s">%1$s ला कालबाह्य</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal ही एक विना - नफा संस्था आहे ज्यामध्ये कोणतेही जाहिरातदार किंवा गुंतवणूकदार नसतात, केवळ ते वापरणाऱ्या आणि मूल्यवान लोकांद्वारे टिकून राहते. आवर्ती मासिक देणगी द्या आणि तुमचे समर्थन सामायिक करण्यासाठी प्रोफाइल बॅज मिळवा.</string>
@@ -4469,7 +4521,7 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">मासिक सस्टेनर व्हा</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">प्रोफाइलवर दाखवा</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">वैशिष्ट्यीकृत बॅज बनवा</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">ठीक</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">सुरू ठेवा</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">जेव्हा तुमच्याकडे एकापेक्षा जास्त बॅज असतील, तेव्हा तुम्ही तुमच्या प्रोफाईलवर इतरांना पाहण्यासाठी एक निवडू शकता.</string>
 
     <string name="BecomeASustainerFragment__get_badges">Signal ला सपोर्ट करून आपल्या प्रोफाइलसाठी बॅज मिळवा.</string>
@@ -5101,7 +5153,7 @@
     <!-- Displayed in the viewer when a story is no longer available -->
     <string name="StorySlateView__this_story_is_no_longer_available">ही स्टोरी यापुढे उपलब्ध नाही.</string>
     <!-- Displayed in the viewer when a story has permanently failed to download. -->
-    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Can\'t download story. %1$s will need to share it again.</string>
+    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">स्टोरी डाउनलोड करु शकत नाही. %1$s ला ती पुन्हा शेअर करावी लागेल.</string>
     <!-- Displayed in the viewer when the network is not available -->
     <string name="StorySlateView__no_internet_connection">इंटरनेट कनेक्शन नाही</string>
     <!-- Displayed in the viewer when network is available but content could not be downloaded -->
@@ -5402,7 +5454,7 @@
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">तरीही सुरू ठेवा</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
-    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
+    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal ला आपले संदेश एक्सपोर्ट करण्यास सक्षम होण्यासाठी SMS परवानगीची गरज आहे.</string>
 
     <!-- ChooseANewDefaultSmsAppFragment -->
     <!-- Title of the screen -->
@@ -5522,30 +5574,33 @@
 
     <!-- DonateToSignalFragment -->
     <!-- Title below avatar -->
-    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <string name="DonateToSignalFragment__powered_by">आपल्या सारख्या लोकांद्वारे समर्थित.</string>
     <!-- Continue button label -->
     <string name="DonateToSignalFragment__continue">सुरू ठेवा</string>
     <!-- Description below title -->
-    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <string name="DonateToSignalFragment__support_technology">Signal ला समर्थन देणाऱ्या समुदायात सामील होऊन, आपल्या डेटासाठी नव्हे, तर आपल्यासाठी बनवलेल्या तंत्रज्ञानाचे समर्थन करा.</string>
     <!-- Donation pill toggle monthly text -->
-    <string name="DonationPillToggle__monthly">Monthly</string>
+    <string name="DonationPillToggle__monthly">महिन्याला</string>
     <!-- Donation pill toggle one-time text -->
     <string name="DonationPillToggle__one_time">एक-वेळ</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
-    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Signal ला %1$s/महिना देणगी द्या</string>
     <!-- Sheet summary when subscribing -->
     <string name="GatewaySelectorBottomSheet__get_a_s_badge">%1$s बॅज मिळवा</string>
     <!-- Sheet title when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Signal %1$s ला देणगी द्या</string>
     <!-- Sheet summary when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <plurals name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">
+        <item quantity="one">Get a %1$s badge for %2$d day</item>
+        <item quantity="other">Get a %1$s badge for %2$d days</item>
+    </plurals>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">क्रेडिट किंवा डेबिट कार्ड</string>
 
     <!-- StripePaymentInProgressFragment -->
-    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
+    <string name="StripePaymentInProgressFragment__cancelling">रद्द करत आहे…</string>
 
     <!-- EOF -->
 

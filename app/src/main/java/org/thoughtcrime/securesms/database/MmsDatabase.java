@@ -78,6 +78,8 @@ import org.thoughtcrime.securesms.mms.MmsException;
 import org.thoughtcrime.securesms.mms.OutgoingExpirationUpdateMessage;
 import org.thoughtcrime.securesms.mms.OutgoingGroupUpdateMessage;
 import org.thoughtcrime.securesms.mms.OutgoingMediaMessage;
+import org.thoughtcrime.securesms.mms.OutgoingPaymentsActivatedMessages;
+import org.thoughtcrime.securesms.mms.OutgoingRequestToActivatePaymentMessages;
 import org.thoughtcrime.securesms.mms.OutgoingSecureMediaMessage;
 import org.thoughtcrime.securesms.mms.QuoteModel;
 import org.thoughtcrime.securesms.mms.SlideDeck;
@@ -1794,6 +1796,10 @@ public class MmsDatabase extends MessageDatabase {
           return new OutgoingGroupUpdateMessage(recipient, new MessageGroupContext(body, Types.isGroupV2(outboxType)), attachments, timestamp, 0, false, quote, contacts, previews, mentions);
         } else if (Types.isExpirationTimerUpdate(outboxType)) {
           return new OutgoingExpirationUpdateMessage(recipient, timestamp, expiresIn);
+        } else if (Types.isRequestToActivatePayments(outboxType)) {
+          return new OutgoingRequestToActivatePaymentMessages(recipient, timestamp, expiresIn);
+        } else if (Types.isPaymentsActivated(outboxType)) {
+          return new OutgoingPaymentsActivatedMessages(recipient, timestamp, expiresIn);
         }
 
         GiftBadge giftBadge = null;
@@ -1973,24 +1979,26 @@ public class MmsDatabase extends MessageDatabase {
       return Optional.empty();
     }
 
-    boolean updateThread = retrieved.getStoryType() == StoryType.NONE;
-    long    messageId    = insertMediaMessage(threadId,
-                                              retrieved.getBody(),
-                                              retrieved.getAttachments(),
-                                              quoteAttachments,
-                                              retrieved.getSharedContacts(),
-                                              retrieved.getLinkPreviews(),
-                                              retrieved.getMentions(),
-                                              retrieved.getMessageRanges(),
-                                              contentValues,
-                                              null,
-                                              updateThread);
+    boolean updateThread       = retrieved.getStoryType() == StoryType.NONE;
+    boolean keepThreadArchived = SignalStore.settings().shouldKeepMutedChatsArchived() && Recipient.resolved(retrieved.getFrom()).isMuted();
+    long    messageId          = insertMediaMessage(threadId,
+                                                    retrieved.getBody(),
+                                                    retrieved.getAttachments(),
+                                                    quoteAttachments,
+                                                    retrieved.getSharedContacts(),
+                                                    retrieved.getLinkPreviews(),
+                                                    retrieved.getMentions(),
+                                                    retrieved.getMessageRanges(),
+                                                    contentValues,
+                                                    null,
+                                                    updateThread,
+                                                    !keepThreadArchived);
 
     boolean isNotStoryGroupReply = retrieved.getParentStoryId() == null || !retrieved.getParentStoryId().isGroupReply();
-    if (!Types.isExpirationTimerUpdate(mailbox) && !retrieved.getStoryType().isStory() && isNotStoryGroupReply) {
+    if (!Types.isPaymentsActivated(mailbox) && !Types.isRequestToActivatePayments(mailbox) && !Types.isExpirationTimerUpdate(mailbox) && !retrieved.getStoryType().isStory() && isNotStoryGroupReply) {
       boolean incrementUnreadMentions = !retrieved.getMentions().isEmpty() && retrieved.getMentions().stream().anyMatch(m -> m.getRecipientId().equals(Recipient.self().getId()));
       SignalDatabase.threads().incrementUnread(threadId, 1, incrementUnreadMentions ? 1 : 0);
-      SignalDatabase.threads().update(threadId, true);
+      SignalDatabase.threads().update(threadId, !keepThreadArchived);
     }
 
     notifyConversationListeners(threadId);
@@ -2011,6 +2019,14 @@ public class MmsDatabase extends MessageDatabase {
 
     if (retrieved.isExpirationUpdate()) {
       type |= Types.EXPIRATION_TIMER_UPDATE_BIT;
+    }
+
+    if (retrieved.isActivatePaymentsRequest()) {
+      type |= Types.SPECIAL_TYPE_ACTIVATE_PAYMENTS_REQUEST;
+    }
+
+    if (retrieved.isPaymentsActivated()) {
+      type |= Types.SPECIAL_TYPE_PAYMENTS_ACTIVATED;
     }
 
     return insertMessageInbox(retrieved, contentLocation, threadId, type);
@@ -2042,6 +2058,20 @@ public class MmsDatabase extends MessageDatabase {
       }
 
       type |= Types.SPECIAL_TYPE_GIFT_BADGE;
+    }
+
+    if (retrieved.isActivatePaymentsRequest()) {
+      if (hasSpecialType) {
+        throw new MmsException("Cannot insert message with multiple special types.");
+      }
+      type |= Types.SPECIAL_TYPE_ACTIVATE_PAYMENTS_REQUEST;
+    }
+
+    if (retrieved.isPaymentsActivated()) {
+      if (hasSpecialType) {
+        throw new MmsException("Cannot insert message with multiple special types.");
+      }
+      type |= Types.SPECIAL_TYPE_PAYMENTS_ACTIVATED;
     }
 
     return insertMessageInbox(retrieved, "", threadId, type);
@@ -2211,6 +2241,20 @@ public class MmsDatabase extends MessageDatabase {
       type |= Types.SPECIAL_TYPE_GIFT_BADGE;
     }
 
+    if (message.isRequestToActivatePayments()) {
+      if (hasSpecialType) {
+        throw new MmsException("Cannot insert message with multiple special types.");
+      }
+      type |= Types.SPECIAL_TYPE_ACTIVATE_PAYMENTS_REQUEST;
+    }
+
+    if (message.isPaymentsActivated()) {
+      if (hasSpecialType) {
+        throw new MmsException("Cannot insert message with multiple special types.");
+      }
+      type |= Types.SPECIAL_TYPE_PAYMENTS_ACTIVATED;
+    }
+
     Map<RecipientId, EarlyReceiptCache.Receipt> earlyDeliveryReceipts = earlyDeliveryReceiptCache.remove(message.getSentTimeMillis());
 
     ContentValues contentValues = new ContentValues();
@@ -2255,7 +2299,7 @@ public class MmsDatabase extends MessageDatabase {
 
     MentionUtil.UpdatedBodyAndMentions updatedBodyAndMentions = MentionUtil.updateBodyAndMentionsWithPlaceholders(message.getBody(), message.getMentions());
 
-    long messageId = insertMediaMessage(threadId, updatedBodyAndMentions.getBodyAsString(), message.getAttachments(), quoteAttachments, message.getSharedContacts(), message.getLinkPreviews(), updatedBodyAndMentions.getMentions(), null, contentValues, insertListener, false);
+    long messageId = insertMediaMessage(threadId, updatedBodyAndMentions.getBodyAsString(), message.getAttachments(), quoteAttachments, message.getSharedContacts(), message.getLinkPreviews(), updatedBodyAndMentions.getMentions(), null, contentValues, insertListener, false, false);
 
     if (message.getRecipient().isGroup()) {
       OutgoingGroupUpdateMessage outgoingGroupUpdateMessage = (message instanceof OutgoingGroupUpdateMessage) ? (OutgoingGroupUpdateMessage) message : null;
@@ -2329,7 +2373,8 @@ public class MmsDatabase extends MessageDatabase {
                                   @Nullable BodyRangeList messageRanges,
                                   @NonNull ContentValues contentValues,
                                   @Nullable InsertListener insertListener,
-                                  boolean updateThread)
+                                  boolean updateThread,
+                                  boolean unarchive)
       throws MmsException
   {
     SQLiteDatabase     db              = databaseHelper.getSignalWritableDatabase();
@@ -2401,7 +2446,7 @@ public class MmsDatabase extends MessageDatabase {
 
       if (updateThread) {
         SignalDatabase.threads().setLastScrolled(contentValuesThreadId, 0);
-        SignalDatabase.threads().update(threadId, true);
+        SignalDatabase.threads().update(threadId, unarchive);
       }
     }
   }

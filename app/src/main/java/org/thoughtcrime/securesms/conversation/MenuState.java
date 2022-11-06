@@ -223,7 +223,9 @@ final class MenuState {
            messageRecord.isChatSessionRefresh() ||
            messageRecord.isInMemoryMessageRecord() ||
            messageRecord.isChangeNumber() ||
-           messageRecord.isBoostRequest();
+           messageRecord.isBoostRequest() ||
+           messageRecord.isRequestToActivatePayments() ||
+           messageRecord.isPaymentsActivated();
   }
 
   private final static class Builder {

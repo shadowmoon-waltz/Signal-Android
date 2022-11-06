@@ -12,7 +12,9 @@ import org.thoughtcrime.securesms.badges.models.BadgeDisplay112
 import org.thoughtcrime.securesms.components.settings.DSLConfiguration
 import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
 import org.thoughtcrime.securesms.components.settings.DSLSettingsBottomSheetFragment
+import org.thoughtcrime.securesms.components.settings.DSLSettingsIcon
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
+import org.thoughtcrime.securesms.components.settings.NO_TINT
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationPaymentComponent
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalType
 import org.thoughtcrime.securesms.components.settings.app.subscription.models.GooglePayButton
@@ -84,6 +86,7 @@ class GatewaySelectorBottomSheet : DSLSettingsBottomSheetFragment() {
 
         primaryButton(
           text = DSLSettingsText.from(R.string.GatewaySelectorBottomSheet__credit_or_debit_card),
+          icon = DSLSettingsIcon.from(R.drawable.credit_card, NO_TINT),
           onClick = {
             findNavController().popBackStack()
             val response = GatewayResponse(GatewayResponse.Gateway.CREDIT_CARD, args.request)
@@ -126,7 +129,7 @@ class GatewaySelectorBottomSheet : DSLSettingsBottomSheetFragment() {
     space(6.dp)
     noPadTextPref(
       title = DSLSettingsText.from(
-        getString(R.string.GatewaySelectorBottomSheet__get_a_s_badge_for_d_days, args.request.badge.name, 30),
+        resources.getQuantityString(R.plurals.GatewaySelectorBottomSheet__get_a_s_badge_for_d_days, 30, args.request.badge.name, 30),
         DSLSettingsText.CenterModifier,
         DSLSettingsText.BodyLargeModifier,
         DSLSettingsText.ColorModifier(ContextCompat.getColor(requireContext(), R.color.signal_colorOnSurfaceVariant))

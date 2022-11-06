@@ -90,7 +90,7 @@ dependencyResolutionManagement {
             alias('libsignal-android').to('org.signal', 'libsignal-android').versionRef('libsignal-client')
             alias('signal-aesgcmprovider').to('org.signal:aesgcmprovider:0.0.3')
             alias('signal-argon2').to('org.signal:argon2:13.1')
-            alias('signal-ringrtc').to('org.signal:ringrtc-android:2.21.2')
+            alias('signal-ringrtc').to('org.signal:ringrtc-android:2.21.3')
             alias('signal-android-database-sqlcipher').to('org.signal:android-database-sqlcipher:4.4.3-S8')
 
             // Third Party
@@ -155,6 +155,7 @@ dependencyResolutionManagement {
             alias('hamcrest-hamcrest').to('org.hamcrest:hamcrest:2.2')
             alias('assertj-core').to('org.assertj:assertj-core:3.11.1')
             alias('square-okhttp-mockserver').to('com.squareup.okhttp3:mockwebserver:3.12.13')
+            alias('mockk').to('io.mockk:mockk:1.13.2')
 
             alias('conscrypt-openjdk-uber').to('org.conscrypt:conscrypt-openjdk-uber:2.0.0')
         }

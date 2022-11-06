@@ -82,7 +82,7 @@ public final class FeatureFlags {
   private static final String RETRY_RECEIPTS                    = "android.retryReceipts";
   private static final String MAX_GROUP_CALL_RING_SIZE          = "global.calling.maxGroupCallRingSize";
   private static final String GROUP_CALL_RINGING                = "android.calling.groupCallRinging";
-  private static final String STORIES                           = "android.stories.6";
+  private static final String STORIES                           = "android.stories.7";
   private static final String STORIES_TEXT_FUNCTIONS            = "android.stories.text.functions";
   private static final String HARDWARE_AEC_BLOCKLIST_MODELS     = "android.calling.hardwareAecBlockList";
   private static final String SOFTWARE_AEC_BLOCKLIST_MODELS     = "android.calling.softwareAecBlockList";
@@ -100,10 +100,12 @@ public final class FeatureFlags {
   private static final String CAMERAX_MIXED_MODEL_BLOCKLIST     = "android.cameraXMixedModelBlockList";
   private static final String RECIPIENT_MERGE_V2                = "android.recipientMergeV2";
   private static final String SMS_EXPORTER                      = "android.sms.exporter.2";
-  public  static final String STORIES_LOCALE                    = "android.stories.locale.2";
+  public  static final String STORIES_LOCALE                    = "android.stories.locale.3";
   private static final String HIDE_CONTACTS                     = "android.hide.contacts";
-  private static final String SMS_EXPORT_MEGAPHONE_DELAY_DAYS   = "android.smsExport.megaphoneDelayDays";
+  private static final String SMS_EXPORT_MEGAPHONE_DELAY_DAYS   = "android.smsExport.megaphoneDelayDays.2";
   public  static final String CREDIT_CARD_PAYMENTS              = "android.credit.card.payments";
+  private static final String PAYMENTS_REQUEST_ACTIVATE_FLOW    = "android.payments.requestActivateFlow";
+  private static final String KEEP_MUTED_CHATS_ARCHIVED         = "android.keepMutedChatsArchived";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
@@ -159,7 +161,9 @@ public final class FeatureFlags {
       STORIES_LOCALE,
       HIDE_CONTACTS,
       SMS_EXPORT_MEGAPHONE_DELAY_DAYS,
-      CREDIT_CARD_PAYMENTS
+      CREDIT_CARD_PAYMENTS,
+      PAYMENTS_REQUEST_ACTIVATE_FLOW,
+      KEEP_MUTED_CHATS_ARCHIVED
   );
 
   @VisibleForTesting
@@ -222,7 +226,9 @@ public final class FeatureFlags {
       RECIPIENT_MERGE_V2,
       STORIES,
       SMS_EXPORT_MEGAPHONE_DELAY_DAYS,
-      CREDIT_CARD_PAYMENTS
+      CREDIT_CARD_PAYMENTS,
+      PAYMENTS_REQUEST_ACTIVATE_FLOW,
+      KEEP_MUTED_CHATS_ARCHIVED
   );
 
   /**
@@ -568,6 +574,18 @@ public final class FeatureFlags {
    */
   public static boolean creditCardPayments() {
     return getBoolean(CREDIT_CARD_PAYMENTS, Environment.IS_STAGING);
+  }
+
+  /** Whether client supports sending a request to another to activate payments */
+  public static boolean paymentsRequestActivateFlow() {
+    return getBoolean(PAYMENTS_REQUEST_ACTIVATE_FLOW, false);
+  }
+
+  /**
+   * Whether users can enable keeping conversations with incoming messages archived if the conversation is muted.
+   */
+  public static boolean keepMutedChatsArchived() {
+    return getBoolean(KEEP_MUTED_CHATS_ARCHIVED, false);
   }
 
   /** Only for rendering debug info. */

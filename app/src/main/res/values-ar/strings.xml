@@ -109,6 +109,14 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">يحتاج Signal إلى إذن الوصول إلى التخزين من أجل إرفاق الصور والفيديوهات والملفّات الصوتيّة، ولكن الإذن لم يُمنح بشكل دائم. الّرجاء زيارة قائمة إعدادات التطبيق، واختيار \"الأذونات\"، ومن ثمّ تفعيل \"سعة التخزين\".</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">يحتاج Signal إلى إذن الوصول لِ جهات الاتصال من أجل إرفاق بيانات جهة اتصال، لكن الإذن لم يُمنح بشكل دائم. الّرجاء زيارة قائمة إعدادات التطبيق، واختيار \"الأذونات\"، ومن ثم تفعيل \"جهات الاتصال\".</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">يحتاج Signal إلى إذن الوصول إلى الموقع من أجل إرفاق الموقع الجغرافي ولكن تم إيقاف الإذن على نحو دائم. يرجى زيارة قائمة إعدادات التطبيق ثم اختيار \"الأذونات\" وتفعيل \"الموقع\".</string>
+    <!-- Alert dialog title to show the recipient has not activated payments -->
+    <string name="AttachmentManager__not_activated_payments">%1$s hasn\'t activated Payments </string>
+    <!-- Alert dialog description to send the recipient a request to activate payments -->
+    <string name="AttachmentManager__request_to_activate_payments">Do you want to send them a request to activate Payments?</string>
+    <!-- Alert dialog button to send request -->
+    <string name="AttachmentManager__send_request">Send request</string>
+    <!-- Alert dialog button to cancel dialog -->
+    <string name="AttachmentManager__cancel">إلغاء</string>
 
     <!-- AttachmentUploadJob -->
     <string name="AttachmentUploadJob_uploading_media">يجري رفع الوسائط…</string>
@@ -131,31 +139,33 @@
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <string name="CreditCardFragment__donation_amount_s">مَبلَغ التَّبَرُّع: %1$s</string>
     <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <string name="CreditCardFragment__enter_your_card_information_below">يُرجى إدخال معلومات بطاقتك أسفله</string>
     <!-- Displayed as a hint in the card number text field -->
-    <string name="CreditCardFragment__card_number">Card number</string>
+    <string name="CreditCardFragment__card_number">رقم البطاقة</string>
     <!-- Displayed as a hint in the card expiry text field -->
-    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <string name="CreditCardFragment__mm_yy">الشهر/السنة</string>
     <!-- Displayed as a hint in the card cvv text field -->
-    <string name="CreditCardFragment__cvv">CVV</string>
+    <string name="CreditCardFragment__cvv">رقم التحقّق من البطاقة (CVV)</string>
     <!-- Error displayed under the card number text field when there is an invalid card number entered -->
-    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <string name="CreditCardFragment__invalid_card_number">رقم البطاقة غير صحيح</string>
     <!-- Error displayed under the card expiry text field when the card is expired -->
-    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <string name="CreditCardFragment__card_has_expired">انتهت صلاحية بطاقتك</string>
     <!-- Error displayed under the card cvv text field when the cvv is too short -->
-    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <string name="CreditCardFragment__code_is_too_short">الرمز قصير جدًا</string>
     <!-- Error displayed under the card cvv text field when the cvv is too long -->
-    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <string name="CreditCardFragment__code_is_too_long">الرمز طويل جدًا</string>
     <!-- Error displayed under the card cvv text field when the cvv is invalid -->
-    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <string name="CreditCardFragment__invalid_code">رمز غير صحيح</string>
     <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
-    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <string name="CreditCardFragment__invalid_month">شهر غير صحيح</string>
     <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
-    <string name="CreditCardFragment__year_required">Year required</string>
+    <string name="CreditCardFragment__year_required">يُرجى إدخال السنة</string>
     <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
-    <string name="CreditCardFragment__invalid_year">Invalid year</string>
+    <string name="CreditCardFragment__invalid_year">سنة غير صحيحة</string>
+    <!-- Button label to confirm credit card input and proceed with payment -->
+    <string name="CreditCardFragment__continue">واصل</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">حظر ثم مغادرة %1$s؟</string>
@@ -302,17 +312,17 @@
     <string name="ConversationItem_this_message_was_deleted">حُذفَت هذه الرسالة.</string>
     <string name="ConversationItem_you_deleted_this_message">لقد حذفت هذه الرسالة.</string>
     <!-- Dialog error message shown when user can't download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Can\'t download message. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">تعذّر تحميل الرسالة. سَيحتاج %1$s إلى إرسالها مرة أخرى.</string>
     <!-- Dialog error message shown when user can't download an image message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Can\'t download image. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">تعذّر تحميل الصورة. سَيحتاج %1$s إلى إرسالها مرة أخرى.</string>
     <!-- Dialog error message shown when user can't download a video message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Can\'t download video. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">تعذّر تحميل الفيديو. سَيحتاج %1$s إلى إرساله مرة أخرى.</string>
     <!-- Dialog error message shown when user can't download a their own message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Can\'t download message. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">تعذّر تحميل الرسالة. سَتحتاج إلى إرسالها مرة أخرى.</string>
     <!-- Dialog error message shown when user can't download a their own image message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Can\'t download image. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">تعذّر تحميل الصورة. سَتحتاج إلى إرسالها مرة أخرى.</string>
     <!-- Dialog error message shown when user can't download a their own video message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Can\'t download video. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">تعذّر تحميل الفيديو. سَتحتاج إلى إرساله مرة أخرى.</string>
 
     <!-- ConversationActivity -->
     <string name="ConversationActivity_add_attachment">إضافة مرفقات</string>
@@ -1016,7 +1026,7 @@
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group -->
     <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">لقد حدّدتَ جهة اتصال لا تدعم مجموعات Signal، لذلك ستُحوّل هذه المجموعة إلى رسائل الوسائط المتعددة المخصصة (MMS). ستكون أسماء وصور مجموعة رسائل الوسائط المتعددة المخصصة (MMS) مرئية لك فقط.</string>
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">لقد اخترت جهة اتصال لا تدعم مجموعات Signal، لذلك هذه المجموعة ستتواصل بتقنية MMS. أسماء وصور مجموعة MMS المُخصصة ستكون مرئية لك فقط. سَتتم إزالة دعم مجموعات MMS قريبًا للتركيز على الرسائل المشفرة.</string>
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that doesn\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">طلبات و دعوات اﻷعضاء</string>
@@ -1641,6 +1651,14 @@
     <string name="MessageRecord_your_message_history_with_s_and_their_number_s_has_been_merged">تمّ دمج سِجّل رسائلك مع %1$s ورقمه %2$s.</string>
     <!-- Update item message shown when we merge two threads together and we don't know the phone number of the other thread -->
     <string name="MessageRecord_your_message_history_with_s_and_another_chat_has_been_merged">تمّ دمج سِجّل رسائلك مع %1$s ودردشة أخرى تخصه.</string>
+    <!-- Message to notify sender that activate payments request has been sent to the recipient -->
+    <string name="MessageRecord_you_sent_request">You sent %1$s a request to activate Payments</string>
+    <!-- Request message from recipient to activate payments -->
+    <string name="MessageRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments. Only send payments to people you trust.</string>
+    <!-- Message to inform user that payments was activated-->
+    <string name="MessageRecord_you_activated_payments">You activated Payments</string>
+    <!-- Message to inform sender that recipient can now accept payments -->
+    <string name="MessageRecord_can_accept_payments">%1$s can now accept Payments</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">قام العضو %1$s ببدء مكالمة جماعية · %2$s</string>
@@ -2189,6 +2207,14 @@
     <string name="ThreadRecord_view_once_media">وسيط لمشاهدة لمرة واحدة</string>
     <string name="ThreadRecord_this_message_was_deleted">حُذفَت هذه الرسالة.</string>
     <string name="ThreadRecord_you_deleted_this_message">لقد حذفت هذه الرسالة.</string>
+    <!-- Displayed in the notification when the user sends a request to activate payments -->
+    <string name="ThreadRecord_you_sent_request">You sent a request to activate Payments</string>
+    <!-- Displayed in the notification when the recipient wants to activate payments -->
+    <string name="ThreadRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments</string>
+    <!-- Displayed in the notification when the user activates payments -->
+    <string name="ThreadRecord_you_activated_payments">You activated Payments</string>
+    <!-- Displayed in the notification when the recipient can accept payments -->
+    <string name="ThreadRecord_can_accept_payments">%1$s can now accept Payments</string>
     <string name="ThreadRecord_s_is_on_signal">%1$sمتواجد على Signal !</string>
     <string name="ThreadRecord_disappearing_messages_disabled">الرسائل المختفية غير مفعّلة</string>
     <string name="ThreadRecord_disappearing_message_time_updated_to_s">ضبط توقيت إخفاء الرسائل إلى %1$s</string>
@@ -2322,7 +2348,7 @@
     <string name="MediaPreviewActivity_media_no_longer_available">هذه الوسيط لم يعد متاحا.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">لم يعثر على تطبيق قادر على فتح هذا الملف.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">إغلاق</string>
-    <string name="MediaPreviewFragment_edit_media_error">Media Error</string>
+    <string name="MediaPreviewFragment_edit_media_error">خطأ في الوسائط</string>
 
     <!-- MessageNotifier -->
     <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d رسائل جديدة في %2$d محادثات</string>
@@ -2423,6 +2449,12 @@
     <!-- UnauthorizedReminder -->
     <string name="UnauthorizedReminder_device_no_longer_registered">إنّ الجهاز لم يعد مسجلا</string>
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">هذا على الأرجح بسبب قيامك بتسجيل رقم هاتفك على Signal في جهاز آخر. أنقر لإعادة التسجيل.</string>
+
+    <!-- EnclaveFailureReminder -->
+    <!-- Banner message to update app to use payments -->
+    <string name="EnclaveFailureReminder_update_signal">حدِّث تطبيق Signal للاستمرار في استخدام عمليات الدفع. قد لا يكون رصيدك مُحدثًا.</string>
+    <!-- Banner button to update now -->
+    <string name="EnclaveFailureReminder_update_now">حدِّث الآن</string>
 
     <!-- WebRtcCallActivity -->
     <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">للإجابة على المكالمة، يجب عليك منح ترخيص الوصول إلى ميكروفونك.</string>
@@ -2565,6 +2597,11 @@
     <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">بعض ضبط المهلة، سوف تختفي رسائلك التي سوف يجري إرسالها بعد انقضاء %1$s.</string>
     <!-- Update item button text to show to boost a feature -->
     <string name="ConversationUpdateItem_donate">تبرع</string>
+    <!-- Update item button text to send payment -->
+    <string name="ConversationUpdateItem_send_payment">إرسال مدفوعات</string>
+    <!-- Update item button text to activate payments -->
+    <string name="ConversationUpdateItem_activate_payments">تفعيل الدفوعات</string>
+
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">شغّل … توقف</string>
@@ -2972,6 +3009,10 @@
     <string name="preferences__pressing_the_enter_key_will_send_text_messages">الضغط على مفتاح الدخول سيقوم بإرسال الرسالة</string>
     <string name="preferences__pref_use_address_book_photos">استخدام صور دفتر العناوين</string>
     <string name="preferences__display_contact_photos_from_your_address_book_if_available">عرض صور جهات الاتصال من دفتر عناوينك إذا كان متاحا</string>
+    <!-- Preference menu item title for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__pref_keep_muted_chats_archived">إبقاء المحادثات المكتومة مُؤرشفة</string>
+    <!-- Preference menu item description for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__muted_chats_that_are_archived_will_remain_archived">المحادثات المكتومة المؤرشفة سَتبقى كذلك عند وصول رسالة جديدة.</string>
     <string name="preferences__generate_link_previews">توليد معاينة الوصلات</string>
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">يمكنك جلب معاينة وصلات المواقع مباشرة للرسائل التي سترسلها.</string>
     <string name="preferences__choose_identity">اختيار الهوية</string>
@@ -3322,6 +3363,14 @@
     <string name="PaymentsHomeFragment__enable">تفعيل</string>
     <!-- Alert dialog button to not enable payment lock for now -->
     <string name="PaymentsHomeFragment__not_now">ليس الآن</string>
+    <!-- Alert dialog title which shows up to update app to send payments -->
+    <string name="PaymentsHomeFragment__update_required">يَجب تحديث التطبيق</string>
+    <!-- Alert dialog description that app update is required to send payments-->
+    <string name="PaymentsHomeFragment__an_update_is_required">يَجب تحديث التطبيق لمتابعة إرسال عمليات الدفع واستلامها، ولعرض رصيد عمليات الدفع المُحدثة الخاصة بك.</string>
+    <!-- Alert dialog button to cancel -->
+    <string name="PaymentsHomeFragment__cancel">إلغاء</string>
+    <!-- Alert dialog button to update now -->
+    <string name="PaymentsHomeFragment__update_now">حدِّث الآن</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -4258,7 +4307,14 @@
     <!-- Title in save recovery phrase screen -->
     <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">حفظ جملة الاستعادة</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">إدخال جملة الاستعادة</string>
-    <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">سوف يُستعاد رصيدك تلقائيا فور الانتهاء من إعادة تثبيت Signal، وذلك إذا قمت بتأكيد ‫رقم Signal التعريفي الشخصي‬. يمكنك أيضا استعادة حسابك باستخدام جملة الاستعادة، والتي تتكون من %1$d كلمة فريدة خاصك بك فقط. يٌرجى كتابتها ثم حفظها في مكان آمن.</string>
+    <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
+        <item quantity="zero">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="one">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="two">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="few">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="many">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="other">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+    </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
     <string name="PaymentsRecoveryStartFragment__got_balance">لديك رصيد! حان وقت حفظ جملة الاستعادة الخاصة بك—مفتاح من 24 كلمة يُمكنك استخدامه لاستعادة رصيدك.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
@@ -4865,7 +4921,7 @@
     <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
     <string name="Subscription__renews_s">يجدد %1$s</string>
     <!-- Shown when a subscription is active and is going to expire at the end of the term -->
-    <string name="Subscription__expires_s">Expires %1$s</string>
+    <string name="Subscription__expires_s">سَتنتهي الصلاحية في %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">إن Signal غير ربحي، وبلا إعلانات ولا مستثمرين، يدعمه فقط الأشخاص الذين يستخدمونه ويقدرونه. نرجو منك التبرع بشكل شهري للحصول على شارة في حسابك لأجل مشاركة دعمك لنا مع الآخرين.</string>
@@ -4881,7 +4937,7 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">كُن داعماً شهرياً.</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">عرض في الملف الشخصي</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">اصنع شارة مميزة</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">تمّ</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">واصل</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">عندما يكون لديك أكثر من شارة واحدة، يمكنك اختيار واحدة لتمييزها ليراها الآخرين في ملفك الشخصي.</string>
 
     <string name="BecomeASustainerFragment__get_badges">احصل على شارات لملفك الشخصي عن طريق دعم Signal.</string>
@@ -5545,7 +5601,7 @@
     <!-- Displayed in the viewer when a story is no longer available -->
     <string name="StorySlateView__this_story_is_no_longer_available">لم تعد هذه القصة متاحة.</string>
     <!-- Displayed in the viewer when a story has permanently failed to download. -->
-    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Can\'t download story. %1$s will need to share it again.</string>
+    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">تعذّر تحميل القصة. سَيحتاج %1$s إلى مشاركتها مرة أخرى.</string>
     <!-- Displayed in the viewer when the network is not available -->
     <string name="StorySlateView__no_internet_connection">لا يوجد اتصال بشبكة الإنترنت</string>
     <!-- Displayed in the viewer when network is available but content could not be downloaded -->
@@ -5886,7 +5942,7 @@
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">متابعة على أي حال</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
-    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
+    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">يَحتاج Signal إلى إذن رسائل SMS من أجل استيراد رسائل SMS الخاصة بك.</string>
 
     <!-- ChooseANewDefaultSmsAppFragment -->
     <!-- Title of the screen -->
@@ -6010,30 +6066,37 @@
 
     <!-- DonateToSignalFragment -->
     <!-- Title below avatar -->
-    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <string name="DonateToSignalFragment__powered_by">يَدعمه أشخاص مثلك.</string>
     <!-- Continue button label -->
     <string name="DonateToSignalFragment__continue">واصل</string>
     <!-- Description below title -->
-    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <string name="DonateToSignalFragment__support_technology">اِدعم تكنولوجيا مصنوعة خصيصًا لأجلك، لا لأجل بياناتك، وذلك عبر الانضمام إلى المُجتمع الداعم لـ Signal.</string>
     <!-- Donation pill toggle monthly text -->
-    <string name="DonationPillToggle__monthly">Monthly</string>
+    <string name="DonationPillToggle__monthly">شهريًا</string>
     <!-- Donation pill toggle one-time text -->
     <string name="DonationPillToggle__one_time">مرة واحدة</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
-    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">تبرّع بـ %1$s/كل شهر لـ Signal</string>
     <!-- Sheet summary when subscribing -->
     <string name="GatewaySelectorBottomSheet__get_a_s_badge">احصل على شارة %1$s</string>
     <!-- Sheet title when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">تبرّع بـ %1$s لـ Signal</string>
     <!-- Sheet summary when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <plurals name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">
+        <item quantity="zero">Get a %1$s badge for %2$d days</item>
+        <item quantity="one">Get a %1$s badge for %2$d day</item>
+        <item quantity="two">Get a %1$s badge for %2$d days</item>
+        <item quantity="few">Get a %1$s badge for %2$d days</item>
+        <item quantity="many">Get a %1$s badge for %2$d days</item>
+        <item quantity="other">Get a %1$s badge for %2$d days</item>
+    </plurals>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">بطاقة الائتمان أو الخصم</string>
 
     <!-- StripePaymentInProgressFragment -->
-    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
+    <string name="StripePaymentInProgressFragment__cancelling">جارٍ الإلغاء…</string>
 
     <!-- EOF -->
 

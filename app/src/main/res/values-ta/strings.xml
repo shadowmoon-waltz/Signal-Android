@@ -105,6 +105,14 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">புகைப்படங்கள், காணொளிகள் அல்லது ஆடியோவை இணைக்கவும் Signal க்கு சேமிப்பக அனுமதி தேவைப்படுகிறது, ஆனால் அது நிரந்தரமாக மறுக்கப்பட்டது. பயன்பாடு அமைப்புகள் மெனுவில் தொடரவும், \"அனுமதிகள்\" என்பதைத் தேர்ந்தெடுத்து \"சேமிப்பகத்தை\" இயக்கவும்.</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">தொடர்பு தகவலை இணைக்கவும் Signal க்கு தொடர்புகளின் அனுமதி தேவைப்படுகிறது, ஆனால் அது நிரந்தரமாக மறுக்கப்பட்டது. பயன்பாடு அமைப்புகள் மெனுவில் தொடரவும், \"அனுமதிகள்\" என்பதைத் தேர்ந்தெடுத்து, \"தொடர்புகளை\" இயக்கவும்.</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">இருப்பிடத்தை இணைக்கவும், Signal க்கு இருப்பிட அனுமதி தேவைப்படுகிறது, ஆனால் அது நிரந்தரமாக மறுக்கப்பட்டது. பயன்பாடு அமைப்புகள் மெனுவில் தொடரவும், \"அனுமதிகள்\" என்பதைத் தேர்ந்தெடுத்து, \"இருப்பிடம்\" ஐ இயக்கவும்.</string>
+    <!-- Alert dialog title to show the recipient has not activated payments -->
+    <string name="AttachmentManager__not_activated_payments">%1$s hasn\'t activated Payments </string>
+    <!-- Alert dialog description to send the recipient a request to activate payments -->
+    <string name="AttachmentManager__request_to_activate_payments">Do you want to send them a request to activate Payments?</string>
+    <!-- Alert dialog button to send request -->
+    <string name="AttachmentManager__send_request">Send request</string>
+    <!-- Alert dialog button to cancel dialog -->
+    <string name="AttachmentManager__cancel">ரத்து</string>
 
     <!-- AttachmentUploadJob -->
     <string name="AttachmentUploadJob_uploading_media">மீடியா பதிவேற்றுகிறது …</string>
@@ -127,31 +135,33 @@
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <string name="CreditCardFragment__donation_amount_s">நன்கொடை தொகை: %1$s</string>
     <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <string name="CreditCardFragment__enter_your_card_information_below">உங்கள் கார்டு தகவலை கீழே உள்ளிடவும்</string>
     <!-- Displayed as a hint in the card number text field -->
-    <string name="CreditCardFragment__card_number">Card number</string>
+    <string name="CreditCardFragment__card_number">கார்டு எண்</string>
     <!-- Displayed as a hint in the card expiry text field -->
     <string name="CreditCardFragment__mm_yy">MM/YY</string>
     <!-- Displayed as a hint in the card cvv text field -->
     <string name="CreditCardFragment__cvv">CVV</string>
     <!-- Error displayed under the card number text field when there is an invalid card number entered -->
-    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <string name="CreditCardFragment__invalid_card_number">கார்டு எண் தவறாக உள்ளது</string>
     <!-- Error displayed under the card expiry text field when the card is expired -->
-    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <string name="CreditCardFragment__card_has_expired">கார்டு காலாவதியானது</string>
     <!-- Error displayed under the card cvv text field when the cvv is too short -->
-    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <string name="CreditCardFragment__code_is_too_short">குறியீடு மிகவும் சிறியது</string>
     <!-- Error displayed under the card cvv text field when the cvv is too long -->
-    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <string name="CreditCardFragment__code_is_too_long">குறியீடு மிக நீளமாக உள்ளது</string>
     <!-- Error displayed under the card cvv text field when the cvv is invalid -->
-    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <string name="CreditCardFragment__invalid_code">தவறான குறியீடு</string>
     <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
-    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <string name="CreditCardFragment__invalid_month">மாதம் தவறாக உள்ளது</string>
     <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
-    <string name="CreditCardFragment__year_required">Year required</string>
+    <string name="CreditCardFragment__year_required">ஆண்டைக் குறிப்பிடவும்</string>
     <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
-    <string name="CreditCardFragment__invalid_year">Invalid year</string>
+    <string name="CreditCardFragment__invalid_year">ஆண்டு தவறாக உள்ளது</string>
+    <!-- Button label to confirm credit card input and proceed with payment -->
+    <string name="CreditCardFragment__continue">தொடரவும்</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">தடுத்து %1$sஐ விடவா?</string>
@@ -298,17 +308,17 @@
     <string name="ConversationItem_this_message_was_deleted">இந்த செய்தி நீக்கப்பட்டது.</string>
     <string name="ConversationItem_you_deleted_this_message">இந்த செய்தியை நீக்கிவிட்டீர்கள்.</string>
     <!-- Dialog error message shown when user can't download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Can\'t download message. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">செய்தியைப் பதிவிறக்க முடியவில்லை. %1$s மீண்டும் அதை அனுப்ப வேண்டும்.</string>
     <!-- Dialog error message shown when user can't download an image message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Can\'t download image. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">படத்தைப் பதிவிறக்க முடியவில்லை. %1$s மீண்டும் அதை அனுப்ப வேண்டும்.</string>
     <!-- Dialog error message shown when user can't download a video message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Can\'t download video. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">வீடியோவைப் பதிவிறக்க முடியவில்லை. %1$s மீண்டும் அதை அனுப்ப வேண்டும்.</string>
     <!-- Dialog error message shown when user can't download a their own message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Can\'t download message. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">செய்தியைப் பதிவிறக்க முடியவில்லை. நீங்கள் மீண்டும் அதை அனுப்ப வேண்டும்.</string>
     <!-- Dialog error message shown when user can't download a their own image message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Can\'t download image. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">படத்தைப் பதிவிறக்க முடியவில்லை. நீங்கள் மீண்டும் அதை அனுப்ப வேண்டும்.</string>
     <!-- Dialog error message shown when user can't download a their own video message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Can\'t download video. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">வீடியோவைப் பதிவிறக்க முடியவில்லை. நீங்கள் மீண்டும் அதை அனுப்ப வேண்டும்.</string>
 
     <!-- ConversationActivity -->
     <string name="ConversationActivity_add_attachment">இணைப்பு சேர்க்க</string>
@@ -864,7 +874,7 @@
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group -->
     <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">சிக்னல் குழுக்களை ஆதரிக்காத ஒரு தொடர்பை நீங்கள் தேர்ந்தெடுத்துள்ளீர்கள், எனவே இந்தக் குழு எம்.எம்.எஸ் ஆக இருக்கும். தனிப்பயன் எம்.எம்.எஸ் குழுப் பெயர்கள் மற்றும் புகைப்படங்கள் உங்களுக்கு மட்டுமே தெரியப்படும்.</string>
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">சிக்னல் குழுக்களை ஆதரிக்காத பயனர் தொடர்பை நீங்கள் தேர்ந்தெடுத்துள்ளீர்கள், இந்த குழு எம்.எம்.எஸ் ஆகும். தனிப்பயன் எம்.எம்.எஸ் குழு பெயர்கள் மற்றும் புகைப்படங்கள் உங்களுக்கு மட்டுமே தெரியப்படும். மறைகுறியாக்கப்பட்ட செய்தியிடலில் கவனம் செலுத்த எம்.எம்.எஸ் குழுக்களுக்கான ஆதரவு விரைவில் அகற்றப்படும்.</string>
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that doesn\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">உறுப்பினர் கோரிக்கைகள் மற்றும் அழைப்புகள்</string>
@@ -1409,6 +1419,14 @@
     <string name="MessageRecord_your_message_history_with_s_and_their_number_s_has_been_merged">%1$s உடனான உங்கள் செய்தி வரலாறு மற்றும் அவர்களின் எண் %2$s இணைக்கப்பட்டது.</string>
     <!-- Update item message shown when we merge two threads together and we don't know the phone number of the other thread -->
     <string name="MessageRecord_your_message_history_with_s_and_another_chat_has_been_merged">%1$s உடனான உங்கள் செய்தி வரலாறும் அவர்களுக்குச் சொந்தமான மற்றொரு சாட்டும் இணைக்கப்பட்டது.</string>
+    <!-- Message to notify sender that activate payments request has been sent to the recipient -->
+    <string name="MessageRecord_you_sent_request">You sent %1$s a request to activate Payments</string>
+    <!-- Request message from recipient to activate payments -->
+    <string name="MessageRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments. Only send payments to people you trust.</string>
+    <!-- Message to inform user that payments was activated-->
+    <string name="MessageRecord_you_activated_payments">You activated Payments</string>
+    <!-- Message to inform sender that recipient can now accept payments -->
+    <string name="MessageRecord_can_accept_payments">%1$s can now accept Payments</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$sகுழு அழைப்பைத் தொடங்கினார்%2$s</string>
@@ -1897,6 +1915,14 @@
     <string name="ThreadRecord_view_once_media">காண்க-ஒருமுறை ஊடகம் </string>
     <string name="ThreadRecord_this_message_was_deleted">இந்த செய்தி இருந்தது நீக்கப்பட்டது</string>
     <string name="ThreadRecord_you_deleted_this_message">இந்த செய்தியை நீக்கிவிட்டீர்கள்.</string>
+    <!-- Displayed in the notification when the user sends a request to activate payments -->
+    <string name="ThreadRecord_you_sent_request">You sent a request to activate Payments</string>
+    <!-- Displayed in the notification when the recipient wants to activate payments -->
+    <string name="ThreadRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments</string>
+    <!-- Displayed in the notification when the user activates payments -->
+    <string name="ThreadRecord_you_activated_payments">You activated Payments</string>
+    <!-- Displayed in the notification when the recipient can accept payments -->
+    <string name="ThreadRecord_can_accept_payments">%1$s can now accept Payments</string>
     <string name="ThreadRecord_s_is_on_signal">%1$s Signal-இல் உள்ளார்!</string>
     <string name="ThreadRecord_disappearing_messages_disabled">காணாமல் போகும் செய்திகள் முடக்கப்பட்டது</string>
     <string name="ThreadRecord_disappearing_message_time_updated_to_s">காணாமல் போகும் செய்திகளின் நேரம் %1$s ஆக அமைக்கப்பட்டுள்ளது</string>
@@ -2026,7 +2052,7 @@
     <string name="MediaPreviewActivity_media_no_longer_available">இந்த ஊடகம் சேமிப்பகத்தில் இல்லை.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">இந்த மீடியாவைப் பகிரக்கூடிய பயன்பாட்டைக் கண்டுபிடிக்க முடியவில்லை.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">நெருக்கமான</string>
-    <string name="MediaPreviewFragment_edit_media_error">Media Error</string>
+    <string name="MediaPreviewFragment_edit_media_error">மீடியா பிழை</string>
 
     <!-- MessageNotifier -->
     <string name="MessageNotifier_d_new_messages_in_d_conversations">%2$d உரையாடல்களில் %1$d புதிய செய்திகள்</string>
@@ -2123,6 +2149,12 @@
     <!-- UnauthorizedReminder -->
     <string name="UnauthorizedReminder_device_no_longer_registered">சாதனம் இனி பதிவு செய்யப்படவில்லை</string>
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">உங்கள் தொலைபேசி எண்ணை Signal வேறு சாதனத்தில் பதிவு செய்ததால் இது நிகழலாம். மீண்டும் பதிவு செய்ய தட்டவும்.</string>
+
+    <!-- EnclaveFailureReminder -->
+    <!-- Banner message to update app to use payments -->
+    <string name="EnclaveFailureReminder_update_signal">Update Signal to continue using payments. Your balance may not be up-to-date.</string>
+    <!-- Banner button to update now -->
+    <string name="EnclaveFailureReminder_update_now">இப்பொழுது மேம்படுத்து</string>
 
     <!-- WebRtcCallActivity -->
     <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">அழைப்பிற்கு பதிலளிக்க, உங்கள் மைக்ரோஃபோன் அணுகலை சிக்னலுக்கு வழங்கவும்.</string>
@@ -2253,6 +2285,11 @@
     <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">நீங்கள் அவர்களுக்கு செய்தி அனுப்பும் போது காணாமல் போகும் செய்திகள் நேரம் %1$s ஆக அமைக்கப்படும்.</string>
     <!-- Update item button text to show to boost a feature -->
     <string name="ConversationUpdateItem_donate">நன்கொடை</string>
+    <!-- Update item button text to send payment -->
+    <string name="ConversationUpdateItem_send_payment">அனுப்பு கட்டணம்</string>
+    <!-- Update item button text to activate payments -->
+    <string name="ConversationUpdateItem_activate_payments">கொடுப்பனவுகளைச் செயல்படுத்தவும்</string>
+
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">விளையாடு … இடைநிறுத்து</string>
@@ -2628,6 +2665,10 @@
     <string name="preferences__pressing_the_enter_key_will_send_text_messages">உள்ளீட்டு விசையை அழுத்துவது செய்தியை அனுப்பும்</string>
     <string name="preferences__pref_use_address_book_photos">முகவரி புத்தக புகைப்படங்களைப் பயன்படுத்தவும்</string>
     <string name="preferences__display_contact_photos_from_your_address_book_if_available">உங்கள் முகவரி புத்தகத்திலிருந்து தொடர்பு புகைப்படங்கள் இருந்தால் காண்பி</string>
+    <!-- Preference menu item title for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__pref_keep_muted_chats_archived">முடக்கப்பட்ட அரட்டைகளைக் காப்பகப்படுத்தவும்</string>
+    <!-- Preference menu item description for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__muted_chats_that_are_archived_will_remain_archived">புதிய செய்தி வரும்போது காப்பகப்படுத்தப்பட்ட முடக்கப்பட்ட அரட்டைகள் காப்பகப்படுத்தப்பட்டதாகவே இருக்கும்.</string>
     <string name="preferences__generate_link_previews">இணைப்பு மாதிரிக்காட்சிகளை உருவாக்கவும்</string>
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">நீங்கள் அனுப்பும் செய்திகளுக்கு வலைத்தளங்களிலிருந்து இணைப்பு முன்னோட்டங்களை நேரடியாக மீட்டெடுக்கவும்.</string>
     <string name="preferences__choose_identity">அடையாள தேர்வு.</string>
@@ -2978,6 +3019,14 @@
     <string name="PaymentsHomeFragment__enable">இயக்கவும்</string>
     <!-- Alert dialog button to not enable payment lock for now -->
     <string name="PaymentsHomeFragment__not_now">இப்போது வேண்டாம்</string>
+    <!-- Alert dialog title which shows up to update app to send payments -->
+    <string name="PaymentsHomeFragment__update_required">Update required</string>
+    <!-- Alert dialog description that app update is required to send payments-->
+    <string name="PaymentsHomeFragment__an_update_is_required">An update is required to continue sending and receiving payments, and to view your up-to-date payment balance.</string>
+    <!-- Alert dialog button to cancel -->
+    <string name="PaymentsHomeFragment__cancel">ரத்து</string>
+    <!-- Alert dialog button to update now -->
+    <string name="PaymentsHomeFragment__update_now">இப்பொழுது மேம்படுத்து</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -3870,7 +3919,10 @@
     <!-- Title in save recovery phrase screen -->
     <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">மீட்பு சொற்றொடரைச் சேமிக்கவும்</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">உள்ளிடவும் மீட்பு சொற்றொடர்</string>
-    <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">உங்கள் சமநிலை தானாகவே இருக்கும் மீட்டமை நீங்கள் மீண்டும் நிறுவும் போது Signal நீங்கள் உறுதிப்படுத்தினால் Signal பின். நீங்களும் செய்யலாம்மீட்டமை உங்கள் சமநிலை மீட்பு சொற்றொடரைப் பயன்படுத்துதல், இது ஒரு %1$d-சொல் சொற்றொடர் உங்களுக்கு தனித்துவமானது. அதை எழுதுங்கள்கடை அது ஒரு பாதுகாப்பான இடத்தில்.</string>
+    <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
+        <item quantity="one">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="other">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+    </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
     <string name="PaymentsRecoveryStartFragment__got_balance">நீங்கள் சமநிலையில் உள்ளீர்கள்! உங்கள் மீட்பு சொற்றொடரைச் சேமிப்பதற்கான நேரம்—உங்கள் சமநிலையை மீட்டெடுக்க நீங்கள் பயன்படுத்தக்கூடிய 24-வார்த்தை குறியீடு</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
@@ -4453,7 +4505,7 @@
     <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
     <string name="Subscription__renews_s">%1$s புதுப்பிக்கப்படுகிறது</string>
     <!-- Shown when a subscription is active and is going to expire at the end of the term -->
-    <string name="Subscription__expires_s">Expires %1$s</string>
+    <string name="Subscription__expires_s">%1$s ஆம் தேதி காலாவதியாகிறது</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">சிக்னல் என்பது விளம்பரதாரர்கள் அல்லது முதலீட்டாளர்கள் இல்லாத ஒரு இலாப நோக்கமற்ற நிறுவனமாகும், அதைப் பயன்படுத்தும் மற்றும் மதிக்கும் நபர்களால் மட்டுமே நிலைநிறுத்தப்படுகிறது. தொடர்ச்சியான மாதாந்திர நன்கொடையைச் செய்து, உங்கள் ஆதரவைப் பகிர்ந்து கொள்ள சுயவிவரப் பேட்ஜைப் பெறுங்கள்.</string>
@@ -4469,7 +4521,7 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">ஒரு மாதாந்திர காப்பாளர் ஆகவும்.</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">சுயவிவரத்தில் காண்பிக்கவும்</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">சிறப்பு பேட்ஜை உருவாக்கவும்</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">முடிந்தது</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">தொடரவும்</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">உங்களிடம் ஒன்றுக்கும் மேற்பட்ட பேட்ஜ்கள் இருந்தால், உங்கள் சுயவிவரத்தில் மற்றவர்கள் பார்க்கும்படியாக ஒன்றைத் தேர்ந்தெடுக்கலாம்.</string>
 
     <string name="BecomeASustainerFragment__get_badges">சிக்னலை ஆதரிப்பதன் மூலம் உங்கள் சுயவிவரத்திற்கான பேட்ஜ்களைப் பெறுங்கள்.</string>
@@ -5101,7 +5153,7 @@
     <!-- Displayed in the viewer when a story is no longer available -->
     <string name="StorySlateView__this_story_is_no_longer_available">இந்த ஸ்டோரி இனி கிடைக்கப்பெறாது.</string>
     <!-- Displayed in the viewer when a story has permanently failed to download. -->
-    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Can\'t download story. %1$s will need to share it again.</string>
+    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">ஸ்டோரியைப் பதிவிறக்க முடியவில்லை. %1$s மீண்டும் அதை பகிர வேண்டும்.</string>
     <!-- Displayed in the viewer when the network is not available -->
     <string name="StorySlateView__no_internet_connection">இணைய இணைப்பு இல்லை</string>
     <!-- Displayed in the viewer when network is available but content could not be downloaded -->
@@ -5402,7 +5454,7 @@
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">எப்படியிருந்தாலும் தொடருங்கள்</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
-    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
+    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">உங்கள் SMS மெசேஜ்களை ஏற்றுமதி செய்ய Signalக்கு SMS அனுமதி தேவை.</string>
 
     <!-- ChooseANewDefaultSmsAppFragment -->
     <!-- Title of the screen -->
@@ -5522,30 +5574,33 @@
 
     <!-- DonateToSignalFragment -->
     <!-- Title below avatar -->
-    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <string name="DonateToSignalFragment__powered_by">உங்களைப் போன்றவர்களால் இயக்கப்படுகிறது.</string>
     <!-- Continue button label -->
     <string name="DonateToSignalFragment__continue">தொடரவும்</string>
     <!-- Description below title -->
-    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <string name="DonateToSignalFragment__support_technology">Signalஐ நிலைநிறுத்தும் சமூகத்தில் சேர்வதன் மூலம், உங்களுக்காக உருவாக்கப்பட்ட தொழில்நுட்பத்திற்கு ஆதரவு தரவும், உங்கள் தரவுக்கு அல்ல.</string>
     <!-- Donation pill toggle monthly text -->
-    <string name="DonationPillToggle__monthly">Monthly</string>
+    <string name="DonationPillToggle__monthly">மாதாந்திரமாக</string>
     <!-- Donation pill toggle one-time text -->
     <string name="DonationPillToggle__one_time">ஒரு-முறை</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
-    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Signalக்கு %1$s/மாதம் நன்கொடை அளியுங்கள்</string>
     <!-- Sheet summary when subscribing -->
     <string name="GatewaySelectorBottomSheet__get_a_s_badge">Get a %1$s badge</string>
     <!-- Sheet title when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Signalக்கு %1$s நன்கொடை அளிக்கவும்</string>
     <!-- Sheet summary when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <plurals name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">
+        <item quantity="one">Get a %1$s badge for %2$d day</item>
+        <item quantity="other">Get a %1$s badge for %2$d days</item>
+    </plurals>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">கிரெடிட் அல்லது டெபிட் கார்டு</string>
 
     <!-- StripePaymentInProgressFragment -->
-    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
+    <string name="StripePaymentInProgressFragment__cancelling">ரத்துசெய்கிறது…</string>
 
     <!-- EOF -->
 

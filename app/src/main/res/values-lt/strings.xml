@@ -107,6 +107,14 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">Norint pridėti nuotraukas, vaizdo įrašus ar garsą, Signal reikia saugyklos leidimo, tačiau jis buvo visam laikui uždraustas. Pereikite į programėlės nustatymų meniu, pasirinkite „Leidimai“ ir įjunkite „Saugyklą“.</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">Norint pridėti kontaktinę informaciją, Signal reikia adresatų leidimo, tačiau jis buvo visam laikui uždraustas. Pereikite į programėlės nustatymų meniu, pasirinkite „Leidimai“ ir įjunkite „Adresatus“.</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">Norint pridėti vietą, Signal reikia vietos leidimo, tačiau jis buvo visam laikui uždraustas. Pereikite į programėlės nustatymų meniu, pasirinkite „Leidimai“ ir įjunkite „Vietą“.</string>
+    <!-- Alert dialog title to show the recipient has not activated payments -->
+    <string name="AttachmentManager__not_activated_payments">%1$s hasn\'t activated Payments </string>
+    <!-- Alert dialog description to send the recipient a request to activate payments -->
+    <string name="AttachmentManager__request_to_activate_payments">Do you want to send them a request to activate Payments?</string>
+    <!-- Alert dialog button to send request -->
+    <string name="AttachmentManager__send_request">Send request</string>
+    <!-- Alert dialog button to cancel dialog -->
+    <string name="AttachmentManager__cancel">Atsisakyti</string>
 
     <!-- AttachmentUploadJob -->
     <string name="AttachmentUploadJob_uploading_media">Nusiunčiama medija…</string>
@@ -129,31 +137,33 @@
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <string name="CreditCardFragment__donation_amount_s">Paramos suma: %1$s</string>
     <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <string name="CreditCardFragment__enter_your_card_information_below">Toliau įvesk savo kortelės duomenis</string>
     <!-- Displayed as a hint in the card number text field -->
-    <string name="CreditCardFragment__card_number">Card number</string>
+    <string name="CreditCardFragment__card_number">Kortelės numeris</string>
     <!-- Displayed as a hint in the card expiry text field -->
     <string name="CreditCardFragment__mm_yy">MM/YY</string>
     <!-- Displayed as a hint in the card cvv text field -->
     <string name="CreditCardFragment__cvv">CVV</string>
     <!-- Error displayed under the card number text field when there is an invalid card number entered -->
-    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <string name="CreditCardFragment__invalid_card_number">Neteisingas kortelės numeris</string>
     <!-- Error displayed under the card expiry text field when the card is expired -->
-    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <string name="CreditCardFragment__card_has_expired">Kortelė nebegalioja</string>
     <!-- Error displayed under the card cvv text field when the cvv is too short -->
-    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <string name="CreditCardFragment__code_is_too_short">Per trumpas kodas</string>
     <!-- Error displayed under the card cvv text field when the cvv is too long -->
-    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <string name="CreditCardFragment__code_is_too_long">Per ilgas kodas</string>
     <!-- Error displayed under the card cvv text field when the cvv is invalid -->
-    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <string name="CreditCardFragment__invalid_code">Neteisingas kodas</string>
     <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
-    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <string name="CreditCardFragment__invalid_month">Neteisingas mėnuo</string>
     <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
-    <string name="CreditCardFragment__year_required">Year required</string>
+    <string name="CreditCardFragment__year_required">Reikalingi metai</string>
     <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
-    <string name="CreditCardFragment__invalid_year">Invalid year</string>
+    <string name="CreditCardFragment__invalid_year">Neteisingi metai</string>
+    <!-- Button label to confirm credit card input and proceed with payment -->
+    <string name="CreditCardFragment__continue">Tęsti</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">Užblokuoti ir išeiti iš %1$s?</string>
@@ -300,17 +310,17 @@
     <string name="ConversationItem_this_message_was_deleted">Ši žinutė buvo ištrinta.</string>
     <string name="ConversationItem_you_deleted_this_message">Jūs ištrynėte šią žinutę.</string>
     <!-- Dialog error message shown when user can't download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Can\'t download message. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Nepavyksta atsisiųsti žinutės. %1$s turės dar kartą ją išsiųsti.</string>
     <!-- Dialog error message shown when user can't download an image message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Can\'t download image. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Nepavyksta atsisiųsti vaizdo. %1$s turės dar kartą ją išsiųsti.</string>
     <!-- Dialog error message shown when user can't download a video message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Can\'t download video. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Nepavyksta atsisiųsti vaizdo įrašo. %1$s turės dar kartą ją išsiųsti.</string>
     <!-- Dialog error message shown when user can't download a their own message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Can\'t download message. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Nepavyksta atsisiųsti žinutės. Turėsi dar kartą ją išsiųsti.</string>
     <!-- Dialog error message shown when user can't download a their own image message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Can\'t download image. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Nepavyksta atsisiųsti vaizdo. Turėsi dar kartą ją išsiųsti.</string>
     <!-- Dialog error message shown when user can't download a their own video message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Can\'t download video. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Nepavyksta atsisiųsti vaizdo įrašo. Turėsi dar kartą ją išsiųsti.</string>
 
     <!-- ConversationActivity -->
     <string name="ConversationActivity_add_attachment">Pridėti priedą</string>
@@ -940,7 +950,7 @@
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group -->
     <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">Pasirinkai adresatą, kuris nepalaiko „Signal“ grupių, todėl tai bus MMS grupė. Tinkintų MMS grupių pavadinimai ir nuotraukos bsu matomos tik tau.</string>
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">Tu pasirinkai adresatą, kuris nepalaiko „Signal“ grupių, tad ši grupė bus MMS. Tinkinti MMS grupės vardai ir nuotraukos bus matomos tik tau. MMS grupių palaikymo greit nebeliks, kad galėtume sutelkti dėmesį į šifruotas žinutes.</string>
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that doesn\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">Narių prašymai ir pakvietimai</string>
@@ -1525,6 +1535,14 @@
     <string name="MessageRecord_your_message_history_with_s_and_their_number_s_has_been_merged">Tavo ir %1$s žinučių istorija susieta su šio žmogaus numeriu %2$s.</string>
     <!-- Update item message shown when we merge two threads together and we don't know the phone number of the other thread -->
     <string name="MessageRecord_your_message_history_with_s_and_another_chat_has_been_merged">Tavo ir %1$s žinučių istorija susieta su kitu šiam žmogui priklausiusiu pokalbiu.</string>
+    <!-- Message to notify sender that activate payments request has been sent to the recipient -->
+    <string name="MessageRecord_you_sent_request">You sent %1$s a request to activate Payments</string>
+    <!-- Request message from recipient to activate payments -->
+    <string name="MessageRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments. Only send payments to people you trust.</string>
+    <!-- Message to inform user that payments was activated-->
+    <string name="MessageRecord_you_activated_payments">You activated Payments</string>
+    <!-- Message to inform sender that recipient can now accept payments -->
+    <string name="MessageRecord_can_accept_payments">%1$s can now accept Payments</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$s pradėjo grupės skambutį · %2$s</string>
@@ -2043,6 +2061,14 @@
     <string name="ThreadRecord_view_once_media">Vienkartinės peržiūros medija</string>
     <string name="ThreadRecord_this_message_was_deleted">Ši žinutė buvo ištrinta.</string>
     <string name="ThreadRecord_you_deleted_this_message">Jūs ištrynėte šią žinutę.</string>
+    <!-- Displayed in the notification when the user sends a request to activate payments -->
+    <string name="ThreadRecord_you_sent_request">You sent a request to activate Payments</string>
+    <!-- Displayed in the notification when the recipient wants to activate payments -->
+    <string name="ThreadRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments</string>
+    <!-- Displayed in the notification when the user activates payments -->
+    <string name="ThreadRecord_you_activated_payments">You activated Payments</string>
+    <!-- Displayed in the notification when the recipient can accept payments -->
+    <string name="ThreadRecord_can_accept_payments">%1$s can now accept Payments</string>
     <string name="ThreadRecord_s_is_on_signal">%1$s atėjo į Signal!</string>
     <string name="ThreadRecord_disappearing_messages_disabled">Išnykstančios žinutės išjungtos</string>
     <string name="ThreadRecord_disappearing_message_time_updated_to_s">Išnykstančių žinučių laikas nustatytas į %1$s</string>
@@ -2174,7 +2200,7 @@
     <string name="MediaPreviewActivity_media_no_longer_available">Medija daugiau nebeprieinama.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Nepavyksta rasti programėlės, galinčios bendrinti šią mediją.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">Užverti</string>
-    <string name="MediaPreviewFragment_edit_media_error">Media Error</string>
+    <string name="MediaPreviewFragment_edit_media_error">Įrašų klaida</string>
 
     <!-- MessageNotifier -->
     <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d naujų(-os) žinutės(-ių) %2$d pokalbyje(-iuose)</string>
@@ -2273,6 +2299,12 @@
     <!-- UnauthorizedReminder -->
     <string name="UnauthorizedReminder_device_no_longer_registered">Įrenginys daugiau nebėra registruotas</string>
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">Tai yra tikėtina, nes registravote savo telefono numerį su Signal kitame įrenginyje. Bakstelėkite, norėdami registruoti iš naujo.</string>
+
+    <!-- EnclaveFailureReminder -->
+    <!-- Banner message to update app to use payments -->
+    <string name="EnclaveFailureReminder_update_signal">Update Signal to continue using payments. Your balance may not be up-to-date.</string>
+    <!-- Banner button to update now -->
+    <string name="EnclaveFailureReminder_update_now">Atnaujinti dabar</string>
 
     <!-- WebRtcCallActivity -->
     <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">Norėdami atsiliepti, suteikite Signal prieigą prie mikrofono.</string>
@@ -2409,6 +2441,11 @@
     <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">Kai rašysite jiems žinutes, išnykstančių žinučių laikas bus nustatytas į %1$s.</string>
     <!-- Update item button text to show to boost a feature -->
     <string name="ConversationUpdateItem_donate">Paaukokite</string>
+    <!-- Update item button text to send payment -->
+    <string name="ConversationUpdateItem_send_payment">Siųsti mokėjimą</string>
+    <!-- Update item button text to activate payments -->
+    <string name="ConversationUpdateItem_activate_payments">Aktyvuoti mokėjimus</string>
+
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Atkurti … Pristabdyti</string>
@@ -2800,6 +2837,10 @@
     <string name="preferences__pressing_the_enter_key_will_send_text_messages">„Enter“ (Įvedimo) klavišo paspaudimas išsiųs tekstines žinutes</string>
     <string name="preferences__pref_use_address_book_photos">Naudoti adresų knygos nuotraukas</string>
     <string name="preferences__display_contact_photos_from_your_address_book_if_available">Jei prieinama, rodyti adresatų nuotraukas iš jūsų adresų knygos</string>
+    <!-- Preference menu item title for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__pref_keep_muted_chats_archived">Palikti pokalbius su išjungtais pranešimais archyvuotus</string>
+    <!-- Preference menu item description for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__muted_chats_that_are_archived_will_remain_archived">Archyvuoti pokalbiai su išjungtais pranešimais, gavus naują žinutę, taip ir liks archyvuoti.</string>
     <string name="preferences__generate_link_previews">Generuoti nuorodų peržiūras</string>
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">Gauti savo siunčiamoms žinutėms nuorodų peržiūras tiesiogiai iš internetinių svetainių.</string>
     <string name="preferences__choose_identity">Pasirinkti tapatybę</string>
@@ -3150,6 +3191,14 @@
     <string name="PaymentsHomeFragment__enable">Įjungti</string>
     <!-- Alert dialog button to not enable payment lock for now -->
     <string name="PaymentsHomeFragment__not_now">Ne dabar</string>
+    <!-- Alert dialog title which shows up to update app to send payments -->
+    <string name="PaymentsHomeFragment__update_required">Update required</string>
+    <!-- Alert dialog description that app update is required to send payments-->
+    <string name="PaymentsHomeFragment__an_update_is_required">An update is required to continue sending and receiving payments, and to view your up-to-date payment balance.</string>
+    <!-- Alert dialog button to cancel -->
+    <string name="PaymentsHomeFragment__cancel">Atsisakyti</string>
+    <!-- Alert dialog button to update now -->
+    <string name="PaymentsHomeFragment__update_now">Atnaujinti dabar</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -4064,7 +4113,12 @@
     <!-- Title in save recovery phrase screen -->
     <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">Išsaugoti atkūrimo frazę</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">Įvesti atkūrimo frazę</string>
-    <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">Kai įdiegsite Signal iš naujo, jūsų likutis bus automatiškai atkurtas tuo atveju, jei patvirtinsite savo Signal PIN kodą. Taip pat galite atkurti savo likutį naudodami atkūrimo frazę – savo unikalią %1$d žodžių frazę. Užsirašykite ją ir saugokite saugioje vietoje.</string>
+    <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
+        <item quantity="one">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="few">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="many">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="other">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+    </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
     <string name="PaymentsRecoveryStartFragment__got_balance">Turi likutį! Laikas išsaugoti atkūrimo frazę – 24 žodžių raktą, kurį galėsi panaudoti savo likučiui atkurti.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
@@ -4659,7 +4713,7 @@
     <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
     <string name="Subscription__renews_s">Atsinaujina %1$s</string>
     <!-- Shown when a subscription is active and is going to expire at the end of the term -->
-    <string name="Subscription__expires_s">Expires %1$s</string>
+    <string name="Subscription__expires_s">Baigia galioti %1$s</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">Signal yra pelno nesiekianti organizacija, kuri neturi reklamuotojų ar investuotojų ir, kurią remia tik Signal programėle besinaudojantys ir ją vertinantys žmonės. Atlikite mėnesinį paaukojimą ir gaukite profilio ženkliuką, kad dalintumėtės savo palaikymu.</string>
@@ -4675,7 +4729,7 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">tapti rėmėju ir remti kas mėnesį.</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">Rodyti profilyje</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Paversti pagrindiniu ženkliuku</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">Atlikta</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Tęsti</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Kai turite daugiau kaip vieną ženkliuką, galite paversti kurį nors vieną iš jų pagrindiniu, Toks ženkliukas jūsų profilyje bus matomas kitiems žmonėms.</string>
 
     <string name="BecomeASustainerFragment__get_badges">Palaikydami Signal, gaukite ženkliukus savo profiliui.</string>
@@ -5323,7 +5377,7 @@
     <!-- Displayed in the viewer when a story is no longer available -->
     <string name="StorySlateView__this_story_is_no_longer_available">Ši istorija nebeprieinama.</string>
     <!-- Displayed in the viewer when a story has permanently failed to download. -->
-    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Can\'t download story. %1$s will need to share it again.</string>
+    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Nepavyksta atsisiųsti istorijos. %1$s turės dar kartą ją bendrinti</string>
     <!-- Displayed in the viewer when the network is not available -->
     <string name="StorySlateView__no_internet_connection">Nėra interneto ryšio</string>
     <!-- Displayed in the viewer when network is available but content could not be downloaded -->
@@ -5644,7 +5698,7 @@
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">Vis tiek tęsti</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
-    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
+    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Programėlei „Signal“ reikia leidimo eksportuoti tavo SMS žinutes.</string>
 
     <!-- ChooseANewDefaultSmsAppFragment -->
     <!-- Title of the screen -->
@@ -5766,30 +5820,35 @@
 
     <!-- DonateToSignalFragment -->
     <!-- Title below avatar -->
-    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <string name="DonateToSignalFragment__powered_by">Tokie žmonės kaip tu yra mūsų variklis.</string>
     <!-- Continue button label -->
     <string name="DonateToSignalFragment__continue">Tęsti</string>
     <!-- Description below title -->
-    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <string name="DonateToSignalFragment__support_technology">Palaikyk technologiją, kuri sukurta tau, o ne dėl tavo duomenų – prisijunk prie „Signal“ rėmėjų bendruomenės.</string>
     <!-- Donation pill toggle monthly text -->
-    <string name="DonationPillToggle__monthly">Monthly</string>
+    <string name="DonationPillToggle__monthly">Kas mėnesį</string>
     <!-- Donation pill toggle one-time text -->
     <string name="DonationPillToggle__one_time">Vienkartiniai</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
-    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Paremti „Signal“ %1$s per mėnesį</string>
     <!-- Sheet summary when subscribing -->
     <string name="GatewaySelectorBottomSheet__get_a_s_badge">Gaukite %1$s ženkliuką</string>
     <!-- Sheet title when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Paremti „Signal“ %1$s</string>
     <!-- Sheet summary when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <plurals name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">
+        <item quantity="one">Get a %1$s badge for %2$d day</item>
+        <item quantity="few">Get a %1$s badge for %2$d days</item>
+        <item quantity="many">Get a %1$s badge for %2$d days</item>
+        <item quantity="other">Get a %1$s badge for %2$d days</item>
+    </plurals>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Kredito arba debeto kortelė</string>
 
     <!-- StripePaymentInProgressFragment -->
-    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
+    <string name="StripePaymentInProgressFragment__cancelling">Atšaukiama…</string>
 
     <!-- EOF -->
 

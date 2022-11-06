@@ -105,6 +105,14 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">سیگنال برای پیوست کردن فایل‌های صوتی و تصویری به مجوز ذخیره‌سازی نیاز دارد، اما این مجوز به صورت دائمی رد شده است. لطفاً به منوی تنظیمات برنامه رفته، «مجوزها» را انتخاب کرده، و «ذخیره‌سازی» را فعال کنید.</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">سیگنال برای پیوست کردن اطلاعات مخاطب به مجوز مخاطبین نیاز دارد، اما این مجوز به صورت دائمی رد شده است. لطفاً به منوی تنظیمات برنامه رفته، «مجوزها» را انتخاب کرده، و «مخاطبین» را فعال کنید.</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">سیگنال برای پیوست کردن موقعیت مکانی به مجوز مکان نیاز دارد، اما این مجوز به صورت دائمی رد شده است. لطفاً به منوی تنظیمات برنامه رفته، «مجوزها» را انتخاب کرده، و «مکان» را فعال کنید.</string>
+    <!-- Alert dialog title to show the recipient has not activated payments -->
+    <string name="AttachmentManager__not_activated_payments">%1$s hasn\'t activated Payments </string>
+    <!-- Alert dialog description to send the recipient a request to activate payments -->
+    <string name="AttachmentManager__request_to_activate_payments">Do you want to send them a request to activate Payments?</string>
+    <!-- Alert dialog button to send request -->
+    <string name="AttachmentManager__send_request">Send request</string>
+    <!-- Alert dialog button to cancel dialog -->
+    <string name="AttachmentManager__cancel">لغو</string>
 
     <!-- AttachmentUploadJob -->
     <string name="AttachmentUploadJob_uploading_media">بارگذاری رسانه…</string>
@@ -127,31 +135,33 @@
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment detailing the donation amount, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__donation_amount_s">Donation amount: %1$s</string>
+    <string name="CreditCardFragment__donation_amount_s">مبلغ کمک مالی: %1$s</string>
     <!-- Explanation of how to fill in the form, displayed above the credit card text fields -->
-    <string name="CreditCardFragment__enter_your_card_information_below">Enter your card information below</string>
+    <string name="CreditCardFragment__enter_your_card_information_below">اطلاعات کارت خود را در زیر وارد کنید</string>
     <!-- Displayed as a hint in the card number text field -->
-    <string name="CreditCardFragment__card_number">Card number</string>
+    <string name="CreditCardFragment__card_number">شماره کارت</string>
     <!-- Displayed as a hint in the card expiry text field -->
-    <string name="CreditCardFragment__mm_yy">MM/YY</string>
+    <string name="CreditCardFragment__mm_yy">سال/ماه</string>
     <!-- Displayed as a hint in the card cvv text field -->
     <string name="CreditCardFragment__cvv">CVV</string>
     <!-- Error displayed under the card number text field when there is an invalid card number entered -->
-    <string name="CreditCardFragment__invalid_card_number">Invalid card number</string>
+    <string name="CreditCardFragment__invalid_card_number">شماره کارت نامعتبر است</string>
     <!-- Error displayed under the card expiry text field when the card is expired -->
-    <string name="CreditCardFragment__card_has_expired">Card has expired</string>
+    <string name="CreditCardFragment__card_has_expired">کارت منقضی شده است</string>
     <!-- Error displayed under the card cvv text field when the cvv is too short -->
-    <string name="CreditCardFragment__code_is_too_short">Code is too short</string>
+    <string name="CreditCardFragment__code_is_too_short">کد خیلی کوتاه است</string>
     <!-- Error displayed under the card cvv text field when the cvv is too long -->
-    <string name="CreditCardFragment__code_is_too_long">Code is too long</string>
+    <string name="CreditCardFragment__code_is_too_long">کد خیلی طولانی است</string>
     <!-- Error displayed under the card cvv text field when the cvv is invalid -->
-    <string name="CreditCardFragment__invalid_code">Invalid code</string>
+    <string name="CreditCardFragment__invalid_code">کد نامعتبر است</string>
     <!-- Error displayed under the card expiry text field when the expiry month is invalid -->
-    <string name="CreditCardFragment__invalid_month">Invalid month</string>
+    <string name="CreditCardFragment__invalid_month">ماه نامعتبر است</string>
     <!-- Error displayed under the card expiry text field when the expiry is missing the year -->
-    <string name="CreditCardFragment__year_required">Year required</string>
+    <string name="CreditCardFragment__year_required">سال الزامی است</string>
     <!-- Error displayed under the card expiry text field when the expiry year is invalid -->
-    <string name="CreditCardFragment__invalid_year">Invalid year</string>
+    <string name="CreditCardFragment__invalid_year">سال نامعتبر است</string>
+    <!-- Button label to confirm credit card input and proceed with payment -->
+    <string name="CreditCardFragment__continue">ادامه</string>
 
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">مسدود کردن و ترک گروه %1$s؟</string>
@@ -298,17 +308,17 @@
     <string name="ConversationItem_this_message_was_deleted">این پیام حذف شد</string>
     <string name="ConversationItem_you_deleted_this_message">شما این پیام را حذف کردید.</string>
     <!-- Dialog error message shown when user can't download a message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">Can\'t download message. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_s_will_need_to_send_it_again">پیام بارگیری نمی‌شود. %1$s باید دوباره آن را ارسال کند.</string>
     <!-- Dialog error message shown when user can't download an image message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">Can\'t download image. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_s_will_need_to_send_it_again">تصویر بارگیری نمی‌شود. %1$s باید دوباره آن را ارسال کند.</string>
     <!-- Dialog error message shown when user can't download a video message from someone else due to a permanent failure (e.g., unable to decrypt), placeholder is other's name -->
-    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">Can\'t download video. %1$s will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_s_will_need_to_send_it_again">ویدیو بارگیری نمی‌شود. %1$s باید دوباره آن را ارسال کند.</string>
     <!-- Dialog error message shown when user can't download a their own message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">Can\'t download message. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_message_you_will_need_to_send_it_again">پیام بارگیری نمی‌شود. باید دوباره آن را ارسال کنید.</string>
     <!-- Dialog error message shown when user can't download a their own image message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">Can\'t download image. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_image_you_will_need_to_send_it_again">تصویر بارگیری نمی‌شود. باید دوباره آن را ارسال کنید.</string>
     <!-- Dialog error message shown when user can't download a their own video message via a linked device due to a permanent failure (e.g., unable to decrypt) -->
-    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">Can\'t download video. You will need to send it again.</string>
+    <string name="ConversationItem_cant_download_video_you_will_need_to_send_it_again">ویدیو بارگیری نمی‌شود. باید دوباره آن را ارسال کنید.</string>
 
     <!-- ConversationActivity -->
     <string name="ConversationActivity_add_attachment">افزودن پیوست</string>
@@ -864,7 +874,7 @@
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group -->
     <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support">شما مخاطبی را انتخاب کرده‌اید که از گروه‌های سیگنال پشتیبانی نمی‌کند، بنابراین این گروه فراپیام خواهد بود. نام‌ها و عکس‌های گروه فراپیامی سفارشی فقط برای شما قابل مشاهده خواهد بود.</string>
     <!-- Info message shown in the middle of the screen, displayed when adding group details to an MMS Group after SMS Phase 0 -->
-    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">شما مخاطبی را انتخاب کردید که از گروه‌های سیگنال پشتیبانی نمی‌کند، این یک گروه فراپیامی (MMS) خواهد بود. اسم‌ها و عکس‌های سفارشی گروه فراپیامی فقط برای شما قابل مشاهده هستند. پشتیبانی از گروه‌های MMS به‌زودی حذف خواهد شد تا روی پیام‌های رمزگذاری‌شده متمرکز شود.</string>
+    <string name="AddGroupDetailsFragment__youve_selected_a_contact_that_doesnt_support_signal_groups_mms_removal">You\'ve selected a contact that doesn\'t support Signal groups, this group will be MMS. Custom MMS group names and photos will only be visible to you. Support for MMS groups will be removed soon to focus on encrypted messaging.</string>
 
     <!-- ManageGroupActivity -->
     <string name="ManageGroupActivity_member_requests_and_invites">درخواست‌های عضویت و دعوت‌ها</string>
@@ -1409,6 +1419,14 @@
     <string name="MessageRecord_your_message_history_with_s_and_their_number_s_has_been_merged">سابقه پیام شما با %1$s و شماره او %2$s ادغام شده است.</string>
     <!-- Update item message shown when we merge two threads together and we don't know the phone number of the other thread -->
     <string name="MessageRecord_your_message_history_with_s_and_another_chat_has_been_merged">سابقه پیام شما با %1$s و گفتگوی دیگری که متعلق به او بود ادغام شده است.</string>
+    <!-- Message to notify sender that activate payments request has been sent to the recipient -->
+    <string name="MessageRecord_you_sent_request">You sent %1$s a request to activate Payments</string>
+    <!-- Request message from recipient to activate payments -->
+    <string name="MessageRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments. Only send payments to people you trust.</string>
+    <!-- Message to inform user that payments was activated-->
+    <string name="MessageRecord_you_activated_payments">You activated Payments</string>
+    <!-- Message to inform sender that recipient can now accept payments -->
+    <string name="MessageRecord_can_accept_payments">%1$s can now accept Payments</string>
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$s یک تماس گروهی آغاز کرد · %2$s</string>
@@ -1897,6 +1915,14 @@
     <string name="ThreadRecord_view_once_media">رسانهٔ یکبار مصرف</string>
     <string name="ThreadRecord_this_message_was_deleted">این پیام حذف شد</string>
     <string name="ThreadRecord_you_deleted_this_message">شما این پیام را حذف کردید.</string>
+    <!-- Displayed in the notification when the user sends a request to activate payments -->
+    <string name="ThreadRecord_you_sent_request">You sent a request to activate Payments</string>
+    <!-- Displayed in the notification when the recipient wants to activate payments -->
+    <string name="ThreadRecord_wants_you_to_activate_payments">%1$s wants you to activate Payments</string>
+    <!-- Displayed in the notification when the user activates payments -->
+    <string name="ThreadRecord_you_activated_payments">You activated Payments</string>
+    <!-- Displayed in the notification when the recipient can accept payments -->
+    <string name="ThreadRecord_can_accept_payments">%1$s can now accept Payments</string>
     <string name="ThreadRecord_s_is_on_signal">%1$s به سیگنال پیوست!</string>
     <string name="ThreadRecord_disappearing_messages_disabled">پیام‌های ناپدید شونده غیرفعال شدند</string>
     <string name="ThreadRecord_disappearing_message_time_updated_to_s">زمان پیام ناپدید شونده روی %1$s تنظیم شد</string>
@@ -2026,7 +2052,7 @@
     <string name="MediaPreviewActivity_media_no_longer_available">رسانه دیگر در دسترس نیست.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">برنامه‌ای برای اشتراک‌گذاری این رسانه پیدا نشد.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">بستن</string>
-    <string name="MediaPreviewFragment_edit_media_error">Media Error</string>
+    <string name="MediaPreviewFragment_edit_media_error">خطای رسانه</string>
 
     <!-- MessageNotifier -->
     <string name="MessageNotifier_d_new_messages_in_d_conversations">%1$d پیام جدید در %2$d مکالمه</string>
@@ -2123,6 +2149,12 @@
     <!-- UnauthorizedReminder -->
     <string name="UnauthorizedReminder_device_no_longer_registered">این دستگاه دیگر ثبت‌نام شده نیست</string>
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">این احتمالاً به این خاطر است که شما ثبت‌نام شماره‌تلفن خود را با دستگاهی دیگر در سیگنال انجام داده‌اید. برای ثبت‌نام دوباره ضربه بزنید.</string>
+
+    <!-- EnclaveFailureReminder -->
+    <!-- Banner message to update app to use payments -->
+    <string name="EnclaveFailureReminder_update_signal">برای ادامه استفاده از پرداخت‌ها، سیگنال را به‌روزرسانی کنید. موجودی شما ممکن است به‌روز نباشد.</string>
+    <!-- Banner button to update now -->
+    <string name="EnclaveFailureReminder_update_now">همین حالا به‌روزرسانی کن</string>
 
     <!-- WebRtcCallActivity -->
     <string name="WebRtcCallActivity_to_answer_the_call_give_signal_access_to_your_microphone">برای پاسخ به تماس، به سیگنال دسترسی به میکروفون خود را بدهید.</string>
@@ -2253,6 +2285,11 @@
     <string name="ConversationUpdateItem_the_disappearing_message_time_will_be_set_to_s_when_you_message_them">زمان پیام ناپدید شونده هنگامی که به آن‌ها پیام دهید روی %1$s تنظیم خواهد شد.</string>
     <!-- Update item button text to show to boost a feature -->
     <string name="ConversationUpdateItem_donate">حمایت کنید</string>
+    <!-- Update item button text to send payment -->
+    <string name="ConversationUpdateItem_send_payment">ارسال پرداخت</string>
+    <!-- Update item button text to activate payments -->
+    <string name="ConversationUpdateItem_activate_payments">فعال کردن پرداخت‌ها</string>
+
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">پخش … توقف</string>
@@ -2628,6 +2665,10 @@
     <string name="preferences__pressing_the_enter_key_will_send_text_messages">پیام‌ها با زدن کلید Enter ارسال خواهند شد</string>
     <string name="preferences__pref_use_address_book_photos">استفاده از عکس‌های دفترچهٔ تلفن</string>
     <string name="preferences__display_contact_photos_from_your_address_book_if_available">نمایش عکس‌های مخاطبین از دفترچهٔ تلفن در صورت وجود</string>
+    <!-- Preference menu item title for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__pref_keep_muted_chats_archived">چت‌های بی‌صدا را در بایگانی نگه دارید</string>
+    <!-- Preference menu item description for a toggle switch for preserving the archived state of muted chats. -->
+    <string name="preferences__muted_chats_that_are_archived_will_remain_archived">چت‌های بی‌صدا که بایگانی می‌شوند، پس از دریافت پیام جدید نیز در بایگانی می‌مانند.</string>
     <string name="preferences__generate_link_previews">تولید پیش‌نمایش‌‌های پیوند</string>
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">پیش‌نمایش‌های پیوند را به صورت مستقیم از وب‌سایت‌ها برای پیام‌هایی که ارسال می‌کنید، دریافت کنید.</string>
     <string name="preferences__choose_identity">انتخاب هویت</string>
@@ -2978,6 +3019,14 @@
     <string name="PaymentsHomeFragment__enable">فعال کردن</string>
     <!-- Alert dialog button to not enable payment lock for now -->
     <string name="PaymentsHomeFragment__not_now">حالا نه</string>
+    <!-- Alert dialog title which shows up to update app to send payments -->
+    <string name="PaymentsHomeFragment__update_required">به‌روزرسانی لازم است</string>
+    <!-- Alert dialog description that app update is required to send payments-->
+    <string name="PaymentsHomeFragment__an_update_is_required">برای ادامه ارسال و دریافت پرداخت‌ها و مشاهده موجودی به‌روز پرداخت‌هایتان، به‌روزرسانی لازم است.</string>
+    <!-- Alert dialog button to cancel -->
+    <string name="PaymentsHomeFragment__cancel">لغو</string>
+    <!-- Alert dialog button to update now -->
+    <string name="PaymentsHomeFragment__update_now">همین حالا به‌روزرسانی کن</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -3870,7 +3919,10 @@
     <!-- Title in save recovery phrase screen -->
     <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">ذخیره‌سازی عبارت بازیابی</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">عبارت بازیابی را وارد کنید</string>
-    <string name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">اگر پین سیگنال خود را تأیید کنید موجودی شما هنگام نصب دوبارهٔ سیگنال به صورت خودکار بازگردانی خواهد شد. شما همچنین می‌توانید موجودی خود را با استفاده از یک عبارت بازیابی، که یک عبارت %1$d-کلمه‌ای منحصر به شماست، بازگردانی کنید. آن را یادداشت و در یک مکان امن نگهداری کنید.</string>
+    <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
+        <item quantity="one">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+        <item quantity="other">Your balance will automatically restore when you reinstall Signal if you confirm your Signal PIN. You can also restore your balance using a recovery phrase, which is a %1$d-word phrase unique to you. Write it down and store it in a safe place.</item>
+    </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
     <string name="PaymentsRecoveryStartFragment__got_balance">شما موجودی دارید! زمان ذخیره‌سازی عبارت بازیابی است—یک رمز 24 کلمه‌ای که می‌توانید برای بازیابی موجودی خود از آن استفاده کنید.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
@@ -4453,7 +4505,7 @@
     <!-- Shown when a subscription is active and isn't going to expire at the end of the term -->
     <string name="Subscription__renews_s">در %1$s تمدید می‌شود</string>
     <!-- Shown when a subscription is active and is going to expire at the end of the term -->
-    <string name="Subscription__expires_s">Expires %1$s</string>
+    <string name="Subscription__expires_s">در %1$s منقضی می‌شود</string>
 
     <!-- First small text blurb on learn more sheet -->
     <string name="SubscribeLearnMoreBottomSheetDialogFragment__signal_is_a_nonprofit_with_no">سیگنال یک سازمان غیرانتفاعی بدون تبلیغ‌کننده یا سرمایه‌گذار است و تنها توسط افرادی که از آن استفاده می‌کنند و برای آن ارزش قائل هستند، پشتیبانی می‌شود. یک حمایت مالی مکرر ماهانه اهدا کنید و یک نشان افتخار پروفایل برای به اشتراک گذاشتن حمایت خود دریافت کنید.</string>
@@ -4469,7 +4521,7 @@
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">به یک حامی ماهیانه تبدیل شوید.</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">نمایش روی پروفایل</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">تبدیل به نشان مورد استفاده</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__done">تمام</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">ادامه</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">هنگامی که شما بیش از یک نشان دارید، می‌توانید یکی را برای نمایش روی پروفایل‌تان انتخاب کنید تا دیگران ببینند.</string>
 
     <string name="BecomeASustainerFragment__get_badges">نشان‌هایی برای پروفایل خود از طریق پشتیبانی سیگنال دریافت کنید.</string>
@@ -5101,7 +5153,7 @@
     <!-- Displayed in the viewer when a story is no longer available -->
     <string name="StorySlateView__this_story_is_no_longer_available">این استوری دیگر در دسترس نیست.</string>
     <!-- Displayed in the viewer when a story has permanently failed to download. -->
-    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">Can\'t download story. %1$s will need to share it again.</string>
+    <string name="StorySlateView__cant_download_story_s_will_need_to_share_it_again">استوری بارگیری نمی‌شود. %1$s باید دوباره آن را هم‌رسانی کند.</string>
     <!-- Displayed in the viewer when the network is not available -->
     <string name="StorySlateView__no_internet_connection">اتصال با اینترنت برقرار نیست.</string>
     <!-- Displayed in the viewer when network is available but content could not be downloaded -->
@@ -5402,7 +5454,7 @@
     <!-- Alert dialog button to continue with exporting sms after seeing the lack of storage warning -->
     <string name="ExportingSmsMessagesFragment__continue_anyway">به هر حال ادامه بده</string>
     <!-- Dialog text shown when Signal isn't granted the sms permission needed to export messages, different than being selected as the sms app -->
-    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">Signal needs the SMS permission to be able to export your SMS messages.</string>
+    <string name="ExportingSmsMessagesFragment__signal_needs_the_sms_permission_to_be_able_to_export_your_sms_messages">سیگنال برای اینکه بتواند پیامک‌های شما را صادر کند، به مجوز پیامک نیاز دارد.</string>
 
     <!-- ChooseANewDefaultSmsAppFragment -->
     <!-- Title of the screen -->
@@ -5522,30 +5574,33 @@
 
     <!-- DonateToSignalFragment -->
     <!-- Title below avatar -->
-    <string name="DonateToSignalFragment__powered_by">Powered by people like you.</string>
+    <string name="DonateToSignalFragment__powered_by">سیگنال با کمک افرادی مانند شما پشتیبانی می‌شود.</string>
     <!-- Continue button label -->
     <string name="DonateToSignalFragment__continue">ادامه</string>
     <!-- Description below title -->
-    <string name="DonateToSignalFragment__support_technology">Support technology built for you, not your data, by joining the community that sustains Signal.</string>
+    <string name="DonateToSignalFragment__support_technology">با پیوستن به اجتماعی که سیگنال را تداوم می‌بخشد، از فناوری‌ای پشتیبانی کنید که برای شما ساخته شده است، نه داده‌هایتان.</string>
     <!-- Donation pill toggle monthly text -->
-    <string name="DonationPillToggle__monthly">Monthly</string>
+    <string name="DonationPillToggle__monthly">ماهانه</string>
     <!-- Donation pill toggle one-time text -->
     <string name="DonationPillToggle__one_time">یک‌باره</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
-    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">Donate %1$s/month to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_month_to_signal">مبلغ %1$s در ماه را به سیگنال اهدا کنید</string>
     <!-- Sheet summary when subscribing -->
     <string name="GatewaySelectorBottomSheet__get_a_s_badge">یک نشان %1$s بگیرید</string>
     <!-- Sheet title when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">Donate %1$s to Signal</string>
+    <string name="GatewaySelectorBottomSheet__donate_s_to_signal">%1$s به سیگنال اهدا کنید</string>
     <!-- Sheet summary when giving a one-time donation -->
-    <string name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">Get a %1$s badge for %2$d days</string>
+    <plurals name="GatewaySelectorBottomSheet__get_a_s_badge_for_d_days">
+        <item quantity="one">Get a %1$s badge for %2$d day</item>
+        <item quantity="other">Get a %1$s badge for %2$d days</item>
+    </plurals>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Credit or debit card</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">کارت اعتباری یا دبیت کارت</string>
 
     <!-- StripePaymentInProgressFragment -->
-    <string name="StripePaymentInProgressFragment__cancelling">Cancelling…</string>
+    <string name="StripePaymentInProgressFragment__cancelling">در حال لغو…</string>
 
     <!-- EOF -->
 
