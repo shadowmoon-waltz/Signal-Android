@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms.recipients.ui.bottomsheet;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -85,6 +86,7 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
   private View                     buttonStrip;
   private View                     interactionsContainer;
   private BadgeImageView           badgeImageView;
+  private Callback                 callback;
 
   public static BottomSheetDialogFragment create(@NonNull RecipientId recipientId,
                                                  @Nullable GroupId groupId)
@@ -356,6 +358,8 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
       removeAdminButton.setEnabled(!busy);
       removeFromGroupButton.setEnabled(!busy);
     });
+
+    callback = getParentFragment() != null && getParentFragment() instanceof Callback ? (Callback) getParentFragment() : null;
   }
 
   private void openSystemContactSheet(@NonNull Intent intent) {
@@ -377,5 +381,17 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
   @Override
   public void show(@NonNull FragmentManager manager, @Nullable String tag) {
     BottomSheetUtil.show(manager, tag, this);
+  }
+
+  @Override
+  public void onDismiss(@NonNull DialogInterface dialog) {
+    super.onDismiss(dialog);
+    if (callback != null) {
+      callback.onRecipientBottomSheetDismissed();
+    }
+  }
+
+  public interface Callback {
+    void onRecipientBottomSheetDismissed();
   }
 }
