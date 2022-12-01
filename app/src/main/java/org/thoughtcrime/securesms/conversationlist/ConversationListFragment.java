@@ -113,9 +113,9 @@ import org.thoughtcrime.securesms.contacts.sync.CdsTemporaryErrorBottomSheet;
 import org.thoughtcrime.securesms.conversation.ConversationFragment;
 import org.thoughtcrime.securesms.conversationlist.model.Conversation;
 import org.thoughtcrime.securesms.conversationlist.model.UnreadPayments;
-import org.thoughtcrime.securesms.database.MessageDatabase.MarkedMessageInfo;
+import org.thoughtcrime.securesms.database.MessageTable.MarkedMessageInfo;
 import org.thoughtcrime.securesms.database.SignalDatabase;
-import org.thoughtcrime.securesms.database.ThreadDatabase;
+import org.thoughtcrime.securesms.database.ThreadTable;
 import org.thoughtcrime.securesms.database.model.ThreadRecord;
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
 import org.thoughtcrime.securesms.events.ReminderUpdateEvent;
@@ -572,7 +572,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       hideKeyboard();
       getNavigator().goToConversation(contact.getId(),
                                       threadId,
-                                      ThreadDatabase.DistributionTypes.DEFAULT,
+                                      ThreadTable.DistributionTypes.DEFAULT,
                                       -1);
     });
   }
@@ -586,7 +586,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       hideKeyboard();
       getNavigator().goToConversation(message.getConversationRecipient().getId(),
                                       message.getThreadId(),
-                                      ThreadDatabase.DistributionTypes.DEFAULT,
+                                      ThreadTable.DistributionTypes.DEFAULT,
                                       startingPosition);
     });
   }
@@ -1079,7 +1079,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     }
 
     SimpleTask.run(SignalExecutors.BOUNDED, () -> {
-      ThreadDatabase db = SignalDatabase.threads();
+      ThreadTable db = SignalDatabase.threads();
 
       db.pinConversations(toPin);
       ConversationUtil.refreshRecipientShortcuts();
@@ -1092,7 +1092,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   private void handleUnpin(@NonNull Collection<Long> ids) {
     SimpleTask.run(SignalExecutors.BOUNDED, () -> {
-      ThreadDatabase db = SignalDatabase.threads();
+      ThreadTable db = SignalDatabase.threads();
 
       db.unpinConversations(ids);
       ConversationUtil.refreshRecipientShortcuts();
@@ -1429,7 +1429,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
                                 Snackbar.LENGTH_LONG,
                                 false)
     {
-      private final ThreadDatabase threadDatabase = SignalDatabase.threads();
+      private final ThreadTable threadTable = SignalDatabase.threads();
 
       private List<Long> pinnedThreadIds;
 
@@ -1437,11 +1437,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       protected void executeAction(@Nullable Long parameter) {
         Context context = requireActivity();
 
-        pinnedThreadIds = threadDatabase.getPinnedThreadIds();
-        threadDatabase.archiveConversation(threadId);
+        pinnedThreadIds = threadTable.getPinnedThreadIds();
+        threadTable.archiveConversation(threadId);
 
         if (unreadCount > 0) {
-          List<MarkedMessageInfo> messageIds = threadDatabase.setRead(threadId, false);
+          List<MarkedMessageInfo> messageIds = threadTable.setRead(threadId, false);
           ApplicationDependencies.getMessageNotifier().updateNotification(context);
           MarkReadReceiver.process(context, messageIds);
         }
@@ -1453,11 +1453,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       protected void reverseAction(@Nullable Long parameter) {
         Context context = requireActivity();
 
-        threadDatabase.unarchiveConversation(threadId);
-        threadDatabase.restorePins(pinnedThreadIds);
+        threadTable.unarchiveConversation(threadId);
+        threadTable.restorePins(pinnedThreadIds);
 
         if (unreadCount > 0) {
-          threadDatabase.incrementUnread(threadId, unreadCount, unreadSelfMentionsCount);
+          threadTable.incrementUnread(threadId, unreadCount, unreadSelfMentionsCount);
           ApplicationDependencies.getMessageNotifier().updateNotification(context);
         }
 
@@ -1696,7 +1696,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     @Override
     public void onNavigateToMessage(long threadId, @NonNull RecipientId threadRecipientId, @NonNull RecipientId senderId, long messageSentAt, long messagePositionInThread) {
-      MainNavigator.get(requireActivity()).goToConversation(threadRecipientId, threadId, ThreadDatabase.DistributionTypes.DEFAULT, (int) messagePositionInThread);
+      MainNavigator.get(requireActivity()).goToConversation(threadRecipientId, threadId, ThreadTable.DistributionTypes.DEFAULT, (int) messagePositionInThread);
     }
   }
 

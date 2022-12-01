@@ -34,7 +34,7 @@ import org.thoughtcrime.securesms.components.menu.ActionItem;
 import org.thoughtcrime.securesms.components.menu.SignalBottomActionBar;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaController;
 import org.thoughtcrime.securesms.components.voice.VoiceNotePlaybackState;
-import org.thoughtcrime.securesms.database.MediaDatabase;
+import org.thoughtcrime.securesms.database.MediaTable;
 import org.thoughtcrime.securesms.database.loaders.GroupedThreadMediaLoader;
 import org.thoughtcrime.securesms.database.loaders.MediaLoader;
 import org.thoughtcrime.securesms.mediapreview.MediaIntentFactory;
@@ -60,9 +60,9 @@ public final class MediaOverviewPageFragment extends Fragment
   private static final String MEDIA_TYPE_EXTRA = "media_type";
   private static final String GRID_MODE        = "grid_mode";
 
-  private final ActionModeCallback            actionModeCallback = new ActionModeCallback();
-  private       MediaDatabase.Sorting         sorting            = MediaDatabase.Sorting.Newest;
-  private       MediaLoader.MediaType         mediaType          = MediaLoader.MediaType.GALLERY;
+  private final ActionModeCallback    actionModeCallback = new ActionModeCallback();
+  private       MediaTable.Sorting    sorting            = MediaTable.Sorting.Newest;
+  private       MediaLoader.MediaType mediaType          = MediaLoader.MediaType.GALLERY;
   private       long                          threadId;
   private       TextView                      noMedia;
   private       RecyclerView                  recyclerView;
@@ -127,7 +127,7 @@ public final class MediaOverviewPageFragment extends Fragment
                                               this,
                                               this,
                                               sorting.isRelatedToFileSize(),
-                                              threadId == MediaDatabase.ALL_THREADS,
+                                              threadId == MediaTable.ALL_THREADS,
                                               !sorting.isRelatedToContentType());
     this.recyclerView.setAdapter(adapter);
     this.recyclerView.setLayoutManager(gridManager);
@@ -198,7 +198,7 @@ public final class MediaOverviewPageFragment extends Fragment
   }
 
   @Override
-  public void onMediaClicked(@NonNull MediaDatabase.MediaRecord mediaRecord) {
+  public void onMediaClicked(@NonNull MediaTable.MediaRecord mediaRecord) {
     if (actionMode != null) {
       handleMediaMultiSelectClick(mediaRecord);
     } else {
@@ -215,7 +215,7 @@ public final class MediaOverviewPageFragment extends Fragment
     }
   }
 
-  private void handleMediaMultiSelectClick(@NonNull MediaDatabase.MediaRecord mediaRecord) {
+  private void handleMediaMultiSelectClick(@NonNull MediaTable.MediaRecord mediaRecord) {
     MediaGalleryAllAdapter adapter = getListAdapter();
 
     adapter.toggleSelection(mediaRecord);
@@ -226,7 +226,7 @@ public final class MediaOverviewPageFragment extends Fragment
     }
   }
 
-  private void handleMediaPreviewClick(@NonNull MediaDatabase.MediaRecord mediaRecord) {
+  private void handleMediaPreviewClick(@NonNull MediaTable.MediaRecord mediaRecord) {
     if (mediaRecord.getAttachment().getUri() == null) {
       return;
     }
@@ -248,7 +248,7 @@ public final class MediaOverviewPageFragment extends Fragment
           mediaRecord.getAttachment().getCaption(),
           true,
           true,
-          threadId == MediaDatabase.ALL_THREADS,
+          threadId == MediaTable.ALL_THREADS,
           true,
           sorting,
           attachment.isVideoGif());
@@ -260,7 +260,7 @@ public final class MediaOverviewPageFragment extends Fragment
     }
   }
 
-  private static void showFileExternally(@NonNull Context context, @NonNull MediaDatabase.MediaRecord mediaRecord) {
+  private static void showFileExternally(@NonNull Context context, @NonNull MediaTable.MediaRecord mediaRecord) {
       Uri uri = mediaRecord.getAttachment().getUri();
 
       Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -275,7 +275,7 @@ public final class MediaOverviewPageFragment extends Fragment
     }
 
   @Override
-  public void onMediaLongClicked(MediaDatabase.MediaRecord mediaRecord) {
+  public void onMediaLongClicked(MediaTable.MediaRecord mediaRecord) {
     if (actionMode == null) {
       enterMultiSelect();
     }

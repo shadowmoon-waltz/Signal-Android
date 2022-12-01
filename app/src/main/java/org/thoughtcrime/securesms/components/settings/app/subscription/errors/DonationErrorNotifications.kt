@@ -62,6 +62,8 @@ object DonationErrorNotifications {
       )
     }
 
+    override fun onTryCreditCardAgain(context: Context): DonationErrorParams.ErrorAction<PendingIntent>? = null
+
     override fun onGoToGooglePay(context: Context): DonationErrorParams.ErrorAction<PendingIntent> {
       return createAction(
         context = context,

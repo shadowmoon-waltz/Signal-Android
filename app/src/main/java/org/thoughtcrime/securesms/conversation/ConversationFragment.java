@@ -112,10 +112,10 @@ import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectFor
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardRepository;
 import org.thoughtcrime.securesms.conversation.quotes.MessageQuotesBottomSheet;
 import org.thoughtcrime.securesms.conversation.ui.error.EnableCallNotificationSettingsDialog;
-import org.thoughtcrime.securesms.database.MessageDatabase;
-import org.thoughtcrime.securesms.database.MmsDatabase;
+import org.thoughtcrime.securesms.database.MessageTable;
+import org.thoughtcrime.securesms.database.MmsTable;
 import org.thoughtcrime.securesms.database.SignalDatabase;
-import org.thoughtcrime.securesms.database.SmsDatabase;
+import org.thoughtcrime.securesms.database.SmsTable;
 import org.thoughtcrime.securesms.database.model.InMemoryMessageRecord;
 import org.thoughtcrime.securesms.database.model.MediaMmsMessageRecord;
 import org.thoughtcrime.securesms.database.model.MessageId;
@@ -1194,12 +1194,14 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     builder.setTitle(getActivity().getResources().getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messagesCount, messagesCount));
     builder.setCancelable(true);
 
-    int deleteForMeResId = isNoteToSelfDelete(messageRecords) ? R.string.ConversationFragment_delete_on_this_device : R.string.ConversationFragment_delete_for_me;
+    boolean isNoteToSelfDelete = isNoteToSelfDelete(messageRecords);
+
+    int deleteForMeResId = isNoteToSelfDelete ? R.string.ConversationFragment_delete_on_this_device : R.string.ConversationFragment_delete_for_me;
     builder.setPositiveButton(deleteForMeResId, (dialog, which) -> handleDeleteMessagesForMe(messageRecords, conversationMessages));
 
-    int deleteForEveryoneResId = isNoteToSelfDelete(messageRecords) ? R.string.ConversationFragment_delete_everywhere : R.string.ConversationFragment_delete_for_everyone;
+    int deleteForEveryoneResId = isNoteToSelfDelete ? R.string.ConversationFragment_delete_everywhere : R.string.ConversationFragment_delete_for_everyone;
 
-    if (RemoteDeleteUtil.isValidSend(messageRecords, System.currentTimeMillis())) {
+    if (RemoteDeleteUtil.isValidSend(messageRecords, System.currentTimeMillis()) && (!isNoteToSelfDelete || TextSecurePreferences.isMultiDevice(requireContext()))) {
       builder.setNeutralButton(deleteForEveryoneResId, (dialog, which) -> handleDeleteForEveryone(messageRecords, conversationMessages));
     }
 
@@ -1322,7 +1324,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   }
 
   public long stageOutgoingMessage(OutgoingMediaMessage message) {
-    MessageRecord messageRecord = MmsDatabase.readerFor(message, threadId).getCurrent();
+    MessageRecord messageRecord = MmsTable.readerFor(message, threadId).getCurrent();
 
     if (getListAdapter() != null) {
       setLastSeen(0);
@@ -1333,7 +1335,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   }
 
   public long stageOutgoingMessage(OutgoingTextMessage message, long messageId) {
-    MessageRecord messageRecord = SmsDatabase.readerFor(message, threadId, messageId).getCurrent();
+    MessageRecord messageRecord = SmsTable.readerFor(message, threadId, messageId).getCurrent();
 
     if (getListAdapter() != null) {
       setLastSeen(0);
@@ -1977,7 +1979,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
           ApplicationDependencies.getViewOnceMessageManager().scheduleIfNecessary();
 
-          ApplicationDependencies.getJobManager().add(new MultiDeviceViewOnceOpenJob(new MessageDatabase.SyncMessageId(messageRecord.getIndividualRecipient().getId(), messageRecord.getDateSent())));
+          ApplicationDependencies.getJobManager().add(new MultiDeviceViewOnceOpenJob(new MessageTable.SyncMessageId(messageRecord.getIndividualRecipient().getId(), messageRecord.getDateSent())));
 
           return tempUri;
         } catch (IOException e) {
