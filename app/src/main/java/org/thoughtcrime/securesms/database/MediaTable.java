@@ -246,7 +246,9 @@ public class MediaTable extends DatabaseTable {
   public enum Sorting {
     Newest (AttachmentTable.TABLE_NAME + "." + AttachmentTable.MMS_ID + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.DISPLAY_ORDER + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.ROW_ID + " DESC"),
     Oldest (AttachmentTable.TABLE_NAME + "." + AttachmentTable.MMS_ID + " ASC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.DISPLAY_ORDER + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.ROW_ID + " ASC"),
-    Largest(AttachmentTable.TABLE_NAME + "." + AttachmentTable.SIZE + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.DISPLAY_ORDER + " DESC");
+    Largest(AttachmentTable.TABLE_NAME + "." + AttachmentTable.SIZE + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.DISPLAY_ORDER + " DESC"),
+    ContentTypeLargest(AttachmentTable.TABLE_NAME + "." + AttachmentTable.CONTENT_TYPE + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.SIZE   + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.DISPLAY_ORDER + " DESC"),
+    ContentTypeNewest(AttachmentTable.TABLE_NAME + "." + AttachmentTable.CONTENT_TYPE + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.MMS_ID + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.DISPLAY_ORDER + " DESC, " + AttachmentTable.TABLE_NAME + "." + AttachmentTable.ROW_ID + " DESC");
 
     private final String postFix;
 
@@ -259,7 +261,12 @@ public class MediaTable extends DatabaseTable {
     }
 
     public boolean isRelatedToFileSize() {
-      return this == Largest;
+      // SW : includes content type newest because I want to show file sizes in that case (for display still groups by content type due to an earlier isRelatedToContentType check)
+      return this == Largest || this == ContentTypeLargest || this == ContentTypeNewest;
+    }
+
+    public boolean isRelatedToContentType() {
+      return this == ContentTypeLargest || this == ContentTypeNewest;
     }
 
     public static @NonNull Sorting deserialize(int code) {

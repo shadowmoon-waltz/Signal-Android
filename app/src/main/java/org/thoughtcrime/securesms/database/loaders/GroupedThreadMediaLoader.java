@@ -216,7 +216,7 @@ public final class GroupedThreadMediaLoader extends AsyncTaskLoader<GroupedThrea
     }
 
     @Override
-    public int groupForRecord(@NonNull MediaDatabase.MediaRecord mediaRecord) {
+    public int groupForRecord(@NonNull MediaTable.MediaRecord mediaRecord) {
       final String contentType = MediaUtil.getContentTypeStringWithGif(mediaRecord.getAttachment(), defaultValue);
       final int id = byString.getOrDefault(contentType, byString.size());
       if (id == byString.size()) {
