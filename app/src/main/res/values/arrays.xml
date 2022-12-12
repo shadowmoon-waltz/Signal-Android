@@ -363,7 +363,7 @@
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
         <item>@string/ForkSettingsFragment__copy_text</item>
         <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
-        <item>@string/media_preview__forward_title</item>
+        <item>@string/conversation_selection__menu_forward</item>
         <item>@string/AndroidManifest__message_details</item>
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
@@ -394,7 +394,7 @@
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
         <item>@string/ForkSettingsFragment__copy_text</item>
         <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
-        <item>@string/media_preview__forward_title</item>
+        <item>@string/conversation_selection__menu_forward</item>
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
         <item>@string/ForkSettingsFragment__select_multiple</item>

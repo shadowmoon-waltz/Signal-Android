@@ -70,7 +70,7 @@ class IdentityTable internal constructor(context: Context?, databaseHelper: Sign
     """
   }
 
-  fun getIdentityStoreRecord(addressName: String): IdentityStoreRecord? {
+  fun getIdentityStoreRecord(addressName: String, tryE164: Boolean = true): IdentityStoreRecord? {
     readableDatabase
       .select()
       .from(TABLE_NAME)
@@ -91,8 +91,12 @@ class IdentityTable internal constructor(context: Context?, databaseHelper: Sign
           if (byServiceId.isPresent) {
             val recipient = Recipient.resolved(byServiceId.get())
             if (recipient.hasE164() && !UuidUtil.isUuid(recipient.requireE164())) {
-              Log.i(TAG, "Could not find identity for UUID. Attempting E164.")
-              return getIdentityStoreRecord(recipient.requireE164())
+              if (tryE164) {
+                Log.i(TAG, "Could not find identity for UUID. Attempting E164.")
+                return getIdentityStoreRecord(recipient.requireE164())
+              } else {
+                Log.i(TAG, "Could not find identity for UUID, and our recipient might have an E164, but tryE164 is false.")
+              }
             } else {
               Log.i(TAG, "Could not find identity for UUID, and our recipient doesn't have an E164.")
             }

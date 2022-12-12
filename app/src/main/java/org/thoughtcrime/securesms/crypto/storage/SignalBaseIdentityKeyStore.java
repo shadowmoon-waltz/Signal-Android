@@ -275,7 +275,7 @@ public class SignalBaseIdentityKeyStore {
         if (cache.containsKey(addressName)) {
           return cache.get(addressName);
         } else {
-          IdentityStoreRecord record = identityDatabase.getIdentityStoreRecord(addressName);
+          IdentityStoreRecord record = identityDatabase.getIdentityStoreRecord(addressName, true);
           cache.put(addressName, record);
           return record;
         }
