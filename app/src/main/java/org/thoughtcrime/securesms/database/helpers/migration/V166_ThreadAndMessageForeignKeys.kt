@@ -2,11 +2,13 @@ package org.thoughtcrime.securesms.database.helpers.migration
 
 import android.app.Application
 import net.zetetic.database.sqlcipher.SQLiteDatabase
+import org.signal.core.util.SqlUtil
 import org.signal.core.util.Stopwatch
 import org.signal.core.util.delete
 import org.signal.core.util.logging.Log
 import org.signal.core.util.readToList
 import org.signal.core.util.requireLong
+import org.signal.core.util.toSingleLine
 import org.signal.core.util.update
 
 /**
@@ -18,6 +20,13 @@ object V166_ThreadAndMessageForeignKeys : SignalDatabaseMigration {
   private val TAG = Log.tag(V166_ThreadAndMessageForeignKeys::class.java)
 
   override fun migrate(context: Application, db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+    // Some crashes we were seeing indicated that we may have been running this migration twice on some unlucky devices, likely due
+    // to some gaps that were left between some transactions during the upgrade path.
+    if (!SqlUtil.columnExists(db, "thread", "thread_recipient_id")) {
+      Log.w(TAG, "Migration must have already run! Skipping.", true)
+      return
+    }
+
     val stopwatch = Stopwatch("migration")
 
     removeDuplicateThreadEntries(db)
@@ -49,12 +58,12 @@ object V166_ThreadAndMessageForeignKeys : SignalDatabaseMigration {
         COUNT(*) AS thread_count 
       FROM thread 
       GROUP BY thread_recipient_id HAVING thread_count > 1
-    """.trimMargin()
+    """.toSingleLine()
     ).use { cursor ->
       while (cursor.moveToNext()) {
         val recipientId = cursor.requireLong("thread_recipient_id")
         val count = cursor.requireLong("thread_count")
-        Log.w(TAG, "There were $count threads for RecipientId::$recipientId. Merging.")
+        Log.w(TAG, "There were $count threads for RecipientId::$recipientId. Merging.", true)
 
         val threads: List<ThreadInfo> = getThreadsByRecipientId(db, cursor.requireLong("thread_recipient_id"))
         mergeThreads(db, threads)
@@ -102,6 +111,14 @@ object V166_ThreadAndMessageForeignKeys : SignalDatabaseMigration {
       .values("thread_id" to primaryId)
       .where("thread_id = ?", secondaryId)
       .run()
+
+    // We're dealing with threads that exist, so we don't need to remap old_ids
+
+    val count = db.update("remapped_threads")
+      .values("new_id" to primaryId)
+      .where("new_id = ?", secondaryId)
+      .run()
+    Log.w(TAG, "Remapped $count remapped_threads new_ids from $secondaryId to $primaryId", true)
 
     db.delete("thread")
       .where("_id = ?", secondaryId)
