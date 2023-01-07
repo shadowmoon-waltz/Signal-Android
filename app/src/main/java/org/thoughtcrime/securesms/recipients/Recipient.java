@@ -660,8 +660,9 @@ public class Recipient {
     String name = Util.getFirstNonEmpty(getGroupName(context),
                                         getSystemProfileName().getGivenName(),
                                         getProfileName().getGivenName(),
-                                        getDisplayName(context),
-                                        getUsername().orElse(null));
+                                        getE164().orElse(null),
+                                        getUsername().orElse(null),
+                                        getDisplayName(context));
 
     return StringUtil.isolateBidi(name);
   }
@@ -1034,6 +1035,10 @@ public class Recipient {
     return capabilities.getPnpCapability();
   }
 
+  public @NonNull Capability getPaymentActivationCapability() {
+    return capabilities.getPaymentActivation();
+  }
+
   public @Nullable byte[] getProfileKey() {
     return profileKey;
   }
@@ -1221,6 +1226,10 @@ public class Recipient {
 
     public int serialize() {
       return value;
+    }
+
+    public boolean isSupported() {
+      return this == SUPPORTED;
     }
 
     public static Capability deserialize(int value) {

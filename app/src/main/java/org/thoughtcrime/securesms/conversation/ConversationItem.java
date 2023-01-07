@@ -2598,8 +2598,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     if (message > -1) builder.setMessage(message);
 
     builder.setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-      MessageTable db = messageRecord.isMms() ? SignalDatabase.mms()
-                                              : SignalDatabase.sms();
+      MessageTable db = messageRecord.isMms() ? SignalDatabase.messages()
+                                              : SignalDatabase.messages();
 
       db.markAsInsecure(messageRecord.getId());
       db.markAsOutbox(messageRecord.getId());
@@ -2617,9 +2617,9 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     builder.setNegativeButton(R.string.no, (dialogInterface, i) -> {
       if (messageRecord.isMms()) {
-        SignalDatabase.mms().markAsSentFailed(messageRecord.getId());
+        SignalDatabase.messages().markAsSentFailed(messageRecord.getId());
       } else {
-        SignalDatabase.sms().markAsSentFailed(messageRecord.getId());
+        SignalDatabase.messages().markAsSentFailed(messageRecord.getId());
       }
     });
     builder.show();

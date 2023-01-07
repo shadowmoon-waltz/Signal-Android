@@ -52,8 +52,8 @@ ktlint {
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1185
-def canonicalVersionName = "6.6.3"
+def canonicalVersionCode = 1189
+def canonicalVersionName = "6.7.3"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)

@@ -104,7 +104,7 @@ public final class ReactionsBottomSheetDialogFragment extends BottomSheetDialogF
     setUpRecipientsRecyclerView((Locale)requireArguments().getSerializable(ARGS_LOCALE));
     setUpTabMediator(view, savedInstanceState);
 
-    MessageId messageId = new MessageId(requireArguments().getLong(ARGS_MESSAGE_ID), requireArguments().getBoolean(ARGS_IS_MMS));
+    MessageId messageId = new MessageId(requireArguments().getLong(ARGS_MESSAGE_ID));
     setUpViewModel(messageId);
   }
 
