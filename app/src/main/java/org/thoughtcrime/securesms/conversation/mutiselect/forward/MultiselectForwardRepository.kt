@@ -112,7 +112,7 @@ class MultiselectForwardRepository {
       MultiselectForwardRepository().send(
         "",
         args.multiShareArgs,
-        setOf(ContactSearchKey.RecipientSearchKey.KnownRecipient(recipient.getId())),
+        setOf(ContactSearchKey.RecipientSearchKey(recipient.getId(), false)),
         MultiselectForwardRepository.MultiselectForwardResultHandlers(
           onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
           onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_failed_to_send, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
