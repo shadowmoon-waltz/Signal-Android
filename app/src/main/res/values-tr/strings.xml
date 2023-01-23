@@ -1153,25 +1153,25 @@
     <string name="MessageRecord_you_updated_group">Grubu güncellediniz.</string>
     <string name="MessageRecord_the_group_was_updated">Grup güncellendi</string>
     <!-- Update message shown when placing an outgoing 1:1 voice/audio call and it\'s answered by the other party -->
-    <string name="MessageRecord_outgoing_voice_call">Outgoing voice call</string>
+    <string name="MessageRecord_outgoing_voice_call">Giden sesli arama</string>
     <!-- Update message shown when placing an outgoing 1:1 video call and it\'s answered by the other party -->
     <string name="MessageRecord_outgoing_video_call">Giden görüntülü arama</string>
     <!-- Update message shown when placing an outgoing 1:1 voice/audio call and it\'s not answered by the other party -->
-    <string name="MessageRecord_unanswered_voice_call">Unanswered voice call</string>
+    <string name="MessageRecord_unanswered_voice_call">Cevapsız sesli arama</string>
     <!-- Update message shown when placing an outgoing 1:1 video call and it\'s not answered by the other party -->
-    <string name="MessageRecord_unanswered_video_call">Cevaplanmamış görüntülü arama</string>
+    <string name="MessageRecord_unanswered_video_call">Cevapsız görüntülü arama</string>
     <!-- Update message shown when receiving an incoming 1:1 voice/audio call and it\'s answered -->
-    <string name="MessageRecord_incoming_voice_call">Incoming voice call</string>
+    <string name="MessageRecord_incoming_voice_call">Gelen sesli arama</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and answered -->
     <string name="MessageRecord_incoming_video_call">Gelen görüntülü arama</string>
     <!-- Update message shown when receiving an incoming 1:1 voice/audio call and not answered -->
-    <string name="MessageRecord_missed_voice_call">Missed voice call</string>
+    <string name="MessageRecord_missed_voice_call">Cevapsız sesli arama</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and not answered -->
     <string name="MessageRecord_missed_video_call">Cevapsız görüntülü arama</string>
     <!-- Update message shown when receiving an incoming 1:1 voice/audio call and explicitly declined -->
-    <string name="MessageRecord_you_declined_a_voice_call">You declined a voice call</string>
+    <string name="MessageRecord_you_declined_a_voice_call">Sesli aramayı reddettin</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and explicitly declined -->
-    <string name="MessageRecord_you_declined_a_video_call">Görüntülü aramayı reddettiniz</string>
+    <string name="MessageRecord_you_declined_a_video_call">Görüntülü aramayı reddettin</string>
     <!-- Call update formatter string to place the update message next to a time stamp. e.g., \'Incoming voice call · 11:11am\' -->
     <string name="MessageRecord_call_message_with_date">%1$s · %2$s</string>
     <string name="MessageRecord_s_updated_group">%1$s grubu güncelledi.</string>
@@ -1887,11 +1887,11 @@
     <string name="ThreadRecord_video">Video</string>
     <string name="ThreadRecord_chat_session_refreshed">Konuşma oturumu yenilendi</string>
     <!-- Displayed in the notification when the user is sent a gift -->
-    <string name="ThreadRecord__you_received_a_gift">Bir hediye aldınız</string>
+    <string name="ThreadRecord__s_donated_for_you">%1$s senin için bağış yaptı</string>
     <!-- Displayed in the notification when the user sends a gift -->
-    <string name="ThreadRecord__you_sent_a_gift">Bir hediye gönderdiniz</string>
+    <string name="ThreadRecord__you_donated_for_s">%1$s için bağış yaptın</string>
     <!-- Displayed in the notification when the user has opened a received gift -->
-    <string name="ThreadRecord__you_redeemed_a_gift_badge">Bir hediye rozeti kullandın</string>
+    <string name="ThreadRecord__you_redeemed_a_badge">Bir rozet kullandın</string>
     <!-- Displayed in the conversation list when someone reacted to your story -->
     <string name="ThreadRecord__reacted_s_to_your_story">Hikayene %1$s tepki verdi</string>
     <!-- Displayed in the conversation list when you reacted to someone\'s story -->
@@ -1998,7 +1998,7 @@
     <string name="MediaPreviewActivity_s_to_you">%1$s\'den sana</string>
     <string name="MediaPreviewActivity_media_no_longer_available">İçerik artık mevcut değil.</string>
     <!-- Notifying the user that the device has encountered a technical issue and is unable to render a video. -->
-    <string name="MediaPreviewActivity_unable_to_play_media">Unable to play media.</string>
+    <string name="MediaPreviewActivity_unable_to_play_media">Medya oynatılamıyor.</string>
     <string name="MediaPreviewActivity_error_finding_message">Mesaj bulma hatası.</string>
     <string name="MediaPreviewActivity_cant_find_an_app_able_to_share_this_media">Bu içeriği paylaşabilen bir uygulama bulunamadı.</string>
     <string name="MediaPreviewActivity_dismiss_due_to_error">Kapat</string>
@@ -2070,7 +2070,7 @@
     <!-- SearchToolbar -->
     <string name="SearchToolbar_search">Ara</string>
     <!-- Hint when searching filtered chat content -->
-    <string name="SearchToolbar_search_unread_chats">Search unread chats</string>
+    <string name="SearchToolbar_search_unread_chats">Okunmamış konuşmalarda ara</string>
     <string name="SearchToolbar_search_for_conversations_contacts_and_messages">Konuşmaları, kişileri ve iletileri ara</string>
 
     <!-- Material3 Search Toolbar -->
@@ -2103,7 +2103,7 @@
     <string name="UnauthorizedReminder_this_is_likely_because_you_registered_your_phone_number_with_Signal_on_a_different_device">Bunun nedeni büyük olasılıkla telefon numaranızın farklı bir cihazda Signal\'e kaydedilmiş olmasıdır. Tekrar kaydetmek için dokunun.</string>
 
     <!-- Push notification when the app is forcibly logged out by the server. -->
-    <string name="LoggedOutNotification_you_have_been_logged_out">You have been logged out of Signal on this device.</string>
+    <string name="LoggedOutNotification_you_have_been_logged_out">Bu cihazdaki Signal oturumun kapatıldı.</string>
 
     <!-- EnclaveFailureReminder -->
     <!-- Banner message to update app to use payments -->
@@ -2267,7 +2267,7 @@
     <!-- Label indicating that the story being replied to no longer exists -->
     <string name="QuoteView_no_longer_available">Artık mevcut değil.</string>
     <!-- Label for quoted gift -->
-    <string name="QuoteView__gift">Hediye</string>
+    <string name="QuoteView__donation_for_a_friend">Arkadaşın için bağış</string>
 
     <!-- conversation_fragment -->
     <string name="conversation_fragment__scroll_to_the_bottom_content_description">En alta kaydır</string>
@@ -4355,7 +4355,7 @@
     <!-- Preference heading for other ways to donate -->
     <string name="ManageDonationsFragment__other_ways_to_give">Vermenin diğer yolları</string>
     <!-- Preference label to launch badge gifting -->
-    <string name="ManageDonationsFragment__gift_a_badge">Bir rozet hediye et</string>
+    <string name="ManageDonationsFragment__donate_for_a_friend">Arkadaşın için bağış yap</string>
 
     <string name="Boost__enter_custom_amount">Farklı Bir Miktar Gir</string>
     <string name="Boost__one_time_contribution">Tek seferlik bağış</string>
@@ -4411,10 +4411,10 @@
     <string name="DonationsErrors__failed_to_validate_badge">Rozet doğrulanamadı</string>
     <!-- Displayed when badge credential couldn\'t be verified -->
     <string name="DonationsErrors__could_not_validate">Sunucu yanıtı doğrulanamadı. Lütfen destek ile iletişime geçin.</string>
-    <!-- Displayed as title when some generic error happens during gift badge sending -->
-    <string name="DonationsErrors__failed_to_send_gift_badge">Hediye rozet gönderimi başarısız</string>
-    <!-- Displayed as message when some generic error happens during gift badge sending -->
-    <string name="DonationsErrors__could_not_send_gift_badge">Hediye rozeti gönderilemedi. Lütfen destek ile iletişime geç.</string>
+    <!-- Displayed as title when some generic error happens during sending donation on behalf of another user -->
+    <string name="DonationsErrors__donation_failed">Bağış başarısız oldu</string>
+    <!-- Displayed as message when some generic error happens during sending donation on behalf of another user -->
+    <string name="DonationsErrors__your_payment_was_processed_but">Ödemen işleme alındı fakat Signal bağış mesajını gönderemedi. Lütfen destek ekibiyle iletişime geç.</string>
     <string name="DonationsErrors__your_badge_could_not">Rozetin hesabına eklenemedi fakat ücret ödenmiş olabilir. Lütfen destek ekibiyle iletişime geç.</string>
     <string name="DonationsErrors__your_payment_is_still">Ödemen hâlâ işleniyor. Bu, bağlantına bağlı olarak birkaç dakika sürebilir.</string>
     <string name="DonationsErrors__failed_to_cancel_subscription">Abonelik iptal edilemedi</string>
@@ -4423,16 +4423,16 @@
     <string name="NetworkFailure__network_error_check_your_connection_and_try_again">Ağ hatası. Bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="NetworkFailure__retry">Tekrar dene</string>
     <!-- Displayed as a dialog title when the selected recipient for a gift doesn\'t support gifting -->
-    <string name="DonationsErrors__cant_send_gift">Hediye gönderilemiyor</string>
+    <string name="DonationsErrors__cannot_send_donation">Bağış gönderilemiyor</string>
     <!-- Displayed as a dialog message when the selected recipient for a gift doesn\'t support gifting -->
-    <string name="DonationsErrors__target_does_not_support_gifting">Bu kişi, hediye rozetleri alamayan bir Signal sürümü kullanıyor. Ancak en son sürüme güncelleme yaptığında hediye alabilir.</string>
-    <!-- Displayed as a dialog title when the user\'s profile could not be fetched, likely due to lack of internet -->
-    <string name="DonationsErrors__couldnt_send_gift">Hediye gönderilemedi</string>
+    <string name="DonationsErrors__this_user_cant_receive_donations_until">Bu kullanıcı, Signal sürümünü yükseltene kadar bağış alamaz.</string>
     <!-- Displayed as a dialog message when the user\'s profile could not be fetched, likely due to lack of internet -->
-    <string name="DonationsErrors__please_check_your_network_connection">Bir ağ hatası nedeniyle hediyen gönderilemedi. Bağlantını kontrol et ve tekrar dene.</string>
+    <string name="DonationsErrors__your_donation_could_not_be_sent">Bir bağlantı hatası nedeniyle bağışın gönderilemedi. Bağlantını kontrol edip tekrar dene.</string>
 
     <!-- Gift message view title -->
-    <string name="GiftMessageView__gift_badge">Hediye rozeti</string>
+    <string name="GiftMessageView__donation_to_s">%1$s için bağış</string>
+    <!-- Gift message view title for incoming donations -->
+    <string name="GiftMessageView__s_donated_to_signal_on">%1$s senin adına Signal\'e bağış yaptı</string>
     <!-- Gift badge redeem action label -->
     <string name="GiftMessageView__redeem">Ödeme</string>
     <!-- Gift badge view action label -->
@@ -4643,7 +4643,7 @@
     <!-- Donation receipts one-time tab label -->
     <string name="DonationReceiptListFragment__one_time">Tek Seferlik</string>
     <!-- Donation receipts gift tab label -->
-    <string name="DonationReceiptListFragment__gift">Hediye</string>
+    <string name="DonationReceiptListFragment__donation_for_a_friend">Arkadaşın için bağış</string>
     <!-- Donation receipts boost row label -->
     <!-- Donation receipts details title -->
     <!-- Donation receipts donation type heading -->
@@ -4993,22 +4993,23 @@
         <item quantity="one">%1$s · %2$d gün süreli</item>
         <item quantity="other">%1$s · %2$d gün süreli</item>
     </plurals>
-    <!-- Tagline for gift row items -->
-    <string name="GiftRowItem__send_a_gift_badge">Bir hediye rozeti gönder</string>
     <!-- Headline text on start fragment for gifting a badge -->
-    <string name="GiftFlowStartFragment__gift_a_badge">Bir Rozet Hediye Et</string>
+    <string name="GiftFlowStartFragment__donate_for_a_friend">Arkadaşın için bağış yap</string>
     <!-- Description text on start fragment for gifting a badge -->
-    <string name="GiftFlowStartFragment__gift_someone_a_badge">Signal\'e kendi adına bağışta bulunarak birine rozet hediye et. Profil fotoğraflarında göstermeleri için bir rozet alacaklar.</string>
+    <plurals name="GiftFlowStartFragment__support_signal_by">
+        <item quantity="one">Signal kullanan bir arkadaşın veya aile üyesi için bağış yaparak Signal\'ı destekle. Böylece %1$d gün boyunca profillerinde görünecek bir rozet sahibi olacaklar</item>
+        <item quantity="other">Signal kullanan bir arkadaşın veya aile üyesi için bağış yaparak Signal\'ı destekle. Böylece %1$d gün boyunca profillerinde görünecek bir rozet sahibi olacaklar</item>
+    </plurals>
     <!-- Action button label for start fragment for gifting a badge -->
     <string name="GiftFlowStartFragment__next">İleri</string>
     <!-- Title text on choose recipient page for badge gifting -->
     <string name="GiftFlowRecipientSelectionFragment__choose_recipient">Alıcı seç</string>
     <!-- Title text on confirm gift page -->
-    <string name="GiftFlowConfirmationFragment__confirm_gift">Hediyeyi doğrula</string>
+    <string name="GiftFlowConfirmationFragment__confirm_donation">Bağışı onayla</string>
     <!-- Heading text specifying who the gift will be sent to -->
     <string name="GiftFlowConfirmationFragment__send_to">Gönderilecek</string>
     <!-- Text explaining that gift will be sent to the chosen recipient -->
-    <string name="GiftFlowConfirmationFragment__your_gift_will_be_sent_in">Hediyeniz alıcıya 1\'e 1 mesaj olarak gönderilecektir. Aşağıya kendi mesajınızı ekleyin.</string>
+    <string name="GiftFlowConfirmationFragment__the_recipient_will_be_notified">Alıcı, bağıştan mesajla haberdar edilecektir. Kendi mesajını aşağıya ekle.</string>
     <!-- Text explaining that this gift is a one time donation -->
     <string name="GiftFlowConfirmationFragment__one_time_donation">Tek seferlik bağış</string>
     <!-- Hint for add message input -->
@@ -5016,27 +5017,27 @@
     <!-- Displayed in the dialog while verifying the chosen recipient -->
     <string name="GiftFlowConfirmationFragment__verifying_recipient">Alıcı doğrulanıyor…</string>
     <!-- Title for sheet shown when opening a redeemed gift -->
-    <string name="ViewReceivedGiftBottomSheet__s_sent_you_a_gift">%1$s sana bir hediye gönderdi</string>
+    <string name="ViewReceivedGiftBottomSheet__s_made_a_donation_for_you">%1$s senin için bağış yaptı</string>
     <!-- Title for sheet shown when opening a sent gift -->
     <string name="ViewSentGiftBottomSheet__thanks_for_your_support">Desteğin için teşekkürler!</string>
     <!-- Description for sheet shown when opening a redeemed gift -->
-    <string name="ViewReceivedGiftBottomSheet__youve_received_a_gift_badge">%1$s adlı kişiden bir hediye rozeti aldın! Bu rozeti profilinde sergileyerek Signal\'in farkındalık oluşturmasına yardımcı ol.</string>
+    <string name="ViewReceivedGiftBottomSheet__s_made_a_donation_to_signal">%1$s senin adına Signal\'a bağış yaptı! Signal\'a desteğini profilinde göster.</string>
     <!-- Description for sheet shown when opening a sent gift -->
-    <string name="ViewSentGiftBottomSheet__youve_gifted_a_badge">%1$s adlı kişiye bir rozet hediye ettin. Hediyeni aldığında, rozetini gösterme veya gizleme seçeneği sunulur.</string>
+    <string name="ViewSentGiftBottomSheet__youve_made_a_donation_to_signal">%1$s adına Signal\'a bağış yaptın. Böylece Signal\'a olan desteklerini profillerinde gösterebilecekler.</string>
     <!-- Primary action for pending gift sheet to redeem badge now -->
     <string name="ViewReceivedGiftSheet__redeem">Ödeme</string>
     <!-- Primary action for pending gift sheet to redeem badge later -->
     <string name="ViewReceivedGiftSheet__not_now">Şimdi değil</string>
     <!-- Dialog text while redeeming a gift -->
-    <string name="ViewReceivedGiftSheet__redeeming_gift">Hediye ödeniyor…</string>
+    <string name="ViewReceivedGiftSheet__redeeming_badge">Rozet kullanılıyor…</string>
     <!-- Snackbar text when user presses "not now" on redemption sheet -->
     <string name="ConversationFragment__you_can_redeem_your_badge_later">Rozetini daha sonra ödeyebilirsin.</string>
     <!-- Description text in gift thanks sheet -->
-    <string name="GiftThanksSheet__youve_gifted_a_badge_to_s">%1$s adlı kişiye bir rozet hediye ettin. Hediyeni aldığında, rozetini gösterme veya gizleme seçeneği sunulur.</string>
+    <string name="GiftThanksSheet__youve_made_a_donation">%1$s adına Signal\'a bağışta bulundun. Böylece Signal\'a olan desteklerini profillerinde gösterebilecekler.</string>
     <!-- Expired gift sheet title -->
-    <string name="ExpiredGiftSheetConfiguration__your_gift_badge_has_expired">Hediye rozetinin süresi doldu</string>
+    <string name="ExpiredGiftSheetConfiguration__your_badge_has_expired">Rozetinin süresi doldu</string>
     <!-- Expired gift sheet top description text -->
-    <string name="ExpiredGiftSheetConfiguration__your_gift_badge_has_expired_and_is">Hediye rozetinin süresi doldu ve artık profilinde başkaları tarafından görüntülenemez.</string>
+    <string name="ExpiredGiftSheetConfiguration__your_badge_has_expired_and_is">Rozetinin süresi doldu ve artık profilinde başkaları tarafından görüntülenemez.</string>
     <!-- Expired gift sheet bottom description text -->
     <string name="ExpiredGiftSheetConfiguration__to_continue">Senin için geliştirilen teknolojiyi desteklemeye devam etmek için, lütfen aylık Destekçi olmayı düşün.</string>
     <!-- Expired gift sheet make a monthly donation button -->
@@ -5090,12 +5091,12 @@
     <string name="ContactSearchMediator__delete_the_custom">\"%1$s\" adlı özel hikaye silinsin mi?</string>
     <!-- Dialog action item for deleting a custom story -->
     <string name="ContactSearchMediator__delete">Sil</string>
-    <!-- Gift expiry days remaining -->
+    <!-- Donation for a friend expiry days remaining -->
     <plurals name="Gifts__d_days_remaining">
         <item quantity="one">%1$d gün kaldı</item>
         <item quantity="other">%1$d gün kaldı</item>
     </plurals>
-    <!-- Gift expiry hours remaining -->
+    <!-- Donation for a friend expiry hours remaining -->
     <plurals name="Gifts__d_hours_remaining">
         <item quantity="one">%1$d saat kaldı</item>
         <item quantity="other">%1$d saat kaldı</item>
@@ -5105,7 +5106,7 @@
         <item quantity="one">%1$d dakika kaldı</item>
         <item quantity="other">%1$d dakika kaldı</item>
     </plurals>
-    <!-- Gift expiry expired -->
+    <!-- Donation for a friend expiry expired -->
     <string name="Gifts__expired">Sona erdi</string>
 
     <!-- Label indicating that a user can tap to advance to the next post in a story -->
@@ -5349,9 +5350,9 @@
     <!-- Phase 1 Small megaphone title indicating sms is going away -->
     <string name="SmsExportMegaphone__sms_support_going_away">SMS desteği kaldırılıyor</string>
     <!-- Phase 1 small megaphone description indicating sms is going away -->
-    <string name="SmsExportMegaphone__sms_support_will_be_removed_soon_to_focus_on_encrypted_messaging">Şifreli mesajlaşmaya geçmek için SMS desteği yakında kaldırılacak.</string>
+    <string name="SmsExportMegaphone__dont_worry_encrypted_signal_messages_will_continue_to_work">Don’t worry, encrypted Signal messages will continue to work.</string>
     <!-- Phase 1 small megaphone button that takes the user to the sms export flow -->
-    <string name="SmsExportMegaphone__export_sms">SMS\'i dışa aktar</string>
+    <string name="SmsExportMegaphone__continue">Devam Et</string>
     <!-- Title for screen shown after sms export has completed -->
     <string name="ExportSmsCompleteFragment__export_complete">Dışa Aktarma Tamamlandı</string>
     <!-- Button to continue to next screen -->
@@ -5408,8 +5409,8 @@
     </plurals>
     <!-- Button label for paying with a credit card -->
     <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Kredi veya banka kartı</string>
-    <!-- Sheet summary when giving a gift -->
-    <string name="GatewaySelectorBottomSheet__send_a_gift_badge">Bir hediye rozeti gönder</string>
+    <!-- Sheet summary when giving donating for a friend -->
+    <string name="GatewaySelectorBottomSheet__donate_for_a_friend">Bir arkadaşın için bağış yap</string>
 
     <!-- StripePaymentInProgressFragment -->
     <string name="StripePaymentInProgressFragment__cancelling">İptal ediliyor…</string>
@@ -5470,10 +5471,23 @@
 
     <!-- ChatFilter -->
     <!-- Displayed in a pill at the top of the chat list when it is filtered by unread messages -->
-    <string name="ChatFilter__filtered_by_unread">Filtered by unread</string>
+    <string name="ChatFilter__filtered_by_unread">Okunmamış olarak filtrelendi</string>
     <!-- Displayed underneath the filter circle at the top of the chat list when the user pulls at a very low velocity -->
-    <string name="ChatFilter__pull_to_filter">Pull to filter</string>
+    <string name="ChatFilter__pull_to_filter">Filtrelemek için aşağı çek</string>
     <!-- Displayed in the "clear filter" item in the chat feed if the user opened the filter from the overflow menu -->
-    <string name="ChatFilter__tip_pull_down">Tip: Pull down on the chat list to filter</string>
+    <string name="ChatFilter__tip_pull_down">İpucu: Filtrelemek için konuşma listesini aşağı çek</string>
+
+    <!-- Title for screen describing that sms support is going to be removed soon -->
+    <string name="SmsRemoval_title_going_away">SMS support is going away</string>
+    <!-- Bullet point message shown on describing screen as first bullet why sms is being removed -->
+    <string name="SmsRemoval_info_bullet_1">SMS messaging in the Signal app will soon no longer be supported.</string>
+    <!-- Bullet point message shown on describing screen as second bullet why sms is being removed -->
+    <string name="SmsRemoval_info_bullet_2">SMS messages are different than Signal messages. <b>This does not affect encrypted Signal messaging which will continue to work.</b></string>
+    <!-- Bullet point message shown on describing screen as third bullet why sms is being removed -->
+    <string name="SmsRemoval_info_bullet_3">You can export your SMS messages and choose a new SMS app.</string>
+    <!-- Bullet point message shown on describing screen as first bullet variant why sms is being removed when user is locked out of sms -->
+    <string name="SmsRemoval_info_bullet_1_phase_3">Signal has removed support for sending SMS messages.</string>
+    <!-- Button label on sms removal info/megaphone to start the export SMS flow -->
+    <string name="SmsRemoval_export_sms">SMS\'i dışa aktar</string>
 
 </resources>

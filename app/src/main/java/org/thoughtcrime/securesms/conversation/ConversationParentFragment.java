@@ -1610,7 +1610,7 @@ public class ConversationParentFragment extends Fragment
     SafetyNumberBottomSheet
         .forIdentityRecordsAndDestination(
             records,
-            new ContactSearchKey.RecipientSearchKey.KnownRecipient(recipient.getId())
+            new ContactSearchKey.RecipientSearchKey(recipient.getId(), false)
         )
         .show(getChildFragmentManager());
   }
@@ -1725,7 +1725,7 @@ public class ConversationParentFragment extends Fragment
       return setMedia(draftMedia, draftMediaType, 0, 0, false, videoGif);
     }
 
-    if (draftText == null && (draftMedia == null || ConversationIntents.isBubbleIntentUri(draftMedia)) && draftMediaType == null) {
+    if (draftText == null && (draftMedia == null || ConversationIntents.isBubbleIntentUri(draftMedia) || ConversationIntents.isNotificationIntentUri(draftMedia)) && draftMediaType == null) {
       Log.d(TAG, "Initializing draft from database");
       return initializeDraftFromDatabase();
     } else {
@@ -1879,6 +1879,7 @@ public class ConversationParentFragment extends Fragment
                   quoteResult.addListener(listener);
                   break;
                 case Draft.VOICE_NOTE:
+                case Draft.MENTION:
                   listener.onSuccess(true);
                   break;
               }
@@ -2517,7 +2518,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void showGroupCallingTooltip() {
-    if (Build.VERSION.SDK_INT == 19 || !SignalStore.tooltips().shouldShowGroupCallingTooltip() || callingTooltipShown) {
+    if (!SignalStore.tooltips().shouldShowGroupCallingTooltip() || callingTooltipShown) {
       return;
     }
 
@@ -2807,13 +2808,7 @@ public class ConversationParentFragment extends Fragment
       MaterialButton actionButton = smsExportStub.get().findViewById(R.id.export_sms_button);
       boolean        isPhase1     = SignalStore.misc().getSmsExportPhase() == SmsExportPhase.PHASE_1;
 
-      if (SignalStore.misc().getSmsExportPhase() == SmsExportPhase.PHASE_0) {
-        message.setText(getString(R.string.NewConversationActivity__s_is_not_a_signal_user, recipient.getDisplayName(requireContext())));
-        actionButton.setText(R.string.conversation_activity__enable_signal_for_sms);
-        actionButton.setOnClickListener(v -> {
-          handleMakeDefaultSms();
-        });
-      } else if (conversationSecurityInfo.getHasUnexportedInsecureMessages()) {
+      if (conversationSecurityInfo.getHasUnexportedInsecureMessages()) {
         message.setText(isPhase1 ? R.string.ConversationActivity__sms_messaging_is_currently_disabled_you_can_export_your_messages_to_another_app_on_your_phone
                                  : R.string.ConversationActivity__sms_messaging_is_no_longer_supported_in_signal_you_can_export_your_messages_to_another_app_on_your_phone);
         actionButton.setText(R.string.ConversationActivity__export_sms_messages);
@@ -3034,6 +3029,11 @@ public class ConversationParentFragment extends Fragment
   }
 
   private void sendMediaMessage(@NonNull MediaSendActivityResult result) {
+    if (ExpiredBuildReminder.isEligible()) {
+      showExpiredDialog();
+      return;
+    }
+
     long            thread    = this.threadId;
     long            expiresIn = TimeUnit.SECONDS.toMillis(recipient.get().getExpiresInSeconds());
     QuoteModel      quote     = result.isViewOnce() ? null : inputPanel.getQuote().orElse(null);
@@ -3112,6 +3112,11 @@ public class ConversationParentFragment extends Fragment
                                                   final boolean clearComposeBox,
                                                   final @Nullable String metricId)
   {
+    if (ExpiredBuildReminder.isEligible()) {
+      showExpiredDialog();
+      return new SettableFuture<>(null);
+    }
+
     if (!viewModel.isDefaultSmsApplication() && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
       showDefaultSmsPrompt();
       return new SettableFuture<>(null);
@@ -3190,6 +3195,11 @@ public class ConversationParentFragment extends Fragment
   private void sendTextMessage(@NonNull MessageSendType sendType, final long expiresIn, final boolean initiating, final @Nullable String metricId)
       throws InvalidMessageException
   {
+    if (ExpiredBuildReminder.isEligible()) {
+      showExpiredDialog();
+      return;
+    }
+
     if (!viewModel.isDefaultSmsApplication() && sendType.usesSmsTransport() && recipient.get().hasSmsAddress()) {
       showDefaultSmsPrompt();
       return;
@@ -3230,6 +3240,27 @@ public class ConversationParentFragment extends Fragment
                    .setNegativeButton(R.string.ConversationActivity_no, (dialog, which) -> dialog.dismiss())
                    .setPositiveButton(R.string.ConversationActivity_yes, (dialog, which) -> handleMakeDefaultSms())
                    .show();
+  }
+
+  private void showExpiredDialog() {
+    Reminder reminder = new ExpiredBuildReminder(requireContext());
+
+    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext())
+        .setMessage(reminder.getText())
+        .setPositiveButton(android.R.string.ok, (d, w) -> d.dismiss());
+
+    List<Reminder.Action> actions = reminder.getActions();
+    if (actions.size() == 1) {
+      Reminder.Action action = actions.get(0);
+
+      builder.setNeutralButton(action.getTitle(), (d, i) -> {
+        if (action.getActionId() == R.id.reminder_action_update_now) {
+          PlayStoreUtil.openPlayStoreOrOurApkDownloadPage(requireContext());
+        }
+      });
+    }
+
+    builder.show();
   }
 
   private void updateToggleButtonState() {
@@ -3608,7 +3639,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
-  public void sendAnywayAfterSafetyNumberChangedInBottomSheet(@NonNull List<? extends ContactSearchKey.RecipientSearchKey> destinations) {
+  public void sendAnywayAfterSafetyNumberChangedInBottomSheet(@NonNull List<ContactSearchKey.RecipientSearchKey> destinations) {
     Log.d(TAG, "onSendAnywayAfterSafetyNumberChange");
     initializeIdentityRecords().addListener(new AssertedSuccessListener<Boolean>() {
       @Override

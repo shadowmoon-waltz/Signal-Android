@@ -8,7 +8,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
@@ -151,6 +150,9 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
     binding.mediaPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
       override fun onPageSelected(position: Int) {
         super.onPageSelected(position)
+        if (position != viewModel.currentPosition) {
+          debouncer.clear()
+        }
         viewModel.setCurrentPage(position)
       }
     })
@@ -240,7 +242,6 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
     }
     bindAlbumRail(albumThumbnailMedia, currentItem)
 
-    fullscreenHelper.showSystemUI()
     crossfadeViewIn(binding.mediaPreviewDetailsContainer)
   }
 
@@ -306,26 +307,32 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
   private fun bindAlbumRail(albumThumbnailMedia: List<Media>, currentItem: MediaTable.MediaRecord) {
     val albumRail: RecyclerView = binding.mediaPreviewPlaybackControls.recyclerView
     if (albumThumbnailMedia.size > 1) {
-      if (albumRail.visibility == GONE) {
+      val firstRailDisplay = albumRail.visibility == GONE
+      if (firstRailDisplay) {
         albumRail.visibility = View.INVISIBLE
+        albumRail.alpha = 0f
       }
       val railItems = albumThumbnailMedia.map { MediaRailAdapter.MediaRailItem(it, it.uri == currentItem.attachment?.uri) }
-      albumRailAdapter.submitList(railItems) { albumRail.post { scrollAlbumRailToCurrentAdapterPosition() } }
+      albumRailAdapter.submitList(railItems) { albumRail.post { scrollAlbumRailToCurrentAdapterPosition(!firstRailDisplay) } }
     } else {
       albumRail.visibility = View.GONE
       albumRailAdapter.submitList(emptyList())
     }
   }
 
-  private fun scrollAlbumRailToCurrentAdapterPosition() {
+  private fun scrollAlbumRailToCurrentAdapterPosition(smooth: Boolean = true) {
     val currentItemPosition = albumRailAdapter.findSelectedItemPosition()
     val albumRail: RecyclerView = binding.mediaPreviewPlaybackControls.recyclerView
-    albumRail.scrollToPosition(currentItemPosition)
     val offsetFromStart = (albumRail.width - individualItemWidth) / 2
     val smoothScroller = OffsetSmoothScroller(requireContext(), offsetFromStart)
     smoothScroller.targetPosition = currentItemPosition
     val layoutManager = albumRail.layoutManager as LinearLayoutManager
-    layoutManager.startSmoothScroll(smoothScroller)
+    if (smooth) {
+      layoutManager.scrollToPosition(currentItemPosition)
+      layoutManager.startSmoothScroll(smoothScroller)
+    } else {
+      layoutManager.scrollToPositionWithOffset(currentItemPosition, offsetFromStart)
+    }
   }
 
   private fun crossfadeViewIn(view: View, duration: Long = 200): Boolean {
@@ -341,9 +348,7 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
             scrollAlbumRailToCurrentAdapterPosition()
           }
         }
-      if (Build.VERSION.SDK_INT >= 21) {
-        viewPropertyAnimator.interpolator = PathInterpolator(0.17f, 0.17f, 0f, 1f)
-      }
+      viewPropertyAnimator.interpolator = PathInterpolator(0.17f, 0.17f, 0f, 1f)
       viewPropertyAnimator.start()
       true
     } else {
@@ -442,7 +447,6 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
 
     if (pagerAdapter.getFragmentTag(viewModel.currentPosition) == tag) {
       debouncer.clear()
-      fullscreenHelper.showSystemUI()
     }
   }
 
