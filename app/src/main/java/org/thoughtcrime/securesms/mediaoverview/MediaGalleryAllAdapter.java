@@ -187,6 +187,14 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
   }
 
   @Override
+  public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+    super.onViewAttachedToWindow(holder);
+    if (holder instanceof SelectableViewHolder) {
+      ((SelectableViewHolder) holder).onAttached();
+    }
+  }
+
+  @Override
   public int getSectionCount() {
     return media.getSectionCount();
   }
@@ -271,6 +279,10 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
       bound = true;
     }
 
+    void rebind() {
+      bound = true;
+    }
+
     void unbind() {
       bound = false;
     }
@@ -304,6 +316,12 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
         unbind();
       }
     }
+
+    void onAttached() {
+      if (!bound) {
+        rebind();
+      }
+    }
   }
 
   private class GalleryViewHolder extends SelectableViewHolder {
@@ -314,6 +332,8 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
     private final ThumbnailView thumbnailView;
     private final TextView      imageFileSize;
 
+    private Slide slide;
+
     GalleryViewHolder(@NonNull View itemView) {
       super(itemView);
       this.thumbnailView = itemView.findViewById(R.id.image);
@@ -323,7 +343,7 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
     @Override
     public void bind(@NonNull Context context, @NonNull MediaTable.MediaRecord mediaRecord, @NonNull Slide slide) {
       super.bind(context, mediaRecord, slide);
-
+      this.slide = slide;
       if (showFileSizes | detailView) {
         imageFileSize.setText(Util.getPrettyFileSize(slide.getFileSize()));
         imageFileSize.setVisibility(View.VISIBLE);
@@ -345,6 +365,12 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
       float scale = isSelected() ? SCALE_SELECTED : SCALE_NORMAL;
       thumbnailView.setScaleX(scale);
       thumbnailView.setScaleY(scale);
+    }
+
+    @Override
+    void rebind() {
+      thumbnailView.setImageResource(glideRequests, slide, false, false);
+      super.rebind();
     }
 
     @Override
@@ -403,6 +429,13 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
 
       liveDataPair = new LiveDataPair<>(from.getLiveData(), to.getLiveData(), Recipient.UNKNOWN, Recipient.UNKNOWN);
       liveDataPair.observeForever(this);
+    }
+
+    @Override
+    void rebind() {
+      liveDataPair.observeForever(this);
+      handler.postDelayed(selectForMarque, 2500);
+      super.rebind();
     }
 
     @Override
@@ -531,6 +564,12 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
     }
 
     @Override
+    void rebind() {
+      super.rebind();
+      audioItemListener.registerPlaybackStateObserver(audioView.getPlaybackStateObserver());
+    }
+
+    @Override
     void unbind() {
       super.unbind();
       audioItemListener.unregisterPlaybackStateObserver(audioView.getPlaybackStateObserver());
@@ -546,6 +585,8 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
 
     private final ThumbnailView thumbnailView;
 
+    private Slide slide;
+
     GalleryDetailViewHolder(@NonNull View itemView) {
       super(itemView);
       this.thumbnailView = itemView.findViewById(R.id.image);
@@ -554,7 +595,7 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
     @Override
     public void bind(@NonNull Context context, @NonNull MediaTable.MediaRecord mediaRecord, @NonNull Slide slide) {
       super.bind(context, mediaRecord, slide);
-
+      this.slide = slide;
       thumbnailView.setImageResource(glideRequests, slide, false, false);
       thumbnailView.setOnClickListener(view -> itemClickListener.onMediaClicked(mediaRecord));
       thumbnailView.setOnLongClickListener(view -> onLongClick());
@@ -565,6 +606,12 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
       if (slide.hasVideo()) return context.getString(R.string.MediaOverviewActivity_video);
       if (slide.hasImage()) return context.getString(R.string.MediaOverviewActivity_image);
       return super.getFileTypeDescription(context, slide);
+    }
+
+    @Override
+    void rebind() {
+      thumbnailView.setImageResource(glideRequests, slide, false, false);
+      super.rebind();
     }
 
     @Override

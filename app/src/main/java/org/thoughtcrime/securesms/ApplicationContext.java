@@ -104,6 +104,7 @@ import org.thoughtcrime.securesms.util.dynamiclanguage.DynamicLanguageContextWra
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.security.Security;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.CompletableObserver;
@@ -181,6 +182,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addNonBlocking(this::cleanAvatarStorage)
                             .addNonBlocking(this::initializeRevealableMessageManager)
                             .addNonBlocking(this::initializePendingRetryReceiptManager)
+                            .addNonBlocking(this::initializeScheduledMessageManager)
                             .addNonBlocking(this::initializeFcmCheck)
                             .addNonBlocking(PreKeysSyncJob::enqueueIfNeeded)
                             .addNonBlocking(this::initializePeriodicTasks)
@@ -389,6 +391,10 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     ApplicationDependencies.getPendingRetryReceiptManager().scheduleIfNecessary();
   }
 
+  private void initializeScheduledMessageManager() {
+    ApplicationDependencies.getScheduledMessageManager().scheduleIfNecessary();
+  }
+
   private void initializeTrimThreadsByDateManager() {
     KeepMessagesDuration keepMessagesDuration = SignalStore.settings().getKeepMessagesDuration();
     if (keepMessagesDuration != KeepMessagesDuration.FOREVER) {
@@ -410,7 +416,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
   private void initializeRingRtc() {
     try {
-      CallManager.initialize(this, new RingRtcLogger());
+      CallManager.initialize(this, new RingRtcLogger(), Collections.emptyMap());
     } catch (UnsatisfiedLinkError e) {
       throw new AssertionError("Unable to load ringrtc library", e);
     }
