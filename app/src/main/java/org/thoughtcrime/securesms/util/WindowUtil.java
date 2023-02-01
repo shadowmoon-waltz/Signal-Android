@@ -17,7 +17,7 @@ public final class WindowUtil {
   }
 
   public static void initializeScreenshotSecurity(@NonNull Context context, @NonNull Window window) {
-    if (TextSecurePreferences.isScreenSecurityEnabled(context)) {
+    if (TextSecurePreferences.isScreenSecurityEnabled2(context)) {
       window.addFlags(WindowManager.LayoutParams.FLAG_SECURE);
     } else {
       window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
