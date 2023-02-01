@@ -3437,6 +3437,8 @@ public class ConversationParentFragment extends Fragment
 
     voiceNoteMediaController.pausePlayback();
     recordingSession = new RecordingSession(audioRecorder.startRecording());
+
+    disposables.add(recordingSession);
   }
 
   @Override
@@ -3746,10 +3748,11 @@ public class ConversationParentFragment extends Fragment
 
   // Listeners
 
-  private class RecordingSession implements SingleObserver<VoiceNoteDraft> {
+  private class RecordingSession implements SingleObserver<VoiceNoteDraft>, Disposable {
 
     private boolean saveDraft  = true;
     private boolean shouldSend = false;
+    private Disposable disposable = Disposable.empty();
 
     RecordingSession(Single<VoiceNoteDraft> observable) {
       observable.observeOn(AndroidSchedulers.mainThread()).subscribe(this);
@@ -3757,6 +3760,7 @@ public class ConversationParentFragment extends Fragment
 
     @Override
     public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+      this.disposable = d;
     }
 
     @Override
@@ -3770,12 +3774,15 @@ public class ConversationParentFragment extends Fragment
           draftViewModel.saveEphemeralVoiceNoteDraft(draft.asDraft());
         }
       }
+
+      recordingSession.dispose();
       recordingSession = null;
     }
 
     @Override
     public void onError(Throwable t) {
       Toast.makeText(requireContext(), R.string.ConversationActivity_unable_to_record_audio, Toast.LENGTH_LONG).show();
+      recordingSession.dispose();
       recordingSession = null;
     }
 
@@ -3794,6 +3801,16 @@ public class ConversationParentFragment extends Fragment
     public void completeRecording() {
       this.shouldSend = true;
       audioRecorder.stopRecording();
+    }
+
+    @Override
+    public void dispose() {
+      disposable.dispose();
+    }
+
+    @Override
+    public boolean isDisposed() {
+      return disposable.isDisposed();
     }
   }
 
