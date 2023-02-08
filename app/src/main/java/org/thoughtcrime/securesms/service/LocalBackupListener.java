@@ -47,11 +47,11 @@ public class LocalBackupListener extends PersistentAlarmManagerListener {
     if (Build.VERSION.SDK_INT < 31) {
       nextTime = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(TextSecurePreferences.getBackupIntervalInDays(context));
     } else {
-      LocalDateTime now  = LocalDateTime.now();
-      int hour = SignalStore.settings().getBackupHour();
-      int minute = SignalStore.settings().getBackupMinute();
-      LocalDateTime next = now.withHour(hour).withMinute(minute).withSecond(0);
-      if (now.getHour() >= 2) {
+      LocalDateTime now    = LocalDateTime.now();
+      int           hour   = SignalStore.settings().getBackupHour();
+      int           minute = SignalStore.settings().getBackupMinute();
+      LocalDateTime next   = now.withHour(hour).withMinute(minute).withSecond(0);
+      if (now.isAfter(next)) {
         next = next.plusDays(TextSecurePreferences.getBackupIntervalInDays(context));
       }
 

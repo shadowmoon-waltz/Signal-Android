@@ -9,7 +9,9 @@ apply from: 'translations.gradle'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'app.cash.exhaustive'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.squareup.wire'
 apply from: 'static-ips.gradle'
+
 
 repositories {
     maven {
@@ -47,13 +49,23 @@ protobuf {
     }
 }
 
+wire {
+    kotlin {
+        javaInterop = true
+    }
+
+    sourcePath {
+        srcDir 'src/main/protowire'
+    }
+}
+
 ktlint {
     // Use a newer version to resolve https://github.com/JLLeitschuh/ktlint-gradle/issues/507
     version = "0.43.2"
 }
 
-def canonicalVersionCode = 1204
-def canonicalVersionName = "6.10.4"
+def canonicalVersionCode = 1208
+def canonicalVersionName = "6.11.2"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -135,11 +147,6 @@ android {
         }
     }
 
-    dependenciesInfo {
-        includeInBundle false
-        includeInApk false
-    }
-
     testOptions {
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
 
@@ -196,6 +203,11 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = '1.3.2'
     }
 
     defaultConfig {
@@ -627,6 +639,8 @@ dependencies {
     implementation libs.rxdogtag
 
     androidTestUtil testLibs.androidx.test.orchestrator
+
+    implementation project(':core-ui')
 }
 
 def getLastCommitTimestamp() {
