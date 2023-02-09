@@ -51,7 +51,7 @@
             android:padding="9dp"
             android:tint="@color/signal_icon_tint_primary"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_info_white_24" />
+            app:srcCompat="@drawable/symbol_info_24" />
 
     </FrameLayout>
 

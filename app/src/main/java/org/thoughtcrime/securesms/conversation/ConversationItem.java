@@ -426,21 +426,21 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
   private void setSwipeIcon(final @NonNull AppCompatImageView icon, final @NonNull String action, int defaultDrawableId) {
     if (SwipeActionTypes.REPLY.equals(action)) {
-      icon.setImageResource(R.drawable.ic_reply_24);
+      icon.setImageResource(R.drawable.symbol_reply_24);
     } else if (SwipeActionTypes.DELETE.equals(action) || SwipeActionTypes.DELETE_NO_PROMPT.equals(action)) {
       icon.setImageResource(R.drawable.ic_trash_24);
     } else if (SwipeActionTypes.COPY_TEXT.equals(action) || SwipeActionTypes.COPY_TEXT_POPUP.equals(action)) {
-      icon.setImageResource(R.drawable.ic_copy_24);
+      icon.setImageResource(R.drawable.symbol_copy_android_24);
     } else if (SwipeActionTypes.FORWARD.equals(action)) {
-      icon.setImageResource(R.drawable.ic_forward_24);
+      icon.setImageResource(R.drawable.symbol_forward_24);
     } else if (SwipeActionTypes.MESSAGE_DETAILS.equals(action)) {
-      icon.setImageResource(R.drawable.ic_info_white_24);
+      icon.setImageResource(R.drawable.symbol_info_24);
     } else if (SwipeActionTypes.SHOW_OPTIONS.equals(action)) {
       icon.setImageResource(R.drawable.ic_more_vert_24);
     } else if (SwipeActionTypes.NOTE_TO_SELF.equals(action)) {
       icon.setImageResource(R.drawable.ic_note_24);
     } else if (SwipeActionTypes.MULTI_SELECT.equals(action)) {
-      icon.setImageResource(R.drawable.ic_select_24);
+      icon.setImageResource(R.drawable.symbol_check_circle_24);
     } else { // for SwipeActionTypes.DEFAULT, SwipeActionTypes.NONE, and any other string
       icon.setImageResource(defaultDrawableId);
     }

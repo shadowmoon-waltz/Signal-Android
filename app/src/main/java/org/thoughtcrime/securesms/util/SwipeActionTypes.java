@@ -35,6 +35,6 @@ public interface SwipeActionTypes {
   public static final String DEFAULT_FOR_RIGHT = REPLY;
   public static final String DEFAULT_FOR_LEFT = NONE;
 
-  public static final int DEFAULT_DRAWABLE_FOR_RIGHT = org.thoughtcrime.securesms.R.drawable.ic_reply_24;
-  public static final int DEFAULT_DRAWABLE_FOR_LEFT = org.thoughtcrime.securesms.R.drawable.ic_info_white_24;
+  public static final int DEFAULT_DRAWABLE_FOR_RIGHT = org.thoughtcrime.securesms.R.drawable.symbol_reply_24;
+  public static final int DEFAULT_DRAWABLE_FOR_LEFT = org.thoughtcrime.securesms.R.drawable.symbol_info_24;
 }
