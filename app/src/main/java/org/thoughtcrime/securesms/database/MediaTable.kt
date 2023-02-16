@@ -238,6 +238,21 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.SIZE} DESC, 
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC
       """.toSingleLine()
+    ),
+    ContentTypeLargest(
+      """
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.SIZE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC
+      """.toSingleLine()
+    ),
+    ContentTypeNewest(
+      """
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.MMS_ID} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ROW_ID} DESC
+      """.toSingleLine()
     );
 
     private val postFix: String
@@ -250,8 +265,13 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
       return query + postFix
     }
 
+    // SW : includes content type newest because I want to show file sizes in that case (for display
+    //      still groups by content type due to an earlier isRelatedToContentType check)
     val isRelatedToFileSize: Boolean
-      get() = this == Largest
+      get() = (this == Largest || this == ContentTypeLargest || this == ContentTypeNewest)
+
+    val isRelatedToContentType: Boolean
+      get() = (this == ContentTypeLargest || this == ContentTypeNewest)
 
     companion object {
       fun deserialize(code: Int): Sorting {
