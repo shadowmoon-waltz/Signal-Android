@@ -1533,12 +1533,12 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
     return releaseChannelThreadId;
   }
 
+  @VisibleForTesting
   public void deleteGroupStoryReplies(long parentStoryId) {
     SQLiteDatabase db   = databaseHelper.getSignalWritableDatabase();
     String[]       args = SqlUtil.buildArgs(parentStoryId);
 
     db.delete(TABLE_NAME, PARENT_STORY_ID + " = ?", args);
-    OptimizeMessageSearchIndexJob.enqueue();
   }
 
   public int deleteStoriesOlderThan(long timestamp, boolean hasSeenReleaseChannelStories) {
@@ -1939,6 +1939,8 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
     } finally {
       db.endTransaction();
     }
+
+    OptimizeMessageSearchIndexJob.enqueue();
 
     ApplicationDependencies.getDatabaseObserver().notifyMessageUpdateObservers(new MessageId(messageId));
     ApplicationDependencies.getDatabaseObserver().notifyConversationListListeners();
@@ -4648,16 +4650,20 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
     }
   }
 
-  public @Nullable Long getOldestScheduledSendTimestamp() {
+  public @Nullable MessageRecord getOldestScheduledSendTimestamp() {
     String[] columns   = new String[] { SCHEDULED_DATE };
     String   selection = STORY_TYPE + " = ? AND " + PARENT_STORY_ID + " <= ? AND " + SCHEDULED_DATE + " != ?";
     String[] args      = SqlUtil.buildArgs(0, 0, -1);
     String   order     = SCHEDULED_DATE + " ASC, " + ID + " ASC";
     String   limit     = "1";
 
-    try (Cursor cursor = getReadableDatabase().query(TABLE_NAME, columns, selection, args, null, null, order, limit)) {
-      return cursor != null && cursor.moveToNext() ? cursor.getLong(0) : null;
+    try (MmsReader reader = mmsReaderFor(getReadableDatabase().query(TABLE_NAME, MMS_PROJECTION, selection, args, null, null, order, limit))) {
+      if (reader.getNext() != null) {
+        return reader.getCurrent();
+      }
     }
+
+    return null;
   }
 
   public Cursor getMessagesForNotificationState(Collection<DefaultMessageNotifier.StickyThread> stickyThreads) {
@@ -5292,6 +5298,10 @@ public class MessageTable extends DatabaseTable implements MessageTypes, Recipie
       } else {
         return getMediaMmsMessageRecord(cursor);
       }
+    }
+
+    public MessageId getCurrentId() {
+      return new MessageId(CursorUtil.requireLong(cursor, ID));
     }
 
     @Override

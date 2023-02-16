@@ -36,7 +36,7 @@ object BioTextPreference {
   }
 
   class RecipientModel(
-    private val recipient: Recipient,
+    private val recipient: Recipient
   ) : BioTextPreferenceModel<RecipientModel>() {
 
     override fun getHeadlineText(context: Context): CharSequence {

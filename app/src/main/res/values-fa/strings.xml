@@ -261,7 +261,7 @@
     <!-- Content descrption for name edit button on contact share edit activity -->
     <string name="ContactShareEditActivity__edit_name">ویرایش نام</string>
     <!-- Content description for user avatar in edit activity -->
-    <string name="ContactShareEditActivity__avatar">عکس</string>
+    <string name="ContactShareEditActivity__avatar">آواتار</string>
 
     <!-- ConversationItem -->
     <string name="ConversationItem_error_not_sent_tap_for_details">ارسال نشد، برای جزئیات ضربه بزنید</string>
@@ -557,7 +557,7 @@
     <string name="CreateProfileActivity_problem_setting_profile">مشکل در ثبت پروفایل</string>
     <string name="CreateProfileActivity_set_up_your_profile">پروفایل خود را برپا کنید</string>
     <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">نمایه شما و تغییرات آن برای افراد، مخاطبان و گروه‌هایی که به آن‌ها پیام می‌فرستید قابل مشاهده خواهد بود.</string>
-    <string name="CreateProfileActivity_set_avatar_description">تنظیم عکس پروفایل</string>
+    <string name="CreateProfileActivity_set_avatar_description">تنظیم آواتار</string>
 
     <!-- ProfileCreateFragment -->
     <!-- Displayed at the top of the screen and explains how profiles can be viewed. -->
@@ -946,7 +946,7 @@
     <string name="ManageProfileFragment_write_a_few_words_about_yourself">چند کلمه دربارهٔ خودتان بنویسید</string>
     <string name="ManageProfileFragment_your_name">نام شما</string>
     <string name="ManageProfileFragment_your_username">نام کاربری شما</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">تنظیم عکس پروفایل ناموفق بود</string>
+    <string name="ManageProfileFragment_failed_to_set_avatar">تنظیم آواتار ناموفق بود</string>
     <string name="ManageProfileFragment_badges">نشان‌ها</string>
     <string name="ManageProfileFragment__edit_photo">ویرایش عکس</string>
     <!-- Snackbar message after creating username -->
@@ -1335,8 +1335,8 @@
     <string name="MessageRecord_the_group_description_has_changed">توضیحات گروه تغییر کرد.</string>
 
     <!-- GV2 avatar change -->
-    <string name="MessageRecord_you_changed_the_group_avatar">شما عکس گروه را عوض کردید.</string>
-    <string name="MessageRecord_s_changed_the_group_avatar">%1$s عکس گروه را تغییر داد.</string>
+    <string name="MessageRecord_you_changed_the_group_avatar">شما آواتار گروه را عوض کردید.</string>
+    <string name="MessageRecord_s_changed_the_group_avatar">%1$s آواتار گروه را تغییر داد.</string>
     <string name="MessageRecord_the_group_group_avatar_has_been_changed">عکس گروه تغییر یافت.</string>
 
     <!-- GV2 attribute access level change -->
@@ -1586,7 +1586,7 @@
 
     <!-- PinOptOutDialog -->
     <string name="PinOptOutDialog_warning">هشدار</string>
-    <string name="PinOptOutDialog_if_you_disable_the_pin_you_will_lose_all_data">اگر پین را غیرفعال کنید، هنگامی که دوباره در سیگنال ثبت‌نام می‌کنید، تمامی داده‌ها را از دست خواهید داد، مگر اینکه به صورت دستی پشتیبان‌گیری و بازگردانی کنید. هنگامی که پین غیرفعال است نمی‌توانید قفل ثبت‌نام را روشن کنید.</string>
+    <string name="PinOptOutDialog_if_you_disable_the_pin_you_will_lose_all_data">If you disable the PIN, you will lose all data when you re-register Signal unless you manually back up and restore. You cannot turn on Registration Lock while the PIN is disabled.</string>
     <string name="PinOptOutDialog_disable_pin">غیرفعال کردن پین</string>
 
     <!-- RatingManager -->
@@ -1957,7 +1957,11 @@
     <!-- Displayed in the conversation list when your most recent message is a payment to or from the person the conversation is with -->
     <string name="ThreadRecord_payment">پرداخت</string>
     <!-- Displayed in the conversation list when your only message in a conversation is a scheduled send. -->
-    <string name="ThreadRecord_scheduled_message">Scheduled message</string>
+    <string name="ThreadRecord_scheduled_message">پیام زمان‌بندی‌شده</string>
+    <!--  Displayed in the conversation list when your message history has been merged -->
+    <string name="ThreadRecord_message_history_has_been_merged">Your message history has been merged</string>
+    <!--  Displayed in the conversation list when identities have been merged. The first placeholder is a phone number, and the second is a person\'s name -->
+    <string name="ThreadRecord_s_belongs_to_s">%1$s belongs to %2$s</string>
 
     <!-- UpdateApkReadyListener -->
     <string name="UpdateApkReadyListener_Signal_update">به‌روزرسانی سیگنال</string>
@@ -5559,7 +5563,7 @@
     <!-- Title for screen describing that sms support is going to be removed soon -->
     <string name="SmsRemoval_title_going_away">پشتیبانی پیامکی به‌زودی برداشته می‌شود</string>
     <!-- Bullet point message shown on describing screen as first bullet why sms is being removed, placeholder with be date of removal (e.g., March 21st) -->
-    <string name="SmsRemoval_info_bullet_1_s">SMS messaging in the Signal app will soon no longer be supported on %1$s.</string>
+    <string name="SmsRemoval_info_bullet_1_s">ارسال پیامک از %1$s به بعد دیگر در برنامه سیگنال پشتیبانی نمی‌شود.</string>
     <!-- Bullet point message shown on describing screen as second bullet why sms is being removed -->
     <string name="SmsRemoval_info_bullet_2">پیامک‌ها با پیام‌های سیگنال تفاوت دارند. <b>این تغییر بر پیام‌های رمزگذاری‌شده سیگنال تأثیری نخواهد داشت و آن‌ها همچنان کار خواهند کرد.</b></string>
     <!-- Bullet point message shown on describing screen as third bullet why sms is being removed -->
@@ -5600,6 +5604,16 @@
     <string name="UsernameEditDialog__edit_username">ویرایش نام کاربری</string>
     <!-- Option to delete username displayed as a list item in a dialog -->
     <string name="UsernameEditDialog__delete_username">پاک کردن نام کاربری</string>
+
+    <!-- Time duration picker -->
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
+    <string name="TimeDurationPickerDialog_single_letter_hour_abbreviation">h</string>
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for minute, e.g., 24m -->
+    <string name="TimeDurationPickerDialog_single_letter_minute_abbreviation">m</string>
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, label for button that will apply the setting -->
+    <string name="TimeDurationPickerDialog_positive_button">Set</string>
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
+    <string name="TimeDurationPickerDialog_minimum_duration_warning">Minimum time before screen lock applies is 1 minute.</string>
 
     <!-- EOF -->
 </resources>

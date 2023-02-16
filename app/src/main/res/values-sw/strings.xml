@@ -659,7 +659,7 @@
     <!-- Title of dialog that allows user to set the time and day that their message will be sent -->
     <string name="ScheduleMessageTimePickerBottomSheet__dialog_title">Panga kutuma jumbe</string>
     <!-- Text for confirmation button when scheduling messages that allows the user to confirm and schedule the sending time -->
-    <string name="ScheduleMessageTimePickerBottomSheet__schedule_send">Panga kutuma</string>
+    <string name="ScheduleMessageTimePickerBottomSheet__schedule_send">Tuma kwa muda uliopangwa</string>
     <!-- Disclaimer in message scheduling dialog. %1$s replaced with a GMT offset (e.g. GMT-05:00), and %2$s is replaced with the time zone name (e.g. Eastern Standard Time) -->
     <string name="ScheduleMessageTimePickerBottomSheet__timezone_disclaimer">Mida yote katika (%1$s) %2$s</string>
     <!-- Warning dialog message text shown when select time for scheduled send is in the past resulting in an immediate send if scheduled. -->
@@ -1586,7 +1586,7 @@
 
     <!-- PinOptOutDialog -->
     <string name="PinOptOutDialog_warning">Onyo</string>
-    <string name="PinOptOutDialog_if_you_disable_the_pin_you_will_lose_all_data">Ukizima PIN, utapoteza data yote utakaposajili upya Signal isipokuwa ukihifadhi nakala yake na kuirejesha mwenyewe. Huwezi kuwasha Kufuli ya Usajili wakati PIN imezimwa.</string>
+    <string name="PinOptOutDialog_if_you_disable_the_pin_you_will_lose_all_data">If you disable the PIN, you will lose all data when you re-register Signal unless you manually back up and restore. You cannot turn on Registration Lock while the PIN is disabled.</string>
     <string name="PinOptOutDialog_disable_pin">Lemaza PIN</string>
 
     <!-- RatingManager -->
@@ -1957,7 +1957,11 @@
     <!-- Displayed in the conversation list when your most recent message is a payment to or from the person the conversation is with -->
     <string name="ThreadRecord_payment">Malipo</string>
     <!-- Displayed in the conversation list when your only message in a conversation is a scheduled send. -->
-    <string name="ThreadRecord_scheduled_message">Scheduled message</string>
+    <string name="ThreadRecord_scheduled_message">Ujumbe uliopangwa kutumwa</string>
+    <!--  Displayed in the conversation list when your message history has been merged -->
+    <string name="ThreadRecord_message_history_has_been_merged">Your message history has been merged</string>
+    <!--  Displayed in the conversation list when identities have been merged. The first placeholder is a phone number, and the second is a person\'s name -->
+    <string name="ThreadRecord_s_belongs_to_s">%1$s belongs to %2$s</string>
 
     <!-- UpdateApkReadyListener -->
     <string name="UpdateApkReadyListener_Signal_update">Sasisho ya Signal</string>
@@ -5559,7 +5563,7 @@
     <!-- Title for screen describing that sms support is going to be removed soon -->
     <string name="SmsRemoval_title_going_away">Msaada wa SMS utaondolewa</string>
     <!-- Bullet point message shown on describing screen as first bullet why sms is being removed, placeholder with be date of removal (e.g., March 21st) -->
-    <string name="SmsRemoval_info_bullet_1_s">SMS messaging in the Signal app will soon no longer be supported on %1$s.</string>
+    <string name="SmsRemoval_info_bullet_1_s">Utumaji wa SMS kwenye programu ya Signal muda si mrefu hautakuwepo kwenye %1$s.</string>
     <!-- Bullet point message shown on describing screen as second bullet why sms is being removed -->
     <string name="SmsRemoval_info_bullet_2">Jumbe za SMS ni tofauti na jumbe za Signal. <b>Hii haiathiri utumaji jumbe kwa usimbwaji wa Signal ambao utaendelea kufanya kazi.</b></string>
     <!-- Bullet point message shown on describing screen as third bullet why sms is being removed -->
@@ -5600,6 +5604,16 @@
     <string name="UsernameEditDialog__edit_username">Hariri jina la mtumiaji</string>
     <!-- Option to delete username displayed as a list item in a dialog -->
     <string name="UsernameEditDialog__delete_username">Futa jina la mtumiaji</string>
+
+    <!-- Time duration picker -->
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
+    <string name="TimeDurationPickerDialog_single_letter_hour_abbreviation">h</string>
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for minute, e.g., 24m -->
+    <string name="TimeDurationPickerDialog_single_letter_minute_abbreviation">m</string>
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, label for button that will apply the setting -->
+    <string name="TimeDurationPickerDialog_positive_button">Set</string>
+    <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
+    <string name="TimeDurationPickerDialog_minimum_duration_warning">Minimum time before screen lock applies is 1 minute.</string>
 
     <!-- EOF -->
 </resources>

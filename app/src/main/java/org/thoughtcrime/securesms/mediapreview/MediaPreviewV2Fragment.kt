@@ -79,7 +79,9 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
 
   private val lifecycleDisposable = LifecycleDisposable()
   private val binding by ViewBinderDelegate(FragmentMediaPreviewV2Binding::bind)
-  private val viewModel: MediaPreviewV2ViewModel by viewModels()
+  private val viewModel: MediaPreviewV2ViewModel by viewModels(ownerProducer = {
+    requireActivity()
+  })
   private val debouncer = Debouncer(2, TimeUnit.SECONDS)
 
   private lateinit var pagerAdapter: MediaPreviewV2Adapter
@@ -183,6 +185,14 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
   private fun initializeFullScreenUi() {
     fullscreenHelper.configureToolbarLayout(binding.toolbarCutoutSpacer, binding.toolbar)
     fullscreenHelper.showAndHideWithSystemUI(requireActivity().window, binding.toolbarLayout, binding.mediaPreviewDetailsContainer)
+
+    lifecycleDisposable += viewModel.state.map {
+      it.isInSharedAnimation to it.loadState
+    }.distinctUntilChanged().subscribe { (isInSharedAnimation, loadState) ->
+      if (!isInSharedAnimation && loadState == MediaPreviewV2State.LoadState.MEDIA_READY) {
+        binding.toolbarLayout.animate().alpha(1f)
+      }
+    }
   }
 
   private fun bindCurrentState(currentState: MediaPreviewV2State) {
@@ -350,6 +360,10 @@ class MediaPreviewV2Fragment : LoggingFragment(R.layout.fragment_media_preview_v
   }
 
   private fun scrollAlbumRailToCurrentAdapterPosition(smooth: Boolean = true) {
+    if (!isResumed) {
+      return
+    }
+
     val currentItemPosition = albumRailAdapter.findSelectedItemPosition()
     val albumRail: RecyclerView = binding.mediaPreviewPlaybackControls.recyclerView
     val offsetFromStart = (albumRail.width - individualItemWidth) / 2

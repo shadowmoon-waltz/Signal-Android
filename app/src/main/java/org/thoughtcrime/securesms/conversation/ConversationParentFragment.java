@@ -512,7 +512,7 @@ public class ConversationParentFragment extends Fragment
       return;
     }
 
-    voiceNoteMediaController = new VoiceNoteMediaController(requireActivity());
+    voiceNoteMediaController = new VoiceNoteMediaController(requireActivity(), true);
     voiceRecorderWakeLock    = new VoiceRecorderWakeLock(requireActivity());
 
     // TODO [alex] LargeScreenSupport -- Should be removed once we move to multi-pane layout.
@@ -2123,26 +2123,24 @@ public class ConversationParentFragment extends Fragment
     attachButton.setOnClickListener(new AttachButtonListener());
     attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
     sendButton.setOnClickListener(sendButtonListener);
-    if (FeatureFlags.scheduledMessageSends()) {
-      sendButton.setScheduledSendListener(new SendButton.ScheduledSendListener() {
-        @Override
-        public void onSendScheduled() {
-          ScheduleMessageContextMenu.show(sendButton, (ViewGroup) requireView(), time -> {
-            if (time == -1) {
-              ScheduleMessageTimePickerBottomSheet.showSchedule(getChildFragmentManager());
-            } else {
-              sendMessage(null, time);
-            }
-            return Unit.INSTANCE;
-          });
-        }
+    sendButton.setScheduledSendListener(new SendButton.ScheduledSendListener() {
+      @Override
+      public void onSendScheduled() {
+        ScheduleMessageContextMenu.show(sendButton, (ViewGroup) requireView(), time -> {
+          if (time == -1) {
+            ScheduleMessageTimePickerBottomSheet.showSchedule(getChildFragmentManager());
+          } else {
+            sendMessage(null, time);
+          }
+          return Unit.INSTANCE;
+        });
+      }
 
-        @Override
-        public boolean canSchedule() {
-          return !(inputPanel.isRecordingInLockedMode() || draftViewModel.getVoiceNoteDraft() != null);
-        }
-      });
-    }
+      @Override
+      public boolean canSchedule() {
+                                   return !(inputPanel.isRecordingInLockedMode() || draftViewModel.getVoiceNoteDraft() != null);
+                                                                                                                                }
+    });
     sendButton.setEnabled(true);
     sendButton.addOnSelectionChangedListener((newMessageSendType, manuallySelected) -> {
       if (getContext() == null) {
@@ -2330,7 +2328,8 @@ public class ConversationParentFragment extends Fragment
     callback.onInitializeToolbar(toolbar);
   }
 
-  protected boolean isInBubble() {
+  @Override
+  public boolean isInBubble() {
     return callback.isInBubble();
   }
 
@@ -4102,6 +4101,12 @@ public class ConversationParentFragment extends Fragment
     } else {
       MessageDetailsFragment.create(messageRecord, recipient.getId()).show(getChildFragmentManager(), null);
     }
+  }
+
+  @Override
+  public void onFirstRender() {
+    requireActivity().supportStartPostponedEnterTransition();
+    voiceNoteMediaController.finishPostpone();
   }
 
   @Override
