@@ -31,6 +31,7 @@ import org.thoughtcrime.securesms.conversationlist.model.ConversationFilter
 import org.thoughtcrime.securesms.database.MessageTable.MarkedMessageInfo
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.attachments
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.drafts
+import org.thoughtcrime.securesms.database.SignalDatabase.Companion.groupCallRings
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.groupReceipts
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.mentions
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.messageLog
@@ -243,13 +244,23 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
       .where("$ID = ?", threadId)
       .run()
 
-    if (unarchive) {
+    if (unarchive && allowedToUnarchive(threadId)) {
       val archiveValues = contentValuesOf(ARCHIVED to 0)
       val query = SqlUtil.buildTrueUpdateQuery(ID_WHERE, SqlUtil.buildArgs(threadId), archiveValues)
       if (writableDatabase.update(TABLE_NAME, archiveValues, query.where, query.whereArgs) > 0) {
         StorageSyncHelper.scheduleSyncForDataChange()
       }
     }
+  }
+
+  private fun allowedToUnarchive(threadId: Long): Boolean {
+    if (!SignalStore.settings().shouldKeepMutedChatsArchived()) {
+      return true
+    }
+
+    val threadRecipientId: RecipientId? = getRecipientIdForThreadId(threadId)
+
+    return threadRecipientId == null || !recipients.isMuted(threadRecipientId)
   }
 
   fun updateSnippetUriSilently(threadId: Long, attachment: Uri?) {
@@ -272,7 +283,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
       SNIPPET_URI to attachment?.toString()
     )
 
-    if (unarchive) {
+    if (unarchive && allowedToUnarchive(threadId)) {
       contentValues.put(ARCHIVED, 0)
     }
 
@@ -1067,6 +1078,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
       messageLog.deleteAll()
       messages.deleteAllThreads()
       drafts.clearAllDrafts()
+      groupCallRings.deleteAll()
       db.delete(TABLE_NAME, null, null)
     }
 

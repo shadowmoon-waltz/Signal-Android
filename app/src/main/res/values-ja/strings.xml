@@ -319,7 +319,7 @@
     <string name="ConversationActivity_transport_signal">Signalメッセージ</string>
     <string name="ConversationActivity_lets_switch_to_signal">メッセージアプリをSignalにしましょう %1$s</string>
     <string name="ConversationActivity_specify_recipient">連絡先を選択してください</string>
-    <string name="ConversationActivity_unblock">ブロックを解除します</string>
+    <string name="ConversationActivity_unblock">ブロック解除</string>
     <string name="ConversationActivity_attachment_exceeds_size_limits">添付ファイルのサイズが、送信するメッセージタイプに応じた制限を超えています。</string>
     <string name="ConversationActivity_unable_to_record_audio">録音できません！</string>
     <string name="ConversationActivity_you_cant_send_messages_to_this_group">メンバーではなくなったので、このグループにメッセージを送ることはできません。</string>
@@ -450,7 +450,7 @@
     <!-- Dialog cancel block request button -->
     <string name="ConversationFragment__cancel">キャンセル</string>
     <!-- Message shown after successfully blocking join requests for a user -->
-    <string name="ConversationFragment__blocked">ブロック中のユーザー</string>
+    <string name="ConversationFragment__blocked">ブロック済</string>
     <!-- Label for a button displayed in conversation list to clear the chat filter -->
     <string name="ConversationListFragment__clear_filter">検索条件を解除する</string>
     <!-- Notice on chat list when no unread chats are available, centered on display -->
@@ -917,9 +917,15 @@
     <!-- Snackbar message after copying username -->
     <string name="ManageProfileFragment__username_copied">ユーザー名をコピーしました</string>
     <!-- Snackbar message after network failure while trying to delete username -->
-    <string name="ManageProfileFragment__couldnt_delete_username">Couldn\'t delete username. Try again later.</string>
+    <string name="ManageProfileFragment__couldnt_delete_username">ユーザーネームを削除できませんでした。あとで再度試してください。</string>
     <!-- Snackbar message after successful deletion of username -->
-    <string name="ManageProfileFragment__username_deleted">Username deleted</string>
+    <string name="ManageProfileFragment__username_deleted">ユーザーネームを削除しました</string>
+
+    <!-- UsernameOutOfSyncReminder -->
+    <!-- Displayed above the conversation list when a user needs to address an issue with their username -->
+    <string name="UsernameOutOfSyncReminder__something_went_wrong">Something went wrong with your username, it\'s no longer assigned to your account. You can try and set it again or choose a new one.</string>
+    <!-- Action text to navigate user to manually fix the issue with their username -->
+    <string name="UsernameOutOfSyncReminder__fix_now">Fix now</string>
 
 
     <!-- ManageRecipientActivity -->
@@ -1525,6 +1531,17 @@
     <string name="PinRestoreLockedFragment_create_new_pin">新しいPINを作成</string>
   <!-- Removed by excludeNonTranslatables <string name="PinRestoreLockedFragment_learn_more_url" translatable="false">https://support.signal.org/hc/articles/360007059792</string> -->
 
+    <!-- Dialog button text indicating user wishes to send an sms code isntead of skipping it -->
+    <string name="ReRegisterWithPinFragment_send_sms_code">Send SMS code</string>
+    <!-- Email subject used when user contacts support about an issue with the reregister flow. -->
+    <string name="ReRegisterWithPinFragment_support_email_subject">Signal Registration - Need Help with reregister PIN for Android</string>
+    <!-- Dialog message shown in reregister flow when tapping a informational button to to learn about pins or contact support for help -->
+    <string name="ReRegisterWithPinFragment_need_help_local">Your PIN is a %1$d+ digit code you created that can be numeric or alphanumeric.\n\nIf you can’t remember your PIN, you can create a new one.</string>
+    <!-- Dialog message shown in reregister flow when user requests to skip this flow and return to the normal flow -->
+    <string name="ReRegisterWithPinFragment_skip_local">If you can’t remember your PIN, you can create a new one.</string>
+    <!-- Dialog message shown in reregister flow when user uses up all of their guesses for their pin and we are going to move on -->
+    <string name="ReRegisterWithPinFragment_out_of_guesses_local">You\'ve run out of PIN guesses, but you can still access your Signal account by creating a new PIN.</string>
+
     <!-- PinOptOutDialog -->
     <string name="PinOptOutDialog_warning">ご注意ください</string>
     <string name="PinOptOutDialog_if_you_disable_the_pin_you_will_lose_all_data">PINを無効にすると、自身でバックアップと復元を行わない限り、Signalに再登録する際すべてのデータが失われます。PINを無効にしている間は登録ロックは使用できません。</string>
@@ -1558,7 +1575,7 @@
 
     <!-- RecipientPreferencesActivity -->
     <string name="RecipientPreferenceActivity_block">ブロックする</string>
-    <string name="RecipientPreferenceActivity_unblock">ブロックを解除する</string>
+    <string name="RecipientPreferenceActivity_unblock">ブロック解除</string>
 
     <!-- RecipientProvider -->
 
@@ -1703,11 +1720,18 @@
     <string name="RegistrationActivity_signal_needs_access_to_your_contacts_and_media_in_order_to_connect_with_friends">Signalは、ご友人とのつながりやメッセージ送信を支えるため、連絡先とメディアへのアクセス許可が必要です。連絡先はエンドツーエンドで暗号化し、Signalプライベートコンタクトディスカバリーを使用してアップロードされるため、Signalのサービス管理者は閲覧できません。</string>
     <string name="RegistrationActivity_signal_needs_access_to_your_contacts_in_order_to_connect_with_friends">Signalは、ご友人とのつながりを支えるため、連絡先へのアクセス許可が必要です。連絡先はエンドツーエンドで暗号化し、Signalプライベートコンタクトディスカバリーを使用してアップロードされるため、Signalのサービス管理者は閲覧できません。</string>
     <string name="RegistrationActivity_rate_limited_to_service">この番号の登録試行回数が多すぎます。あとで再度試してください。</string>
+    <!--    During registration, if the user attempts (and fails) to register, we display this error message with a number of minutes timer they are allowed to try again.-->
+    <string name="RegistrationActivity_rate_limited_to_try_again">You\'ve made too many attempts to register this number. Please try again in %1$s.</string>
     <string name="RegistrationActivity_unable_to_connect_to_service">サービスに接続できませんでした。ネットワークの接続を確認してから、再度試してください。</string>
     <string name="RegistrationActivity_non_standard_number_format">非標準の数字フォーマット</string>
     <string name="RegistrationActivity_the_number_you_entered_appears_to_be_a_non_standard">あなたが入力した数字 (%1$s) は、非標準のフォーマットのようです。\n\n%2$s を意図していすか？</string>
     <string name="RegistrationActivity_signal_android_phone_number_format">Signal Android - 電話番号フォーマット</string>
+    <!--    Small "toast" notification to the user confirming that they have requested a new code via voice call.-->
     <string name="RegistrationActivity_call_requested">通話を要求されました</string>
+    <!--    Small "toast" notification to the user confirming that they have requested a new code via SMS.-->
+    <string name="RegistrationActivity_sms_requested">SMS requested</string>
+    <!--    Small "toast" notification to the user confirming that they have requested a new code (through an unspecified channel).-->
+    <string name="RegistrationActivity_code_requested">Verification code requested</string>
     <plurals name="RegistrationActivity_debug_log_hint">
         <item quantity="other">デバッグログの提出まで、あと%1$dステップです。</item>
     </plurals>
@@ -1726,6 +1750,16 @@
     <string name="RegistrationActivity_call">通話</string>
     <string name="RegistrationActivity_verification_code">認証コード</string>
     <string name="RegistrationActivity_resend_code">コードを再送信する</string>
+    <!--    A title for a bottom sheet dialog offering to help a user having trouble entering their verification code.-->
+    <string name="RegistrationActivity_support_bottom_sheet_title">Having trouble registering?</string>
+    <!--    A list of suggestions to try for a user having trouble entering their verification code.-->
+    <string name="RegistrationActivity_support_bottom_sheet_body_suggestions">• Make sure your phone has a cellular signal to receive your SMS or call\n • Confirm you can receive a phone call to the number\n • Check that you have entered your phone number correctly.</string>
+    <!--    A call to action for a user having trouble entering the verification to seek further help. -->
+    <string name="RegistrationActivity_support_bottom_sheet_body_call_to_action">For more information, please follow these troubleshooting steps or Contact Support</string>
+    <!--    A clickable piece of text that will take the user to our website with additional suggestions.-->
+    <string name="RegistrationActivity_support_bottom_sheet_cta_troubleshooting_steps_substring">these troubleshooting steps</string>
+    <!--    A clickable piece of text that will pre-fill a request for support email in the user\'s email app.-->
+    <string name="RegistrationActivity_support_bottom_sheet_cta_contact_support_substring">お問い合わせ</string>
 
     <!-- RegistrationLockV2Dialog -->
     <string name="RegistrationLockV2Dialog_turn_on_registration_lock">登録ロックを有効にしますか？</string>
@@ -1893,7 +1927,7 @@
     <!-- Displayed in the conversation list when your only message in a conversation is a scheduled send. -->
     <string name="ThreadRecord_scheduled_message">予約メッセージ</string>
     <!--  Displayed in the conversation list when your message history has been merged -->
-    <string name="ThreadRecord_message_history_has_been_merged">Your message history has been merged</string>
+    <string name="ThreadRecord_message_history_has_been_merged">メッセージ履歴が統合されました</string>
     <!--  Displayed in the conversation list when identities have been merged. The first placeholder is a phone number, and the second is a person\'s name -->
     <string name="ThreadRecord_s_belongs_to_s">%1$s は %2$s の番号です</string>
 
@@ -2561,10 +2595,10 @@
     <string name="arrays__use_default">既定を使う</string>
     <string name="arrays__use_custom">カスタムを使う</string>
 
-    <string name="arrays__mute_for_one_hour">1時間</string>
-    <string name="arrays__mute_for_eight_hours">8時間</string>
-    <string name="arrays__mute_for_one_day">1日間</string>
-    <string name="arrays__mute_for_seven_days">7日間</string>
+    <string name="arrays__mute_for_one_hour">1時間ミュート</string>
+    <string name="arrays__mute_for_eight_hours">8時間ミュート</string>
+    <string name="arrays__mute_for_one_day">1日間ミュート</string>
+    <string name="arrays__mute_for_seven_days">7日間ミュート</string>
     <string name="arrays__always">常時</string>
 
     <string name="arrays__settings_default">既定の設定</string>
@@ -3052,7 +3086,7 @@
     <!-- conversation_secure_verified -->
 
     <!-- conversation_muted -->
-    <string name="conversation_muted__unmute">ミュートを解除</string>
+    <string name="conversation_muted__unmute">ミュート解除</string>
 
     <!-- conversation_unmuted -->
     <string name="conversation_unmuted__mute_notifications">通知をミュート</string>
@@ -3216,6 +3250,8 @@
     <!-- KbsLockFragment -->
     <string name="RegistrationLockFragment__enter_your_pin">PINを入力してください</string>
     <string name="RegistrationLockFragment__enter_the_pin_you_created">あなたのアカウント用に作成したPINを入力してください。これはSMSの認証コードとは違います。</string>
+    <!-- Info text shown above a pin entry text box describing what pin they should be entering. -->
+    <string name="RegistrationLockFragment__enter_the_pin_you_created_for_your_account">Enter the PIN you created for your account.</string>
     <string name="RegistrationLockFragment__enter_alphanumeric_pin">英数字のPINを入力</string>
     <string name="RegistrationLockFragment__enter_numeric_pin">数字のPINを入力</string>
     <string name="RegistrationLockFragment__incorrect_pin_try_again">PINが違います。再度試してください。</string>
@@ -3314,7 +3350,10 @@
     <string name="LocalBackupJobApi29_your_backup_contains_a_very_large_file">非常に大きなファイルが含まれているためバックアップできません。そのファイルを消去して、新しいバックアップを作成してください。</string>
     <string name="LocalBackupJobApi29_tap_to_manage_backups">タップしてバックアップを管理</string>
     <string name="RegistrationActivity_wrong_number">電話番号を訂正</string>
+    <!--    Countdown to when the user can request a new code via phone call during registration.-->
     <string name="RegistrationActivity_call_me_instead_available_in">電話で確認 (%1$02d:%2$02d)</string>
+    <!--    Countdown to when the user can request a new SMS code during registration.-->
+    <string name="RegistrationActivity_resend_sms_available_in">Resend Code (%1$02d:%2$02d)</string>
     <string name="RegistrationActivity_contact_signal_support">Signalサポートに問い合わせ</string>
     <string name="RegistrationActivity_code_support_subject">Signal登録 - Android用認証コード</string>
     <string name="RegistrationActivity_incorrect_code">コードが違います</string>
@@ -3915,7 +3954,7 @@
     <string name="NotificationProfilesFragment__create_profile">プロファイルを作成</string>
 
     <!-- PrivacySettingsFragment -->
-    <string name="PrivacySettingsFragment__blocked">ブロック中のユーザー</string>
+    <string name="PrivacySettingsFragment__blocked">ブロック済</string>
     <string name="PrivacySettingsFragment__d_contacts">%1$d件</string>
     <string name="PrivacySettingsFragment__messaging">メッセージ送受信</string>
     <string name="PrivacySettingsFragment__disappearing_messages">消えるメッセージ</string>
@@ -4087,7 +4126,7 @@
     <string name="ConversationSettingsFragment__view_safety_number">安全番号の検証</string>
     <string name="ConversationSettingsFragment__block">ブロック</string>
     <string name="ConversationSettingsFragment__block_group">グループをブロック</string>
-    <string name="ConversationSettingsFragment__unblock">ブロックを解除</string>
+    <string name="ConversationSettingsFragment__unblock">ブロック解除</string>
     <string name="ConversationSettingsFragment__unblock_group">グループのブロックを解除</string>
     <string name="ConversationSettingsFragment__add_to_a_group">グループへ追加</string>
     <string name="ConversationSettingsFragment__see_all">すべて表示</string>
@@ -4096,7 +4135,7 @@
     <string name="ConversationSettingsFragment__requests_and_invites">申請と招待</string>
     <string name="ConversationSettingsFragment__group_link">グループリンク</string>
     <string name="ConversationSettingsFragment__add_as_a_contact">連絡先に追加</string>
-    <string name="ConversationSettingsFragment__unmute">ミュートを解除</string>
+    <string name="ConversationSettingsFragment__unmute">ミュート解除</string>
     <string name="ConversationSettingsFragment__conversation_muted_until_s">チャットは%1$sまでミュートされます</string>
     <string name="ConversationSettingsFragment__conversation_muted_forever">チャットは常にミュートされます</string>
     <string name="ConversationSettingsFragment__copied_phone_number_to_clipboard">電話番号をクリップボードにコピーしました。</string>
@@ -4152,7 +4191,7 @@
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s さんは削除されています</string>
     <!-- Snackbar message after blocking a contact -->
-    <string name="NewConversationActivity__s_has_been_blocked">%1$s さんはブロックされています</string>
+    <string name="NewConversationActivity__s_has_been_blocked">%1$s はブロックされました</string>
     <!-- Dialog title when remove target contact is in system contacts -->
     <string name="NewConversationActivity__unable_to_remove_s">%1$s さんを削除できません</string>
     <!-- Dialog message when remove target contact is in system contacts -->
@@ -5487,13 +5526,13 @@
 
     <!-- Time duration picker -->
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for hour, e.g., 12h -->
-    <string name="TimeDurationPickerDialog_single_letter_hour_abbreviation">h</string>
+    <string name="TimeDurationPickerDialog_single_letter_hour_abbreviation">時間</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label shown after the user input value for minute, e.g., 24m -->
-    <string name="TimeDurationPickerDialog_single_letter_minute_abbreviation">月</string>
+    <string name="TimeDurationPickerDialog_single_letter_minute_abbreviation">分</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, label for button that will apply the setting -->
     <string name="TimeDurationPickerDialog_positive_button">設定する</string>
     <!-- Shown in a time duration picker for selecting duration in hours and minutes, helper text indicating minimum allowable duration -->
-    <string name="TimeDurationPickerDialog_minimum_duration_warning">Minimum time before screen lock applies is 1 minute.</string>
+    <string name="TimeDurationPickerDialog_minimum_duration_warning">画面ロックが作動するまでの最短時間は 1 分です。</string>
 
     <!-- EOF -->
 </resources>
