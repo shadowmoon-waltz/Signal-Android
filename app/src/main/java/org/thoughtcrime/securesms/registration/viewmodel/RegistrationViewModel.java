@@ -122,6 +122,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
   }
 
   public void setUserSkippedReRegisterFlow(boolean userSkippedReRegisterFlow) {
+    Log.i(TAG, "User skipped re-register flow.");
     this.userSkippedReRegisterFlow = userSkippedReRegisterFlow;
     if (userSkippedReRegisterFlow) {
       setAutoShowSmsConfirmDialog(true);
@@ -303,6 +304,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
     }
 
     return verifyAccountRepository.registerAccount(null, registrationData, null, null)
+                                  .observeOn(Schedulers.io())
                                   .onErrorReturn(ServiceResponse::forUnknownError)
                                   .map(VerifyResponseWithoutKbs::new)
                                   .flatMap(processor -> {
@@ -328,8 +330,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
                                     } else {
                                       return Single.just(processor);
                                     }
-                                  })
-                                  .observeOn(AndroidSchedulers.mainThread());
+                                  });
   }
 
   public @NonNull Single<Boolean> canEnterSkipSmsFlow() {
@@ -339,6 +340,7 @@ public final class RegistrationViewModel extends BaseRegistrationViewModel {
 
     return Single.just(hasRecoveryPassword())
                  .flatMap(hasRecoveryPassword -> {
+                   Log.i(TAG, "Checking if user has existing recovery password: " + hasRecoveryPassword);
                    if (hasRecoveryPassword) {
                      return Single.just(true);
                    } else {
