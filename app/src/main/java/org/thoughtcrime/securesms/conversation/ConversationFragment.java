@@ -187,6 +187,7 @@ import org.thoughtcrime.securesms.util.RemoteDeleteUtil;
 import org.thoughtcrime.securesms.util.SaveAttachmentTask;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.thoughtcrime.securesms.util.SignalProxyUtil;
+import org.thoughtcrime.securesms.util.SignalTrace;
 import org.thoughtcrime.securesms.util.SnapToTopDataObserver;
 import org.thoughtcrime.securesms.util.StickyHeaderDecoration;
 import org.thoughtcrime.securesms.util.StorageUtil;
@@ -294,6 +295,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     this.locale = Locale.getDefault();
     startupStopwatch = new Stopwatch("conversation-open");
     SignalLocalMetrics.ConversationOpen.start();
+    SignalTrace.beginSection("ConversationOpen");
   }
 
   @Override
@@ -823,6 +825,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
             startupStopwatch.stop(TAG);
             SignalLocalMetrics.ConversationOpen.onRenderFinished();
             listener.onFirstRender();
+            SignalTrace.endSection();
           });
         }
       });
@@ -1319,7 +1322,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     if (message.getScheduledDate() != -1) {
       return;
     }
-    MessageRecord messageRecord = MessageTable.readerFor(message, threadId).getCurrent();
 
     if (getListAdapter() != null) {
       setLastSeen(0);
@@ -2269,7 +2271,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void goToMediaPreview(ConversationItem parent, View sharedElement, MediaIntentFactory.MediaPreviewArgs args) {
       if (listener.isInBubble()) {
-        requireActivity().startActivity(MediaIntentFactory.create(requireActivity(), args));
+        requireActivity().startActivity(MediaIntentFactory.create(requireActivity(), args.skipSharedElementTransition(true)));
         return;
       }
 

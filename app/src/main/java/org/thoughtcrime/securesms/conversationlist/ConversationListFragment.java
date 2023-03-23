@@ -299,31 +299,33 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     contactSearchMediator = new ContactSearchMediator(this,
                                                       Collections.emptySet(),
                                                       SelectionLimits.NO_LIMITS,
-                                                      false,
-                                                      ContactSearchAdapter.DisplaySmsTag.DEFAULT,
-                                                      ContactSearchAdapter.DisplaySecondaryInformation.NEVER,
+                                                      new ContactSearchAdapter.DisplayOptions(
+                                                          false,
+                                                          ContactSearchAdapter.DisplaySmsTag.DEFAULT,
+                                                          ContactSearchAdapter.DisplaySecondaryInformation.NEVER,
+                                                          false,
+                                                          false
+                                                      ),
                                                       this::mapSearchStateToConfiguration,
                                                       new ContactSearchMediator.SimpleCallbacks(),
                                                       false,
                                                       (context,
                                                        fixedContacts,
-                                                       displayCheckBox,
-                                                       displaySmsTag,
-                                                       displaySecondaryInformation,
+                                                       displayOptions,
                                                        callbacks,
                                                        longClickCallbacks,
-                                                       storyContextMenuCallbacks
+                                                       storyContextMenuCallbacks,
+                                                       callButtonClickCallbacks
                                                       ) -> {
                                                         //noinspection CodeBlock2Expr
                                                         return new ConversationListSearchAdapter(
                                                             context,
                                                             fixedContacts,
-                                                            displayCheckBox,
-                                                            displaySmsTag,
-                                                            displaySecondaryInformation,
+                                                            displayOptions,
                                                             new ContactSearchClickCallbacks(callbacks),
                                                             longClickCallbacks,
                                                             storyContextMenuCallbacks,
+                                                            callButtonClickCallbacks,
                                                             getViewLifecycleOwner(),
                                                             GlideApp.with(this)
                                                         );
@@ -385,6 +387,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     list.setLayoutManager(new LinearLayoutManager(requireActivity()));
     list.setItemAnimator(itemAnimator);
     list.addItemDecoration(archiveDecoration);
+    CachedInflater.from(list.getContext()).cacheUntilLimit(R.layout.conversation_list_item_view, list, 10);
 
     snapToTopDataObserver = new SnapToTopDataObserver(list);
 
@@ -653,7 +656,10 @@ public class ConversationListFragment extends MainFragment implements ActionMode
               null
           ));
 
-          builder.setHasEmptyState(true);
+          builder.withEmptyState(emptyStateBuilder -> {
+            emptyStateBuilder.addSection(ContactSearchConfiguration.Section.Empty.INSTANCE);
+            return Unit.INSTANCE;
+          });
         } else {
           builder.arbitrary(
               conversationFilterRequest.getSource() == ConversationFilterSource.DRAG
