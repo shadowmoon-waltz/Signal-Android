@@ -86,6 +86,10 @@ internal object ConversationOptionsMenu {
 
       menuInflater.inflate(R.menu.conversation, menu)
 
+      if (!SignalStore.settings().isConversationDeleteInMenu) {
+        hideMenuItem(menu, R.id.menu_delete_conversation)
+      }
+
       if (isInMessageRequest() && !recipient!!.isBlocked) {
         hideMenuItem(menu, R.id.menu_conversation_settings)
       }
@@ -170,6 +174,7 @@ internal object ConversationOptionsMenu {
         R.id.menu_conversation_settings -> optionsMenuProviderCallback.handleConversationSettings()
         R.id.menu_expiring_messages_off, R.id.menu_expiring_messages -> optionsMenuProviderCallback.handleSelectMessageExpiration()
         R.id.menu_create_bubble -> optionsMenuProviderCallback.handleCreateBubble()
+        R.id.menu_delete_conversation -> optionsMenuProviderCallback.handleDeleteConversation()
         R.id.home -> optionsMenuProviderCallback.handleGoHome()
         else -> return false
       }
@@ -233,6 +238,7 @@ internal object ConversationOptionsMenu {
     fun handleConversationSettings()
     fun handleSelectMessageExpiration()
     fun handleCreateBubble()
+    fun handleDeleteConversation()
     fun handleGoHome()
   }
 }
