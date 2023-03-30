@@ -111,6 +111,7 @@ import org.thoughtcrime.securesms.components.reminder.UnauthorizedReminder;
 import org.thoughtcrime.securesms.components.reminder.UsernameOutOfSyncReminder;
 import org.thoughtcrime.securesms.components.settings.app.notifications.manual.NotificationProfileSelectionFragment;
 import org.thoughtcrime.securesms.components.settings.app.subscription.errors.UnexpectedSubscriptionCancellation;
+import org.thoughtcrime.securesms.components.spoiler.SpoilerAnnotation;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
 import org.thoughtcrime.securesms.components.voice.VoiceNotePlayerView;
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchAdapter;
@@ -471,6 +472,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     updateReminders();
     EventBus.getDefault().register(this);
     itemAnimator.disable();
+    SpoilerAnnotation.resetRevealedSpoilers();
 
     if (Util.isDefaultSmsProvider(requireContext())) {
       InsightsLauncher.showInsightsModal(requireContext(), requireFragmentManager());
@@ -982,7 +984,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     startupStopwatch.split("first-render");
     startupStopwatch.stop(TAG);
     mediaControllerOwner.getVoiceNoteMediaController().finishPostpone();
-    requireCallback().getSearchToolbar().get();
+
+    if (getParentFragment() != null) {
+      requireCallback().getSearchToolbar().get();
+    }
+
     if (getContext() != null) {
       ConversationFragment.prepare(getContext());
     }

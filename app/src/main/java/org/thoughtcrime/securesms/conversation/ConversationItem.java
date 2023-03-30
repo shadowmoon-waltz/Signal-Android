@@ -348,6 +348,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     bodyText.setOnLongClickListener(passthroughClickListener);
     bodyText.setOnClickListener(passthroughClickListener);
+    bodyText.enableSpoilerFiltering();
     footer.setOnTouchDelegateChangedListener(touchDelegateChangedListener);
   }
 
