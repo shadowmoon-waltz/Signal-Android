@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">হ্যাঁ</string>
     <string name="no">না</string>
@@ -494,39 +495,18 @@
         <item quantity="other">পড়ুন</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">পড়া হয়নি</item>
-        <item quantity="other">পড়া হয়নি</item>
+        <item quantity="one">অপঠিত</item>
+        <item quantity="other">অপঠিত</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">পিন করুন</item>
-        <item quantity="other">পিন করুন</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">আনপিন করুন</item>
-        <item quantity="other">আনপিন করুন</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">মিউট করুন</item>
-        <item quantity="other">মিউট করুন</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">আনমিউট করুন</item>
-        <item quantity="other">আনমিউট করুন</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">পিন করুন</string>
+    <string name="ConversationListFragment_unpin">আনপিন করুন</string>
+    <string name="ConversationListFragment_mute">মিউট করুন</string>
+    <string name="ConversationListFragment_unmute">আনমিউট করুন</string>
     <string name="ConversationListFragment_select">নির্বাচন করুন</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">আর্কাইভ করুন</item>
-        <item quantity="other">আর্কাইভ করুন</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">আনআর্কাইভ করুন</item>
-        <item quantity="other">আনআর্কাইভ করুন</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">মুছে ফেলুন</item>
-        <item quantity="other">মুছে ফেলুন</item>
-    </plurals>
-    <string name="ConversationListFragment_select_all">সবগুলো নির্বাচন করুন</string>
+    <string name="ConversationListFragment_archive">আর্কাইভ করুন</string>
+    <string name="ConversationListFragment_unarchive">আর্কাইভ মুক্ত</string>
+    <string name="ConversationListFragment_delete">মুছে ফেলুন</string>
+    <string name="ConversationListFragment_select_all">সব নির্বাচন করুন</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d নির্বাচিত</item>
         <item quantity="other">%1$d নির্বাচিত</item>
@@ -1499,6 +1479,8 @@
     <string name="MessageRequestBottomView_delete">মুছে ফেলুন</string>
     <string name="MessageRequestBottomView_block">ব্লক করুন</string>
     <string name="MessageRequestBottomView_unblock">আনব্লক করুন</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">%1$s-কে আপনাকে মেসেজ দিতে দিন এবং তার সাথে আপনার নাম ও ছবি শেয়ার করুন? আপনি অতীতে এই ব্যক্তিকে মুছে ফেলেছিলেন।</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">%1$s-কে কি আপনাকে মেসেজ পাঠাতে এবং আপনার নাম ও ছবি শেয়ার করতে দেবেন? আপনি গ্রহণ না করা পর্যন্ত আপনি যে তাদের মেসেজটি দেখেছেন সেটি তারা জানতে পারবেন না।</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">%1$s-কে কি আপনাকে ম্যাসেজ পাঠাতে এবং আপনার নাম ও ছবি শেয়ার করতে দেবেন? আপনি তাদের আনব্লক না করা পর্যন্ত তাদের পাঠানো কোনো ম্যাসেজ পাবেন না।</string>
@@ -1745,17 +1727,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">ক্যামেরার দিক টগল করুন</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">স্পিকার টগল করুন</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">ক্যামেরা টগল করুন</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">মিউট টগল করুন</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">রিং টগল করুন</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">কল শেষ করুন</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">একটি UI ত্রুটি দেখা দিয়েছে। অনুগ্রহ করে ডেভেলপারদের কাছে এই ত্রুটির ব্যাপারে রিপোর্ট করুন।</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">কোনো ব্যবহারযোগ্য অডিও ইনপুট/আউটপুট শনাক্ত করা যায়নি।</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">ব্লুটুথ ডিভাইসকে নির্দেশকারী একটি আইকন।</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">তারযুক্ত হেডসেটকে নির্দেশকারী একটি আইকন।</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">স্পিকারফোনকে নির্দেশকারী একটি আইকন।</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">একটি ডিভাইসের ইয়ারপিসকে নির্দেশকারী একটি আইকন।</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1823,6 +1818,8 @@
         <item quantity="other">আপনি এখন একটি ডিবাগ লগ জমা দেওয়ার থেকে %1$d পদক্ষেপ দূরে।</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">আপনি যে একজন মানুষ তা আমরা যাচাই করতে চাই।</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">বাহ্যিক কোনো ত্রুটির কারণে Signal একটি এসএমএস কোড পাঠাতে সক্ষম হয়নি।</string>
     <string name="RegistrationActivity_next">পরবর্তী</string>
     <string name="RegistrationActivity_continue">চলতে থাকুন</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">আপনার গোপনীয়তা বজায় রাখুন।\n প্রতিটি বার্তায় নিজস্ব থাকুন।</string>
@@ -1993,6 +1990,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">বার্তাটি প্রক্রিয়া করা যায়নি</string>
     <string name="ThreadRecord_delivery_issue">পাঠানোর ক্ষেত্রে সমস্যা</string>
     <string name="ThreadRecord_message_request">বার্তার অনুরোধ</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">ছবি</string>
     <string name="ThreadRecord_gif">জিফ</string>
     <string name="ThreadRecord_voice_message">ভয়েস বার্তা</string>
@@ -2259,10 +2258,18 @@
     <string name="WebRtcCallScreen__answer_without_video">ভিডিও সহ সাড়া দান করুন</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">অডিও আউটপুট</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">ফোনের ইয়ারপিস</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">স্পিকার</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">ব্লুটুথ</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">তারযুক্ত হেডসেট</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">তারযুক্ত হেডসেট (ইউএসবি)</string>
 
     <string name="WebRtcCallControls_answer_call_description">কল গ্রহণ করুন</string>
     <string name="WebRtcCallControls_reject_call_description">কল প্রত্যাখ্যান করুন</string>
@@ -2380,7 +2387,8 @@
     <string name="ConversationUpdateItem_send_payment">পেমেন্ট পাঠান</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">অর্থ প্রদানের উপায় সক্রিয় করুন</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">আপনি এই ব্যক্তিকে মুছে ফেলেছেন, তাকে আবার মেসেজ পাঠালে আপনার তালিকায় তাকে আবার যোগ করা হবে।</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">চালু…. বিরতি</string>
@@ -3087,7 +3095,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">নোট</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">নোট সেভ করুন</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">পেমেন্ট নিশ্চিত করুন</string>
@@ -3994,59 +4002,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">Signal-এ আপনার ফোন নম্বরটি রেজিস্টার করতে আপনার Signal-এর পিনটি আবশ্যক</string>
     <string name="AccountSettingsFragment__change_phone_number">ফোন নম্বর পরিবর্তন করুন</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">আপনার অ্যাকাউন্টের ডেটা</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">আপনার অ্যাকাউন্টের ডেটা</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">আপনার Signal অ্যাকাউন্টের ডেটার একটি রিপোর্ট এক্সপোর্ট করুন। এই রিপোর্টে কোনো ম্যাসেজ বা মিডিয়া অন্তর্ভুক্ত নেই। %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">আরো জানুন</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">রিপোর্ট এক্সপোর্ট করুন</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">TXT হিসাবে এক্সপোর্ট করুন</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">সহজে পড়া যায় এমন টেক্সট ফাইল</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">JSON হিসাবে এক্সপোর্ট করুন</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">মেশিন-পাঠযোগ্য ফাইল</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">বাতিল করুন</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">ঠিক আছে</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">রিপোর্ট তৈরি করা যায়নি</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">আপনার নেটওয়ার্ক সংযোগ ঠিক আছে কি না দেখুন এবং আবার চেষ্টা করুন।</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">ডেটা এক্সপোর্ট করতে চান?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">শুধুমাত্র আপনার বিশ্বাসযোগ্য ব্যক্তি বা অ্যাপের সাথে আপনার Signal অ্যাকাউন্টের ডেটা শেয়ার করুন।</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">এক্সপোর্ট করুন</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">রিপোর্ট তৈরি করা হচ্ছে…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">আপনার রিপোর্ট শুধুমাত্র এক্সপোর্ট করার সময় তৈরি হয় এবং Signal কর্তৃক আপনার ডিভাইসে সংরক্ষণ করা হয় না।</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">আপনার বর্তমান ফোন নম্বরটি একটি নতুন ফোন নম্বরে পরিবর্তন করতে এটি ব্যবহার করুন। আপনি এই পরিবর্তনটি পূর্বাবস্থায় ফেরাতে পারবেন না।\n\nচালিয়ে যাওয়ার আগে, নিশ্চিত করুন যে আপনার নতুন নম্বরটি SMS বা কল পেতে পারে।</string>
@@ -4492,6 +4489,9 @@
     <string name="ImageEditorHud__undo">পূর্বাবস্থায় ফিরে যান</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">মার্কার এবং হাইলাইটারের মধ্যে টগল করুন</string>
     <string name="ImageEditorHud__toggle_between_text_styles">পাঠ্য শৈলীর মধ্যে টগল করুন</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">ফিচারকৃত</string>
 
     <string name="MediaCountIndicatorButton__send">পাঠান</string>
 
@@ -5737,7 +5737,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">মনোস্পেস</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">স্পয়লার</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5745,11 +5745,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">আপনার Signal ব্যবহারকারীর নাম সেট আপ করুন</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">ব্যবহারকারীর নাম সংখ্যার একটি সেটের সাথে সংযুক্ত থাকে এবং আপনার প্রোফাইলে তা শেয়ার করা হয় না</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">প্রত্যেক ব্যবহারকারীর নামের একটি বিশেষ QR কোড ও লিঙ্ক থাকে এবং এটি আপনি আপনার বন্ধুদের সাথে শেয়ার করতে পারেন যাতে তাঁরা আপনার সাথে চ্যাট শুরু করতে পারেন</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">অন্যরা আপনার সাথে যোগাযোগ করার প্রাথমিক উপায় হিসেবে আপনার \'ব্যবহারকারীর নাম\' যাতে ব্যবহার করতে না পারেন, তার জন্য \'সেটিংস &gt; গোপনীয়তা &gt; ফোন নম্বর &gt; কে আমার নম্বর খুঁজে পেতে পারেন\'-এর মধ্যে থেকে ফোন নম্বর দেখতে পাওয়ার সুযোগটি বন্ধ করুন</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5776,6 +5776,12 @@
     <string name="CallLogAdapter__outgoing">কল যাচ্ছে</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">মিসড কল</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">যোগ দিন</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">ফিরে যান</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5848,9 +5854,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">মাইক বন্ধ করুন</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">\'ক্যাপচার\' বোতাম</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">\'চালিয়ে যান\' বোতাম</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">গ্রুপ কল</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">মিসড গ্রুপ কল</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">ইনকামিং গ্রুপ কল</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">আউটগোয়িং গ্রুপ কল</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">কলের একটি লিংক তৈরি করুন</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Signal কলের জন্য একটি লিংক শেয়ার করুন</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">কলের লিংক তৈরি করুন</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Signal কল</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">যোগ দিন</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">কলের নাম যোগ করুন</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">সকল সদস্যকে অনুমোদন দিন</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Signal-এর মাধ্যমে লিংক শেয়ার করুন</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">লিংক কপি করুন</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">লিংক শেয়ার করুন</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">সম্পন্ন হয়েছে</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">শেয়ার শিট খুলতে ব্যর্থ হয়েছে।</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">ক্লিপবোর্ডে কপি করা হয়েছে</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">কলের নাম এডিট করুন</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">সেভ করুন</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">কলের নাম</string>
 
     <!-- EOF -->
 </resources>

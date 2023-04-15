@@ -35,6 +35,7 @@ import com.google.android.material.progressindicator.IndeterminateDrawable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import org.signal.core.util.DimensionUnit
+import org.signal.core.util.concurrent.LifecycleDisposable
 import org.signal.core.util.dp
 import org.signal.core.util.getParcelableCompat
 import org.signal.core.util.logging.Log
@@ -81,7 +82,6 @@ import org.thoughtcrime.securesms.util.AvatarUtil
 import org.thoughtcrime.securesms.util.BottomSheetUtil
 import org.thoughtcrime.securesms.util.DateUtils
 import org.thoughtcrime.securesms.util.Debouncer
-import org.thoughtcrime.securesms.util.LifecycleDisposable
 import org.thoughtcrime.securesms.util.ServiceUtil
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.fragments.requireListener
@@ -300,6 +300,7 @@ class StoryViewerPageFragment :
     progressBar.listener = object : SegmentedProgressBarListener {
       override fun onPage(oldPageIndex: Int, newPageIndex: Int) {
         if (oldPageIndex != newPageIndex && context != null) {
+          Log.d(TAG, "onPage: Moving from $oldPageIndex to $newPageIndex")
           viewModel.setSelectedPostIndex(newPageIndex)
         }
       }
@@ -370,10 +371,12 @@ class StoryViewerPageFragment :
       }
     }
 
-    lifecycleDisposable += sharedViewModel.state.distinctUntilChanged().observeOn(AndroidSchedulers.mainThread()).subscribe { parentState ->
-      viewModel.setIsRunningSharedElementAnimation(!parentState.loadState.isCrossfaderReady)
-      storyContentContainer.visible = parentState.loadState.isCrossfaderReady
+    lifecycleDisposable += sharedViewModel.loadState.subscribe {
+      viewModel.setIsRunningSharedElementAnimation(!it.isCrossfaderReady)
+      storyContentContainer.visible = it.isCrossfaderReady
+    }
 
+    lifecycleDisposable += sharedViewModel.state.distinctUntilChanged().observeOn(AndroidSchedulers.mainThread()).subscribe { parentState ->
       if (parentState.pages.size <= parentState.page) {
         viewModel.setIsSelectedPage(false)
       } else if (storyViewerPageArgs.recipientId == parentState.pages[parentState.page]) {
@@ -765,21 +768,25 @@ class StoryViewerPageFragment :
         markViewedIfAble()
       }
       AttachmentTable.TRANSFER_PROGRESS_PENDING -> {
+        Log.d(TAG, "Story content download is pending.")
         storySlate.moveToState(StorySlateView.State.LOADING, post.id)
         sharedViewModel.setContentIsReady()
         viewModel.setIsDisplayingSlate(true)
       }
       AttachmentTable.TRANSFER_PROGRESS_STARTED -> {
+        Log.d(TAG, "Story content download is in progress.")
         storySlate.moveToState(StorySlateView.State.LOADING, post.id)
         sharedViewModel.setContentIsReady()
         viewModel.setIsDisplayingSlate(true)
       }
       AttachmentTable.TRANSFER_PROGRESS_FAILED -> {
+        Log.d(TAG, "Story content download has failed temporarily.")
         storySlate.moveToState(StorySlateView.State.ERROR, post.id)
         sharedViewModel.setContentIsReady()
         viewModel.setIsDisplayingSlate(true)
       }
       AttachmentTable.TRANSFER_PROGRESS_PERMANENT_FAILURE -> {
+        Log.d(TAG, "Story content download has failed permanently.")
         storySlate.moveToState(StorySlateView.State.FAILED, post.id, post.sender)
         sharedViewModel.setContentIsReady()
         viewModel.setIsDisplayingSlate(true)
@@ -1320,10 +1327,12 @@ class StoryViewerPageFragment :
   }
 
   override fun onContentReady() {
+    Log.d(TAG, "Story content is ready.")
     sharedViewModel.setContentIsReady()
   }
 
   override fun onContentNotAvailable() {
+    Log.d(TAG, "Story content is not available.")
     sharedViewModel.setContentIsReady()
   }
 

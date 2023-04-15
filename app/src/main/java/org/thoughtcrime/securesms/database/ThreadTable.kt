@@ -31,8 +31,8 @@ import org.signal.libsignal.zkgroup.groups.GroupMasterKey
 import org.thoughtcrime.securesms.conversationlist.model.ConversationFilter
 import org.thoughtcrime.securesms.database.MessageTable.MarkedMessageInfo
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.attachments
+import org.thoughtcrime.securesms.database.SignalDatabase.Companion.calls
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.drafts
-import org.thoughtcrime.securesms.database.SignalDatabase.Companion.groupCallRings
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.groupReceipts
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.mentions
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.messageLog
@@ -380,6 +380,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
         setLastScrolled(threadId, 0)
         update(threadId, false)
         notifyConversationListeners(threadId)
+        SignalDatabase.calls.updateCallEventDeletionTimestamps()
       } else {
         Log.i(TAG, "Trimming deleted no messages thread: $threadId")
       }
@@ -634,6 +635,13 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
           DistributionTypes.DEFAULT
         }
       }
+  }
+
+  fun containsId(threadId: Long): Boolean {
+    return readableDatabase
+      .exists(TABLE_NAME)
+      .where("$ID = ?", threadId)
+      .run()
   }
 
   fun getFilteredConversationList(filter: List<RecipientId>, unreadOnly: Boolean): Cursor? {
@@ -1081,13 +1089,14 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
     ConversationUtil.clearShortcuts(context, recipientIds)
   }
 
+  @SuppressLint("DiscouragedApi")
   fun deleteAllConversations() {
     writableDatabase.withinTransaction { db ->
       messageLog.deleteAll()
       messages.deleteAllThreads()
       drafts.clearAllDrafts()
-      groupCallRings.deleteAll()
       db.delete(TABLE_NAME, null, null)
+      calls.deleteAllCalls()
     }
 
     notifyConversationListListeners()
@@ -1574,6 +1583,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
   private fun getExtrasFor(record: MessageRecord, body: ThreadBody): Extra? {
     val threadRecipient = if (record.isOutgoing) record.recipient else getRecipientForThreadId(record.threadId)
     val messageRequestAccepted = RecipientUtil.isMessageRequestAccepted(record.threadId, threadRecipient)
+    val isHidden = threadRecipient?.isHidden ?: false
     val individualRecipientId = record.individualRecipient.id
 
     if (!messageRequestAccepted && threadRecipient != null) {
@@ -1600,7 +1610,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
           }
         }
       } else {
-        return Extra.forMessageRequest(individualRecipientId)
+        return Extra.forMessageRequest(individualRecipientId, isHidden)
       }
     }
 
@@ -1763,7 +1773,8 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
             groupAddedBy = jsonObject.getString("groupAddedBy"),
             individualRecipientId = jsonObject.getString("individualRecipientId")!!,
             bodyRanges = jsonObject.getString("bodyRanges"),
-            isScheduled = jsonObject.getBoolean("isScheduled")
+            isScheduled = jsonObject.getBoolean("isScheduled"),
+            isRecipientHidden = jsonObject.getBoolean("isRecipientHidden")
           )
         } catch (exception: Exception) {
           null
@@ -1846,7 +1857,10 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
     val bodyRanges: String? = null,
     @field:JsonProperty
     @param:JsonProperty("isScheduled")
-    val isScheduled: Boolean = false
+    val isScheduled: Boolean = false,
+    @field:JsonProperty
+    @param:JsonProperty("isRecipientHidden")
+    val isRecipientHidden: Boolean = false
   ) {
 
     fun getIndividualRecipientId(): String {
@@ -1870,8 +1884,8 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
         return Extra(isRemoteDelete = true, individualRecipientId = individualRecipient.serialize())
       }
 
-      fun forMessageRequest(individualRecipient: RecipientId): Extra {
-        return Extra(isMessageRequestAccepted = false, individualRecipientId = individualRecipient.serialize())
+      fun forMessageRequest(individualRecipient: RecipientId, isHidden: Boolean = false): Extra {
+        return Extra(isMessageRequestAccepted = false, individualRecipientId = individualRecipient.serialize(), isRecipientHidden = isHidden)
       }
 
       fun forGroupMessageRequest(recipientId: RecipientId, individualRecipient: RecipientId): Extra {

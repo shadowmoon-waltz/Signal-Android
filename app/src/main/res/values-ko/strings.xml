@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">네</string>
     <string name="no">아니요</string>
@@ -485,28 +486,14 @@
     <plurals name="ConversationListFragment_unread_plural">
         <item quantity="other">읽지 않음 표시</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="other">고정</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="other">고정 해제</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="other">알림 끄기</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="other">알림 켜기</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">고정</string>
+    <string name="ConversationListFragment_unpin">고정 해제</string>
+    <string name="ConversationListFragment_mute">알림 끄기</string>
+    <string name="ConversationListFragment_unmute">알림 켜기</string>
     <string name="ConversationListFragment_select">선택</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="other">보관</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="other">보관 해제</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="other">삭제</item>
-    </plurals>
+    <string name="ConversationListFragment_archive">보관</string>
+    <string name="ConversationListFragment_unarchive">보관 해제</string>
+    <string name="ConversationListFragment_delete">삭제</string>
     <string name="ConversationListFragment_select_all">모두 선택</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="other">%1$d개 선택됨</item>
@@ -1441,6 +1428,8 @@
     <string name="MessageRequestBottomView_delete">삭제</string>
     <string name="MessageRequestBottomView_block">차단</string>
     <string name="MessageRequestBottomView_unblock">차단 해제</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">%1$s 님이 내게 메시지를 보내도록 허용하고, 내 이름과 사진을 공유할까요? 이 사용자는 귀하가 이전에 제거한 사용자입니다.</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">%1$s 님에게 메시지를 보내고 이름과 사진을 공유할 수 있도록 하시겠습니까? 귀하가 수락할 때까지 귀하가 자신의 메시지를 본 것을 알지 못합니다.</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">%1$s 님이 내게 메시지를 보내고 내 이름과 사진을 공유할 수 있도록 허용할까요? 차단을 해제할 때까지 모든 메시지를 차단합니다.</string>
@@ -1676,17 +1665,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">카메라 방향 전환</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">스피커 토글</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">카메라 토글</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">알림 토글</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">벨소리 토글</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">전화 종료</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">UI 오류가 발생했습니다. 이 오류를 개발자에게 보고해 주세요.</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">적격 오디오 입출력이 탐지되지 않습니다.</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">블루투스 기기를 나타내는 아이콘입니다.</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">유선 헤드셋을 나타내는 아이콘입니다.</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">스피커폰을 나타내는 아이콘입니다.</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">기기 이어폰을 나타내는 아이콘입니다.</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1752,6 +1754,8 @@
         <item quantity="other">디버그 로그를 보내기까지 %1$d단계 남았습니다.</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">사람인지 확인하고자 합니다.</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">외부 오류로 인해 Signal에서 SMS 코드를 보낼 수 없습니다.</string>
     <string name="RegistrationActivity_next">다음</string>
     <string name="RegistrationActivity_continue">확인</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">내 개인 정보는 내 손에서만.\n안전하게 메시지를 보내세요.</string>
@@ -1922,6 +1926,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">메시지를 처리할 수 없음</string>
     <string name="ThreadRecord_delivery_issue">이슈 전송하기</string>
     <string name="ThreadRecord_message_request">메시지 요청</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">사진</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">음성 메시지</string>
@@ -2186,10 +2192,18 @@
     <string name="WebRtcCallScreen__answer_without_video">카메라 끄고 통화</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">오디오 출력</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">전화용 이어폰</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">스피커</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">블루투스</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">유선 헤드셋</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">유선 헤드셋(USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">전화 수락</string>
     <string name="WebRtcCallControls_reject_call_description">전화 거부</string>
@@ -2304,7 +2318,8 @@
     <string name="ConversationUpdateItem_send_payment">송금</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">결제 활성화</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">이전에 제거한 사용자입니다. 해당 사용자에게 메시지를 보내면 사용자가 목록에 다시 추가됩니다.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">재생 … 일시 정지</string>
@@ -3003,7 +3018,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">메모</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">메모 저장</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">결제 확인</string>
@@ -3897,59 +3912,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">Signal에 전화번호를 다시 등록하려면 Signal PIN이 필요합니다.</string>
     <string name="AccountSettingsFragment__change_phone_number">전화번호 변경</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">내 계정 데이터</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">내 계정 데이터</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">Signal 계정 데이터 보고서를 내보냅니다. 이 보고서는 메시지나 미디어를 포함하지 않습니다. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">자세히 알아보기</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">보고서 내보내기</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">TXT로 내보내기</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">읽기 쉬운 텍스트 파일</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">JSON으로 내보내기</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">컴퓨터에서 읽을 수 있는 파일</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">취소</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">확인</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">보고서를 생성할 수 없습니다.</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">연결을 확인하고 다시 시도하세요.</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">데이터를 내보낼까요?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Signal 계정 데이터를 신뢰하는 사람 또는 앱에만 공유하세요.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">내보내기</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">보고서를 생성하는 중…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">보고서는 내보내기를 하는 시점에만 생성되며, 기기의 Signal에는 저장되지 않습니다.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">현재 전화번호를 새 전화번호로 바꾸려면 이 기능을 사용하세요. 이 작업은 되돌릴 수 없습니다.\n\n변경하기 전에, 새 전화번호로 SMS나 전화를 받을 수 있는지 확인하세요.</string>
@@ -4389,6 +4393,9 @@
     <string name="ImageEditorHud__undo">실행 취소</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">마커와 하이라이터 토글</string>
     <string name="ImageEditorHud__toggle_between_text_styles">텍스트 스타일 토글</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">추천</string>
 
     <string name="MediaCountIndicatorButton__send">보내기</string>
 
@@ -5612,7 +5619,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">고정 폭</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">스포일러</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5620,11 +5627,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Signal 사용자 이름 설정</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">사용자 이름은 일련번호와 짝지어 사용되며 프로필에서 공유되지 않습니다.</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">각 사용자 이름에는 친구와 공유하여 채팅을 시작할 수 있는 고유한 QR 코드와 링크가 있습니다.</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">\'설정 &gt; 개인 정보 보호 &gt; 전화번호 &gt; 내 번호로 나를 찾을 수 있는 사람\'에서 \'전화번호 검색\'을 꺼서 다른 사람이 나에게 연락할 때 기본적으로 사용자 이름을 사용하도록 하세요.</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5651,6 +5658,12 @@
     <string name="CallLogAdapter__outgoing">송신</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">부재중</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">참가</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">돌아가기</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5722,9 +5735,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">마이크 꺼짐</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">캡처 버튼</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">계속 버튼</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">그룹 통화</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">부재중 그룹 통화</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">수신 그룹 통화</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">발신 그룹 통화</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">통화 링크 만들기</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Signal 통화 링크 공유</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">통화 링크 만들기</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Signal 통화</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">참가</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">통화 이름 추가</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">모든 멤버 승인</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Signal을 통해 링크 공유</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">링크 복사</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">링크 공유</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">확인</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">공유 시트를 열 수 없습니다.</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">클립보드로 복사했습니다.</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">통화 이름 수정</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">저장</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">통화 이름</string>
 
     <!-- EOF -->
 </resources>

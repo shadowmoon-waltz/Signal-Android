@@ -14,6 +14,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,6 +23,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.Flowables
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.signal.core.util.DimensionUnit
+import org.signal.core.util.concurrent.LifecycleDisposable
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.calls.new.NewCallActivity
 import org.thoughtcrime.securesms.components.Material3SearchToolbar
@@ -38,13 +40,15 @@ import org.thoughtcrime.securesms.conversationlist.chatfilter.ConversationListFi
 import org.thoughtcrime.securesms.conversationlist.chatfilter.FilterLerp
 import org.thoughtcrime.securesms.conversationlist.chatfilter.FilterPullState
 import org.thoughtcrime.securesms.databinding.CallLogFragmentBinding
+import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.main.Material3OnScrollHelperBinder
 import org.thoughtcrime.securesms.main.SearchBinder
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.stories.tabs.ConversationListTab
 import org.thoughtcrime.securesms.stories.tabs.ConversationListTabsViewModel
 import org.thoughtcrime.securesms.util.CommunicationActions
-import org.thoughtcrime.securesms.util.LifecycleDisposable
+import org.thoughtcrime.securesms.util.SnapToTopDataObserver
+import org.thoughtcrime.securesms.util.SnapToTopDataObserver.ScrollRequestValidator
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.fragments.requireListener
 import org.thoughtcrime.securesms.util.visible
@@ -100,6 +104,26 @@ class CallLogFragment : Fragment(R.layout.call_log_fragment), CallLogAdapter.Cal
     disposables.bindTo(viewLifecycleOwner)
     adapter.setPagingController(viewModel.controller)
 
+    val snapToTopDataObserver = SnapToTopDataObserver(
+      binding.recycler,
+      object : ScrollRequestValidator {
+        override fun isPositionStillValid(position: Int): Boolean {
+          return position < adapter.itemCount && position >= 0
+        }
+
+        override fun isItemAtPositionLoaded(position: Int): Boolean {
+          return adapter.getItem(position) != null
+        }
+      }
+    ) {
+      val layoutManager = binding.recycler.layoutManager as? LinearLayoutManager ?: return@SnapToTopDataObserver
+      if (layoutManager.findFirstVisibleItemPosition() <= LIST_SMOOTH_SCROLL_TO_TOP_THRESHOLD) {
+        binding.recycler.smoothScrollToPosition(0)
+      } else {
+        binding.recycler.scrollToPosition(0)
+      }
+    }
+
     disposables += Flowables.combineLatest(viewModel.data, viewModel.selectedAndStagedDeletion)
       .observeOn(AndroidSchedulers.mainThread())
       .subscribe { (data, selected) ->
@@ -144,7 +168,7 @@ class CallLogFragment : Fragment(R.layout.call_log_fragment), CallLogAdapter.Cal
     )
 
     initializePullToFilter()
-    initializeTapToScrollToTop()
+    initializeTapToScrollToTop(snapToTopDataObserver)
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
@@ -167,18 +191,15 @@ class CallLogFragment : Fragment(R.layout.call_log_fragment), CallLogAdapter.Cal
   override fun onResume() {
     super.onResume()
     initializeSearchAction()
+    ApplicationDependencies.getDeletedCallEventManager().scheduleIfNecessary()
+    viewModel.markAllCallEventsRead()
   }
 
-  private fun initializeTapToScrollToTop() {
+  private fun initializeTapToScrollToTop(snapToTopDataObserver: SnapToTopDataObserver) {
     disposables += tabsViewModel.tabClickEvents
       .filter { it == ConversationListTab.CALLS }
       .subscribeBy(onNext = {
-        val layoutManager = binding.recycler.layoutManager as? LinearLayoutManager ?: return@subscribeBy
-        if (layoutManager.findFirstVisibleItemPosition() <= LIST_SMOOTH_SCROLL_TO_TOP_THRESHOLD) {
-          binding.recycler.smoothScrollToPosition(0)
-        } else {
-          binding.recycler.scrollToPosition(0)
-        }
+        snapToTopDataObserver.requestScrollPosition(0)
       })
   }
 
@@ -266,11 +287,15 @@ class CallLogFragment : Fragment(R.layout.call_log_fragment), CallLogAdapter.Cal
     }
   }
 
+  override fun onCreateACallLinkClicked() {
+    findNavController().navigate(R.id.createCallLinkBottomSheet)
+  }
+
   override fun onCallClicked(callLogRow: CallLogRow.Call) {
     if (viewModel.selectionStateSnapshot.isNotEmpty(binding.recycler.adapter!!.itemCount)) {
       viewModel.toggleSelected(callLogRow.id)
     } else {
-      val intent = ConversationSettingsActivity.forCall(requireContext(), callLogRow.peer, longArrayOf(callLogRow.call.messageId))
+      val intent = ConversationSettingsActivity.forCall(requireContext(), callLogRow.peer, (callLogRow.id as CallLogRow.Id.Call).children.toLongArray())
       startActivity(intent)
     }
   }

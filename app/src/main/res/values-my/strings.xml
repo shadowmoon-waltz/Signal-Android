@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">ဟုတ်ကဲ့</string>
     <string name="no">မလုပ်ပါ</string>
@@ -485,29 +486,15 @@
     <plurals name="ConversationListFragment_unread_plural">
         <item quantity="other">မဖတ်ရသေး</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="other">ပင်တွဲရန်</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="other">ပင်ဖြုတ်ရန်</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="other">အသံပိတ်ရန်</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="other">အသံပြန်ဖွင့်ရန်</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">ပင်တွဲရန်</string>
+    <string name="ConversationListFragment_unpin">ပင်ဖြုတ်ရန်</string>
+    <string name="ConversationListFragment_mute">အသံပိတ်ရန်</string>
+    <string name="ConversationListFragment_unmute">အသံဖွင့်ရန်</string>
     <string name="ConversationListFragment_select">ရွေးရန်</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="other">စုစည်းရန်</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="other">ဖယ်ထုတ်ရန်</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="other">ဖျက်ရန်</item>
-    </plurals>
-    <string name="ConversationListFragment_select_all">အားလုံး ရွေးရန်</string>
+    <string name="ConversationListFragment_archive">စုစည်းရန်</string>
+    <string name="ConversationListFragment_unarchive">ပြန်ထုတ်ရန်</string>
+    <string name="ConversationListFragment_delete">ဖျက်ရန်</string>
+    <string name="ConversationListFragment_select_all">အားလုံးရွေးရန်</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="other">%1$d ရွေးထားပြီး</item>
     </plurals>
@@ -1441,6 +1428,8 @@
     <string name="MessageRequestBottomView_delete">ဖျက်ရန်</string>
     <string name="MessageRequestBottomView_block">ဘလော့ခ်ရန်</string>
     <string name="MessageRequestBottomView_unblock">ဘလော့ခ်ဖြေရန်</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">%1$s အား သင့်ထံ မက်ဆေ့ချ်ပို့ခွင့်ပြုပြီး သင့်အမည်နှင့် ဓာတ်ပုံကို ဝေမျှပေးမည်လား။ ဤလူကို ယခင်က ဖယ်ရှားထားပါသည်။</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">%1$s မှ သင့်ကို မက်ဆေ့ချ်ပို့ရန် ခွင့်ပြုပြီး သင်၏ အမည်နှင့် ရုပ်ပုံတို့ကို ၎င်းနှင့် မျှဝေမည်လား? ၎င်းသည် သင်မှ ၎င်းတို့၏ မက်ဆေ့ချ်များကို ဖတ်ရှုခဲ့သည်ကို သင်လက်ခံသည်အထိ မတွေ့ရပါ။</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">%1$s အား သင့်ထံ မက်ဆေ့ချ်ပို့ခွင့်ပြုပြီး သင်၏ အမည်နှင့် ပုံကို ၎င်းထံ မျှဝေမည်လား။ ၎င်းတို့အား ဘလော့ခ် မဖြေမချင်း မက်ဆေ့ချ်များ ရရှိမည် မဟုတ်ပါ။</string>
@@ -1676,17 +1665,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">ကင်မရာ ဦးတည်ချက် ဖွင့်/ပိတ်လုပ်ရန်</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">စပီကာ ဖွင့်/ပိတ်လုပ်ရန်</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">ကင်မရာ ဖွင့်/ပိတ်လုပ်ရန်</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">အသံ ဖွင့်/ပိတ်လုပ်ရန်</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">ဖုန်းမြည်သံ ဖွင့်/ပိတ်လုပ်ရန်</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">ဖုန်းချမည်</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">UI ချို့ယွင်းချက်တစ်ခု ဖြစ်နေသည်။ ဤချို့ယွင်းချက်ကို ဆော့ဖ်ဝဲရေးသားသူများထံ ရီပို့(တ်)လုပ်ပါ။</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">သင့်လျော်ကိုက်ညီသော အသံ I/O မတွေ့ပါ။</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">ဘလူးတုသ်စက်ကို ကိုယ်စားပြုသည့် အိုင်ကွန်။</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">ကြိုးတပ်နားကြပ်ကို ကိုယ်စားပြုသည့် အိုင်ကွန်။</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">စပီကာဖုန်းကို ကိုယ်စားပြုသည့် အိုင်ကွန်။</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">စက်တစ်ခု၏ နားကြပ်ကို ကိုယ်စားပြုသည့် အိုင်ကွန်။</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1752,6 +1754,8 @@
         <item quantity="other">ယခု သင်သည် ပျက်ကွက်မှုပြင်ခြင်း မှတ်တမ်း တင်ရန်အတွက် အဆင့် %1$d ဆင့်သာလိုတော့သည်</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">သင်သည် လူသားဖြစ်ကြောင်း ကျွန်ုပ်တို့ အတည်ပြုရန် လိုအပ်သည်</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">ပြင်ပပျက်ကွက်မှုတစ်ခုကြောင့် SMS ကုဒ်ကို Signal က ပေးပို့နိုင်ခြင်း မရှိပါ။</string>
     <string name="RegistrationActivity_next">နောက်ထက်</string>
     <string name="RegistrationActivity_continue">ရှေ့ဆက်ပါ</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">လုံခြုံရေးကို သင်နှင့် ယူဆောင်သွားပါ။ \n မက်ဆေ့ချ်တိုင်းတွင် သင်ကိုယ်တိုင်ဖြစ်နိုင်ပါစေ။</string>
@@ -1922,6 +1926,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">မက်ဆေ့ခ်ျကို လုပ်ဆောင်၍မရပါ</string>
     <string name="ThreadRecord_delivery_issue">ပေးပို့မှု ပြဿနာ</string>
     <string name="ThreadRecord_message_request">မက်ဆေ့ပို့ရန် တောင်းခံချက်</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">ရုပ်ပုံ</string>
     <string name="ThreadRecord_gif">လှုပ်ရှားနေသောရုပ်ပုံ</string>
     <string name="ThreadRecord_voice_message">အသံမက်ဆေ့ချ်</string>
@@ -2186,10 +2192,18 @@
     <string name="WebRtcCallScreen__answer_without_video">ဗွီဒီယိုမပါဘဲ ဖြေဆိုမယ်</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">အထွက်သံ</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">ဖုန်းနားကြပ်</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">စပီကာ</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">ဘလူးတုသ်</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">ကြိုးတပ်နားကြပ်</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">ကြိုးတပ်နားကြပ် (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">ဖုန်းကိုင်မည်</string>
     <string name="WebRtcCallControls_reject_call_description">ခေါ်ဆိုမှုကိုငြင်းပယ်ပါ</string>
@@ -2304,7 +2318,8 @@
     <string name="ConversationUpdateItem_send_payment">ငွေပေးချေမှု ပေးပို့မယ်</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">ငွေပေးချေမှုများ ဖွင့်မယ်</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">ဤလူကို ဖယ်ရှားထားပါသည်၊ ထိုသူတို့ထံ မက်ဆေ့ချ်ပို့ခြင်းဖြင့် ထိုသူတို့ကို သင့်စာရင်းတွင် ပြန်လည်ပေါင်းထည့်ပေးသွားပါမည်။</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">ဖွင့်မယ် … ခေတ္တရပ်မယ်</string>
@@ -3003,7 +3018,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">မှတ်ချက်</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">မှတ်စု သိမ်းဆည်းရန်</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">ငွေပေးချေမှု အတည်ပြုမယ်</string>
@@ -3897,59 +3912,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">သင့်ဖုန်းနံပါတ်ကို Signal ဖြင့် ထပ်မံစာရင်းသွင်းရန် သင်၏ Signal PIN ကို လိုအပ်ပါသည်</string>
     <string name="AccountSettingsFragment__change_phone_number">ဖုန်းနံပါတ်ပြောင်းလဲရန်</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">သင့်အကောင့်ဒေတာ</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">သင့်အကောင့်ဒေတာ</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">သင့် Signal အကောင့်ဒေတာ၏ အစီရင်ခံစာတစ်စောင်ကို ထုတ်ယူပါ။ ဤအစီရင်ခံစာတွင် မက်ဆေ့ချ် သို့မဟုတ် မီဒီယာတစ်ခုမျှ မပါဝင်ပါ။ %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">ပိုမိုလေ့လာရန်</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">အစီရင်ခံစာ ထုတ်ယူရန်</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">TXT အဖြစ် ထုတ်ယူရန်</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">ဖတ်ရလွယ်ကူသော စာသားဖိုင်</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">JSON အဖြစ် ထုတ်ယူရန်</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">စက်ဖြင့် ဖတ်၍ရသော ဖိုင်</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">မလုပ်တော့ပါ</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">အိုကေ</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">အစီရင်ခံစာ မထုတ်နိုင်ခဲ့ပါ</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်ကြိုးစားကြည့်ပါ။</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">ဒေတာ ထုတ်ယူမည်လား။</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">သင့် Signal အကောင့်ဒေတာကို သင် ယုံကြည်သော လူများ သို့မဟုတ် အက်ပ်များနှင့်သာ မျှဝေပါ။</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">ထုတ်ယူရန်</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">အစီရင်ခံစာ ထုတ်နေဆဲ…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">သင့်အစီရင်ခံစာကို ထုတ်သိမ်းသည့်အချိန်တွင်သာ ထုတ်ယူထားပြီး သင့်စက်တွင် Signal က မသိမ်းထားပါ။</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">သင့်လက်ရှိဖုန်းနံပါတ်ကို အသစ်တစ်ခုသို့ ပြောင်းရန် ဤသည်ကို သုံးပါ။ ဤပြောင်းလဲမှုကို ပြန်လည်ဖျက်သိမ်း၍ မရနိုင်ပါ။\n\nဆက်မလုပ်မီ သင့်နံပါတ်အသစ်တွင် SMS သို့မဟုတ် ကောလ်များ လက်ခံရရှိနိုင်ကြောင်း သေချာပါစေ။</string>
@@ -4389,6 +4393,9 @@
     <string name="ImageEditorHud__undo">လုပ်ဆောင်ချက် ဖျက်သိမ်းရန်</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">Marker နှင့် Highlighter အကြား ပြောင်းရန်</string>
     <string name="ImageEditorHud__toggle_between_text_styles">စာသားစတိုင်များအကြား ပြောင်းရန်</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">အသားပေးထားသည်များ</string>
 
     <string name="MediaCountIndicatorButton__send">ပေးပို့မယ်</string>
 
@@ -5612,7 +5619,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Monospace</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">စာကို ဝါးထားရန်</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5620,11 +5627,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">သင်၏ Signal သုံးစွဲသူအမည်ကို သတ်မှတ်ပါ</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">သုံးစွဲသူအမည်များကို ကိန်းဂဏန်းအတွဲတစ်ခုနှင့် တွဲဖက်ထားပြီး သင့်ပရိုဖိုင်တွင် ဝေမျှ မထားပါ</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">သုံးစွဲသူအမည်တစ်ခုစီတွင် သင်နှင့် ချက်(တ်)စတင်ရန် သင့်မိတ်ဆွေများထံ ဝေမျှနိုင်သည့် သီးသန့် QR ကုဒ်နှင့် လင့်ခ်တစ်ခု ရှိပါသည်</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">သင့်သုံးစွဲသူအမည်ကို သင့်ထံ အခြားသူများဆက်သွယ်နိုင်သည့် ပင်မနည်းလမ်းအဖြစ် သုံးရန် ဆက်တင် &gt; ကိုယ်ပိုင်အချက်အလက် &gt; ဖုန်းနံပါတ် &gt; ကျွန်ုပ်၏ ဖုန်းနံပါတ်ကို ရှာနိုင်သည့်သူများအောက်ရှိ ဖုန်းနံပါတ် ရှာဖွေရေးကို ပိတ်ပါ</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5651,6 +5658,12 @@
     <string name="CallLogAdapter__outgoing">အထွက်</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">လွတ်သွားသော ကောလ်</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">ပါဝင်ရန်</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">နောက်ပြန်သွားရန်</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5722,9 +5735,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">မိုက် ပိတ်ထားသည်</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">ရိုက်ကူးမှု ခလုတ်</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">ဆက်လုပ်ရန် ခလုတ်</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">အဖွဲ့လိုက် ခေါ်ဆိုမှု</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">လွတ်သွားသော အဖွဲ့ကောလ်</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">အဝင် အဖွဲ့ကောလ်</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">အထွက် အဖွဲ့ကောလ်</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">ကောလ်လင့်ခ်တစ်ခု ဖန်တီးရန်</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Signal ကောလ်အတွက် လင့်ခ် မျှဝေခြင်း</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">ကောလ်လင့်ခ် ဖန်တီးရန်</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Signal ကောလ်</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">ပါဝင်ရန်</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">ကောလ်အမည် ပေါင်းထည့်ရန်</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">မန်ဘာအားလုံးကို အတည်ပြုရန်</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Signal မှတစ်ဆင့် လင့်ခ်ဝေမျှရန်</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">လင့်ခ်ကူးရန်</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">လင့်ခ်ဝေမျှရန်</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">ပြီးပါပြီ</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">မျှဝေနည်း မျက်နှာပြင်ကို ဖွင့်ရန် မအောင်မြင်ပါ။</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">ကလစ်ဘုတ်သို့ ကူးယူပြီး</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">ကောလ်အမည် ပြင်ဆင်ရန်</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">သိမ်းရန်</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">ကောလ်အမည်</string>
 
     <!-- EOF -->
 </resources>

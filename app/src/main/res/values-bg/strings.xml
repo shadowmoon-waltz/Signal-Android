@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">Да</string>
     <string name="no">Не</string>
@@ -490,43 +491,22 @@
         <item quantity="other">%1$d разговора са преместени във входящата кутия</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="one">Прочети</item>
-        <item quantity="other">Прочети</item>
+        <item quantity="one">Прочетено</item>
+        <item quantity="other">Прочетени</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">Маркирай непрочетено</item>
-        <item quantity="other">Маркирай непрочетени</item>
+        <item quantity="one">Непрочетено</item>
+        <item quantity="other">Непрочетени</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">Закачане</item>
-        <item quantity="other">Закачане</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">Откачане</item>
-        <item quantity="other">Откачане</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">Заглушаване</item>
-        <item quantity="other">Заглушаване</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">Премахни заглушаване</item>
-        <item quantity="other">Премахни заглушаване</item>
-    </plurals>
-    <string name="ConversationListFragment_select">Избиране</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">Архивиране</item>
-        <item quantity="other">Архивиране</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">Разархивиране</item>
-        <item quantity="other">Разархивиране</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">Изтриване</item>
-        <item quantity="other">Изтриване</item>
-    </plurals>
-    <string name="ConversationListFragment_select_all">Избиране на всичко</string>
+    <string name="ConversationListFragment_pin">Закачане</string>
+    <string name="ConversationListFragment_unpin">Откачане</string>
+    <string name="ConversationListFragment_mute">Тих режим</string>
+    <string name="ConversationListFragment_unmute">Изкл тих режим</string>
+    <string name="ConversationListFragment_select">Избери</string>
+    <string name="ConversationListFragment_archive">Архивиране</string>
+    <string name="ConversationListFragment_unarchive">Разархивиране</string>
+    <string name="ConversationListFragment_delete">Изтриване</string>
+    <string name="ConversationListFragment_select_all">Избери всичко</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d избрано</item>
         <item quantity="other">%1$d избрани</item>
@@ -1499,6 +1479,8 @@
     <string name="MessageRequestBottomView_delete">Изтриване</string>
     <string name="MessageRequestBottomView_block">Блокиране</string>
     <string name="MessageRequestBottomView_unblock">Отблокиране</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">Искате ли да позволите на %1$s да ви изпраща съобщения и да споделите името и снимката си с тях? В миналото сте премахвали този човек.</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">Позволете на %1$s да ви изпратят съобщение и да споделите вашето име и снимка с тях? Те няма да разберат, че сте видели съобщението им, докато не приемете.</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">Позволете на %1$s да ви праща съобщения и споделете вашето име и снимка с тях? Няма да получавате съобщения, докато не ги отблокирате.</string>
@@ -1745,17 +1727,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">Превключване посока на камерата</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">Превключване на високоговорител</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">Превключване на камера</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">Превключване на тих режим</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">Превключване на звънене</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Прекрати обаждането</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">Възникна грешка с потребителския интерфейс. Моля, докладвайте тази грешка на разработчиците.</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">Не е открит отговарящ на условията аудио вход/изход.</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">Икона с Bluetooth устройство.</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">Икона със слушалки с кабел.</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">Икона с високоговорител.</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">Икона със слушалка на устройство.</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1823,6 +1818,8 @@
         <item quantity="other">Сега сте на %1$d стъпки от изпращането на дебъг лог.</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">Трябва да проверим дали сте човек.</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">Signal не можа да изпрати SMS с код поради външна грешка.</string>
     <string name="RegistrationActivity_next">Напред</string>
     <string name="RegistrationActivity_continue">Продължи</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">Носете поверителността със себе си.\nБъдете себе си във всяко съобщение.</string>
@@ -1993,6 +1990,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">Съобщението не можа да бъде отработено</string>
     <string name="ThreadRecord_delivery_issue">Грешка при изпращането</string>
     <string name="ThreadRecord_message_request">Заявка за съобщение</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">Снимка</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">Гласово съобщение</string>
@@ -2259,10 +2258,18 @@
     <string name="WebRtcCallScreen__answer_without_video">Отговори без видео</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">Аудио изход</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">Слушалка за телефон</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">Говорител</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">Bluetooth</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">Слушалки с кабел</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">Слушалки с кабел (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">Приеми обаждането</string>
     <string name="WebRtcCallControls_reject_call_description">Отхвърляне на обаждането</string>
@@ -2380,7 +2387,8 @@
     <string name="ConversationUpdateItem_send_payment">Send Payment</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">Включете Плащания</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">Вие сте премахнали този човек, ако отново му изпратите съобщение, ще го добавите обратно към списъка си.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Пусни … Пауза</string>
@@ -3087,7 +3095,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">Бележка</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">Запази бележка</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">Потвърди плащане</string>
@@ -3994,59 +4002,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">Изисквайте вашия Signal ПИН при регистриране на вашия телефонен номер със Signal отново</string>
     <string name="AccountSettingsFragment__change_phone_number">Смяна на телефонен номер</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">Данните за вашия акаунт</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">Данните за вашия акаунт</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">Експорт на доклад за данните от акаунта ви в Signal. Този доклад не включва никакви съобщения или мултимедия. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">Научете повече</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">Експортиране на доклад</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">Експортиране като TXT</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">Лесен за четене текстов файл</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">Експортиране като JSON</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">Машинно четим файл</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">Отказ</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">ОК</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">Неуспешно генериране на доклад</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">Проверете връзката си и опитайте отново.</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">Експортиране на данни?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Споделяйте данни от акаунта си в Signal само с хора или приложения, на които имате доверие.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">Експортиране</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">Генериране на доклад…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Докладът ви се генерира само в момента на експортиране и не се съхранява от Signal на вашето устройство.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Използвайте тази опция, за да промените текущия си телефонен номер на нов телефонен номер. Тази промяна не може да бъде върната.\n\nПреди да продължите, уверете се, че новият ви номер може да получава SMS-и или повиквания.</string>
@@ -4492,6 +4489,9 @@
     <string name="ImageEditorHud__undo">Върни</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">Превключване между флумастер и маркер</string>
     <string name="ImageEditorHud__toggle_between_text_styles">Превключване между стиловете на текста</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">Представени</string>
 
     <string name="MediaCountIndicatorButton__send">Изпращане</string>
 
@@ -5737,7 +5737,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Моношир</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">Спойлър</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5745,11 +5745,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Задайте потребителското си име за Signal</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Потребителските имена се комбинират с набор от цифри и не се споделят във вашия профил</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Всяко потребителско име има уникален QR код, който можете да споделяте с приятели, за да започнат чат с вас</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Изключете откриването по телефонен номер от „Настройки &gt; Поверителност &gt; Телефонен номер &gt; Кой може да намира номера ми“, за да използвате потребителското си име като основния начин, по който другите могат да се свържат с вас</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5776,6 +5776,12 @@
     <string name="CallLogAdapter__outgoing">Изходящи</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">Пропуснати</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">Присъедини се</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">Връщане</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5848,9 +5854,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">Микрофонът е изключен</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">Бутон за заснемане</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">Бутон за продължаване</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">Групов разговор</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">Пропуснато групово повикване</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">Входящо групово повикване</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">Изходящо групово повикване</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">Създаване на линк за обаждането</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Споделяне на линк за Signal обаждане</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">Създаване на линк за обаждането</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Signal обаждане</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">Присъедини се</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">Добавяне на име на обаждането</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">Одобряване на всички членове</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Споделяне на линк чрез Signal</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">Копиране на линка</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">Споделяне на линк</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">Готово</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">Неуспешно отваряне на таблицата за споделяне.</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">Копирано</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">Редактиране на име на обаждането</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">Запази</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">Име на обаждането</string>
 
     <!-- EOF -->
 </resources>

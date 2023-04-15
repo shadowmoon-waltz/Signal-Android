@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">جی ہاں</string>
     <string name="no">جی نہیں</string>
@@ -494,39 +495,18 @@
         <item quantity="other">پڑھی گئی</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">غیر پڑھی گئی</item>
-        <item quantity="other">غیر پڑھی گئی</item>
+        <item quantity="one">بغیر پڑھی</item>
+        <item quantity="other">بغیر پڑھی</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">پن کریں</item>
-        <item quantity="other">پن کریں</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">ان پِن کریں</item>
-        <item quantity="other">ان پِن کریں</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">خاموش کریں</item>
-        <item quantity="other">خاموش کریں</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">غیر خاموش کریں</item>
-        <item quantity="other">غیر خاموش کریں</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">پِن کریں</string>
+    <string name="ConversationListFragment_unpin">ان پِن کریں</string>
+    <string name="ConversationListFragment_mute">خاموش کریں</string>
+    <string name="ConversationListFragment_unmute">غیر خاموش کریں</string>
     <string name="ConversationListFragment_select">منتخب کریں</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">آرکائیو کریں</item>
-        <item quantity="other">آرکائیو کریں</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">ان آرکائیو کریں</item>
-        <item quantity="other">ان آرکائیو کریں</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">حذف کریں</item>
-        <item quantity="other">حذف کریں</item>
-    </plurals>
-    <string name="ConversationListFragment_select_all">تمام منتخب کریں</string>
+    <string name="ConversationListFragment_archive">آرکائیو کریں</string>
+    <string name="ConversationListFragment_unarchive">ان آرکائیو</string>
+    <string name="ConversationListFragment_delete">حذف کریں</string>
+    <string name="ConversationListFragment_select_all">سب منتخب کریں</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d منتخب کیا گیا</item>
         <item quantity="other">%1$d منتخب کیا گیا</item>
@@ -1499,6 +1479,8 @@
     <string name="MessageRequestBottomView_delete">حذف کریں</string>
     <string name="MessageRequestBottomView_block">بلاک کریں</string>
     <string name="MessageRequestBottomView_unblock">اَن بلاک کریں</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">%1$s کو خود کو میسج کرنے اور اپنا نام اور تصویر ان کے ساتھ شیئر کرنے کی اجازت دیں؟ آپ ماضی میں اس فرد کو ہٹا چکے ہیں۔</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">%1$s کو آپ کو میسج کرنے اور ان کے ساتھ اپنا نام اور تصویر شئیر کرنے دیں؟ جب تک آپ ان کو قبول نہیں کرتے انھیں معلوم نہیں ہوگا کہ آپ نے ان کا پیغام دیکھا ہے۔</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">%1$s کو خود کو میسج بھیجنے اور ان کے ساتھ اپنا نام اور تصویر شیئر کرنے کی اجازت دیں؟ جب تک آپ ان کو اَن بلاک نہیں کرتے تب تک آپ کو کوئی میسجز موصول نہیں ہوں گے۔</string>
@@ -1745,17 +1727,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">کیمرے کی سمت ٹوگل کریں</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">اسپیکر ٹوگل کریں</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">کیمرہ ٹوگل کریں</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">خاموش ٹوگل کریں</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">رنگ ٹوگل کریں</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">کال ختم کریں</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">ایک UI نقص آ گیا ہے۔ براہ کرم اس نقص کی اطلاع ڈویلپرز کو دیں۔</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">کسی اہل آڈیو I/O کی شناخت نہیں ہوئی۔</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">ایک آئیکن بلو ٹوتھ ڈیوائس کو ظاہر کر رہا ہے۔</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">ایک آئیکن وائر والے ہیڈ سیٹ کو ظاہر کر رہا ہے۔</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">ایک آئیکن اسپیکر فون کو ظاہر کر رہا ہے۔</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">ایک آئیکن ڈیوائس کے ایئر پیس کو ظاہر کر رہا ہے۔</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1823,6 +1818,8 @@
         <item quantity="other">کسی ڈی بَگ لاگ کو پیش کرنے کیلئے اب آپ %1$d مرحلے دور ہیں۔</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">ہم تصدیق کرنا چاہتے ہیں کہ آپ انسان ہو۔</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">Signal ایک بیرونی ناکامی کے سبب SMS کوڈ بھیجنے سے قاصر تھا۔</string>
     <string name="RegistrationActivity_next">اگلا</string>
     <string name="RegistrationActivity_continue">جاری رکھیں</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">اپنے ساتھ رازداری اختیار کریں۔/n ہر پیغام میں اپنے آپ کو سمجھیں۔</string>
@@ -1993,6 +1990,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">پیغام آگے نہیں بڑھ سکتا</string>
     <string name="ThreadRecord_delivery_issue">ترسیل کا مسئلہ</string>
     <string name="ThreadRecord_message_request">پیغام کی درخواست</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">تصویر</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">پیغام بذریعہ آواز</string>
@@ -2259,10 +2258,18 @@
     <string name="WebRtcCallScreen__answer_without_video">ویڈیو کے بغیر جواب دیں</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">آڈیو آؤٹ پٹ</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">فون ایئر پیس</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">سپیکر</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">بلوٹوتھ</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">وائر والا ہیڈ سیٹ</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">وائر والا ہیڈ سیٹ (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">کال کا جواب دیں</string>
     <string name="WebRtcCallControls_reject_call_description">کال مسترد کریں</string>
@@ -2380,7 +2387,8 @@
     <string name="ConversationUpdateItem_send_payment">ادائیگی بھیجیں</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">ادائیگی چالو کریں</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">آپ نے اس فرد کو ہٹا دیا ہے، انہیں دوبارہ میسج کرنے سے وہ دوبارہ آپ کی فہرست میں شامل ہو جائیں گے۔</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">چلائیں ۔۔۔ روکیں</string>
@@ -3087,7 +3095,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">نوٹ</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">نوٹ محفوظ کریں</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">ادائیگی کی تصدیق کریں</string>
@@ -3994,59 +4002,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">اپنے فون نمبر کو دوبارہ Signal کے ساتھ رجسٹر کرنے کیلئے اپنے Signal پن کی ضرورت ہے</string>
     <string name="AccountSettingsFragment__change_phone_number">فون نمبر تبدیل کریں</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">آپ کا اکاؤنٹ ڈیٹا</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">آپ کے اکاؤنٹ کا ڈیٹا</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">اپنے Signal اکاؤنٹ ڈیٹا کی رپورٹ برآمد کریں۔ اس رپورٹ میں کوئی میسجز یا میڈیا شامل نہیں ہے۔ %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">مزید جانیں</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">رپورٹ برآمد کریں</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">بطور TXT برآمد کریں</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">پڑھنے میں آسان ٹیکسٹ فائل</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">بطور JSON برآمد کریں</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">مشین سے پڑھی جانے والی فائل</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">منسوخ کریں</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">ٹھیک ہے</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">رپورٹ جنریٹ نہیں ہو سکی</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">ڈیٹا برآمد کریں؟</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">صرف اپنے قابلِ اعتماد لوگوں یا ایپس کے ساتھ اپنے Signal اکاؤنٹ کا ڈیٹا شیئر کریں۔</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">برآمد کریں</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">رپورٹ جنریٹ ہو رہی ہے…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">آپ کی رپورٹ صرف برآمدی کے وقت جنریٹ ہوتی ہے اور اسے Signal کی جانب سے آپ کی ڈیوائس پر اسٹور نہیں کیا جاتا۔</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">اپنا موجودہ فون نمبر ایک نئے فون نمبر پر تبدیل کرنے کے لیے اس کا استعمال کریں۔ آپ اس تبدیلی کو کالعدم نہیں کر سکتے۔\n\nجاری رکھنے سے پہلے، یقینی بنائیں کہ آپ کا نیا نمبر SMS یا کالز وصول کر سکتا ہو۔</string>
@@ -4492,6 +4489,9 @@
     <string name="ImageEditorHud__undo">کالعدم کریں</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">مارکر اور ہائی لائٹر کے درمیان ٹوگل کریں</string>
     <string name="ImageEditorHud__toggle_between_text_styles">متن کے اسٹائلز کے درمیان ٹوگل کریں</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">فیچر کردہ</string>
 
     <string name="MediaCountIndicatorButton__send">بھیجیں</string>
 
@@ -5737,7 +5737,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">مونو اسپیس کریں</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">سپائلر</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5745,11 +5745,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">اپنا Signal یوزر نیم سیٹ کریں</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">یوزر نیمز کو ہندسوں کے ایک سیٹ کے ساتھ ملایا جاتا ہے اور یہ آپ کی پروفائل پر شیئر نہیں کیے جاتے</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">ہر یوزر نیم کا ایک منفرد QR کوڈ اور لنک ہوتا ہے جسے آپ اپنے دوستوں کے ساتھ شیئر کر سکتے ہیں تاکہ وہ آپ کے ساتھ چیٹ شروع کر سکیں</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">سیٹنگز &gt; پرائیویسی &gt; فون نمبر &gt; کون میرا نمبر تلاش کر سکتا ہے کے تحت فون نمبر کی تلاش کو آف کریں، تاکہ آپ کے یوزر نیم کو دوسروں کے آپ سے رابطہ کرنے کا بنیادی طریقہ بنایا جا سکے</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5776,6 +5776,12 @@
     <string name="CallLogAdapter__outgoing">جانے والی</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">مسڈ</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">شامل ہوں</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">واپس</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5848,9 +5854,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">مائیک آف</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">کیپچر بٹن</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">جاری رکھنے کا بٹن</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">گروپ کال</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">مس کردہ گروپ کال</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">آنے والی گروپ کال</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">جانے والی گروپ کال</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">کال لنک تخلیق کریں</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Signal کال کے لیے لنک شیئر کریں</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">کال لنک تخلیق کریں</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Signal کال</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">شامل ہوں</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">کال نیم شامل کریں</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">تمام ممبرز منظور کریں</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">بذریعہ Signal لنک شیئر کریں</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">لنک کاپی کریں</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">لنک شیئر کریں</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">ہو گیا</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">شیئر شیٹ کھولنے میں ناکام ہو گئے۔</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">کلپ بورڈ کو کاپی کریں</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">کال نیم میں ترمیم کریں</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">محفوظ کریں</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">کال نیم</string>
 
     <!-- EOF -->
 </resources>

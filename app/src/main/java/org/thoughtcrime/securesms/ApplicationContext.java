@@ -197,6 +197,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addNonBlocking(() -> ApplicationDependencies.getGiphyMp4Cache().onAppStart(this))
                             .addNonBlocking(this::ensureProfileUploaded)
                             .addNonBlocking(() -> ApplicationDependencies.getExpireStoriesManager().scheduleIfNecessary())
+                            .addPostRender(() -> ApplicationDependencies.getDeletedCallEventManager().scheduleIfNecessary())
                             .addPostRender(() -> RateLimitUtil.retryAllRateLimitedMessages(this))
                             .addPostRender(this::initializeExpiringMessageManager)
                             .addPostRender(() -> SignalStore.settings().setDefaultSms(Util.isDefaultSmsProvider(this)))
@@ -214,7 +215,6 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addPostRender(StoryOnboardingDownloadJob.Companion::enqueueIfNeeded)
                             .addPostRender(PnpInitializeDevicesJob::enqueueIfNecessary)
                             .addPostRender(() -> ApplicationDependencies.getExoPlayerPool().getPoolStats().getMaxUnreserved())
-                            .addPostRender(() -> SignalDatabase.groupCallRings().removeOldRings())
                             .addPostRender(() -> ApplicationDependencies.getRecipientCache().warmUp())
                             .execute();
 
@@ -492,9 +492,6 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
   private void initializeCleanup() {
     int deleted = SignalDatabase.attachments().deleteAbandonedPreuploadedAttachments();
     Log.i(TAG, "Deleted " + deleted + " abandoned attachments.");
-    if (SignalStore.account().clearOldAccountDataReport()) {
-      Log.i(TAG, "Deleted " + deleted + " expired account data report.");
-    }
   }
 
   private void initializeGlideCodecs() {

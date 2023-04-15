@@ -38,7 +38,6 @@ import org.signal.core.util.SqlUtil.buildSingleCollectionQuery
 import org.signal.core.util.SqlUtil.buildTrueUpdateQuery
 import org.signal.core.util.SqlUtil.getNextAutoIncrementId
 import org.signal.core.util.delete
-import org.signal.core.util.emptyIfNull
 import org.signal.core.util.exists
 import org.signal.core.util.forEach
 import org.signal.core.util.insertInto
@@ -71,6 +70,7 @@ import org.thoughtcrime.securesms.conversation.MessageStyler
 import org.thoughtcrime.securesms.database.EarlyReceiptCache.Receipt
 import org.thoughtcrime.securesms.database.MentionUtil.UpdatedBodyAndMentions
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.attachments
+import org.thoughtcrime.securesms.database.SignalDatabase.Companion.calls
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.distributionLists
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.groupReceipts
 import org.thoughtcrime.securesms.database.SignalDatabase.Companion.groups
@@ -113,6 +113,7 @@ import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.groups.GroupMigrationMembershipChange
 import org.thoughtcrime.securesms.insights.InsightsConstants
 import org.thoughtcrime.securesms.jobs.OptimizeMessageSearchIndexJob
+import org.thoughtcrime.securesms.jobs.ThreadUpdateJob
 import org.thoughtcrime.securesms.jobs.TrimThreadJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.linkpreview.LinkPreview
@@ -139,6 +140,7 @@ import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.isStory
 import org.whispersystems.signalservice.api.messages.multidevice.ReadMessage
 import org.whispersystems.signalservice.api.push.ServiceId
+import org.whispersystems.signalservice.internal.push.SignalServiceProtos.SyncMessage
 import java.io.Closeable
 import java.io.IOException
 import java.util.LinkedList
@@ -399,6 +401,8 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       ($TYPE = ${MessageTypes.MISSED_AUDIO_CALL_TYPE})
       OR
       ($TYPE = ${MessageTypes.MISSED_VIDEO_CALL_TYPE})
+      OR
+      ($TYPE = ${MessageTypes.GROUP_CALL_TYPE})
     )""".toSingleLine()
 
     @JvmStatic
@@ -801,122 +805,111 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     ApplicationDependencies.getDatabaseObserver().notifyMessageUpdateObservers(MessageId(messageId))
   }
 
-  fun insertOrUpdateGroupCall(
+  fun insertGroupCall(
     groupRecipientId: RecipientId,
     sender: RecipientId,
     timestamp: Long,
-    peekGroupCallEraId: String?,
-    peekJoinedUuids: Collection<UUID>,
+    eraId: String,
+    joinedUuids: Collection<UUID>,
     isCallFull: Boolean
-  ) {
+  ): MessageId {
     val recipient = Recipient.resolved(groupRecipientId)
     val threadId = threads.getOrCreateThreadIdFor(recipient)
-    val peerEraIdSameAsPrevious = updatePreviousGroupCall(threadId, peekGroupCallEraId, peekJoinedUuids, isCallFull)
+    val messageId: MessageId = writableDatabase.withinTransaction { db ->
+      val self = Recipient.self()
+      val markRead = joinedUuids.contains(self.requireServiceId().uuid()) || self.id == sender
+      val updateDetails: ByteArray = GroupCallUpdateDetails.newBuilder()
+        .setEraId(eraId)
+        .setStartedCallUuid(Recipient.resolved(sender).requireServiceId().toString())
+        .setStartedCallTimestamp(timestamp)
+        .addAllInCallUuids(joinedUuids.map { it.toString() })
+        .setIsCallFull(isCallFull)
+        .build()
+        .toByteArray()
 
-    writableDatabase.withinTransaction { db ->
-      if (!peerEraIdSameAsPrevious && !Util.isEmpty(peekGroupCallEraId)) {
-        val self = Recipient.self()
-        val markRead = peekJoinedUuids.contains(self.requireServiceId().uuid()) || self.id == sender
-        val updateDetails = GroupCallUpdateDetails.newBuilder()
-          .setEraId(peekGroupCallEraId.emptyIfNull())
-          .setStartedCallUuid(Recipient.resolved(sender).requireServiceId().toString())
-          .setStartedCallTimestamp(timestamp)
-          .addAllInCallUuids(peekJoinedUuids.map { it.toString() }.toList())
-          .setIsCallFull(isCallFull)
-          .build()
-          .toByteArray()
+      val values = contentValuesOf(
+        RECIPIENT_ID to sender.serialize(),
+        RECIPIENT_DEVICE_ID to 1,
+        DATE_RECEIVED to timestamp,
+        DATE_SENT to timestamp,
+        READ to if (markRead) 1 else 0,
+        BODY to Base64.encodeBytes(updateDetails),
+        TYPE to MessageTypes.GROUP_CALL_TYPE,
+        THREAD_ID to threadId
+      )
 
-        val values = contentValuesOf(
-          RECIPIENT_ID to sender.serialize(),
-          RECIPIENT_DEVICE_ID to 1,
-          DATE_RECEIVED to timestamp,
-          DATE_SENT to timestamp,
-          READ to if (markRead) 1 else 0,
-          BODY to Base64.encodeBytes(updateDetails),
-          TYPE to MessageTypes.GROUP_CALL_TYPE,
-          THREAD_ID to threadId
-        )
-
-        db.insert(TABLE_NAME, null, values)
-
-        threads.incrementUnread(threadId, 1, 0)
-      }
-
+      val messageId = MessageId(db.insert(TABLE_NAME, null, values))
+      threads.incrementUnread(threadId, 1, 0)
       threads.update(threadId, true)
+
+      messageId
     }
 
     notifyConversationListeners(threadId)
     TrimThreadJob.enqueueAsync(threadId)
+
+    return messageId
   }
 
-  fun insertOrUpdateGroupCall(
-    groupRecipientId: RecipientId,
-    sender: RecipientId,
-    timestamp: Long,
-    messageGroupCallEraId: String?
-  ) {
-    val threadId = writableDatabase.withinTransaction { db ->
-      val recipient = Recipient.resolved(groupRecipientId)
-      val threadId = threads.getOrCreateThreadIdFor(recipient)
-
-      val cursor = db
-        .select(*MMS_PROJECTION)
-        .from(TABLE_NAME)
-        .where("$TYPE = ? AND $THREAD_ID = ?", MessageTypes.GROUP_CALL_TYPE, threadId)
-        .orderBy("$DATE_RECEIVED DESC")
-        .limit(1)
-        .run()
-
-      var sameEraId = false
-
-      MmsReader(cursor).use { reader ->
-        val record: MessageRecord? = reader.firstOrNull()
-
-        if (record != null) {
-          val groupCallUpdateDetails = GroupCallUpdateDetailsUtil.parse(record.body)
-          sameEraId = groupCallUpdateDetails.eraId == messageGroupCallEraId && !Util.isEmpty(messageGroupCallEraId)
-
-          if (!sameEraId) {
-            db.update(TABLE_NAME)
-              .values(BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(groupCallUpdateDetails, emptyList(), false))
-              .where("$ID = ?", record.id)
-              .run()
-          }
-        }
-      }
-
-      if (!sameEraId && !Util.isEmpty(messageGroupCallEraId)) {
-        val updateDetails = GroupCallUpdateDetails.newBuilder()
-          .setEraId(Util.emptyIfNull(messageGroupCallEraId))
-          .setStartedCallUuid(Recipient.resolved(sender).requireServiceId().toString())
-          .setStartedCallTimestamp(timestamp)
-          .addAllInCallUuids(emptyList())
-          .setIsCallFull(false)
-          .build()
-          .toByteArray()
-
-        val values = contentValuesOf(
-          RECIPIENT_ID to sender.serialize(),
-          RECIPIENT_DEVICE_ID to 1,
-          DATE_RECEIVED to timestamp,
-          DATE_SENT to timestamp,
-          READ to 0,
-          BODY to Base64.encodeBytes(updateDetails),
-          TYPE to MessageTypes.GROUP_CALL_TYPE,
-          THREAD_ID to threadId
-        )
-
-        db.insert(TABLE_NAME, null, values)
-        threads.incrementUnread(threadId, 1, 0)
-      }
-
-      threads.update(threadId, true)
-
-      threadId
+  /**
+   * Updates the timestamps associated with the given message id to the given ts
+   */
+  fun updateCallTimestamps(messageId: Long, timestamp: Long) {
+    val message = try {
+      getMessageRecord(messageId = messageId)
+    } catch (e: NoSuchMessageException) {
+      error("Message $messageId does not exist")
     }
 
-    notifyConversationListeners(threadId)
-    TrimThreadJob.enqueueAsync(threadId)
+    val updateDetail = GroupCallUpdateDetailsUtil.parse(message.body)
+    val contentValues = contentValuesOf(
+      BODY to Base64.encodeBytes(updateDetail.toBuilder().setStartedCallTimestamp(timestamp).build().toByteArray()),
+      DATE_SENT to timestamp,
+      DATE_RECEIVED to timestamp
+    )
+
+    val query = buildTrueUpdateQuery(ID_WHERE, buildArgs(messageId), contentValues)
+    val updated = writableDatabase.update(TABLE_NAME, contentValues, query.where, query.whereArgs) > 0
+
+    if (updated) {
+      notifyConversationListeners(message.threadId)
+    }
+  }
+
+  fun updateGroupCall(
+    messageId: Long,
+    eraId: String,
+    joinedUuids: Collection<UUID>,
+    isCallFull: Boolean
+  ): MessageId {
+    writableDatabase.withinTransaction { db ->
+      val message = try {
+        getMessageRecord(messageId = messageId)
+      } catch (e: NoSuchMessageException) {
+        error("Message $messageId does not exist.")
+      }
+
+      val updateDetail = GroupCallUpdateDetailsUtil.parse(message.body)
+      val containsSelf = joinedUuids.contains(SignalStore.account().requireAci().uuid())
+      val sameEraId = updateDetail.eraId == eraId && !Util.isEmpty(eraId)
+      val inCallUuids = if (sameEraId) joinedUuids.map { it.toString() } else emptyList()
+      val contentValues = contentValuesOf(
+        BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(updateDetail, inCallUuids, isCallFull)
+      )
+
+      if (sameEraId && containsSelf) {
+        contentValues.put(READ, 1)
+      }
+
+      val query = buildTrueUpdateQuery(ID_WHERE, buildArgs(messageId), contentValues)
+      val updated = db.update(TABLE_NAME, contentValues, query.where, query.whereArgs) > 0
+
+      if (updated) {
+        notifyConversationListeners(message.threadId)
+      }
+    }
+
+    return MessageId(messageId)
   }
 
   fun updatePreviousGroupCall(threadId: Long, peekGroupCallEraId: String?, peekJoinedUuids: Collection<UUID>, isCallFull: Boolean): Boolean {
@@ -1066,7 +1059,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       }
 
       if (!silent) {
-        threads.update(threadId, true)
+        ThreadUpdateJob.enqueue(threadId)
         TrimThreadJob.enqueueAsync(threadId)
       }
 
@@ -1309,6 +1302,13 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
 
   fun markAllIncomingStoriesRead(): List<MarkedMessageInfo> {
     val where = "$IS_STORY_CLAUSE AND NOT (${getOutgoingTypeClause()}) AND $READ = 0"
+    val markedMessageInfos = setMessagesRead(where, null)
+    notifyConversationListListeners()
+    return markedMessageInfos
+  }
+
+  fun markAllCallEventsRead(): List<MarkedMessageInfo> {
+    val where = "$IS_CALL_TYPE_CLAUSE AND $READ = 0"
     val markedMessageInfos = setMessagesRead(where, null)
     notifyConversationListListeners()
     return markedMessageInfos
@@ -2475,7 +2475,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     if (!MessageTypes.isPaymentsActivated(mailbox) && !MessageTypes.isPaymentsRequestToActivate(mailbox) && !MessageTypes.isExpirationTimerUpdate(mailbox) && !retrieved.storyType.isStory && isNotStoryGroupReply) {
       val incrementUnreadMentions = retrieved.mentions.isNotEmpty() && retrieved.mentions.any { it.recipientId == Recipient.self().id }
       threads.incrementUnread(threadId, 1, if (incrementUnreadMentions) 1 else 0)
-      threads.update(threadId, true)
+      ThreadUpdateJob.enqueue(threadId)
     }
 
     notifyConversationListeners(threadId)
@@ -3098,6 +3098,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       .where("$ID = ?", messageId)
       .run()
 
+    calls.updateCallEventDeletionTimestamps()
     threads.setLastScrolled(threadId, 0)
     val threadDeleted = threads.update(threadId, false)
 
@@ -3355,6 +3356,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
 
     if (deletes > 0) {
       Log.i(TAG, "Deleted $deletes abandoned messages")
+      calls.updateCallEventDeletionTimestamps()
     }
 
     return deletes
@@ -3384,6 +3386,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     groupReceipts.deleteAllRows()
     mentions.deleteAllMentions()
     writableDatabase.delete(TABLE_NAME).run()
+    calls.updateCallEventDeletionTimestamps()
 
     OptimizeMessageSearchIndexJob.enqueue()
   }
@@ -4340,6 +4343,12 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     }
 
     return unhandled
+  }
+
+  fun setTimestampReadFromSyncMessageProto(readMessages: List<SyncMessage.Read>, proposedExpireStarted: Long, threadToLatestRead: MutableMap<Long, Long>): Collection<SyncMessageId> {
+    val reads: List<ReadMessage> = readMessages.map { r -> ReadMessage(ServiceId.parseOrThrow(r.senderUuid), r.timestamp) }
+
+    return setTimestampReadFromSyncMessage(reads, proposedExpireStarted, threadToLatestRead)
   }
 
   /**

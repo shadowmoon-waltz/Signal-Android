@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">כן</string>
     <string name="no">לא</string>
@@ -511,59 +512,24 @@
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
         <item quantity="one">סימון כנקרא</item>
-        <item quantity="two">סימון כנקראו</item>
-        <item quantity="many">סימון כנקראו</item>
-        <item quantity="other">סימון כנקראו</item>
+        <item quantity="two">סימון כנקרא</item>
+        <item quantity="many">סימון כנקרא</item>
+        <item quantity="other">סימון כנקרא</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
         <item quantity="one">סימון כלא נקרא</item>
-        <item quantity="two">סימון כלא נקראו</item>
-        <item quantity="many">סימון כלא נקראו</item>
-        <item quantity="other">סימון כלא נקראו</item>
+        <item quantity="two">סימון כלא נקרא</item>
+        <item quantity="many">סימון כלא נקרא</item>
+        <item quantity="other">סימון כלא נקרא</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">הצמדה</item>
-        <item quantity="two">הצמדה</item>
-        <item quantity="many">הצמדה</item>
-        <item quantity="other">הצמדה</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">ביטול הצמדה</item>
-        <item quantity="two">ביטול הצמדה</item>
-        <item quantity="many">ביטול הצמדה</item>
-        <item quantity="other">ביטול הצמדה</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">השתקה</item>
-        <item quantity="two">השתקה</item>
-        <item quantity="many">השתקה</item>
-        <item quantity="other">השתקה</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">ביטול השתקה</item>
-        <item quantity="two">ביטול השתקה</item>
-        <item quantity="many">ביטול השתקה</item>
-        <item quantity="other">ביטול השתקה</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">הצמדה</string>
+    <string name="ConversationListFragment_unpin">ביטול הצמדה</string>
+    <string name="ConversationListFragment_mute">השתקה</string>
+    <string name="ConversationListFragment_unmute">ביטול השתקה</string>
     <string name="ConversationListFragment_select">בחירה</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">העברה לארכיון</item>
-        <item quantity="two">העברה לארכיון</item>
-        <item quantity="many">העברה לארכיון</item>
-        <item quantity="other">העברה לארכיון</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">הוצאה מהארכיון</item>
-        <item quantity="two">הוצאה מהארכיון</item>
-        <item quantity="many">הוצאה מהארכיון</item>
-        <item quantity="other">הוצאה מהארכיון</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">מחיקה</item>
-        <item quantity="two">מחיקה</item>
-        <item quantity="many">מחיקה</item>
-        <item quantity="other">מחיקה</item>
-    </plurals>
+    <string name="ConversationListFragment_archive">העברה לארכיון</string>
+    <string name="ConversationListFragment_unarchive">הוצאה מארכיון</string>
+    <string name="ConversationListFragment_delete">מחיקה</string>
     <string name="ConversationListFragment_select_all">בחירת הכל</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d נבחר</item>
@@ -1615,6 +1581,8 @@
     <string name="MessageRequestBottomView_delete">מחיקה</string>
     <string name="MessageRequestBottomView_block">חסימה</string>
     <string name="MessageRequestBottomView_unblock">ביטול חסימה</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">לתת ל%1$s לשלוח לך הודעות ולשתף את השם והתמונה שלך איתו או איתה? הסרת את האדם הזה בעבר.</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">לאפשר אל %1$s לשלוח אליך הודעות? הצד השני לא יידע שראית את ההודעות שלו עד שלא תאשר.</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">לאפשר ל%1$s לשלוח לך הודעות ולשתף איתו או איתה את השם והתמונה שלך? לא תוצג לך אף הודעה עד שהחסימה תבוטל.</string>
@@ -1883,17 +1851,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">שינוי כיוון מצלמה</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">שינוי מצב רמקול</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">שינוי מצב מצלמה</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">שינוי מצב השתקה</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">שינוי מצב צלצול</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">סיים שיחה</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">אירעה שגיאת ממשק משתמש. כדאי לדווח על השגיאה למפתחים.</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">לא זוהה קלט/פלט שמע מתאים.</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">סמל שמייצג מכשיר בלוטות׳.</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">סמל שמייצג אוזניות חוטיות.</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">סמל שמייצג דיבורית.</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">סמל שמייצג אוזנייה של מכשיר.</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1965,6 +1946,8 @@
         <item quantity="other">אתה כעת במרחק %1$d צעדים מהגשת יומן ניפוי תקלים.</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">אנחנו צריכים לוודא שאתה בן־אדם.</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">Signal לא הצליחה לשלוח קוד SMS עקב תקלה חיצונית.</string>
     <string name="RegistrationActivity_next">הבא</string>
     <string name="RegistrationActivity_continue">המשך</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">קח פרטיות איתך.\nהייה עצמך בכל הודעה.</string>
@@ -2135,6 +2118,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">ההודעה לא יכלה להיות מעובדת</string>
     <string name="ThreadRecord_delivery_issue">סוגיית מסירה</string>
     <string name="ThreadRecord_message_request">בקשת התכתבות</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">תמונה</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">הודעה קולית</string>
@@ -2405,10 +2390,18 @@
     <string name="WebRtcCallScreen__answer_without_video">ענה בלי וידאו</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">פלט שמע</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">אפרכסת הטלפון</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">רמקול</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">Bluetooth</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">אוזניות חוטיות</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">אוזניות חוטיות (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">ענה לשיחה</string>
     <string name="WebRtcCallControls_reject_call_description">דחה שיחה</string>
@@ -2532,7 +2525,8 @@
     <string name="ConversationUpdateItem_send_payment">שלח תשלום</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">הפעל תשלומים</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">הסרת את האדם הזה, שליחת הודעה תוסיף אותו או אותה מחדש לרשימה שלך.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">נגן … השהה</string>
@@ -3255,7 +3249,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">הערה</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">שמירת הערה</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">אשר תשלום</string>
@@ -4188,59 +4182,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">דרוש את ה־PIN של Signal שלך כדי להירשם שוב אל Signal עם מספר הטלפון שלך</string>
     <string name="AccountSettingsFragment__change_phone_number">שנה מספר טלפון</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">נתוני החשבון שלך</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">נתוני החשבון שלך</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">אפשר לייצא דוח של נתוני חשבון Signal שלך. הדוח הזה לא כולל הודעות או מדיה. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">למידע נוסף</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">יצוא דוח</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">יצוא כקובץ TXT</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">קובץ טקסט קל לקריאה</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">יצוא כקובץ JSON</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">קובץ שניתן לקריאה על ידי מכונה</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">ביטול</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">אישור</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">הפקת דוח נכשלה</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">כדאי לבדוק את החיבור שלך ולנסות שוב.</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">לייצא נתונים?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">כדאי לשתף את נתוני חשבון Signal שלך רק עם אנשים או אפליקציות שבוטחים בהם.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">יצוא</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">מפיקים דוח…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">הדוח שלך נוצר רק בזמן הייצוא ואינו מאוחסן על ידי Signal במכשיר שלך.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">השתמש בזה כדי לשנות את מספר הטלפון הנוכחי שלך אל מספר טלפון חדש. אתה לא יכול לבטל את השינוי הזה.\n\nלפני המשכה, וודא שהמספר החדש שלך יכול לקבל מסרונים או שיחות.</string>
@@ -4698,6 +4681,9 @@
     <string name="ImageEditorHud__undo">בטל עשייה</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">עורר בין סמן ודגשן</string>
     <string name="ImageEditorHud__toggle_between_text_styles">עורר בין סגנונות מלל</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">מומלצים</string>
 
     <string name="MediaCountIndicatorButton__send">שלח</string>
 
@@ -5987,7 +5973,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">רוחב אחיד</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">ספוילר</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5995,11 +5981,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">הגדרת שם המשתמש שלך ב–Signal</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">שמות משתמש מוצמדים לסט של ספרות ולא משותפים בפרופיל שלך</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">לכל שם משתמש יש לינק וקוד QR ייחודי שאפשר לשתף עם חברים כדי שהם יוכלו להתחיל איתך צ׳אט</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">אפשר לכבות את גילוי מספר הטלפון תחת הגדרות &gt; פרטיות &gt; מספר טלפון &gt; מי יכול למצוא את המספר שלי, כדי להשתמש בשם המשתמש שלך בתור הדרך העיקרית שבה אנשים יכולים ליצור איתך קשר</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -6026,6 +6012,12 @@
     <string name="CallLogAdapter__outgoing">שיחה יוצאת</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">שיחה שלא נענתה</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">הצטרפות</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">חזרה</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -6100,9 +6092,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">מיקרופון מושבת</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">כפתור צילום</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">כפתור המשך</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">שיחה קבוצתית</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">שיחה קבוצתית שלא נענתה</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">שיחה קבוצתית נכנסת</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">שיחה קבוצתית יוצאת</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">יצירת לינק לשיחה</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">שיתוף לינק לשיחת Signal</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">יצירת לינק לשיחה</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">שיחת Signal</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">הצטרפות</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">הוספת שם שיחה</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">אישור כל החברים</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">שיתוף לינק דרך Signal</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">העתקת קישור</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">שיתוף קישור</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">סיום</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">פתיחת מסך שיתוף נכשלה.</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">הועתק ללוח</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">עריכת שם שיחה</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">שמירה</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">שם שיחה</string>
 
     <!-- EOF -->
 </resources>

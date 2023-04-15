@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">Tá</string>
     <string name="no">Níl</string>
@@ -533,56 +534,14 @@
         <item quantity="many">Neamhléite</item>
         <item quantity="other">Neamhléite</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">Pionnáil</item>
-        <item quantity="two">Pionnáil</item>
-        <item quantity="few">Pionnáil</item>
-        <item quantity="many">Pionnáil</item>
-        <item quantity="other">Pionnáil</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">Díphionnáil</item>
-        <item quantity="two">Díphionnáil</item>
-        <item quantity="few">Díphionnáil</item>
-        <item quantity="many">Díphionnáil</item>
-        <item quantity="other">Díphionnáil</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">Balbhaigh</item>
-        <item quantity="two">Balbhaigh</item>
-        <item quantity="few">Balbhaigh</item>
-        <item quantity="many">Balbhaigh</item>
-        <item quantity="other">Balbhaigh</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">Díbhalbhaigh</item>
-        <item quantity="two">Díbhalbhaigh</item>
-        <item quantity="few">Díbhalbhaigh</item>
-        <item quantity="many">Díbhalbhaigh</item>
-        <item quantity="other">Díbhalbhaigh</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">Pionnáil</string>
+    <string name="ConversationListFragment_unpin">Díphionnáil</string>
+    <string name="ConversationListFragment_mute">Balbhaigh</string>
+    <string name="ConversationListFragment_unmute">Díbhalbhaigh</string>
     <string name="ConversationListFragment_select">Roghnaigh</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">Cuir sa chartlann í</item>
-        <item quantity="two">Cuir sa chartlann iad</item>
-        <item quantity="few">Cuir sa chartlann iad</item>
-        <item quantity="many">Cuir sa chartlann iad</item>
-        <item quantity="other">Cuir sa chartlann iad</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">Bain ón gcartlann</item>
-        <item quantity="two">Bain ón gcartlann iad</item>
-        <item quantity="few">Bain ón gcartlann iad</item>
-        <item quantity="many">Bain ón gcartlann iad</item>
-        <item quantity="other">Bain ón gcartlann iad</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">Scrios</item>
-        <item quantity="two">Scrios</item>
-        <item quantity="few">Scrios</item>
-        <item quantity="many">Scrios</item>
-        <item quantity="other">Scrios</item>
-    </plurals>
+    <string name="ConversationListFragment_archive">Cartlannú</string>
+    <string name="ConversationListFragment_unarchive">Díchartlannú</string>
+    <string name="ConversationListFragment_delete">Scrios</string>
     <string name="ConversationListFragment_select_all">Roghnaigh uile</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d roghnaithe</item>
@@ -1673,6 +1632,8 @@
     <string name="MessageRequestBottomView_delete">Scrios</string>
     <string name="MessageRequestBottomView_block">Cuir bac</string>
     <string name="MessageRequestBottomView_unblock">Bain an bac</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">Lig do %1$s teachtaireachtaí a sheoladh chugat agus comhroinn d\'ainm agus grianghraf leis/léi? Bhain tú an duine sin roimhe.</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">Lig do %1$s teachtaireachtaí a sheoladh chugat agus comhroinn d\'ainm agus grianghraf leis/léi? Ní bheidh a fhios ag an duine sin go bhfaca tú an teachtaireacht go dtí go nglacfaidh tú.</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">Lig do %1$s teachtaireachtaí a sheoladh chugat agus comhroinn d\'ainm agus grianghraf leis an duine sin? Ní bhfaighidh tú aon teachtaireacht go dtí go mbainfidh tú an bac de/di.</string>
@@ -1952,17 +1913,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">Scoránaigh treo an cheamara</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">Scoránaigh callaire</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">Scoránaigh ceamara</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">Scoránaigh balbhú</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">Scoránaigh bualadh</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Cuir deireadh leis an nglao</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">Tharla earráid UI. Tuairiscigh an earráid seo do na forbróirí.</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">Níl aon ionchur/aschur incháilithe fuaime braite.</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">Deilbhín a léiríonn gléas Bluetooth.</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">Deilbhín a léiríonn gléas cinn sreangtha.</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">Deilbhín a léiríonn fón callaire.</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">Deilbhín a léiríonn cluaisín gléis.</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -2036,6 +2010,8 @@
         <item quantity="other">Tá %1$d céim fágtha anois roimh loga dífhabhtaithe a chur isteach.</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">Ní mór dúinn a dheimhniú gur neach daonna thú.</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">Ní raibh Signal in ann cód SMS a sheoladh de dheasca teip sheachtrach.</string>
     <string name="RegistrationActivity_next">Ar aghaidh</string>
     <string name="RegistrationActivity_continue">Lean ar aghaidh</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">Beir an príobháideachas leat.\nBíodh cead cainte agat i ngach teachtaireacht.</string>
@@ -2206,6 +2182,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">Níorbh fhéidir an teachtaireacht a phróiseáil</string>
     <string name="ThreadRecord_delivery_issue">Delivery Issue</string>
     <string name="ThreadRecord_message_request">Iarratas Teachtaireachta</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">Grianghraf</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">Teachtaireacht Ghutha</string>
@@ -2478,10 +2456,18 @@
     <string name="WebRtcCallScreen__answer_without_video">Freagair gan fís</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">Aschur fuaime</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">Cluasán gutháin</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">Callaire</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">Bluetooth</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">Gléas Cinn Sreangtha</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">Gléas Cinn Sreangtha (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">Freagair an glao</string>
     <string name="WebRtcCallControls_reject_call_description">Diúltaigh an glao</string>
@@ -2608,7 +2594,8 @@
     <string name="ConversationUpdateItem_send_payment">Seol íocaíocht</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">Gníomhachtaigh íocaíochtaí</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">Bhain tú an duine sin, má sheolann tú teachtaireachtaí chuige/chuici arís cuirfear ar do liosta arís é/í.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Seinn … Cuir ar sos</string>
@@ -3339,7 +3326,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">Nóta</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">Sábháil nóta</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">Confirm Payment</string>
@@ -4285,59 +4272,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">Éiligh d\'UAP Signal le d\'uimhir ghutháin a chlárú le Signal arís</string>
     <string name="AccountSettingsFragment__change_phone_number">Change Phone Number</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">Sonraí do chuntais</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">Sonraí do chuntais</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">Easpórtáil tuairisc ar shonraí do chuntas Signal. Níl aon teachtaireachtaí ná meáin sa tuairisc seo. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">Tuilleadh faisnéise</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">Easpórtáil an tuairisc</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">Easpórtáil leagan TXT</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">Comhad téacs soléite</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">Easpórtáil leagan JSON</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">Comhad atá inléite ag meaisín</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">Cuir ar ceal</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">CGL</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">Níorbh fhéidir tuairisc a ghiniúint</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">Seiceáil do nasc agus triail arís.</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">Easpórtáil sonraí?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Ná comhroinn sonraí do chuntais Signal ach le daoine nó aipeanna a bhfuil muinín agat iontu.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">Easpórtáil</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">Tuairisc á giniúint…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Ní ghintear do thuairisc ach ag am na heaspórtála agus ní dhéanann Signal í a stóráil ar do ghléas.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Use this to change your current phone number to a new phone number. You can’t undo this change.\n\nBefore continuing, make sure your new number can receive SMS or calls.</string>
@@ -4801,6 +4777,9 @@
     <string name="ImageEditorHud__undo">CEALAIGH</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">Scoránaigh idir marcóir agus aibhsitheoir</string>
     <string name="ImageEditorHud__toggle_between_text_styles">Scoránaigh idir stíleanna téacs</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">Faoi thrácht</string>
 
     <string name="MediaCountIndicatorButton__send">Seol</string>
 
@@ -6112,7 +6091,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Aonleithead</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">Bacóir</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -6120,11 +6099,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Socraigh d\'ainm úsáideora Signal</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Péireáiltear ainmneacha úsáideora le tacar digití agus ní chomhroinntear ar do phróifíl iad</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Tá cód QR agus nasc uathúil ag gach ainm úsáideora, ar féidir leat iad a chomhroinnt le cairde chun tosú ar chomhrá leat</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Cas as aimsiú uimhreacha gutháin faoi Shocruithe &gt; Príobháideachas &gt; Uimhir Ghutháin &gt; Na daoine ar féidir leo m\'uimhir a aimsiú, chun d\'ainm úsáideora a úsáid mar an príomhbhealach ag daoine chun teagmháil a dhéanamh leat</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -6151,6 +6130,12 @@
     <string name="CallLogAdapter__outgoing">Amach</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">Caillte</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">Téigh isteach ann</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">Fill air</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -6226,9 +6211,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">Micreafón as</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">Cnaipe Gabhála</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">Cnaipe Ar Aghaidh</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">Glao grúpa</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">Grúpghlao caillte</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">Grúpghlao isteach</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">Grúpghlao amach</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">Cruthaigh Nasc Glao</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Comhroinn nasc le haghaidh glao Signal</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">Cruthaigh nasc glao</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Glao Signal</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">Téigh isteach ann</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">Cuir ainm an ghlao leis</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">Faomh gach ball</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Comhroinn nasc trí Signal</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">Cóipeáil an nasc</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">Comhroinn an nasc</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">Déanta</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">Theip ar an mbileog chomhroinnte a oscailt.</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">Cóipeáilte chuig an ngearrthaisce</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">Cuir ainm an ghlao in eagar</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">Sábháil</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">Ainm an ghlao</string>
 
     <!-- EOF -->
 </resources>

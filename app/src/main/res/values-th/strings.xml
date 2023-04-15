@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">ใช่</string>
     <string name="no">ไม่</string>
@@ -485,28 +486,14 @@
     <plurals name="ConversationListFragment_unread_plural">
         <item quantity="other">ยังไม่ได้อ่าน</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="other">ปักหมุด</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="other">เลิกปักหมุด</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="other">ปิดการแจ้งเตือน</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="other">เปิดการแจ้งเตือน</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">ปักหมุด</string>
+    <string name="ConversationListFragment_unpin">เลิกปักหมุด</string>
+    <string name="ConversationListFragment_mute">ปิดเสียง</string>
+    <string name="ConversationListFragment_unmute">เปิดเสียง</string>
     <string name="ConversationListFragment_select">เลือก</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="other">เก็บถาวร</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="other">เลิกเก็บถาวร</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="other">ลบ</item>
-    </plurals>
+    <string name="ConversationListFragment_archive">ที่เก็บถาวร</string>
+    <string name="ConversationListFragment_unarchive">ยกเลิกเก็บถาวร</string>
+    <string name="ConversationListFragment_delete">ลบ</string>
     <string name="ConversationListFragment_select_all">เลือกทั้งหมด</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="other">เลือกไว้ %1$d</item>
@@ -1441,6 +1428,8 @@
     <string name="MessageRequestBottomView_delete">ลบ</string>
     <string name="MessageRequestBottomView_block">บล็อก</string>
     <string name="MessageRequestBottomView_unblock">เลิกบล็อก</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">อนุญาตให้ %1$s ส่งข้อความหารวมถึงมองเห็นชื่อและรูปของคุณหรือไม่ โปรดทราบว่าคุณเคยลบผู้ใช้คนนี้</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">อนุญาตให้ %1$s ส่งข้อความและเห็นชื่อกับรูปภาพของคุณหรือไม่? พวกเขาจะไม่รู้ว่าคุณได้เห็นข้อความของพวกเขาแล้วจนกว่าคุณจะตอบรับ</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">อนุญาตให้ %1$s ส่งข้อความหารวมถึงมองเห็นชื่อและรูปของคุณหรือไม่ คุณจะไม่ได้รับข้อความจนกว่าจะเลิกบล็อกผู้ใช้รายนี้</string>
@@ -1676,17 +1665,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">สลับทิศทางกล้อง</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">สลับลำโพง</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">เปิดปิดกล้อง</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">เปิดปิดการแจ้งเตือน</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">เปิดปิดการส่งเสียงเรียก</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">วางสาย</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">เกิดข้อผิดพลาดด้าน UI โปรดรายงานข้อผิดพลาดนี้ให้นักพัฒนาแอปทราบ</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">ไม่พบอุปกรณ์อินพุต/เอาต์พุตเสียงที่ใช้ได้</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">ไอคอนรูปอุปกรณ์บลูทูธ</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">ไอคอนรูปชุดหูฟังพร้อมไมโครโฟนแบบมีสาย</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">ไอคอนรูปสปีกเกอร์โฟน</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">ไอคอนรูปลำโพงของอุปกรณ์</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1752,6 +1754,8 @@
         <item quantity="other">เหลืออีก %1$d ขั้นตอนในการส่งปูมดีบัก</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">เราจำเป็นต้องตรวจยืนยันว่าคุณเป็นมนุษย์</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">Signal ไม่สามารถส่งรหัสทาง SMS ได้เนื่องจากมีความผิดพลาดจากภายนอกแอป</string>
     <string name="RegistrationActivity_next">ต่อไป</string>
     <string name="RegistrationActivity_continue">ทำต่อ</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">นำความเป็นส่วนตัวไปกับคุณทุกที่\nเป็นตัวคุณในทุกข้อความ</string>
@@ -1922,6 +1926,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">ไม่สามารถประมวลผลข้อความ</string>
     <string name="ThreadRecord_delivery_issue">ปัญหาการจัดส่ง</string>
     <string name="ThreadRecord_message_request">คำขอส่งข้อความ</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">รูปภาพ</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">ข้อความเสียง</string>
@@ -2186,10 +2192,18 @@
     <string name="WebRtcCallScreen__answer_without_video">ตอบรับโดยไม่ใช้วิดีโอ</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">ช่องรับสัญญาณเสียง</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">หูฟังโทรศัพท์</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">ลำโพง</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">บลูทูธ</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">ชุดหูฟังพร้อมไมโครโฟนแบบมีสาย</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">ชุดหูฟังพร้อมไมโครโฟนแบบมีสาย (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">รับสาย</string>
     <string name="WebRtcCallControls_reject_call_description">ปฏิเสธสาย</string>
@@ -2304,7 +2318,8 @@
     <string name="ConversationUpdateItem_send_payment">ส่งการชำระเงิน</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">ใช้การชำระเงิน</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">คุณลบผู้ใช้คนนี้แล้ว การส่งข้อความหาผู้ใช้อีกครั้งจะเป็นการเพิ่มคนคนนั้นกลับเข้ามาในรายชื่อผู้ติดต่อของคุณ</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">เล่น … หยุดชั่วคราว</string>
@@ -3003,7 +3018,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">บันทึก</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">บันทึกโน้ต</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">ยืนยันการจ่ายเงิน</string>
@@ -3897,59 +3912,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">ต้องการรหัส SignalPIN ในการลงทะเบียนหมายเลขโทรศัพท์ของคุณกับ Signal อีกครั้ง</string>
     <string name="AccountSettingsFragment__change_phone_number">เปลี่ยนหมายเลขโทรศัพท์</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">ข้อมูลบัญชีของคุณ</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">ข้อมูลบัญชีของคุณ</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">ส่งออกรายงานข้อมูลบัญชี Signal ของคุณ โดยรายงานนี้จะไม่มีข้อความหรือสื่อใดๆ %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">เรียนรู้เพิ่มเติม</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">ส่งออกรายงาน</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">ส่งออกเป็นไฟล์ TXT</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">ไฟล์ข้อความที่อ่านง่าย</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">ส่งออกเป็นไฟล์ JSON</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">ไฟล์ที่คอมพิวเตอร์อ่านได้</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">ยกเลิก</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">ตกลง</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">ไม่สามารถสร้างรายงานได้</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">โปรดตรวจสอบการเชื่อมต่อแล้วลองอีกครั้ง</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">ส่งออกข้อมูลใช่หรือไม่</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">เราขอแนะนำให้แชร์ข้อมูลบัญชี Signal ของคุณให้กับคนรู้จักหรือแอปที่คุณไว้วางใจเท่านั้น</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">ส่งออก</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">กำลังสร้างรายงาน…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">รายงานจะถูกสร้างในตอนที่ส่งออกเท่านั้น และ Signal จะไม่จัดเก็บรายงานไว้บนอุปกรณ์ของคุณ</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">ใช้สิ่งนี้เพื่อเปลี่ยนหมายเลขโทรศัพท์ปัจจุบันเป็นหมายเลขโทรศัพท์ใหม่ คุณไม่สามารถยกเลิกการเปลี่ยนแปลงได้ \n\nก่อนที่จะดำเนินการต่อ ตรวจสอบให้มั่นใจว่าหมายเลขใหม่สามารถรับ SMS หรือรับสายได้</string>
@@ -4389,6 +4393,9 @@
     <string name="ImageEditorHud__undo">เลิกทำ</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">สลับระหว่างตัวทำเครื่องหมายและตัวเน้นข้อความ</string>
     <string name="ImageEditorHud__toggle_between_text_styles">สลับระหว่างสไตล์ข้อความ</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">แนะนำ</string>
 
     <string name="MediaCountIndicatorButton__send">ส่ง</string>
 
@@ -5612,7 +5619,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">โมโนสเปซ</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">โหมดสปอยเลอร์</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5620,11 +5627,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">ตั้งค่าชื่อผู้ใช้ Signal ของคุณ</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">ชื่อผู้ใช้จะถูกผูกเข้ากับชุดตัวเลขและจะไม่แสดงบนโปรไฟล์ของคุณ</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">ชื่อผู้ใช้แต่ละชื่อจะมีคิวอาร์โค้ดและลิงก์เฉพาะที่คุณสามารถแชร์เพื่อให้เพื่อนเริ่มการสนทนากับคุณได้</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">ปิดใช้งานการค้นหาด้วยหมายโทรศัพท์ โดยไปที่การตั้งค่า &gt; ความเป็นส่วนตัว &gt; หมายเลขโทรศัพท์ &gt; ใครบ้างที่สามารถค้นหาหมายเลขโทรศัพท์ฉันได้ ซึ่งวิธีนี้จะตั้งให้ชื่อผู้ใช้ของคุณเป็นวิธีหลักที่ผู้ใช้คนอื่นจะติดต่อคุณได้</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5651,6 +5658,12 @@
     <string name="CallLogAdapter__outgoing">โทรออก</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">ไม่ได้รับ</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">เข้าร่วม</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">ย้อนกลับ</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5722,9 +5735,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">ไมค์ปิดอยู่</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">ปุ่มถ่ายภาพ</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">ปุ่มดำเนินการต่อ</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">โทรกลุ่ม</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">สายโทรกลุ่มที่ไม่ได้รับ</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">สายโทรกลุ่มขาเข้า</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">สายโทรกลุ่มขาออก</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">สร้างลิงก์การโทร</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">แชร์ลิงก์สำหรับการโทร Signal</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">สร้างลิงก์การโทร</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">สาย Signal</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">เข้าร่วม</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">เพิ่มชื่อการโทร</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">อนุมัติสำหรับสมาชิกทุกคน</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">แชร์ลิงก์ผ่าน Signal</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">คัดลอกลิงก์</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">แชร์ลิงก์</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">เสร็จสิ้น</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">ไม่สามารถเปิดหน้าการแชร์ได้</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">คัดลอกไปยังคลิปบอร์ดแล้ว</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">แก้ไขชื่อการโทร</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">บันทึก</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">ชื่อการโทร</string>
 
     <!-- EOF -->
 </resources>

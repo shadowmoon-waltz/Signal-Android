@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">Ano</string>
     <string name="no">Ne</string>
@@ -510,60 +511,25 @@
         <item quantity="other">%1$d konverzací přesunuto do složky příchozích zpráv</item>
     </plurals>
     <plurals name="ConversationListFragment_read_plural">
-        <item quantity="one">Přečíst</item>
-        <item quantity="few">Přečíst</item>
-        <item quantity="many">Přečíst</item>
-        <item quantity="other">Přečíst</item>
+        <item quantity="one">Přečteno</item>
+        <item quantity="few">Přečteno</item>
+        <item quantity="many">Přečteno</item>
+        <item quantity="other">Přečteno</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">Zrušit přečtení</item>
-        <item quantity="few">Zrušit přečtení</item>
-        <item quantity="many">Zrušit přečtení</item>
-        <item quantity="other">Zrušit přečtení</item>
+        <item quantity="one">Nepřečteno</item>
+        <item quantity="few">Nepřečteno</item>
+        <item quantity="many">Nepřečteno</item>
+        <item quantity="other">Nepřečteno</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">Připnout</item>
-        <item quantity="few">Připnout</item>
-        <item quantity="many">Připnout</item>
-        <item quantity="other">Připnout</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">Odepnout</item>
-        <item quantity="few">Odepnout</item>
-        <item quantity="many">Odepnout</item>
-        <item quantity="other">Odepnout</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">Ztlumit</item>
-        <item quantity="few">Ztlumit</item>
-        <item quantity="many">Ztlumit</item>
-        <item quantity="other">Ztlumit</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">Zrušit ztišení</item>
-        <item quantity="few">Zrušit ztišení</item>
-        <item quantity="many">Zrušit ztišení</item>
-        <item quantity="other">Zrušit ztišení</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">Připnout</string>
+    <string name="ConversationListFragment_unpin">Odepnout</string>
+    <string name="ConversationListFragment_mute">Ztlumit</string>
+    <string name="ConversationListFragment_unmute">Zapnout</string>
     <string name="ConversationListFragment_select">Vybrat</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">Archivovat</item>
-        <item quantity="few">Archivovat</item>
-        <item quantity="many">Archivovat</item>
-        <item quantity="other">Archivovat</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">Zrušit archivaci</item>
-        <item quantity="few">Zrušit archivaci</item>
-        <item quantity="many">Zrušit archivaci</item>
-        <item quantity="other">Zrušit archivaci</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">Odstranit</item>
-        <item quantity="few">Odstranit</item>
-        <item quantity="many">Odstranit</item>
-        <item quantity="other">Odstranit</item>
-    </plurals>
+    <string name="ConversationListFragment_archive">Archivovat</string>
+    <string name="ConversationListFragment_unarchive">Nearchivovat</string>
+    <string name="ConversationListFragment_delete">Smazat</string>
     <string name="ConversationListFragment_select_all">Vybrat vše</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$d vybrán</item>
@@ -1615,6 +1581,8 @@
     <string name="MessageRequestBottomView_delete">Odstranit</string>
     <string name="MessageRequestBottomView_block">Blokovat</string>
     <string name="MessageRequestBottomView_unblock">Odblokovat</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">Chcete, aby vám %1$s mohl/a napsat a zobrazit si vaše jméno a fotografii? Tuto osobu jste v minulosti odebrali.</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">Dovolit %1$s zasílat vám zprávy a sdílet vaše jméno a fotografii? Nebudou vědět, že jste viděl jejich zprávy, dokud je nepřijmete.</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">Nechat si od %1$s posílat zprávy a sdílet s nimi vaše jméno a fotografii? Dokud je neodblokujete, nebudete dostávat žádné zprávy.</string>
@@ -1883,17 +1851,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">Přepnout směr kamery</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">Přepnout reproduktor</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">Přepnout kameru</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">Přepnout ztlumení zvuku</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">Přepnout vyzvánění</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">Ukončit hovor</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">Vyskytla se chyba v uživatelském rozhraní. Nahlaste prosím tuto chybu vývojářům.</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">Nebyl detekován žádný zvukový vstup ani výstup.</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">Ikona znázorňující zařízení Bluetooth.</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">Ikona znázorňující drátová sluchátka s mikrofonem.</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">Ikona znázorňující reproduktor.</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">Ikona znázorňující sluchátko zařízení.</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1965,6 +1946,8 @@
         <item quantity="other">Zbývá vám %1$d kroků k odeslání ladícího logu.</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">Potřebujeme ověřit, že jste člověk.</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">Službě Signal se nepodařilo odeslat SMS kód z důvodu externí poruchy.</string>
     <string name="RegistrationActivity_next">Další</string>
     <string name="RegistrationActivity_continue">Pokračovat</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">Noste soukromí s sebou.\nBuďte sami sebou v každé zprávě.</string>
@@ -2135,6 +2118,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">Zprávu nelze zpracovat</string>
     <string name="ThreadRecord_delivery_issue">Potíže s doručením</string>
     <string name="ThreadRecord_message_request">Požadavek na zprávu</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">Fotografie</string>
     <string name="ThreadRecord_gif">GIF</string>
     <string name="ThreadRecord_voice_message">Hlasová zpráva</string>
@@ -2405,10 +2390,18 @@
     <string name="WebRtcCallScreen__answer_without_video">Přijmout bez videa</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">Audio výstup</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">Sluchátko</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">Hlasitě</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">Bluetooth</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">Drátová sluchátka s mikrofonem</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">Drátová sluchátka s mikrofonem (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">Přijmout hovor</string>
     <string name="WebRtcCallControls_reject_call_description">Odmítnout hovor</string>
@@ -2532,7 +2525,8 @@
     <string name="ConversationUpdateItem_send_payment">Odeslat platbu</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">Aktivovat platby</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">Tuto osobu jste odebrali. Když jí znovu napíšete, bude přidána zpět do vašeho seznamu.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Spustit … Pozastavit</string>
@@ -3255,7 +3249,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">Poznámka</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">Uložit poznámku</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">Potvrdit platbu</string>
@@ -4188,59 +4182,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">Vyžadovat Signal PIN pro opětovnou registraci vašeho telefonního čísla v aplikaci Signal.</string>
     <string name="AccountSettingsFragment__change_phone_number">Změnit telefonní číslo</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">Údaje o vašem účtu</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">Údaje o vašem účtu</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">Exportujte si přehled údajů o svém účtu Signal. Tento přehled neobsahuje žádné zprávy ani média. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">Více informací</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">Exportovat přehled</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">Exportovat jako TXT</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">Snadno čitelný textový soubor</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">Exportovat jako JSON</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">Strojově čitelný soubor</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">Zrušit</string>
 
     <!-- Acknowledgement for download failure -->
     <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">Přehled se nepovedlo vygenerovat</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">Zkontrolujte připojení a zkuste to znovu.</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">Exportovat údaje?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Údaje o svém účtu Signalu sdílejte jen s lidmi nebo aplikacemi, kterým důvěřujete.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">Exportovat</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">Generování přehledu…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Váš přehled se generuje v okamžiku exportu a služba Signal jej neukládá do vašeho zařízení.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Pomocí této funkce můžete změnit své aktuální telefonní číslo na nové. Tuto změnu nelze vrátit zpět.\n\nPřed pokračováním se ujistěte, že nové číslo může přijímat SMS nebo hovory.</string>
@@ -4698,6 +4681,9 @@
     <string name="ImageEditorHud__undo">Zpět</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">Přepnout mezi značkovačem a zvýrazňovačem</string>
     <string name="ImageEditorHud__toggle_between_text_styles">Přepínání mezi styly textu</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">Doporučené</string>
 
     <string name="MediaCountIndicatorButton__send">Odeslat</string>
 
@@ -5987,7 +5973,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">Písmo se stejnou roztečí</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">Zastření</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5995,11 +5981,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">Nastavte si uživatelské jméno v aplikaci Signal</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Uživatelská jména jsou spárována se sadou číslic a nejsou sdílena na vašem profilu</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Každé uživatelské jméno má jedinečný QR kód a odkaz, který můžete sdílet s přáteli, aby s vámi mohli zahájit konverzaci</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Vypněte funkci vyhledání telefonního čísla v nabídce Nastavení &gt; Soukromí &gt; Telefonní číslo &gt; Kdo může najít mé číslo a používejte své uživatelské jméno jako primární způsob, jak vás mohou ostatní kontaktovat</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -6026,6 +6012,12 @@
     <string name="CallLogAdapter__outgoing">Odchozí</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">Zmeškaný</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">Připojit se</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">Vrátit se</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -6100,9 +6092,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">Mikrofon vypnutý</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">Tlačítko spouště</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">Tlačítko pokračovat</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">Skupinový hovor</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">Zmeškaný skupinový hovor</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">Příchozí skupinový hovor</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">Odchozí skupinový hovor</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">Vytvořit odkaz na hovor</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Sdílejte odkaz na hovor přes Signal</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">Vytvoření odkazu na hovor</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Hovor přes Signal</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">Připojit se</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">Přidat název hovoru</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">Schválit všechny členy</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Sdílet odkaz přes Signal</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">Zkopírovat odkaz</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">Sdílet odkaz</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">Hotovo</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">Sdílenou obrazovku se nepodařilo otevřít.</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">Zkopírováno do schránky</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">Upravit název hovoru</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">Uložit</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">Název hovoru</string>
 
     <!-- EOF -->
 </resources>

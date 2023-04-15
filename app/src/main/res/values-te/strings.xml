@@ -15,6 +15,7 @@
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url" translatable="false">https://signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="signal_me_username_url_no_scheme" translatable="false">signal.me/#u/%1$s</string> -->
   <!-- Removed by excludeNonTranslatables <string name="username_support_url" translatable="false">https://support.signal.org/hc/articles/5389476324250</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="export_account_data_url" translatable="false">https://support.signal.org/hc/articles/5538911756954</string> -->
 
     <string name="yes">అవును</string>
     <string name="no">కాదు</string>
@@ -497,35 +498,14 @@
         <item quantity="one">చదవనిది</item>
         <item quantity="other">చదవనివి</item>
     </plurals>
-    <plurals name="ConversationListFragment_pin_plural">
-        <item quantity="one">పిన్</item>
-        <item quantity="other">పిన్స్</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unpin_plural">
-        <item quantity="one">అన్‌పిన్</item>
-        <item quantity="other">అన్‌పిన్స్</item>
-    </plurals>
-    <plurals name="ConversationListFragment_mute_plural">
-        <item quantity="one">మ్యూట్</item>
-        <item quantity="other">మ్యూట్స్</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unmute_plural">
-        <item quantity="one">అన్‌మ్యూట్</item>
-        <item quantity="other">అన్‌మ్యూట్స్</item>
-    </plurals>
+    <string name="ConversationListFragment_pin">పిన్</string>
+    <string name="ConversationListFragment_unpin">అన్‌పిన్</string>
+    <string name="ConversationListFragment_mute">మ్యూట్</string>
+    <string name="ConversationListFragment_unmute">అన్‌మ్యూట్</string>
     <string name="ConversationListFragment_select">ఎంచుకోండి</string>
-    <plurals name="ConversationListFragment_archive_plural">
-        <item quantity="one">ఆర్కైవ్</item>
-        <item quantity="other">ఆర్కైవ్స్</item>
-    </plurals>
-    <plurals name="ConversationListFragment_unarchive_plural">
-        <item quantity="one">అన్‌ఆర్కైవ్</item>
-        <item quantity="other">అన్‌ఆర్కైవ్స్</item>
-    </plurals>
-    <plurals name="ConversationListFragment_delete_plural">
-        <item quantity="one">తొలగించండి</item>
-        <item quantity="other">తొలగించండి</item>
-    </plurals>
+    <string name="ConversationListFragment_archive">ఆర్కైవ్</string>
+    <string name="ConversationListFragment_unarchive">అన్ఆర్కైవ్</string>
+    <string name="ConversationListFragment_delete">తొలగించండి</string>
     <string name="ConversationListFragment_select_all">అన్నిటిని ఎంచుకోండి</string>
     <plurals name="ConversationListFragment_s_selected">
         <item quantity="one">%1$dఎంచుకోబడింది</item>
@@ -1499,6 +1479,8 @@
     <string name="MessageRequestBottomView_delete">తొలగించండి</string>
     <string name="MessageRequestBottomView_block">బ్లాక్ చేయండి</string>
     <string name="MessageRequestBottomView_unblock">అన్‌బ్లాక్ చేయండి</string>
+    <!-- Text explaining a message request from someone you\'ve removed before -->
+    <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_you_removed_them_before">%1$s మీకు సందేశం పంపనివ్వండి మరియు మీ పేరు మరియు ఫోటోను వారితో పంచుకునేదా? మీరు గతంలో ఈ వ్యక్తిని తొలగించారు.</string>
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_they_wont_know_youve_seen_their_messages_until_you_accept">%1$s మీకు సందేశం ఇవ్వనివ్వండి మరియు మీ పేరు మరియు ఫోటోను వారితో పంచుకోవాలా? మీరు అంగీకరించే వరకు మీరు వారి సందేశాన్ని చూశారని వారికి తెలియదు.</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock a Signal user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">%1$s మీకు సందేశం పంపనివ్వండి మరియు మీ పేరు మరియు ఫోటోను వారితో పంచుకునేదా? మీరు వారిని అన్‌బ్లాక్ చేసేంతవరకు మీరు ఎటువంటి సందేశాలు అందుకోరు.</string>
@@ -1745,17 +1727,30 @@
     </plurals>
 
     <!-- Toggle content description for toggling camera direction  -->
-    <string name="WebRtcCallView__toggle_camera_direction">Toggle camera direction</string>
+    <string name="WebRtcCallView__toggle_camera_direction">కెమెరా దిశ టోగుల్ చేస్తుంది</string>
     <!-- Toggle content description for toggling audio output  -->
-    <string name="WebRtcCallView__toggle_speaker">Toggle speaker</string>
+    <string name="WebRtcCallView__toggle_speaker">స్పీకర్‌ను టోగుల్ చేస్తుంది</string>
     <!-- Toggle content description for toggling camera state  -->
-    <string name="WebRtcCallView__toggle_camera">Toggle camera</string>
+    <string name="WebRtcCallView__toggle_camera">కెమెరాను టోగుల్ చేస్తుంది</string>
     <!-- Toggle content description for toggling mute state  -->
-    <string name="WebRtcCallView__toggle_mute">Toggle mute</string>
+    <string name="WebRtcCallView__toggle_mute">మ్యూట్‌ను టోగుల్ చేస్తుంది</string>
     <!-- Toggle content description for toggling group ring state  -->
-    <string name="WebRtcCallView__toggle_ring">Toggle ring</string>
+    <string name="WebRtcCallView__toggle_ring">రింగ్‌ను టోగుల్ చేస్తుంది</string>
     <!-- Content description for end-call button -->
     <string name="WebRtcCallView__end_call">కాల్ ముగించండి</string>
+
+    <!-- Error message when the developer added a button in the wrong place. -->
+    <string name="WebRtcAudioOutputToggleButton_fragment_activity_error">ఒక UI లోపం సంభవించింది. దయచేసి ఈ లోపాన్ని డెవలపర్‌లకు నివేదించండి.</string>
+    <!-- Error message when the user is trying to change audio outputs but none are present. -->
+    <string name="WebRtcAudioOutputToggleButton_no_eligible_audio_i_o_detected">అర్హత కలిగిన ఆడియో I/O కనుగొనబడలేదు.</string>
+    <!-- A text description of the bluetooth icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__bluetooth_icon_content_description">ఒక బ్లూటూత్ పరికరాన్ని సూచించే ఒక ఐకాన్.</string>
+    <!-- A text description of the headset icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__headset_icon_content_description">ఒక వైర్డ్ హెడ్‌సెట్‌ను సూచించే ఒక ఐకాన్.</string>
+    <!-- A text description of the speaker icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__speaker_icon_content_description">ఒక స్పీకర్‌ఫోన్‌ను సూచించే ఒక ఐకాన్.</string>
+    <!-- A text description of the earpiece icon, used for accessibility. -->
+    <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">ఒక పరికరపు ఇయర్‌పీస్‌ను సూచించే ఒక ఐకాన్.</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call_d_people">
@@ -1823,6 +1818,8 @@
         <item quantity="other">డీబగ్ లాగ్ను సమర్పించకుండా మీరు ఇప్పుడు %1$d మళ్లే ఉన్నారు.</item>
     </plurals>
     <string name="RegistrationActivity_we_need_to_verify_that_youre_human">మీరు మానవుడని మేము ధృవీకరించాలి.</string>
+    <!-- An error shown when the request was valid, but due to an issue with a partner vendor, the server is unable to send an SMS code -->
+    <string name="RegistrationActivity_external_service_error">బాహ్య వైఫల్యం కారణంగా Signal SMS కోడ్‌ను పంపలేకపోయింది.</string>
     <string name="RegistrationActivity_next">తరువాత</string>
     <string name="RegistrationActivity_continue">కొనసాగించు</string>
     <string name="RegistrationActivity_take_privacy_with_you_be_yourself_in_every_message">మీతో గోప్యతను తీసుకోండి.\nప్రతి సందేశంలో మీరే ఉండండి.</string>
@@ -1993,6 +1990,8 @@
     <string name="ThreadRecord_message_could_not_be_processed">సందేశాన్ని ప్రాసెస్ చేయడం సాధ్యం కాలేదు</string>
     <string name="ThreadRecord_delivery_issue">నిర్వహణ సమస్య</string>
     <string name="ThreadRecord_message_request">సందేశ అభ్యర్థన</string>
+    <!-- Thread preview for a recipient that has been hidden -->
+    <string name="ThreadRecord_hidden_recipient">You have hidden this person, message them again to add them back to your list.</string>
     <string name="ThreadRecord_photo">చిత్రం</string>
     <string name="ThreadRecord_gif">గిఫ్</string>
     <string name="ThreadRecord_voice_message">వాయిస్ సందేశం</string>
@@ -2259,10 +2258,18 @@
     <string name="WebRtcCallScreen__answer_without_video">వీడియో లేకుండా సమాధానం ఇవ్వండి</string>
 
     <!-- WebRtcAudioOutputToggle -->
+    <!-- Label for a dialog asking the user to switch the audio output device during a call -->
     <string name="WebRtcAudioOutputToggle__audio_output">శ్రవణ సంబంధి ఉత్పత్తి</string>
+    <!-- Audio output option referring to the earpiece built into the phone -->
     <string name="WebRtcAudioOutputToggle__phone_earpiece">చరవాణి ఇయర్ పీస్</string>
+    <!-- Audio output option referring to the louder speaker built into the phone -->
     <string name="WebRtcAudioOutputToggle__speaker">స్పీకర్</string>
+    <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">Bluetooth</string>
+    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headset">వైర్డ్ హెడ్‌సెట్</string>
+    <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
+    <string name="WebRtcAudioOutputToggle__wired_headset_usb">వైర్డ్ హెడ్‌సెట్ (USB)</string>
 
     <string name="WebRtcCallControls_answer_call_description">కాల్ ఆన్సర్ చేయండి</string>
     <string name="WebRtcCallControls_reject_call_description">కాల్ ని తిరస్కరించండి</string>
@@ -2380,7 +2387,8 @@
     <string name="ConversationUpdateItem_send_payment">చెల్లింపు పంపండి</string>
     <!-- Update item button text to activate payments -->
     <string name="ConversationUpdateItem_activate_payments">చెల్లింపులను సక్రియం చేయండి</string>
-
+    <!-- Update item alerting the user they hid this person and that they can message them to unhide them -->
+    <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">మీరు ఈ వ్యక్తిని తొలగించారు, వారికి మళ్ళీ సందేశం పంపడం వల్ల వారిని మీ జాబితాకు తిరిగి జోడిస్తుంది.</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">నడుపు … నిలుపు</string>
@@ -3087,7 +3095,7 @@
     <!-- EditNoteFragment -->
     <string name="EditNoteFragment_note">గమనిక</string>
     <!-- Content descriptor explaining the use of the save note FAB for Android accessibility settings-->
-    <string name="EditNoteFragment__content_description_save_note">Save note</string>
+    <string name="EditNoteFragment__content_description_save_note">గమనిక సేవ్ చేస్తుంది</string>
 
     <!-- ConfirmPaymentFragment -->
     <string name="ConfirmPayment__confirm_payment">పేమెంట్‌ని ధృవీకరించండి</string>
@@ -3994,59 +4002,48 @@
     <string name="AccountSettingsFragment__require_your_signal_pin">మళ్లీ Signal తో మీ ఫోన్ నెంబర్‌ను రిజిస్టర్ చేసుకోవడానికి మీ Signal PIN అవసరం</string>
     <string name="AccountSettingsFragment__change_phone_number">ఫోన్ నెంబరు మార్చండి</string>
     <!-- Account setting that allows user to request and export their signal account data -->
-    <string name="AccountSettingsFragment__request_account_data">Request account data</string>
+    <string name="AccountSettingsFragment__request_account_data">మీ ఖాతా డేటా</string>
 
     <!-- ExportAccountDataFragment -->
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
-    <string name="ExportAccountDataFragment__your_account_data">Your account data</string>
+    <string name="ExportAccountDataFragment__your_account_data">మీ ఖాతా డేటా</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Download and export a report of your Signal account data. This report does not include any messages or media. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">మీ Signal ఖాతా డేటా యొక్క నివేదికను ఎగుమతి చేయండి. ఈ నివేదికలో ఎలాంటి మీడియా లేదా సందేశాలు ఉండవు. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
-    <string name="ExportAccountDataFragment__learn_more">Learn more</string>
-    <!-- Button action to download the report data -->
-    <string name="ExportAccountDataFragment__download_report">Download report</string>
+    <string name="ExportAccountDataFragment__learn_more">మరింత తెలుసుకోండి</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Export report</string>
-    <!-- Button action to delete the requested account data -->
-    <string name="ExportAccountDataFragment__delete_report">Delete report</string>
+    <string name="ExportAccountDataFragment__export_report">నివేదికను ఎగుమతి చేయండి</string>
 
     <!-- Radio option to export the data as a text file .txt -->
-    <string name="ExportAccountDataFragment__export_as_txt">Export as TXT</string>
+    <string name="ExportAccountDataFragment__export_as_txt">TXT లాగా ఎగుమతి చేయండి</string>
     <!-- Label for the text file option -->
-    <string name="ExportAccountDataFragment__export_as_txt_label">Easy-to-read text file</string>
+    <string name="ExportAccountDataFragment__export_as_txt_label">సులభంగా చదవగలిగే టెక్స్ట్ ఫైల్</string>
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
-    <string name="ExportAccountDataFragment__export_as_json">Export as JSON</string>
+    <string name="ExportAccountDataFragment__export_as_json">JSON లాగా ఎగుమతి చేయండి</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Machine-readable file</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">మెషీన్-చదవగల ఫైల్</string>
 
     <!-- Action to cancel (in a dialog) -->
-    <string name="ExportAccountDataFragment__cancel_action">Cancel</string>
+    <string name="ExportAccountDataFragment__cancel_action">రద్దు చేయండి</string>
 
     <!-- Acknowledgement for download failure -->
-    <string name="ExportAccountDataFragment__ok_action">OK</string>
-    <!-- Message shown when report download fails -->
-    <string name="ExportAccountDataFragment__report_download_failed">Your report could not be downloaded due to a network error. Check your connection and try again.</string>
+    <string name="ExportAccountDataFragment__ok_action">సరే</string>
+    <!-- Title of dialog shown when report fails to generate -->
+    <string name="ExportAccountDataFragment__report_generation_failed">నివేదికను రూపొందించడం సాధ్యపడలేదు</string>
+    <!-- Message of dialog shown when report fails to generate asking user to check network connection -->
+    <string name="ExportAccountDataFragment__check_network">మీ కనెక్షన్‌ను తనిఖీ చేయండి మరియు మళ్ళీ ప్రయత్నించండి.</string>
 
     <!-- Title for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation">Export data?</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation">డేటా ఎగుమతి చేసేదా?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Only share your Signal account data with people or apps you trust.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">మీరు విశ్వసించే వ్యక్తులు లేదా యాపలతో మాత్రమే మీ Signal ఖాతా డేటాను పంచుకోండి.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Export</string>
+    <string name="ExportAccountDataFragment__export_report_action">ఎగుమతి చేయండి</string>
 
-    <!-- Action to delete report in confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_action">Delete</string>
-    <!-- Title for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation">Delete report?</string>
-    <!-- Message for delete report confirmation dialog -->
-    <string name="ExportAccountDataFragment__delete_report_confirmation_message">This will not delete any data from your account.</string>
-
-    <!-- Shown as a snackbar letting the user know the report was deleted -->
-    <string name="ExportAccountDataFragment__delete_report_snackbar">Report deleted</string>
     <!-- Shown in a dialog with a spinner while the report is downloading -->
-    <string name="ExportAccountDataFragment__download_progress">Downloading report…</string>
-    <!-- Explanation that the downloaded report will be available for 30 days before it is deleted -->
-    <string name="ExportAccountDataFragment__report_deletion_disclaimer">Your report will be available for export for 30 days and will then be automatically deleted.</string>
+    <string name="ExportAccountDataFragment__download_progress">నివేదికను రూపొందిస్తోంది…</string>
+    <!-- Explanation that the report is only generated on export and is not saved on the device -->
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">మీ నివేదిక ఎగుమతి సమయంలో మాత్రమే రూపొందిం చబడుతుంది మరియు మీ పరికరంలో Signal ద్వారా నిల్వచేయబడదు.</string>
 
     <!-- ChangeNumberFragment -->
     <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">మీ ప్రస్తుత ఫోన్ నెంబర్‌ను కొత్త ఫోన్ నెంబరుకు మార్చడానికి దీనిని ఉపయోగించండి. ఈ మార్పును మీరు అన్‌డ్యూ చేయలేరు.\n\n కొనసాగడానికి ముందు, మీ కొత్త నెంబర్ SMS లేదా కాల్స్‌ని అందుకుంటుందని ధృవీకరించుకోండి.</string>
@@ -4492,6 +4489,9 @@
     <string name="ImageEditorHud__undo">దిద్దుబాటు</string>
     <string name="ImageEditorHud__toggle_between_marker_and_highlighter">మార్కర్ మరియు హైలైటర్ మధ్య టోగుల్ చేయడం</string>
     <string name="ImageEditorHud__toggle_between_text_styles">టెక్ట్స్ స్టైల్స్ మధ్య టోగుల్ చేయడం</string>
+
+    <!-- Header for section of featured stickers (location/time stickers) -->
+    <string name="ScribbleStickersFragment__featured_stickers">ఫీచర్ చేయబడింది</string>
 
     <string name="MediaCountIndicatorButton__send">పంపు</string>
 
@@ -5737,7 +5737,7 @@
     <!-- Popup menu label for applying monospace font style -->
     <string name="TextFormatting_monospace">మోనోస్పేస్</string>
     <!-- Popup menu label for applying spoiler style -->
-    <string name="TextFormatting_spoiler">Spoiler</string>
+    <string name="TextFormatting_spoiler">స్పాయిలర్</string>
 
     <!-- UsernameEducationFragment -->
     <!-- Continue button which takes the user to the add a username screen -->
@@ -5745,11 +5745,11 @@
     <!-- Displayed as a title on the username education screen -->
     <string name="UsernameEducationFragment__set_up_your_signal_username">మీ Signal యూజర్‌నేమ్‌ను సెటప్ చేయండి</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">Usernames are paired with a set of digits and aren\'t shared on your profile</string>
+    <string name="UsernameEducationFragment__usernames_are_paired_with_a_set_of_digits">యూజర్‌నేమ్స్ అంకెల సెట్‌తో జత చేయబడ్డాయి మరియు మీ ప్రొఫైల్‌లో పంచుకోబడలేదు</string>
     <!-- Displayed as body text in the username education screen -->
-    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">Each username has a unique QR code and link you can share with friends to start a chat with you</string>
+    <string name="UsernameEducationFragment__each_username_has_a_unique_qr_code">ప్రతి యూజర్‌నేమ్‌కు ప్రత్యేక QR కోడ్ మరియు మీతో చాట్ ప్రారంభించడానికి మీరు స్నేహితులతో పంచుకోగల లింక్ ఉంటుంది</string>
     <!-- Displayed as body text in the username education screen. The string references the names of settings, so they should match our translations for those settings. -->
-    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">Turn off phone number discovery under Settings &gt; Privacy &gt; Phone number &gt; Who can find my number, to use your username as the primary way others can contact you</string>
+    <string name="UsernameEducationFragment__turn_off_phone_number_discovery">ఇతరులు మిమ్మల్ని సంప్రదించడానికి మీ యూజర్‌నేమ్‌ను ప్రాథమిక మార్గంగా ఉపయోగించడానికి, సెట్టింగ్స్ &gt; గోప్యత &gt; ఫోన్ నంబర్ &gt; నా నంబర్‌ను ఎవరు కనుగొనగలరు కింద ఫోన్ నంబర్ కనుగొనడాన్ని ఆఫ్ చేయండి</string>
 
     <!-- Username edit dialog -->
     <!-- Option to open username editor displayed as a list item in a dialog -->
@@ -5776,6 +5776,12 @@
     <string name="CallLogAdapter__outgoing">అవుట్ గోయింగ్</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">మిస్డ్</string>
+    <!-- Displayed on Group Call button if user is not in the call -->
+    <string name="CallLogAdapter__join">చేరండి</string>
+    <!-- Displayed on Group Call button if user is in the call -->
+    <string name="CallLogAdapter__return">తిరిగి వెళ్ళండి</string>
+    <!-- Call state template when there is more than one call collapsed into a single row. D is a number > 1 and S is a call info string (like Missed) -->
+    <string name="CallLogAdapter__d_s">(%1$d) %2$s</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -5848,9 +5854,57 @@
     <string name="CallStateUpdatePopupWindow__mic_off">మైక్ ఆఫ్‌లో ఉంది</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
-    <string name="CameraControls_capture_button_accessibility_label">Capture Button</string>
+    <string name="CameraControls_capture_button_accessibility_label">క్యాప్చర్ బటన్</string>
     <!-- Accessibility label describing the continue button on the camera screen -->
-    <string name="CameraControls_continue_button_accessibility_label">Continue Button</string>
+    <string name="CameraControls_continue_button_accessibility_label">కొనసాగింపు బటన్</string>
+
+    <!-- CallPreference -->
+    <!-- Generic group call in call info -->
+    <string name="CallPreference__group_call">సమూహ కాల్</string>
+    <!-- Missed group call in call info -->
+    <string name="CallPreference__missed_group_call">మిస్ అయిన గ్రూప్ కాల్</string>
+    <!-- Incoming group call in call info -->
+    <string name="CallPreference__incoming_group_call">ఇన్‌కమింగ్ గ్రూప్ కాల్</string>
+    <!-- Outgoing group call in call info -->
+    <string name="CallPreference__outgoing_group_call">అవుట్‌గోయింగ్ గ్రూప్ కాల్</string>
+
+    <!-- CreateCallLink -->
+    <!-- Call link creation item title on calls tab -->
+    <string name="CreateCallLink__create_a_call_link">కాల్ లింక్‌ను సృష్టించండి</string>
+    <!-- Call link creation item description on calls tab -->
+    <string name="CreateCallLink__share_a_link_for">Signal కాల్ కొరకు ఒక లింక్‌ను పంచుకోండి</string>
+
+    <!-- CreateCallLinkBottomSheetDialogFragment -->
+    <!-- Fragment title -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__create_call_link">కాల్ లింక్‌ను సృష్టించండి</string>
+    <!-- Displayed as a default name for the signal call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__signal_call">Signal కాల్</string>
+    <!-- Displayed on a small button to allow user to instantly join call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__join">చేరండి</string>
+    <!-- Option to open a full screen dialog to enter a call name -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__add_call_name">కాల్ పేరును జోడించండి</string>
+    <!-- Toggle to require approval for all members before joining -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__approve_all_members">సభ్యులందరినీ ఆమోదించండి</string>
+    <!-- Row label to share the link via Signal -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link_via_signal">Signal ద్వారా లింక్‌ను పంచుకోండి</string>
+    <!-- Row label to copy the link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copy_link">లింక్‌ను కాపీ చేయండి</string>
+    <!-- Row label to share the link with the external share sheet -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__share_link">లింక్‌ను పంచుకోండి</string>
+    <!-- Button text to dismiss the sheet and add it as an upcoming call -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__done">పూర్తయింది</string>
+    <!-- Displayed when we can\'t find a suitable way to open the system share picker -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet">షేర్ షీట్‌ను తెరిచేందుకు విఫలమైంది.</string>
+    <!-- Displayed when we copy the call link to the clipboard -->
+    <string name="CreateCallLinkBottomSheetDialogFragment__copied_to_clipboard">క్లిప్‌బోర్డ్‌కు కాపీ చేయబడింది</string>
+
+    <!-- EditCallLinkNameDialogFragment -->
+    <!-- App bar title for editing a call name -->
+    <string name="EditCallLinkNameDialogFragment__edit_call_name">కాల్ పేరును సవరించండి</string>
+    <!-- Text on button to confirm edit -->
+    <string name="EditCallLinkNameDialogFragment__save">సేవ్ చేయండి</string>
+    <!-- Placeholder text on input field when editing call name -->
+    <string name="EditCallLinkNameDialogFragment__call_name">కాల్ పేరు</string>
 
     <!-- EOF -->
 </resources>
