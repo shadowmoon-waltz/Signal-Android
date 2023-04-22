@@ -282,12 +282,14 @@ import org.thoughtcrime.securesms.util.ConversationUtil;
 import org.thoughtcrime.securesms.util.Debouncer;
 import org.thoughtcrime.securesms.util.Dialogs;
 import org.thoughtcrime.securesms.util.DrawableUtil;
+import org.thoughtcrime.securesms.util.FeatureFlags;
 import org.thoughtcrime.securesms.util.FullscreenHelper;
 import org.thoughtcrime.securesms.util.IdentityUtil;
 import org.signal.core.util.concurrent.LifecycleDisposable;
 import org.thoughtcrime.securesms.util.Material3OnScrollHelper;
 import org.thoughtcrime.securesms.util.MediaUtil;
 import org.thoughtcrime.securesms.util.MessageRecordUtil;
+import org.thoughtcrime.securesms.util.MessageConstraintsUtil;
 import org.thoughtcrime.securesms.util.MessageUtil;
 import org.thoughtcrime.securesms.util.PlayStoreUtil;
 import org.thoughtcrime.securesms.util.ServiceUtil;
@@ -399,6 +401,7 @@ public class ConversationParentFragment extends Fragment
   private   AnimatingToggle              buttonToggle;
   private   SendButton                   sendButton;
   private   ImageButton                  attachButton;
+  private   ImageButton                  sendEditButton;
   protected ConversationTitleView        titleView;
   private   TextView                     charactersLeft;
   private   ConversationFragment         fragment;
@@ -794,7 +797,8 @@ public class ConversationParentFragment extends Fragment
                        initiating,
                        true,
                        null,
-                       result.getScheduledTime()).addListener(new AssertedSuccessListener<Void>() {
+                       result.getScheduledTime(),
+                       null).addListener(new AssertedSuccessListener<Void>() {
         @Override
         public void onSuccess(Void result) {
           AsyncTask.THREAD_POOL_EXECUTOR.execute(() -> {
@@ -1627,6 +1631,7 @@ public class ConversationParentFragment extends Fragment
       inputPanel.setEnabled(canSendMessages);
       sendButton.setEnabled(canSendMessages);
       attachButton.setEnabled(canSendMessages);
+      sendEditButton.setEnabled(canSendMessages);
     });
   }
 
@@ -1705,6 +1710,24 @@ public class ConversationParentFragment extends Fragment
                   ));
 
                   quoteResult.addListener(listener);
+                  break;
+                case Draft.MESSAGE_EDIT:
+                  SettableFuture<Boolean> messageEditResult = new SettableFuture<>();
+                  disposables.add(draftViewModel.loadDraftEditMessage(draft.getValue()).subscribe(
+                      conversationMessage -> {
+                        inputPanel.enterEditMessageMode(glideRequests, conversationMessage, true);
+                        messageEditResult.set(true);
+                      },
+                      err -> {
+                        Log.e(TAG, "Failed to restore message edit from a draft.", err);
+                        messageEditResult.set(false);
+                      },
+                      () -> {
+                        Log.e(TAG, "Failed to load message edit. No matching message record.");
+                        messageEditResult.set(false);
+                      }
+                  ));
+                  messageEditResult.addListener(listener);
                   break;
                 case Draft.VOICE_NOTE:
                 case Draft.BODY_RANGES:
@@ -1882,6 +1905,7 @@ public class ConversationParentFragment extends Fragment
     buttonToggle             = view.findViewById(R.id.button_toggle);
     sendButton               = view.findViewById(R.id.send_button);
     attachButton             = view.findViewById(R.id.attach_button);
+    sendEditButton           = view.findViewById(R.id.send_edit_button);
     composeText              = view.findViewById(R.id.embedded_text_editor);
     charactersLeft           = view.findViewById(R.id.space_left);
     emojiDrawerStub          = ViewUtil.findStubById(view, R.id.emoji_drawer_stub);
@@ -1938,6 +1962,7 @@ public class ConversationParentFragment extends Fragment
     attachButton.setOnClickListener(new AttachButtonListener());
     attachButton.setOnLongClickListener(new AttachButtonLongClickListener());
     sendButton.setOnClickListener(sendButtonListener);
+    sendEditButton.setOnClickListener(v -> handleSendEditMessage());
     sendButton.setScheduledSendListener(new SendButton.ScheduledSendListener() {
       @Override
       public void onSendScheduled() {
@@ -2815,6 +2840,8 @@ public class ConversationParentFragment extends Fragment
     callback.onSendComplete(threadId);
 
     draftViewModel.onSendComplete(threadId);
+
+    inputPanel.exitEditMessageMode();
   }
 
   private void sendMessage(@Nullable String metricId) {
@@ -2850,6 +2877,7 @@ public class ConversationParentFragment extends Fragment
       MessageSendType sendType       = sendButton.getSelectedSendType();
       long            expiresIn      = TimeUnit.SECONDS.toMillis(recipient.getExpiresInSeconds());
       boolean         initiating     = threadId == -1;
+      boolean         isEditMessage  = inputPanel.inEditMessageMode();
       boolean         needsSplit     = !sendType.usesSmsTransport() && message.length() > sendType.calculateCharacters(message).maxPrimaryMessageSize;
       boolean         isMediaMessage = attachmentManager.isAttachmentPresent() ||
                                        recipient.isGroup()                     ||
@@ -2862,14 +2890,19 @@ public class ConversationParentFragment extends Fragment
 
       Log.i(TAG, "[sendMessage] recipient: " + recipient.getId() + ", threadId: " + threadId + ",  sendType: " + (sendType.usesSignalTransport() ? "signal" : "sms") + ", isManual: " + sendButton.isManualSelection());
 
-      if ((recipient.isMmsGroup() || recipient.getEmail().isPresent()) && !viewModel.getConversationStateSnapshot().isMmsEnabled()) {
+      if (!sendType.usesSignalTransport() && isEditMessage) {
+        Toast.makeText(requireContext(),
+                       R.string.ConversationActivity_edit_sms_message_error,
+                       Toast.LENGTH_LONG)
+             .show();
+      } else if ((recipient.isMmsGroup() || recipient.getEmail().isPresent()) && !viewModel.getConversationStateSnapshot().isMmsEnabled()) {
         handleManualMmsRequired();
       } else if (sendType.usesSignalTransport() && (identityRecords.isUnverified(true) || identityRecords.isUntrusted(true))) {
         handleRecentSafetyNumberChange();
       } else if (isMediaMessage) {
-        sendMediaMessage(sendType, expiresIn, false, initiating, metricId, scheduledDate);
+        sendMediaMessage(sendType, expiresIn, false, initiating, metricId, scheduledDate, inputPanel.getEditMessageId());
       } else {
-        sendTextMessage(sendType, expiresIn, initiating, metricId, scheduledDate);
+        sendTextMessage(sendType, expiresIn, initiating, metricId, scheduledDate, inputPanel.getEditMessageId());
       }
     } catch (RecipientFormattingException ex) {
       Toast.makeText(requireContext(),
@@ -2918,7 +2951,8 @@ public class ConversationParentFragment extends Fragment
                                                     null,
                                                     true,
                                                     result.getBodyRanges(),
-                                                    -1);
+                                                    -1,
+                                                    0);
 
     final Context         context      = requireContext().getApplicationContext();
 
@@ -2940,7 +2974,7 @@ public class ConversationParentFragment extends Fragment
     }, this::sendComplete);
   }
 
-  private void sendMediaMessage(@NonNull MessageSendType sendType, final long expiresIn, final boolean viewOnce, final boolean initiating, @Nullable String metricId, long scheduledDate)
+  private void sendMediaMessage(@NonNull MessageSendType sendType, final long expiresIn, final boolean viewOnce, final boolean initiating, @Nullable String metricId, long scheduledDate, @Nullable MessageId editMessageId)
       throws InvalidMessageException
   {
     Log.i(TAG, "Sending media message...");
@@ -2959,7 +2993,8 @@ public class ConversationParentFragment extends Fragment
                      initiating,
                      true,
                      metricId,
-                     scheduledDate);
+                     scheduledDate,
+                     editMessageId);
   }
 
   private ListenableFuture<Void> sendMediaMessage(@NonNull RecipientId recipientId,
@@ -2977,7 +3012,7 @@ public class ConversationParentFragment extends Fragment
                                                   final boolean clearComposeBox,
                                                   final @Nullable String metricId)
   {
-    return sendMediaMessage(recipientId, sendType, body, slideDeck, quote, contacts, previews, mentions, styling, expiresIn, viewOnce, initiating, clearComposeBox, metricId, -1);
+    return sendMediaMessage(recipientId, sendType, body, slideDeck, quote, contacts, previews, mentions, styling, expiresIn, viewOnce, initiating, clearComposeBox, metricId, -1, null);
   }
 
   private ListenableFuture<Void> sendMediaMessage(@NonNull RecipientId recipientId,
@@ -2994,7 +3029,8 @@ public class ConversationParentFragment extends Fragment
                                                   final boolean initiating,
                                                   final boolean clearComposeBox,
                                                   final @Nullable String metricId,
-                                                  final long scheduledDate)
+                                                  final long scheduledDate,
+                                                  @Nullable MessageId editMessageId)
   {
     if (ExpiredBuildReminder.isEligible()) {
       showExpiredDialog();
@@ -3008,7 +3044,7 @@ public class ConversationParentFragment extends Fragment
 
     if (SignalStore.uiHints().hasNotSeenTextFormattingAlert() && styling != null && styling.getRangesCount() > 0) {
       final String finalBody = body;
-      Dialogs.showFormattedTextDialog(requireContext(), () -> sendMediaMessage(recipientId, sendType, finalBody, slideDeck, quote, contacts, previews, mentions, styling, expiresIn, viewOnce, initiating, clearComposeBox, metricId, scheduledDate));
+      Dialogs.showFormattedTextDialog(requireContext(), () -> sendMediaMessage(recipientId, sendType, finalBody, slideDeck, quote, contacts, previews, mentions, styling, expiresIn, viewOnce, initiating, clearComposeBox, metricId, scheduledDate, editMessageId));
       return new SettableFuture<>(null);
     }
 
@@ -3044,7 +3080,8 @@ public class ConversationParentFragment extends Fragment
                                                                    null,
                                                                    false,
                                                                    styling,
-                                                                   scheduledDate);
+                                                                   scheduledDate,
+                                                                   editMessageId != null ? editMessageId.getId() : 0);
 
     final SettableFuture<Void> future  = new SettableFuture<>();
     final Context              context = requireContext().getApplicationContext();
@@ -3084,7 +3121,12 @@ public class ConversationParentFragment extends Fragment
     return future;
   }
 
-  private void sendTextMessage(@NonNull MessageSendType sendType, final long expiresIn, final boolean initiating, final @Nullable String metricId, long scheduledDate)
+  private void sendTextMessage(@NonNull MessageSendType sendType,
+                               final long expiresIn,
+                               final boolean initiating,
+                               final @Nullable String metricId,
+                               long scheduledDate,
+                               @Nullable MessageId messageToEdit)
       throws InvalidMessageException
   {
     if (ExpiredBuildReminder.isEligible()) {
@@ -3105,8 +3147,11 @@ public class ConversationParentFragment extends Fragment
     final OutgoingMessage message;
 
     if (sendPush) {
-      if (scheduledDate > 0) {
-        message = OutgoingMessage.text(recipient.get(), messageBody, expiresIn, System.currentTimeMillis(), null).sendAt(scheduledDate);
+      if (messageToEdit != null) {
+        message = OutgoingMessage.editText(recipient.get(), messageBody, System.currentTimeMillis(), null, messageToEdit.getId());
+      } else if (scheduledDate > 0) {
+        message = OutgoingMessage.text(recipient.get(), messageBody, expiresIn, System.currentTimeMillis(), null)
+                                 .sendAt(scheduledDate);
       } else {
         message = OutgoingMessage.text(recipient.get(), messageBody, expiresIn, System.currentTimeMillis(), null);
       }
@@ -3163,6 +3208,13 @@ public class ConversationParentFragment extends Fragment
     if (inputPanel.isRecordingInLockedMode()) {
       buttonToggle.display(sendButton);
       quickAttachmentToggle.show();
+      inlineAttachmentToggle.hide();
+      return;
+    }
+
+    if (inputPanel.inEditMessageMode()) {
+      buttonToggle.display(sendEditButton);
+      quickAttachmentToggle.hide();
       inlineAttachmentToggle.hide();
       return;
     }
@@ -3392,7 +3444,8 @@ public class ConversationParentFragment extends Fragment
                      initiating,
                      true,
                      null,
-                     scheduledDate);
+                     scheduledDate,
+                     null);
   }
 
   private void sendSticker(@NonNull StickerRecord stickerRecord, boolean clearCompose) {
@@ -3709,7 +3762,11 @@ public class ConversationParentFragment extends Fragment
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
       if (actionId == EditorInfo.IME_ACTION_SEND) {
-        sendButton.performClick();
+        if (inputPanel.isInEditMode()) {
+          sendEditButton.performClick();
+        } else {
+          sendButton.performClick();
+        }
         return true;
       }
       return false;
@@ -3793,7 +3850,13 @@ public class ConversationParentFragment extends Fragment
     }
 
     private void handleSaveDraftOnTextChange(@NonNull CharSequence text) {
-      textDraftSaveDebouncer.publish(() -> draftViewModel.setTextDraft(StringUtil.trimSequence(text).toString(), MentionAnnotation.getMentionsFromAnnotations(text), MessageStyler.getStyling(text)));
+      textDraftSaveDebouncer.publish(() -> {
+        if (inputPanel.inEditMessageMode()) {
+          draftViewModel.setMessageEditDraft(inputPanel.getEditMessageId(), StringUtil.trimSequence(text).toString(), MentionAnnotation.getMentionsFromAnnotations(text), MessageStyler.getStyling(text));
+        } else {
+          draftViewModel.setTextDraft(StringUtil.trimSequence(text).toString(), MentionAnnotation.getMentionsFromAnnotations(text), MessageStyler.getStyling(text));
+        }
+      });
     }
 
     private void handleTypingIndicatorOnTextChange(@NonNull String text) {
@@ -4054,13 +4117,7 @@ public class ConversationParentFragment extends Fragment
 
     MessageRecord messageRecord = conversationMessage.getMessageRecord();
 
-    Recipient author;
-
-    if (messageRecord.isOutgoing()) {
-      author = Recipient.self();
-    } else {
-      author = messageRecord.getIndividualRecipient();
-    }
+    Recipient author = messageRecord.getFromRecipient();
 
     if (messageRecord.isMms() && !((MmsMessageRecord) messageRecord).getSharedContacts().isEmpty()) {
       Contact   contact     = ((MmsMessageRecord) messageRecord).getSharedContacts().get(0);
@@ -4111,6 +4168,62 @@ public class ConversationParentFragment extends Fragment
     }
 
     inputPanel.clickOnComposeInput();
+  }
+
+  @Override
+  public void handleEditMessage(@NonNull ConversationMessage conversationMessage) {
+    if (!FeatureFlags.editMessageSending()) {
+      return;
+    }
+    if (isSearchRequested) {
+      searchViewItem.collapseActionView();
+    }
+    disposables.add(viewModel.resolveMessageToEdit(conversationMessage).subscribe(updatedMessage -> {
+      inputPanel.enterEditMessageMode(glideRequests, updatedMessage, false);
+    }));
+  }
+
+  private void handleSendEditMessage() {
+    if (!FeatureFlags.editMessageSending()) {
+      Log.w(TAG, "Edit message sending disabled, forcing exit of edit mode");
+      inputPanel.exitEditMessageMode();
+      return;
+    }
+
+    if (!inputPanel.inEditMessageMode()) {
+      Log.w(TAG, "Not in edit message mode, unknown state, forcing re-exit");
+      inputPanel.exitEditMessageMode();
+      return;
+    }
+
+    MessageRecord editMessage = inputPanel.getEditMessage();
+    if (editMessage == null) {
+      Log.w(TAG, "No edit message found, forcing exit");
+      inputPanel.exitEditMessageMode();
+      return;
+    }
+
+    if (!MessageConstraintsUtil.isValidEditMessageSend(editMessage, System.currentTimeMillis())) {
+      Log.i(TAG, "Edit message no longer valid");
+      final int editDurationHours = MessageConstraintsUtil.getEditMessageThresholdHours();
+      Dialogs.showAlertDialog(requireContext(), null, getResources().getQuantityString(R.plurals.ConversationActivity_edit_message_too_old, editDurationHours, editDurationHours));
+      return;
+    }
+
+    String metricId = recipient.get().isGroup() ? SignalLocalMetrics.GroupMessageSend.start()
+                                                : SignalLocalMetrics.IndividualMessageSend.start();
+
+    sendMessage(metricId);
+  }
+
+  @Override
+  public void onEnterEditMode() {
+    updateToggleButtonState();
+  }
+
+  @Override
+  public void onExitEditMode() {
+    updateToggleButtonState();
   }
 
   @Override
