@@ -97,6 +97,7 @@ import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.ContextUtil
 import org.thoughtcrime.securesms.util.DrawableUtil
 import org.thoughtcrime.securesms.util.FullscreenHelper
+import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.WindowUtil
 import org.thoughtcrime.securesms.util.fragments.requireListener
 import org.thoughtcrime.securesms.util.hasGiftBadge
@@ -553,7 +554,7 @@ class ConversationFragment : LoggingFragment(R.layout.v2_conversation_fragment) 
 
     override fun onReactionClicked(multiselectPart: MultiselectPart, messageId: Long, isMms: Boolean) {
       context ?: return
-      ReactionsBottomSheetDialogFragment.create(messageId, isMms).show(parentFragmentManager, null)
+      ReactionsBottomSheetDialogFragment.create(messageId, isMms, if (TextSecurePreferences.isShowReactionTimeEnabled(context)) Locale.getDefault() else null).show(parentFragmentManager, null)
     }
 
     override fun onGroupMemberClicked(recipientId: RecipientId, groupId: GroupId) {
@@ -857,6 +858,10 @@ class ConversationFragment : LoggingFragment(R.layout.v2_conversation_fragment) 
 
     override fun showGroupCallingTooltip() {
       conversationTooltips.displayGroupCallingTooltip(requireView().findViewById(R.id.menu_video_secure))
+    }
+
+    override fun handleDeleteConversation() {
+      // TODO [sw] - ("Not yet implemented")
     }
   }
 
