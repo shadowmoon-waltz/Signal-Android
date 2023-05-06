@@ -19,26 +19,39 @@ import org.thoughtcrime.securesms.recipients.RecipientId
 import org.whispersystems.signalservice.api.push.ACI
 
 /**
- * This is a combination of the edit message and message recipient migrations (would have been V185 and v186), but as they
- * both require recreating the message table, they are merged into one.
+ * This is a fix for a bad situation that could happen during [V185_MessageRecipientsAndEditMessageMigration].
+ * That migration required the concept of a "self" in order to do the migration. This was all well and good
+ * for an account that had already registered.
  *
- * Original V185:
- * Our current column setup for knowing is the the sender/receiver of a message is both confusing and non-optimal from a performance perspective.
- * This moves to a world where instead of tracking a single recipient, we track two: a sender and receiver.
+ * But for people who had restored a backup and needed to run this migration afterwards as part of the restore
+ * process, they were restoring messages without any notion of a self. And migration just sort of ignored that
+ * case. And so those users are now stuck in a situation where all of their to/from addresses are messed up.
  *
- * Original V186:
- * Changes needed for edit message. New foreign keys require recreating the table.
+ * To start, if those users finished registration, we should just be able to run V185 on them again, and it
+ * should just work out for them.
  *
+ * But for people who are hitting this migration during a backup restore, we need to run this migration without
+ * the concept of a self. To do that, we're going to create a placeholder for self with a special ID (-2), and then
+ * we're going to replace that ID with the true self after it's been created.
  */
-object V185_MessageRecipientsAndEditMessageMigration : SignalDatabaseMigration {
+object V188_FixMessageRecipientsAndEditMessageMigration : SignalDatabaseMigration {
 
-  private val TAG = Log.tag(V185_MessageRecipientsAndEditMessageMigration::class.java)
+  private val TAG = Log.tag(V188_FixMessageRecipientsAndEditMessageMigration::class.java)
 
   private val outgoingClause = "(" + listOf(21, 23, 22, 24, 25, 26, 2, 11)
     .map { "type & ${0x1F} = $it" }
     .joinToString(separator = " OR ") + ")"
 
+  private const val PLACEHOLDER_ID = -2L
+
   override fun migrate(context: Application, db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+    if (columnExists(db, "message", "from_recipient_id")) {
+      Log.i(TAG, "Already performed the migration! No need to do this.")
+      return
+    }
+
+    Log.w(TAG, "Detected that V185 wasn't run properly! Repairing.")
+
     val stopwatch = Stopwatch("migration")
 
     var selfId: RecipientId? = getSelfId(db)
@@ -63,10 +76,13 @@ object V185_MessageRecipientsAndEditMessageMigration : SignalDatabaseMigration {
           val id = db.insert("recipient", null, contentValues)
           selfId = RecipientId.from(id)
         } else {
-          Log.w(TAG, "No local recipient data at all! Have to bail.")
-          return
+          Log.w(TAG, "No local recipient data at all! This must be after a backup-restore. Using a placeholder recipient.")
+          db.insert("recipient", null, contentValuesOf("_id" to PLACEHOLDER_ID))
+          selfId = RecipientId.from(PLACEHOLDER_ID)
         }
       }
+    } else {
+      Log.i(TAG, "Was able to find a selfId -- must have registered in-between.")
     }
 
     stopwatch.split("get-self")
@@ -236,6 +252,16 @@ object V185_MessageRecipientsAndEditMessageMigration : SignalDatabaseMigration {
     }
     stopwatch.split("recreate-dependents")
 
+    // These are the indexes that should have been created in V186 -- conditionally done here in case it didn't run properly
+    db.execSQL("CREATE INDEX IF NOT EXISTS message_original_message_id_index ON message (original_message_id)")
+    db.execSQL("CREATE INDEX IF NOT EXISTS message_latest_revision_id_index ON message (latest_revision_id)")
+    db.execSQL("CREATE INDEX IF NOT EXISTS message_from_recipient_id_index ON message (from_recipient_id)")
+    db.execSQL("CREATE INDEX IF NOT EXISTS message_to_recipient_id_index ON message (to_recipient_id)")
+    db.execSQL("CREATE INDEX IF NOT EXISTS reaction_author_id_index ON reaction (author_id)")
+    db.execSQL("DROP INDEX IF EXISTS message_quote_id_quote_author_scheduled_date_index")
+    db.execSQL("CREATE INDEX IF NOT EXISTS message_quote_id_quote_author_scheduled_date_latest_revision_id_index ON message (quote_id, quote_author, scheduled_date, latest_revision_id)")
+    stopwatch.split("v186-indexes")
+
     val foreignKeyViolations: List<SqlUtil.ForeignKeyViolation> = SqlUtil.getForeignKeyViolations(db, "message")
     if (foreignKeyViolations.isNotEmpty()) {
       Log.w(TAG, "Foreign key violations!\n${foreignKeyViolations.joinToString(separator = "\n")}")
@@ -312,6 +338,12 @@ object V185_MessageRecipientsAndEditMessageMigration : SignalDatabaseMigration {
         createStatement = cursor.requireNonNullString("sql")
       )
     }
+  }
+
+  private fun columnExists(db: SQLiteDatabase, table: String, column: String): Boolean {
+    return db.query("PRAGMA table_info($table)", null)
+      .readToList { it.requireNonNullString("name") }
+      .any { it == column }
   }
 
   data class SqlItem(
