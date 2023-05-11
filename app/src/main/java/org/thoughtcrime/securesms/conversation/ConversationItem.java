@@ -2362,7 +2362,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   private class ScheduledIndicatorClickListener implements View.OnClickListener {
     public void onClick(final View view) {
       if (eventListener != null && batchSelected.isEmpty()) {
-        eventListener.onScheduledIndicatorClicked(view, (messageRecord));
+        eventListener.onScheduledIndicatorClicked(view, (conversationMessage));
       } else {
         passthroughClickListener.onClick(view);
       }

@@ -151,6 +151,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_block_tinted_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -167,6 +168,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_block_tinted_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -183,6 +185,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_leave_tinted_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -199,6 +202,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_group_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -215,6 +219,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_group_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -230,6 +235,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_group_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:text="@string/RecipientBottomSheet_add_to_a_group"
                 tools:visibility="visible" />
 
@@ -247,6 +253,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_plus_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -263,6 +270,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_profile_circle_24"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
             <TextView
@@ -279,7 +287,7 @@
                 android:textAppearance="@style/Signal.Text.BodyLarge"
                 android:visibility="gone"
                 app:drawableStartCompat="@drawable/ic_safety_number_24"
-                app:drawableTint="@color/signal_icon_tint_primary"
+                app:drawableTint="@color/icon_tint_color_primary_enabled_selector"
                 tools:visibility="visible" />
 
         </LinearLayout>
