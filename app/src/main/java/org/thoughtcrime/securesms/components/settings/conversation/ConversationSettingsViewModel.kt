@@ -33,7 +33,6 @@ import org.thoughtcrime.securesms.util.FeatureFlags
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.livedata.LiveDataUtil
 import org.thoughtcrime.securesms.util.livedata.Store
-import org.thoughtcrime.securesms.util.TextSecurePreferences
 import java.util.Optional
 
 sealed class ConversationSettingsViewModel(
