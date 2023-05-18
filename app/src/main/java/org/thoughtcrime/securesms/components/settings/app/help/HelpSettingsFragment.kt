@@ -59,7 +59,7 @@ class HelpSettingsFragment : DSLSettingsFragment(R.string.preferences__help) {
             append(getString(R.string.HelpFragment__copyright_signal_messenger))
             append(", shadowmoon_waltz")
             append("\n")
-            append(getString(R.string.HelpFragment__licenced_under_the_gplv3))
+            append(getString(R.string.HelpFragment__licenced_under_the_agplv3))
             append("\n")
             append("SignalSW (this app) is a unaffiliated fork of Signal")
           }

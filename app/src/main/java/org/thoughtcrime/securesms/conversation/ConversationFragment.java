@@ -91,7 +91,6 @@ import org.thoughtcrime.securesms.components.TypingStatusRepository;
 import org.thoughtcrime.securesms.components.menu.ActionItem;
 import org.thoughtcrime.securesms.components.menu.SignalBottomActionBar;
 import org.thoughtcrime.securesms.components.recyclerview.SmoothScrollingLinearLayoutManager;
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalFragment;
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalType;
 import org.thoughtcrime.securesms.components.voice.VoiceNoteMediaControllerOwner;
@@ -198,7 +197,6 @@ import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
 import org.thoughtcrime.securesms.util.task.ProgressDialogAsyncTask;
-import org.thoughtcrime.securesms.verify.VerifyIdentityActivity;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
 
 import java.io.IOException;
@@ -1932,7 +1930,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
           ApplicationDependencies.getViewOnceMessageManager().scheduleIfNecessary();
 
-          ApplicationDependencies.getJobManager().add(new MultiDeviceViewOnceOpenJob(new MessageTable.SyncMessageId(messageRecord.getToRecipient().getId(), messageRecord.getDateSent())));
+          ApplicationDependencies.getJobManager().add(new MultiDeviceViewOnceOpenJob(new MessageTable.SyncMessageId(messageRecord.getFromRecipient().getId(), messageRecord.getDateSent())));
 
           return tempUri;
         } catch (IOException e) {
@@ -1992,9 +1990,12 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void onReactionClicked(@NonNull MultiselectPart multiselectPart, long messageId, boolean isMms) {
       if (getParentFragment() == null) return;
+      final String REACTIONS_TAG = "REACTIONS";
 
-      ReactionsBottomSheetDialogFragment.create(messageId, isMms, TextSecurePreferences.isShowReactionTimeEnabled(requireContext()) ? locale : null)
-                                        .show(getParentFragmentManager(), null);
+      if (getParentFragmentManager().findFragmentByTag(REACTIONS_TAG) == null) {
+        ReactionsBottomSheetDialogFragment.create(messageId, isMms, TextSecurePreferences.isShowReactionTimeEnabled(requireContext()) ? locale : null)
+                                          .show(getParentFragmentManager(), REACTIONS_TAG);
+      }
     }
 
     @Override
@@ -2182,6 +2183,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void goToMediaPreview(ConversationItem parent, View sharedElement, MediaIntentFactory.MediaPreviewArgs args) {
       if (listener.isInBubble()) {
+        Intent intent = ConversationIntents.createBuilder(requireActivity(), recipient.getId(), threadId)
+                                           .withStartingPosition(list.getChildAdapterPosition(parent))
+                                           .build();
+
+        requireActivity().startActivity(intent);
         requireActivity().startActivity(MediaIntentFactory.create(requireActivity(), args.skipSharedElementTransition(true)));
         return;
       }
@@ -2200,15 +2206,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       requireActivity().setExitSharedElementCallback(new MaterialContainerTransformSharedElementCallback());
       ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), sharedElement, MediaPreviewV2Activity.SHARED_ELEMENT_TRANSITION_NAME);
 
-      final Intent mediaPreviewIntent = MediaIntentFactory.create(requireActivity(), args);
-
-      if (listener.isInBubble()) {
-        mediaPreviewIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                    Intent.FLAG_ACTIVITY_NEW_TASK |
-                                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
-      }
-
-      requireActivity().startActivity(mediaPreviewIntent, options.toBundle());
+      requireActivity().startActivity(MediaIntentFactory.create(requireActivity(), args), options.toBundle());
     }
 
     @Override
@@ -2218,6 +2216,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       } else {
         EditMessageHistoryDialog.show(getChildFragmentManager(), messageRecord.getFromRecipient().getId(), messageRecord.getId());
       }
+    }
+
+    @Override
+    public void onShowGroupDescriptionClicked(@NonNull String groupName, @NonNull String description, boolean shouldLinkifyWebLinks) {
+      GroupDescriptionDialog.show(getChildFragmentManager(), groupName, description, shouldLinkifyWebLinks);
     }
 
     @Override

@@ -431,6 +431,10 @@ public class ConversationIntents {
       return Objects.equals(this, BUBBLE);
     }
 
+    public boolean isInPopup() {
+      return Objects.equals(this, POPUP);
+    }
+
     public boolean isNormal() {
       return Objects.equals(this, NORMAL);
     }
@@ -457,7 +461,7 @@ public class ConversationIntents {
   }
 
   private static long resolveThreadId(@NonNull RecipientId recipientId, long threadId) {
-    if (threadId >= 0 && SignalStore.internalValues().useConversationFragmentV2()) {
+    if (threadId < 0 && SignalStore.internalValues().useConversationFragmentV2()) {
       Log.w(TAG, "Getting thread id from database...");
       // TODO [alex] -- Yes, this hits the database. No, we shouldn't be doing this.
       return SignalDatabase.threads().getOrCreateThreadIdFor(Recipient.resolved(recipientId));
