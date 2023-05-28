@@ -522,6 +522,18 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     return SWIPE_RECT.contains((int) downX, (int) downY);
   }
 
+  public @Nullable ConversationItemBodyBubble getBodyBubble() {
+    return bodyBubble;
+  }
+
+  public @Nullable View getQuotedIndicator() {
+    return quotedIndicator;
+  }
+
+  public @Nullable ReactionsConversationView getReactionsView() {
+    return reactionsView;
+  }
+
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -1550,6 +1562,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         int     end   = messageBody.getSpanEnd(urlSpan);
         URLSpan span  = new InterceptableLongClickCopyLinkSpan(urlSpan.getURL(), urlClickHandler);
         messageBody.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        messageBody.removeSpan(urlSpan);
       }
     }
   }
