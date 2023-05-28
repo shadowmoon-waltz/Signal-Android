@@ -1019,7 +1019,8 @@ class ConversationFragment : LoggingFragment(R.layout.v2_conversation_fragment) 
   ) {
     reactionDelegate.setOnActionSelectedListener(onActionSelectedListener)
     reactionDelegate.setOnHideListener(onHideListener)
-    reactionDelegate.show(requireActivity(), viewModel.recipientSnapshot!!, conversationMessage, conversationGroupViewModel.isNonAdminInAnnouncementGroup(), selectedConversationModel)
+    // TODO [sw] : need to merge in all changes to conversation fragment from v1 at some point
+    reactionDelegate.show(requireActivity(), viewModel.recipientSnapshot!!, conversationMessage, conversationGroupViewModel.isNonAdminInAnnouncementGroup(), selectedConversationModel, null)
     composeText.clearFocus()
 
     /*
@@ -1713,7 +1714,8 @@ class ConversationFragment : LoggingFragment(R.layout.v2_conversation_fragment) 
       reactionDelegate.hide()
     }
 
-    override fun onCustomReactionSelected(messageRecord: MessageRecord, hasAddedCustomEmoji: Boolean) {
+    // TODO [sw] : pull in changes from v1 at some point
+    override fun onCustomReactionSelected(messageRecord: MessageRecord, hasAddedCustomEmoji: Boolean, holdDuration: Long) {
       reactionDelegate.hide()
     }
   }
