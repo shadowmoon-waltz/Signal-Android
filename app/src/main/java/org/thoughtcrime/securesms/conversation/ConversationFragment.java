@@ -78,6 +78,7 @@ import org.signal.core.util.concurrent.LifecycleDisposable;
 import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.concurrent.SimpleTask;
 import org.signal.core.util.logging.Log;
+import org.signal.ringrtc.CallLinkRootKey;
 import org.thoughtcrime.securesms.BindableConversationItem;
 import org.thoughtcrime.securesms.LoggingFragment;
 import org.thoughtcrime.securesms.R;
@@ -194,6 +195,7 @@ import org.thoughtcrime.securesms.util.SwipeActionTypes;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.TopToastPopup;
 import org.thoughtcrime.securesms.util.Util;
+import org.thoughtcrime.securesms.util.ViewExtensionsKt;
 import org.thoughtcrime.securesms.util.ViewUtil;
 import org.thoughtcrime.securesms.util.WindowUtil;
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture;
@@ -211,6 +213,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import kotlin.Unit;
@@ -244,7 +247,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
   private ConversationScrollToView    scrollToBottomButton;
   private ConversationScrollToView    scrollToMentionButton;
   private TextView                    scrollDateHeader;
-  private ConversationBannerView      conversationBanner;
+  private ConversationHeaderView      conversationHeader;
   private MessageRequestViewModel     messageRequestViewModel;
   private MessageCountsViewModel      messageCountsViewModel;
   private ConversationViewModel       conversationViewModel;
@@ -354,7 +357,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     getViewLifecycleOwner().getLifecycle().addObserver(multiselectItemDecoration);
 
     snapToTopDataObserver = new ConversationSnapToTopDataObserver(list, new ConversationScrollRequestValidator());
-    conversationBanner    = (ConversationBannerView) inflater.inflate(R.layout.conversation_item_banner, container, false);
+    conversationHeader    = (ConversationHeaderView) inflater.inflate(R.layout.conversation_item_banner, container, false);
     topLoadMoreView       = (ViewSwitcher) inflater.inflate(R.layout.load_more_header, container, false);
     bottomLoadMoreView    = (ViewSwitcher) inflater.inflate(R.layout.load_more_header, container, false);
 
@@ -390,8 +393,22 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
 
       ConversationAdapter adapter = getListAdapter();
       if (adapter != null) {
+        final AtomicBoolean firstRender = new AtomicBoolean(true);
         List<ConversationMessage> messages = messageData.getMessages();
         getListAdapter().submitList(messages, () -> {
+
+          if (firstRender.get()) {
+            firstRender.set(false);
+            ViewExtensionsKt.doAfterNextLayout(list, () -> {
+              startupStopwatch.split("first-render");
+              startupStopwatch.stop(TAG);
+              SignalLocalMetrics.ConversationOpen.onRenderFinished();
+              listener.onFirstRender();
+              SignalTrace.endSection();
+              return Unit.INSTANCE;
+            });
+          }
+
           list.post(() -> {
             conversationViewModel.onMessagesCommitted(messages);
           });
@@ -662,7 +679,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     listener.onMessageRequest(messageRequestViewModel);
 
     messageRequestViewModel.getRecipientInfo().observe(getViewLifecycleOwner(), recipientInfo -> {
-      presentMessageRequestProfileView(requireContext(), recipientInfo, conversationBanner);
+      presentMessageRequestProfileView(requireContext(), recipientInfo, conversationHeader);
     });
 
     messageRequestViewModel.getMessageData().observe(getViewLifecycleOwner(), data -> {
@@ -673,7 +690,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     });
   }
 
-  private void presentMessageRequestProfileView(@NonNull Context context, @NonNull MessageRequestViewModel.RecipientInfo recipientInfo, @Nullable ConversationBannerView conversationBanner) {
+  private void presentMessageRequestProfileView(@NonNull Context context, @NonNull MessageRequestViewModel.RecipientInfo recipientInfo, @Nullable ConversationHeaderView conversationBanner) {
     if (conversationBanner == null) {
       return;
     }
@@ -814,13 +831,6 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         public void onItemRangeInserted(int positionStart, int itemCount) {
           adapter.unregisterAdapterDataObserver(this);
           startupStopwatch.split("data-set");
-          list.post(() -> {
-            startupStopwatch.split("first-render");
-            startupStopwatch.stop(TAG);
-            SignalLocalMetrics.ConversationOpen.onRenderFinished();
-            listener.onFirstRender();
-            SignalTrace.endSection();
-          });
         }
       });
     }
@@ -1349,7 +1359,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
       return;
     }
 
-    adapter.setFooterView(conversationBanner);
+    adapter.setFooterView(conversationHeader);
 
     Runnable afterScroll = () -> {
       if (!conversation.getMessageRequestData().isMessageRequestAccepted()) {
@@ -1510,7 +1520,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
         Rect rect = new Rect();
         toolbar.getGlobalVisibleRect(rect);
         conversationViewModel.setToolbarBottom(rect.bottom);
-        ViewUtil.setTopMargin(conversationBanner, rect.bottom + ViewUtil.dpToPx(16));
+        ViewUtil.setTopMargin(conversationHeader, rect.bottom + ViewUtil.dpToPx(16));
         toolbar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
       }
     });
@@ -2232,6 +2242,11 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
     @Override
     public void onShowGroupDescriptionClicked(@NonNull String groupName, @NonNull String description, boolean shouldLinkifyWebLinks) {
       GroupDescriptionDialog.show(getChildFragmentManager(), groupName, description, shouldLinkifyWebLinks);
+    }
+
+    @Override
+    public void onJoinCallLink(@NonNull CallLinkRootKey callLinkRootKey) {
+      CommunicationActions.startVideoCall(ConversationFragment.this, callLinkRootKey);
     }
 
     @Override

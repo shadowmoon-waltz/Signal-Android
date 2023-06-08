@@ -197,11 +197,11 @@ public final class MenuState {
                            .allMatch(collection -> multiselectParts.containsAll(collection.toSet()));
   }
 
-  static boolean canReplyToMessage(@NonNull Recipient conversationRecipient,
-                                   boolean actionMessage,
-                                   @NonNull MessageRecord messageRecord,
-                                   boolean isDisplayingMessageRequest,
-                                   boolean isNonAdminInAnnouncementGroup)
+  public static boolean canReplyToMessage(@NonNull Recipient conversationRecipient,
+                                          boolean actionMessage,
+                                          @NonNull MessageRecord messageRecord,
+                                          boolean isDisplayingMessageRequest,
+                                          boolean isNonAdminInAnnouncementGroup)
   {
     return !actionMessage &&
            !isNonAdminInAnnouncementGroup &&
@@ -233,7 +233,7 @@ public final class MenuState {
     return (!isActionMessage(messageRecord));
   }
 
-  static boolean isActionMessage(@NonNull MessageRecord messageRecord) {
+  public static boolean isActionMessage(@NonNull MessageRecord messageRecord) {
     return messageRecord.isInMemoryMessageRecord() || messageRecord.isUpdate();
   }
 

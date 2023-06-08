@@ -34,10 +34,10 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   private final SwipeAvailabilityProvider     swipeAvailabilityProvider2;
   private final OnSwipeListener               onSwipeListener2;
 
-  ConversationItemSwipeCallback(@NonNull SwipeAvailabilityProvider swipeAvailabilityProvider,
-                                @NonNull OnSwipeListener onSwipeListener,
-                                @Nullable SwipeAvailabilityProvider swipeAvailabilityProvider2,
-                                @Nullable OnSwipeListener onSwipeListener2)
+  public ConversationItemSwipeCallback(@NonNull SwipeAvailabilityProvider swipeAvailabilityProvider,
+                                       @NonNull OnSwipeListener onSwipeListener,
+                                       @Nullable SwipeAvailabilityProvider swipeAvailabilityProvider2,
+                                       @Nullable OnSwipeListener onSwipeListener2)
   {
     super(0, ItemTouchHelper.START | ItemTouchHelper.END);
     this.itemTouchListener          = new ConversationItemTouchListener(this::updateLatestDownCoordinate);
@@ -49,7 +49,7 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     this.canTriggerSwipe            = true;
   }
 
-  void attachToRecyclerView(@NonNull RecyclerView recyclerView) {
+  public void attachToRecyclerView(@NonNull RecyclerView recyclerView) {
     recyclerView.addOnItemTouchListener(itemTouchListener);
     new ItemTouchHelper(this).attachToRecyclerView(recyclerView);
   }
@@ -231,11 +231,11 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
     if (vibrator != null) vibrator.vibrate(SWIPE_SUCCESS_VIBE_TIME_MS);
   }
 
-  interface SwipeAvailabilityProvider {
+  public interface SwipeAvailabilityProvider {
     boolean isSwipeAvailable(ConversationMessage conversationMessage);
   }
 
-  interface OnSwipeListener {
+  public interface OnSwipeListener {
     void onSwipe(ConversationMessage conversationMessage, ConversationItem conversationItem, MotionEvent motionEvent);
   }
 }
