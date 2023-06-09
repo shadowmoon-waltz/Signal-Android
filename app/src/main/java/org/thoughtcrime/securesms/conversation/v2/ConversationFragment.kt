@@ -582,9 +582,13 @@ class ConversationFragment : LoggingFragment(R.layout.v2_conversation_fragment) 
       .subscribeBy { presentRequestReviewState(it) }
       .addTo(disposables)
 
+    // TODO [sw] : implement swipe actions for v2
+
     ConversationItemSwipeCallback(
       SwipeAvailabilityProvider(),
-      this::handleReplyToMessage
+      this::handleReplyToMessage,
+      null,
+      null
     ).attachToRecyclerView(binding.conversationItemRecycler)
 
     draftViewModel.loadShareOrDraftData()
@@ -1267,6 +1271,10 @@ class ConversationFragment : LoggingFragment(R.layout.v2_conversation_fragment) 
   }
 
   //region Message action handling
+
+  private fun handleReplyToMessage(conversationMessage: ConversationMessage, conversationItem: ConversationItem, motionEvent: MotionEvent) {
+    handleReplyToMessage(conversationMessage)
+  }
 
   private fun handleReplyToMessage(conversationMessage: ConversationMessage) {
     /*
