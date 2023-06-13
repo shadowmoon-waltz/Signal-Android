@@ -1484,12 +1484,14 @@
 
     <!-- Group Calling update messages -->
     <string name="MessageRecord_s_started_a_group_call_s">%1$s started a group call · %2$s</string>
+    <string name="MessageRecord_you_started_a_group_call_s">You started a group call · %1$s</string>
     <string name="MessageRecord_s_is_in_the_group_call_s">%1$s is in the group call · %2$s</string>
     <string name="MessageRecord_you_are_in_the_group_call_s1">You are in the group call · %1$s</string>
     <string name="MessageRecord_s_and_s_are_in_the_group_call_s1">%1$s and %2$s are in the group call · %3$s</string>
     <string name="MessageRecord_group_call_s">Group call · %1$s</string>
 
     <string name="MessageRecord_s_started_a_group_call">%1$s started a group call</string>
+    <string name="MessageRecord_you_started_a_group_call">You started a group call</string>
     <string name="MessageRecord_s_is_in_the_group_call">%1$s is in the group call</string>
     <string name="MessageRecord_you_are_in_the_group_call">You are in the group call</string>
     <string name="MessageRecord_s_and_s_are_in_the_group_call">%1$s and %2$s are in the group call</string>
@@ -2346,7 +2348,9 @@
     <string name="WebRtcAudioOutputToggle__speaker">Speaker</string>
     <!-- Audio output option referring to an external audio device connected via wireless Bluetooth -->
     <string name="WebRtcAudioOutputToggle__bluetooth">Bluetooth</string>
-    <!-- Audio output option referring to an external headset connected via a 3.5mm headphone jack -->
+    <!-- Audio output option referring to a pair of headphones that do not contain a microphone connected via a 3.5mm headphone jack -->
+    <string name="WebRtcAudioOutputToggle__wired_headphones">Wired Headphones</string>
+    <!-- Audio output option referring to an external headset that contains a microphone connected via a 3.5mm headphone jack -->
     <string name="WebRtcAudioOutputToggle__wired_headset">Wired Headset</string>
     <!-- Audio output option referring to an external headset connected via a USB-C data cable -->
     <string name="WebRtcAudioOutputToggle__wired_headset_usb">Wired Headset (USB)</string>
