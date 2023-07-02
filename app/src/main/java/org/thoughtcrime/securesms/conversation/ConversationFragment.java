@@ -1705,9 +1705,7 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
           return;
         }
   
-        if (messageRecord.isSecure()                                        &&
-            !messageRecord.isRemoteDelete()                                 &&
-            !messageRecord.isUpdate()                                       &&
+        if (MessageRecordUtil.isValidReactionTarget(messageRecord)          &&
             !recipient.get().isBlocked()                                    &&
             !messageRequestViewModel.shouldShowMessageRequest()             &&
             (!recipient.get().isGroup() || recipient.get().isActiveGroup()) &&
