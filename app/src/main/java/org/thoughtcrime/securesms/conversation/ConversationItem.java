@@ -2307,6 +2307,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     return Collections.singletonList(bodyBubble);
   }
 
+  @Nullable @Override public View getSwipeToLeftView() {
+    return swipeToLeft;
+  }
+
   @Override
   public int getAdapterPosition(@NonNull RecyclerView recyclerView) {
     return recyclerView.getChildAdapterPosition(this);

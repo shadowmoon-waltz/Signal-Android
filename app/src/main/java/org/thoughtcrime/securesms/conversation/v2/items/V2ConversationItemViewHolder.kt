@@ -115,6 +115,9 @@ class V2TextOnlyViewHolder<Model : MappingModel<Model>>(
   override val contactPhotoHolderView: View? = binding.senderPhoto
   override val badgeImageView: View? = binding.senderBadge
 
+  // TODO sw : add/set actual view
+  override val swipeToLeftView: View? = null
+
   private var reactionMeasureListener: ReactionMeasureListener = ReactionMeasureListener()
 
   init {

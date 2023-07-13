@@ -107,6 +107,7 @@ import org.thoughtcrime.securesms.conversation.colors.RecyclerViewColorizer;
 import org.thoughtcrime.securesms.conversation.mutiselect.ConversationItemAnimator;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectItemDecoration;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart;
+import org.thoughtcrime.securesms.conversation.mutiselect.Multiselectable;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardBottomSheet;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragment;
 import org.thoughtcrime.securesms.conversation.mutiselect.forward.MultiselectForwardFragmentArgs;
@@ -519,43 +520,39 @@ public class ConversationFragment extends LoggingFragment implements Multiselect
                                                                                      conversationMessage.getMessageRecord(),
                                                                                      messageRequestViewModel.shouldShowMessageRequest(),
                                                                                      groupViewModel.isNonAdminInAnnouncementGroup()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleReplyMessage(conversationMessage));
+                                  conversationMessage -> handleReplyMessage(conversationMessage));
     } else if (SwipeActionTypes.DELETE.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessages(conversationMessage.getMultiselectCollection().toSet(), false));
+                                  conversationMessage -> handleDeleteMessages(conversationMessage.getMultiselectCollection().toSet(), false));
     } else if (SwipeActionTypes.DELETE_NO_PROMPT.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canDeleteMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleDeleteMessagesForMe2(Collections.singleton(conversationMessage.getMessageRecord()), null));
+                                  conversationMessage -> handleDeleteMessagesForMe2(Collections.singleton(conversationMessage.getMessageRecord()), null));
     } else if (SwipeActionTypes.COPY_TEXT.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(conversationMessage.getMultiselectCollection().toSet(), false));
+                                  conversationMessage -> handleCopyMessage(conversationMessage.getMultiselectCollection().toSet(), false));
     } else if (SwipeActionTypes.COPY_TEXT_POPUP.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canCopyMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleCopyMessage(conversationMessage.getMultiselectCollection().toSet(), true));
+                                  conversationMessage -> handleCopyMessage(conversationMessage.getMultiselectCollection().toSet(), true));
     } else if (SwipeActionTypes.FORWARD.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleForwardMessageParts(conversationMessage.getMultiselectCollection().toSet()));
+                                  conversationMessage -> handleForwardMessageParts(conversationMessage.getMultiselectCollection().toSet()));
     } else if (SwipeActionTypes.MESSAGE_DETAILS.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canShowMessageDetails(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleDisplayDetails(conversationMessage));
-    } else if (SwipeActionTypes.SHOW_OPTIONS.equals(action)) {
-      return new SetupSwipeResult(conversationMessage -> actionMode == null,
-                                  (conversationMessage, conversationItem, motionEvent) ->
-                                    ((ConversationFragmentItemClickListener)selectionClickListener).onItemLongClick2(conversationItem, conversationItem.getMultiselectPartForLatestTouch(), motionEvent));
+                                  conversationMessage -> handleDisplayDetails(conversationMessage));
     } else if (SwipeActionTypes.NOTE_TO_SELF.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null &&
                                                          MenuState.canForwardMessage(conversationMessage.getMessageRecord()),
-                                  (conversationMessage, conversationItem, motionEvent) -> handleForwardMessagePartsNoteToSelf(conversationMessage.getMultiselectCollection().toSet()));
+                                  conversationMessage -> handleForwardMessagePartsNoteToSelf(conversationMessage.getMultiselectCollection().toSet()));
     } else if (SwipeActionTypes.MULTI_SELECT.equals(action)) {
       return new SetupSwipeResult(conversationMessage -> actionMode == null,
-                                  (conversationMessage, conversationItem, motionEvent) -> handleEnterMultiSelect(conversationMessage));
-    } else { // includes SwipeActionTypes.NONE and any other string
+                                  conversationMessage -> handleEnterMultiSelect(conversationMessage));
+    } else { // includes SwipeActionTypes.NONE and any other string (and SwipeActionType.SHOW_OPTIONS for now)
       return new SetupSwipeResult(null,
                                   null);
     }
