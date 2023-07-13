@@ -70,12 +70,18 @@ class DraftRepository(
     val TAG = Log.tag(DraftRepository::class.java)
   }
 
-  fun getShareOrDraftData(): Maybe<Pair<ShareOrDraftData, Drafts?>> {
+  fun getShareOrDraftData(): Maybe<Pair<ShareOrDraftData?, Drafts?>> {
     return MaybeCompat.fromCallable { getShareOrDraftDataInternal() }
       .observeOn(Schedulers.io())
   }
 
-  private fun getShareOrDraftDataInternal(): Pair<ShareOrDraftData, Drafts?>? {
+  /**
+   * Loads share data from the intent and draft data from the database and provides a one-spot initial
+   * load of data.
+   *
+   * Note: Voice note drafts are handled differently and via the [DraftViewModel.state]
+   */
+  private fun getShareOrDraftDataInternal(): Pair<ShareOrDraftData?, Drafts?>? {
     val shareText = conversationArguments?.draftText
     val shareMedia = conversationArguments?.draftMedia
     val shareContentType = conversationArguments?.draftContentType
@@ -130,11 +136,6 @@ class DraftRepository(
         return ShareOrDraftData.SetLocation(location, draftText) to drafts
       }
 
-      val audio: Uri? = drafts.firstOrNull { it.type == DraftTable.Draft.AUDIO }?.let { Uri.parse(it.value) }
-      if (audio != null) {
-        return ShareOrDraftData.SetMedia(audio, SlideFactory.MediaType.AUDIO, null) to drafts
-      }
-
       val quote: ConversationMessage? = drafts.firstOrNull { it.type == DraftTable.Draft.QUOTE }?.let { loadDraftQuoteInternal(it.value) }
       if (quote != null) {
         return ShareOrDraftData.SetQuote(quote, draftText) to drafts
@@ -142,12 +143,14 @@ class DraftRepository(
 
       val messageEdit: ConversationMessage? = drafts.firstOrNull { it.type == DraftTable.Draft.MESSAGE_EDIT }?.let { loadDraftMessageEditInternal(it.value) }
       if (messageEdit != null) {
-        return ShareOrDraftData.SetEditMessage(messageEdit) to drafts
+        return ShareOrDraftData.SetEditMessage(messageEdit, draftText) to drafts
       }
 
       if (draftText != null) {
         return ShareOrDraftData.SetText(draftText) to drafts
       }
+
+      return null to drafts
     }
 
     // no share or draft
@@ -287,7 +290,7 @@ class DraftRepository(
     data class SetText(val text: CharSequence) : ShareOrDraftData
     data class SetLocation(val location: SignalPlace, val draftText: CharSequence?) : ShareOrDraftData
     data class SetQuote(val quote: ConversationMessage, val draftText: CharSequence?) : ShareOrDraftData
-    data class SetEditMessage(val messageEdit: ConversationMessage) : ShareOrDraftData
+    data class SetEditMessage(val messageEdit: ConversationMessage, val draftText: CharSequence?) : ShareOrDraftData
   }
 
   data class KeyboardImageDetails(val width: Int, val height: Int, val hasTransparency: Boolean)

@@ -140,7 +140,7 @@ import org.thoughtcrime.securesms.groups.SelectionLimits;
 import org.thoughtcrime.securesms.insights.InsightsLauncher;
 import org.thoughtcrime.securesms.jobs.ServiceOutageDetectionJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
-import org.thoughtcrime.securesms.lock.v2.CreateKbsPinActivity;
+import org.thoughtcrime.securesms.lock.v2.CreateSvrPinActivity;
 import org.thoughtcrime.securesms.main.Material3OnScrollHelperBinder;
 import org.thoughtcrime.securesms.main.SearchBinder;
 import org.thoughtcrime.securesms.mediasend.v2.MediaSelectionActivity;
@@ -566,8 +566,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     ConversationFilterRequest request             = viewModel.getConversationFilterRequest();
     boolean                   isChatFilterEnabled = request != null && request.getFilter() == ConversationFilter.UNREAD;
 
-    menu.findItem(R.id.menu_filter_unread_chats).setVisible(FeatureFlags.chatFilters() && !isChatFilterEnabled);
-    menu.findItem(R.id.menu_clear_unread_filter).setVisible(FeatureFlags.chatFilters() && isChatFilterEnabled);
+    menu.findItem(R.id.menu_filter_unread_chats).setVisible(!isChatFilterEnabled);
+    menu.findItem(R.id.menu_clear_unread_filter).setVisible(isChatFilterEnabled);
   }
 
   @Override
@@ -706,7 +706,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       }
     }
 
-    if (resultCode == RESULT_OK && requestCode == CreateKbsPinActivity.REQUEST_NEW_PIN) {
+    if (resultCode == RESULT_OK && requestCode == CreateSvrPinActivity.REQUEST_NEW_PIN) {
       Snackbar.make(fab, R.string.ConfirmKbsPinFragment__pin_created, Snackbar.LENGTH_LONG).show();
       viewModel.onMegaphoneCompleted(Megaphones.Event.PINS_FOR_ALL);
     }

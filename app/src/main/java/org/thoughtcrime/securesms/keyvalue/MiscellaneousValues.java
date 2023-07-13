@@ -29,7 +29,6 @@ public final class MiscellaneousValues extends SignalStoreValues {
   private static final String LAST_GV2_PROFILE_CHECK_TIME    = "misc.last_gv2_profile_check_time";
   private static final String CDS_TOKEN                      = "misc.cds_token";
   private static final String CDS_BLOCKED_UNTIL              = "misc.cds_blocked_until";
-  private static final String LAST_FCM_FOREGROUND_TIME       = "misc.last_fcm_foreground_time";
   private static final String LAST_FOREGROUND_TIME           = "misc.last_foreground_time";
   private static final String PNI_INITIALIZED_DEVICES        = "misc.pni_initialized_devices";
   private static final String SMS_PHASE_1_START_MS           = "misc.sms_export.phase_1_start.3";
@@ -39,6 +38,8 @@ public final class MiscellaneousValues extends SignalStoreValues {
   private static final String KEYBOARD_LANDSCAPE_HEIGHT      = "misc.keyboard.landscape_height";
   private static final String KEYBOARD_PORTRAIT_HEIGHT       = "misc.keyboard.protrait_height";
   private static final String LAST_CONSISTENCY_CHECK_TIME    = "misc.last_consistency_check_time";
+  private static final String SERVER_TIME_OFFSET             = "misc.server_time_offset";
+  private static final String LAST_SERVER_TIME_OFFSET_UPDATE = "misc.last_server_time_offset_update";
 
   MiscellaneousValues(@NonNull KeyValueStore store) {
     super(store);
@@ -215,14 +216,6 @@ public final class MiscellaneousValues extends SignalStoreValues {
     return getLong(CDS_BLOCKED_UNTIL, 0);
   }
 
-  public long getLastFcmForegroundServiceTime() {
-    return getLong(LAST_FCM_FOREGROUND_TIME, 0);
-  }
-
-  public void setLastFcmForegroundServiceTime(long time) {
-    putLong(LAST_FCM_FOREGROUND_TIME, time);
-  }
-
   public long getLastForegroundTime() {
     return getLong(LAST_FOREGROUND_TIME, 0);
   }
@@ -325,5 +318,32 @@ public final class MiscellaneousValues extends SignalStoreValues {
 
   public void setLastConsistencyCheckTime(long time) {
     putLong(LAST_CONSISTENCY_CHECK_TIME, time);
+  }
+
+  /**
+   * Sets the last-known server time.
+   */
+  public void setLastKnownServerTime(long serverTime, long currentTime) {
+    getStore()
+        .beginWrite()
+        .putLong(SERVER_TIME_OFFSET, currentTime - serverTime)
+        .putLong(LAST_SERVER_TIME_OFFSET_UPDATE, System.currentTimeMillis())
+        .apply();
+  }
+
+  /**
+   * The last-known offset between our local clock and the server. To get an estimate of the server time, take your current time and subtract this offset. e.g.
+   *
+   * estimatedServerTime = System.currentTimeMillis() - SignalStore.misc().getLastKnownServerTimeOffset()
+   */
+  public long getLastKnownServerTimeOffset() {
+    return getLong(SERVER_TIME_OFFSET, 0);
+  }
+
+  /**
+   * The last time (using our local clock) we updated the server time offset returned by {@link #getLastKnownServerTimeOffset()}}.
+   */
+  public long getLastKnownServerTimeOffsetUpdateTime() {
+    return getLong(LAST_SERVER_TIME_OFFSET_UPDATE, 0);
   }
 }

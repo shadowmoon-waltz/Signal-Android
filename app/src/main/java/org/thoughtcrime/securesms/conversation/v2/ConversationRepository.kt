@@ -289,6 +289,12 @@ class ConversationRepository(
     }.subscribeOn(Schedulers.io())
   }
 
+  fun getMessagePosition(threadId: Long, messageRecord: MessageRecord): Single<Int> {
+    return Single.fromCallable {
+      SignalDatabase.messages.getMessagePositionInConversation(threadId, messageRecord.dateReceived)
+    }.subscribeOn(Schedulers.io())
+  }
+
   fun getMessageCounts(threadId: Long): Flowable<MessageCounts> {
     return RxDatabaseObserver.conversationList
       .map { getUnreadCount(threadId) }
@@ -557,6 +563,15 @@ class ConversationRepository(
   fun updateStickerLastUsedTime(stickerRecord: StickerRecord, timestamp: Duration) {
     SignalExecutors.BOUNDED_IO.execute {
       SignalDatabase.stickers.updateStickerLastUsedTime(stickerRecord.rowId, timestamp.inWholeMilliseconds)
+    }
+  }
+
+  fun startExpirationTimeout(messageRecord: MessageRecord) {
+    SignalExecutors.BOUNDED_IO.execute {
+      val now = System.currentTimeMillis()
+
+      SignalDatabase.messages.markExpireStarted(messageRecord.id, now)
+      ApplicationDependencies.getExpiringMessageManager().scheduleDeletion(messageRecord.id, messageRecord.isMms, now, messageRecord.expiresIn)
     }
   }
 

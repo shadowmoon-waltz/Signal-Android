@@ -30,6 +30,7 @@ import org.signal.paging.ProxyPagingController
 import org.thoughtcrime.securesms.components.reminder.Reminder
 import org.thoughtcrime.securesms.contactshare.Contact
 import org.thoughtcrime.securesms.conversation.ConversationMessage
+import org.thoughtcrime.securesms.conversation.ScheduledMessagesRepository
 import org.thoughtcrime.securesms.conversation.colors.GroupAuthorNameColorHelper
 import org.thoughtcrime.securesms.conversation.colors.NameColor
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart
@@ -43,6 +44,7 @@ import org.thoughtcrime.securesms.database.model.MmsMessageRecord
 import org.thoughtcrime.securesms.database.model.Quote
 import org.thoughtcrime.securesms.database.model.ReactionRecord
 import org.thoughtcrime.securesms.database.model.StickerRecord
+import org.thoughtcrime.securesms.database.model.StoryViewState
 import org.thoughtcrime.securesms.database.model.databaseprotos.BodyRangeList
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.jobs.RetrieveProfileJob
@@ -73,7 +75,8 @@ class ConversationViewModel(
   requestedStartingPosition: Int,
   private val repository: ConversationRepository,
   recipientRepository: ConversationRecipientRepository,
-  messageRequestRepository: MessageRequestRepository
+  messageRequestRepository: MessageRequestRepository,
+  private val scheduledMessagesRepository: ScheduledMessagesRepository
 ) : ViewModel() {
 
   private val disposables = CompositeDisposable()
@@ -98,7 +101,10 @@ class ConversationViewModel(
 
   val pagingController = ProxyPagingController<ConversationElementKey>()
 
-  val nameColorsMap: Observable<Map<RecipientId, NameColor>> = recipient.flatMap { repository.getNameColorsMap(it, groupAuthorNameColorHelper) }
+  val nameColorsMap: Observable<Map<RecipientId, NameColor>> = recipient
+    .filter { it.isGroup }
+    .flatMap { repository.getNameColorsMap(it, groupAuthorNameColorHelper) }
+    .distinctUntilChanged()
 
   @Volatile
   var recipientSnapshot: Recipient? = null
@@ -122,6 +128,12 @@ class ConversationViewModel(
 
   private val _searchQuery = BehaviorSubject.createDefault("")
   val searchQuery: Observable<String> = _searchQuery
+
+  val storyRingState = recipient
+    .switchMap { StoryViewState.getForRecipientId(it.id) }
+    .subscribeOn(Schedulers.io())
+    .distinctUntilChanged()
+    .observeOn(AndroidSchedulers.mainThread())
 
   init {
     disposables += recipient
@@ -239,6 +251,11 @@ class ConversationViewModel(
     return repository.getNextMentionPosition(threadId)
   }
 
+  fun moveToMessage(messageRecord: MessageRecord): Single<Int> {
+    return repository.getMessagePosition(threadId, messageRecord)
+      .observeOn(AndroidSchedulers.mainThread())
+  }
+
   fun setLastScrolled(lastScrolledTimestamp: Long) {
     repository.setLastVisibleMessageTimestamp(
       threadId,
@@ -264,6 +281,10 @@ class ConversationViewModel(
     return recipient.firstOrError().flatMap {
       repository.getRecipientContactPhotoBitmap(context, glideRequests, it)
     }
+  }
+
+  fun startExpirationTimeout(messageRecord: MessageRecord) {
+    repository.startExpirationTimeout(messageRecord)
   }
 
   fun updateReaction(messageRecord: MessageRecord, emoji: String): Completable {
@@ -367,5 +388,11 @@ class ConversationViewModel(
 
   fun updateStickerLastUsedTime(stickerRecord: StickerRecord, timestamp: Duration) {
     repository.updateStickerLastUsedTime(stickerRecord, timestamp)
+  }
+
+  fun getScheduledMessagesCount(): Observable<Int> {
+    return scheduledMessagesRepository
+      .getScheduledMessageCount(threadId)
+      .observeOn(AndroidSchedulers.mainThread())
   }
 }

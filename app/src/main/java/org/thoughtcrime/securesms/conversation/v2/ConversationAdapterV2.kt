@@ -16,7 +16,7 @@ import org.signal.core.util.logging.Log
 import org.signal.core.util.toOptional
 import org.thoughtcrime.securesms.BindableConversationItem
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.conversation.ConversationAdapter
+import org.thoughtcrime.securesms.conversation.ConversationAdapter.ItemClickListener
 import org.thoughtcrime.securesms.conversation.ConversationAdapterBridge
 import org.thoughtcrime.securesms.conversation.ConversationHeaderView
 import org.thoughtcrime.securesms.conversation.ConversationItemDisplayMode
@@ -24,6 +24,7 @@ import org.thoughtcrime.securesms.conversation.ConversationMessage
 import org.thoughtcrime.securesms.conversation.colors.Colorizable
 import org.thoughtcrime.securesms.conversation.colors.Colorizer
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart
+import org.thoughtcrime.securesms.conversation.mutiselect.Multiselectable
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationElementKey
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationMessageElement
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationUpdate
@@ -32,10 +33,15 @@ import org.thoughtcrime.securesms.conversation.v2.data.IncomingTextOnly
 import org.thoughtcrime.securesms.conversation.v2.data.OutgoingMedia
 import org.thoughtcrime.securesms.conversation.v2.data.OutgoingTextOnly
 import org.thoughtcrime.securesms.conversation.v2.data.ThreadHeader
+import org.thoughtcrime.securesms.conversation.v2.items.V2ConversationContext
+import org.thoughtcrime.securesms.conversation.v2.items.V2TextOnlyViewHolder
+import org.thoughtcrime.securesms.conversation.v2.items.bridge
 import org.thoughtcrime.securesms.database.model.MessageRecord
-import org.thoughtcrime.securesms.giph.mp4.GiphyMp4Playable
+import org.thoughtcrime.securesms.databinding.V2ConversationItemTextOnlyIncomingBinding
+import org.thoughtcrime.securesms.databinding.V2ConversationItemTextOnlyOutgoingBinding
 import org.thoughtcrime.securesms.giph.mp4.GiphyMp4PlaybackPolicyEnforcer
 import org.thoughtcrime.securesms.groups.v2.GroupDescriptionUtil
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.messagerequests.MessageRequestState
 import org.thoughtcrime.securesms.mms.GlideRequests
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter
@@ -52,10 +58,11 @@ import java.util.Optional
 class ConversationAdapterV2(
   private val lifecycleOwner: LifecycleOwner,
   private val glideRequests: GlideRequests,
-  private val clickListener: ConversationAdapter.ItemClickListener,
+  override val clickListener: ItemClickListener,
   private var hasWallpaper: Boolean,
-  private val colorizer: Colorizer
-) : PagingMappingAdapter<ConversationElementKey>(), ConversationAdapterBridge {
+  private val colorizer: Colorizer,
+  private val startExpirationTimeout: (MessageRecord) -> Unit
+) : PagingMappingAdapter<ConversationElementKey>(), ConversationAdapterBridge, V2ConversationContext {
 
   companion object {
     private val TAG = Log.tag(ConversationAdapterV2::class.java)
@@ -66,13 +73,16 @@ class ConversationAdapterV2(
   override val selectedItems: Set<MultiselectPart>
     get() = _selected.toSet()
 
-  private var searchQuery: String? = null
+  override var searchQuery: String? = null
   private var inlineContent: ConversationMessage? = null
 
   private var recordToPulse: ConversationMessage? = null
   private var pulseRequest: ConversationAdapterBridge.PulseRequest? = null
 
   private val condensedMode: ConversationItemDisplayMode? = null
+
+  // TODO [cfv2]
+  override val isMessageRequestAccepted: Boolean = true
 
   init {
     registerFactory(ThreadHeader::class.java, ::ThreadHeaderViewHolder, R.layout.conversation_item_thread_header)
@@ -82,24 +92,36 @@ class ConversationAdapterV2(
       ConversationUpdateViewHolder(view)
     }
 
-    registerFactory(OutgoingTextOnly::class.java) { parent ->
-      val view = CachedInflater.from(parent.context).inflate<View>(R.layout.conversation_item_sent_text_only, parent, false)
-      OutgoingTextOnlyViewHolder(view)
-    }
-
     registerFactory(OutgoingMedia::class.java) { parent ->
       val view = CachedInflater.from(parent.context).inflate<View>(R.layout.conversation_item_sent_multimedia, parent, false)
       OutgoingMediaViewHolder(view)
     }
 
-    registerFactory(IncomingTextOnly::class.java) { parent ->
-      val view = CachedInflater.from(parent.context).inflate<View>(R.layout.conversation_item_received_text_only, parent, false)
-      IncomingTextOnlyViewHolder(view)
-    }
-
     registerFactory(IncomingMedia::class.java) { parent ->
       val view = CachedInflater.from(parent.context).inflate<View>(R.layout.conversation_item_received_multimedia, parent, false)
       IncomingMediaViewHolder(view)
+    }
+
+    if (SignalStore.internalValues().useConversationItemV2()) {
+      registerFactory(OutgoingTextOnly::class.java) { parent ->
+        val view = CachedInflater.from(parent.context).inflate<View>(R.layout.v2_conversation_item_text_only_outgoing, parent, false)
+        V2TextOnlyViewHolder(V2ConversationItemTextOnlyOutgoingBinding.bind(view).bridge(), this)
+      }
+
+      registerFactory(IncomingTextOnly::class.java) { parent ->
+        val view = CachedInflater.from(parent.context).inflate<View>(R.layout.v2_conversation_item_text_only_incoming, parent, false)
+        V2TextOnlyViewHolder(V2ConversationItemTextOnlyIncomingBinding.bind(view).bridge(), this)
+      }
+    } else {
+      registerFactory(OutgoingTextOnly::class.java) { parent ->
+        val view = CachedInflater.from(parent.context).inflate<View>(R.layout.conversation_item_sent_text_only, parent, false)
+        OutgoingTextOnlyViewHolder(view)
+      }
+
+      registerFactory(IncomingTextOnly::class.java) { parent ->
+        val view = CachedInflater.from(parent.context).inflate<View>(R.layout.conversation_item_received_text_only, parent, false)
+        IncomingTextOnlyViewHolder(view)
+      }
     }
   }
 
@@ -122,6 +144,24 @@ class ConversationAdapterV2(
         recyclerView.recycledViewPool.setMaxRecycledViews(type, count)
       }
     }
+  }
+  override val displayMode: ConversationItemDisplayMode
+    get() = condensedMode ?: ConversationItemDisplayMode.STANDARD
+
+  override fun onStartExpirationTimeout(messageRecord: MessageRecord) {
+    startExpirationTimeout(messageRecord)
+  }
+
+  override fun hasWallpaper(): Boolean = hasWallpaper && displayMode.displayWallpaper()
+
+  override fun getColorizer(): Colorizer = colorizer
+
+  override fun getNextMessage(adapterPosition: Int): MessageRecord? {
+    return getConversationMessage(adapterPosition - 1)?.messageRecord
+  }
+
+  override fun getPreviousMessage(adapterPosition: Int): MessageRecord? {
+    return getConversationMessage(adapterPosition + 1)?.messageRecord
   }
 
   fun updateSearchQuery(searchQuery: String?) {
@@ -337,9 +377,11 @@ class ConversationAdapterV2(
     }
   }
 
-  private abstract inner class ConversationViewHolder<T>(itemView: View) : MappingViewHolder<T>(itemView), GiphyMp4Playable, Colorizable {
+  private abstract inner class ConversationViewHolder<T>(itemView: View) : MappingViewHolder<T>(itemView), Multiselectable, Colorizable {
     val bindable: BindableConversationItem
       get() = itemView as BindableConversationItem
+
+    override val root: ViewGroup = bindable.root
 
     protected val previousMessage: Optional<MessageRecord>
       get() = getConversationMessage(bindingAdapterPosition + 1)?.messageRecord.toOptional()
@@ -349,6 +391,9 @@ class ConversationAdapterV2(
 
     protected val displayMode: ConversationItemDisplayMode
       get() = condensedMode ?: ConversationItemDisplayMode.STANDARD
+
+    override val conversationMessage: ConversationMessage
+      get() = bindable.conversationMessage
 
     init {
       itemView.setOnClickListener {
@@ -392,9 +437,17 @@ class ConversationAdapterV2(
       return bindable.shouldProjectContent()
     }
 
-    override fun getColorizerProjections(coordinateRoot: ViewGroup): ProjectionList {
-      return bindable.getColorizerProjections(coordinateRoot)
-    }
+    override fun hasNonSelectableMedia(): Boolean = bindable.hasNonSelectableMedia()
+
+    override fun getColorizerProjections(coordinateRoot: ViewGroup): ProjectionList = bindable.getColorizerProjections(coordinateRoot)
+
+    override fun getTopBoundaryOfMultiselectPart(multiselectPart: MultiselectPart): Int = bindable.getTopBoundaryOfMultiselectPart(multiselectPart)
+
+    override fun getBottomBoundaryOfMultiselectPart(multiselectPart: MultiselectPart): Int = bindable.getBottomBoundaryOfMultiselectPart(multiselectPart)
+
+    override fun getHorizontalTranslationTarget(): View? = bindable.getHorizontalTranslationTarget()
+
+    override fun getMultiselectPartForLatestTouch(): MultiselectPart = bindable.getMultiselectPartForLatestTouch()
   }
 
   inner class ThreadHeaderViewHolder(itemView: View) : MappingViewHolder<ThreadHeader>(itemView) {
