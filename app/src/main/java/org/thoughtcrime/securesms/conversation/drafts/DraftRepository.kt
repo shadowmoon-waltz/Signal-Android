@@ -1,13 +1,9 @@
 package org.thoughtcrime.securesms.conversation.drafts
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Color
 import android.net.Uri
 import android.text.Spannable
 import android.text.SpannableString
-import androidx.annotation.WorkerThread
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -34,11 +30,10 @@ import org.thoughtcrime.securesms.database.model.MessageId
 import org.thoughtcrime.securesms.database.model.MessageRecord
 import org.thoughtcrime.securesms.database.model.databaseprotos.BodyRangeList
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.keyboard.KeyboardUtil
 import org.thoughtcrime.securesms.mediasend.Media
-import org.thoughtcrime.securesms.mms.DecryptableStreamUriLoader.DecryptableUri
 import org.thoughtcrime.securesms.mms.GifSlide
 import org.thoughtcrime.securesms.mms.GlideApp
-import org.thoughtcrime.securesms.mms.GlideRequests
 import org.thoughtcrime.securesms.mms.ImageSlide
 import org.thoughtcrime.securesms.mms.PartAuthority
 import org.thoughtcrime.securesms.mms.QuoteId
@@ -53,10 +48,7 @@ import org.thoughtcrime.securesms.util.concurrent.SerialMonoLifoExecutor
 import org.thoughtcrime.securesms.util.hasTextSlide
 import org.thoughtcrime.securesms.util.requireTextSlide
 import java.io.IOException
-import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executor
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 class DraftRepository(
   private val context: Context = ApplicationDependencies.getApplication(),
@@ -70,8 +62,8 @@ class DraftRepository(
     val TAG = Log.tag(DraftRepository::class.java)
   }
 
-  fun getShareOrDraftData(): Maybe<Pair<ShareOrDraftData?, Drafts?>> {
-    return MaybeCompat.fromCallable { getShareOrDraftDataInternal() }
+  fun getShareOrDraftData(lastShareDataTimestamp: Long): Maybe<Pair<ShareOrDraftData?, Drafts?>> {
+    return MaybeCompat.fromCallable { getShareOrDraftDataInternal(lastShareDataTimestamp) }
       .observeOn(Schedulers.io())
   }
 
@@ -81,7 +73,17 @@ class DraftRepository(
    *
    * Note: Voice note drafts are handled differently and via the [DraftViewModel.state]
    */
-  private fun getShareOrDraftDataInternal(): Pair<ShareOrDraftData?, Drafts?>? {
+  @Suppress("ConvertTwoComparisonsToRangeCheck")
+  private fun getShareOrDraftDataInternal(lastShareDataTimestamp: Long): Pair<ShareOrDraftData?, Drafts?>? {
+    val sharedDataTimestamp: Long = conversationArguments?.shareDataTimestamp ?: -1
+    Log.d(TAG, "Shared this data at $sharedDataTimestamp and last processed share data at $lastShareDataTimestamp")
+    if (sharedDataTimestamp > 0 && sharedDataTimestamp <= lastShareDataTimestamp) {
+      Log.d(TAG, "Already processed this share data. Skipping.")
+      return null
+    } else {
+      Log.d(TAG, "Have not processed this share data. Proceeding.")
+    }
+
     val shareText = conversationArguments?.draftText
     val shareMedia = conversationArguments?.draftMedia
     val shareContentType = conversationArguments?.draftContentType
@@ -96,7 +98,7 @@ class DraftRepository(
     }
 
     if (shareMedia != null && shareContentType != null && borderless) {
-      val details = getKeyboardImageDetails(GlideApp.with(context), shareMedia)
+      val details = KeyboardUtil.getImageDetails(GlideApp.with(context), shareMedia)
 
       if (details == null || !details.hasTransparency) {
         return ShareOrDraftData.SetMedia(shareMedia, shareMediaType!!, null) to null
@@ -260,26 +262,6 @@ class DraftRepository(
     return ConversationMessageFactory.createWithUnresolvedData(context, messageRecord, threadRecipient)
   }
 
-  @WorkerThread
-  private fun getKeyboardImageDetails(glideRequests: GlideRequests, uri: Uri): KeyboardImageDetails? {
-    return try {
-      val bitmap: Bitmap = glideRequests.asBitmap()
-        .load(DecryptableUri(uri))
-        .skipMemoryCache(true)
-        .diskCacheStrategy(DiskCacheStrategy.NONE)
-        .submit()
-        .get(1000, TimeUnit.MILLISECONDS)
-      val topLeft = bitmap.getPixel(0, 0)
-      KeyboardImageDetails(bitmap.width, bitmap.height, Color.alpha(topLeft) < 255)
-    } catch (e: InterruptedException) {
-      null
-    } catch (e: ExecutionException) {
-      null
-    } catch (e: TimeoutException) {
-      null
-    }
-  }
-
   data class DatabaseDraft(val drafts: Drafts, val updatedText: CharSequence?)
 
   sealed interface ShareOrDraftData {
@@ -292,6 +274,4 @@ class DraftRepository(
     data class SetQuote(val quote: ConversationMessage, val draftText: CharSequence?) : ShareOrDraftData
     data class SetEditMessage(val messageEdit: ConversationMessage, val draftText: CharSequence?) : ShareOrDraftData
   }
-
-  data class KeyboardImageDetails(val width: Int, val height: Int, val hasTransparency: Boolean)
 }

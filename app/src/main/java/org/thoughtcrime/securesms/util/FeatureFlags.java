@@ -101,13 +101,15 @@ public final class FeatureFlags {
   private static final String PAYPAL_RECURRING_DONATIONS        = "android.recurringPayPalDonations.3";
   private static final String ANY_ADDRESS_PORTS_KILL_SWITCH     = "android.calling.fieldTrial.anyAddressPortsKillSwitch";
   private static final String AD_HOC_CALLING                    = "android.calling.ad.hoc.2";
-  private static final String EDIT_MESSAGE_SEND                 = "android.editMessage.send.4";
+  private static final String EDIT_MESSAGE_SEND                 = "android.editMessage.send.5";
   private static final String MAX_ATTACHMENT_COUNT              = "android.attachments.maxCount";
   private static final String MAX_ATTACHMENT_RECEIVE_SIZE_BYTES = "global.attachments.maxReceiveBytes";
   private static final String MAX_ATTACHMENT_SIZE_BYTES         = "global.attachments.maxBytes";
   private static final String SVR2_KILLSWITCH                   = "android.svr2.killSwitch";
   private static final String CDS_COMPAT_MODE                   = "global.cds.return_acis_without_uaks";
-
+  private static final String CONVERSATION_FRAGMENT_V2          = "android.conversationFragmentV2.2";
+  private static final String FCM_MAY_HAVE_MESSAGES_KILL_SWITCH = "android.fcmNotificationFallbackKillSwitch";
+  private static final String SAFETY_NUMBER_ACI                 = "global.safetyNumberAci";
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
    * remotely, place it in here.
@@ -165,7 +167,10 @@ public final class FeatureFlags {
       MAX_ATTACHMENT_SIZE_BYTES,
       AD_HOC_CALLING,
       SVR2_KILLSWITCH,
-      CDS_COMPAT_MODE
+      CDS_COMPAT_MODE,
+      CONVERSATION_FRAGMENT_V2,
+      SAFETY_NUMBER_ACI,
+      FCM_MAY_HAVE_MESSAGES_KILL_SWITCH
   );
 
   @VisibleForTesting
@@ -230,7 +235,10 @@ public final class FeatureFlags {
       MAX_ATTACHMENT_RECEIVE_SIZE_BYTES,
       MAX_ATTACHMENT_SIZE_BYTES,
       SVR2_KILLSWITCH,
-      CDS_COMPAT_MODE
+      CDS_COMPAT_MODE,
+      CONVERSATION_FRAGMENT_V2,
+      SAFETY_NUMBER_ACI,
+      FCM_MAY_HAVE_MESSAGES_KILL_SWITCH
   );
 
   /**
@@ -239,7 +247,8 @@ public final class FeatureFlags {
   @VisibleForTesting
   static final Set<String> STICKY = SetUtil.newHashSet(
       VERIFY_V2,
-      SVR2_KILLSWITCH
+      SVR2_KILLSWITCH,
+      FCM_MAY_HAVE_MESSAGES_KILL_SWITCH
   );
 
   /**
@@ -335,6 +344,14 @@ public final class FeatureFlags {
   /** Whether or not to use the UUID in verification codes. */
   public static boolean verifyV2() {
     return getBoolean(VERIFY_V2, false);
+  }
+
+  /** Whether or not we show the ACI safety number as the default initial safety number. */
+  public static boolean showAciSafetyNumberAsDefault() {
+    long estimatedServerTimeSeconds = (System.currentTimeMillis() - SignalStore.misc().getLastKnownServerTimeOffset()) / 1000;
+    long flagEnableTimeSeconds      = getLong(SAFETY_NUMBER_ACI, Long.MAX_VALUE);
+
+    return estimatedServerTimeSeconds > flagEnableTimeSeconds;
   }
 
   /** The raw client expiration JSON string. */
@@ -559,6 +576,13 @@ public final class FeatureFlags {
     return getBoolean(ANY_ADDRESS_PORTS_KILL_SWITCH, false);
   }
 
+  /**
+   * Enable/disable for notification when we cannot fetch messages despite receiving an urgent push.
+   */
+  public static boolean fcmMayHaveMessagesNotificationKillSwitch() {
+    return getBoolean(FCM_MAY_HAVE_MESSAGES_KILL_SWITCH, false);
+  }
+
   public static boolean editMessageSending() {
     return getBoolean(EDIT_MESSAGE_SEND, false);
   }
@@ -590,6 +614,11 @@ public final class FeatureFlags {
   /** True if you should use CDS in compat mode (i.e. request ACI's even if you don't know the access key), otherwise false. */
   public static boolean cdsCompatMode() {
     return getBoolean(CDS_COMPAT_MODE, true);
+  }
+
+  /** True if the new conversation fragment should be used. */
+  public static boolean useConversationFragmentV2() {
+    return getBoolean(CONVERSATION_FRAGMENT_V2, false);
   }
 
   /** Only for rendering debug info. */

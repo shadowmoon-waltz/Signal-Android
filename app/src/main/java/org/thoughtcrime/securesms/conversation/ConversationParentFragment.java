@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.hardware.Camera;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -58,7 +57,6 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -106,7 +104,6 @@ import org.thoughtcrime.securesms.ShortcutLauncherActivity;
 import org.thoughtcrime.securesms.attachments.Attachment;
 import org.thoughtcrime.securesms.attachments.TombstoneAttachment;
 import org.thoughtcrime.securesms.audio.AudioRecorder;
-import org.thoughtcrime.securesms.audio.BluetoothVoiceNoteUtil;
 import org.thoughtcrime.securesms.badges.gifts.thanks.GiftThanksSheet;
 import org.thoughtcrime.securesms.components.AnimatingToggle;
 import org.thoughtcrime.securesms.components.ComposeText;
@@ -206,7 +203,6 @@ import org.thoughtcrime.securesms.keyboard.sticker.StickerKeyboardPageFragment;
 import org.thoughtcrime.securesms.keyboard.sticker.StickerSearchDialogFragment;
 import org.thoughtcrime.securesms.keyvalue.PaymentsValues;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
-import org.thoughtcrime.securesms.keyvalue.SmsExportPhase;
 import org.thoughtcrime.securesms.linkpreview.LinkPreview;
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewRepository;
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewViewModel;
@@ -299,7 +295,6 @@ import org.thoughtcrime.securesms.util.views.Stub;
 import org.thoughtcrime.securesms.verify.VerifyIdentityActivity;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaperDimLevelUtil;
-import org.thoughtcrime.securesms.webrtc.audio.AudioManagerCompat;
 import org.whispersystems.signalservice.api.SignalSessionLock;
 
 import java.io.IOException;
@@ -414,7 +409,6 @@ public class ConversationParentFragment extends Fragment
   private   View                         navigationBarBackground;
 
   private AttachmentManager      attachmentManager;
-  private BluetoothVoiceNoteUtil bluetoothVoiceNoteUtil;
   private AudioRecorder          audioRecorder;
 
   private   RecordingSession         recordingSession;
@@ -485,6 +479,12 @@ public class ConversationParentFragment extends Fragment
   }
 
   @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    SignalLocalMetrics.ConversationOpen.start();
+  }
+
+  @Override
   public @NonNull View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     return inflater.inflate(R.layout.conversation_activity, container, false);
   }
@@ -513,7 +513,6 @@ public class ConversationParentFragment extends Fragment
 
     voiceNoteMediaController = new VoiceNoteMediaController(requireActivity(), true);
     voiceRecorderWakeLock    = new VoiceRecorderWakeLock(requireActivity());
-    bluetoothVoiceNoteUtil   = BluetoothVoiceNoteUtil.Companion.create(requireContext(), this::onBluetoothConnectionAttempt, this::onBluetoothPermissionDenied);
 
     // TODO [alex] LargeScreenSupport -- Should be removed once we move to multi-pane layout.
     new FullscreenHelper(requireActivity()).showSystemUI();
@@ -669,7 +668,6 @@ public class ConversationParentFragment extends Fragment
   public void onDestroy() {
     if (securityUpdateReceiver != null) requireActivity().unregisterReceiver(securityUpdateReceiver);
     if (pinnedShortcutReceiver != null) requireActivity().unregisterReceiver(pinnedShortcutReceiver);
-    if (bluetoothVoiceNoteUtil != null) bluetoothVoiceNoteUtil.destroy();
     super.onDestroy();
   }
 
@@ -2031,7 +2029,7 @@ public class ConversationParentFragment extends Fragment
 
     voiceNoteMediaController.getVoiceNotePlaybackState().observe(getViewLifecycleOwner(), inputPanel.getPlaybackStateObserver());
 
-    material3OnScrollHelper = new Material3OnScrollHelper(requireActivity(), Collections.singletonList(toolbarBackground), Collections.emptyList()) {
+    material3OnScrollHelper = new Material3OnScrollHelper(requireActivity(), Collections.singletonList(toolbarBackground), Collections.emptyList(), getViewLifecycleOwner()) {
       @Override
       public @NonNull ColorSet getActiveColorSet() {
         return new ColorSet(getActiveToolbarColor(wallpaper.getDrawable() != null));
@@ -2131,7 +2129,7 @@ public class ConversationParentFragment extends Fragment
   }
 
   protected void initializeActionBar() {
-    toolbar.addMenuProvider(new ConversationOptionsMenu.Provider(this, disposables));
+    toolbar.addMenuProvider(new ConversationOptionsMenu.Provider(this, disposables, true));
     invalidateOptionsMenu();
     toolbar.setNavigationContentDescription(R.string.ConversationFragment__content_description_back_button);
     if (isInBubble()) {
@@ -3333,22 +3331,7 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void onRecorderStarted() {
-    final AudioManagerCompat audioManager = ApplicationDependencies.getAndroidCallAudioManager();
-    if (audioManager.isBluetoothHeadsetAvailable()) {
-      connectToBluetoothAndBeginRecording();
-    } else {
-      Log.d(TAG, "Recording from phone mic because no bluetooth devices were available.");
-      beginRecording();
-    }
-  }
-
-  private void connectToBluetoothAndBeginRecording() {
-      if (bluetoothVoiceNoteUtil != null) {
-        Log.d(TAG, "Initiating Bluetooth SCO connection...");
-        bluetoothVoiceNoteUtil.connectBluetoothScoConnection();
-      } else {
-        Log.e(TAG, "Unable to instantiate BluetoothVoiceNoteUtil.");
-      }
+    beginRecording();
   }
 
   private Unit onBluetoothConnectionAttempt(Boolean success) {
@@ -3389,7 +3372,6 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void onRecorderFinished() {
-    bluetoothVoiceNoteUtil.disconnectBluetoothScoConnection();
     voiceRecorderWakeLock.release();
     updateToggleButtonState();
 
@@ -3409,7 +3391,6 @@ public class ConversationParentFragment extends Fragment
 
   @Override
   public void onRecorderCanceled(boolean byUser) {
-    bluetoothVoiceNoteUtil.disconnectBluetoothScoConnection();
     voiceRecorderWakeLock.release();
     updateToggleButtonState();
 
@@ -4467,7 +4448,7 @@ public class ConversationParentFragment extends Fragment
     public void onClicked(final List<IdentityRecord> unverifiedIdentities) {
       Log.i(TAG, "onClicked: " + unverifiedIdentities.size());
       if (unverifiedIdentities.size() == 1) {
-        startActivity(VerifyIdentityActivity.newIntent(requireContext(), unverifiedIdentities.get(0), false));
+        VerifyIdentityActivity.startOrShowExchangeMessagesDialog(requireContext(), unverifiedIdentities.get(0), false);
       } else {
         String[] unverifiedNames = new String[unverifiedIdentities.size()];
 
@@ -4479,7 +4460,7 @@ public class ConversationParentFragment extends Fragment
         builder.setIcon(R.drawable.ic_warning);
         builder.setTitle(R.string.ConversationFragment__no_longer_verified);
         builder.setItems(unverifiedNames, (dialog, which) -> {
-          startActivity(VerifyIdentityActivity.newIntent(requireContext(), unverifiedIdentities.get(which), false));
+          VerifyIdentityActivity.startOrShowExchangeMessagesDialog(requireContext(), unverifiedIdentities.get(which), false);
         });
         builder.show();
       }

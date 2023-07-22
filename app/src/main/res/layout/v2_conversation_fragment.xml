@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipChildren="false"
     app:animateKeyboardChanges="true">
 
     <include layout="@layout/system_ui_guidelines" />
@@ -35,21 +36,49 @@
         app:layout_constraintStart_toStartOf="@+id/conversation_item_recycler"
         app:layout_constraintTop_toTopOf="@+id/conversation_item_recycler" />
 
-    <org.thoughtcrime.securesms.conversation.mutiselect.MultiselectRecyclerView
-        android:id="@+id/conversation_item_recycler"
+    <FrameLayout
+        android:id="@+id/conversation_item_recycler_frame"
         android:layout_width="0dp"
-        android:layout_height="0dip"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:overScrollMode="ifContentScrolls"
-        android:scrollbars="vertical"
-        android:splitMotionEvents="false"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/conversation_bottom_panel_barrier"
         app:layout_constraintEnd_toEndOf="@id/parent_end_guideline"
         app:layout_constraintStart_toStartOf="@id/parent_start_guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="20"
-        tools:listitem="@layout/conversation_item_sent_text_only" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <org.thoughtcrime.securesms.conversation.mutiselect.MultiselectRecyclerView
+            android:id="@+id/conversation_item_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="vertical"
+            android:splitMotionEvents="false"
+            tools:itemCount="20"
+            tools:listitem="@layout/conversation_item_sent_text_only" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/scroll_date_header"
+        style="@style/Signal.Text.BodySmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/sticky_date_header_background"
+        android:elevation="9dp"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:textColor="@color/signal_colorOnSurfaceVariant"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/conversation_banner"
+        tools:text="March 1, 2015"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/toolbar_background"
@@ -118,6 +147,13 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <ViewStub
+            android:id="@+id/voice_note_player_stub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inflatedId="@+id/voice_note_player"
+            android:layout="@layout/voice_note_player_stub" />
+
+        <ViewStub
             android:id="@+id/unverified_banner_stub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,7 +215,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="conversation_input_panel,attachment_editor_stub,attachment_editor,conversation_disabled_input,scheduled_messages_stub,scheduled_messages" />
+        app:constraint_referenced_ids="conversation_input_panel,attachment_editor_stub,attachment_editor,conversation_disabled_input,scheduled_messages_stub,scheduled_messages,conversation_search_bottom_bar" />
 
     <ViewStub
         android:id="@+id/attachment_editor_stub"
@@ -291,7 +327,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginBottom="16dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/navigation_bar_guideline"
+        app:layout_constraintBottom_toBottomOf="@id/keyboard_guideline"
         app:layout_constraintEnd_toEndOf="@+id/parent_end_guideline"
         app:layout_constraintStart_toStartOf="@+id/parent_start_guideline" />
 
