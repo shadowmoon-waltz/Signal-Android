@@ -15,17 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: set up JDK 11
-      uses: actions/setup-java@v2
+    - name: set up JDK 17
+      uses: actions/setup-java@v3
       with:
-        java-version: '11'
-        distribution: 'temurin'
+        distribution: temurin
+        java-version: 17
 
     - name: Validate Gradle Wrapper
       uses: gradle/wrapper-validation-action@v1
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
 
     # https://proandroiddev.com/how-to-securely-build-and-sign-your-android-app-with-github-actions-ad5323452ce
     # https://github.community/t/how-can-i-test-if-secrets-are-available-in-an-action/17911/5
