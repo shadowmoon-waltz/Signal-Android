@@ -1956,8 +1956,8 @@
     <string name="SignalPinReminders_well_remind_you_again_later">Успешна провера PIN-а. Касније ћемо вас поново подсетити.</string>
     <string name="SignalPinReminders_well_remind_you_again_tomorrow">ПИН је успешно верификован. Сутра ћемо вас поново подсетити.</string>
     <string name="SignalPinReminders_well_remind_you_again_in_a_few_days">ПИН је успешно верификован. За неколико дана ћемо вас поново подсетити.</string>
-    <string name="SignalPinReminders_well_remind_you_again_in_a_week">ПИН је успешно верификован. за недељу дана ћемо вас поново подсетити.</string>
-    <string name="SignalPinReminders_well_remind_you_again_in_a_couple_weeks">ПИН је успешно верификован. За 2 недеље ћемо вас поново подсетити.</string>
+    <string name="SignalPinReminders_well_remind_you_again_in_a_week">ПИН је успешно верификован. за 1 седмицу ћемо вас поново подсетити.</string>
+    <string name="SignalPinReminders_well_remind_you_again_in_a_couple_weeks">ПИН је успешно верификован. За 2 седмице ћемо вас поново подсетити.</string>
     <string name="SignalPinReminders_well_remind_you_again_in_a_month">ПИН је успешно верификован. За месец дана ћемо вас поново подсетити.</string>
 
     <!-- Slide -->
@@ -2141,7 +2141,7 @@
     <string name="VerifyIdentityActivity_unable_to_scan_qr_code_without_camera_permission">Није могуће скенирати QR кôд без дозволе камере</string>
     <string name="VerifyIdentityActivity_you_must_first_exchange_messages_in_order_to_view">Прво морате разменити поруке са %1$s да бисте видели његов сигурносни број.</string>
     <!-- Dialog message explaining to user they must exchange messages first to create a safety number -->
-    <string name="VerifyIdentityActivity_dialog_exchange_messages_to_create_safety_number_message">A safety number will be created with this person after they exchange messages with you.</string>
+    <string name="VerifyIdentityActivity_dialog_exchange_messages_to_create_safety_number_message">Након што са овом особом размените поруке, са њом ће бити креиран сигурносни број.</string>
     <!-- Confirmation option for dialog explaining to user they must exchange messages first to create a safety number  -->
     <string name="VerifyIdentityActivity_dialog_exchange_messages_to_create_safety_number_ok">У реду</string>
     <!-- Learn more option for dialog explaining to user they must exchange messages first to create a safety number  -->
@@ -2270,7 +2270,7 @@
     <!-- Notification channel name for occasional alerts to the user. Will appear in the system notification settings as the title of this notification channel. -->
     <string name="NotificationChannel_critical_app_alerts">Критично упозорење о апликацији</string>
     <!-- Notification channel name for other notifications related to messages. Will appear in the system notification settings as the title of this notification channel. -->
-    <string name="NotificationChannel_additional_message_notifications">Additional message notifications</string>
+    <string name="NotificationChannel_additional_message_notifications">Додатна обавештења о порукама</string>
 
     <!-- ProfileEditNameFragment -->
 
@@ -2598,8 +2598,8 @@
     <string name="expiration_days_abbreviated">%1$d д</string>
 
     <plurals name="expiration_weeks">
-        <item quantity="one">%1$d нед.</item>
-        <item quantity="other">%1$d нед.</item>
+        <item quantity="one">%1$d сед.</item>
+        <item quantity="other">%1$d сед.</item>
     </plurals>
 
     <string name="expiration_weeks_abbreviated">%1$d с</string>
@@ -4381,7 +4381,7 @@
     <string name="CustomExpireTimerSelectorView__minutes">минута</string>
     <string name="CustomExpireTimerSelectorView__hours">сати</string>
     <string name="CustomExpireTimerSelectorView__days">дан(а)</string>
-    <string name="CustomExpireTimerSelectorView__weeks">недељ(а)</string>
+    <string name="CustomExpireTimerSelectorView__weeks">седмиц(а)</string>
 
     <!-- HelpSettingsFragment -->
     <string name="HelpSettingsFragment__support_center">Центар за подршку</string>

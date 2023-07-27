@@ -200,7 +200,7 @@ class ConversationAdapterV2(
   fun playInlineContent(conversationMessage: ConversationMessage?) {
     if (this.inlineContent !== conversationMessage) {
       this.inlineContent = conversationMessage
-      notifyDataSetChanged()
+      notifyItemRangeChanged(0, itemCount)
     }
   }
 
@@ -236,8 +236,15 @@ class ConversationAdapterV2(
     return request
   }
 
-  fun onHasWallpaperChanged(hasChanged: Boolean) {
-    // todo [cody] implement
+  fun onHasWallpaperChanged(hasWallpaper: Boolean): Boolean {
+    return if (this.hasWallpaper != hasWallpaper) {
+      Log.d(TAG, "Resetting adapter due to wallpaper change.")
+      this.hasWallpaper = hasWallpaper
+      notifyItemRangeChanged(0, itemCount)
+      true
+    } else {
+      false
+    }
   }
 
   fun onMessageRequestStateChanged(isMessageRequestAccepted: Boolean) {
@@ -252,6 +259,7 @@ class ConversationAdapterV2(
   fun clearSelection() {
     mostRecentSelected = null
     _selected.clear()
+    updateSelected()
   }
 
   fun toggleSelection(multiselectPart: MultiselectPart) {
@@ -262,6 +270,24 @@ class ConversationAdapterV2(
       mostRecentSelected = multiselectPart.getMessageRecord()
       _selected.add(multiselectPart)
     }
+    updateSelected()
+  }
+
+  fun removeFromSelection(expired: Set<MultiselectPart>) {
+    _selected.removeAll(expired)
+    updateSelected()
+  }
+
+  fun updateTimestamps() {
+    notifyItemRangeChanged(0, itemCount, ConversationAdapterBridge.PAYLOAD_TIMESTAMP)
+  }
+
+  fun updateNameColors() {
+    notifyItemRangeChanged(0, itemCount, ConversationAdapterBridge.PAYLOAD_NAME_COLORS)
+  }
+
+  private fun updateSelected() {
+    notifyItemRangeChanged(0, itemCount, ConversationAdapterBridge.PAYLOAD_SELECTED)
   }
 
   
@@ -314,6 +340,11 @@ class ConversationAdapterV2(
   private inner class ConversationUpdateViewHolder(itemView: View) : ConversationViewHolder<ConversationUpdate>(itemView) {
     override fun bind(model: ConversationUpdate) {
       bindable.setEventListener(clickListener)
+
+      if (bindPayloadsIfAvailable()) {
+        return
+      }
+
       bindable.bind(
         lifecycleOwner,
         model.conversationMessage,
@@ -326,7 +357,7 @@ class ConversationAdapterV2(
         searchQuery,
         false,
         hasWallpaper && displayMode.displayWallpaper(),
-        true, // isMessageRequestAccepted,
+        isMessageRequestAccepted,
         model.conversationMessage == inlineContent,
         colorizer,
         displayMode
@@ -337,6 +368,11 @@ class ConversationAdapterV2(
   private inner class OutgoingTextOnlyViewHolder(itemView: View) : ConversationViewHolder<OutgoingTextOnly>(itemView) {
     override fun bind(model: OutgoingTextOnly) {
       bindable.setEventListener(clickListener)
+
+      if (bindPayloadsIfAvailable()) {
+        return
+      }
+
       bindable.bind(
         lifecycleOwner,
         model.conversationMessage,
@@ -349,7 +385,7 @@ class ConversationAdapterV2(
         searchQuery,
         false,
         hasWallpaper && displayMode.displayWallpaper(),
-        true, // isMessageRequestAccepted,
+        isMessageRequestAccepted,
         model.conversationMessage == inlineContent,
         colorizer,
         displayMode
@@ -360,6 +396,11 @@ class ConversationAdapterV2(
   private inner class OutgoingMediaViewHolder(itemView: View) : ConversationViewHolder<OutgoingMedia>(itemView) {
     override fun bind(model: OutgoingMedia) {
       bindable.setEventListener(clickListener)
+
+      if (bindPayloadsIfAvailable()) {
+        return
+      }
+
       bindable.bind(
         lifecycleOwner,
         model.conversationMessage,
@@ -383,6 +424,11 @@ class ConversationAdapterV2(
   private inner class IncomingTextOnlyViewHolder(itemView: View) : ConversationViewHolder<IncomingTextOnly>(itemView) {
     override fun bind(model: IncomingTextOnly) {
       bindable.setEventListener(clickListener)
+
+      if (bindPayloadsIfAvailable()) {
+        return
+      }
+
       bindable.bind(
         lifecycleOwner,
         model.conversationMessage,
@@ -395,7 +441,7 @@ class ConversationAdapterV2(
         searchQuery,
         false,
         hasWallpaper && displayMode.displayWallpaper(),
-        true, // isMessageRequestAccepted,
+        isMessageRequestAccepted,
         model.conversationMessage == inlineContent,
         colorizer,
         displayMode
@@ -406,6 +452,11 @@ class ConversationAdapterV2(
   private inner class IncomingMediaViewHolder(itemView: View) : ConversationViewHolder<IncomingMedia>(itemView) {
     override fun bind(model: IncomingMedia) {
       bindable.setEventListener(clickListener)
+
+      if (bindPayloadsIfAvailable()) {
+        return
+      }
+
       bindable.bind(
         lifecycleOwner,
         model.conversationMessage,
@@ -456,6 +507,27 @@ class ConversationAdapterV2(
         )
         true
       }
+    }
+
+    fun bindPayloadsIfAvailable(): Boolean {
+      var payloadApplied = false
+
+      if (payload.contains(ConversationAdapterBridge.PAYLOAD_TIMESTAMP)) {
+        bindable.updateTimestamps()
+        payloadApplied = true
+      }
+
+      if (payload.contains(ConversationAdapterBridge.PAYLOAD_NAME_COLORS)) {
+        bindable.updateContactNameColor()
+        payloadApplied = true
+      }
+
+      if (payload.contains(ConversationAdapterBridge.PAYLOAD_SELECTED)) {
+        bindable.updateSelectedState()
+        payloadApplied = true
+      }
+
+      return payloadApplied
     }
 
     override fun showProjectionArea() {

@@ -104,10 +104,14 @@ class ConversationViewModel(
 
   val pagingController = ProxyPagingController<ConversationElementKey>()
 
-  val nameColorsMap: Observable<Map<RecipientId, NameColor>> = recipient
-    .filter { it.isGroup }
-    .flatMap { repository.getNameColorsMap(it, groupAuthorNameColorHelper) }
+  val nameColorsMap: Observable<Map<RecipientId, NameColor>> = recipientRepository
+    .groupRecord
+    .filter { it.isPresent }
+    .map { it.get() }
+    .distinctUntilChanged { previous, next -> previous.hasSameMembers(next) }
+    .map { repository.getNameColorsMap(it, groupAuthorNameColorHelper) }
     .distinctUntilChanged()
+    .observeOn(AndroidSchedulers.mainThread())
 
   @Volatile
   var recipientSnapshot: Recipient? = null
@@ -131,7 +135,9 @@ class ConversationViewModel(
 
   private val refreshIdentityRecords: Subject<Unit> = PublishSubject.create()
   private val identityRecordsStore: RxStore<IdentityRecordsState> = RxStore(IdentityRecordsState())
-  val identityRecords: Observable<IdentityRecordsState> = identityRecordsStore.stateFlowable.toObservable()
+  val identityRecordsObservable: Observable<IdentityRecordsState> = identityRecordsStore.stateFlowable.toObservable()
+  val identityRecordsState: IdentityRecordsState
+    get() = identityRecordsStore.state
 
   private val _searchQuery = BehaviorSubject.createDefault("")
   val searchQuery: Observable<String> = _searchQuery
@@ -208,6 +214,7 @@ class ConversationViewModel(
         conversationRecipient = recipient,
         messageRequestState = messageRequestRepository.getMessageRequestState(recipient, threadId),
         groupRecord = groupRecord.orNull(),
+        groupNameColors = groupRecord.map { repository.getNameColorsMap(it, groupAuthorNameColorHelper) }.orElse(emptyMap()),
         isClientExpired = SignalStore.misc().isClientDeprecated,
         isUnauthorized = TextSecurePreferences.isUnauthorizedReceived(ApplicationDependencies.getApplication())
       )
@@ -337,6 +344,7 @@ class ConversationViewModel(
 
   fun sendMessage(
     metricId: String?,
+    threadRecipient: Recipient,
     body: String,
     slideDeck: SlideDeck?,
     scheduledDate: Long,
@@ -347,12 +355,11 @@ class ConversationViewModel(
     contacts: List<Contact>,
     linkPreviews: List<LinkPreview>,
     preUploadResults: List<MessageSender.PreUploadResult>,
-    bypassPreSendSafetyNumberCheck: Boolean,
     isViewOnce: Boolean
   ): Completable {
     return repository.sendMessage(
       threadId = threadId,
-      threadRecipient = recipientSnapshot,
+      threadRecipient = threadRecipient,
       metricId = metricId,
       body = body,
       slideDeck = slideDeck,
@@ -364,7 +371,6 @@ class ConversationViewModel(
       contacts = contacts,
       linkPreviews = linkPreviews,
       preUploadResults = preUploadResults,
-      identityRecordsState = if (bypassPreSendSafetyNumberCheck) null else identityRecordsStore.state,
       isViewOnce = isViewOnce
     ).observeOn(AndroidSchedulers.mainThread())
   }

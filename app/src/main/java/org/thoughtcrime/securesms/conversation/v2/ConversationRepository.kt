@@ -18,7 +18,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleEmitter
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -28,7 +27,6 @@ import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.dp
 import org.signal.core.util.logging.Log
 import org.signal.core.util.toOptional
-import org.signal.libsignal.protocol.InvalidMessageException
 import org.signal.paging.PagedData
 import org.signal.paging.PagingConfig
 import org.thoughtcrime.securesms.R
@@ -88,7 +86,6 @@ import org.thoughtcrime.securesms.mms.SlideDeck
 import org.thoughtcrime.securesms.profiles.spoofing.ReviewUtil
 import org.thoughtcrime.securesms.providers.BlobProvider
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.recipients.RecipientFormattingException
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.search.MessageResult
 import org.thoughtcrime.securesms.sms.MessageSender
@@ -166,19 +163,10 @@ class ConversationRepository(
    * Generates the name color-map for groups.
    */
   fun getNameColorsMap(
-    recipient: Recipient,
+    group: GroupRecord,
     groupAuthorNameColorHelper: GroupAuthorNameColorHelper
-  ): Observable<Map<RecipientId, NameColor>> {
-    return Recipient.observable(recipient.id)
-      .distinctUntilChanged { a, b -> a.participantIds == b.participantIds }
-      .map {
-        if (it.groupId.isPresent) {
-          groupAuthorNameColorHelper.getColorMap(it.requireGroupId())
-        } else {
-          emptyMap()
-        }
-      }
-      .subscribeOn(Schedulers.io())
+  ): Map<RecipientId, NameColor> {
+    return groupAuthorNameColorHelper.getColorMap(group)
   }
 
   fun sendReactionRemoval(messageRecord: MessageRecord, oldRecord: ReactionRecord): Completable {
@@ -203,7 +191,7 @@ class ConversationRepository(
 
   fun sendMessage(
     threadId: Long,
-    threadRecipient: Recipient?,
+    threadRecipient: Recipient,
     metricId: String?,
     body: String,
     slideDeck: SlideDeck?,
@@ -215,25 +203,9 @@ class ConversationRepository(
     contacts: List<Contact>,
     linkPreviews: List<LinkPreview>,
     preUploadResults: List<PreUploadResult>,
-    identityRecordsState: IdentityRecordsState?,
     isViewOnce: Boolean
   ): Completable {
     val sendCompletable = Completable.create { emitter ->
-      if (body.isEmpty() && slideDeck?.containsMediaSlide() != true && preUploadResults.isEmpty() && contacts.isEmpty()) {
-        emitter.onError(InvalidMessageException("Message is empty!"))
-        return@create
-      }
-
-      if (threadRecipient == null) {
-        emitter.onError(RecipientFormattingException("Badly formatted"))
-        return@create
-      }
-
-      if (identityRecordsState != null && identityRecordsState.hasRecentSafetyNumberChange()) {
-        emitter.onError(RecentSafetyNumberChangeException(identityRecordsState.getRecentSafetyNumberChangeRecords()))
-        return@create
-      }
-
       val splitMessage: MessageUtil.SplitResult = MessageUtil.getSplitMessage(
         applicationContext,
         body,
