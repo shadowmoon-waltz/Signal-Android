@@ -274,6 +274,7 @@ class ConversationAdapterV2(
   }
 
   fun removeFromSelection(expired: Set<MultiselectPart>) {
+    clearMostRecentSelectedIfNecessary(expired.map(MultiselectPart::getMessageRecord).toSet())
     _selected.removeAll(expired)
     updateSelected()
   }

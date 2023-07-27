@@ -37,6 +37,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.annimon.stream.Collectors;
+import com.annimon.stream.Stream;
 import com.google.android.exoplayer2.MediaItem;
 
 import org.signal.core.util.logging.Log;
@@ -587,6 +589,7 @@ public class ConversationAdapter
   }
 
   public void removeFromSelection(@NonNull Set<MultiselectPart> parts) {
+    clearMostRecentSelectedIfNecessary(Stream.of(parts).map(MultiselectPart::getConversationMessage).collect(Collectors.toSet()));
     selected.removeAll(parts);
     updateSelected();
   }
