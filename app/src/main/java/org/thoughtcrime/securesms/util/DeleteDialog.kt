@@ -22,6 +22,8 @@ object DeleteDialog {
    * @param title             The dialog title
    * @param message           The dialog message, or null
    * @param forceRemoteDelete Allow remote deletion, even if it would normally be disallowed
+   * @param forceDeleteForMe  no prompt, go ahead and delete for me
+   * @param checkFastDeleteForMe skip prompt if trashNoPromptForMe is true
    *
    * @return a Single, who's value notes whether or not a thread deletion occurred.
    */
@@ -30,8 +32,15 @@ object DeleteDialog {
     messageRecords: Set<MessageRecord>,
     title: CharSequence = context.resources.getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messageRecords.size, messageRecords.size),
     message: CharSequence? = null,
-    forceRemoteDelete: Boolean = false
+    forceRemoteDelete: Boolean = false,
+    forceDeleteForMe: Boolean = false,
+    checkFastDeleteForMe: Boolean = false
   ): Single<Boolean> = Single.create { emitter ->
+    if (forceDeleteForMe || (checkFastDeleteForMe && SignalStore.settings().isTrashNoPromptForMe())) {
+      handleDeleteForMe(context, messageRecords, emitter)
+      return@create
+    }
+
     val builder = MaterialAlertDialogBuilder(context)
 
     builder.setTitle(title)
@@ -41,9 +50,7 @@ object DeleteDialog {
     if (forceRemoteDelete) {
       builder.setPositiveButton(R.string.ConversationFragment_delete_for_everyone) { _, _ -> deleteForEveryone(messageRecords, emitter) }
     } else {
-      builder.setPositiveButton(R.string.ConversationFragment_delete_for_me) { _, _ ->
-        DeleteProgressDialogAsyncTask(context, messageRecords, emitter::onSuccess).executeOnExecutor(SignalExecutors.BOUNDED)
-      }
+      builder.setPositiveButton(R.string.ConversationFragment_delete_for_me) { _, _ -> handleDeleteForMe(context, messageRecords, emitter) }
 
       if (MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis())) {
         builder.setNeutralButton(R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
@@ -53,6 +60,14 @@ object DeleteDialog {
     builder.setNegativeButton(android.R.string.cancel) { _, _ -> emitter.onSuccess(false) }
     builder.setOnCancelListener { emitter.onSuccess(false) }
     builder.show()
+  }
+
+  private fun handleDeleteForMe(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Boolean>) {
+    if (messageRecords.size > 1) {
+      DeleteProgressDialogAsyncTask(context, messageRecords, emitter::onSuccess).executeOnExecutor(SignalExecutors.BOUNDED)
+    } else {
+      SignalExecutors.BOUNDED.execute { emitter.onSuccess(SignalDatabase.messages.deleteMessage(messageRecords.first().id)) }
+    }
   }
 
   private fun handleDeleteForEveryone(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Boolean>) {

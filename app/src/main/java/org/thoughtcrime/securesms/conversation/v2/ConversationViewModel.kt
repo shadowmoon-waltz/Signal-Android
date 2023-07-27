@@ -316,10 +316,11 @@ class ConversationViewModel(
   /**
    * @return Maybe which only emits if the "React with any" sheet should be displayed.
    */
-  fun updateCustomReaction(messageRecord: MessageRecord, hasAddedCustomEmoji: Boolean): Maybe<Unit> {
+  fun updateCustomReaction(messageRecord: MessageRecord, hasAddedCustomEmoji: Boolean, holdDuration: Long): Maybe<Unit> {
     val oldRecord = messageRecord.oldReactionRecord()
 
-    return if (oldRecord != null && hasAddedCustomEmoji) {
+    // TODO[sw]: don't hardcode fast custom reaction change hold duration?
+    return if ((!SignalStore.settings().isFastCustomReactionChange() || holdDuration < 500) && oldRecord != null && hasAddedCustomEmoji) {
       repository.sendReactionRemoval(messageRecord, oldRecord).toMaybe()
     } else {
       Maybe.just(Unit)
@@ -399,6 +400,10 @@ class ConversationViewModel(
 
   fun copyToClipboard(context: Context, messageParts: Set<MultiselectPart>): Maybe<CharSequence> {
     return repository.copyToClipboard(context, messageParts)
+  }
+
+  fun getAsText(context: Context, messageParts: Set<MultiselectPart>): Maybe<CharSequence> {
+    return repository.getAsText(context, messageParts)
   }
 
   fun resendMessage(conversationMessage: ConversationMessage): Completable {

@@ -37,8 +37,8 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   private final SwipeAvailabilityProvider     swipeAvailabilityProvider2;
   private final OnSwipeListener               onSwipeListener2;
 
-  public ConversationItemSwipeCallback(@NonNull SwipeAvailabilityProvider swipeAvailabilityProvider,
-                                       @NonNull OnSwipeListener onSwipeListener,
+  public ConversationItemSwipeCallback(@Nullable SwipeAvailabilityProvider swipeAvailabilityProvider,
+                                       @Nullable OnSwipeListener onSwipeListener,
                                        @Nullable SwipeAvailabilityProvider swipeAvailabilityProvider2,
                                        @Nullable OnSwipeListener onSwipeListener2)
   {
@@ -142,11 +142,11 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
 
     if (!swipeToLeft) {
       if (onSwipeListener != null) {
-        onSwipeListener.onSwipe(element.getConversationMessage());
+        onSwipeListener.onSwipe(element.getConversationMessage(), element, motionEvent);
       }
     } else {
       if (onSwipeListener2 != null) {
-        onSwipeListener2.onSwipe(element.getConversationMessage());
+        onSwipeListener2.onSwipe(element.getConversationMessage(), element, motionEvent);
       }
     }
   }
@@ -253,6 +253,6 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   }
 
   public interface OnSwipeListener {
-    void onSwipe(ConversationMessage conversationMessage);
+    void onSwipe(ConversationMessage conversationMessage, InteractiveConversationElement element, MotionEvent event);
   }
 }

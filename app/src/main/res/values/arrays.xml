@@ -367,9 +367,9 @@
     <string-array name="ForkSettingsFragment__swipe_to_right_action__entries">
         <item>@string/ForkSettingsFragment__swipe_to_right_action__default</item>
         <item>@string/preferences__none</item>
-        <item>@string/delete</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_prompt</item>
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
-        <item>@string/ForkSettingsFragment__copy_text</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_no_popup</item>
         <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
         <item>@string/conversation_selection__menu_forward</item>
         <item>@string/AndroidManifest__message_details</item>
@@ -398,9 +398,9 @@
         <item>@string/ForkSettingsFragment__swipe_to_left_action__default</item>
         <item>@string/AndroidManifest__message_details</item>
         <item>@string/MessageNotifier_reply</item>
-        <item>@string/delete</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_prompt</item>
         <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
-        <item>@string/ForkSettingsFragment__copy_text</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_no_popup</item>
         <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
         <item>@string/conversation_selection__menu_forward</item>
         <item>@string/ForkSettingsFragment__show_options</item>

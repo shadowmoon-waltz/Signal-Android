@@ -10,7 +10,7 @@ Releases prior to and including v5.44.1-0 were locally compiled, locally signed 
 
 ## Differences from stock Signal
 
-<details open="">
+<details>
 <summary>October 2022</summary>
 
 * (Option) Long-press a sticker in the recent sticker list to jump to the pack that sticker belongs to (normally this enlarges the sticker and shows you what emoji it corresponds to)
@@ -72,7 +72,7 @@ Releases prior to and including v5.44.1-0 were locally compiled, locally signed 
     * delete message (with usual prompt or for me without prompt)
     * copy text (normal method or with popup)
     * show message details
-    * ~~show options (show long press menu) (June 2021)~~ (July 2023, temporarily broken, will be easier to readd when some other upstream changes are finished)
+    * show options (show long press menu) (June 2021) ~~(broken and fixed in July 2023, although bubble is currently still in swiped position while options are shown)~~
     * note to self (shortcut for forward to self, only works if you have an existing note to self conversation) (June 2021)
     * select multiple (select item and enter multi select mode) (June 2021)
 * Option to enable a range to be selected when selecting multiple conversation items, by long pressing an item after selecting an item, which will select all items in that range (including the selected and long pressed items)

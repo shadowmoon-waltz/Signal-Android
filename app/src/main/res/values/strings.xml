@@ -4422,10 +4422,11 @@
     <string name="ForkSettingsFragment__conversation_delete_in_menu_summary">Option will show up in menu while viewing a conversation</string>
     <string name="conversation__delete_conversation">Delete conversation</string>
     <string name="ForkSettingsFragment__swipe_to_right_action__default">Default (Reply)</string>
+    <string name="ForkSettingsFragment__swipe_action__delete_prompt">Delete (Prompt)</string>
     <string name="ForkSettingsFragment__swipe_action__delete_no_prompt">Delete (For Me) (No Prompt)</string>
-    <string name="ForkSettingsFragment__copy_text">Copy Text</string>
+    <string name="ForkSettingsFragment__swipe_action__copy_text_no_popup">Copy Text (No Popup)</string>
     <string name="ForkSettingsFragment__swipe_action__copy_text_popup">Copy Text (Popup)</string>
-    <string name="ForkSettingsFragment__show_options">Show Options (temp broken)</string>
+    <string name="ForkSettingsFragment__show_options">Show Options</string>
     <string name="ForkSettingsFragment__select_multiple">Select multiple</string>
     <string name="ForkSettingsFragment__swipe_to_right_action">Swipe to Right Conversation Item Action</string>
     <string name="ForkSettingsFragment__range_multi_select">Conversation Items Range Multi Select</string>

@@ -475,6 +475,11 @@ class ConversationRepository(
       }
   }
 
+  fun getAsText(context: Context, messageParts: Set<MultiselectPart>): Maybe<CharSequence> {
+    return Maybe.fromCallable { extractBodies(context, messageParts) }
+      .subscribeOn(Schedulers.computation())
+  }
+
   fun resendMessage(messageRecord: MessageRecord): Completable {
     return Completable.fromAction {
       MessageSender.resend(applicationContext, messageRecord)
