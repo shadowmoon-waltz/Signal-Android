@@ -44,8 +44,6 @@ import org.thoughtcrime.securesms.contactshare.Contact
 import org.thoughtcrime.securesms.contactshare.ContactUtil
 import org.thoughtcrime.securesms.conversation.ConversationMessage
 import org.thoughtcrime.securesms.conversation.MessageSendType
-import org.thoughtcrime.securesms.conversation.colors.GroupAuthorNameColorHelper
-import org.thoughtcrime.securesms.conversation.colors.NameColor
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart
 import org.thoughtcrime.securesms.conversation.v2.RequestReviewState.GroupReviewState
 import org.thoughtcrime.securesms.conversation.v2.RequestReviewState.IndividualReviewState
@@ -157,16 +155,6 @@ class ConversationRepository(
         meta = metadata
       )
     }.subscribeOn(Schedulers.io())
-  }
-
-  /**
-   * Generates the name color-map for groups.
-   */
-  fun getNameColorsMap(
-    group: GroupRecord,
-    groupAuthorNameColorHelper: GroupAuthorNameColorHelper
-  ): Map<RecipientId, NameColor> {
-    return groupAuthorNameColorHelper.getColorMap(group)
   }
 
   fun sendReactionRemoval(messageRecord: MessageRecord, oldRecord: ReactionRecord): Completable {
@@ -319,7 +307,7 @@ class ConversationRepository(
     return Maybe.fromCallable {
       val reminder: Reminder? = when {
         ExpiredBuildReminder.isEligible() -> ExpiredBuildReminder(applicationContext)
-        UnauthorizedReminder.isEligible(applicationContext) -> UnauthorizedReminder(applicationContext)
+        UnauthorizedReminder.isEligible(applicationContext) -> UnauthorizedReminder()
         ServiceOutageReminder.isEligible(applicationContext) -> {
           ApplicationDependencies.getJobManager().add(ServiceOutageDetectionJob())
           ServiceOutageReminder()

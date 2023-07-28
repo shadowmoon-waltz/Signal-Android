@@ -70,7 +70,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.kotlin.subscribeBy
@@ -301,8 +300,8 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.WindowUtil
-import org.thoughtcrime.securesms.util.activityViewModel
 import org.thoughtcrime.securesms.util.concurrent.ListenableFuture
+import org.thoughtcrime.securesms.util.createActivityViewModel
 import org.thoughtcrime.securesms.util.doAfterNextLayout
 import org.thoughtcrime.securesms.util.fragments.requireListener
 import org.thoughtcrime.securesms.util.getRecordQuoteType
@@ -362,8 +361,8 @@ class ConversationFragment :
   }
 
   private val disposables = LifecycleDisposable()
-  private val binding by ViewBinderDelegate(V2ConversationFragmentBinding::bind) {
-    composeText.apply {
+  private val binding by ViewBinderDelegate(V2ConversationFragmentBinding::bind) { _binding ->
+    _binding.conversationInputPanel.embeddedTextEditor.apply {
       setOnEditorActionListener(null)
       setCursorPositionChangedListener(null)
       setOnKeyListener(null)
@@ -373,7 +372,9 @@ class ConversationFragment :
       removeOnFocusChangeListener(composeTextEventsListener)
     }
 
-    adapter.unregisterAdapterDataObserver(dataObserver)
+    dataObserver?.let {
+      adapter.unregisterAdapterDataObserver(it)
+    }
 
     textDraftSaveDebouncer.clear()
   }
@@ -423,9 +424,7 @@ class ConversationFragment :
     StickerSuggestionsViewModel()
   }
 
-  private val inlineQueryViewModel: InlineQueryViewModelV2 by activityViewModel {
-    InlineQueryViewModelV2(recipientRepository = conversationRecipientRepository)
-  }
+  private lateinit var inlineQueryViewModel: InlineQueryViewModelV2
 
   private val shareDataTimestampViewModel: ShareDataTimestampViewModel by activityViewModels()
 
@@ -466,7 +465,6 @@ class ConversationFragment :
   private lateinit var menuProvider: ConversationOptionsMenu.Provider
   private lateinit var typingIndicatorDecoration: TypingIndicatorDecoration
   private lateinit var backPressedCallback: BackPressedDelegate
-  private lateinit var dataObserver: DataObserver
 
   private var animationsAllowed = false
   private var actionMode: ActionMode? = null
@@ -476,6 +474,7 @@ class ConversationFragment :
   private var previousPages: Set<KeyboardPage>? = null
   private var reShowScheduleMessagesBar: Boolean = false
   private var composeTextEventsListener: ComposeTextEventsListener? = null
+  private var dataObserver: DataObserver? = null
 
   private val jumpAndPulseScrollStrategy = object : ScrollToPositionDelegate.ScrollStrategy {
     override fun performScroll(recyclerView: RecyclerView, layoutManager: LinearLayoutManager, position: Int, smooth: Boolean) {
@@ -522,12 +521,15 @@ class ConversationFragment :
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    registerForResults()
     disposables.bindTo(viewLifecycleOwner)
     FullscreenHelper(requireActivity()).showSystemUI()
 
     markReadHelper = MarkReadHelper(ConversationId.forConversation(args.threadId), requireContext(), viewLifecycleOwner)
     markReadHelper.ignoreViewReveals()
+
+    inlineQueryViewModel = createActivityViewModel { InlineQueryViewModelV2(recipientRepository = conversationRecipientRepository) }
+
+    attachmentManager = AttachmentManager(requireContext(), requireView(), AttachmentManagerListener())
 
     initializeConversationThreadUi()
 
@@ -558,6 +560,8 @@ class ConversationFragment :
 
     ToolbarDependentMarginListener(binding.toolbar)
     initializeMediaKeyboard()
+
+    registerForResults()
   }
 
   override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -769,6 +773,7 @@ class ConversationFragment :
       .doOnSuccess { state ->
         SignalLocalMetrics.ConversationOpen.onDataLoaded()
         conversationItemDecorations.setFirstUnreadCount(state.meta.unreadCount)
+        colorizer.onGroupMembershipChanged(state.meta.groupMemberAcis)
       }
       .observeOn(AndroidSchedulers.mainThread())
       .doOnSuccess { state ->
@@ -805,8 +810,6 @@ class ConversationFragment :
 
     menuProvider.afterFirstRenderMode = true
 
-    attachmentManager = AttachmentManager(requireContext(), requireView(), AttachmentManagerListener())
-
     viewLifecycleOwner.lifecycle.addObserver(LastScrolledPositionUpdater(adapter, layoutManager, viewModel))
 
     disposables += viewModel.recipient
@@ -822,10 +825,9 @@ class ConversationFragment :
       .subscribeBy(onNext = this::presentScrollButtons)
 
     disposables += viewModel
-      .nameColorsMap
-      .observeOn(AndroidSchedulers.mainThread())
+      .groupMemberServiceIds
       .subscribeBy(onNext = {
-        colorizer.onNameColorsChanged(it)
+        colorizer.onGroupMembershipChanged(it)
         adapter.updateNameColors()
       })
 
@@ -847,7 +849,6 @@ class ConversationFragment :
     }
 
     sendButton.apply {
-      snackbarContainer = binding.root
       setPopupContainer(binding.root)
       setOnClickListener(sendButtonListener)
       setScheduledSendListener(sendButtonListener)
@@ -876,7 +877,7 @@ class ConversationFragment :
     }
 
     dataObserver = DataObserver()
-    adapter.registerAdapterDataObserver(dataObserver)
+    adapter.registerAdapterDataObserver(dataObserver!!)
 
     val keyboardEvents = KeyboardEvents()
     container.listener = keyboardEvents
@@ -1058,6 +1059,7 @@ class ConversationFragment :
       inputReadyState.isActiveGroup == false -> disabledInputView.showAsNoLongerAMember()
       inputReadyState.isRequestingMember == true -> disabledInputView.showAsRequestingMember()
       inputReadyState.isAnnouncementGroup == true && inputReadyState.isAdmin == false -> disabledInputView.showAsAnnouncementGroupAdminsOnly()
+      !inputReadyState.conversationRecipient.isGroup && !inputReadyState.conversationRecipient.isRegistered -> disabledInputView.showAsInviteToSignal(requireContext(), inputReadyState.conversationRecipient)
       else -> inputDisabled = false
     }
 
@@ -1070,8 +1072,6 @@ class ConversationFragment :
     }
 
     composeText.setMessageSendType(MessageSendType.SignalMessageSendType)
-
-    colorizer.onNameColorsChanged(inputReadyState.groupNameColors)
   }
 
   private fun presentIdentityRecordsState(identityRecordsState: IdentityRecordsState) {
@@ -2963,7 +2963,7 @@ class ConversationFragment :
       return ConversationOptionsMenu.Snapshot(
         recipient = recipient,
         isPushAvailable = viewModel.isPushAvailable,
-        canShowAsBubble = Observable.empty(),
+        canShowAsBubble = viewModel.canShowAsBubble(requireContext()),
         isActiveGroup = recipient?.isActiveGroup == true,
         isActiveV2Group = recipient?.let { it.isActiveGroup && it.isPushV2Group } == true,
         isInActiveGroup = recipient?.isActiveGroup == false,
@@ -3623,6 +3623,15 @@ class ConversationFragment :
       }
 
       GroupsV1MigrationInitiationBottomSheetDialogFragment.showForInitiation(childFragmentManager, recipient.id)
+    }
+
+    override fun onInviteToSignal(recipient: Recipient) {
+      InviteActions.inviteUserToSignal(
+        context = requireContext(),
+        recipient = recipient,
+        appendInviteToComposer = null,
+        launchIntent = this@ConversationFragment::startActivity
+      )
     }
 
     private fun Single<Result<Unit, GroupChangeFailureReason>>.subscribeWithShowProgress(logMessage: String): Disposable {
