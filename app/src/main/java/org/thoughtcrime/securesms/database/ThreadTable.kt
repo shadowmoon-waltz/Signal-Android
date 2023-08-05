@@ -63,7 +63,6 @@ import org.thoughtcrime.securesms.util.JsonUtils.SaneJSONObject
 import org.thoughtcrime.securesms.util.LRUCache
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.isScheduled
-import org.whispersystems.signalservice.api.push.ServiceId
 import org.whispersystems.signalservice.api.storage.SignalAccountRecord
 import org.whispersystems.signalservice.api.storage.SignalAccountRecord.PinnedConversation
 import org.whispersystems.signalservice.api.storage.SignalContactRecord
@@ -722,7 +721,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
     }
 
     if (hideV1Groups) {
-      where += " AND ${RecipientTable.TABLE_NAME}.${RecipientTable.GROUP_TYPE} != ${RecipientTable.GroupType.SIGNAL_V1.id}"
+      where += " AND ${RecipientTable.TABLE_NAME}.${RecipientTable.TYPE} != ${RecipientTable.RecipientType.GV1.id}"
     }
 
     if (hideSms) {
@@ -731,10 +730,9 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
         OR 
         (
           ${RecipientTable.TABLE_NAME}.${RecipientTable.GROUP_ID} NOT NULL 
-          AND ${RecipientTable.TABLE_NAME}.${RecipientTable.GROUP_TYPE} != ${RecipientTable.GroupType.MMS.id}
+          AND ${RecipientTable.TABLE_NAME}.${RecipientTable.TYPE} != ${RecipientTable.RecipientType.MMS.id}
         ) 
       )"""
-      where += " AND ${RecipientTable.TABLE_NAME}.${RecipientTable.FORCE_SMS_SELECTION} = 0"
     }
 
     if (hideSelf) {
@@ -1700,7 +1698,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
         if (threadRecipient.isPushV2Group) {
           val inviteAddState = record.gv2AddInviteState
           if (inviteAddState != null) {
-            val from = RecipientId.from(ServiceId.from(inviteAddState.addedOrInvitedBy))
+            val from = RecipientId.from(inviteAddState.addedOrInvitedBy)
             return if (inviteAddState.isInvited) {
               Log.i(TAG, "GV2 invite message request from $from")
               Extra.forGroupV2invite(from, authorId)

@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.core.view.children
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.exoplayer2.MediaItem
@@ -16,6 +17,7 @@ import org.signal.core.util.logging.Log
 import org.signal.core.util.toOptional
 import org.thoughtcrime.securesms.BindableConversationItem
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.Unbindable
 import org.thoughtcrime.securesms.conversation.ConversationAdapter.ItemClickListener
 import org.thoughtcrime.securesms.conversation.ConversationAdapterBridge
 import org.thoughtcrime.securesms.conversation.ConversationHeaderView
@@ -146,6 +148,21 @@ class ConversationAdapterV2(
       }
     }
   }
+
+  override fun onViewRecycled(holder: MappingViewHolder<*>) {
+    if (holder is ConversationViewHolder) {
+      holder.bindable.unbind()
+    }
+  }
+
+  /** Triggered when switching addapters or by setting adapter to null on [recyclerView] in [ConversationFragment] */
+  override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+    recyclerView
+      .children
+      .filterIsInstance<Unbindable>()
+      .forEach { it.unbind() }
+  }
+
   override val displayMode: ConversationItemDisplayMode
     get() = condensedMode ?: ConversationItemDisplayMode.STANDARD
 
@@ -247,7 +264,7 @@ class ConversationAdapterV2(
     }
   }
 
-  fun onMessageRequestStateChanged(isMessageRequestAccepted: Boolean) {
+  fun setMessageRequestIsAccepted(isMessageRequestAccepted: Boolean) {
     val oldState = this.isMessageRequestAccepted
     this.isMessageRequestAccepted = isMessageRequestAccepted
 
@@ -414,7 +431,7 @@ class ConversationAdapterV2(
         searchQuery,
         false,
         hasWallpaper && displayMode.displayWallpaper(),
-        true, // isMessageRequestAccepted,
+        isMessageRequestAccepted,
         model.conversationMessage == inlineContent,
         colorizer,
         displayMode
@@ -470,7 +487,7 @@ class ConversationAdapterV2(
         searchQuery,
         false,
         hasWallpaper && displayMode.displayWallpaper(),
-        true, // isMessageRequestAccepted,
+        isMessageRequestAccepted,
         model.conversationMessage == inlineContent,
         colorizer,
         displayMode

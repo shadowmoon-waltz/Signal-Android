@@ -112,7 +112,6 @@ import org.thoughtcrime.securesms.database.model.databaseprotos.SessionSwitchove
 import org.thoughtcrime.securesms.database.model.databaseprotos.ThreadMergeEvent
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.groups.GroupMigrationMembershipChange
-import org.thoughtcrime.securesms.insights.InsightsConstants
 import org.thoughtcrime.securesms.jobs.OptimizeMessageSearchIndexJob
 import org.thoughtcrime.securesms.jobs.ThreadUpdateJob
 import org.thoughtcrime.securesms.jobs.TrimThreadJob
@@ -845,7 +844,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     val threadId = threads.getOrCreateThreadIdFor(recipient)
     val messageId: MessageId = writableDatabase.withinTransaction { db ->
       val self = Recipient.self()
-      val markRead = joinedUuids.contains(self.requireServiceId().uuid()) || self.id == sender
+      val markRead = joinedUuids.contains(self.requireServiceId().rawUuid) || self.id == sender
       val updateDetails: ByteArray = GroupCallUpdateDetails.newBuilder()
         .setEraId(eraId)
         .setStartedCallUuid(Recipient.resolved(sender).requireServiceId().toString())
@@ -919,7 +918,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       }
 
       val updateDetail = GroupCallUpdateDetailsUtil.parse(message.body)
-      val containsSelf = joinedUuids.contains(SignalStore.account().requireAci().uuid())
+      val containsSelf = joinedUuids.contains(SignalStore.account().requireAci().rawUuid)
       val sameEraId = updateDetail.eraId == eraId && !Util.isEmpty(eraId)
       val inCallUuids = if (sameEraId) joinedUuids.map { it.toString() } else emptyList()
       val contentValues = contentValuesOf(
@@ -954,7 +953,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       MmsReader(cursor).use { reader ->
         val record = reader.getNext() ?: return@withinTransaction false
         val groupCallUpdateDetails = GroupCallUpdateDetailsUtil.parse(record.body)
-        val containsSelf = peekJoinedUuids.contains(SignalStore.account().requireAci().uuid())
+        val containsSelf = peekJoinedUuids.contains(SignalStore.account().requireAci().rawUuid)
         val sameEraId = groupCallUpdateDetails.eraId == peekGroupCallEraId && !Util.isEmpty(peekGroupCallEraId)
 
         val inCallUuids = if (sameEraId) {
@@ -1083,10 +1082,6 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       } else {
         if (unread && editedMessage == null) {
           threads.incrementUnread(threadId, 1, 0)
-        }
-
-        if (message.subscriptionId != -1) {
-          recipients.setDefaultSubscriptionId(message.authorId, message.subscriptionId)
         }
       }
 
@@ -2507,7 +2502,6 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
           body = body,
           attachments = attachments,
           timestamp = timestamp,
-          subscriptionId = subscriptionId,
           expiresIn = expiresIn,
           viewOnce = viewOnce,
           distributionType = distributionType,
@@ -3090,7 +3084,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       if (message.isGroupUpdate && message.isV2Group) {
         members += message.requireGroupV2Properties().allActivePendingAndRemovedMembers
           .distinct()
-          .map { uuid -> RecipientId.from(ServiceId.from(uuid)) }
+          .map { serviceId -> RecipientId.from(serviceId) }
           .toList()
 
         members -= Recipient.self().id
@@ -3712,15 +3706,6 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       .readToSingleInt()
   }
 
-  fun getInsecureMessageSentCount(threadId: Long): Int {
-    return readableDatabase
-      .select("COUNT(*)")
-      .from(TABLE_NAME)
-      .where("$THREAD_ID = ? AND $outgoingInsecureMessageClause AND $DATE_SENT > ?", threadId, (System.currentTimeMillis() - InsightsConstants.PERIOD_IN_MILLIS))
-      .run()
-      .readToSingleInt()
-  }
-
   fun getSecureMessageCount(threadId: Long): Int {
     return readableDatabase
       .select("COUNT(*)")
@@ -3739,28 +3724,11 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       .readToSingleInt()
   }
 
-  fun getInsecureMessageCountForInsights(): Int {
-    return getMessageCountForRecipientsAndType(outgoingInsecureMessageClause)
-  }
-
-  fun getSecureMessageCountForInsights(): Int {
-    return getMessageCountForRecipientsAndType(outgoingSecureMessageClause)
-  }
-
   private fun hasSmsExportMessage(threadId: Long): Boolean {
     return readableDatabase
       .exists(TABLE_NAME)
       .where("$THREAD_ID = ? AND $TYPE = ?", threadId, MessageTypes.SMS_EXPORT_TYPE)
       .run()
-  }
-
-  private fun getMessageCountForRecipientsAndType(typeClause: String): Int {
-    return readableDatabase
-      .select("COUNT(*)")
-      .from(TABLE_NAME)
-      .where("$typeClause AND $DATE_SENT > ?", (System.currentTimeMillis() - InsightsConstants.PERIOD_IN_MILLIS))
-      .run()
-      .readToSingleInt()
   }
 
   private val outgoingInsecureMessageClause = "($TYPE & ${MessageTypes.BASE_TYPE_MASK}) = ${MessageTypes.BASE_SENT_TYPE} AND NOT ($TYPE & ${MessageTypes.SECURE_MESSAGE_BIT})"
@@ -4453,7 +4421,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
               FROM ${RecipientTable.TABLE_NAME} 
               WHERE 
                 ${RecipientTable.TABLE_NAME}.${RecipientTable.ID} = $TO_RECIPIENT_ID AND 
-                ${RecipientTable.TABLE_NAME}.${RecipientTable.GROUP_TYPE} != ${RecipientTable.GroupType.NONE.id}
+                ${RecipientTable.TABLE_NAME}.${RecipientTable.TYPE} != ${RecipientTable.RecipientType.INDIVIDUAL.id}
             )
           )
           $qualifierWhere

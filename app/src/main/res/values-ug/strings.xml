@@ -341,6 +341,10 @@
     <plurals name="ConversationActivity_edit_message_too_old">
         <item quantity="other">بۇ ئۇچۇرنى يوللاپ پەقەت %1$d سائەت ئىچىدىلا تەھرىرلەشكە بولىدۇ.</item>
     </plurals>
+    <!-- Warning dialog text shown to user if they try to edit a message too many times. Where %1$d is replaced with the number of edits -->
+    <plurals name="ConversationActivity_edit_message_too_many_edits">
+        <item quantity="other">بۇ ئۇچۇرغا پەقەت %1$d تەھرىرلەشنى قوللانغىلى بولىدۇ.</item>
+    </plurals>
 
     <string name="ConversationActivity_invalid_recipient">ئىناۋەتسىز تاپشۇرۇۋالغۇچى!</string>
     <string name="ConversationActivity_added_to_home_screen">باش ئېكرانغا قوشۇلدى</string>
@@ -2074,7 +2078,7 @@
     <string name="VerifyIdentityActivity_unable_to_scan_qr_code_without_camera_permission">كامېرا ھوقۇقى بولمىسا QR كودىنى سايىلىغىلى بولمايدۇ</string>
     <string name="VerifyIdentityActivity_you_must_first_exchange_messages_in_order_to_view"> %1$sنىڭ بىخەتەرلىك نومۇرىنى كۆرۈش ئۈچۈن. ئاۋۋال ئۇنىڭ بىلەن ئۇچۇر ئالماشتۇرىشىڭىز كېرەك.</string>
     <!-- Dialog message explaining to user they must exchange messages first to create a safety number -->
-    <string name="VerifyIdentityActivity_dialog_exchange_messages_to_create_safety_number_message">A safety number will be created with this person after they exchange messages with you.</string>
+    <string name="VerifyIdentityActivity_dialog_exchange_messages_to_create_safety_number_message">سىز بىلەن ئۇچۇر ئالماشتۇرغاندىن كىيىن بۇ كىشىگە مۇناسىۋەتلىك بىر بىخەتەرلىك نومۇرى يارىتىلىدۇ.</string>
     <!-- Confirmation option for dialog explaining to user they must exchange messages first to create a safety number  -->
     <string name="VerifyIdentityActivity_dialog_exchange_messages_to_create_safety_number_ok">بولىدۇ</string>
     <!-- Learn more option for dialog explaining to user they must exchange messages first to create a safety number  -->
@@ -2201,7 +2205,7 @@
     <!-- Notification channel name for occasional alerts to the user. Will appear in the system notification settings as the title of this notification channel. -->
     <string name="NotificationChannel_critical_app_alerts">مۇھىم ئەپ ئاگاھلاندۇرۇشى</string>
     <!-- Notification channel name for other notifications related to messages. Will appear in the system notification settings as the title of this notification channel. -->
-    <string name="NotificationChannel_additional_message_notifications">Additional message notifications</string>
+    <string name="NotificationChannel_additional_message_notifications">قوشۇمچە ئۇچۇر ئۇقتۇرۇشلىرى</string>
 
     <!-- ProfileEditNameFragment -->
 
@@ -3356,33 +3360,6 @@
     <!-- new_conversation_activity -->
     <string name="new_conversation_activity__refresh">يېڭىلا</string>
     <!-- redphone_audio_popup_menu -->
-
-    <!-- Insights -->
-    <string name="Insights__percent">%</string>
-    <string name="Insights__title">چۈشىنىش</string>
-    <string name="InsightsDashboardFragment__title">چۈشىنىش</string>
-    <!-- Body text for a page describing how many signal messages you\'ve sent. The first placeholder represents the number of signal messages sent, and the second placeholder represents how many days have passed. -->
-    <string name="InsightsDashboardFragment__signal_protocol_automatically_protected">Signal Protocol ئۆتكەن %2$d كۈندە سىز يوللىغان %1$d%% ئۇچۇرنى ئاپتوماتىك قوغدىدى. Signal ئىشلەتكۈچىلىرى ئارىسىدىكى پاراڭلار نۇقتىدىن-نۇقتىغا مەخپىيلەشتۈرۈلگەن بولىدۇ.</string>
-    <string name="InsightsDashboardFragment__spread_the_word">تەشۋىق قىلىپ قويۇڭ</string>
-    <string name="InsightsDashboardFragment__not_enough_data">سانلىق مەلۇمات يېتەرسىز</string>
-    <string name="InsightsDashboardFragment__your_insights_percentage_is_calculated_based_on">پەرقلەندۈرۈش قابىلىيىتىڭىز ئۆتكەن %1$d كۈندە يوللانغان غايىب بولمىغان ۋە ئۆچۈرۈلگەن ئۇچۇرلارغا ئاساسەن ھېسابلىنىدۇ.</string>
-    <!-- Label for a button that, when pressed, will begin a chat with a person whose name is showed on the screen. -->
-    <string name="InsightsDashboardFragment__start_a_conversation">پاراڭ باشلاش</string>
-    <string name="InsightsDashboardFragment__invite_your_contacts">تېخىمۇ كۆپ ئالاقەداشلار Signal غا قوشۇلسا، تېخىمۇ كۆپ يېڭى ئىقتىدارلارنى ئىشلىتەلەيدۇ، شىفىرلانمىغان تېكىست ئۇچۇرنىڭ چەكلىمىسىگە ئۇچرىمايدۇ، بىخەتەر ئالاقىنىڭ يېڭى سەپىرىنى باشلايلى.</string>
-    <string name="InsightsDashboardFragment__this_stat_was_generated_locally">بۇ سىتاتىستىكا ئۇچۇرلار يەرلىك ئۈسكۈنىڭىزدە ھاسىل قىلىندى، پەقەت سىزلا كۆرەلەيسىز. ئۇلار باشقا ھەر قانداق جايغا يوللانمايدۇ.</string>
-    <string name="InsightsDashboardFragment__encrypted_messages">شىفىرلانغان ئۇچۇرلار</string>
-    <string name="InsightsDashboardFragment__cancel">ۋاز كەچ</string>
-    <string name="InsightsDashboardFragment__send">ئەۋەت</string>
-    <string name="InsightsModalFragment__title">چۈشىنىش ئىقتىدارىنى تونۇشتۇرۇش</string>
-    <string name="InsightsModalFragment__description">يوللىغان ئۇچۇرلىرىڭىزنىڭ قانچىلىكى شىفىرلىنىپ يوللانغانلىقىنى كۆرەلەيسىز، ھەمدە تېزلىكتە ئالاقەداشلىرىڭىزنى تەكلىپ قىلىپ بىرلىكتە Signal ئىشلىتىش نىسبىتىنى يۈكسەلتەلەيسىز.</string>
-    <string name="InsightsModalFragment__view_insights">چۈشىنىش كۆرسەت</string>
-
-    <string name="FirstInviteReminder__title">Signal ئىشلىتىش تەكلىپى</string>
-    <string name="FirstInviteReminder__description">سىز يوللىغان مەخپىيلەشتۈرۈلگەن ئۇچۇرلارنىڭ سانىنى %1$d%% ئاشۇرالايسىز</string>
-    <string name="SecondInviteReminder__title">Signal ياخشىلاش</string>
-    <string name="SecondInviteReminder__description">%1$s تەكلىپ</string>
-    <string name="InsightsReminder__view_insights">چۈشىنىش كۆرسەت</string>
-    <string name="InsightsReminder__invite">تەكلىپ</string>
 
     <!-- Edit KBS Pin -->
 
@@ -5796,7 +5773,7 @@
     <!-- Title for screen describing that sms support is going to be removed soon -->
     <string name="SmsRemoval_title_going_away">SMS ئىقتىدارى ئەمەلدىن قالدۇرۇلماقچى</string>
     <!-- Bullet point message shown on describing screen as first bullet why sms is being removed, placeholder with be date of removal (e.g., March 21st) -->
-    <string name="SmsRemoval_info_bullet_1">SMS messaging in the Signal app will soon no longer be supported.</string>
+    <string name="SmsRemoval_info_bullet_1">سىگنال ئەپلىرىدىكى قىسقا ئۇچۇرلىشىشلار بۇنىڭدىن كىيىن قوللانمايدۇ.</string>
     <!-- Bullet point message shown on describing screen as second bullet why sms is being removed -->
     <string name="SmsRemoval_info_bullet_2">SMS ئۇچۇرلىرى Signal ئۇچۇرلىرىغا ئوخشىمايدۇ. <b> بۇ مەخپىيلەشتۈرۈلگەن Signal ئۇچۇرلىشىشىنىڭ داۋاملىق ئىشلىشىگە تەسىر يەتكۈزمەيدۇ.</b></string>
     <!-- Bullet point message shown on describing screen as third bullet why sms is being removed -->
@@ -5956,6 +5933,10 @@
     <string name="CallStateUpdatePopupWindow__mic_on">مىكروفون ئوچۇق</string>
     <!-- Displayed when the user turns off their mic -->
     <string name="CallStateUpdatePopupWindow__mic_off">مىكروفون ئېتىك</string>
+    <!-- Displayed when the user turns on their speakerphone -->
+    <string name="CallStateUpdatePopupWindow__speaker_on">Speaker on</string>
+    <!-- Displayed when the user turns off their speakerphone -->
+    <string name="CallStateUpdatePopupWindow__speaker_off">Speaker off</string>
 
     <!-- Accessibility label describing the capture button on the camera screen -->
     <string name="CameraControls_capture_button_accessibility_label">ئېكران تۇتۇش كۇنۇپكىسى</string>

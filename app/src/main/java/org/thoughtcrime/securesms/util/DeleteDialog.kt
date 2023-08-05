@@ -25,7 +25,8 @@ object DeleteDialog {
    * @param forceDeleteForMe  no prompt, go ahead and delete for me
    * @param checkFastDeleteForMe skip prompt if trashNoPromptForMe is true
    *
-   * @return a Single, who's value notes whether or not a thread deletion occurred.
+   * @return a Single, who's value is a pair that notes whether or not a deletion attempt
+   * happened at all, as well as if a thread deletion occurred.
    */
   fun show(
     context: Context,
@@ -35,7 +36,7 @@ object DeleteDialog {
     forceRemoteDelete: Boolean = false,
     forceDeleteForMe: Boolean = false,
     checkFastDeleteForMe: Boolean = false
-  ): Single<Boolean> = Single.create { emitter ->
+  ): Single<Pair<Boolean, Boolean>> = Single.create { emitter ->
     if (forceDeleteForMe || (checkFastDeleteForMe && SignalStore.settings().isTrashNoPromptForMe())) {
       handleDeleteForMe(context, messageRecords, emitter)
       return@create
@@ -57,12 +58,12 @@ object DeleteDialog {
       }
 
       if (MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis()) && (!isNoteToSelfDelete || TextSecurePreferences.isMultiDevice(context))) {
-        builder.setNeutralButton(R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
+        builder.setNeutralButton(if (isNoteToSelfDelete) R.string.ConversationFragment_delete_everywhere else R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
       }
     }
 
-    builder.setNegativeButton(android.R.string.cancel) { _, _ -> emitter.onSuccess(false) }
-    builder.setOnCancelListener { emitter.onSuccess(false) }
+    builder.setNegativeButton(android.R.string.cancel) { _, _ -> emitter.onSuccess(Pair(false, false)) }
+    builder.setOnCancelListener { emitter.onSuccess(Pair(false, false)) }
     builder.show()
   }
 
@@ -70,16 +71,16 @@ object DeleteDialog {
     return messageRecords.all { messageRecord: MessageRecord -> messageRecord.isOutgoing && messageRecord.toRecipient.isSelf }
   }
 
-  private fun handleDeleteForMe(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Boolean>) {
+  private fun handleDeleteForMe(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Pair<Boolean, Boolean>>) {
     if (messageRecords.size > 1) {
-      DeleteProgressDialogAsyncTask(context, messageRecords, emitter::onSuccess).executeOnExecutor(SignalExecutors.BOUNDED)
+      DeleteProgressDialogAsyncTask(context, messageRecords){ emitter.onSuccess(Pair(true, it)) }.executeOnExecutor(SignalExecutors.BOUNDED)
     } else {
-      SignalExecutors.BOUNDED.execute { emitter.onSuccess(SignalDatabase.messages.deleteMessage(messageRecords.first().id)) }
+      SignalExecutors.BOUNDED.execute { emitter.onSuccess(true, SignalDatabase.messages.deleteMessage(messageRecords.first().id)) }
     }
   }
 
-  private fun handleDeleteForEveryone(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Boolean>) {
-    if (SignalStore.uiHints().hasConfirmedDeleteForEveryoneOnce() || isNoteToSelfDelete(messageRecords)) {
+  private fun handleDeleteForEveryone(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Pair<Boolean, Boolean>>) {
+    if (SignalStore.uiHints().hasConfirmedDeleteForEveryoneOnce()) {
       deleteForEveryone(messageRecords, emitter)
     } else {
       MaterialAlertDialogBuilder(context)
@@ -88,19 +89,19 @@ object DeleteDialog {
           SignalStore.uiHints().markHasConfirmedDeleteForEveryoneOnce()
           deleteForEveryone(messageRecords, emitter)
         }
-        .setNegativeButton(android.R.string.cancel) { _, _ -> emitter.onSuccess(false) }
-        .setOnCancelListener { emitter.onSuccess(false) }
+        .setNegativeButton(android.R.string.cancel) { _, _ -> emitter.onSuccess(Pair(false, false)) }
+        .setOnCancelListener { emitter.onSuccess(Pair(false, false)) }
         .show()
     }
   }
 
-  private fun deleteForEveryone(messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Boolean>) {
+  private fun deleteForEveryone(messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Pair<Boolean, Boolean>>) {
     SignalExecutors.BOUNDED.execute {
       messageRecords.forEach { message ->
         MessageSender.sendRemoteDelete(message.id)
       }
 
-      emitter.onSuccess(false)
+      emitter.onSuccess(Pair(true, false))
     }
   }
 
