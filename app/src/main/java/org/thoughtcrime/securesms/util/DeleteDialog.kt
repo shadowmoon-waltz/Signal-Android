@@ -75,7 +75,7 @@ object DeleteDialog {
     if (messageRecords.size > 1) {
       DeleteProgressDialogAsyncTask(context, messageRecords){ emitter.onSuccess(Pair(true, it)) }.executeOnExecutor(SignalExecutors.BOUNDED)
     } else {
-      SignalExecutors.BOUNDED.execute { emitter.onSuccess(true, SignalDatabase.messages.deleteMessage(messageRecords.first().id)) }
+      SignalExecutors.BOUNDED.execute { emitter.onSuccess(Pair(true, SignalDatabase.messages.deleteMessage(messageRecords.first().id))) }
     }
   }
 

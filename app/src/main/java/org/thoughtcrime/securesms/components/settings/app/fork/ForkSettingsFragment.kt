@@ -32,16 +32,6 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
   private fun getConfiguration(state: ForkSettingsState): DSLConfiguration {
     return configure {
       switchPref(
-        title = DSLSettingsText.from(R.string.ForkSettingsFragment__hide_insights),
-        summary = DSLSettingsText.from(R.string.ForkSettingsFragment__hide_insights_summary),
-        isChecked = state.hideInsights,
-        onClick = {
-          TextSecurePreferences.setHideInsights(requireContext(), !state.hideInsights)
-          viewModel.setHideInsights(!state.hideInsights)
-        }
-      )
-
-      switchPref(
         title = DSLSettingsText.from(R.string.ForkSettingsFragment__show_reaction_timestamps),
         isChecked = state.showReactionTimestamps,
         onClick = {

@@ -4386,8 +4386,6 @@
 
     <!-- Fork -->
     <string name="preferences__fork_specific">Fork Specific</string>
-    <string name="ForkSettingsFragment__hide_insights">Hide Insights</string>
-    <string name="ForkSettingsFragment__hide_insights_summary">Disable the Insights main menu option that appears if SMS is enabled</string>
     <string name="ForkSettingsFragment__show_reaction_timestamps">Show reaction timestamps</string>
     <string name="ForkSettingsFragment__force_websocket_mode">Force WebSocket mode</string>
     <string name="ForkSettingsFragment__force_websocket_mode_summary">May require an app restart to take effect</string>

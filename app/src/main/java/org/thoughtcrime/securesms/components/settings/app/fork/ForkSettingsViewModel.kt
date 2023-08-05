@@ -10,7 +10,6 @@ class ForkSettingsViewModel : ViewModel() {
 
   init {
     val initialState = ForkSettingsState(
-      hideInsights = SignalStore.settings().isHideInsights,
       showReactionTimestamps = SignalStore.settings().isShowReactionTimestamps,
       forceWebsocketMode = SignalStore.settings().isForceWebsocketMode,
       fastCustomReactionChange = SignalStore.settings().isFastCustomReactionChange,
@@ -34,11 +33,6 @@ class ForkSettingsViewModel : ViewModel() {
   }
 
   val state: LiveData<ForkSettingsState> = store.stateLiveData
-
-  fun setHideInsights(hideInsights: Boolean) {
-    store.update { it.copy(hideInsights = hideInsights) }
-    SignalStore.settings().isHideInsights = hideInsights
-  }
 
   fun setShowReactionTimestamps(showReactionTimestamps: Boolean) {
     store.update { it.copy(showReactionTimestamps = showReactionTimestamps) }

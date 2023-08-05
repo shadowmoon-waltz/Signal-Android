@@ -75,7 +75,6 @@ public final class SettingsValues extends SignalStoreValues {
   public static final int BACKUP_DEFAULT_HOUR   = 2;
   public static final int BACKUP_DEFAULT_MINUTE = 0;
 
-  public static final String HIDE_INSIGHTS                           = "settings.fork.hide.insights";
   public static final String SHOW_REACTION_TIMESTAMPS                = "settings.fork.show.reaction.timestamps";
   public static final String FORCE_WEBSOCKET_MODE                    = "settings.fork.force.websocket.mode";
   public static final String FAST_CUSTOM_REACTION_CHANGE             = "settings.fork.fast.custom.reaction.change";
@@ -145,7 +144,6 @@ public final class SettingsValues extends SignalStoreValues {
                          SENT_MEDIA_QUALITY,
                          KEEP_MUTED_CHATS_ARCHIVED,
                          USE_COMPACT_NAVIGATION_BAR,
-                         HIDE_INSIGHTS,
                          SHOW_REACTION_TIMESTAMPS,
                          FORCE_WEBSOCKET_MODE,
                          FAST_CUSTOM_REACTION_CHANGE,
@@ -519,14 +517,6 @@ public final class SettingsValues extends SignalStoreValues {
     } else {
       return Uri.parse(uri);
     }
-  }
-
-  public boolean isHideInsights() {
-    return getBoolean(HIDE_INSIGHTS, TextSecurePreferences.isHideInsights(ApplicationDependencies.getApplication()));
-  }
-
-  public void setHideInsights(boolean hideInsights) {
-    putBoolean(HIDE_INSIGHTS, hideInsights);
   }
 
   public boolean isShowReactionTimestamps() {

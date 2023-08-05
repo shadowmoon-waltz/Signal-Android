@@ -194,8 +194,6 @@ public class TextSecurePreferences {
 
   private static final String ARGON2_TESTED = "argon2_tested";
 
-  private static final String PREF_HIDE_INSIGHTS = "pref_hide_insights";
-
   private static final String PREF_SHOW_REACTION_TIME = "pref_show_reaction_time";
 
   private static final String PREF_FORCE_WEBSOCKET_MODE = "pref_force_websocket_mode";
@@ -248,7 +246,6 @@ public class TextSecurePreferences {
                                                               SHOW_INVITE_REMINDER_PREF,
                                                               SYSTEM_EMOJI_PREF,
                                                               ENTER_SENDS_PREF,
-                                                              PREF_HIDE_INSIGHTS,
                                                               PREF_SHOW_REACTION_TIME,
                                                               PREF_FORCE_WEBSOCKET_MODE,
                                                               PREF_FAST_CUSTOM_REACTION_CHANGE,
@@ -1159,14 +1156,6 @@ public class TextSecurePreferences {
 
   public static void setArgon2Tested(Context context, boolean tested) {
     setBooleanPreference(context, ARGON2_TESTED, tested);
-  }
-
-  public static boolean isHideInsights(Context context) {
-    return getBooleanPreference(context, PREF_HIDE_INSIGHTS, false);
-  }
-
-  public static void setHideInsights(Context context, boolean hideInsights) {
-    setBooleanPreference(context, PREF_HIDE_INSIGHTS, hideInsights);
   }
 
   public static boolean isShowReactionTimeEnabled(Context context) {

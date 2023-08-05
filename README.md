@@ -85,7 +85,7 @@ Releases prior to and including v5.44.1-0 were locally compiled, locally signed 
 * Build signing code is slightly tweaked to my preferred style (note that the build target I use is assembleSwProdRelease).
 * As I may not provide support, the sending debug log feature is disabled.
 * Update check is not currently set up for the fork and is disabled.
-* Option to hide insights option when sms is enabled (just tells you how much of your messages sent were encrypted).
+~~* Option to hide insights option when sms is enabled (just tells you how much of your messages sent were encrypted).~~ (August 2023: insights ui was removed following sms removal)
 * Option to show read reaction timestamp.
 * Option to view/set identity keys (very specific use cases, may break Signal installation, please read security warnings when clicking the button in the view/set screen that populates your public and private identity keys). (hides itself in recent apps screen from January 2022)
 </details>
