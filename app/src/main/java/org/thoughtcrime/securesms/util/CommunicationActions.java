@@ -445,7 +445,7 @@ public class CommunicationActions {
   private static void startVideoCallInternal(@NonNull CallContext callContext, @NonNull Recipient recipient, boolean fromCallLink) {
     // SW: TODO: add user-facing option to enable/disable audio-only call initialization by default
     if (Permissions.hasAny(callContext.getContext(), Manifest.permission.RECORD_AUDIO)) {
-      startVideoCallInternal2(callContext, recipient);
+      startVideoCallInternal2(callContext, recipient, fromCallLink);
       return;
     }
 
@@ -457,7 +457,7 @@ public class CommunicationActions {
                                     R.drawable.ic_video_solid_24_tinted)
                .withPermanentDenialDialog(callContext.getContext().getString(R.string.ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s, recipient.getDisplayName(callContext.getContext())))
                .onAllGranted(() -> {
-                 startVideoCallInternal2(callContext, recipient);
+                 startVideoCallInternal2(callContext, recipient, fromCallLink);
                })
                .execute();
   }
