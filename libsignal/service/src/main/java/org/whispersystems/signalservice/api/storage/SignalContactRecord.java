@@ -300,7 +300,7 @@ public final class SignalContactRecord implements SignalRecord {
     }
 
     public Builder setPni(PNI pni) {
-      builder.setPni(pni == null ? "" : pni.toString());
+      builder.setPni(pni == null ? "" : pni.toStringWithoutPrefix());
       return this;
     }
 

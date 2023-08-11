@@ -23,7 +23,6 @@ import org.thoughtcrime.securesms.components.settings.configure
 import org.thoughtcrime.securesms.components.settings.models.IndeterminateLoadingCircle
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.subscription.Subscription
 import org.thoughtcrime.securesms.util.Material3OnScrollHelper
 import org.thoughtcrime.securesms.util.SpanUtil
@@ -239,15 +238,13 @@ class ManageDonationsFragment :
 
     sectionHeaderPref(R.string.ManageDonationsFragment__other_ways_to_give)
 
-    if (Recipient.self().giftBadgesCapability == Recipient.Capability.SUPPORTED) {
-      clickPref(
-        title = DSLSettingsText.from(R.string.ManageDonationsFragment__donate_for_a_friend),
-        icon = DSLSettingsIcon.from(R.drawable.symbol_gift_24),
-        onClick = {
-          startActivity(Intent(requireContext(), GiftFlowActivity::class.java))
-        }
-      )
-    }
+    clickPref(
+      title = DSLSettingsText.from(R.string.ManageDonationsFragment__donate_for_a_friend),
+      icon = DSLSettingsIcon.from(R.drawable.symbol_gift_24),
+      onClick = {
+        startActivity(Intent(requireContext(), GiftFlowActivity::class.java))
+      }
+    )
   }
 
   private fun DSLConfiguration.presentBadges() {

@@ -1092,6 +1092,8 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       return Optional.empty()
     }
 
+    threads.markAsActiveEarly(threadId)
+
     if (!silent) {
       ThreadUpdateJob.enqueue(threadId)
       TrimThreadJob.enqueueAsync(threadId)
@@ -1689,6 +1691,65 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       val deletedStoryCount = db.select(ID)
         .from(TABLE_NAME)
         .where(storiesBeforeTimestampWhere, sharedArgs)
+        .run()
+        .use { cursor ->
+          while (cursor.moveToNext()) {
+            deleteMessage(cursor.requireLong(ID))
+          }
+
+          cursor.count
+        }
+
+      if (deletedStoryCount > 0) {
+        OptimizeMessageSearchIndexJob.enqueue()
+      }
+
+      deletedStoryCount
+    }
+  }
+
+  /**
+   * Delete all the stories received from the recipient in 1:1 stories
+   */
+  fun deleteStoriesForRecipient(recipientId: RecipientId): Int {
+    return writableDatabase.withinTransaction { db ->
+      val threadId = threads.getThreadIdFor(recipientId) ?: return@withinTransaction 0
+      val storesInRecipientThread = "$IS_STORY_CLAUSE AND $THREAD_ID = ?"
+      val sharedArgs = buildArgs(threadId)
+
+      val deleteStoryRepliesQuery = """
+        DELETE FROM $TABLE_NAME 
+        WHERE 
+          $PARENT_STORY_ID > 0 AND 
+          $PARENT_STORY_ID IN (
+            SELECT $ID 
+            FROM $TABLE_NAME 
+            WHERE $storesInRecipientThread
+          )
+        """
+
+      val disassociateQuoteQuery = """
+        UPDATE $TABLE_NAME 
+        SET 
+          $QUOTE_MISSING = 1, 
+          $QUOTE_BODY = '' 
+        WHERE 
+          $PARENT_STORY_ID < 0 AND 
+          ABS($PARENT_STORY_ID) IN (
+            SELECT $ID 
+            FROM $TABLE_NAME 
+            WHERE $storesInRecipientThread
+          )
+        """
+
+      db.execSQL(deleteStoryRepliesQuery, sharedArgs)
+      db.execSQL(disassociateQuoteQuery, sharedArgs)
+
+      ApplicationDependencies.getDatabaseObserver().notifyStoryObservers(recipientId)
+
+      val deletedStoryCount = db.select(ID)
+        .from(TABLE_NAME)
+        .where(storesInRecipientThread, sharedArgs)
         .run()
         .use { cursor ->
           while (cursor.moveToNext()) {
@@ -3666,7 +3727,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
         val latestMessage = reader.getNext()
 
         if (latestMessage != null && latestMessage.isGroupV2) {
-          val changeEditor = message.changeEditor
+          val changeEditor: Optional<ServiceId> = message.changeEditor
 
           if (changeEditor.isPresent && latestMessage.isGroupV2JoinRequest(changeEditor.get())) {
             val secondLatestMessage = reader.getNext()
@@ -3676,11 +3737,11 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
 
             if (secondLatestMessage != null && secondLatestMessage.isGroupV2JoinRequest(changeEditor.get())) {
               id = secondLatestMessage.id
-              encodedBody = MessageRecord.createNewContextWithAppendedDeleteJoinRequest(secondLatestMessage, message.changeRevision, changeEditor.get())
+              encodedBody = MessageRecord.createNewContextWithAppendedDeleteJoinRequest(secondLatestMessage, message.changeRevision, changeEditor.get().toByteString())
               deleteMessage(latestMessage.id)
             } else {
               id = latestMessage.id
-              encodedBody = MessageRecord.createNewContextWithAppendedDeleteJoinRequest(latestMessage, message.changeRevision, changeEditor.get())
+              encodedBody = MessageRecord.createNewContextWithAppendedDeleteJoinRequest(latestMessage, message.changeRevision, changeEditor.get().toByteString())
             }
 
             db.update(TABLE_NAME)

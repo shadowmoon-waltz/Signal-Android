@@ -9,6 +9,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -20,6 +21,7 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Browser
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -582,6 +584,8 @@ class ConversationFragment :
     SpoilerAnnotation.resetRevealedSpoilers()
 
     registerForResults()
+
+    inputPanel.setMediaListener(InputPanelMediaListener())
   }
 
   override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -661,6 +665,22 @@ class ConversationFragment :
   @Suppress("OVERRIDE_DEPRECATION")
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
     Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults)
+  }
+
+  override fun startActivity(intent: Intent) {
+    if (intent.getStringArrayExtra(Browser.EXTRA_APPLICATION_ID) != null) {
+      intent.removeExtra(Browser.EXTRA_APPLICATION_ID)
+    }
+
+    try {
+      super.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+      Log.w(TAG, e)
+      toast(
+        toastTextId = R.string.ConversationActivity_there_is_no_app_available_to_handle_this_link_on_your_device,
+        toastDuration = Toast.LENGTH_LONG
+      )
+    }
   }
 
   //endregion
@@ -817,7 +837,7 @@ class ConversationFragment :
       .doOnSuccess { state ->
         adapter.setMessageRequestIsAccepted(state.meta.messageRequestData.isMessageRequestAccepted)
         SignalLocalMetrics.ConversationOpen.onDataLoaded()
-        conversationItemDecorations.setFirstUnreadState(state.meta.lastSeen)
+        conversationItemDecorations.setFirstUnreadCount(state.meta.unreadCount)
         colorizer.onGroupMembershipChanged(state.meta.groupMemberAcis)
       }
       .observeOn(AndroidSchedulers.mainThread())
@@ -900,7 +920,6 @@ class ConversationFragment :
       setOnClickListener(sendButtonListener)
       setScheduledSendListener(sendButtonListener)
       isEnabled = true
-      sendButton.triggerSelectedChangedEvent()
     }
 
     sendEditButton.setOnClickListener { handleSendEditMessage() }
@@ -1003,7 +1022,6 @@ class ConversationFragment :
     initializeInlineSearch()
 
     inputPanel.setListener(InputPanelListener())
-    inputPanel.setMediaListener(InputPanelMediaListener())
 
     viewModel
       .getScheduledMessagesCount()
@@ -1107,7 +1125,7 @@ class ConversationFragment :
     var inputDisabled = true
     when {
       inputReadyState.isClientExpired || inputReadyState.isUnauthorized -> disabledInputView.showAsExpiredOrUnauthorized(inputReadyState.isClientExpired, inputReadyState.isUnauthorized)
-      inputReadyState.messageRequestState != MessageRequestState.NONE -> disabledInputView.showAsMessageRequest(inputReadyState.conversationRecipient, inputReadyState.messageRequestState)
+      inputReadyState.messageRequestState != MessageRequestState.NONE && inputReadyState.messageRequestState != MessageRequestState.NONE_HIDDEN -> disabledInputView.showAsMessageRequest(inputReadyState.conversationRecipient, inputReadyState.messageRequestState)
       inputReadyState.isActiveGroup == false -> disabledInputView.showAsNoLongerAMember()
       inputReadyState.isRequestingMember == true -> disabledInputView.showAsRequestingMember()
       inputReadyState.isAnnouncementGroup == true && inputReadyState.isAdmin == false -> disabledInputView.showAsAnnouncementGroupAdminsOnly()
