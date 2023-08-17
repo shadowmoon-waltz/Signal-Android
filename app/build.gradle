@@ -10,7 +10,6 @@ plugins {
     id 'app.cash.exhaustive'
     id 'kotlin-parcelize'
     id 'com.squareup.wire'
-    id 'android-constants'
     id 'translations'
 }
 
@@ -45,8 +44,8 @@ ktlint {
     version = "0.49.1"
 }
 
-def canonicalVersionCode = 1311
-def canonicalVersionName = "6.29.0"
+def canonicalVersionCode = 1315
+def canonicalVersionName = "6.30.0"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -100,7 +99,7 @@ android {
     testBuildType 'instrumentation'
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = signalKotlinJvmTarget
         freeCompilerArgs = ["-Xallow-result-return-type"]
     }
 
@@ -556,7 +555,7 @@ dependencies {
     implementation libs.google.play.services.maps
     implementation libs.google.play.services.auth
 
-    implementation libs.bundles.exoplayer
+    implementation libs.bundles.media3
 
     implementation libs.conscrypt.android
     implementation libs.signal.aesgcmprovider

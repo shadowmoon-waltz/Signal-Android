@@ -835,7 +835,7 @@ class ConversationFragment :
       .conversationThreadState
       .subscribeOn(Schedulers.io())
       .doOnSuccess { state ->
-        adapter.setMessageRequestIsAccepted(state.meta.messageRequestData.isMessageRequestAccepted)
+        updateMessageRequestAcceptedState(state.meta.messageRequestData.isMessageRequestAccepted)
         SignalLocalMetrics.ConversationOpen.onDataLoaded()
         conversationItemDecorations.setFirstUnreadCount(state.meta.unreadCount)
         colorizer.onGroupMembershipChanged(state.meta.groupMemberAcis)
@@ -1222,7 +1222,17 @@ class ConversationFragment :
     presentChatColors(recipient.chatColors)
     invalidateOptionsMenu()
 
-    adapter.setMessageRequestIsAccepted(!viewModel.hasMessageRequestState)
+    updateMessageRequestAcceptedState(!viewModel.hasMessageRequestState)
+  }
+
+  private fun updateMessageRequestAcceptedState(isMessageRequestAccepted: Boolean) {
+    if (binding.conversationItemRecycler.isInLayout) {
+      binding.conversationItemRecycler.doAfterNextLayout {
+        adapter.setMessageRequestIsAccepted(isMessageRequestAccepted)
+      }
+    } else {
+      adapter.setMessageRequestIsAccepted(isMessageRequestAccepted)
+    }
   }
 
   private fun invalidateOptionsMenu() {
@@ -2240,17 +2250,17 @@ class ConversationFragment :
       messageRecords = records,
       forceDeleteForMe = forceDeleteForMe,
       checkFastDeleteForMe = checkFastDeleteForMe
-    ).subscribe { (deleted: Boolean, deleted2: Boolean) ->
-      if (deleted2) {
-        // TODO (sw): use runOnMain?
-        adapter.clearMostRecentSelectedIfNecessary(records)
+    ).observeOn(AndroidSchedulers.mainThread())
+      .subscribe { (deleted: Boolean, deleted2: Boolean) ->
+        if (deleted2) {
+          adapter.clearMostRecentSelectedIfNecessary(records)
+        }
+        if (!deleted) return@subscribe
+        val editMessageId = inputPanel.editMessageId?.id
+        if (editMessageId != null && records.any { it.id == editMessageId }) {
+          inputPanel.exitEditMessageMode()
+        }
       }
-      if (!deleted) return@subscribe
-      val editMessageId = inputPanel.editMessageId?.id
-      if (editMessageId != null && records.any { it.id == editMessageId }) {
-        inputPanel.exitEditMessageMode()
-      }
-    }
   }
 
   private inner class SwipeAvailabilityProvider(val action: String) : ConversationItemSwipeCallback.SwipeAvailabilityProvider, ConversationItemSwipeCallback.OnSwipeListener {
@@ -2486,7 +2496,7 @@ class ConversationFragment :
 
   private inner class DataObserver : RecyclerView.AdapterDataObserver() {
     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-      if (positionStart == 0 && itemCount == 1 && shouldScrollToBottom()) {
+      if (positionStart == 0 && shouldScrollToBottom()) {
         layoutManager.scrollToPositionWithOffset(0, 0)
         scrollListener?.onScrolled(binding.conversationItemRecycler, 0, 0)
       }
@@ -3302,10 +3312,6 @@ class ConversationFragment :
 
     override fun showExpiring(recipient: Recipient) = Unit
     override fun clearExpiring() = Unit
-
-    override fun showGroupCallingTooltip() {
-      conversationTooltips.displayGroupCallingTooltip(requireView().findViewById(R.id.menu_video_secure))
-    }
 
     override fun handleFormatText(id: Int) {
       composeText.handleFormatText(id)
