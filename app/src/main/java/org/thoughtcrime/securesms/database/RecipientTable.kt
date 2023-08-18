@@ -445,7 +445,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
   @VisibleForTesting
   fun getAndPossiblyMerge(aci: ACI?, pni: PNI?, e164: String?, pniVerified: Boolean = false, changeSelf: Boolean = false): RecipientId {
-    require(aci != null || e164 != null) { "Must provide an ACI or E164!" }
+    require(aci != null || pni != null || e164 != null) { "Must provide an ACI, PNI, or E164!" }
 
     val db = writableDatabase
     var transactionSuccessful = false
@@ -795,19 +795,19 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     if (id < 0) {
       Log.w(TAG, "[applyStorageSyncContactInsert] Failed to insert. Possibly merging.")
       if (FeatureFlags.phoneNumberPrivacy()) {
-        recipientId = getAndPossiblyMergePnpVerified(if (insert.aci.isValid) insert.aci else null, insert.pni.orElse(null), insert.number.orElse(null))
+        recipientId = getAndPossiblyMergePnpVerified(insert.aci.orNull(), insert.pni.orNull(), insert.number.orNull())
       } else {
-        recipientId = getAndPossiblyMerge(if (insert.aci.isValid) insert.aci else null, insert.number.orElse(null))
+        recipientId = getAndPossiblyMerge(insert.aci.orNull(), insert.number.orNull())
       }
       db.update(TABLE_NAME, values, ID_WHERE, SqlUtil.buildArgs(recipientId))
     } else {
       recipientId = RecipientId.from(id)
     }
 
-    if (insert.identityKey.isPresent && insert.aci.isValid) {
+    if (insert.identityKey.isPresent && insert.aci.isPresent) {
       try {
         val identityKey = IdentityKey(insert.identityKey.get(), 0)
-        identities.updateIdentityAfterSync(insert.aci.toString(), recipientId, identityKey, StorageSyncModels.remoteToLocalIdentityStatus(insert.identityState))
+        identities.updateIdentityAfterSync(insert.aci.get().toString(), recipientId, identityKey, StorageSyncModels.remoteToLocalIdentityStatus(insert.identityState))
       } catch (e: InvalidKeyException) {
         Log.w(TAG, "Failed to process identity key during insert! Skipping.", e)
       }
@@ -836,9 +836,9 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
       Log.w(TAG, "[applyStorageSyncContactUpdate] Found user $recipientId. Possibly merging.")
       if (FeatureFlags.phoneNumberPrivacy()) {
-        recipientId = getAndPossiblyMergePnpVerified(if (update.new.aci.isValid) update.new.aci else null, update.new.pni.orElse(null), update.new.number.orElse(null))
+        recipientId = getAndPossiblyMergePnpVerified(update.new.aci.orElse(null), update.new.pni.orElse(null), update.new.number.orElse(null))
       } else {
-        recipientId = getAndPossiblyMerge(if (update.new.aci.isValid) update.new.aci else null, update.new.number.orElse(null))
+        recipientId = getAndPossiblyMerge(update.new.aci.orElse(null), update.new.number.orElse(null))
       }
 
       Log.w(TAG, "[applyStorageSyncContactUpdate] Merged into $recipientId")
@@ -855,9 +855,9 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     try {
       val oldIdentityRecord = identityStore.getIdentityRecord(recipientId)
-      if (update.new.identityKey.isPresent && update.new.aci.isValid) {
+      if (update.new.identityKey.isPresent && update.new.aci.isPresent) {
         val identityKey = IdentityKey(update.new.identityKey.get(), 0)
-        identities.updateIdentityAfterSync(update.new.aci.toString(), recipientId, identityKey, StorageSyncModels.remoteToLocalIdentityStatus(update.new.identityState))
+        identities.updateIdentityAfterSync(update.new.aci.get().toString(), recipientId, identityKey, StorageSyncModels.remoteToLocalIdentityStatus(update.new.identityState))
       }
 
       val newIdentityRecord = identityStore.getIdentityRecord(recipientId)
@@ -2075,6 +2075,16 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     return results
   }
 
+  /** A function that's just to help with some temporary bug investigation. */
+  private fun getAllPnis(): Set<PNI> {
+    return readableDatabase
+      .select(PNI_COLUMN)
+      .from(TABLE_NAME)
+      .where("$PNI NOT NULL")
+      .run()
+      .readToSet { PNI.parseOrThrow(it.requireString(PNI_COLUMN)) }
+  }
+
   /**
    * Gives you all of the recipientIds of possibly-registered users (i.e. REGISTERED or UNKNOWN) that can be found by the set of
    * provided E164s.
@@ -2410,7 +2420,54 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
                 .newBuilder()
                 .setE164(operation.e164 ?: "")
                 .build()
-              SignalDatabase.messages.insertSessionSwitchoverEvent(operation.recipientId, threadId, event)
+              try {
+                SignalDatabase.messages.insertSessionSwitchoverEvent(operation.recipientId, threadId, event)
+              } catch (e: Exception) {
+                Log.e(TAG, "About to crash! Breadcrumbs: ${changeSet.breadCrumbs}, Operations: ${changeSet.operations}, ID: ${changeSet.id}")
+
+                val allPnis: Set<PNI> = getAllPnis()
+                val pnisWithSessions: Set<PNI> = sessions.findAllThatHaveAnySession(allPnis)
+                Log.e(TAG, "We know of ${allPnis.size} PNIs, and there are sessions with ${pnisWithSessions.size} of them.")
+
+                val record = getRecord(operation.recipientId)
+                Log.e(TAG, "ID: ${record.id}, E164: ${record.e164}, ACI: ${record.aci}, PNI: ${record.pni}, Registered: ${record.registered}")
+
+                if (record.aci != null && record.aci == SignalStore.account().aci) {
+                  if (pnisWithSessions.contains(SignalStore.account().pni!!)) {
+                    throw SseWithSelfAci(e)
+                  } else {
+                    throw SseWithSelfAciNoSession(e)
+                  }
+                }
+
+                if (record.pni != null && record.pni == SignalStore.account().pni) {
+                  if (pnisWithSessions.contains(SignalStore.account().pni!!)) {
+                    throw SseWithSelfPni(e)
+                  } else {
+                    throw SseWithSelfPniNoSession(e)
+                  }
+                }
+
+                if (record.e164 != null && record.e164 == SignalStore.account().e164) {
+                  if (pnisWithSessions.contains(SignalStore.account().pni!!)) {
+                    throw SseWithSelfE164(e)
+                  } else {
+                    throw SseWithSelfE164NoSession(e)
+                  }
+                }
+
+                if (pnisWithSessions.isEmpty()) {
+                  throw SseWithNoPniSessionsException(e)
+                } else if (pnisWithSessions.size == 1) {
+                  if (pnisWithSessions.first() == SignalStore.account().pni) {
+                    throw SseWithASinglePniSessionForSelfException(e)
+                  } else {
+                    throw SseWithASinglePniSessionException(e)
+                  }
+                } else {
+                  throw SseWithMultiplePniSessionsException(e)
+                }
+              }
             }
           }
         }
@@ -2529,7 +2586,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         aci = aci
       )
 
-      if (!pniVerified && postMergeData.pni != null && sessions.hasAnySessionFor(postMergeData.pni.toString())) {
+      if (needsSessionSwitchoverEvent(pniVerified, postMergeData.pni, aci)) {
+        breadCrumbs += "FinalUpdateAciSSE"
         operations += PnpOperation.SessionSwitchoverInsert(
           recipientId = primaryId,
           e164 = postMergeData.e164
@@ -2673,6 +2731,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     }
 
     if (record.e164 != null && updatedNumber && notSelf(e164, pni, aci) && !record.isBlocked) {
+      breadCrumbs += "NonMergeChangeNumber"
       operations += PnpOperation.ChangeNumberInsert(
         recipientId = commonId,
         oldE164 = record.e164,
@@ -2683,7 +2742,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     val oldServiceId: ServiceId? = record.aci ?: record.pni
     val newServiceId: ServiceId? = aci ?: pni ?: oldServiceId
 
-    if (!pniVerified && newServiceId != oldServiceId && oldServiceId != null && sessions.hasAnySessionFor(oldServiceId.toString())) {
+    if (needsSessionSwitchoverEvent(pniVerified, oldServiceId, newServiceId)) {
+      breadCrumbs += "NonMergeSSE"
       operations += PnpOperation.SessionSwitchoverInsert(recipientId = commonId, e164 = record.e164 ?: e164)
     }
 
@@ -2756,6 +2816,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
       // By migrating the PNI to the e164 record, we may cause an SSE
       if (needsSessionSwitchoverEvent(pniVerified, data.e164Record.serviceId, data.e164Record.aci ?: data.pni)) {
+        breadCrumbs += "PniE164SSE"
         operations += PnpOperation.SessionSwitchoverInsert(recipientId = data.byE164, e164 = data.e164Record.e164)
       }
 
@@ -2764,9 +2825,11 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       // in the next function call, and each step on it's own would think that no SSE is necessary. Given that this scenario only
       // happens with an unstable PNI-E164 mapping, we get out ahead of it by putting an SSE in both preemptively.
       if (!pniVerified && data.pniRecord.aci == null && sessions.hasAnySessionFor(data.pni.toString())) {
+        breadCrumbs += "DefensiveSSEByPni"
         operations += PnpOperation.SessionSwitchoverInsert(recipientId = data.byPni, e164 = data.pniRecord.e164)
 
         if (data.e164Record.aci == null) {
+          breadCrumbs += "DefensiveSSEByE164"
           operations += PnpOperation.SessionSwitchoverInsert(recipientId = data.byE164, e164 = data.e164Record.e164)
         }
       }
@@ -2821,6 +2884,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
         // This also becomes a change number event
         if (notSelf(data) && !data.aciRecord.isBlocked) {
+          breadCrumbs += "PniMatchingE164NoAciChangeNumber"
           operations += PnpOperation.ChangeNumberInsert(
             recipientId = data.byAci,
             oldE164 = data.aciRecord.e164,
@@ -2864,6 +2928,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         )
 
         if (data.aciRecord.e164 != null && notSelf(data) && !data.aciRecord.isBlocked) {
+          breadCrumbs += "PniHasExtraFieldChangeNumber"
           operations += PnpOperation.ChangeNumberInsert(
             recipientId = data.byAci,
             oldE164 = data.aciRecord.e164,
@@ -2910,6 +2975,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       )
 
       if (data.aciRecord.e164 != null && data.aciRecord.e164 != data.e164 && notSelf(data) && !data.aciRecord.isBlocked) {
+        breadCrumbs += "E164OnlyChangeNumber"
         operations += PnpOperation.ChangeNumberInsert(
           recipientId = data.byAci,
           oldE164 = data.aciRecord.e164,
@@ -2935,6 +3001,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       )
 
       if (data.aciRecord.e164 != null && data.aciRecord.e164 != data.e164 && notSelf(data) && !data.aciRecord.isBlocked) {
+        breadCrumbs += "E164MatchingPniChangeNumber"
         operations += PnpOperation.ChangeNumberInsert(
           recipientId = data.byAci,
           oldE164 = data.aciRecord.e164,
@@ -2953,6 +3020,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       )
 
       if (data.aciRecord.e164 != null && data.aciRecord.e164 != data.e164 && notSelf(data) && !data.aciRecord.isBlocked) {
+        breadCrumbs += "E164NonMatchingPniChangeNumber"
         operations += PnpOperation.ChangeNumberInsert(
           recipientId = data.byAci,
           oldE164 = data.aciRecord.e164,
@@ -3804,9 +3872,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       val systemName = ProfileName.fromParts(contact.systemGivenName.orElse(null), contact.systemFamilyName.orElse(null))
       val username = contact.username.orElse(null)
 
-      if (contact.aci.isValid) {
-        put(ACI_COLUMN, contact.aci.toString())
-      }
+      put(ACI_COLUMN, contact.aci.orElse(null)?.toString())
 
       if (FeatureFlags.phoneNumberPrivacy()) {
         put(PNI_COLUMN, contact.pni.orElse(null)?.toString())
@@ -3837,14 +3903,14 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       put(UNREGISTERED_TIMESTAMP, contact.unregisteredTimestamp)
       if (contact.unregisteredTimestamp > 0L) {
         put(REGISTERED, RegisteredState.NOT_REGISTERED.id)
-      } else if (contact.aci.isValid) {
+      } else if (contact.aci.isPresent) {
         put(REGISTERED, RegisteredState.REGISTERED.id)
       } else {
         Log.w(TAG, "Contact is marked as registered, but has no serviceId! Can't locally mark registered. (Phone: ${contact.number.orElse("null")}, Username: ${username?.isNotEmpty()})")
       }
 
       if (isInsert) {
-        put(AVATAR_COLOR, AvatarColorHash.forAddress(contact.aci.toString(), contact.number.orNull()).serialize())
+        put(AVATAR_COLOR, AvatarColorHash.forAddress(contact.aci.map { it.toString() }.or(contact.pni.map { it.toString() }).orNull(), contact.number.orNull()).serialize())
       }
     }
   }
@@ -4582,4 +4648,15 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     val operations: List<PnpOperation>,
     val breadCrumbs: List<String>
   )
+
+  class SseWithSelfAci(cause: Exception) : IllegalStateException(cause)
+  class SseWithSelfAciNoSession(cause: Exception) : IllegalStateException(cause)
+  class SseWithSelfPni(cause: Exception) : IllegalStateException(cause)
+  class SseWithSelfPniNoSession(cause: Exception) : IllegalStateException(cause)
+  class SseWithSelfE164(cause: Exception) : IllegalStateException(cause)
+  class SseWithSelfE164NoSession(cause: Exception) : IllegalStateException(cause)
+  class SseWithNoPniSessionsException(cause: Exception) : IllegalStateException(cause)
+  class SseWithASinglePniSessionForSelfException(cause: Exception) : IllegalStateException(cause)
+  class SseWithASinglePniSessionException(cause: Exception) : IllegalStateException(cause)
+  class SseWithMultiplePniSessionsException(cause: Exception) : IllegalStateException(cause)
 }
