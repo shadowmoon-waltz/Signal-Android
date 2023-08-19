@@ -2987,7 +2987,7 @@ class ConversationFragment :
             ViewUtil.fadeOut(target.quotedIndicatorView!!, 150, View.INVISIBLE)
           }
 
-          ViewUtil.hideKeyboard(requireContext(), itemView)
+          container.hideKeyboard(composeText, keepHeightOverride = true)
 
           viewModel.setHideScrollButtonsForReactionOverlay(true)
 
@@ -2997,9 +2997,13 @@ class ConversationFragment :
             ReactionsToolbarListener(item.conversationMessage),
             selectedConversationModel,
             object : OnHideListener {
-              override fun startHide() {
+              override fun startHide(focusedView: View?) {
                 multiselectItemDecoration.hideShade(binding.conversationItemRecycler)
                 ViewUtil.fadeOut(binding.reactionsShade, resources.getInteger(R.integer.reaction_scrubber_hide_duration), View.GONE)
+
+                if (focusedView == composeText) {
+                  container.showSoftkey(composeText)
+                }
               }
 
               override fun onHide() {
