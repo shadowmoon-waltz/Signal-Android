@@ -13,6 +13,19 @@
     android:nextFocusLeft="@+id/container"
     android:nextFocusRight="@+id/embedded_text_editor">
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/conversation_item_swipe_to_left"
+        android:layout_width="@dimen/conversation_item_reply_size"
+        android:layout_height="@dimen/conversation_item_reply_size"
+        android:alpha="0"
+        android:tint="@color/signal_icon_tint_secondary"
+        app:contentPadding="9dp"
+        app:layout_constraintBottom_toBottomOf="@id/conversation_item_body_wrapper"
+        app:layout_constraintStart_toStartOf="@id/conversation_item_body_wrapper"
+        app:layout_constraintTop_toTopOf="@id/conversation_item_body_wrapper"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Signal.Circle"
+        app:srcCompat="@drawable/symbol_reply_24" />
+
     <!-- STR Icon -->
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/conversation_item_reply"

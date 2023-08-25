@@ -22,6 +22,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.imageview.ShapeableImageView
 import org.signal.core.util.StringUtil
 import org.signal.core.util.dp
 import org.thoughtcrime.securesms.R
@@ -46,6 +47,7 @@ import org.thoughtcrime.securesms.util.Projection
 import org.thoughtcrime.securesms.util.ProjectionList
 import org.thoughtcrime.securesms.util.SearchUtil
 import org.thoughtcrime.securesms.util.SignalLocalMetrics
+import org.thoughtcrime.securesms.util.SwipeActionTypes
 import org.thoughtcrime.securesms.util.ThemeUtil
 import org.thoughtcrime.securesms.util.VibrateUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
@@ -91,6 +93,7 @@ class V2TextOnlyViewHolder<Model : MappingModel<Model>>(
 
   override val reactionsView: View = binding.conversationItemReactions
   override val quotedIndicatorView: View? = null
+  override val swipeToLeftView: View = binding.conversationItemSwipeToLeft
   override val replyView: View = binding.conversationItemReply
   override val contactPhotoHolderView: View? = binding.senderPhoto
   override val badgeImageView: View? = binding.senderBadge
@@ -179,12 +182,33 @@ class V2TextOnlyViewHolder<Model : MappingModel<Model>>(
       shapeDelegate.corners
     )
 
+    setSwipeIcon(binding.conversationItemSwipeToLeft, SignalStore.settings().getSwipeToLeftAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_LEFT);
+    setSwipeIcon(binding.conversationItemReply, SignalStore.settings().getSwipeToRightAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_RIGHT);
+
+    binding.conversationItemSwipeToLeft.setBackgroundColor(themeDelegate.getReplyIconBackgroundColor())
     binding.conversationItemReply.setBackgroundColor(themeDelegate.getReplyIconBackgroundColor())
 
     itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
       topMargin = shape.topPadding.toInt()
       bottomMargin = shape.bottomPadding.toInt()
     }
+  }
+
+  private fun setSwipeIcon(icon: ShapeableImageView, action: String, defaultDrawableId: Int)
+  {
+    icon.setImageResource(
+      when (action) {
+        SwipeActionTypes.REPLY -> R.drawable.symbol_reply_24
+        SwipeActionTypes.DELETE, SwipeActionTypes.DELETE_NO_PROMPT -> R.drawable.ic_trash_24
+        SwipeActionTypes.COPY_TEXT, SwipeActionTypes.COPY_TEXT_POPUP -> R.drawable.symbol_copy_android_24
+        SwipeActionTypes.FORWARD -> R.drawable.symbol_forward_24
+        SwipeActionTypes.MESSAGE_DETAILS -> R.drawable.symbol_info_24
+        SwipeActionTypes.SHOW_OPTIONS -> R.drawable.ic_more_vert_24
+        SwipeActionTypes.NOTE_TO_SELF -> R.drawable.ic_note_24
+        SwipeActionTypes.MULTI_SELECT -> R.drawable.symbol_check_circle_24
+        else -> defaultDrawableId // for SwipeActionTypes.DEFAULT, SwipeActionTypes.NONE, and any other string
+      }
+    )
   }
 
   override fun getAdapterPosition(recyclerView: RecyclerView): Int = bindingAdapterPosition

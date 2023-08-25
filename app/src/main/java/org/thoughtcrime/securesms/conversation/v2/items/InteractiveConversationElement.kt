@@ -29,7 +29,7 @@ interface InteractiveConversationElement : ChatColorsDrawable.ChatColorsDrawable
   val badgeImageView: View?
 
   // this is the swipeToLeft view (note that replyView is the swipe to right view for us)
-  val swipeToLeftView: View?
+  val swipeToLeftView: View
 
   /**
    * Whether or not the given element is swipeable
