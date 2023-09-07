@@ -101,7 +101,7 @@ public final class FeatureFlags {
   private static final String PAYPAL_RECURRING_DONATIONS        = "android.recurringPayPalDonations.3";
   private static final String ANY_ADDRESS_PORTS_KILL_SWITCH     = "android.calling.fieldTrial.anyAddressPortsKillSwitch";
   private static final String AD_HOC_CALLING                    = "android.calling.ad.hoc.2";
-  private static final String EDIT_MESSAGE_SEND                 = "android.editMessage.send.10";
+  private static final String EDIT_MESSAGE_SEND                 = "android.editMessage.send.11";
   private static final String MAX_ATTACHMENT_COUNT              = "android.attachments.maxCount";
   private static final String MAX_ATTACHMENT_RECEIVE_SIZE_BYTES = "global.attachments.maxReceiveBytes";
   private static final String MAX_ATTACHMENT_SIZE_BYTES         = "global.attachments.maxBytes";
@@ -114,7 +114,7 @@ public final class FeatureFlags {
   public  static final String PROMPT_BATTERY_SAVER              = "android.promptBatterySaver";
   public  static final String USERNAMES                         = "android.usernames";
   public  static final String INSTANT_VIDEO_PLAYBACK            = "android.instantVideoPlayback";
-  private static final String CONVERSATION_ITEM_V2_TEXT         = "android.conversationItemV2.text";
+  private static final String CONVERSATION_ITEM_V2_TEXT         = "android.conversationItemV2.text.2";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
