@@ -113,6 +113,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
       val wrapperHeight = binding.conversationItemBodyWrapper.measuredHeight
       val yTranslation = (wrapperHeight - 38.dp) / 2f
       binding.conversationItemReply.translationY = -yTranslation
+      binding.conversationItemSwipeToLeft.translationY = -yTranslation
 
       return false
     }

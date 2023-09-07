@@ -22,7 +22,6 @@
         app:contentPadding="9dp"
         app:layout_constraintBottom_toBottomOf="@id/conversation_item_body_wrapper"
         app:layout_constraintStart_toStartOf="@id/conversation_item_body_wrapper"
-        app:layout_constraintTop_toTopOf="@id/conversation_item_body_wrapper"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Signal.Circle"
         app:srcCompat="@drawable/symbol_reply_24" />
 
