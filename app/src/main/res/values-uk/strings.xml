@@ -479,7 +479,7 @@
     <string name="ConversationFragment_failed_to_open_message">Не вдалося відкрити повідомлення</string>
     <string name="ConversationFragment_you_can_swipe_to_the_right_reply">Ви можете потягнути будь-яке повідомлення праворуч для швидкої відповіді</string>
     <string name="ConversationFragment_you_can_swipe_to_the_left_reply">Ви можете потягнути будь-яке повідомлення ліворуч для швидкої відповіді</string>
-    <string name="ConversationFragment_outgoing_view_once_media_files_are_automatically_removed">Вихідні одноразові медіа-файли автоматично видаляються після того, як були відправлені</string>
+    <string name="ConversationFragment_view_once_media_is_deleted_after_sending">View-once media is deleted after sending</string>
     <string name="ConversationFragment_you_already_viewed_this_message">Ви вже переглянули це повідомлення</string>
     <string name="ConversationFragment__you_can_add_notes_for_yourself_in_this_conversation">У цьому чаті ви можете додавати нотатки для себе. Якщо ваш акаунт має зв\'язані пристрої, нові нотатки буде синхронізовано.</string>
     <string name="ConversationFragment__d_group_members_have_the_same_name">%1$d учасників групи мають однакові імена.</string>
@@ -678,8 +678,8 @@
     <string name="AvatarSelectionBottomSheetDialogFragment__viewing_your_gallery_requires_the_storage_permission">Для перегляду галереї потрібен дозвіл на доступ до сховища.</string>
 
     <!-- DateUtils -->
-    <string name="DateUtils_just_now">Зараз</string>
-    <string name="DateUtils_minutes_ago">%1$dхв</string>
+    <string name="DateUtils_just_now">Щойно</string>
+    <string name="DateUtils_minutes_ago">%1$d хв</string>
     <string name="DateUtils_today">Сьогодні</string>
     <string name="DateUtils_yesterday">Вчора</string>
     <!-- When scheduling a message, %1$s replaced with either today, tonight, or tomorrow. %2$s replaced with the time. e.g. Tonight at 9:00pm -->
@@ -1085,7 +1085,7 @@
     </plurals>
 
     <!-- CustomNotificationsDialogFragment -->
-    <string name="CustomNotificationsDialogFragment__custom_notifications">Власні повідомлення</string>
+    <string name="CustomNotificationsDialogFragment__custom_notifications">Настроювані сповіщення</string>
     <string name="CustomNotificationsDialogFragment__messages">Повідомлення</string>
     <string name="CustomNotificationsDialogFragment__use_custom_notifications">Використовувати власні сповіщення</string>
     <string name="CustomNotificationsDialogFragment__notification_sound">Звук сповіщення</string>
@@ -1316,7 +1316,7 @@
     <string name="MediaSendActivity_camera_unavailable">Камера не доступна</string>
 
     <!-- MediaRepository -->
-    <string name="MediaRepository_all_media">Всі медіа-файли Всі зображення</string>
+    <string name="MediaRepository_all_media">Усі медіафайли</string>
     <string name="MediaRepository__camera">Камера</string>
 
     <!-- MessageRecord -->
@@ -1628,9 +1628,9 @@
     <string name="MessageRequestBottomView_unblock_this_group_and_share_your_name_and_photo_with_its_members">Розблокувати цю групу та ділитися своїм ім’ям і фото з її учасниками? Ви не отримаєте повідомлень, поки не розблокуєте групу.</string>
   <!-- Removed by excludeNonTranslatables <string name="MessageRequestBottomView_legacy_learn_more_url" translatable="false">https://support.signal.org/hc/articles/360007459591</string> -->
     <string name="MessageRequestProfileView_view">Детальніше</string>
-    <string name="MessageRequestProfileView_member_of_one_group">Полягає в %1$s</string>
-    <string name="MessageRequestProfileView_member_of_two_groups">Полягає в %1$s і %2$s</string>
-    <string name="MessageRequestProfileView_member_of_many_groups">Полягає в %1$s, %2$s, і %3$s</string>
+    <string name="MessageRequestProfileView_member_of_one_group">Є учасником «%1$s»</string>
+    <string name="MessageRequestProfileView_member_of_two_groups">Є учасником «%1$s» і «%2$s»</string>
+    <string name="MessageRequestProfileView_member_of_many_groups">Є учасником «%1$s», «%2$s» і «%3$s»</string>
     <plurals name="MessageRequestProfileView_members">
         <item quantity="one">%1$d учасник</item>
         <item quantity="few">%1$d учасник</item>
@@ -2395,6 +2395,18 @@
 
     <string name="TurnOffContactJoinedNotificationsActivity__turn_off_contact_joined_signal">Вимкнути сповіщення \"Контакт приєднався до Signal\"? Ви можете заново включити їх в Signal &gt; Налаштування &gt; Сповіщення.</string>
 
+    <!-- TurnOnNotificationsBottomSheet -->
+    <!-- Title for sheet explaining how to turn on app notifications -->
+    <string name="TurnOnNotificationsBottomSheet__turn_on_notifications">Turn on notifications</string>
+    <!-- Subtitle  for sheet explaining how to turn on app notifications -->
+    <string name="TurnOnNotificationsBottomSheet__to_receive_notifications">To receive notifications for new messages:</string>
+    <!-- Sheet step 1  for sheet explaining how to turn on app notifications-->
+    <string name="TurnOnNotificationsBottomSheet__1_tap_settings_below">1. Tap “Settings” below</string>
+    <!-- Sheet step 2 with placeholder which will be replaced with an image of a toggle  for sheet explaining how to turn on app notifications -->
+    <string name="TurnOnNotificationsBottomSheet__2_s_turn_on_notifications">2. %1$s Turn on notifications</string>
+    <!-- Label for button at the bottom of the sheet which opens system app notification settings for sheet explaining how to turn on app notifications -->
+    <string name="TurnOnNotificationsBottomSheet__settings">Settings</string>
+
     <!-- Notification Channels -->
     <string name="NotificationChannel_channel_messages">Повідомлення</string>
     <string name="NotificationChannel_calls">Виклики</string>
@@ -2727,13 +2739,13 @@
     <string name="expiration_minutes_abbreviated">%1$dхв</string>
 
     <plurals name="expiration_hours">
-        <item quantity="one">%1$d година</item>
-        <item quantity="few">%1$d годин</item>
-        <item quantity="many">%1$d годин</item>
-        <item quantity="other">%1$d годин</item>
+        <item quantity="one">%1$d год</item>
+        <item quantity="few">%1$d год</item>
+        <item quantity="many">%1$d год</item>
+        <item quantity="other">%1$d год</item>
     </plurals>
 
-    <string name="expiration_hours_abbreviated">%1$dг</string>
+    <string name="expiration_hours_abbreviated">%1$d год</string>
 
     <plurals name="expiration_days">
         <item quantity="one">%1$d день</item>
@@ -2861,7 +2873,7 @@
     <string name="verify_display_fragment__failed_to_verify_safety_number">Не вдалось підтвердити код безпеки</string>
     <string name="verify_display_fragment__loading">Завантаження…</string>
     <string name="verify_display_fragment__mark_as_verified">Позначити перевіреним</string>
-    <string name="verify_display_fragment__clear_verification">Чітка верифікація</string>
+    <string name="verify_display_fragment__clear_verification">Очистити верифікацію</string>
     <!-- Banner at top of safety numbers screen explaining that we\'re updating how safety numbers work. -->
     <string name="verify_display_fragment__safety_numbers_are_updating_banner_no_learn_more">Коди безпеки оновлюються.</string>
 
@@ -3004,10 +3016,10 @@
 
     <!-- plurals.xml -->
     <plurals name="hours_ago">
-        <item quantity="one">%1$dгодину</item>
-        <item quantity="few">%1$dгодину</item>
-        <item quantity="many">%1$dгодин</item>
-        <item quantity="other">%1$dгодин</item>
+        <item quantity="one">%1$d год</item>
+        <item quantity="few">%1$d год</item>
+        <item quantity="many">%1$d год</item>
+        <item quantity="other">%1$d год</item>
     </plurals>
 
     <!-- preferences.xml -->
@@ -3241,7 +3253,7 @@
     <string name="PaymentsHomeFragment__restore_payments_account">Відновити платіжний обліковий запис</string>
     <string name="PaymentsHomeFragment__no_recent_activity_yet">Жодної активності останнім часом</string>
     <string name="PaymentsHomeFragment__recent_activity">Недавня активність</string>
-    <string name="PaymentsHomeFragment__see_all">Побачити все</string>
+    <string name="PaymentsHomeFragment__see_all">Усі</string>
     <string name="PaymentsHomeFragment__add_funds">Додати кошти</string>
     <string name="PaymentsHomeFragment__send">Відправити</string>
     <string name="PaymentsHomeFragment__sent_s">Відправлено %1$s</string>
@@ -3291,6 +3303,32 @@
     <string name="PaymentsHomeFragment__cancel">Скасувати</string>
     <!-- Alert dialog button to update now -->
     <string name="PaymentsHomeFragment__update_now">Оновити зараз</string>
+
+    <!-- GrantPermissionsFragment -->
+    <!-- Displayed as a text-only action button at the bottom start of the screen -->
+    <string name="GrantPermissionsFragment__not_now">Not now</string>
+    <!-- Displayed as an action button at the bottom end of the screen -->
+    <string name="GrantPermissionsFragment__next">Next</string>
+    <!-- Displayed as a title at the top of the screen -->
+    <string name="GrantPermissionsFragment__allow_permissions">Allow permissions</string>
+    <!-- Displayed as a subtitle at the top of the screen -->
+    <string name="GrantPermissionsFragment__to_help_you_message_people_you_know">To help you message people you know, Signal will request these permissions. </string>
+    <!-- Notifications permission row title -->
+    <string name="GrantPermissionsFragment__notifications">Notifications</string>
+    <!-- Notifications permission row description -->
+    <string name="GrantPermissionsFragment__get_notified_when">Get notified when new messages arrive.</string>
+    <!-- Contacts permission row title -->
+    <string name="GrantPermissionsFragment__contacts">Contacts</string>
+    <!-- Contacts permission row description -->
+    <string name="GrantPermissionsFragment__find_people_you_know">Find people you know. Your contacts are encrypted and not visible to the Signal service.</string>
+    <!-- Phone calls permission row title -->
+    <string name="GrantPermissionsFragment__phone_calls">Phone calls</string>
+    <!-- Phone calls permission row description -->
+    <string name="GrantPermissionsFragment__make_registering_easier">Make registering easier and enable additional calling features.</string>
+    <!-- Storage permission row title -->
+    <string name="GrantPermissionsFragment__storage">Storage</string>
+    <!-- Storage permission row description -->
+    <string name="GrantPermissionsFragment__send_photos_videos_and_files">Send photos, videos and files from your device.</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -3517,7 +3555,7 @@
     <!-- conversation -->
     <string name="conversation__menu_group_settings">Налаштування групи</string>
     <string name="conversation__menu_leave_group">Вийти з групи</string>
-    <string name="conversation__menu_view_all_media">Всі медіа-файли Всі зображення</string>
+    <string name="conversation__menu_view_all_media">Усі медіафайли</string>
     <string name="conversation__menu_conversation_settings">Налаштування чату</string>
     <string name="conversation__menu_add_shortcut">Додати до домашнього екрану</string>
     <string name="conversation__menu_create_bubble">Створити бульбашку</string>
@@ -4651,8 +4689,8 @@
     <string name="ConversationSettingsFragment__see_all">Побачити все</string>
     <string name="ConversationSettingsFragment__add_members">Додати учасників</string>
     <string name="ConversationSettingsFragment__permissions">Дозволи</string>
-    <string name="ConversationSettingsFragment__requests_and_invites">Запити на прийняття; запрошення</string>
-    <string name="ConversationSettingsFragment__group_link">Групове посилання</string>
+    <string name="ConversationSettingsFragment__requests_and_invites">Запити і запрошення</string>
+    <string name="ConversationSettingsFragment__group_link">Посилання групи</string>
     <string name="ConversationSettingsFragment__add_as_a_contact">Додати як контакт</string>
     <string name="ConversationSettingsFragment__unmute">Сповіщати</string>
     <!-- The subtitle for a settings item that describes how long the user\'s chat is muted. If a chat is muted, you will not receive notifications unless @mentioned. The placeholder represents a time (e.g. 10pm, March 4, etc). -->
@@ -4675,7 +4713,7 @@
     <!-- SoundsAndNotificationsSettingsFragment -->
     <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Вимкнути сповіщення</string>
     <string name="SoundsAndNotificationsSettingsFragment__not_muted">Сповіщення увімкнені</string>
-    <string name="SoundsAndNotificationsSettingsFragment__mentions">Згадати</string>
+    <string name="SoundsAndNotificationsSettingsFragment__mentions">Згадки</string>
     <string name="SoundsAndNotificationsSettingsFragment__always_notify">Завжди повідомляти</string>
     <string name="SoundsAndNotificationsSettingsFragment__do_not_notify">Не повідомляти</string>
     <string name="SoundsAndNotificationsSettingsFragment__custom_notifications">Власні повідомлення</string>
@@ -5204,6 +5242,10 @@
 
     <!-- Displayed in a toast when we fail to open the ringtone picker -->
     <string name="NotificationSettingsFragment__failed_to_open_picker">Не вдалося відкрити вибір.</string>
+    <!-- Banner title when notification permission is disabled -->
+    <string name="NotificationSettingsFragment__to_enable_notifications">To enable notifications, Signal needs permission to display them.</string>
+    <!-- Banner action when notification permission is disabled -->
+    <string name="NotificationSettingsFragment__turn_on">Turn on</string>
 
     <!-- Description shown for the Signal Release Notes channel -->
     <string name="ReleaseNotes__signal_release_notes_and_news">Що нового &amp; Новини Signal</string>
@@ -6332,9 +6374,9 @@
     <!-- Title shown at top of bottom sheet dialog for displaying a message\'s edit history -->
     <string name="EditMessageHistoryDialog_title">Історія редагування</string>
     <!-- Title of dialog shown alerting user that edit message is in beta only -->
-    <string name="SendingEditMessageBetaOnlyDialog_title">Тільки в бета-версії Signal</string>
+    <string name="SendingEditMessageBetaOnlyDialog_title">Edit Message</string>
     <!-- Body of dialog shown alerting user that edit message is in beta only and only sent to beta users. -->
-    <string name="SendingEditMessageBetaOnlyDialog_body">Редагування повідомлень доступно тільки для користувачів бета-версії Signal. Якщо ви відредагуєте повідомлення, це побачать тільки користувачі останньої бета-версії Signal.</string>
+    <string name="SendingEditMessageBetaOnlyDialog_body">If you edit a message, it will only be visible to people who are on the latest versions of Signal. They will be able to see you edited a message.</string>
     <!-- Button to cancel sending edit message as it is beta only -->
     <string name="SendingEditMessageBetaOnlyDialog_cancel">Скасувати</string>
     <!-- Button to continue sending edit message despite it being beta only -->
@@ -6369,6 +6411,16 @@
     <string name="UsernameLinkSettings_username_copied_toast">Ім’я користувача скопійовано</string>
     <!-- Content of a toast that will show after the username link is copied to the clipboard -->
     <string name="UsernameLinkSettings_link_copied_toast">Посилання скопійовано</string>
+    <!-- Content of a text field that is shown when the user has not yet set a username link -->
+    <string name="UsernameLinkSettings_link_not_set_label">Link not set</string>
+    <!-- Content of a text field that is shown when the user is actively resetting the username link and waiting for the operation to finish -->
+    <string name="UsernameLinkSettings_resetting_link_label">Resetting link…</string>
+    <!-- Title of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
+    <string name="UsernameLinkSettings_reset_link_dialog_title">Reset QR code?</string>
+    <!-- Body of a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
+    <string name="UsernameLinkSettings_reset_link_dialog_body">If you reset your QR code, your existing QR code and link will no longer work.</string>
+    <!-- Label for the confirmation button on a dialog prompting the user to confirm whether they would like to reset their username link and QR code -->
+    <string name="UsernameLinkSettings_reset_link_dialog_confirm_button">Reset</string>
     <!-- Button label for a button that will reset your username and give you a new link -->
     <string name="UsernameLinkSettings_reset_button_label">Скинути</string>
     <!-- Button label for a button that indicates that the user is done changing the current setting -->
@@ -6385,8 +6437,14 @@
     <string name="UsernameLinkSettings_qr_result_invalid">QR-код недійсний.</string>
     <!-- Body of a dialog that is displayed when the username we looked up could not be found. -->
     <string name="UsernameLinkSettings_qr_result_not_found">Не вдалося знайти користувача з іменем %1$s.</string>
+    <!-- Body of a dialog that is displayed when the username we looked up could not be found and we also could not parse the username. -->
+    <string name="UsernameLinkSettings_qr_result_not_found_no_username">This user could not be found.</string>
     <!-- Body of a dialog that is displayed when we experienced a network error when looking up a username. -->
     <string name="UsernameLinkSettings_qr_result_network_error">Виникла помилка мережі. Спробуйте ще раз.</string>
+    <!-- Body of a dialog that is displayed when we failed to reset your username link because you had no internet. -->
+    <string name="UsernameLinkSettings_reset_link_result_network_unavailable">You do not have network access. Your link was not reset. Try again later.</string>
+    <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
+    <string name="UsernameLinkSettings_reset_link_result_network_error">A network error occurred while trying to reset your link. Try again later.</string>
 
     <!-- PendingParticipantsView -->
     <!-- Displayed in the popup card when a remote user attempts to join a call link -->
@@ -6411,7 +6469,7 @@
     </plurals>
     <!-- Content description for rejecting a user -->
     <string name="PendingParticipantsBottomSheet__reject">Відхилити</string>
-    <!-- Content desccription for confirming a user -->
+    <!-- Content description for confirming a user -->
     <string name="PendingParticipantsBottomSheet__approve">Прийняти</string>
 
     <!-- EOF -->
