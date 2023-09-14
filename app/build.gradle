@@ -11,6 +11,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.squareup.wire'
     id 'translations'
+    id 'licenses'
 }
 
 apply from: 'static-ips.gradle'
@@ -48,8 +49,8 @@ ktlint {
     version = "0.49.1"
 }
 
-def canonicalVersionCode = 1327
-def canonicalVersionName = "6.32.4"
+def canonicalVersionCode = 1328
+def canonicalVersionName = "6.33.0"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)

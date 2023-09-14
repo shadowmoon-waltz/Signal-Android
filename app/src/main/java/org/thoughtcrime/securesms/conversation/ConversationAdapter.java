@@ -116,8 +116,7 @@ public class ConversationAdapter
   private ConversationMessage         inlineContent;
   private Colorizer                   colorizer;
   private boolean                     isTypingViewEnabled;
-  private ConversationItemDisplayMode condensedMode;
-  private boolean                     scheduledMessagesMode;
+  private ConversationItemDisplayMode displayMode;
   private PulseRequest                pulseRequest;
 
   private ConversationMessage mostRecentSelected;
@@ -258,12 +257,7 @@ public class ConversationAdapter
   }
 
   public void setCondensedMode(ConversationItemDisplayMode condensedMode) {
-    this.condensedMode = condensedMode;
-    notifyDataSetChanged();
-  }
-
-  public void setScheduledMessagesMode(boolean scheduledMessagesMode) {
-    this.scheduledMessagesMode = scheduledMessagesMode;
+    this.displayMode = condensedMode;
     notifyDataSetChanged();
   }
 
@@ -282,7 +276,7 @@ public class ConversationAdapter
         ConversationMessage previousMessage = adapterPosition < getItemCount() - 1  && !isFooterPosition(adapterPosition + 1) ? getItem(adapterPosition + 1) : null;
         ConversationMessage nextMessage     = adapterPosition > 0                   && !isHeaderPosition(adapterPosition - 1) ? getItem(adapterPosition - 1) : null;
 
-        ConversationItemDisplayMode displayMode = condensedMode != null ? condensedMode : ConversationItemDisplayMode.STANDARD;
+        ConversationItemDisplayMode itemDisplayMode = displayMode != null ? displayMode : ConversationItemDisplayMode.Standard.INSTANCE;
 
         conversationViewHolder.getBindable().bind(lifecycleOwner,
                                                   conversationMessage,
@@ -294,11 +288,11 @@ public class ConversationAdapter
                                                   conversationMessage.getThreadRecipient(),
                                                   searchQuery,
                                                   conversationMessage == recordToPulse,
-                                                  hasWallpaper && displayMode.displayWallpaper(),
+                                                  hasWallpaper && itemDisplayMode.displayWallpaper(),
                                                   isMessageRequestAccepted,
                                                   conversationMessage == inlineContent,
                                                   colorizer,
-                                                  displayMode);
+                                                  itemDisplayMode);
 
         if (conversationMessage == recordToPulse) {
           recordToPulse = null;
@@ -337,9 +331,9 @@ public class ConversationAdapter
 
     if (conversationMessage == null) return -1;
 
-    if (scheduledMessagesMode) {
+    if (displayMode.getScheduleMessageMode()) {
       calendar.setTimeInMillis(((MediaMmsMessageRecord) conversationMessage.getMessageRecord()).getScheduledDate());
-    } else if (condensedMode == ConversationItemDisplayMode.EDIT_HISTORY) {
+    } else if (displayMode == ConversationItemDisplayMode.EditHistory.INSTANCE) {
       calendar.setTimeInMillis(conversationMessage.getMessageRecord().getDateSent());
     } else {
       calendar.setTimeInMillis(conversationMessage.getConversationTimestamp());
@@ -357,9 +351,9 @@ public class ConversationAdapter
     Context             context             = viewHolder.itemView.getContext();
     ConversationMessage conversationMessage = Objects.requireNonNull(getItem(position));
 
-    if (scheduledMessagesMode) {
+    if (displayMode.getScheduleMessageMode()) {
       viewHolder.setText(DateUtils.getScheduledMessagesDateHeaderString(viewHolder.itemView.getContext(), locale, ((MediaMmsMessageRecord) conversationMessage.getMessageRecord()).getScheduledDate()));
-    } else if (condensedMode == ConversationItemDisplayMode.EDIT_HISTORY) {
+    } else if (displayMode == ConversationItemDisplayMode.EditHistory.INSTANCE) {
       viewHolder.setText(DateUtils.getConversationDateHeaderString(viewHolder.itemView.getContext(), locale, conversationMessage.getMessageRecord().getDateSent()));
     } else {
       viewHolder.setText(DateUtils.getConversationDateHeaderString(viewHolder.itemView.getContext(), locale, conversationMessage.getConversationTimestamp()));
