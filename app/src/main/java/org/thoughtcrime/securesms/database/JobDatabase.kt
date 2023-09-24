@@ -178,8 +178,23 @@ class JobDatabase(
 
   @Synchronized
   fun getAllJobSpecs(): List<JobSpec> {
+    val columns = arrayOf(
+      Jobs.ID,
+      Jobs.JOB_SPEC_ID,
+      Jobs.FACTORY_KEY,
+      Jobs.QUEUE_KEY,
+      Jobs.CREATE_TIME,
+      Jobs.LAST_RUN_ATTEMPT_TIME,
+      Jobs.NEXT_BACKOFF_INTERVAL,
+      Jobs.RUN_ATTEMPT,
+      Jobs.MAX_ATTEMPTS,
+      Jobs.LIFESPAN,
+      Jobs.SERIALIZED_DATA,
+      Jobs.SERIALIZED_INPUT_DATA,
+      Jobs.IS_RUNNING
+    )
     return readableDatabase
-      .query(Jobs.TABLE_NAME, null, null, null, null, null, "${Jobs.CREATE_TIME}, ${Jobs.ID} ASC")
+      .query(Jobs.TABLE_NAME, columns, null, null, null, null, "${Jobs.CREATE_TIME}, ${Jobs.ID} ASC")
       .readToList { cursor ->
         jobSpecFromCursor(cursor)
       }
@@ -198,12 +213,13 @@ class JobDatabase(
   }
 
   @Synchronized
-  fun updateJobAfterRetry(id: String, isRunning: Boolean, runAttempt: Int, nextBackoffInterval: Long, serializedData: ByteArray?) {
+  fun updateJobAfterRetry(id: String, currentTime: Long, runAttempt: Int, nextBackoffInterval: Long, serializedData: ByteArray?) {
     writableDatabase
       .update(Jobs.TABLE_NAME)
       .values(
-        Jobs.IS_RUNNING to if (isRunning) 1 else 0,
+        Jobs.IS_RUNNING to 0,
         Jobs.RUN_ATTEMPT to runAttempt,
+        Jobs.LAST_RUN_ATTEMPT_TIME to currentTime,
         Jobs.NEXT_BACKOFF_INTERVAL to nextBackoffInterval,
         Jobs.SERIALIZED_DATA to serializedData
       )

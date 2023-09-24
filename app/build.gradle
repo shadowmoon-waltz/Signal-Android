@@ -3,7 +3,6 @@ import com.android.build.api.dsl.ManagedVirtualDevice
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'com.google.protobuf'
     id 'androidx.navigation.safeargs'
     id 'org.jlleitschuh.gradle.ktlint'
     id 'org.jetbrains.kotlin.android'
@@ -15,21 +14,6 @@ plugins {
 }
 
 apply from: 'static-ips.gradle'
-
-protobuf {
-    protoc {
-        artifact = 'com.google.protobuf:protoc:3.18.0'
-    }
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java {
-                    option "lite"
-                }
-            }
-        }
-    }
-}
 
 wire {
     kotlin {
@@ -49,8 +33,8 @@ ktlint {
     version = "0.49.1"
 }
 
-def canonicalVersionCode = 1328
-def canonicalVersionName = "6.33.0"
+def canonicalVersionCode = 1334
+def canonicalVersionName = "6.34.2"
 
 def postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -581,13 +565,11 @@ dependencies {
     implementation project(':sms-exporter')
     implementation project(':sticky-header-grid')
     implementation project(':photoview')
+    implementation project(':glide-webp')
 
     implementation libs.libsignal.android
-    implementation libs.google.protobuf.javalite
 
-    implementation(libs.mobilecoin) {
-        exclude group: 'com.google.protobuf'
-    }
+    implementation libs.mobilecoin
 
     implementation libs.signal.ringrtc
 
