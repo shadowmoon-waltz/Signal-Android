@@ -59,6 +59,8 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.media3.common.MediaItem;
+import androidx.recyclerview.widget.ConcatAdapter;
+import androidx.recyclerview.widget.ConversationLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -2346,7 +2348,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
   @Override
   public int getAdapterPosition(@NonNull RecyclerView recyclerView) {
-    return recyclerView.getChildAdapterPosition(this);
+    return recyclerView.getChildViewHolder(this).getBindingAdapterPosition();
   }
 
   @Override

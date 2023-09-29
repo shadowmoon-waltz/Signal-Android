@@ -4542,7 +4542,7 @@
     <!-- Dialog title when removing a contact -->
     <string name="NewConversationActivity__remove_s">Supprimer %1$s ?</string>
     <!-- Dialog message when removing a contact -->
-    <string name="NewConversationActivity__you_wont_see_this_person">Vous ne verrez pas cette personne lors d\'une recherche Vous recevrez une demande si cette personne essaye de vous envoyer un message à l\'avenir.</string>
+    <string name="NewConversationActivity__you_wont_see_this_person">Vous ne verrez pas cette personne lors d\'une recherche. Vous recevrez une demande si cette personne essaye de vous envoyer un message à l\'avenir.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s a été supprimé</string>
     <!-- Snackbar message after blocking a contact -->
@@ -6017,7 +6017,7 @@
     <!-- Shown during empty state -->
     <string name="CallLogFragment__get_started_by_calling_a_friend">Commencez en appelant un ami.</string>
     <!-- Displayed as a message in a dialog when deleting multiple items -->
-    <string name="CallLogFragment__call_links_youve_created">Call links you\'ve created will no longer work for people who have them.</string>
+    <string name="CallLogFragment__call_links_youve_created">Les liens d’appel que vous avez créés ne fonctionneront plus.</string>
 
     <!-- New call activity -->
     <!-- Activity title in title bar -->

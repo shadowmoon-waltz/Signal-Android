@@ -27,6 +27,7 @@ import org.signal.ringrtc.CallId;
 import org.signal.ringrtc.CallLinkRootKey;
 import org.signal.ringrtc.CallManager;
 import org.signal.ringrtc.GroupCall;
+import org.signal.ringrtc.GroupCall.Reaction;
 import org.signal.ringrtc.HttpHeader;
 import org.signal.ringrtc.NetworkRoute;
 import org.signal.ringrtc.PeekInfo;
@@ -637,6 +638,11 @@ private void processStateless(@NonNull Function1<WebRtcEphemeralState, WebRtcEph
   }
 
   @Override
+  public void onLowBandwidthForVideo(@Nullable Remote remote, boolean recovered) {
+    // TODO: Implement handling of the "low outgoing bandwidth for video" notification.
+  }
+
+  @Override
   public void onCallConcluded(@Nullable Remote remote) {
     if (!(remote instanceof RemotePeer)) {
       return;
@@ -883,6 +889,16 @@ private void processStateless(@NonNull Function1<WebRtcEphemeralState, WebRtcEph
   @Override
   public void onAudioLevels(@NonNull GroupCall groupCall) {
     processStateless(s -> serviceState.getActionProcessor().handleGroupAudioLevelsChanged(serviceState, s));
+  }
+
+  @Override
+  public void onLowBandwidthForVideo(@NonNull GroupCall groupCall, boolean recovered) {
+    // TODO: Implement handling of the "low outgoing bandwidth for video" notification.
+  }
+
+  @Override
+  public void onReactions(@NonNull GroupCall groupCall, List<Reaction> reactions) {
+    // TODO: Implement handling of reactions.
   }
 
   @Override

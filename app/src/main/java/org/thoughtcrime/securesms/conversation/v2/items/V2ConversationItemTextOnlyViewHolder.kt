@@ -52,6 +52,7 @@ import org.thoughtcrime.securesms.util.SignalLocalMetrics
 import org.thoughtcrime.securesms.util.SwipeActionTypes
 import org.thoughtcrime.securesms.util.ThemeUtil
 import org.thoughtcrime.securesms.util.VibrateUtil
+import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
 import org.thoughtcrime.securesms.util.hasExtraText
 import org.thoughtcrime.securesms.util.hasNoBubble
@@ -194,7 +195,6 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     conversationMessage = model.conversationMessage
 
     shape = shapeDelegate.setMessageShape(
-      isLtr = itemView.layoutDirection == View.LAYOUT_DIRECTION_LTR,
       currentMessage = conversationMessage.messageRecord,
       isGroupThread = conversationMessage.threadRecipient.isGroup,
       adapterPosition = bindingAdapterPosition
@@ -241,7 +241,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
       } else {
         conversationMessage.threadRecipient.chatColors
       },
-      shapeDelegate.corners
+      shapeDelegate.cornersLTR
     )
 
     setSwipeIcon(binding.swipeToLeft, SignalStore.settings().getSwipeToLeftAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_LEFT);
@@ -290,7 +290,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
       Projection.relativeToParent(
         coordinateRoot,
         binding.bodyWrapper,
-        shapeDelegate.corners
+        shapeDelegate.cornersLTR
       ).translateX(binding.bodyWrapper.translationX).translateY(root.translationY)
     )
 
@@ -342,7 +342,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     return Projection.relativeToParent(
       coordinateRoot,
       binding.bodyWrapper,
-      shapeDelegate.corners
+      shapeDelegate.cornersLTR
     )
       .translateY(root.translationY)
       .translateX(binding.bodyWrapper.translationX)
@@ -361,7 +361,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     val projection = Projection.relativeToParent(
       coordinateRoot,
       binding.footerBackground,
-      shapeDelegate.corners
+      shapeDelegate.cornersLTR
     )
 
     footerDrawable.applyMaskProjection(projection)
@@ -369,6 +369,14 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
   }
 
   private fun invalidateBodyBubbleDrawable(coordinateRoot: ViewGroup) {
+    val corners: Projection.Corners = if (ViewUtil.isLtr(coordinateRoot)) {
+      shapeDelegate.cornersLTR
+    } else {
+      shapeDelegate.cornersRTL
+    }
+
+    bodyBubbleDrawable.setCorners(corners.toRadii())
+
     if (bodyBubbleDrawable.isSolidColor()) {
       return
     }
@@ -376,7 +384,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     val projection = Projection.relativeToParent(
       coordinateRoot,
       binding.bodyWrapper,
-      shapeDelegate.corners
+      corners
     )
 
     bodyBubbleDrawable.applyMaskProjection(projection)
