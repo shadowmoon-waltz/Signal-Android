@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import org.thoughtcrime.securesms.R;
 
-import org.thoughtcrime.securesms.util.Base64;
+import org.signal.core.util.Base64;
 import org.thoughtcrime.securesms.util.views.CircularProgressMaterialButton;
 import org.signal.libsignal.protocol.IdentityKeyPair;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
@@ -212,8 +212,8 @@ public class SetIdentityKeysFragment extends Fragment {
              .setPositiveButton("Proceed", (d, i) -> {
                try {
                  IdentityKeyPair ikp = SignalStore.account().getAciIdentityKey();
-                 this.publicKeyText.setText(Base64.encodeBytes(ikp.getPublicKey().serialize()));
-                 this.privateKeyText.setText(Base64.encodeBytes(ikp.getPrivateKey().serialize()));
+                 this.publicKeyText.setText(Base64.encodeWithPadding(ikp.getPublicKey().serialize()));
+                 this.privateKeyText.setText(Base64.encodeWithPadding(ikp.getPrivateKey().serialize()));
                } catch (Exception e) {
 
                }
