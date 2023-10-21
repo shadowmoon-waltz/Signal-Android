@@ -233,16 +233,14 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     presentSenderNameBackground()
     presentReactions()
 
-    bodyBubbleDrawable.setChatColors(
-      if (binding.body.isJumbomoji) {
-        transparentChatColors
-      } else if (binding.isIncoming) {
-        ChatColors.forColor(ChatColors.Id.NotSet, themeDelegate.getBodyBubbleColor(conversationMessage))
-      } else {
-        conversationMessage.threadRecipient.chatColors
-      },
-      shapeDelegate.cornersLTR
-    )
+    bodyBubbleDrawable.setCorners(shapeDelegate.cornersLTR)
+    if (binding.body.isJumbomoji) {
+      bodyBubbleDrawable.setLocalChatColors(transparentChatColors)
+    } else if (binding.isIncoming) {
+      bodyBubbleDrawable.setLocalChatColors(ChatColors.forColor(ChatColors.Id.NotSet, themeDelegate.getBodyBubbleColor(conversationMessage)))
+    } else {
+      bodyBubbleDrawable.clearLocalChatColors()
+    }
 
     setSwipeIcon(binding.swipeToLeft, SignalStore.settings().getSwipeToLeftAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_LEFT);
     setSwipeIcon(binding.reply, SignalStore.settings().getSwipeToRightAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_RIGHT);
@@ -495,7 +493,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     val timer = binding.footerExpiry
     val record = conversationMessage.messageRecord
     if (record.expiresIn > 0 && !record.isPending) {
-      timer.setColorFilter(themeDelegate.getFooterTextColor(conversationMessage), PorterDuff.Mode.SRC_IN)
+      timer.setColorFilter(themeDelegate.getFooterForegroundColor(conversationMessage), PorterDuff.Mode.SRC_IN)
 
       timer.visible = true
       timer.setPercentComplete(0f)
@@ -530,10 +528,8 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     }
 
     if (conversationContext.hasWallpaper()) {
-      senderDrawable.setChatColors(
-        ChatColors.forColor(ChatColors.Id.BuiltIn, themeDelegate.getFooterBubbleColor(conversationMessage)),
-        footerCorners
-      )
+      senderDrawable.setCorners(footerCorners)
+      senderDrawable.setLocalChatColors(ChatColors.forColor(ChatColors.Id.BuiltIn, themeDelegate.getFooterBubbleColor(conversationMessage)))
 
       binding.senderName.background = senderDrawable
     } else {
@@ -630,14 +626,13 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     }
 
     binding.footerBackground.visible = true
-    footerDrawable.setChatColors(
-      if (binding.isIncoming) {
-        ChatColors.forColor(ChatColors.Id.NotSet, themeDelegate.getFooterBubbleColor(conversationMessage))
-      } else {
-        conversationMessage.threadRecipient.chatColors
-      },
-      footerCorners
-    )
+    footerDrawable.setCorners(footerCorners)
+
+    if (binding.isIncoming) {
+      footerDrawable.setLocalChatColors(ChatColors.forColor(ChatColors.Id.NotSet, themeDelegate.getFooterBubbleColor(conversationMessage)))
+    } else {
+      footerDrawable.clearLocalChatColors()
+    }
   }
 
   private fun presentDate() {
@@ -650,7 +645,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
 
     binding.footerDate.setOnClickListener(null)
     binding.footerDate.visible = true
-    binding.footerDate.setTextColor(themeDelegate.getFooterTextColor(conversationMessage))
+    binding.footerDate.setTextColor(themeDelegate.getFooterForegroundColor(conversationMessage))
 
     val record = conversationMessage.messageRecord
     if (record.isFailed) {
@@ -691,6 +686,8 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
 
     val record = conversationMessage.messageRecord
     val newMessageId = record.buildMessageId()
+
+    deliveryStatus.setTint(themeDelegate.getFooterForegroundColor(conversationMessage))
 
     if (messageId != newMessageId && deliveryStatus.isPending && !record.isPending) {
       if (record.toRecipient.isGroup) {

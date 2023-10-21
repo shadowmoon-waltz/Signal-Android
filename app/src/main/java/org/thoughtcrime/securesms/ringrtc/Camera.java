@@ -43,7 +43,7 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
 
   @NonNull  private final Context                   context;
   @Nullable private final CameraVideoCapturer       capturer;
-  @NonNull  private final CameraEventListener       cameraEventListener;
+  @Nullable private       CameraEventListener       cameraEventListener;
   @NonNull  private final EglBaseWrapper            eglBase;
             private final int                       cameraCount;
   @NonNull  private       CameraState.Direction     activeDirection;
@@ -146,6 +146,10 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
     }
   }
 
+  public void setCameraEventListener(@Nullable CameraEventListener cameraEventListener) {
+    this.cameraEventListener = cameraEventListener;
+  }
+
   public void dispose() {
     if (capturer != null) {
       capturer.dispose();
@@ -205,13 +209,13 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
   @Override
   public void onCameraSwitchDone(boolean isFrontFacing) {
     activeDirection = isFrontFacing ? FRONT : BACK;
-    cameraEventListener.onCameraSwitchCompleted(new CameraState(getActiveDirection(), getCount()));
+    if (cameraEventListener != null) cameraEventListener.onCameraSwitchCompleted(new CameraState(getActiveDirection(), getCount()));
   }
 
   @Override
   public void onCameraSwitchError(String errorMessage) {
     Log.e(TAG, "onCameraSwitchError: " + errorMessage);
-    cameraEventListener.onCameraSwitchCompleted(new CameraState(getActiveDirection(), getCount()));
+    if (cameraEventListener != null) cameraEventListener.onCameraSwitchCompleted(new CameraState(getActiveDirection(), getCount()));
   }
 
   private static class FilteredCamera2Enumerator extends Camera2Enumerator {
@@ -320,7 +324,7 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
     @Override
     public void onCapturerStarted(boolean success) {
       observer.onCapturerStarted(success);
-      if (success) {
+      if (success && cameraEventListener != null) {
         cameraEventListener.onFullyInitialized();
       }
     }
@@ -328,7 +332,7 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
     @Override
     public void onCapturerStopped() {
       observer.onCapturerStopped();
-      cameraEventListener.onCameraStopped();
+      if (cameraEventListener != null) cameraEventListener.onCameraStopped();
     }
 
     @Override
