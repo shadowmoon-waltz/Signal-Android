@@ -2,9 +2,6 @@ package org.thoughtcrime.securesms.components.settings.app.subscription
 
 import org.signal.donations.PaymentSourceType
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalType
-import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.util.FeatureFlags
-import org.thoughtcrime.securesms.util.LocaleFeatureFlags
 
 /**
  * Helper object to determine in-app donations availability.
@@ -20,60 +17,50 @@ object InAppDonations {
    * - Able to use PayPal and is in a region where it is able to be accepted.
    */
   fun hasAtLeastOnePaymentMethodAvailable(): Boolean {
-    return isCreditCardAvailable() || isPayPalAvailable() || isGooglePayAvailable() || isSEPADebitAvailable() || isIDEALAvailable()
+    return false
   }
 
   fun isPaymentSourceAvailable(paymentSourceType: PaymentSourceType, donateToSignalType: DonateToSignalType): Boolean {
-    return when (paymentSourceType) {
-      PaymentSourceType.PayPal -> isPayPalAvailableForDonateToSignalType(donateToSignalType)
-      PaymentSourceType.Stripe.CreditCard -> isCreditCardAvailable()
-      PaymentSourceType.Stripe.GooglePay -> isGooglePayAvailable()
-      PaymentSourceType.Stripe.SEPADebit -> isSEPADebitAvailableForDonateToSignalType(donateToSignalType)
-      PaymentSourceType.Stripe.IDEAL -> isIDEALAvailbleForDonateToSignalType(donateToSignalType)
-      PaymentSourceType.Unknown -> false
-    }
+    return false
   }
 
   private fun isPayPalAvailableForDonateToSignalType(donateToSignalType: DonateToSignalType): Boolean {
-    return when (donateToSignalType) {
-      DonateToSignalType.ONE_TIME, DonateToSignalType.GIFT -> FeatureFlags.paypalOneTimeDonations()
-      DonateToSignalType.MONTHLY -> FeatureFlags.paypalRecurringDonations()
-    } && !LocaleFeatureFlags.isPayPalDisabled()
+    return false
   }
 
   /**
    * Whether the user is in a region that supports credit cards, based off local phone number.
    */
   fun isCreditCardAvailable(): Boolean {
-    return !LocaleFeatureFlags.isCreditCardDisabled()
+    return false
   }
 
   /**
    * Whether the user is in a region that supports PayPal, based off local phone number.
    */
   fun isPayPalAvailable(): Boolean {
-    return (FeatureFlags.paypalOneTimeDonations() || FeatureFlags.paypalRecurringDonations()) && !LocaleFeatureFlags.isPayPalDisabled()
+    return false
   }
 
   /**
    * Whether the user is using a device that supports GooglePay, based off Wallet API and phone number.
    */
   fun isGooglePayAvailable(): Boolean {
-    return SignalStore.donationsValues().isGooglePayReady && !LocaleFeatureFlags.isGooglePayDisabled()
+    return false
   }
 
   /**
    * Whether the user is in a region which supports SEPA Debit transfers, based off local phone number.
    */
   fun isSEPADebitAvailable(): Boolean {
-    return FeatureFlags.sepaDebitDonations()
+    return false
   }
 
   /**
    * Whether the user is in a region which supports IDEAL transfers, based off local phone number.
    */
   fun isIDEALAvailable(): Boolean {
-    return FeatureFlags.idealDonations()
+    return false
   }
 
   /**
@@ -81,7 +68,7 @@ object InAppDonations {
    * and donation type.
    */
   fun isSEPADebitAvailableForDonateToSignalType(donateToSignalType: DonateToSignalType): Boolean {
-    return donateToSignalType != DonateToSignalType.GIFT && FeatureFlags.sepaDebitDonations()
+    return false
   }
 
   /**
@@ -89,6 +76,6 @@ object InAppDonations {
    * donation type
    */
   fun isIDEALAvailbleForDonateToSignalType(donateToSignalType: DonateToSignalType): Boolean {
-    return donateToSignalType != DonateToSignalType.GIFT && FeatureFlags.idealDonations()
+    return false
   }
 }
