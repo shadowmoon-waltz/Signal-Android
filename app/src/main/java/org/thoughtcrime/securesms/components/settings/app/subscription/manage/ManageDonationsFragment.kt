@@ -350,10 +350,6 @@ class ManageDonationsFragment :
           .setNegativeButton(R.string.DonationsErrors__learn_more) { _, _ ->
             CommunicationActions.openBrowserLink(requireContext(), getString(R.string.donate_url))
           }
-          .setPositiveButton(R.string.Subscription__contact_support) { _, _ ->
-            requireActivity().finish()
-            startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
-          }
           .setOnDismissListener {
             SignalStore.donationsValues().setPendingOneTimeDonation(null)
           }

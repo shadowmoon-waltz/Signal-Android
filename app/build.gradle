@@ -378,9 +378,9 @@ android {
 
         sw {
             dimension 'distribution'
-            ext.websiteUpdateUrl = "null"
-            buildConfigField "boolean", "PLAY_STORE_DISABLED", "true"
-            buildConfigField "String", "NOPLAY_UPDATE_URL", "$ext.websiteUpdateUrl"
+            buildConfigField "boolean", "MANAGES_APP_UPDATES", "false"
+            buildConfigField "String", "APK_UPDATE_URL", "null"
+            buildConfigField "String", "BUILD_DISTRIBUTION_TYPE", "\"sw\""
             applicationIdSuffix ".sw"
         }
 
