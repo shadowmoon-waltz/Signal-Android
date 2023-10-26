@@ -13,6 +13,7 @@ import org.signal.core.util.StringUtil
 import org.signal.core.util.logging.Log
 import org.signal.core.util.money.FiatMoney
 import org.signal.core.util.money.PlatformCurrencyUtil
+import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper.isExpired
 import org.thoughtcrime.securesms.components.settings.app.subscription.MonthlyDonationRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.OneTimeDonationRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.boost.Boost
@@ -207,9 +208,22 @@ class DonateToSignalViewModel(
   }
 
   private fun initializeOneTimeDonationState(oneTimeDonationRepository: OneTimeDonationRepository) {
-    oneTimeDonationDisposables += SignalStore.donationsValues().observablePendingOneTimeDonation
-      .map { it.isPresent }
+    val isOneTimeDonationInProgress: Observable<Boolean> = DonationRedemptionJobWatcher.watchOneTimeRedemption().map {
+      it.map { jobState ->
+        when (jobState) {
+          JobTracker.JobState.PENDING -> true
+          JobTracker.JobState.RUNNING -> true
+          else -> false
+        }
+      }.orElse(false)
+    }.distinctUntilChanged()
+
+    val isOneTimeDonationPending: Observable<Boolean> = SignalStore.donationsValues().observablePendingOneTimeDonation
+      .map { pending -> pending.filter { !it.isExpired }.isPresent }
       .distinctUntilChanged()
+
+    oneTimeDonationDisposables += Observable
+      .combineLatest(isOneTimeDonationInProgress, isOneTimeDonationPending) { a, b -> a || b }
       .subscribe { hasPendingOneTimeDonation ->
         store.update { it.copy(oneTimeDonationState = it.oneTimeDonationState.copy(isOneTimeDonationPending = hasPendingOneTimeDonation)) }
       }

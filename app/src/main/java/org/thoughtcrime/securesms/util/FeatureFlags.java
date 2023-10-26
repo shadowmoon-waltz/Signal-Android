@@ -92,7 +92,7 @@ public final class FeatureFlags {
   private static final String TELECOM_MODEL_BLOCKLIST           = "android.calling.telecomModelBlockList";
   private static final String CAMERAX_MODEL_BLOCKLIST           = "android.cameraXModelBlockList";
   private static final String CAMERAX_MIXED_MODEL_BLOCKLIST     = "android.cameraXMixedModelBlockList";
-  private static final String HIDE_CONTACTS                     = "android.hide.contacts";
+  private static final String HIDE_CONTACTS                     = "android.hide.contacts.2";
   private static final String PAYMENTS_REQUEST_ACTIVATE_FLOW    = "android.payments.requestActivateFlow";
   public  static final String GOOGLE_PAY_DISABLED_REGIONS       = "global.donations.gpayDisabledRegions";
   public  static final String CREDIT_CARD_DISABLED_REGIONS      = "global.donations.ccDisabledRegions";
@@ -117,8 +117,10 @@ public final class FeatureFlags {
   public  static final String INSTANT_VIDEO_PLAYBACK            = "android.instantVideoPlayback";
   private static final String CONVERSATION_ITEM_V2_TEXT         = "android.conversationItemV2.text.4";
   public  static final String CRASH_PROMPT_CONFIG               = "android.crashPromptConfig";
-  private static final String SEPA_DEBIT_DONATIONS              = "android.sepa.debit.donations";
-  private static final String IDEAL_DONATIONS                   = "android.ideal.donations";
+  private static final String SEPA_DEBIT_DONATIONS              = "android.sepa.debit.donations.2";
+  private static final String IDEAL_DONATIONS                   = "android.ideal.donations.2";
+  public  static final String IDEAL_ENABLED_REGIONS             = "global.donations.idealEnabledRegions";
+  public  static final String SEPA_ENABLED_REGIONS              = "global.donations.sepaEnabledRegions";
 
   /**
    * We will only store remote values for flags in this set. If you want a flag to be controllable
@@ -189,7 +191,9 @@ public final class FeatureFlags {
       CRASH_PROMPT_CONFIG,
       BLOCK_SSE,
       SEPA_DEBIT_DONATIONS,
-      IDEAL_DONATIONS
+      IDEAL_DONATIONS,
+      IDEAL_ENABLED_REGIONS,
+      SEPA_ENABLED_REGIONS
   );
 
   @VisibleForTesting
@@ -361,7 +365,7 @@ public final class FeatureFlags {
 
   /** Internal testing extensions. */
   public static boolean internalUser() {
-    return getBoolean(INTERNAL_USER, false) || Environment.IS_PNP;
+    return getBoolean(INTERNAL_USER, false) || Environment.IS_PNP || Environment.IS_STAGING;
   }
 
   /** Whether or not to use the UUID in verification codes. */
@@ -689,11 +693,19 @@ public final class FeatureFlags {
    * WARNING: This feature is under heavy development and is *not* ready for wider use.
    */
   public static boolean sepaDebitDonations() {
-    return getBoolean(SEPA_DEBIT_DONATIONS, Environment.IS_STAGING);
+    return getBoolean(SEPA_DEBIT_DONATIONS, false);
   }
 
   public static boolean idealDonations() {
-    return getBoolean(IDEAL_DONATIONS, Environment.IS_STAGING);
+    return getBoolean(IDEAL_DONATIONS, false);
+  }
+
+  public static String idealEnabledRegions() {
+    return getString(IDEAL_ENABLED_REGIONS, "");
+  }
+
+  public static String sepaEnabledRegions() {
+    return getString(SEPA_ENABLED_REGIONS, "");
   }
 
   /** Only for rendering debug info. */

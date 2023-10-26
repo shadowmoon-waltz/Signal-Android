@@ -52,6 +52,7 @@ import org.thoughtcrime.securesms.jobs.AccountConsistencyWorkerJob;
 import org.thoughtcrime.securesms.jobs.CheckServiceReachabilityJob;
 import org.thoughtcrime.securesms.jobs.DownloadLatestEmojiDataJob;
 import org.thoughtcrime.securesms.jobs.EmojiSearchIndexDownloadJob;
+import org.thoughtcrime.securesms.jobs.ExternalLaunchDonationJob;
 import org.thoughtcrime.securesms.jobs.FcmRefreshJob;
 import org.thoughtcrime.securesms.jobs.FontDownloaderJob;
 import org.thoughtcrime.securesms.jobs.GroupV2UpdateSelfProfileKeyJob;
@@ -83,7 +84,7 @@ import org.thoughtcrime.securesms.service.KeyCachingService;
 import org.thoughtcrime.securesms.service.LocalBackupListener;
 import org.thoughtcrime.securesms.service.RotateSenderCertificateListener;
 import org.thoughtcrime.securesms.service.RotateSignedPreKeyListener;
-import org.thoughtcrime.securesms.service.UpdateApkRefreshListener;
+import org.thoughtcrime.securesms.apkupdate.ApkUpdateRefreshListener;
 import org.thoughtcrime.securesms.service.webrtc.AndroidTelecomUtil;
 import org.thoughtcrime.securesms.storage.StorageSyncHelper;
 import org.thoughtcrime.securesms.util.AppForegroundObserver;
@@ -224,6 +225,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     ApplicationDependencies.getMegaphoneRepository().onAppForegrounded();
     ApplicationDependencies.getDeadlockDetector().start();
     SubscriptionKeepAliveJob.enqueueAndTrackTimeIfNecessary();
+    ExternalLaunchDonationJob.enqueueIfNecessary();
     FcmFetchManager.onForeground(this);
 
     SignalExecutors.BOUNDED.execute(() -> {
@@ -397,8 +399,8 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     RotateSenderCertificateListener.schedule(this);
     RoutineMessageFetchReceiver.startOrUpdateAlarm(this);
 
-    if (BuildConfig.PLAY_STORE_DISABLED && BuildConfig.NOPLAY_UPDATE_URL != null) {
-      UpdateApkRefreshListener.schedule(this);
+    if (BuildConfig.MANAGES_APP_UPDATES) {
+      ApkUpdateRefreshListener.schedule(this);
     }
   }
 

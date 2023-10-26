@@ -113,6 +113,7 @@ import org.whispersystems.signalservice.internal.contacts.entities.KeyBackupResp
 import org.whispersystems.signalservice.internal.contacts.entities.TokenResponse;
 import org.whispersystems.signalservice.internal.crypto.AttachmentDigest;
 import org.whispersystems.signalservice.internal.push.exceptions.DonationProcessorError;
+import org.whispersystems.signalservice.internal.push.exceptions.DonationReceiptCredentialError;
 import org.whispersystems.signalservice.internal.push.exceptions.ForbiddenException;
 import org.whispersystems.signalservice.internal.push.exceptions.GroupExistsException;
 import org.whispersystems.signalservice.internal.push.exceptions.GroupMismatchedDevicesException;
@@ -280,6 +281,7 @@ public class PushServiceSocket {
   private static final String CREATE_STRIPE_SUBSCRIPTION_PAYMENT_METHOD  = "/v1/subscription/%s/create_payment_method?type=%s";
   private static final String CREATE_PAYPAL_SUBSCRIPTION_PAYMENT_METHOD  = "/v1/subscription/%s/create_payment_method/paypal";
   private static final String DEFAULT_STRIPE_SUBSCRIPTION_PAYMENT_METHOD = "/v1/subscription/%s/default_payment_method/stripe/%s";
+  private static final String DEFAULT_IDEAL_SUBSCRIPTION_PAYMENT_METHOD  = "/v1/subscription/%s/default_payment_method_for_ideal/%s";
   private static final String DEFAULT_PAYPAL_SUBSCRIPTION_PAYMENT_METHOD = "/v1/subscription/%s/default_payment_method/braintree/%s";
   private static final String SUBSCRIPTION_RECEIPT_CREDENTIALS           = "/v1/subscription/%s/receipt_credentials";
   private static final String CREATE_STRIPE_ONE_TIME_PAYMENT_INTENT      = "/v1/subscription/boost/create";
@@ -1174,6 +1176,16 @@ public class PushServiceSocket {
         NO_HEADERS,
         (code, body) -> {
           if (code == 204) throw new NonSuccessfulResponseCodeException(204);
+          if (code == 402) {
+            DonationReceiptCredentialError donationReceiptCredentialError;
+            try {
+              donationReceiptCredentialError = JsonUtil.fromJson(body.string(), DonationReceiptCredentialError.class);
+            } catch (IOException e) {
+              throw new NonSuccessfulResponseCodeException(402);
+            }
+
+            throw donationReceiptCredentialError;
+          }
         });
 
     ReceiptCredentialResponseJson responseJson = JsonUtil.fromJson(response, ReceiptCredentialResponseJson.class);
@@ -1232,6 +1244,10 @@ public class PushServiceSocket {
 
   public void setDefaultStripeSubscriptionPaymentMethod(String subscriberId, String paymentMethodId) throws IOException {
     makeServiceRequestWithoutAuthentication(String.format(DEFAULT_STRIPE_SUBSCRIPTION_PAYMENT_METHOD, subscriberId, paymentMethodId), "POST", "");
+  }
+
+  public void setDefaultIdealSubscriptionPaymentMethod(String subscriberId, String setupIntentId) throws IOException {
+    makeServiceRequestWithoutAuthentication(String.format(DEFAULT_IDEAL_SUBSCRIPTION_PAYMENT_METHOD, subscriberId, setupIntentId), "POST", "");
   }
 
   public void setDefaultPaypalSubscriptionPaymentMethod(String subscriberId, String paymentMethodId) throws IOException {
@@ -2668,11 +2684,14 @@ public class PushServiceSocket {
       }
 
       if (responseCode == 440) {
+        DonationProcessorError exception;
         try {
-          throw JsonUtil.fromJson(body.string(), DonationProcessorError.class);
+          exception = JsonUtil.fromJson(body.string(), DonationProcessorError.class);
         } catch (IOException e) {
           throw new NonSuccessfulResponseCodeException(440);
         }
+
+        throw exception;
       } else {
         throw new NonSuccessfulResponseCodeException(responseCode);
       }

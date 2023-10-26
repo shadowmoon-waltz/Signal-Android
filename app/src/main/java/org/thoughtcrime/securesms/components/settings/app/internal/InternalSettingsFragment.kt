@@ -30,6 +30,7 @@ import org.thoughtcrime.securesms.database.LogDatabase
 import org.thoughtcrime.securesms.database.MegaphoneDatabase
 import org.thoughtcrime.securesms.database.OneTimePreKeyTable
 import org.thoughtcrime.securesms.database.SignalDatabase
+import org.thoughtcrime.securesms.database.model.databaseprotos.TerminalDonationQueue
 import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.jobmanager.JobTracker
 import org.thoughtcrime.securesms.jobs.DownloadLatestEmojiDataJob
@@ -475,6 +476,29 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
         )
       }
 
+      if (state.hasPendingOneTimeDonation) {
+        clickPref(
+          title = DSLSettingsText.from("Clear pending one-time donation."),
+          onClick = {
+            SignalStore.donationsValues().setPendingOneTimeDonation(null)
+          }
+        )
+      } else {
+        clickPref(
+          title = DSLSettingsText.from("Set pending one-time donation."),
+          onClick = {
+            findNavController().safeNavigate(InternalSettingsFragmentDirections.actionInternalSettingsFragmentToOneTimeDonationConfigurationFragment())
+          }
+        )
+      }
+
+      clickPref(
+        title = DSLSettingsText.from("Enqueue terminal donation"),
+        onClick = {
+          findNavController().safeNavigate(InternalSettingsFragmentDirections.actionInternalSettingsFragmentToTerminalDonationConfigurationFragment())
+        }
+      )
+
       dividerPref()
 
       sectionHeaderPref(DSLSettingsText.from("Release channel"))
@@ -741,7 +765,12 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
   }
 
   private fun enqueueSubscriptionRedemption() {
-    SubscriptionReceiptRequestResponseJob.createSubscriptionContinuationJobChain(-1L, false).enqueue()
+    SubscriptionReceiptRequestResponseJob.createSubscriptionContinuationJobChain(
+      -1L,
+      TerminalDonationQueue.TerminalDonation(
+        level = 1000
+      )
+    ).enqueue()
   }
 
   private fun enqueueSubscriptionKeepAlive() {
