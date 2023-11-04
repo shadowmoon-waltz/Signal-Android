@@ -383,7 +383,7 @@ android {
         sw {
             dimension 'distribution'
             buildConfigField "boolean", "MANAGES_APP_UPDATES", "false"
-            buildConfigField "String", "APK_UPDATE_URL", "null"
+            buildConfigField "String", "APK_UPDATE_MANIFEST_URL", "null"
             buildConfigField "String", "BUILD_DISTRIBUTION_TYPE", "\"sw\""
             applicationIdSuffix ".sw"
         }
