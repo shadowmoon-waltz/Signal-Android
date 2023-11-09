@@ -43,6 +43,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
@@ -156,13 +158,15 @@ class BankTransferDetailsFragment : ComposeFragment(), DonationCheckoutDelegate.
     )
   }
 
-  override fun onUserCancelledPaymentFlow() = Unit
+  override fun onUserLaunchedAnExternalApplication() = Unit
 
   override fun navigateToDonationPending(gatewayRequest: GatewayRequest) {
-    findNavController().popBackStack()
-    findNavController().popBackStack()
-
     setFragmentResult(BankTransferRequestKeys.PENDING_KEY, bundleOf(BankTransferRequestKeys.PENDING_KEY to gatewayRequest))
+    viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+      override fun onResume(owner: LifecycleOwner) {
+        findNavController().popBackStack(R.id.donateToSignalFragment, false)
+      }
+    })
   }
 }
 
@@ -270,6 +274,7 @@ private fun BankTransferDetailsContent(
             modifier = Modifier
               .fillMaxWidth()
               .padding(top = 12.dp)
+              .defaultMinSize(minHeight = 78.dp)
               .onFocusChanged { onIBANFocusChanged(it.hasFocus) }
               .focusRequester(focusRequester)
           )
@@ -289,9 +294,11 @@ private fun BankTransferDetailsContent(
             keyboardActions = KeyboardActions(
               onNext = { focusManager.moveFocus(FocusDirection.Down) }
             ),
+            supportingText = {},
             modifier = Modifier
               .fillMaxWidth()
-              .padding(bottom = 16.dp)
+              .padding(top = 16.dp)
+              .defaultMinSize(minHeight = 78.dp)
           )
         }
 
@@ -309,16 +316,20 @@ private fun BankTransferDetailsContent(
             keyboardActions = KeyboardActions(
               onDone = { onDonateClick() }
             ),
+            supportingText = {},
             modifier = Modifier
               .fillMaxWidth()
-              .padding(bottom = 16.dp)
+              .padding(top = 16.dp)
+              .defaultMinSize(minHeight = 78.dp)
           )
         }
 
         item {
           Box(
             contentAlignment = Center,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+              .fillMaxWidth()
+              .padding(top = 8.dp)
           ) {
             TextButton(
               onClick = { setDisplayFindAccountInfoSheet(true) }
@@ -334,7 +345,7 @@ private fun BankTransferDetailsContent(
         onClick = onDonateClick,
         modifier = Modifier
           .defaultMinSize(minWidth = 220.dp)
-          .padding(bottom = 16.dp)
+          .padding(vertical = 16.dp)
       ) {
         Text(text = donateLabel)
       }

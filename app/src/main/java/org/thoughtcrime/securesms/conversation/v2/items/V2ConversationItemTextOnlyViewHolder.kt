@@ -167,6 +167,8 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     binding.bodyWrapper.layoutTransition = bodyBubbleLayoutTransition
 
     binding.footerBackground.background = footerDrawable
+    binding.footerDate.setOnClickListener(passthroughClickListener)
+    binding.footerDate.setOnLongClickListener(passthroughClickListener)
   }
 
   override fun invalidateChatColorsDrawable(coordinateRoot: ViewGroup) {
@@ -689,7 +691,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
 
     deliveryStatus.setTint(themeDelegate.getFooterForegroundColor(conversationMessage))
 
-    if (messageId != newMessageId && deliveryStatus.isPending && !record.isPending) {
+    if (messageId == newMessageId && deliveryStatus.isPending && !record.isPending) {
       if (record.toRecipient.isGroup) {
         SignalLocalMetrics.GroupMessageSend.onUiUpdated(record.id)
       } else {

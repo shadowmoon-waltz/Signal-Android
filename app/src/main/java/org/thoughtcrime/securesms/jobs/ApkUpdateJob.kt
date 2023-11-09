@@ -60,7 +60,7 @@ class ApkUpdateJob private constructor(parameters: Parameters) : BaseJob(paramet
       return
     }
 
-    Log.i(TAG, "Checking for APK update...")
+    Log.d(TAG, "Checking for APK update at ${BuildConfig.APK_UPDATE_MANIFEST_URL}")
 
     val client = OkHttpClient()
     val request = Request.Builder().url(BuildConfig.APK_UPDATE_MANIFEST_URL).build()
@@ -78,10 +78,12 @@ class ApkUpdateJob private constructor(parameters: Parameters) : BaseJob(paramet
       Log.w(TAG, "Invalid update descriptor! $updateDescriptor")
       return
     } else {
-      Log.i(TAG, "Got descriptor: $updateDescriptor")
+      Log.d(TAG, "Got descriptor: $updateDescriptor")
     }
 
-    if (updateDescriptor.versionCode > getCurrentAppVersionCode()) {
+    val currentVersionCode = getCurrentAppVersionCode()
+    if (updateDescriptor.versionCode > currentVersionCode || (updateDescriptor.versionCode == currentVersionCode && (updateDescriptor.uploadTimestamp ?: 0) > SignalStore.apkUpdate().lastApkUploadTime)) {
+      Log.i(TAG, "Newer version code available. Current: (versionCode: ${getCurrentAppVersionCode()}, uploadTime: ${SignalStore.apkUpdate().lastApkUploadTime}), Update: (versionCode: ${updateDescriptor.versionCode}, uploadTime: ${updateDescriptor.uploadTimestamp})")
       val digest: ByteArray = Hex.fromStringCondensed(updateDescriptor.digest)
       val downloadStatus: DownloadStatus = getDownloadStatus(updateDescriptor.url, digest)
 
@@ -92,9 +94,13 @@ class ApkUpdateJob private constructor(parameters: Parameters) : BaseJob(paramet
         handleDownloadComplete(downloadStatus.downloadId)
       } else if (downloadStatus.status == DownloadStatus.Status.MISSING) {
         Log.i(TAG, "Download status missing, starting download...")
-        handleDownloadStart(updateDescriptor.url, updateDescriptor.versionName, digest)
+        handleDownloadStart(updateDescriptor.url, updateDescriptor.versionName, digest, updateDescriptor.uploadTimestamp ?: 0)
       }
+    } else {
+      Log.d(TAG, "Version code is the same or older than our own. Current: (versionCode: ${getCurrentAppVersionCode()}, uploadTime: ${SignalStore.apkUpdate().lastApkUploadTime}), Update: (versionCode: ${updateDescriptor.versionCode}, uploadTime: ${updateDescriptor.uploadTimestamp})")
     }
+
+    SignalStore.apkUpdate().lastSuccessfulCheck = System.currentTimeMillis()
   }
 
   public override fun onShouldRetry(e: Exception): Boolean {
@@ -150,7 +156,7 @@ class ApkUpdateJob private constructor(parameters: Parameters) : BaseJob(paramet
     return DownloadStatus(DownloadStatus.Status.MISSING, -1)
   }
 
-  private fun handleDownloadStart(uri: String?, versionName: String?, digest: ByteArray) {
+  private fun handleDownloadStart(uri: String?, versionName: String?, digest: ByteArray, uploadTimestamp: Long) {
     deleteExistingDownloadedApks(context)
 
     val downloadRequest = DownloadManager.Request(Uri.parse(uri)).apply {
@@ -164,7 +170,7 @@ class ApkUpdateJob private constructor(parameters: Parameters) : BaseJob(paramet
     val downloadId = context.getDownloadManager().enqueue(downloadRequest)
     // DownloadManager will trigger [UpdateApkReadyListener] when finished via a broadcast
 
-    SignalStore.apkUpdate().setDownloadAttributes(downloadId, digest)
+    SignalStore.apkUpdate().setDownloadAttributes(downloadId, digest, uploadTimestamp)
   }
 
   private fun handleDownloadComplete(downloadId: Long) {
@@ -211,7 +217,10 @@ class ApkUpdateJob private constructor(parameters: Parameters) : BaseJob(paramet
     val url: String? = null,
 
     @JsonProperty("sha256sum")
-    val digest: String? = null
+    val digest: String? = null,
+
+    @JsonProperty
+    val uploadTimestamp: Long? = null
   )
 
   private class DownloadStatus(val status: Status, val downloadId: Long) {

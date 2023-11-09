@@ -78,7 +78,7 @@ public class BoostReceiptRequestResponseJob extends BaseJob {
   }
 
   private static long resolveLifespan(boolean isLongRunning) {
-    return isLongRunning ? TimeUnit.DAYS.toMillis(14) : TimeUnit.DAYS.toMillis(1);
+    return isLongRunning ? TimeUnit.DAYS.toMillis(30) : TimeUnit.DAYS.toMillis(1);
   }
 
   private static BoostReceiptRequestResponseJob createJob(@NonNull String paymentIntentId,
@@ -237,20 +237,10 @@ public class BoostReceiptRequestResponseJob extends BaseJob {
                                                               receiptCredentialPresentation.serialize())
                                              .putBlobAsString(DonationReceiptRedemptionJob.INPUT_TERMINAL_DONATION, terminalDonation.encode())
                                              .serialize());
-
-      enqueueDonationComplete();
     } else {
       Log.w(TAG, "Encountered a retryable exception: " + response.getStatus(), response.getExecutionError().orElse(null), true);
       throw new RetryableException();
     }
-  }
-
-  private void enqueueDonationComplete() {
-    if (donationErrorSource != DonationErrorSource.GIFT) {
-      return;
-    }
-
-    SignalStore.donationsValues().setPendingOneTimeDonation(null);
   }
 
   /**
