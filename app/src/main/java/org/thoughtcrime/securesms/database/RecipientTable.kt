@@ -446,6 +446,14 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   fun getAndPossiblyMerge(aci: ACI?, pni: PNI?, e164: String?, pniVerified: Boolean = false, changeSelf: Boolean = false): RecipientId {
     require(aci != null || pni != null || e164 != null) { "Must provide an ACI, PNI, or E164!" }
 
+    // To avoid opening a transaction and doing extra reads, we start with a single read that checks if all of the fields already match a single recipient
+    val singleMatch: RecipientId? = getRecipientIdIfAllFieldsMatch(aci, pni, e164)
+    if (singleMatch != null) {
+      return singleMatch
+    }
+
+    Log.d(TAG, "[getAndPossiblyMerge] Requires a transaction.")
+
     val db = writableDatabase
     var transactionSuccessful = false
     lateinit var result: ProcessPnpTupleResult
@@ -2619,6 +2627,40 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   }
 
   /**
+   * If all of the non-null fields match a single recipient, return it. Otherwise null.
+   */
+  private fun getRecipientIdIfAllFieldsMatch(aci: ACI?, pni: PNI?, e164: String?): RecipientId? {
+    if (aci == null && pni == null && e164 == null) {
+      return null
+    }
+
+    val columns = listOf(
+      ACI_COLUMN to aci?.toString(),
+      PNI_COLUMN to pni?.toString(),
+      E164 to e164
+    ).filter { it.second != null }
+
+    val query = columns
+      .map { "${it.first} = ?" }
+      .joinToString(separator = " AND ")
+
+    val args: Array<String> = columns.map { it.second!! }.toTypedArray()
+
+    val ids: List<Long> = readableDatabase
+      .select(ID)
+      .from(TABLE_NAME)
+      .where(query, args)
+      .run()
+      .readToList { it.requireLong(ID) }
+
+    return if (ids.size == 1) {
+      RecipientId.from(ids[0])
+    } else {
+      null
+    }
+  }
+
+  /**
    * A session switchover event indicates a situation where we start communicating with a different session that we were before.
    * If a switchover is "verified" (i.e. proven safe cryptographically by the sender), then this doesn't require a user-visible event.
    * But if it's not verified and we're switching from one established session to another, the user needs to be aware.
@@ -3640,13 +3682,18 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
    * users).
    */
   fun rotateStorageId(recipientId: RecipientId) {
+    val selfId = Recipient.self().id
+
     val values = ContentValues(1).apply {
       put(STORAGE_SERVICE_ID, Base64.encodeWithPadding(StorageSyncHelper.generateKey()))
     }
 
-    val query = "$ID = ? AND ($TYPE IN (?, ?, ?) OR $REGISTERED = ?)"
-    val args = SqlUtil.buildArgs(recipientId, RecipientType.GV1.id, RecipientType.GV2.id, RecipientType.DISTRIBUTION_LIST.id, RegisteredState.REGISTERED.id)
-    writableDatabase.update(TABLE_NAME, values, query, args)
+    val query = "$ID = ? AND ($TYPE IN (?, ?, ?) OR $REGISTERED = ? OR $ID = ?)"
+    val args = SqlUtil.buildArgs(recipientId, RecipientType.GV1.id, RecipientType.GV2.id, RecipientType.DISTRIBUTION_LIST.id, RegisteredState.REGISTERED.id, selfId.toLong())
+
+    writableDatabase.update(TABLE_NAME, values, query, args).also { updateCount ->
+      Log.d(TAG, "[rotateStorageId] updateCount: $updateCount")
+    }
   }
 
   /**
