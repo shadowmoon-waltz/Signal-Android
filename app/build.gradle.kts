@@ -25,15 +25,19 @@ val canonicalVersionCode = 1368
 val canonicalVersionName = "6.42.2"
 
 val postFixSize = 100
-val abiPostFix: Map<String, Int> = mapOf(
-  "universal" to 0,
-  "armeabi-v7a" to 1,
-  "arm64-v8a" to 2,
-  "x86" to 3,
-  "x86_64" to 4
-)
+// abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
+// val abiPostFix: Map<String, Int> = mapOf(
+//   "universal" to 0,
+//   "armeabi-v7a" to 1,
+//   "arm64-v8a" to 2,
+//   "x86" to 3,
+//   "x86_64" to 4
+// )
 
 val keystores: Map<String, Properties?> = mapOf("debug" to loadKeystoreProperties("keystore.debug.properties"))
+
+val signConfigExists = project.hasProperty("keystoreFile") && project.hasProperty("keystorePassword") && project.hasProperty("keystoreAlias") && project.hasProperty("keystoreAliasPassword")
+val signConfigExists2 = !signConfigExists && System.getenv("TEMP_KEYSTORE_FILE") != null && file(System.getenv("TEMP_KEYSTORE_FILE")).canRead()
 
 val selectableVariants = listOf(
   "nightlyProdSpinner",
@@ -57,6 +61,8 @@ val selectableVariants = listOf(
   "playPnpDebug",
   "playPnpSpinner",
   "playStagingRelease",
+  "swProdDebug",
+  "swProdRelease",
   "websiteProdSpinner",
   "websiteProdRelease"
 )
@@ -107,6 +113,22 @@ android {
       storePassword = properties.getProperty("storePassword")
       keyAlias = properties.getProperty("keyAlias")
       keyPassword = properties.getProperty("keyPassword")
+    }
+  }
+
+  if (signConfigExists) {
+    signingConfigs.create("swSign").apply {
+      storeFile = file(project.property("keystoreFile"))
+      storePassword = project.property("keystorePassword") as String
+      keyAlias = project.property("keystoreAlias") as String
+      keyPassword = project.property("keystoreAliasPassword") as String
+    }
+  } else if (signConfigExists2) {
+    signingConfigs.create("swSign").apply {
+      storeFile = file(System.getenv("TEMP_KEYSTORE_FILE"))
+      storePassword = System.getenv("TEMP_KEYSTORE_PASSWORD")
+      keyAlias = System.getenv("TEMP_KEYSTORE_ALIAS")
+      keyPassword = System.getenv("TEMP_KEYSTORE_ALIAS_PASSWORD")
     }
   }
 
@@ -243,6 +265,8 @@ android {
     getByName("debug") {
       if (keystores["debug"] != null) {
         signingConfig = signingConfigs["debug"]
+      } else if (signConfigExists || signConfigExists2) {
+        signingConfig = signingConfigs["swSign"]
       }
       isDefault = true
       isMinifyEnabled = false
@@ -279,8 +303,12 @@ android {
 
     getByName("release") {
       isMinifyEnabled = true
+      isShrinkResources = true
       proguardFiles(*buildTypes["debug"].proguardFiles.toTypedArray())
       buildConfigField("String", "BUILD_VARIANT_TYPE", "\"Release\"")
+      if (signConfigExists || signConfigExists2) {
+        signingConfig = signingConfigs["swSign"]
+      }
     }
 
     create("instrumentation") {
@@ -360,6 +388,14 @@ android {
       buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"nightly\"")
     }
 
+    create("sw") {
+      dimension = "distribution"
+      applicationIdSuffix = ".sw"
+      buildConfigField("boolean", "MANAGES_APP_UPDATES", "false")
+      buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "null")
+      buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"sw\"")
+    }
+    
     create("prod") {
       dimension = "environment"
 
@@ -434,7 +470,7 @@ android {
           output.outputFileName = output.outputFileName.replace(".apk", "-${variant.versionName}.apk")
 
           val abiName: String = output.getFilter("ABI") ?: "universal"
-          val postFix: Int = abiPostFix[abiName]!!
+          val postFix: Int = 5 // abiPostFix[abiName]!!
 
           if (postFix >= postFixSize) {
             throw AssertionError("postFix is too large")

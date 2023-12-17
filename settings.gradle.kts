@@ -54,14 +54,14 @@ include(":qr-app")
 include(":sticky-header-grid")
 include(":photoview")
 include(":core-ui")
-include(":benchmark")
-include(":microbenchmark")
+//include(":benchmark")
+//include(":microbenchmark")
 include(":video")
 include(":video-app")
 include(":glide-webp")
 include(":glide-webp-app")
 
-project(":app").name = "Signal-Android"
+project(":app").name = "SignalSW"
 project(":paging").projectDir = file("paging/lib")
 project(":paging-app").projectDir = file("paging/app")
 
