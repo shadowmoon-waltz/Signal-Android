@@ -378,7 +378,7 @@ class ManageDonationsFragment :
     externalLinkPref(
       title = DSLSettingsText.from(R.string.ManageDonationsFragment__subscription_faq),
       icon = DSLSettingsIcon.from(R.drawable.symbol_help_24),
-      linkId = R.string.donate_url
+      linkId = R.string.donate_faq_url
     )
   }
 
