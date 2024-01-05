@@ -5,33 +5,56 @@
 
 package org.thoughtcrime.securesms.components.webrtc.controls
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Handler
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.annotation.IdRes
+import androidx.annotation.Px
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.Guideline
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetBehaviorHack
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.signal.core.util.dp
+import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.WebRtcCallActivity
+import org.thoughtcrime.securesms.calls.links.CallLinks
+import org.thoughtcrime.securesms.calls.links.EditCallLinkNameDialogFragment
+import org.thoughtcrime.securesms.calls.links.EditCallLinkNameDialogFragmentArgs
 import org.thoughtcrime.securesms.components.InsetAwareConstraintLayout
 import org.thoughtcrime.securesms.components.webrtc.CallOverflowPopupWindow
 import org.thoughtcrime.securesms.components.webrtc.WebRtcCallView
 import org.thoughtcrime.securesms.components.webrtc.WebRtcCallViewModel
 import org.thoughtcrime.securesms.components.webrtc.WebRtcControls
+import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.events.CallParticipant
+import org.thoughtcrime.securesms.service.webrtc.links.UpdateCallLinkResult
 import org.thoughtcrime.securesms.util.padding
 import org.thoughtcrime.securesms.util.visible
 import kotlin.math.max
@@ -41,17 +64,21 @@ import kotlin.time.Duration.Companion.seconds
  * Brain for rendering the call controls and info within a bottom sheet.
  */
 class ControlsAndInfoController(
+  private val webRtcCallActivity: WebRtcCallActivity,
   private val webRtcCallView: WebRtcCallView,
   private val overflowPopupWindow: CallOverflowPopupWindow,
   private val viewModel: WebRtcCallViewModel,
   private val controlsAndInfoViewModel: ControlsAndInfoViewModel
-) : Disposable {
+) : CallInfoView.Callbacks, Disposable {
 
   companion object {
+    private val TAG = Log.tag(ControlsAndInfoController::class.java)
+
     private const val CONTROL_FADE_OUT_START = 0f
     private const val CONTROL_FADE_OUT_DONE = 0.23f
     private const val INFO_FADE_IN_START = CONTROL_FADE_OUT_DONE
     private const val INFO_FADE_IN_DONE = 0.8f
+    private const val CONTROL_TRANSITION_DURATION = 250L
 
     private val HIDE_CONTROL_DELAY = 5.seconds.inWholeMilliseconds
   }
@@ -62,7 +89,9 @@ class ControlsAndInfoController(
   private val frame: FrameLayout
   private val behavior: BottomSheetBehavior<View>
   private val callInfoComposeView: ComposeView
+  private val raiseHandComposeView: ComposeView
   private val callControls: ConstraintLayout
+  private val aboveControlsGuideline: Guideline
   private val bottomSheetVisibilityListeners = mutableSetOf<BottomSheetVisibilityListener>()
   private val scheduleHideControlsRunnable: Runnable = Runnable { onScheduledHide() }
   private val handler: Handler?
@@ -79,17 +108,26 @@ class ControlsAndInfoController(
     behavior = BottomSheetBehavior.from(frame)
     callInfoComposeView = webRtcCallView.findViewById(R.id.call_info_compose)
     callControls = webRtcCallView.findViewById(R.id.call_controls_constraint_layout)
+    raiseHandComposeView = webRtcCallView.findViewById(R.id.call_screen_raise_hand_view)
+    aboveControlsGuideline = webRtcCallView.findViewById(R.id.call_screen_above_controls_guideline)
 
     callInfoComposeView.apply {
       setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
       setContent {
         val nestedScrollInterop = rememberNestedScrollInteropConnection()
-        CallInfoView.View(viewModel, controlsAndInfoViewModel, Modifier.nestedScroll(nestedScrollInterop))
+        CallInfoView.View(viewModel, controlsAndInfoViewModel, this@ControlsAndInfoController, Modifier.nestedScroll(nestedScrollInterop))
       }
     }
 
     callInfoComposeView.alpha = 0f
     callInfoComposeView.translationY = infoTranslationDistance
+
+    raiseHandComposeView.apply {
+      setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+      setContent {
+        RaiseHandSnackbar.View(viewModel, showCallInfoListener = ::showCallInfo)
+      }
+    }
 
     frame.background = MaterialShapeDrawable(
       ShapeAppearanceModel.builder()
@@ -97,7 +135,7 @@ class ControlsAndInfoController(
         .setTopRightCorner(CornerFamily.ROUNDED, 18.dp.toFloat())
         .build()
     ).apply {
-      fillColor = ColorStateList.valueOf(ContextCompat.getColor(webRtcCallView.context, R.color.signal_colorSurface))
+      fillColor = ColorStateList.valueOf(ContextCompat.getColor(webRtcCallActivity, R.color.signal_colorSurface))
     }
 
     behavior.isHideable = true
@@ -106,8 +144,11 @@ class ControlsAndInfoController(
     BottomSheetBehaviorHack.setNestedScrollingChild(behavior, callInfoComposeView)
 
     coordinator.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
-      val guidelineTop = max(frame.top, coordinator.height - behavior.peekHeight)
-      webRtcCallView.post { webRtcCallView.onControlTopChanged(guidelineTop) }
+      webRtcCallView.post { onControlTopChanged() }
+    }
+
+    raiseHandComposeView.addOnLayoutChangeListener { _, _, top, _, bottom, _, _, _, _ ->
+      onControlTopChanged(composeViewSize = bottom - top)
     }
 
     callControls.viewTreeObserver.addOnGlobalLayoutListener {
@@ -118,8 +159,7 @@ class ControlsAndInfoController(
         frame.minimumHeight = coordinator.height / 2
         behavior.maxHeight = (coordinator.height.toFloat() * 0.66f).toInt()
 
-        val guidelineTop = max(frame.top, coordinator.height - behavior.peekHeight)
-        webRtcCallView.post { webRtcCallView.onControlTopChanged(guidelineTop) }
+        webRtcCallView.post { onControlTopChanged() }
       }
     }
 
@@ -145,7 +185,7 @@ class ControlsAndInfoController(
         callInfoComposeView.alpha = alphaCallInfo(slideOffset)
         callInfoComposeView.translationY = infoTranslationDistance - (infoTranslationDistance * callInfoComposeView.alpha)
 
-        webRtcCallView.onControlTopChanged(max(frame.top, coordinator.height - behavior.peekHeight))
+        onControlTopChanged()
       }
     })
 
@@ -160,6 +200,20 @@ class ControlsAndInfoController(
     overflowPopupWindow.setOnDismissListener {
       hide(delay = HIDE_CONTROL_DELAY)
     }
+
+    webRtcCallActivity
+      .supportFragmentManager
+      .setFragmentResultListener(EditCallLinkNameDialogFragment.RESULT_KEY, webRtcCallActivity) { resultKey, bundle ->
+        if (bundle.containsKey(resultKey)) {
+          setName(bundle.getString(resultKey)!!)
+        }
+      }
+  }
+
+  fun onControlTopChanged(composeViewSize: Int = raiseHandComposeView.height) {
+    val guidelineTop = max(frame.top, coordinator.height - behavior.peekHeight)
+    aboveControlsGuideline.setGuidelineBegin(guidelineTop)
+    webRtcCallView.onControlTopChanged(guidelineTop, composeViewSize)
   }
 
   fun addVisibilityListener(listener: BottomSheetVisibilityListener): Boolean {
@@ -172,7 +226,7 @@ class ControlsAndInfoController(
     behavior.state = BottomSheetBehavior.STATE_EXPANDED
   }
 
-  fun showControls() {
+  private fun showControls() {
     cancelScheduledHide()
     behavior.isHideable = false
     behavior.state = BottomSheetBehavior.STATE_COLLAPSED
@@ -207,7 +261,7 @@ class ControlsAndInfoController(
       overflowPopupWindow.dismiss()
     } else {
       cancelScheduledHide()
-      overflowPopupWindow.show(webRtcCallView.popupAnchor)
+      overflowPopupWindow.show(aboveControlsGuideline)
     }
   }
 
@@ -215,6 +269,14 @@ class ControlsAndInfoController(
     val previousState = controlState
     controlState = newControlState
 
+    showOrHideControlsOnUpdate(previousState)
+
+    if (controlState != WebRtcControls.PIP && controlState.controlVisibilitiesChanged(previousState)) {
+      updateControlVisibilities()
+    }
+  }
+
+  private fun showOrHideControlsOnUpdate(previousState: WebRtcControls) {
     if (controlState == WebRtcControls.PIP) {
       hide()
       return
@@ -239,6 +301,32 @@ class ControlsAndInfoController(
         showControls()
       }
     }
+  }
+
+  private fun updateControlVisibilities() {
+    TransitionManager.endTransitions(callControls)
+    TransitionManager.beginDelayedTransition(
+      callControls,
+      AutoTransition().apply {
+        ordering = TransitionSet.ORDERING_TOGETHER
+        duration = CONTROL_TRANSITION_DURATION
+      }
+    )
+
+    val constraints = ConstraintSet().apply {
+      clone(callControls)
+      val margin = if (controlState.displaySmallCallButtons()) 4.dp else 8.dp
+
+      setControlConstraints(R.id.call_screen_speaker_toggle, controlState.displayAudioToggle(), margin)
+      setControlConstraints(R.id.call_screen_camera_direction_toggle, controlState.displayCameraToggle(), margin)
+      setControlConstraints(R.id.call_screen_video_toggle, controlState.displayVideoToggle(), margin)
+      setControlConstraints(R.id.call_screen_audio_mic_toggle, controlState.displayMuteAudio(), margin)
+      setControlConstraints(R.id.call_screen_audio_ring_toggle, controlState.displayRingToggle(), margin)
+      setControlConstraints(R.id.call_screen_overflow_button, controlState.displayOverflow(), margin)
+      setControlConstraints(R.id.call_screen_end_call, controlState.displayEndCall(), margin)
+    }
+
+    constraints.applyTo(callControls)
   }
 
   private fun onScheduledHide() {
@@ -277,6 +365,93 @@ class ControlsAndInfoController(
 
   override fun isDisposed(): Boolean {
     return disposables.isDisposed
+  }
+
+  override fun onShareLinkClicked() {
+    val mimeType = Intent.normalizeMimeType("text/plain")
+    val shareIntent = ShareCompat.IntentBuilder(webRtcCallActivity)
+      .setText(CallLinks.url(controlsAndInfoViewModel.rootKeySnapshot))
+      .setType(mimeType)
+      .createChooserIntent()
+
+    try {
+      webRtcCallActivity.startActivity(shareIntent)
+    } catch (e: ActivityNotFoundException) {
+      Toast.makeText(webRtcCallActivity, R.string.CreateCallLinkBottomSheetDialogFragment__failed_to_open_share_sheet, Toast.LENGTH_LONG).show()
+    }
+  }
+
+  override fun onEditNameClicked(name: String) {
+    EditCallLinkNameDialogFragment().apply {
+      arguments = EditCallLinkNameDialogFragmentArgs.Builder(name).build().toBundle()
+    }.show(webRtcCallActivity.supportFragmentManager, null)
+  }
+
+  override fun onToggleAdminApprovalClicked(checked: Boolean) {
+    controlsAndInfoViewModel.setApproveAllMembers(checked)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeBy(onSuccess = {
+        if (it !is UpdateCallLinkResult.Success) {
+          Log.w(TAG, "Failed to change restrictions. $it")
+          toastFailure()
+        }
+      }, onError = handleError("onApproveAllMembersChanged"))
+      .addTo(disposables)
+  }
+
+  override fun onBlock(callParticipant: CallParticipant) {
+    MaterialAlertDialogBuilder(webRtcCallActivity)
+      .setNegativeButton(android.R.string.cancel, null)
+      .setMessage(webRtcCallView.resources.getString(R.string.CallLinkInfoSheet__remove_s_from_the_call, callParticipant.recipient.getShortDisplayName(webRtcCallActivity)))
+      .setPositiveButton(R.string.CallLinkInfoSheet__remove) { _, _ ->
+        ApplicationDependencies.getSignalCallManager().removeFromCallLink(callParticipant)
+      }
+      .setNeutralButton(R.string.CallLinkInfoSheet__block_from_call) { _, _ ->
+        ApplicationDependencies.getSignalCallManager().blockFromCallLink(callParticipant)
+      }
+      .show()
+  }
+
+  private fun setName(name: String) {
+    controlsAndInfoViewModel.setName(name)
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeBy(
+        onSuccess = {
+          if (it !is UpdateCallLinkResult.Success) {
+            Log.w(TAG, "Failed to set name. $it")
+            toastFailure()
+          }
+        },
+        onError = handleError("setName")
+      )
+      .addTo(disposables)
+  }
+
+  private fun handleError(method: String): (throwable: Throwable) -> Unit {
+    return {
+      Log.w(TAG, "Failure during $method", it)
+      toastFailure()
+    }
+  }
+
+  private fun toastFailure() {
+    Toast.makeText(webRtcCallActivity, R.string.CallLinkDetailsFragment__couldnt_save_changes, Toast.LENGTH_LONG).show()
+  }
+
+  private fun ConstraintSet.setControlConstraints(@IdRes viewId: Int, visible: Boolean, @Px horizontalMargins: Int) {
+    setVisibility(viewId, if (visible) View.VISIBLE else View.GONE)
+    setMargin(viewId, ConstraintSet.START, horizontalMargins)
+    setMargin(viewId, ConstraintSet.END, horizontalMargins)
+  }
+
+  private fun WebRtcControls.controlVisibilitiesChanged(previousState: WebRtcControls): Boolean {
+    return displayAudioToggle() != previousState.displayAudioToggle() ||
+      displayCameraToggle() != previousState.displayCameraToggle() ||
+      displayVideoToggle() != previousState.displayVideoToggle() ||
+      displayMuteAudio() != previousState.displayMuteAudio() ||
+      displayRingToggle() != previousState.displayRingToggle() ||
+      displayOverflow() != previousState.displayOverflow() ||
+      displayEndCall() != previousState.displayEndCall()
   }
 
   interface BottomSheetVisibilityListener {
