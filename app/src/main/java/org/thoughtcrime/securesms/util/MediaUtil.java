@@ -555,11 +555,11 @@ public class MediaUtil {
   }
 
   public static @NonNull String getContentTypeStringWithGif(@NonNull Attachment attachment, @NonNull String defaultValue) {
-    String contentType = attachment.getContentType().trim();
+    String contentType = attachment.contentType.trim();
     if (contentType.isEmpty()) {
       contentType = defaultValue;
     }
-    if (isVideoType(attachment.getContentType()) && attachment.isVideoGif()) {
+    if (isVideoType(attachment.contentType) && attachment.videoGif) {
       contentType += " (gif)";
     }
     return contentType;

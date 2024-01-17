@@ -272,16 +272,16 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
     ContentTypeLargest(
       """
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
-        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.SIZE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DATA_SIZE} DESC,
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC
       """
     ),
     ContentTypeNewest(
       """
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
-        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.MMS_ID} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.MESSAGE_ID} DESC,
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC,
-        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ROW_ID} DESC
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ID} DESC
       """
     );
 
