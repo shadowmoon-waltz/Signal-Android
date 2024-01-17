@@ -96,6 +96,8 @@ import org.thoughtcrime.securesms.components.ThumbnailView;
 import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
 import org.thoughtcrime.securesms.components.mention.MentionAnnotation;
 import org.thoughtcrime.securesms.contactshare.Contact;
+import org.thoughtcrime.securesms.conversation.clicklisteners.AttachmentCancelClickListener;
+import org.thoughtcrime.securesms.conversation.clicklisteners.ResendClickListener;
 import org.thoughtcrime.securesms.conversation.colors.Colorizer;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectCollection;
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart;
@@ -1121,7 +1123,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
                                   boolean messageRequestAccepted,
                                   boolean allowedToPlayInline)
   {
-    boolean showControls = !messageRecord.isFailed() && !MessageRecordUtil.isScheduled(messageRecord);
+    boolean showControls = messageRecord.isMediaPending() || (!messageRecord.isFailed() && !MessageRecordUtil.isScheduled(messageRecord));
 
     ViewUtil.setTopMargin(bodyText, readDimen(R.dimen.message_bubble_top_padding));
 
@@ -1212,8 +1214,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         mediaThumbnailStub.require().setMaximumThumbnailHeight(readDimen(R.dimen.media_bubble_max_height));
         mediaThumbnailStub.require().setImageResource(glideRequests, Collections.singletonList(new ImageSlide(linkPreview.getThumbnail().get())), showControls, false);
         mediaThumbnailStub.require().setThumbnailClickListener(new LinkPreviewThumbnailClickListener());
-        mediaThumbnailStub.require().setDownloadClickListener(downloadClickListener);
-        mediaThumbnailStub.require().setCancelDownloadClickListener(attachmentCancelClickListener);
+        mediaThumbnailStub.require().setStartTransferClickListener(downloadClickListener);
+        mediaThumbnailStub.require().setCancelTransferClickListener(attachmentCancelClickListener);
         mediaThumbnailStub.require().setPlayVideoClickListener(playVideoClickListener);
         mediaThumbnailStub.require().setOnLongClickListener(passthroughClickListener);
 
@@ -1350,8 +1352,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
                                                                                             : R.dimen.media_bubble_max_height));
 
       mediaThumbnailStub.require().setThumbnailClickListener(new ThumbnailClickListener());
-      mediaThumbnailStub.require().setDownloadClickListener(downloadClickListener);
-      mediaThumbnailStub.require().setCancelDownloadClickListener(attachmentCancelClickListener);
+      mediaThumbnailStub.require().setCancelTransferClickListener(attachmentCancelClickListener);
       mediaThumbnailStub.require().setPlayVideoClickListener(playVideoClickListener);
       mediaThumbnailStub.require().setOnLongClickListener(passthroughClickListener);
       mediaThumbnailStub.require().setOnClickListener(passthroughClickListener);
@@ -1362,8 +1363,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
                                                     false);
       if (!messageRecord.isOutgoing()) {
         mediaThumbnailStub.require().setConversationColor(getDefaultBubbleColor(hasWallpaper));
+        mediaThumbnailStub.require().setStartTransferClickListener(downloadClickListener);
       } else {
         mediaThumbnailStub.require().setConversationColor(Color.TRANSPARENT);
+        mediaThumbnailStub.require().setStartTransferClickListener(new ResendClickListener(messageRecord));
       }
 
       mediaThumbnailStub.require().setBorderless(false);
@@ -1604,7 +1607,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   private void setStatusIcons(MessageRecord messageRecord, boolean hasWallpaper) {
     bodyText.setCompoundDrawablesWithIntrinsicBounds(0, 0, messageRecord.isKeyExchange() ? R.drawable.ic_menu_login : 0, 0);
 
-    if (messageRecord.isFailed()) {
+    if (!messageRecord.isMediaPending() && messageRecord.isFailed()) {
       alertView.setFailed();
     } else if (messageRecord.isPendingInsecureSmsFallback()) {
       alertView.setPendingApproval();
@@ -2061,10 +2064,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     if (messageRecord.isMms()) {
       TextSlide slide = ((MmsMessageRecord) messageRecord).getSlideDeck().getTextSlide();
 
-      if (slide != null && (slide.asAttachment().getTransferState() == AttachmentTable.TRANSFER_PROGRESS_DONE || MessageRecordUtil.isScheduled(messageRecord))) {
+      if (slide != null && (slide.asAttachment().transferState == AttachmentTable.TRANSFER_PROGRESS_DONE || MessageRecordUtil.isScheduled(messageRecord))) {
         message = getResources().getString(R.string.ConversationItem_read_more);
         action  = () -> eventListener.onMoreTextClicked(conversationRecipient.getId(), messageRecord.getId(), messageRecord.isMms());
-      } else if (slide != null && slide.asAttachment().getTransferState() == AttachmentTable.TRANSFER_PROGRESS_STARTED) {
+      } else if (slide != null && slide.asAttachment().transferState == AttachmentTable.TRANSFER_PROGRESS_STARTED) {
         message = getResources().getString(R.string.ConversationItem_pending);
         action  = () -> {};
       } else if (slide != null) {
@@ -2480,27 +2483,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
         for (Slide slide : slides) {
           ApplicationDependencies.getJobManager().add(new AttachmentDownloadJob(messageRecord.getId(),
-                                                                                ((DatabaseAttachment) slide.asAttachment()).getAttachmentId(),
+                                                                                ((DatabaseAttachment) slide.asAttachment()).attachmentId,
                                                                                 true));
-        }
-      }
-    }
-  }
-
-  private class AttachmentCancelClickListener implements SlidesClickedListener {
-    @Override
-    public void onClick(View v, List<Slide> slides) {
-      Log.i(TAG, "onClick() for attachment cancellation");
-      final JobManager jobManager = ApplicationDependencies.getJobManager();
-      if (messageRecord.isMmsNotification()) {
-        Log.i(TAG, "Canceling MMS attachments download");
-        jobManager.cancel("mms-operation");
-      } else {
-        Log.i(TAG, "Canceling push attachment downloads for " + slides.size() + " items");
-
-        for (Slide slide : slides) {
-          final String queue = AttachmentDownloadJob.constructQueueString(((DatabaseAttachment) slide.asAttachment()).getAttachmentId());
-          jobManager.cancelAllInQueue(queue);
         }
       }
     }
@@ -2519,8 +2503,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       }
       if (MediaUtil.isInstantVideoSupported(slide)) {
         final DatabaseAttachment databaseAttachment = (DatabaseAttachment) slide.asAttachment();
-        if (databaseAttachment.getTransferState() != AttachmentTable.TRANSFER_PROGRESS_STARTED) {
-          final AttachmentId attachmentId = databaseAttachment.getAttachmentId();
+        if (databaseAttachment.transferState != AttachmentTable.TRANSFER_PROGRESS_STARTED) {
+          final AttachmentId attachmentId = databaseAttachment.attachmentId;
           final JobManager   jobManager   = ApplicationDependencies.getJobManager();
           final String       queue        = AttachmentDownloadJob.constructQueueString(attachmentId);
           setup(v, slide);
@@ -2592,7 +2576,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         performClick();
       } else if (eventListener != null && hasSticker(messageRecord)) {
         //noinspection ConstantConditions
-        eventListener.onStickerClicked(((MmsMessageRecord) messageRecord).getSlideDeck().getStickerSlide().asAttachment().getSticker());
+        eventListener.onStickerClicked(((MmsMessageRecord) messageRecord).getSlideDeck().getStickerSlide().asAttachment().stickerLocator);
       }
     }
   }
@@ -2659,7 +2643,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         messageRecord.getTimestamp(),
         mediaUri,
         slide.getContentType(),
-        slide.asAttachment().getSize(),
+        slide.asAttachment().size,
         slide.getCaption().orElse(null),
         false,
         false,
@@ -2668,8 +2652,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         MediaTable.Sorting.Newest,
         slide.isVideoGif(),
         new MediaIntentFactory.SharedElementArgs(
-            slide.asAttachment().getWidth(),
-            slide.asAttachment().getHeight(),
+            slide.asAttachment().width,
+            slide.asAttachment().height,
             mediaThumbnailStub.require().getCorners().getTopLeft(),
             mediaThumbnailStub.require().getCorners().getTopRight(),
             mediaThumbnailStub.require().getCorners().getBottomRight(),

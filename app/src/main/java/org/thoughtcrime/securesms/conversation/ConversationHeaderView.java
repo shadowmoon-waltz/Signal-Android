@@ -1,6 +1,7 @@
 package org.thoughtcrime.securesms.conversation;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewKt;
 
 import org.signal.core.util.DimensionUnit;
 import org.signal.core.util.concurrent.SignalExecutors;
@@ -94,17 +96,22 @@ public class ConversationHeaderView extends ConstraintLayout {
   }
 
   public void setSubtitle(@NonNull CharSequence subtitle, @DrawableRes int iconRes) {
+    if (TextUtils.isEmpty(subtitle)) {
+      hideSubtitle();
+      return;
+    }
+
     binding.messageRequestSubtitle.setText(prependIcon(subtitle, iconRes));
     binding.messageRequestSubtitle.setVisibility(View.VISIBLE);
   }
 
   public void setDescription(@Nullable CharSequence description, @DrawableRes int iconRes) {
-    if (description == null) {
+    if (TextUtils.isEmpty(description)) {
       hideDescription();
       return;
     }
 
-    binding.messageRequestSubtitle.setText(prependIcon(description, iconRes));
+    binding.messageRequestDescription.setText(prependIcon(description, iconRes));
     binding.messageRequestDescription.setVisibility(View.VISIBLE);
   }
 
@@ -122,6 +129,8 @@ public class ConversationHeaderView extends ConstraintLayout {
       binding.messageRequestInfoOutline.setVisibility(View.VISIBLE);
       binding.messageRequestDivider.setVisibility(View.INVISIBLE);
     }
+
+    hideDecoratorsIfContentIsNotPresent();
   }
 
   public void hideSubtitle() {
@@ -140,10 +149,20 @@ public class ConversationHeaderView extends ConstraintLayout {
     binding.messageRequestDescription.setMovementMethod(enable ? LongClickMovementMethod.getInstance(getContext()) : null);
   }
 
+  private void hideDecoratorsIfContentIsNotPresent() {
+    if (ViewKt.isVisible(binding.messageRequestSubtitle) || ViewKt.isVisible(binding.messageRequestDescription)) {
+      return;
+    }
+
+    binding.messageRequestInfoOutline.setVisibility(View.GONE);
+    binding.messageRequestDivider.setVisibility(View.GONE);
+  }
+
   private @NonNull CharSequence prependIcon(@NonNull CharSequence input, @DrawableRes int iconRes) {
     Drawable drawable = ContextCompat.getDrawable(getContext(), iconRes);
     Preconditions.checkNotNull(drawable);
     drawable.setBounds(0, 0, (int) DimensionUnit.DP.toPixels(20), (int) DimensionUnit.DP.toPixels(20));
+    drawable.setColorFilter(ContextCompat.getColor(getContext(), R.color.signal_colorOnSurface), PorterDuff.Mode.SRC_ATOP);
 
     return new SpannableStringBuilder()
         .append(SpanUtil.buildCenteredImageSpan(drawable))

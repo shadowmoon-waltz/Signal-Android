@@ -1294,10 +1294,6 @@ public class SignalServiceMessageSender {
         offerBuilder.opaque(ByteString.of(offer.getOpaque()));
       }
 
-      if (offer.getSdp() != null) {
-        offerBuilder.sdp(offer.getSdp());
-      }
-
       builder.offer(offerBuilder.build());
     } else if (callMessage.getAnswerMessage().isPresent()) {
       AnswerMessage answer = callMessage.getAnswerMessage().get();
@@ -1308,26 +1304,16 @@ public class SignalServiceMessageSender {
         answerBuilder.opaque(ByteString.of(answer.getOpaque()));
       }
 
-      if (answer.getSdp() != null) {
-        answerBuilder.sdp(answer.getSdp());
-      }
-
       builder.answer(answerBuilder.build());
     } else if (callMessage.getIceUpdateMessages().isPresent()) {
       List<IceUpdateMessage> updates = callMessage.getIceUpdateMessages().get();
       List<CallMessage.IceUpdate> iceUpdates = new ArrayList<>(updates.size());
       for (IceUpdateMessage update : updates) {
         CallMessage.IceUpdate.Builder iceBuilder = new CallMessage.IceUpdate.Builder()
-                                                                            .id(update.getId())
-                                                                            .mid("audio")
-                                                                            .line(0);
+                                                                            .id(update.getId());
 
         if (update.getOpaque() != null) {
           iceBuilder.opaque(ByteString.of(update.getOpaque()));
-        }
-
-        if (update.getSdp() != null) {
-          iceBuilder.sdp(update.getSdp());
         }
 
         iceUpdates.add(iceBuilder.build());
@@ -2128,10 +2114,12 @@ public class SignalServiceMessageSender {
     }
 
     for (int i = 0; i < RETRY_COUNT; i++) {
-      GroupTargetInfo            targetInfo     = buildGroupTargetInfo(recipients);
+            GroupTargetInfo targetInfo         = buildGroupTargetInfo(recipients);
+      final GroupTargetInfo targetInfoSnapshot = targetInfo;
+
       Set<SignalProtocolAddress> sharedWith     = aciStore.getSenderKeySharedWith(distributionId);
       List<SignalServiceAddress> needsSenderKey = targetInfo.destinations.stream()
-                                                                         .filter(a -> !sharedWith.contains(a))
+                                                                         .filter(a -> !sharedWith.contains(a) || targetInfoSnapshot.sessions.get(a) == null)
                                                                          .map(a -> ServiceId.parseOrThrow(a.getName()))
                                                                          .distinct()
                                                                          .map(SignalServiceAddress::new)

@@ -116,7 +116,7 @@ dependencyResolutionManagement {
       library("libsignal-client", "org.signal", "libsignal-client").versionRef("libsignal-client")
       library("libsignal-android", "org.signal", "libsignal-android").versionRef("libsignal-client")
       library("signal-aesgcmprovider", "org.signal:aesgcmprovider:0.0.3")
-      library("signal-ringrtc", "org.signal:ringrtc-android:2.35.0")
+      library("signal-ringrtc", "org.signal:ringrtc-android:2.36.0")
       library("signal-android-database-sqlcipher", "org.signal:sqlcipher-android:4.5.4-S2")
 
       // Third Party
@@ -131,7 +131,7 @@ dependencyResolutionManagement {
       library("rxjava3-rxkotlin", "io.reactivex.rxjava3:rxkotlin:3.0.1")
       library("rxdogtag", "com.uber.rxdogtag2:rxdogtag:2.0.1")
       library("conscrypt-android", "org.conscrypt:conscrypt-android:2.5.2")
-      library("mobilecoin", "com.mobilecoin:android-sdk:5.0.1")
+      library("mobilecoin", "com.mobilecoin:android-sdk:6.0.1")
       library("leolin-shortcutbadger", "me.leolin:ShortcutBadger:1.1.22")
       library("emilsjolander-stickylistheaders", "se.emilsjolander:stickylistheaders:2.7.0")
       library("apache-httpclient-android", "org.apache.httpcomponents:httpclient-android:4.3.5")

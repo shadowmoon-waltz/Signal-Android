@@ -326,9 +326,9 @@
     <!-- Display as the timestamp footer in a message bubble in a conversation when a message has been edited. The timestamp represents a message that has been edited within the last minute. -->
     <string name="ConversationItem_edited_now_timestamp_footer">இப்போது திருத்தப்பட்டது</string>
     <!-- Display as the timestamp footer in a message bubble in a conversation when a message has been edited. This is displayed when the edit has occurred between 1-59 minutes ago. -->
-    <string name="ConversationItem_edited_relative_timestamp_footer">Edited %1$s</string>
+    <string name="ConversationItem_edited_relative_timestamp_footer">திருத்தப்பட்டது %1$s</string>
     <!-- Display as the timestamp footer in a message bubble in a conversation when a message has been edited. This is displayed when the edit occurred at least 1 hour ago. -->
-    <string name="ConversationItem_edited_absolute_timestamp_footer">Edited %1$s</string>
+    <string name="ConversationItem_edited_absolute_timestamp_footer">திருத்தப்பட்டது %1$s</string>
     <!-- Displayed if the link preview in the conversation item is for a call link call -->
     <string name="ConversationItem__join_call">அழைப்பில் சேரவும்</string>
 
@@ -363,7 +363,7 @@
     <!-- A title for the option to send an SMS with a placeholder to put the name of their SIM card -->
     <string name="ConversationActivity_transport_signal">Signal செய்தி</string>
     <!-- The content description for button to send a message in a conversation -->
-    <string name="ConversationActivity_send_message_content_description">Send message</string>
+    <string name="ConversationActivity_send_message_content_description">அனுப்பு செய்தி</string>
     <string name="ConversationActivity_lets_switch_to_signal">%1$s நாம் Signalக்கு மாறுவோம்</string>
     <string name="ConversationActivity_specify_recipient">தயவு செய்து ஒரு தொடர்பை தேர்ந்தெடு</string>
     <string name="ConversationActivity_attachment_exceeds_size_limits">நீங்கள் அனுப்பும் இணைப்பு செய்தி அளவு வரம்பை மீறுகிறது .</string>
@@ -1283,6 +1283,10 @@
     <string name="MessageRecord_missed_voice_call">தவறவிட்ட குரல் அழைப்பு</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and not answered -->
     <string name="MessageRecord_missed_video_call">தவறவிட்ட வீடியோ அழைப்பு</string>
+    <!-- Update message shown when receiving an incoming voice call and declined due to notification profile -->
+    <string name="MessageRecord_missed_voice_call_notification_profile">Missed voice call while notification profile on</string>
+    <!-- Update message shown when receiving an incoming video call and declined due to notification profile -->
+    <string name="MessageRecord_missed_video_call_notification_profile">Missed video call while notification profile on</string>
     <!-- Update message shown when receiving an incoming 1:1 voice/audio call and explicitly declined -->
     <string name="MessageRecord_you_declined_a_voice_call">குரல் அழைப்பை மறுத்துவிட்டீர்கள்</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and explicitly declined -->
@@ -1853,24 +1857,24 @@
     <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">டிவைஸின் இயர்பீஸைக் குறிக்கும் ஐகான்.</string>
 
     <!-- A clickable button to "raise your hand" in a group call to signify you have something to say -->
-    <string name="CallOverflowPopupWindow__raise_hand">Raise hand</string>
+    <string name="CallOverflowPopupWindow__raise_hand">கையை உயர்த்துக</string>
     <!-- A description of a clickable image representing a raised hand -->
-    <string name="CallOverflowPopupWindow__raise_hand_illustration_content_description">Raise hand</string>
+    <string name="CallOverflowPopupWindow__raise_hand_illustration_content_description">கையை உயர்த்துக</string>
     <!-- A dialog prompt to confirm you want to lower your hand -->
-    <string name="CallOverflowPopupWindow__lower_your_hand">Lower your hand?</string>
+    <string name="CallOverflowPopupWindow__lower_your_hand">உங்கள் கையைத் தாழ்த்துகிறீர்களா?</string>
     <!-- A dialog button to confirm you would like to lower your hand -->
-    <string name="CallOverflowPopupWindow__lower_hand">Lower hand</string>
+    <string name="CallOverflowPopupWindow__lower_hand">கையைத் தாழ்த்தவும்</string>
     <!-- A negative button for a dialog confirming the user wants to lower their hand (withdraw a raised hand) -->
-    <string name="CallOverflowPopupWindow__cancel">Cancel</string>
+    <string name="CallOverflowPopupWindow__cancel">ரத்துசெய்</string>
     <!-- A notification to the user that they successfully raised their hand -->
-    <string name="CallOverflowPopupWindow__you_raised_your_hand">You raised your hand</string>
+    <string name="CallOverflowPopupWindow__you_raised_your_hand">நீங்கள் கையை உயர்த்தியுள்ளீர்கள்</string>
     <!-- A button to take you to a list of participants with raised hands -->
-    <string name="CallOverflowPopupWindow__view">View</string>
+    <string name="CallOverflowPopupWindow__view">காண்க</string>
 
     <!-- A notification to the user that one or more participants in the call successfully raised their hand. In the singular case, it is a name. In the plural case, it is a name or "You" -->
     <plurals name="CallOverflowPopupWindow__raised_a_hand">
-        <item quantity="one">%1$s has raised a hand</item>
-        <item quantity="other">%1$s + %2$d have raised a hand</item>
+        <item quantity="one">%1$s கையை உயர்த்தியுள்ளார்</item>
+        <item quantity="other">%1$s + %2$d கையை உயர்த்தியுள்ளனர்</item>
     </plurals>
 
     <!-- A badge to show how many hands are raised. The first string may be a name or "You" -->
@@ -1880,23 +1884,23 @@
     </plurals>
 
     <!-- An accessibility label for screen readers on a view that can be expanded -->
-    <string name="CallOverflowPopupWindow__expand_snackbar_accessibility_label">Expand raised hand view</string>
+    <string name="CallOverflowPopupWindow__expand_snackbar_accessibility_label">உயர்த்தப்பட்ட கை காட்சியை விரிவுபடுத்தவும்</string>
 
     <!-- AboutSheet -->
     <!-- Displayed in a sheet row and allows user to open signal connection explanation on tap -->
-    <string name="AboutSheet__signal_connection">Signal connection</string>
+    <string name="AboutSheet__signal_connection">சிக்னல் இணைப்பு</string>
     <!-- Explains that the given user (placeholder is short name) is in the users system contact -->
-    <string name="AboutSheet__s_is_in_your_system_contacts">%1$s is in your system contacts</string>
+    <string name="AboutSheet__s_is_in_your_system_contacts">உங்கள் சிஸ்டம் தொடர்புகளில் %1$s உள்ளார்</string>
     <!-- Notice in a row when user has no groups in common -->
-    <string name="AboutSheet__you_have_no_groups_in_common">You have no groups in common</string>
+    <string name="AboutSheet__you_have_no_groups_in_common">உங்களுக்குப் பொதுவான குழுக்கள் எதுவும் இல்லை</string>
     <!-- Notice when a user is not a connection to review requests carefully -->
-    <string name="AboutSheet__review_requests_carefully">Review requests carefully</string>
+    <string name="AboutSheet__review_requests_carefully">கோரிக்கைகளை கவனமாக மதிப்பாய்வு செய்யவும்</string>
     <!-- Text used when user has groups in common. Placeholder is the count -->
-    <string name="AboutSheet__d_groups_in_common">%1$d groups in common</string>
+    <string name="AboutSheet__d_groups_in_common">%1$d பொதுவான குழுக்கள்</string>
     <!-- Text displayed in title for external recipients -->
-    <string name="AboutSheet__about">About</string>
+    <string name="AboutSheet__about">அவரைப் பற்றி</string>
     <!-- Text displayed in title for you -->
-    <string name="AboutSheet__you">You</string>
+    <string name="AboutSheet__you">நீங்கள்</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call">
@@ -1912,8 +1916,8 @@
         <item quantity="other">Signal (%1$d) பேருக்குத் தெரியப்படுத்தும்</item>
     </plurals>
     <plurals name="CallParticipantsListDialog__raised_hands">
-        <item quantity="one">Raised hand (%1$d)</item>
-        <item quantity="other">Raised hands (%1$d)</item>
+        <item quantity="one">உயர்த்திய கை (%1$d)</item>
+        <item quantity="other">உயர்த்திய கைகள் (%1$d)</item>
     </plurals>
 
     <!-- CallParticipantView -->
@@ -2029,9 +2033,9 @@
 
     <!-- ReviewBannerView -->
     <!-- ReviewBannerView text when a name conflict has been found -->
-    <string name="ReviewBannerView__name_conflict_found">Name conflict found</string>
+    <string name="ReviewBannerView__name_conflict_found">பெயர் முரண்பாடு கண்டறியப்பட்டது</string>
     <!-- Button label to view name conflicts -->
-    <string name="ReviewBannerView__view">View</string>
+    <string name="ReviewBannerView__view">காண்க</string>
 
     <!-- Search -->
     <string name="SearchFragment_no_results">\'%1$s\' க்கான முடிவுகள் எதுவும் கிடைக்கவில்லை</string>
@@ -2199,6 +2203,8 @@
     <string name="UnverifiedSendDialog_send">அனுப்புக</string>
 
     <!-- UsernameEditFragment -->
+    <!-- Placeholder text for custom discriminator -->
+    <string name="UsernameEditFragment__00">00</string>
     <!-- Toolbar title when entering from registration -->
     <string name="UsernameEditFragment__add_a_username">ஒரு பயனர் பெயரைச் சேர்க்கவும்</string>
     <!-- Instructional text at the top of the username edit screen -->
@@ -2221,6 +2227,12 @@
     <string name="UsernameEditFragment__skip">தவிர்</string>
     <!-- Content description for done button -->
     <string name="UsernameEditFragment__done">முடிந்தது</string>
+    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
+    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">This username is not available, try another number.</string>
+    <!-- Displayed when the chosen discriminator is too short -->
+    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">Invalid username, enter a minimum of %1$d digits.</string>
+    <!-- Displayed when the chosen discriminator is too long -->
+    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Invalid username, enter a maximum of %1$d digits.</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%1$d தொடர்பு Signal-இல் உள்ளார்!</item>
@@ -2418,8 +2430,10 @@
     </plurals>
     <!-- Status update label used while the device is transcoding video as a prerequisite to uploading -->
     <string name="TransferControlView__processing">செயலாக்கப்படுகிறது…</string>
-    <!-- Status update label used while the device is transmitting data over the network. Will take the form of "123 KB/2.0 MB" -->
-    <string name="TransferControlView__download_progress">%1$s/%2$s</string>
+    <!-- Status update label used while the device is transmitting data over the network. Will take the form of "1.0 MB/2.0 MB" -->
+    <string name="TransferControlView__download_progress">%1$1.1f MB/%2$2.1f MB</string>
+    <!-- Attachment file size label for not-yet-downloaded images and video. Will take the form of "1.0 MB" -->
+    <string name="TransferControlView__filesize">%1$1.1f MB</string>
 
 
     <!-- UnauthorizedReminder -->
@@ -4008,9 +4022,9 @@
     <string name="ReviewCard__block">தடைசெய்</string>
     <string name="ReviewCard__delete">நீக்கு</string>
     <!-- Displayed when a recent name change has occurred. First placeholder is new short name, second is previous name, third is new name. -->
-    <string name="ReviewCard__s_recently_changed">%1$s recently changed their profile name from %2$s to %3$s</string>
+    <string name="ReviewCard__s_recently_changed">%1$s சமீபத்தில் தனது ப்ரொஃபைல் பெயரை %2$s -இல் இருந்து %3$s ஆக மாற்றினார்</string>
     <!-- Displayed when a review user is in your system contacts. Placeholder is short name. -->
-    <string name="ReviewCard__s_is_in_your_system_contacts">%1$s is in your system contacts</string>
+    <string name="ReviewCard__s_is_in_your_system_contacts">உங்கள் சிஸ்டம் தொடர்புகளில் %1$s உள்ளார்</string>
 
     <!-- CallParticipantsListUpdatePopupWindow -->
     <string name="CallParticipantsListUpdatePopupWindow__s_joined">%1$s சேர்ந்தார்</string>
@@ -5066,6 +5080,12 @@
     <string name="AddAllowedMembers__add_people_and_groups_you_want_notifications_and_calls_from_when_this_profile_is_on">இந்தச் சுயவிவரம் இயக்கத்தில் இருக்கும் போது நீங்கள் அறிவிப்புகளையும் அழைப்புகளையும் பெற விரும்பும் நபர்களையும் குழுக்களையும் சேர்க்கவும்</string>
     <!-- Button text that launches the contact picker to select from -->
     <string name="AddAllowedMembers__add_people_or_groups">நபர்கள் அல்லது குழுக்களைச் சேர்க்கவும்</string>
+    <!-- Title for exceptions section of add people to notification profile screen in create flow -->
+    <string name="AddAllowedMembers__exceptions">விதிவிலக்குகள்</string>
+    <!-- List preference to toggle that allows calls through the notification profile during create flow -->
+    <string name="AddAllowedMembers__allow_all_calls">அனைத்து அழைப்புகளையும் அனுமதி</string>
+    <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
+    <string name="AddAllowedMembers__notify_for_all_mentions">அனைத்து குறிப்புகளுக்கும் தெரிவிக்கவும்</string>
 
     <!-- Call to action button on contact picker for adding to profile -->
     <string name="SelectRecipientsFragment__add">சேர்க்கவும்</string>
@@ -5680,8 +5700,8 @@
     <string name="SafetyNumberBottomSheetFragment__all_connections_have_been_reviewed">அனைத்து இணைப்புகளும் மதிப்பாய்வு செய்யப்பட்டுள்ளன, தொடர அனுப்பு என்பதைத் தட்டவும்.</string>
     <!-- Message of safety number changes bottom sheet when not showing individual records -->
     <plurals name="SafetyNumberBottomSheetFragment__you_have_d_connections_plural">
-        <item quantity="one">உங்களிடம் Signalஐ மீண்டும் நிறுவிய அல்லது டிவைஸ்களை மாற்றிய %1$d இணைப்பு உள்ளது. உங்கள் ஸ்டோரியை அவர்களுடன் பகிர்வதற்கு முன் அவர்களின் பாதுகாப்பு எண்களை மதிப்பாய்வு செய்யவும் அல்லது உங்கள் ஸ்டோரியிலிருந்து அவற்றை அகற்றவும்.</item>
-        <item quantity="other">உங்களிடம் Signalஐ மீண்டும் நிறுவிய அல்லது டிவைஸ்களை மாற்றிய %1$d இணைப்புகள் உள்ளது. உங்கள் ஸ்டோரியை அவர்களுடன் பகிர்வதற்கு முன் அவர்களின் பாதுகாப்பு எண்களை மதிப்பாய்வு செய்யவும் அல்லது உங்கள் ஸ்டோரியிலிருந்து அவற்றை அகற்றவும்.</item>
+        <item quantity="one">%1$d connection may have reinstalled Signal or changed devices. You may review their safety number or continue with the send.</item>
+        <item quantity="other">%1$d connections may have reinstalled Signal or changed devices. You may review their safety numbers or continue with the send.</item>
     </plurals>
     <!-- Menu action to launch safety number verification screen -->
     <string name="SafetyNumberBottomSheetFragment__verify_safety_number">பாதுகாப்பு எண்ணைச் சரிபார்க்கவும்</string>
@@ -6236,6 +6256,8 @@
     <string name="CallLogAdapter__outgoing">அவுட்கோயிங்</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">தவறவிட்டவை</string>
+    <!-- Displayed for missed calls declined by notification profile -->
+    <string name="CallLogAdapter__missed_notification_profile">Missed while notification profile on</string>
     <!-- Displayed on Group Call button if user is not in the call -->
     <string name="CallLogAdapter__join">சேரவும்</string>
     <!-- Displayed on Group Call button if user is in the call -->
@@ -6343,6 +6365,8 @@
     <string name="CallPreference__group_call">குழு அழைப்பு</string>
     <!-- Missed group call in call info -->
     <string name="CallPreference__missed_group_call">தவறிய குழு அழைப்பு</string>
+    <!-- Missed group call while notification profile on in call info -->
+    <string name="CallPreference__missed_group_call_notification_profile">Missed group call while notification profile on</string>
     <!-- Incoming group call in call info -->
     <string name="CallPreference__incoming_group_call">உள்வரும் குழு அழைப்பு</string>
     <!-- Outgoing group call in call info -->

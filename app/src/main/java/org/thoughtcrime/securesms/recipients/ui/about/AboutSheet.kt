@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -22,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -141,6 +144,7 @@ private fun AboutSheetContent(
       modifier = Modifier
         .padding(top = 56.dp)
         .size(240.dp)
+        .clip(CircleShape)
         .clickable(onClick = avatarOnClick)
     )
 
@@ -150,7 +154,7 @@ private fun AboutSheetContent(
       modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 32.dp)
-        .padding(top = 20.dp, bottom = 8.dp)
+        .padding(top = 20.dp, bottom = 14.dp)
     )
 
     val context = LocalContext.current
@@ -183,9 +187,8 @@ private fun AboutSheetContent(
         startIcon = painterResource(id = R.drawable.symbol_connections_24),
         text = stringResource(id = R.string.AboutSheet__signal_connection),
         endIcon = painterResource(id = R.drawable.symbol_chevron_right_compact_bold_16),
-        modifier = Modifier
-          .fillMaxWidth()
-          .clickable(onClick = onClickSignalConnections)
+        modifier = Modifier.align(alignment = Alignment.Start),
+        onClick = onClickSignalConnections
       )
     }
 
@@ -230,7 +233,7 @@ private fun AboutSheetContent(
       )
     }
 
-    Spacer(modifier = Modifier.size(32.dp))
+    Spacer(modifier = Modifier.size(26.dp))
   }
 }
 
@@ -253,7 +256,8 @@ private fun AboutRow(
   startIcon: Painter,
   text: String,
   modifier: Modifier = Modifier,
-  endIcon: Painter? = null
+  endIcon: Painter? = null,
+  onClick: (() -> Unit)? = null
 ) {
   AboutRow(
     startIcon = startIcon,
@@ -264,7 +268,8 @@ private fun AboutRow(
       )
     },
     modifier = modifier,
-    endIcon = endIcon
+    endIcon = endIcon,
+    onClick = onClick
   )
 }
 
@@ -273,13 +278,27 @@ private fun AboutRow(
   startIcon: Painter,
   text: @Composable () -> Unit,
   modifier: Modifier = Modifier,
-  endIcon: Painter? = null
+  endIcon: Painter? = null,
+  onClick: (() -> Unit)? = null
 ) {
+  val padHorizontal = if (onClick != null) 19.dp else 32.dp
+  val padVertical = if (onClick != null) 4.dp else 6.dp
+
   Row(
     verticalAlignment = Alignment.CenterVertically,
     modifier = modifier
-      .padding(horizontal = 32.dp)
-      .padding(top = 12.dp)
+      .padding(horizontal = padHorizontal)
+      .padding(vertical = padVertical)
+      .let {
+        if (onClick != null) {
+          it
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(top = 2.dp, bottom = 2.dp, start = 13.dp, end = 8.dp)
+        } else {
+          it
+        }
+      }
   ) {
     Icon(
       painter = startIcon,

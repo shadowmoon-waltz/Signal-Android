@@ -783,8 +783,32 @@ public class SignalServiceAccountManager {
     return this.pushServiceSocket.reserveUsername(usernameHashes);
   }
 
-  public void confirmUsername(String username, ReserveUsernameResponse reserveUsernameResponse) throws IOException {
-    this.pushServiceSocket.confirmUsername(username, reserveUsernameResponse);
+  public UsernameLinkComponents confirmUsernameAndCreateNewLink(Username username) throws IOException {
+    try {
+      UsernameLink link    = username.generateLink();
+      UUID        serverId = this.pushServiceSocket.confirmUsernameAndCreateNewLink(username, link);
+
+      return new UsernameLinkComponents(link.getEntropy(), serverId);
+    } catch (BaseUsernameException e) {
+      throw new AssertionError(e);
+    }
+  }
+
+  public UsernameLinkComponents reclaimUsernameAndLink(Username username, UsernameLinkComponents linkComponents) throws IOException {
+    try {
+      UsernameLink link     = username.generateLink(linkComponents.getEntropy());
+      UUID         serverId = this.pushServiceSocket.confirmUsernameAndCreateNewLink(username, link);
+
+      return new UsernameLinkComponents(link.getEntropy(), serverId);
+    } catch (BaseUsernameException e) {
+      throw new AssertionError(e);
+    }
+  }
+
+  public UsernameLinkComponents updateUsernameLink(UsernameLink newUsernameLink) throws IOException {
+      UUID serverId = this.pushServiceSocket.createUsernameLink(Base64.encodeUrlSafeWithoutPadding(newUsernameLink.getEncryptedUsername()), true);
+
+      return new UsernameLinkComponents(newUsernameLink.getEntropy(), serverId);
   }
 
   public void deleteUsername() throws IOException {
@@ -794,7 +818,7 @@ public class SignalServiceAccountManager {
   public UsernameLinkComponents createUsernameLink(Username username) throws IOException {
     try {
       UsernameLink link     = username.generateLink();
-      UUID         serverId = this.pushServiceSocket.createUsernameLink(Base64.encodeUrlSafeWithPadding(link.getEncryptedUsername()));
+      UUID         serverId = this.pushServiceSocket.createUsernameLink(Base64.encodeUrlSafeWithPadding(link.getEncryptedUsername()), false);
 
       return new UsernameLinkComponents(link.getEntropy(), serverId);
     } catch (BaseUsernameException e) {

@@ -1109,20 +1109,22 @@ public class PushServiceSocket {
    * PUT /v1/accounts/username_hash/confirm
    * Set a previously reserved username for the account.
    *
-   * @param username                The username the user wishes to confirm. For example, myusername.27
-   * @param reserveUsernameResponse The response object from the reservation
-   * @throws IOException            Thrown when the username is invalid or taken, or when another network error occurs.
+   * @param username     The username the user wishes to confirm.
+   * @throws IOException Thrown when the username is invalid or taken, or when another network error occurs.
    */
-  public void confirmUsername(String username, ReserveUsernameResponse reserveUsernameResponse) throws IOException {
+  public UUID confirmUsernameAndCreateNewLink(Username username, Username.UsernameLink link) throws IOException {
     try {
       byte[] randomness = new byte[32];
       random.nextBytes(randomness);
 
-      byte[]                 proof                  = new Username(username).generateProofWithRandomness(randomness);
-      ConfirmUsernameRequest confirmUsernameRequest = new ConfirmUsernameRequest(reserveUsernameResponse.getUsernameHash(),
-                                                                                 Base64.encodeUrlSafeWithoutPadding(proof));
+      byte[]                 proof                  = username.generateProofWithRandomness(randomness);
+      ConfirmUsernameRequest confirmUsernameRequest = new ConfirmUsernameRequest(
+                                                        Base64.encodeUrlSafeWithoutPadding(username.getHash()),
+                                                        Base64.encodeUrlSafeWithoutPadding(proof),
+                                                        Base64.encodeUrlSafeWithoutPadding(link.getEncryptedUsername())
+                                                      );
 
-      makeServiceRequest(CONFIRM_USERNAME_PATH, "PUT", JsonUtil.toJson(confirmUsernameRequest), NO_HEADERS, (responseCode, body) -> {
+      String response = makeServiceRequest(CONFIRM_USERNAME_PATH, "PUT", JsonUtil.toJson(confirmUsernameRequest), NO_HEADERS, (responseCode, body) -> {
         switch (responseCode) {
           case 409:
             throw new UsernameIsNotReservedException();
@@ -1130,6 +1132,8 @@ public class PushServiceSocket {
             throw new UsernameTakenException();
         }
       }, Optional.empty());
+
+      return JsonUtil.fromJson(response, ConfirmUsernameResponse.class).getUsernameLinkHandle();
     } catch (BaseUsernameException e) {
       throw new IOException(e);
     }
@@ -1147,8 +1151,8 @@ public class PushServiceSocket {
    * @param encryptedUsername URL-safe base64-encoded encrypted username
    * @return The serverId for the generated link.
    */
-  public UUID createUsernameLink(String encryptedUsername) throws IOException {
-    String                      response = makeServiceRequest(USERNAME_LINK_PATH, "PUT", JsonUtil.toJson(new SetUsernameLinkRequestBody(encryptedUsername)));
+  public UUID createUsernameLink(String encryptedUsername, boolean keepLinkHandle) throws IOException {
+    String                      response = makeServiceRequest(USERNAME_LINK_PATH, "PUT", JsonUtil.toJson(new SetUsernameLinkRequestBody(encryptedUsername, keepLinkHandle)));
     SetUsernameLinkResponseBody parsed   = JsonUtil.fromJson(response, SetUsernameLinkResponseBody.class);
 
     return parsed.getUsernameLinkHandle();
@@ -1159,7 +1163,7 @@ public class PushServiceSocket {
     makeServiceRequest(USERNAME_LINK_PATH, "DELETE", null);
   }
 
-  /** Given a link serverId (see {@link #createUsernameLink(String)}), this will return the encrypted username associate with the link. */
+  /** Given a link serverId (see {@link #createUsernameLink(String, boolean)}}), this will return the encrypted username associate with the link. */
   public byte[] getEncryptedUsernameFromLinkServerId(UUID serverId) throws IOException {
     String                          response = makeServiceRequestWithoutAuthentication(String.format(USERNAME_FROM_LINK_PATH, serverId.toString()), "GET", null);
     GetUsernameFromLinkResponseBody parsed   = JsonUtil.fromJson(response, GetUsernameFromLinkResponseBody.class);

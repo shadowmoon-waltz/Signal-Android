@@ -326,9 +326,9 @@
     <!-- Display as the timestamp footer in a message bubble in a conversation when a message has been edited. The timestamp represents a message that has been edited within the last minute. -->
     <string name="ConversationItem_edited_now_timestamp_footer">এখন এডিট করা হয়েছে</string>
     <!-- Display as the timestamp footer in a message bubble in a conversation when a message has been edited. This is displayed when the edit has occurred between 1-59 minutes ago. -->
-    <string name="ConversationItem_edited_relative_timestamp_footer">Edited %1$s</string>
+    <string name="ConversationItem_edited_relative_timestamp_footer">%1$s এডিট করা হয়েছে</string>
     <!-- Display as the timestamp footer in a message bubble in a conversation when a message has been edited. This is displayed when the edit occurred at least 1 hour ago. -->
-    <string name="ConversationItem_edited_absolute_timestamp_footer">Edited %1$s</string>
+    <string name="ConversationItem_edited_absolute_timestamp_footer">%1$s এডিট করা হয়েছে</string>
     <!-- Displayed if the link preview in the conversation item is for a call link call -->
     <string name="ConversationItem__join_call">কলে যোগ দিন</string>
 
@@ -363,7 +363,7 @@
     <!-- A title for the option to send an SMS with a placeholder to put the name of their SIM card -->
     <string name="ConversationActivity_transport_signal">Signal বার্তা</string>
     <!-- The content description for button to send a message in a conversation -->
-    <string name="ConversationActivity_send_message_content_description">Send message</string>
+    <string name="ConversationActivity_send_message_content_description">মেসেজ পাঠান</string>
     <string name="ConversationActivity_lets_switch_to_signal">চলুন Signal এ যোগ দেই %1$s</string>
     <string name="ConversationActivity_specify_recipient">দয়া করে একটি পরিচিতি চয়ন করুন</string>
     <string name="ConversationActivity_attachment_exceeds_size_limits">আপনি যে বার্তা প্রেরণ করছেন সংযুক্তি তার আকারের সীমা অতিক্রম করেছে।</string>
@@ -1283,6 +1283,10 @@
     <string name="MessageRecord_missed_voice_call">মিসড ভয়েস কল</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and not answered -->
     <string name="MessageRecord_missed_video_call">মিসড ভিডিও কল</string>
+    <!-- Update message shown when receiving an incoming voice call and declined due to notification profile -->
+    <string name="MessageRecord_missed_voice_call_notification_profile">নোটিফিকেশন প্রোফাইল চালু থাকা অবস্থায় মিসড ভয়েস কল</string>
+    <!-- Update message shown when receiving an incoming video call and declined due to notification profile -->
+    <string name="MessageRecord_missed_video_call_notification_profile">নোটিফিকেশন প্রোফাইল চালু থাকা অবস্থায় মিসড ভিডিও কল</string>
     <!-- Update message shown when receiving an incoming 1:1 voice/audio call and explicitly declined -->
     <string name="MessageRecord_you_declined_a_voice_call">আপনি একটি ভয়েস কল প্রত্যাখ্যান করেছেন</string>
     <!-- Update message shown when receiving an incoming 1:1 video call and explicitly declined -->
@@ -1853,24 +1857,24 @@
     <string name="WebRtcAudioOutputBottomSheet__earpiece_icon_content_description">একটি ডিভাইসের ইয়ারপিসকে নির্দেশকারী একটি আইকন।</string>
 
     <!-- A clickable button to "raise your hand" in a group call to signify you have something to say -->
-    <string name="CallOverflowPopupWindow__raise_hand">Raise hand</string>
+    <string name="CallOverflowPopupWindow__raise_hand">হাত তুলুন</string>
     <!-- A description of a clickable image representing a raised hand -->
-    <string name="CallOverflowPopupWindow__raise_hand_illustration_content_description">Raise hand</string>
+    <string name="CallOverflowPopupWindow__raise_hand_illustration_content_description">হাত তুলুন</string>
     <!-- A dialog prompt to confirm you want to lower your hand -->
-    <string name="CallOverflowPopupWindow__lower_your_hand">Lower your hand?</string>
+    <string name="CallOverflowPopupWindow__lower_your_hand">হাত নামবেন?</string>
     <!-- A dialog button to confirm you would like to lower your hand -->
-    <string name="CallOverflowPopupWindow__lower_hand">Lower hand</string>
+    <string name="CallOverflowPopupWindow__lower_hand">হাত নামান</string>
     <!-- A negative button for a dialog confirming the user wants to lower their hand (withdraw a raised hand) -->
-    <string name="CallOverflowPopupWindow__cancel">Cancel</string>
+    <string name="CallOverflowPopupWindow__cancel">বাতিল করুন</string>
     <!-- A notification to the user that they successfully raised their hand -->
-    <string name="CallOverflowPopupWindow__you_raised_your_hand">You raised your hand</string>
+    <string name="CallOverflowPopupWindow__you_raised_your_hand">আপনি হাত তুলেছেন</string>
     <!-- A button to take you to a list of participants with raised hands -->
-    <string name="CallOverflowPopupWindow__view">View</string>
+    <string name="CallOverflowPopupWindow__view">দেখুন</string>
 
     <!-- A notification to the user that one or more participants in the call successfully raised their hand. In the singular case, it is a name. In the plural case, it is a name or "You" -->
     <plurals name="CallOverflowPopupWindow__raised_a_hand">
-        <item quantity="one">%1$s has raised a hand</item>
-        <item quantity="other">%1$s + %2$d have raised a hand</item>
+        <item quantity="one">%1$s হাত তুলেছেন</item>
+        <item quantity="other">%1$s + %2$d হাত তুলেছেন</item>
     </plurals>
 
     <!-- A badge to show how many hands are raised. The first string may be a name or "You" -->
@@ -1880,23 +1884,23 @@
     </plurals>
 
     <!-- An accessibility label for screen readers on a view that can be expanded -->
-    <string name="CallOverflowPopupWindow__expand_snackbar_accessibility_label">Expand raised hand view</string>
+    <string name="CallOverflowPopupWindow__expand_snackbar_accessibility_label">হাত উঠানোর ভিউ সম্প্রসারিত করুন</string>
 
     <!-- AboutSheet -->
     <!-- Displayed in a sheet row and allows user to open signal connection explanation on tap -->
-    <string name="AboutSheet__signal_connection">Signal connection</string>
+    <string name="AboutSheet__signal_connection">Signal কানেকশন</string>
     <!-- Explains that the given user (placeholder is short name) is in the users system contact -->
-    <string name="AboutSheet__s_is_in_your_system_contacts">%1$s is in your system contacts</string>
+    <string name="AboutSheet__s_is_in_your_system_contacts">%1$s আপনার সিস্টেমের কন্টাক্টে আছেন</string>
     <!-- Notice in a row when user has no groups in common -->
-    <string name="AboutSheet__you_have_no_groups_in_common">You have no groups in common</string>
+    <string name="AboutSheet__you_have_no_groups_in_common">আপনারা দুজনই আছেন এমন কোনো গ্রুপ নেই</string>
     <!-- Notice when a user is not a connection to review requests carefully -->
-    <string name="AboutSheet__review_requests_carefully">Review requests carefully</string>
+    <string name="AboutSheet__review_requests_carefully">তোমার অনুরোধ ভালোভাবে দেখো</string>
     <!-- Text used when user has groups in common. Placeholder is the count -->
-    <string name="AboutSheet__d_groups_in_common">%1$d groups in common</string>
+    <string name="AboutSheet__d_groups_in_common">%1$d-টি একই গ্রুপ আছে</string>
     <!-- Text displayed in title for external recipients -->
-    <string name="AboutSheet__about">About</string>
+    <string name="AboutSheet__about">পরিচিতি</string>
     <!-- Text displayed in title for you -->
-    <string name="AboutSheet__you">You</string>
+    <string name="AboutSheet__you">আপনি</string>
 
     <!-- CallParticipantsListDialog -->
     <plurals name="CallParticipantsListDialog_in_this_call">
@@ -1912,8 +1916,8 @@
         <item quantity="other">Signal (%1$d)-কে জানাবে</item>
     </plurals>
     <plurals name="CallParticipantsListDialog__raised_hands">
-        <item quantity="one">Raised hand (%1$d)</item>
-        <item quantity="other">Raised hands (%1$d)</item>
+        <item quantity="one">হাত তুলেছেন (%1$d)</item>
+        <item quantity="other">হাত তুলেছেন (%1$d)</item>
     </plurals>
 
     <!-- CallParticipantView -->
@@ -2029,9 +2033,9 @@
 
     <!-- ReviewBannerView -->
     <!-- ReviewBannerView text when a name conflict has been found -->
-    <string name="ReviewBannerView__name_conflict_found">Name conflict found</string>
+    <string name="ReviewBannerView__name_conflict_found">একই নাম পাওয়া গেছে</string>
     <!-- Button label to view name conflicts -->
-    <string name="ReviewBannerView__view">View</string>
+    <string name="ReviewBannerView__view">দেখুন</string>
 
     <!-- Search -->
     <string name="SearchFragment_no_results">\'%1$s\' এর জন্য কোনও ফলাফল পাওয়া যায়নি</string>
@@ -2199,6 +2203,8 @@
     <string name="UnverifiedSendDialog_send">পাঠান</string>
 
     <!-- UsernameEditFragment -->
+    <!-- Placeholder text for custom discriminator -->
+    <string name="UsernameEditFragment__00">00</string>
     <!-- Toolbar title when entering from registration -->
     <string name="UsernameEditFragment__add_a_username">একটি ইউজারনেম যোগ করুন</string>
     <!-- Instructional text at the top of the username edit screen -->
@@ -2221,6 +2227,12 @@
     <string name="UsernameEditFragment__skip">বাদ দিয়ে যান</string>
     <!-- Content description for done button -->
     <string name="UsernameEditFragment__done">শেষ</string>
+    <!-- Displayed when the chosen discriminator is not available for the given nickname -->
+    <string name="UsernameEditFragment__this_username_is_not_available_try_another_number">এই ব্যবহারকারীর নামটি পাওয়া যাচ্ছে না, আরেকটি নম্বর দিয়ে চেষ্টা করুন।</string>
+    <!-- Displayed when the chosen discriminator is too short -->
+    <string name="UsernameEditFragment__invalid_username_enter_a_minimum_of_d_digits">অকার্যকর ব্যবহারকারীর নাম, অন্তত %1$d-টি সংখ্যা লিখুন।</string>
+    <!-- Displayed when the chosen discriminator is too long -->
+    <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">অকার্যকর ব্যবহারকারীর নাম, অন্তত %1$d-টি সংখ্যা লিখুন।</string>
 
     <plurals name="UserNotificationMigrationJob_d_contacts_are_on_signal">
         <item quantity="one">%1$d টি কন্ট্যাক্ট Signal ব্যবহার করছে!</item>
@@ -2418,8 +2430,10 @@
     </plurals>
     <!-- Status update label used while the device is transcoding video as a prerequisite to uploading -->
     <string name="TransferControlView__processing">প্রক্রিয়া হচ্ছে…</string>
-    <!-- Status update label used while the device is transmitting data over the network. Will take the form of "123 KB/2.0 MB" -->
-    <string name="TransferControlView__download_progress">%1$s/%2$s</string>
+    <!-- Status update label used while the device is transmitting data over the network. Will take the form of "1.0 MB/2.0 MB" -->
+    <string name="TransferControlView__download_progress">%1$1.1f MB/%2$2.1f MB</string>
+    <!-- Attachment file size label for not-yet-downloaded images and video. Will take the form of "1.0 MB" -->
+    <string name="TransferControlView__filesize">%1$1.1f MB</string>
 
 
     <!-- UnauthorizedReminder -->
@@ -4008,9 +4022,9 @@
     <string name="ReviewCard__block">ব্লক করুন</string>
     <string name="ReviewCard__delete">মুছে ফেলুন</string>
     <!-- Displayed when a recent name change has occurred. First placeholder is new short name, second is previous name, third is new name. -->
-    <string name="ReviewCard__s_recently_changed">%1$s recently changed their profile name from %2$s to %3$s</string>
+    <string name="ReviewCard__s_recently_changed">%1$s সম্প্রতি তার নাম %2$s থেকে %3$s-এ পরিবর্তন করেছেন।</string>
     <!-- Displayed when a review user is in your system contacts. Placeholder is short name. -->
-    <string name="ReviewCard__s_is_in_your_system_contacts">%1$s is in your system contacts</string>
+    <string name="ReviewCard__s_is_in_your_system_contacts">%1$s আপনার সিস্টেমের কন্টাক্টে আছেন</string>
 
     <!-- CallParticipantsListUpdatePopupWindow -->
     <string name="CallParticipantsListUpdatePopupWindow__s_joined">%1$s যোগ দিয়েছেন</string>
@@ -5066,6 +5080,12 @@
     <string name="AddAllowedMembers__add_people_and_groups_you_want_notifications_and_calls_from_when_this_profile_is_on">প্রোফাইল চালু থাকা অবস্থায় আপনি যে সমস্ত ব্যক্তি ও গ্ৰুপের নোটিফিকেশন পেতে চান এবং কল করতে চান তাদের যোগ করুন</string>
     <!-- Button text that launches the contact picker to select from -->
     <string name="AddAllowedMembers__add_people_or_groups">ব্যক্তি অথবা গ্ৰুপ যোগ করুন</string>
+    <!-- Title for exceptions section of add people to notification profile screen in create flow -->
+    <string name="AddAllowedMembers__exceptions">প্রত্যাশা</string>
+    <!-- List preference to toggle that allows calls through the notification profile during create flow -->
+    <string name="AddAllowedMembers__allow_all_calls">সকল কল অনুমোদন করুন</string>
+    <!-- List preference to toggle that allows mentions through the notification profile during create flow -->
+    <string name="AddAllowedMembers__notify_for_all_mentions">সকল উল্লেখ অবহিত করুন</string>
 
     <!-- Call to action button on contact picker for adding to profile -->
     <string name="SelectRecipientsFragment__add">যোগ করুন</string>
@@ -5680,8 +5700,8 @@
     <string name="SafetyNumberBottomSheetFragment__all_connections_have_been_reviewed">সকল কানেকশন রিভিউ করা হয়েছে, চালিয়ে যেতে সেন্ডে ট্যাপ করুন।</string>
     <!-- Message of safety number changes bottom sheet when not showing individual records -->
     <plurals name="SafetyNumberBottomSheetFragment__you_have_d_connections_plural">
-        <item quantity="one">আপনার %1$dটি কানেকশন আছে, যারা হয়তো Signal আবার ইন্সটল করেছেন বা ডিভাইস পরিবর্তন করেছেন। তাদের সাথে আপনার স্টোরি শেয়ার করার আগে তাদের নিরাপত্তা নম্বরগুলো পর্যালোচনা করুন বা আপনার স্টোরি দেখা থেকে তাদের বাদ দিন।</item>
-        <item quantity="other">আপনার %1$dটি কানেকশন আছে, যারা হয়তো Signal আবার ইনস্টল করেছেন বা ডিভাইস পরিবর্তন করেছেন। তাদের সাথে আপনার স্টোরি শেয়ার করার আগে তাদের নিরাপত্তা নম্বরগুলো পর্যালোচনা করুন বা আপনার স্টোরি দেখা থেকে তাদের বাদ দিন।</item>
+        <item quantity="one">%1$d-টি কানেকশন হয়তো Signal পুনরায় ইনস্টল করেছেন বা ডিভাইস পরিবর্তন করেছেন। আপনি তার নিরাপত্তা নম্বর পর্যালোচনা করতে পারেন বা পাঠানো চালিয়ে যেতে পারেন।</item>
+        <item quantity="other">%1$d-টি কানেকশন হয়তো Signal পুনরায় ইনস্টল করেছেন বা ডিভাইস পরিবর্তন করেছেন। আপনি তাদের নিরাপত্তা নম্বর পর্যালোচনা করতে পারেন বা পাঠানো চালিয়ে যেতে পারেন।</item>
     </plurals>
     <!-- Menu action to launch safety number verification screen -->
     <string name="SafetyNumberBottomSheetFragment__verify_safety_number">নিরাপত্তা নাম্বার যাচাই করুন</string>
@@ -6236,6 +6256,8 @@
     <string name="CallLogAdapter__outgoing">আউটগোয়িং কল</string>
     <!-- Displayed for missed calls -->
     <string name="CallLogAdapter__missed">মিসড কল</string>
+    <!-- Displayed for missed calls declined by notification profile -->
+    <string name="CallLogAdapter__missed_notification_profile">নোটিফিকেশন প্রোফাইল চালু থাকা অবস্থায় মিস হয়েছে</string>
     <!-- Displayed on Group Call button if user is not in the call -->
     <string name="CallLogAdapter__join">যোগ দিন</string>
     <!-- Displayed on Group Call button if user is in the call -->
@@ -6343,6 +6365,8 @@
     <string name="CallPreference__group_call">গ্রুপ কল</string>
     <!-- Missed group call in call info -->
     <string name="CallPreference__missed_group_call">মিসড গ্রুপ কল</string>
+    <!-- Missed group call while notification profile on in call info -->
+    <string name="CallPreference__missed_group_call_notification_profile">নোটিফিকেশন প্রোফাইল চালু থাকা অবস্থায় মিসড গ্রুপ কল</string>
     <!-- Incoming group call in call info -->
     <string name="CallPreference__incoming_group_call">ইনকামিং গ্রুপ কল</string>
     <!-- Outgoing group call in call info -->
