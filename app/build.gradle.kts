@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1376
-val canonicalVersionName = "6.44.2"
+val canonicalVersionCode = 1379
+val canonicalVersionName = "6.45.1"
 
 val postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -523,7 +523,6 @@ dependencies {
   implementation(project(":sms-exporter"))
   implementation(project(":sticky-header-grid"))
   implementation(project(":photoview"))
-  implementation(project(":glide-webp"))
   implementation(project(":core-ui"))
 
   implementation(libs.androidx.fragment.ktx)
