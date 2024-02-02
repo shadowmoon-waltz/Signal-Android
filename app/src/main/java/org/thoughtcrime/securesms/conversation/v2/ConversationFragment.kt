@@ -67,6 +67,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.ConversationLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.Duration
 import com.google.android.material.snackbar.Snackbar
@@ -250,7 +251,6 @@ import org.thoughtcrime.securesms.messagerequests.MessageRequestState
 import org.thoughtcrime.securesms.mms.AttachmentManager
 import org.thoughtcrime.securesms.mms.AudioSlide
 import org.thoughtcrime.securesms.mms.GifSlide
-import org.thoughtcrime.securesms.mms.GlideApp
 import org.thoughtcrime.securesms.mms.ImageSlide
 import org.thoughtcrime.securesms.mms.MediaConstraints
 import org.thoughtcrime.securesms.mms.QuoteModel
@@ -295,6 +295,7 @@ import org.thoughtcrime.securesms.util.Debouncer
 import org.thoughtcrime.securesms.util.DeleteDialog
 import org.thoughtcrime.securesms.util.Dialogs
 import org.thoughtcrime.securesms.util.DrawableUtil
+import org.thoughtcrime.securesms.util.FeatureFlags
 import org.thoughtcrime.securesms.util.FullscreenHelper
 import org.thoughtcrime.securesms.util.MediaUtil
 import org.thoughtcrime.securesms.util.MessageConstraintsUtil
@@ -1215,7 +1216,7 @@ class ConversationFragment :
       )
       conversationActivityResultContracts.launchMediaEditor(listOf(media), recipientId, composeText.textTrimmed)
     } else {
-      attachmentManager.setMedia(GlideApp.with(this), uri, mediaType, MediaConstraints.getPushMediaConstraints(), width, height)
+      attachmentManager.setMedia(Glide.with(this), uri, mediaType, MediaConstraints.getPushMediaConstraints(), width, height)
     }
   }
 
@@ -1311,7 +1312,7 @@ class ConversationFragment :
 
     val titleView = binding.conversationTitleView.root
 
-    titleView.setTitle(GlideApp.with(this), recipient)
+    titleView.setTitle(Glide.with(this), recipient)
     if (recipient.expiresInSeconds > 0) {
       titleView.showExpiring(recipient)
     } else {
@@ -1455,7 +1456,7 @@ class ConversationFragment :
       is ShareOrDraftData.SetLocation -> attachmentManager.setLocation(data.location, MediaConstraints.getPushMediaConstraints())
       is ShareOrDraftData.SetEditMessage -> {
         composeText.setDraftText(data.draftText)
-        inputPanel.enterEditMessageMode(GlideApp.with(this), data.messageEdit, true)
+        inputPanel.enterEditMessageMode(Glide.with(this), data.messageEdit, true)
       }
 
       is ShareOrDraftData.SetMedia -> {
@@ -1544,7 +1545,7 @@ class ConversationFragment :
     clickListener = ConversationItemClickListener()
     adapter = ConversationAdapterV2(
       lifecycleOwner = viewLifecycleOwner,
-      glideRequests = GlideApp.with(this),
+      requestManager = Glide.with(this),
       clickListener = clickListener,
       hasWallpaper = args.wallpaper != null,
       colorizer = colorizer,
@@ -1552,7 +1553,7 @@ class ConversationFragment :
       chatColorsDataProvider = viewModel::chatColorsSnapshot
     )
 
-    typingIndicatorAdapter = ConversationTypingIndicatorAdapter(GlideApp.with(this))
+    typingIndicatorAdapter = ConversationTypingIndicatorAdapter(Glide.with(this))
 
     scrollToPositionDelegate = ScrollToPositionDelegate(
       recyclerView = binding.conversationItemRecycler,
@@ -1653,7 +1654,7 @@ class ConversationFragment :
         } else if (state.hasLinks() && !state.linkPreview.isPresent) {
           inputPanel.setLinkPreviewNoPreview(state.error)
         } else {
-          inputPanel.setLinkPreview(GlideApp.with(this), state.linkPreview)
+          inputPanel.setLinkPreview(Glide.with(this), state.linkPreview)
         }
 
         updateToggleButtonState()
@@ -1671,7 +1672,7 @@ class ConversationFragment :
     val keyboardPage = when (keyboardMode) {
       TextSecurePreferences.MediaKeyboardMode.EMOJI -> if (isSystemEmojiPreferred) KeyboardPage.STICKER else KeyboardPage.EMOJI
       TextSecurePreferences.MediaKeyboardMode.STICKER -> KeyboardPage.STICKER
-      TextSecurePreferences.MediaKeyboardMode.GIF -> KeyboardPage.GIF
+      TextSecurePreferences.MediaKeyboardMode.GIF -> if (FeatureFlags.gifSearchAvailable()) KeyboardPage.GIF else KeyboardPage.STICKER
     }
 
     inputPanel.setMediaKeyboardToggleMode(keyboardPage)
@@ -1866,7 +1867,7 @@ class ConversationFragment :
           composeTextEventsListener?.typingStatusEnabled = false
           composeText.setText("")
           composeTextEventsListener?.typingStatusEnabled = true
-          attachmentManager.clear(GlideApp.with(this@ConversationFragment), false)
+          attachmentManager.clear(Glide.with(this@ConversationFragment), false)
           inputPanel.clearQuote()
         }
         scrollToPositionDelegate.markListCommittedVersion()
@@ -2143,7 +2144,7 @@ class ConversationFragment :
     val author = conversationMessage.messageRecord.fromRecipient
 
     inputPanel.setQuote(
-      GlideApp.with(this),
+      Glide.with(this),
       conversationMessage.messageRecord.dateSent,
       author,
       body,
@@ -2161,7 +2162,7 @@ class ConversationFragment :
 
     viewModel.resolveMessageToEdit(conversationMessage)
       .subscribeBy { updatedMessage ->
-        inputPanel.enterEditMessageMode(GlideApp.with(this), updatedMessage, false)
+        inputPanel.enterEditMessageMode(Glide.with(this), updatedMessage, false)
       }
       .addTo(disposables)
   }
@@ -3198,14 +3199,9 @@ class ConversationFragment :
       this@ConversationFragment.handleVideoCall()
     }
 
-    override fun handleDial(isSecure: Boolean) {
+    override fun handleDial() {
       val recipient: Recipient = viewModel.recipientSnapshot ?: return
-
-      if (isSecure) {
-        CommunicationActions.startVoiceCall(this@ConversationFragment, recipient)
-      } else {
-        CommunicationActions.startInsecureCall(this@ConversationFragment, recipient)
-      }
+      CommunicationActions.startVoiceCall(this@ConversationFragment, recipient)
     }
 
     override fun handleViewMedia() {
@@ -3229,7 +3225,7 @@ class ConversationFragment :
         requireActivity().registerReceiver(pinnedShortcutReceiver, IntentFilter(ACTION_PINNED_SHORTCUT))
       }
 
-      viewModel.getContactPhotoIcon(requireContext(), GlideApp.with(this@ConversationFragment))
+      viewModel.getContactPhotoIcon(requireContext(), Glide.with(this@ConversationFragment))
         .subscribe { infoCompat ->
           val intent = Intent(ACTION_PINNED_SHORTCUT)
           val callback = PendingIntent.getBroadcast(requireContext(), 902, intent, PendingIntentFlags.mutable())
@@ -3635,7 +3631,7 @@ class ConversationFragment :
           .toTypedArray()
 
         MaterialAlertDialogBuilder(requireContext())
-          .setIcon(R.drawable.ic_warning)
+          .setIcon(R.drawable.symbol_error_triangle_fill_24)
           .setTitle(R.string.ConversationFragment__no_longer_verified)
           .setItems(unverifiedNames) { _, which: Int -> VerifyIdentityActivity.startOrShowExchangeMessagesDialog(requireContext(), unverifiedIdentities[which], false) }
           .show()

@@ -5,13 +5,13 @@ dependencyResolutionManagement {
   versionCatalogs {
     create("libs") {
       version("androidx-appcompat", "1.6.1")
-      version("androidx-activity", "1.7.2")
-      version("androidx-camera", "1.3.0-rc01")
-      version("androidx-fragment", "1.6.1")
-      version("androidx-lifecycle", "2.6.1")
+      version("androidx-activity", "1.8.2")
+      version("androidx-camera", "1.3.1")
+      version("androidx-fragment", "1.6.2")
+      version("androidx-lifecycle", "2.7.0")
       version("androidx-media3", "1.2.1")
-      version("androidx-navigation", "2.6.0")
-      version("androidx-window", "1.0.0")
+      version("androidx-navigation", "2.7.6")
+      version("androidx-window", "1.2.0")
       version("exoplayer", "2.19.0")
       version("glide", "4.15.1")
       version("kotlin", "1.8.10")
@@ -26,7 +26,7 @@ dependencyResolutionManagement {
       library("android-application", "com.android.application", "com.android.application.gradle.plugin").versionRef("android-gradle-plugin")
 
       // Compose
-      library("androidx-compose-bom", "androidx.compose:compose-bom:2023.08.00")
+      library("androidx-compose-bom", "androidx.compose:compose-bom:2023.09.01")
       library("androidx-compose-material3", "androidx.compose.material3", "material3").withoutVersion()
       library("androidx-compose-ui-tooling-preview", "androidx.compose.ui", "ui-tooling-preview").withoutVersion()
       library("androidx-compose-ui-tooling-core", "androidx.compose.ui", "ui-tooling").withoutVersion()
@@ -72,6 +72,7 @@ dependencyResolutionManagement {
       library("androidx-multidex", "androidx.multidex:multidex:2.0.1")
       library("androidx-navigation-fragment-ktx", "androidx.navigation", "navigation-fragment-ktx").versionRef("androidx-navigation")
       library("androidx-navigation-ui-ktx", "androidx.navigation", "navigation-ui-ktx").versionRef("androidx-navigation")
+      library("androidx-navigation-compose", "androidx.navigation", "navigation-compose").versionRef("androidx-navigation")
       library("androidx-lifecycle-viewmodel-ktx", "androidx.lifecycle", "lifecycle-viewmodel-ktx").versionRef("androidx-lifecycle")
       library("androidx-lifecycle-livedata-core", "androidx.lifecycle", "lifecycle-livedata").versionRef("androidx-lifecycle")
       library("androidx-lifecycle-livedata-ktx", "androidx.lifecycle", "lifecycle-livedata-ktx").versionRef("androidx-lifecycle")
@@ -118,7 +119,7 @@ dependencyResolutionManagement {
       library("libsignal-client", "org.signal", "libsignal-client").versionRef("libsignal-client")
       library("libsignal-android", "org.signal", "libsignal-android").versionRef("libsignal-client")
       library("signal-aesgcmprovider", "org.signal:aesgcmprovider:0.0.3")
-      library("signal-ringrtc", "org.signal:ringrtc-android:2.36.0")
+      library("signal-ringrtc", "org.signal:ringrtc-android:2.37.0")
       library("signal-android-database-sqlcipher", "org.signal:sqlcipher-android:4.5.4-S2")
 
       // Third Party
@@ -138,10 +139,10 @@ dependencyResolutionManagement {
       library("emilsjolander-stickylistheaders", "se.emilsjolander:stickylistheaders:2.7.0")
       library("apache-httpclient-android", "org.apache.httpcomponents:httpclient-android:4.3.5")
       library("glide-glide", "com.github.bumptech.glide", "glide").versionRef("glide")
-      library("glide-compiler", "com.github.bumptech.glide", "compiler").versionRef("glide")
+      library("glide-ksp", "com.github.bumptech.glide", "ksp").versionRef("glide")
       library("roundedimageview", "com.makeramen:roundedimageview:2.1.0")
-      library("materialish-progress", "com.pnikosis:materialish-progress:1.5")
-      library("subsampling-scale-image-view", "com.davemorrissey.labs:subsampling-scale-image-view:3.10.0")
+      library("materialish-progress", "com.pnikosis:materialish-progress:1.7")
+      library("subsampling-scale-image-view", "com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0")
       library("android-tooltips", "com.tomergoldst.android:tooltips:1.0.6")
       library("android-smsmms", "com.klinkerapps:android-smsmms:4.0.1")
       library("stream", "com.annimon:stream:1.1.8")
@@ -153,7 +154,6 @@ dependencyResolutionManagement {
 
       // Can"t use the newest version because it hits some weird NoClassDefFoundException
       library("jknack-handlebars", "com.github.jknack:handlebars:4.0.7")
-      library("kotlinx-collections-immutable", "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
 
       // Mp4Parser
       library("mp4parser-isoparser", "org.mp4parser", "isoparser").versionRef("mp4parser")
