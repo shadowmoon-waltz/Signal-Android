@@ -608,9 +608,9 @@
     <!-- Toolbar title for this screen -->
     <string name="WhoCanSeeMyPhoneNumberFragment__who_can_find_me_by_number">Wer kann mich anhand der Nummer finden?</string>
     <!-- Description for radio item stating anyone can see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Anyone who has your phone number will see you\'re on Signal and can start chats with you.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Wer deine Telefonnummer hat, sieht, dass du bei Signal bist und kann mit dir chatten.</string>
     <!-- Description for radio item stating no one will be able to see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Nobody will be able to see you\'re on Signal unless you message them or have an existing chat with them.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Niemand kann sehen, dass du auf Signal bist, es sei denn, du schreibst eine Nachricht oder hast mit der Person einen bereits bestehenden Chat.</string>
 
     <!-- ChooseBackupFragment -->
     <string name="ChooseBackupFragment__restore_from_backup">Aus Sicherung wiederherstellen?</string>
@@ -1587,7 +1587,7 @@
 
     <!-- DeviceProvisioningActivity -->
     <string name="DeviceProvisioningActivity_link_this_device">Dieses Gerät koppeln?</string>
-    <string name="DeviceProvisioningActivity_continue">Continue</string>
+    <string name="DeviceProvisioningActivity_continue">Fortfahren</string>
 
     <string name="DeviceProvisioningActivity_content_intro">Folgende Rechte werden vergeben:</string>
     <string name="DeviceProvisioningActivity_content_bullets">
@@ -3798,7 +3798,7 @@
     <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
     <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Wer mich anhand der Rufnummer finden kann</string>
     <!-- Subtext below radio buttons when who can see my number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Your phone number will be visible to people and groups you message.</string>
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Deine Telefonnummer ist für Personen und Gruppen sichtbar, mit denen du Nachrichten austauschst.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
     <string name="PhoneNumberPrivacySettingsFragment__anyone_who_has">Wer deine Telefonnummer hat, sieht, dass du bei Signal bist und kann mit dir chatten.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
@@ -4186,7 +4186,7 @@
     <string name="payment_info_card_hide_this_card">Diese Karte ausblenden?</string>
     <string name="payment_info_card_hide">Ausblenden</string>
     <!-- Title of save recovery phrase card -->
-    <string name="payment_info_card_save_recovery_phrase">Speichere deinen Wiederherstellungssatz</string>
+    <string name="payment_info_card_save_recovery_phrase">Speichere deine Wiederherstellungsphrase</string>
     <string name="payment_info_card_your_recovery_phrase_gives_you">Deine Wiederherstellungsphrase gibt dir eine weitere Möglichkeit, dein Zahlungskonto wiederherzustellen.</string>
     <!-- Button in save recovery phrase card -->
     <string name="payment_info_card_save_your_phrase">Speichere deinen Satz</string>
@@ -4214,16 +4214,16 @@
     <string name="PaymentsRecoveryStartFragment__recovery_phrase">Wiederherstellungsphrase</string>
     <string name="PaymentsRecoveryStartFragment__view_recovery_phrase">Wiederherstellungsphrase anzeigen</string>
     <!-- Title in save recovery phrase screen -->
-    <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">Speichere deinen Wiederherstellungssatz</string>
+    <string name="PaymentsRecoveryStartFragment__save_recovery_phrase">Speichere deine Wiederherstellungsphrase</string>
     <string name="PaymentsRecoveryStartFragment__enter_recovery_phrase">Wiederherstellungsphrase eingeben</string>
     <plurals name="PaymentsRecoveryStartFragment__your_balance_will_automatically_restore">
         <item quantity="one">Dein Kontostand wird beim erneuten Installieren von Signal automatisch wiederhergestellt, falls du deine Signal-PIN bestätigst. Du kannst dein Guthaben auch mit einer Wiederherstellungsphrase wiederherstellen. Das ist eine Phrase mit %1$d-Wort, die nur du kennst. Schreibe sie auf und bewahre sie an einem sicheren Ort auf.</item>
         <item quantity="other">Dein Kontostand wird beim erneuten Installieren von Signal automatisch wiederhergestellt, falls du deine Signal-PIN bestätigst. Du kannst dein Guthaben auch mit einer Wiederherstellungsphrase wiederherstellen. Das ist eine Phrase mit %1$d-Wort, die nur du kennst. Schreibe sie auf und bewahre sie an einem sicheren Ort auf.</item>
     </plurals>
     <!-- Description in save recovery phrase screen which shows up when user has non zero balance -->
-    <string name="PaymentsRecoveryStartFragment__got_balance">Du hast ein Guthaben! Zeit, deinen Wiederherstellungssatz zu speichern – ein Schlüssel mit 24 Wörtern, mit dem du dein Guthaben wiederherstellen kannst.</string>
+    <string name="PaymentsRecoveryStartFragment__got_balance">Du hast ein Guthaben! Zeit, deine Wiederherstellungsphrase zu speichern – ein Schlüssel mit 24 Wörtern, mit dem du dein Guthaben wiederherstellen kannst.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
-    <string name="PaymentsRecoveryStartFragment__time_to_save">Zeit, deinen Wiederherstellungssatz zu speichern – ein Schlüssel mit 24 Wörtern, mit dem du dein Guthaben wiederherstellen kannst.</string>
+    <string name="PaymentsRecoveryStartFragment__time_to_save">Zeit, deine Wiederherstellungsphrase zu speichern – ein Schlüssel mit 24 Wörtern, mit dem du dein Guthaben wiederherstellen kannst.</string>
     <string name="PaymentsRecoveryStartFragment__your_recovery_phrase_is_a">Deine Wiederherstellungsphrase ist ein einzigartiger Satz mit %1$d Wörtern. Verwende sie, um deinen Kontostand wiederherzustellen.</string>
     <string name="PaymentsRecoveryStartFragment__start">Starten</string>
     <string name="PaymentsRecoveryStartFragment__enter_manually">Manuell eingeben</string>
@@ -4231,9 +4231,9 @@
     <!-- Alert dialog title which asks before going back if user wants to save recovery phrase -->
     <string name="PaymentsRecoveryStartFragment__continue_without_saving">Ohne Speichern fortfahren?</string>
     <!-- Alert dialog description to let user know why recovery phrase needs to be saved -->
-    <string name="PaymentsRecoveryStartFragment__your_recovery_phrase">Mit deinem Wiederherstellungssatz kannst du im schlimmsten Fall dein Guthaben wiederherstellen. Wir empfehlen dir dringend, ihn zu speichern.</string>
+    <string name="PaymentsRecoveryStartFragment__your_recovery_phrase">Mit deiner Wiederherstellungsphrase kannst du im schlimmsten Fall dein Guthaben wiederherstellen. Wir empfehlen dir dringend, sie zu speichern.</string>
     <!-- Alert dialog option to skip recovery phrase -->
-    <string name="PaymentsRecoveryStartFragment__skip_recovery_phrase">Wiederherstellungssatz überspringen</string>
+    <string name="PaymentsRecoveryStartFragment__skip_recovery_phrase">Wiederherstellungsphrase überspringen</string>
     <!-- Alert dialog option to cancel dialog-->
     <string name="PaymentsRecoveryStartFragment__cancel">Abbrechen</string>
 
@@ -4282,7 +4282,7 @@
 
     <!-- CanNotSendPaymentDialog -->
     <string name="CanNotSendPaymentDialog__cant_send_payment">Zahlung kann nicht gesendet werden</string>
-    <string name="CanNotSendPaymentDialog__to_send_a_payment_to_this_user">Zum Senden einer Zahlung an diesen Nutzer muss er deine Nachrichtenanfrage akzeptieren. Sende ihm eine Nachricht, um eine Nachrichtenanfrage zu stellen.</string>
+    <string name="CanNotSendPaymentDialog__to_send_a_payment_to_this_user">Zum Senden einer Zahlung an diesen Nutzer muss er deine Unterhaltungsanfrage akzeptieren. Sende ihm eine Nachricht, um eine Unterhaltungsanfrage zu stellen.</string>
     <string name="CanNotSendPaymentDialog__send_a_message">Sende eine Nachricht</string>
 
     <!-- GroupsInCommonMessageRequest -->
@@ -4675,7 +4675,7 @@
     <!-- Dialog title when removing a contact -->
     <string name="NewConversationActivity__remove_s">%1$s entfernen?</string>
     <!-- Dialog message when removing a contact -->
-    <string name="NewConversationActivity__you_wont_see_this_person">Du wirst diese Person bei der Suche nicht sehen. Du erhältst eine Nachrichtenanfrage, wenn sie dir in Zukunft eine Nachricht schicken.</string>
+    <string name="NewConversationActivity__you_wont_see_this_person">Du wirst diese Person bei der Suche nicht sehen. Du erhältst eine Unterhaltungsanfrage, wenn sie dir in Zukunft eine Nachricht schicken.</string>
     <!-- Snackbar message after removing a contact -->
     <string name="NewConversationActivity__s_has_been_removed">%1$s wurde entfernt</string>
     <!-- Snackbar message after blocking a contact -->
@@ -5975,6 +5975,12 @@
     <string name="IdealTransferDetailsFragment__email">E-Mail</string>
     <!-- Default label for bank selection -->
     <string name="IdealTransferDetailsFragment__choose_your_bank">Wähle deine Bank</string>
+    <!-- Dialog title shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__confirm_your_donation_with_s">Confirm your donation with %1$s</string>
+    <!-- Dialog warning shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__monthly_ideal_warning">To setup your recurring donation tap continue to confirm a €0,01 charge with your bank. This will be automatically refunded and allows your €5/month donation to debited from your account.</string>
+    <!-- Dialog button shown when using iDEAL payment for setting up a monthly donation to continue with the donation -->
+    <string name="IdealTransferDetailsFragment__continue">Continue</string>
 
     <!-- IdealTransferDetailsBankSelectionDialogFragment -->
     <!-- Title of the screen, displayed in the toolbar -->
@@ -6386,7 +6392,7 @@
     <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
     <string name="UsernameLinkSettings_reset_link_result_network_error">Beim Zurücksetzen deines Links ist ein Netzwerkfehler aufgetreten. Versuche es später erneut.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
-    <string name="UsernameLinkSettings_scan_this_qr_code">Scan this QR code with your phone to chat with me on Signal.</string>
+    <string name="UsernameLinkSettings_scan_this_qr_code">Scanne diesen QR-Code mit deinem Smartphone, um mit mir auf Signal zu chatten.</string>
 
     <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
     <string name="UsernameLinkShareBottomSheet_title">Mit diesem Link können andere deinen Nutzernamen sehen und einen Chat mit dir beginnen. Teile den Link nur mit Leuten, denen du vertraust.</string>

@@ -608,9 +608,9 @@
     <!-- Toolbar title for this screen -->
     <string name="WhoCanSeeMyPhoneNumberFragment__who_can_find_me_by_number">Sinong makakahanap sa \'kin gamit ang number ko?</string>
     <!-- Description for radio item stating anyone can see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Anyone who has your phone number will see you\'re on Signal and can start chats with you.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Makikita ka sa Signal at pwede kang i-chat ng sinumang mayroong phone number mo.</string>
     <!-- Description for radio item stating no one will be able to see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Nobody will be able to see you\'re on Signal unless you message them or have an existing chat with them.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Walang makakakita na nasa Signal ka maliban sa mga taong minessage o naka-chat mo.</string>
 
     <!-- ChooseBackupFragment -->
     <string name="ChooseBackupFragment__restore_from_backup">I-restore mula sa backup?</string>
@@ -1587,7 +1587,7 @@
 
     <!-- DeviceProvisioningActivity -->
     <string name="DeviceProvisioningActivity_link_this_device">I-link ang device na ito?</string>
-    <string name="DeviceProvisioningActivity_continue">Continue</string>
+    <string name="DeviceProvisioningActivity_continue">Magpatuloy</string>
 
     <string name="DeviceProvisioningActivity_content_intro">Magagawa nitong</string>
     <string name="DeviceProvisioningActivity_content_bullets">
@@ -2241,9 +2241,9 @@
     <!-- Displayed when the chosen discriminator is too long -->
     <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Invalid username, maglagay ng maximum na %1$d digits.</string>
     <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">This number can\'t be 00. Enter a digit between 1–9</string>
+    <string name="UsernameEditFragment__this_number_cant_be_00">Hindi pwedeng 00 ang number na ito. Maglagay ng digit between 1–9</string>
     <!-- Displayed when the chosen discriminator starts with 00 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_00">This number can\'t start with 00. Enter a digit between 1–9</string>
+    <string name="UsernameEditFragment__this_number_cant_start_with_00">Hindi pwedeng magsimula sa 00 ang number na ito. Maglagay ng digit between 1–9</string>
     <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
     <string name="UsernameEditFragment_recovery_dialog_confirmation">Ma-re-reset ang iyong existing QR code at link kapag ni-recover mo ang username mo. Sigurado ka na ba?</string>
 
@@ -3798,7 +3798,7 @@
     <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
     <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Sinong makakahanap sa \'kin gamit ang number ko</string>
     <!-- Subtext below radio buttons when who can see my number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Your phone number will be visible to people and groups you message.</string>
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Makikita ng lahat ng tao at groups na mine-message mo ang iyong phone number.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
     <string name="PhoneNumberPrivacySettingsFragment__anyone_who_has">Makikita ka sa Signal at pwede kang i-chat ng sinumang mayroong phone number mo.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
@@ -5975,6 +5975,12 @@
     <string name="IdealTransferDetailsFragment__email">email</string>
     <!-- Default label for bank selection -->
     <string name="IdealTransferDetailsFragment__choose_your_bank">Piliin ang iyong bangko</string>
+    <!-- Dialog title shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__confirm_your_donation_with_s">Confirm your donation with %1$s</string>
+    <!-- Dialog warning shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__monthly_ideal_warning">To setup your recurring donation tap continue to confirm a €0,01 charge with your bank. This will be automatically refunded and allows your €5/month donation to debited from your account.</string>
+    <!-- Dialog button shown when using iDEAL payment for setting up a monthly donation to continue with the donation -->
+    <string name="IdealTransferDetailsFragment__continue">Continue</string>
 
     <!-- IdealTransferDetailsBankSelectionDialogFragment -->
     <!-- Title of the screen, displayed in the toolbar -->
@@ -6386,7 +6392,7 @@
     <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
     <string name="UsernameLinkSettings_reset_link_result_network_error">Nagkaroon ng network error habang sinusubukang i-reset ang link mo. Subukan ulit mamaya.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
-    <string name="UsernameLinkSettings_scan_this_qr_code">Scan this QR code with your phone to chat with me on Signal.</string>
+    <string name="UsernameLinkSettings_scan_this_qr_code">I-scan ang QR code na ito gamit ang phone mo para maka-chat ako sa Signal.</string>
 
     <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
     <string name="UsernameLinkShareBottomSheet_title">Makikita ang username mo at pwedeng makipag-chat sa\'yo ang sinumang may link na ito. I-share lamang ito sa mga taong pinagkakatiwalaan mo.</string>

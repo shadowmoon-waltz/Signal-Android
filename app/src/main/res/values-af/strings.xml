@@ -608,9 +608,9 @@
     <!-- Toolbar title for this screen -->
     <string name="WhoCanSeeMyPhoneNumberFragment__who_can_find_me_by_number">Wie kan my volgens my nommer vind?</string>
     <!-- Description for radio item stating anyone can see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Anyone who has your phone number will see you\'re on Signal and can start chats with you.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Enigiemand wat jou foonnommer het, sal sien jy is op Signal en kan met jou begin klets.</string>
     <!-- Description for radio item stating no one will be able to see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Nobody will be able to see you\'re on Signal unless you message them or have an existing chat with them.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Niemand sal kan sien jy is op Signal nie, tensy jy vir hulle \'n boodskap stuur of \'n bestaande klets met hulle het.</string>
 
     <!-- ChooseBackupFragment -->
     <string name="ChooseBackupFragment__restore_from_backup">Herstel van rugsteun af?</string>
@@ -1587,7 +1587,7 @@
 
     <!-- DeviceProvisioningActivity -->
     <string name="DeviceProvisioningActivity_link_this_device">Koppel hierdie toestel?</string>
-    <string name="DeviceProvisioningActivity_continue">Continue</string>
+    <string name="DeviceProvisioningActivity_continue">Gaan voort</string>
 
     <string name="DeviceProvisioningActivity_content_intro">Dit sal die volgende kan doen:</string>
     <string name="DeviceProvisioningActivity_content_bullets">
@@ -2241,9 +2241,9 @@
     <!-- Displayed when the chosen discriminator is too long -->
     <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">Ongeldige gebruikernaam, voer \'n maksimum van %1$d syfers in.</string>
     <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">This number can\'t be 00. Enter a digit between 1–9</string>
+    <string name="UsernameEditFragment__this_number_cant_be_00">Hierdie nommer kan nie 00 wees nie. Voer \'n syfer tussen 1 en 9 in</string>
     <!-- Displayed when the chosen discriminator starts with 00 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_00">This number can\'t start with 00. Enter a digit between 1–9</string>
+    <string name="UsernameEditFragment__this_number_cant_start_with_00">Hierdie nommer kan nie met 00 begin nie. Voer \'n syfer tussen 1 en 9 in</string>
     <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
     <string name="UsernameEditFragment_recovery_dialog_confirmation">As jy jou gebruikersnaam herwin, sal dit jou bestaande QR-kode en skakel terugstel. Is jy seker?</string>
 
@@ -3798,7 +3798,7 @@
     <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
     <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">Wie my volgens my nommer kan vind</string>
     <!-- Subtext below radio buttons when who can see my number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Your phone number will be visible to people and groups you message.</string>
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Jou foonnommer sal sigbaar wees vir mense en groepe aan wie jy boodskappe stuur.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
     <string name="PhoneNumberPrivacySettingsFragment__anyone_who_has">Enigiemand wat jou foonnommer het, sal sien jy is op Signal en kan met jou begin klets.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
@@ -5975,6 +5975,12 @@
     <string name="IdealTransferDetailsFragment__email">E-pos</string>
     <!-- Default label for bank selection -->
     <string name="IdealTransferDetailsFragment__choose_your_bank">Kies jou bank</string>
+    <!-- Dialog title shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__confirm_your_donation_with_s">Confirm your donation with %1$s</string>
+    <!-- Dialog warning shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__monthly_ideal_warning">To setup your recurring donation tap continue to confirm a €0,01 charge with your bank. This will be automatically refunded and allows your €5/month donation to debited from your account.</string>
+    <!-- Dialog button shown when using iDEAL payment for setting up a monthly donation to continue with the donation -->
+    <string name="IdealTransferDetailsFragment__continue">Continue</string>
 
     <!-- IdealTransferDetailsBankSelectionDialogFragment -->
     <!-- Title of the screen, displayed in the toolbar -->
@@ -6340,7 +6346,7 @@
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">Hierdie skakel sal nie meer werk vir enigiemand wat dit het nie.</string>
 
     <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Link</string>
+    <string name="UsernameLinkSettings_link_button_label">Skakel</string>
     <!-- Button label for the share button in the username link settings -->
     <string name="UsernameLinkSettings_share_button_label">Deel</string>
     <!-- Button label for the color selector button in the username link settings -->
@@ -6386,7 +6392,7 @@
     <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
     <string name="UsernameLinkSettings_reset_link_result_network_error">\'n Netwerkfout het voorgekom terwyl jy probeer het om jou skakel terug te stel. Probeer later weer.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
-    <string name="UsernameLinkSettings_scan_this_qr_code">Scan this QR code with your phone to chat with me on Signal.</string>
+    <string name="UsernameLinkSettings_scan_this_qr_code">Skandeer hierdie QR-kode met jou foon om met my op Signal te klets.</string>
 
     <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
     <string name="UsernameLinkShareBottomSheet_title">Enigeen met hierdie skakel kan jou gebruikersnaam sien en \'n gesprek met jou begin. Deel dit slegs met mense wie jy vertrou.</string>

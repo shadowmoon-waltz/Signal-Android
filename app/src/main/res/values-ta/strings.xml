@@ -608,9 +608,9 @@
     <!-- Toolbar title for this screen -->
     <string name="WhoCanSeeMyPhoneNumberFragment__who_can_find_me_by_number">எண் மூலம் என்னை யார் கண்டுபிடிக்க முடியும்?</string>
     <!-- Description for radio item stating anyone can see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">Anyone who has your phone number will see you\'re on Signal and can start chats with you.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__anyone_who_has_your">உங்கள் தொலைபேசி எண்ணை வைத்திருக்கும் எவரும் நீங்கள் சிக்னலை பயன்படுத்திக் கொண்டிருப்பதை அறிவார்கள், மேலும் உங்களுடன் அவர்கள் சாட் செய்யத் தொடங்கலாம்.</string>
     <!-- Description for radio item stating no one will be able to see your phone number -->
-    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">Nobody will be able to see you\'re on Signal unless you message them or have an existing chat with them.</string>
+    <string name="WhoCanSeeMyPhoneNumberFragment__nobody_will_be_able">நீங்கள் அவர்களுக்கு மெசேஜ் அனுப்பாத வரை அல்லது அவர்களுடன் ஏற்கனவே சாட் செய்யாத வரை, நீங்கள் சிக்னலை பயன்படுத்திக் கொண்டிருப்பதை யாராலும் பார்க்க முடியாது.</string>
 
     <!-- ChooseBackupFragment -->
     <string name="ChooseBackupFragment__restore_from_backup">காப்புப்பதிவு பயனர் தரவு மீட்டமைக்கவா?</string>
@@ -1587,7 +1587,7 @@
 
     <!-- DeviceProvisioningActivity -->
     <string name="DeviceProvisioningActivity_link_this_device">இந்த சாதனத்தை இணைக்களாமா?</string>
-    <string name="DeviceProvisioningActivity_continue">Continue</string>
+    <string name="DeviceProvisioningActivity_continue">தொடர்க</string>
 
     <string name="DeviceProvisioningActivity_content_intro">இதனால் முடியும்</string>
     <string name="DeviceProvisioningActivity_content_bullets">
@@ -2241,9 +2241,9 @@
     <!-- Displayed when the chosen discriminator is too long -->
     <string name="UsernameEditFragment__invalid_username_enter_a_maximum_of_d_digits">தவறான பயனர்பெயர், அதிகபட்சம் %1$d இலக்கங்களை உள்ளிடவும்.</string>
     <!-- Displayed when the chosen discriminator is 00 -->
-    <string name="UsernameEditFragment__this_number_cant_be_00">This number can\'t be 00. Enter a digit between 1–9</string>
+    <string name="UsernameEditFragment__this_number_cant_be_00">இந்த எண் 00 ஆக இருக்கக் கூடாது. 1–9 க்கு இடையேயுள்ள ஒரு எண்ணை உள்ளிடவும்</string>
     <!-- Displayed when the chosen discriminator starts with 00 -->
-    <string name="UsernameEditFragment__this_number_cant_start_with_00">This number can\'t start with 00. Enter a digit between 1–9</string>
+    <string name="UsernameEditFragment__this_number_cant_start_with_00">இந்த எண் 00 ஐக் கொண்டு தொடங்கக் கூடாது. 1–9 க்கு இடையேயுள்ள ஒரு எண்ணை உள்ளிடவும்</string>
     <!-- The body of an alert dialog asking the user to confirm that they want to recover their username -->
     <string name="UsernameEditFragment_recovery_dialog_confirmation">உங்கள் பயனர் பெயரை மீட்டமைப்பது உங்கள் தற்போதைய QR குறியீடு மற்றும் இணைப்பை மீட்டமைக்கும். நீங்கள் உறுதியாக உள்ளீர்களா?</string>
 
@@ -3798,7 +3798,7 @@
     <!-- Section title above two radio buttons for enabling and disabling whether users can find me by my phone number  -->
     <string name="PhoneNumberPrivacySettingsFragment__who_can_find_me_by_number">எண் மூலம் என்னை யார் கண்டுபிடிக்க முடியும்</string>
     <!-- Subtext below radio buttons when who can see my number is set to everyone -->
-    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">Your phone number will be visible to people and groups you message.</string>
+    <string name="PhoneNumberPrivacySettingsFragment__your_phone_number_will_be">நீங்கள் மெசேஜ் அனுப்பும் அனைத்து நபர்களுக்கும் குழுக்களுக்கும் உங்கள் தொலைபேசி எண் புலனாகும்.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to everyone -->
     <string name="PhoneNumberPrivacySettingsFragment__anyone_who_has">உங்கள் தொலைபேசி எண்ணை வைத்திருக்கும் எவரும் நீங்கள் சிக்னலை பயன்படுத்திக் கொண்டிருப்பதை அறிவார்கள், மேலும் உங்களுடன் அவர்கள் சாட் செய்யத் தொடங்கலாம்.</string>
     <!-- Subtext below radio buttons when who can find me by number is set to nobody -->
@@ -5975,6 +5975,12 @@
     <string name="IdealTransferDetailsFragment__email">மின்னஞ்சல்</string>
     <!-- Default label for bank selection -->
     <string name="IdealTransferDetailsFragment__choose_your_bank">உங்கள் வங்கியைத் தேர்ந்தெடுக்கவும்</string>
+    <!-- Dialog title shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__confirm_your_donation_with_s">Confirm your donation with %1$s</string>
+    <!-- Dialog warning shown when using iDEAL payment for setting up a monthly donation -->
+    <string name="IdealTransferDetailsFragment__monthly_ideal_warning">To setup your recurring donation tap continue to confirm a €0,01 charge with your bank. This will be automatically refunded and allows your €5/month donation to debited from your account.</string>
+    <!-- Dialog button shown when using iDEAL payment for setting up a monthly donation to continue with the donation -->
+    <string name="IdealTransferDetailsFragment__continue">Continue</string>
 
     <!-- IdealTransferDetailsBankSelectionDialogFragment -->
     <!-- Title of the screen, displayed in the toolbar -->
@@ -6340,7 +6346,7 @@
     <string name="CallLinkDetailsFragment__this_link_will_no_longer_work">இந்த இணைப்பை வைத்திருக்கும் எவருக்கும் இது இனி வேலை செய்யாது.</string>
 
     <!-- Button label for the link button in the username link settings -->
-    <string name="UsernameLinkSettings_link_button_label">Link</string>
+    <string name="UsernameLinkSettings_link_button_label">இணைப்பு</string>
     <!-- Button label for the share button in the username link settings -->
     <string name="UsernameLinkSettings_share_button_label">பகிர்</string>
     <!-- Button label for the color selector button in the username link settings -->
@@ -6386,7 +6392,7 @@
     <!-- Body of a dialog that is displayed when we failed to reset your username link because of a transient network issue. -->
     <string name="UsernameLinkSettings_reset_link_result_network_error">உங்கள் இணைப்பை மீட்டமைக்க முயலும்போது நெட்வர்க் பிழை ஏற்பட்டது. பின்னர் மீண்டும் முயலவும்.</string>
     <!-- Shown on the generated username qr code image to explain how to use it. -->
-    <string name="UsernameLinkSettings_scan_this_qr_code">Scan this QR code with your phone to chat with me on Signal.</string>
+    <string name="UsernameLinkSettings_scan_this_qr_code">என்னுடன் சிக்னலில் சாட் செய்ய இந்த QR குறியீட்டை உங்கள் ஃபோன் மூலம் ஸ்கேன் செய்யவும்.</string>
 
     <!-- Explanatory text at the top of a bottom sheet describing how username links work -->
     <string name="UsernameLinkShareBottomSheet_title">இந்த இணைப்பைக் கொண்டுள்ள எவரும் உங்கள் பயனர் பெயரைப் பார்த்து உங்களுடன் சாட் செய்யத் தொடங்கலாம். நீங்கள் நம்பும் நபர்களுடன் மட்டும் பகிரவும்.</string>
