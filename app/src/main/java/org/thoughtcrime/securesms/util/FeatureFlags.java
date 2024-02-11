@@ -84,7 +84,6 @@ public final class FeatureFlags {
   private static final String USE_HARDWARE_AEC_IF_OLD           = "android.calling.useHardwareAecIfOlderThanApi29";
   private static final String PAYMENTS_COUNTRY_BLOCKLIST        = "global.payments.disabledRegions";
   public  static final String PHONE_NUMBER_PRIVACY              = "android.pnp";
-  public  static final String BLOCK_SSE                         = "android.blockSessionSwitchoverEvents";
   private static final String STORIES_AUTO_DOWNLOAD_MAXIMUM     = "android.stories.autoDownloadMaximum";
   private static final String TELECOM_MANUFACTURER_ALLOWLIST    = "android.calling.telecomAllowList";
   private static final String TELECOM_MODEL_BLOCKLIST           = "android.calling.telecomModelBlockList";
@@ -118,7 +117,7 @@ public final class FeatureFlags {
   private static final String CALLING_REACTIONS                 = "android.calling.reactions";
   private static final String NOTIFICATION_THUMBNAIL_BLOCKLIST  = "android.notificationThumbnailProductBlocklist";
   private static final String CALLING_RAISE_HAND                = "android.calling.raiseHand";
-  private static final String USE_ACTIVE_CALL_MANAGER           = "android.calling.useActiveCallManager.2";
+  private static final String USE_ACTIVE_CALL_MANAGER           = "android.calling.useActiveCallManager.3";
   private static final String GIF_SEARCH                        = "global.gifSearch";
   private static final String AUDIO_REMUXING                    = "android.media.audioRemux";
 
@@ -183,7 +182,6 @@ public final class FeatureFlags {
       USERNAMES,
       INSTANT_VIDEO_PLAYBACK,
       CRASH_PROMPT_CONFIG,
-      BLOCK_SSE,
       SEPA_DEBIT_DONATIONS,
       IDEAL_DONATIONS,
       IDEAL_ENABLED_REGIONS,
@@ -261,7 +259,6 @@ public final class FeatureFlags {
       PROMPT_BATTERY_SAVER,
       USERNAMES,
       CRASH_PROMPT_CONFIG,
-      BLOCK_SSE,
       CALLING_REACTIONS,
       NOTIFICATION_THUMBNAIL_BLOCKLIST,
       CALLING_RAISE_HAND,
@@ -383,13 +380,6 @@ public final class FeatureFlags {
    */
   public static boolean phoneNumberPrivacy() {
     return getBoolean(PHONE_NUMBER_PRIVACY, false) || Environment.IS_PNP;
-  }
-
-  /**
-   * Whether session switchover events should be blocked on the client.
-   */
-  public static boolean blockSessionSwitchoverEvents() {
-    return getBoolean(BLOCK_SSE, false) && !phoneNumberPrivacy();
   }
 
   /** Whether to use the custom streaming muxer or built in android muxer. */

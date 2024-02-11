@@ -120,43 +120,58 @@ public class ConversationHeaderView extends ConstraintLayout {
     return binding.messageRequestDescription;
   }
 
+  public void setButton(@NonNull CharSequence button, Runnable onClick) {
+    binding.messageRequestButton.setText(button);
+    binding.messageRequestButton.setOnClickListener(v -> onClick.run());
+    binding.messageRequestButton.setVisibility(View.VISIBLE);
+  }
+
   public void showBackgroundBubble(boolean enabled) {
     if (enabled) {
       setBackgroundResource(R.drawable.wallpaper_bubble_background_18);
-      binding.messageRequestInfoOutline.setVisibility(View.INVISIBLE);
-      binding.messageRequestDivider.setVisibility(View.VISIBLE);
     } else {
       setBackground(null);
-      binding.messageRequestInfoOutline.setVisibility(View.VISIBLE);
-      binding.messageRequestDivider.setVisibility(View.INVISIBLE);
     }
 
-    hideDecoratorsIfContentIsNotPresent();
+    updateOutlineVisibility();
   }
 
   public void hideSubtitle() {
     binding.messageRequestSubtitle.setVisibility(View.GONE);
+    updateOutlineVisibility();
   }
 
   public void showDescription() {
     binding.messageRequestDescription.setVisibility(View.VISIBLE);
+    updateOutlineVisibility();
   }
 
   public void hideDescription() {
     binding.messageRequestDescription.setVisibility(View.GONE);
+    updateOutlineVisibility();
+  }
+
+  public void hideButton() {
+    binding.messageRequestButton.setVisibility(View.GONE);
   }
 
   public void setLinkifyDescription(boolean enable) {
     binding.messageRequestDescription.setMovementMethod(enable ? LongClickMovementMethod.getInstance(getContext()) : null);
   }
 
-  private void hideDecoratorsIfContentIsNotPresent() {
+  private void updateOutlineVisibility() {
     if (ViewKt.isVisible(binding.messageRequestSubtitle) || ViewKt.isVisible(binding.messageRequestDescription)) {
-      return;
+      if (getBackground() != null) {
+        binding.messageRequestInfoOutline.setVisibility(View.GONE);
+        binding.messageRequestDivider.setVisibility(View.VISIBLE);
+      } else {
+        binding.messageRequestInfoOutline.setVisibility(View.VISIBLE);
+        binding.messageRequestDivider.setVisibility(View.INVISIBLE);
+      }
+    } else {
+      binding.messageRequestInfoOutline.setVisibility(View.GONE);
+      binding.messageRequestDivider.setVisibility(View.GONE);
     }
-
-    binding.messageRequestInfoOutline.setVisibility(View.GONE);
-    binding.messageRequestDivider.setVisibility(View.GONE);
   }
 
   private @NonNull CharSequence prependIcon(@NonNull CharSequence input, @DrawableRes int iconRes) {
