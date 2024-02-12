@@ -135,7 +135,7 @@ internal object ConversationOptionsMenu {
 
       // TODO[sw]: not sure deleting release notes still crashes (removed other workaround to past crash when switching to upstream delete chat)
       if (!SignalStore.settings().isConversationDeleteInMenu || recipient.isReleaseNotes) {
-        hideMenuItem(menu, R.id.menu_delete_conversation)
+        hideMenuItem(menu, R.id.menu_delete_chat_2)
       }
 
       if (!recipient.isGroup && !isPushAvailable && !recipient.isReleaseNotes) {
@@ -221,12 +221,12 @@ internal object ConversationOptionsMenu {
         R.id.menu_conversation_settings -> callback.handleConversationSettings()
         R.id.menu_expiring_messages_off, R.id.menu_expiring_messages -> callback.handleSelectMessageExpiration()
         R.id.menu_create_bubble -> callback.handleCreateBubble()
-        R.id.menu_delete_conversation -> callback.handleDeleteConversation()
         R.id.home -> callback.handleGoHome()
         R.id.menu_block -> callback.handleBlock()
         R.id.menu_unblock -> callback.handleUnblock()
         R.id.menu_report_spam -> callback.handleReportSpam()
         R.id.menu_accept -> callback.handleMessageRequestAccept()
+        R.id.menu_delete_chat_2,
         R.id.menu_delete_chat -> callback.handleDeleteConversation()
         R.id.edittext_bold,
         R.id.edittext_italic,
@@ -292,7 +292,6 @@ internal object ConversationOptionsMenu {
     fun handleConversationSettings()
     fun handleSelectMessageExpiration()
     fun handleCreateBubble()
-    fun handleDeleteConversation()
     fun handleGoHome()
     fun showExpiring(recipient: Recipient)
     fun clearExpiring()

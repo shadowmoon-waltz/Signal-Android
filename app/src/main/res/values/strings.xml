@@ -4596,7 +4596,6 @@
     <string name="ForkSettingsFragment__copy_text_opens_popup_summary">When selecting copy text for one or more messages in a conversation, it will appear as an editable string in a popup allowing easy modification and/or copying of part or all of the string</string>
     <string name="ForkSettingsFragment__conversation_delete_in_menu">Delete Option in Conversation Menu</string>
     <string name="ForkSettingsFragment__conversation_delete_in_menu_summary">Option will show up in menu while viewing a conversation</string>
-    <string name="conversation__delete_conversation">Delete conversation</string>
     <string name="ForkSettingsFragment__swipe_to_right_action__default">Default (Reply)</string>
     <string name="ForkSettingsFragment__swipe_action__delete_prompt">Delete (Prompt)</string>
     <string name="ForkSettingsFragment__swipe_action__delete_no_prompt">Delete (For Me) (No Prompt)</string>

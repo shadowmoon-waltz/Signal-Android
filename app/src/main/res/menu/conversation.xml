@@ -59,7 +59,7 @@
 
     </item>
 
-    <item android:title="@string/conversation__delete_conversation"
-          android:id="@+id/menu_delete_conversation" />
+    <item android:title="@string/ConversationActivity_delete_conversation"
+          android:id="@+id/menu_delete_chat_2" />
 
 </menu>
