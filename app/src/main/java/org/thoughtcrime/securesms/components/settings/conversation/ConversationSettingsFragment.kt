@@ -501,9 +501,7 @@ class ConversationSettingsFragment : DSLSettingsFragment(
                 recipient = member.member,
                 isAdmin = member.isAdmin,
                 onClick = {
-                  if (!member.member.isSelf()) {
-                    RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
-                  }
+                  RecipientBottomSheetDialogFragment.show(parentFragmentManager, member.member.id, groupState.groupId)
                 }
               )
             )
@@ -743,9 +741,7 @@ class ConversationSettingsFragment : DSLSettingsFragment(
                 recipient = member.member,
                 isAdmin = member.isAdmin,
                 onClick = {
-                  if (!member.member.isSelf()) {
-                    RecipientBottomSheetDialogFragment.create(member.member.id, groupState.groupId).show(parentFragmentManager, "BOTTOM")
-                  }
+                  RecipientBottomSheetDialogFragment.show(parentFragmentManager, member.member.id, groupState.groupId)
                 }
               )
             )

@@ -85,6 +85,7 @@ import org.signal.core.util.PendingIntentFlags
 import org.signal.core.util.Result
 import org.signal.core.util.ThreadUtil
 import org.signal.core.util.concurrent.LifecycleDisposable
+import org.signal.core.util.concurrent.ListenableFuture
 import org.signal.core.util.concurrent.addTo
 import org.signal.core.util.dp
 import org.signal.core.util.logging.Log
@@ -309,7 +310,6 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.WindowUtil
-import org.thoughtcrime.securesms.util.concurrent.ListenableFuture
 import org.thoughtcrime.securesms.util.createActivityViewModel
 import org.thoughtcrime.securesms.util.doAfterNextLayout
 import org.thoughtcrime.securesms.util.fragments.requireListener
@@ -2815,7 +2815,7 @@ class ConversationFragment :
 
     override fun onGroupMemberClicked(recipientId: RecipientId, groupId: GroupId) {
       context ?: return
-      RecipientBottomSheetDialogFragment.create(recipientId, groupId).show(childFragmentManager, BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG)
+      RecipientBottomSheetDialogFragment.show(childFragmentManager, recipientId, groupId)
     }
 
     override fun onMessageWithErrorClicked(messageRecord: MessageRecord) {
@@ -2948,10 +2948,11 @@ class ConversationFragment :
     override fun onRecipientNameClicked(target: RecipientId) {
       context ?: return
       disposables += viewModel.recipient.firstOrError().observeOn(AndroidSchedulers.mainThread()).subscribeBy {
-        RecipientBottomSheetDialogFragment.create(
+        RecipientBottomSheetDialogFragment.show(
+          parentFragmentManager,
           target,
           it.groupId.orElse(null)
-        ).show(parentFragmentManager, BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG)
+        )
       }
     }
 
