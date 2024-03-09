@@ -128,7 +128,7 @@ class MediaSelectionGalleryFragment : Fragment(R.layout.fragment_container), Med
   }
 
   override fun onSelectedMediaClicked(media: Media) {
-    sharedViewModel.setFocusedMedia(media)
+    sharedViewModel.onPageChanged(media)
     navigator.goToReview(findNavController())
   }
 

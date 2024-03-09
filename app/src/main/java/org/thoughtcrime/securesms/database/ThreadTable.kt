@@ -1166,9 +1166,23 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
   }
 
   fun getOrCreateThreadIdFor(recipientId: RecipientId, isGroup: Boolean, distributionType: Int = DistributionTypes.DEFAULT): Long {
+    return getOrCreateThreadIdResultFor(recipientId, isGroup, distributionType).threadId
+  }
+
+  fun getOrCreateThreadIdResultFor(recipientId: RecipientId, isGroup: Boolean, distributionType: Int = DistributionTypes.DEFAULT): ThreadIdResult {
     return writableDatabase.withinTransaction {
       val threadId = getThreadIdFor(recipientId)
-      threadId ?: createThreadForRecipient(recipientId, isGroup, distributionType)
+      if (threadId != null) {
+        ThreadIdResult(
+          threadId = threadId,
+          newlyCreated = false
+        )
+      } else {
+        ThreadIdResult(
+          threadId = createThreadForRecipient(recipientId, isGroup, distributionType),
+          newlyCreated = true
+        )
+      }
     }
   }
 
@@ -1929,7 +1943,8 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
 
       val hasReadReceipt = TextSecurePreferences.isReadReceiptsEnabled(context) && cursor.requireBoolean(HAS_READ_RECEIPT)
       val extraString = cursor.getString(cursor.getColumnIndexOrThrow(SNIPPET_EXTRAS))
-      val messageExtras = cursor.getBlob(cursor.getColumnIndexOrThrow(SNIPPET_MESSAGE_EXTRAS))
+      val messageExtraBytes = cursor.getBlob(cursor.getColumnIndexOrThrow(SNIPPET_MESSAGE_EXTRAS))
+      val messageExtras = if (messageExtraBytes != null) MessageExtras.ADAPTER.decode(messageExtraBytes) else null
       val extra: Extra? = if (extraString != null) {
         try {
           val jsonObject = SaneJSONObject(JSONObject(extraString))
@@ -1974,6 +1989,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
         .setPinned(cursor.requireBoolean(PINNED))
         .setUnreadSelfMentionsCount(cursor.requireInt(UNREAD_SELF_MENTION_COUNT))
         .setExtra(extra)
+        .setSnippetMessageExtras(messageExtras)
         .build()
     }
 
@@ -2109,4 +2125,9 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
   )
 
   data class MergeResult(val threadId: Long, val previousThreadId: Long, val neededMerge: Boolean)
+
+  data class ThreadIdResult(
+    val threadId: Long,
+    val newlyCreated: Boolean
+  )
 }

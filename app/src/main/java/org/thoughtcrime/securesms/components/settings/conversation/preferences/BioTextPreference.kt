@@ -2,11 +2,11 @@ package org.thoughtcrime.securesms.components.settings.conversation.preferences
 
 import android.content.ClipData
 import android.content.Context
-import android.graphics.drawable.InsetDrawable
 import android.text.SpannableStringBuilder
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import org.signal.core.util.dp
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.components.settings.PreferenceModel
@@ -47,7 +47,7 @@ object BioTextPreference {
       val name = if (recipient.isSelf) {
         context.getString(R.string.note_to_self)
       } else {
-        recipient.getDisplayNameOrUsername(context)
+        recipient.getDisplayName(context)
       }
 
       if (!recipient.showVerified() && !recipient.isIndividual) {
@@ -56,16 +56,23 @@ object BioTextPreference {
 
       return SpannableStringBuilder(name).apply {
         if (recipient.showVerified()) {
-          SpanUtil.appendCenteredImageSpan(this, ContextUtil.requireDrawable(context, R.drawable.ic_official_28), 28, 28)
+          SpanUtil.appendSpacer(this, 8)
+          SpanUtil.appendCenteredImageSpanWithoutSpace(this, ContextUtil.requireDrawable(context, R.drawable.ic_official_28), 28, 28)
+        } else if (recipient.isSystemContact) {
+          val drawable = ContextUtil.requireDrawable(context, R.drawable.symbol_person_circle_24).apply {
+            setTint(ContextCompat.getColor(context, R.color.signal_colorOnSurface))
+          }
+          SpanUtil.appendSpacer(this, 8)
+          SpanUtil.appendCenteredImageSpanWithoutSpace(this, drawable, 24, 24)
         }
 
         if (recipient.isIndividual && !recipient.isSelf) {
-          val drawable = ContextUtil.requireDrawable(context, R.drawable.symbol_chevron_right_24_color_on_secondary_container)
-          drawable.setBounds(0, 0, 24.dp, 24.dp)
+          val drawable = ContextUtil.requireDrawable(context, R.drawable.symbol_chevron_right_24).apply {
+            setBounds(0, 0, 24.dp, 24.dp)
+            setTint(ContextCompat.getColor(context, R.color.signal_colorOutline))
+          }
 
-          val insetDrawable = InsetDrawable(drawable, 0, 0, 0, 4.dp)
-
-          SpanUtil.appendBottomImageSpan(this, insetDrawable, 24, 28)
+          append(SpanUtil.buildCenteredImageSpan(drawable))
         }
       }
     }

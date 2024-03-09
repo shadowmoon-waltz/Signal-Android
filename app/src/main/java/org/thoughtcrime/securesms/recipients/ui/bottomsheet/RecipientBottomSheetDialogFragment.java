@@ -4,8 +4,9 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -18,8 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -42,7 +43,6 @@ import org.thoughtcrime.securesms.recipients.RecipientExporter;
 import org.thoughtcrime.securesms.recipients.RecipientId;
 import org.thoughtcrime.securesms.recipients.RecipientUtil;
 import org.thoughtcrime.securesms.recipients.ui.about.AboutSheet;
-import org.thoughtcrime.securesms.recipients.ui.about.AboutSheetKt;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.ContextUtil;
 import org.thoughtcrime.securesms.util.SpanUtil;
@@ -187,20 +187,24 @@ public final class RecipientBottomSheetDialogFragment extends BottomSheetDialogF
       }
 
       String name = recipient.isSelf() ? requireContext().getString(R.string.note_to_self)
-                                       : recipient.getDisplayNameOrUsername(requireContext());
+                                       : recipient.getDisplayName(requireContext());
       fullName.setVisibility(TextUtils.isEmpty(name) ? View.GONE : View.VISIBLE);
       SpannableStringBuilder nameBuilder = new SpannableStringBuilder(name);
       if (recipient.showVerified()) {
-        SpanUtil.appendCenteredImageSpan(nameBuilder, ContextUtil.requireDrawable(requireContext(), R.drawable.ic_official_28), 28, 28);
+        SpanUtil.appendSpacer(nameBuilder, 8);
+        SpanUtil.appendCenteredImageSpanWithoutSpace(nameBuilder, ContextUtil.requireDrawable(requireContext(), R.drawable.ic_official_28), 28, 28);
+      } else if (recipient.isSystemContact()) {
+        Drawable drawable = ContextUtil.requireDrawable(requireContext(), R.drawable.symbol_person_circle_24);
+        drawable.setTint(ContextCompat.getColor(requireContext(), R.color.signal_colorOnSurface));
+        SpanUtil.appendSpacer(nameBuilder, 8);
+        SpanUtil.appendCenteredImageSpanWithoutSpace(nameBuilder, drawable, 24, 24);
       }
 
       if (!recipient.isSelf() && recipient.isIndividual()) {
-        Drawable drawable = ContextUtil.requireDrawable(requireContext(), R.drawable.symbol_chevron_right_24_color_on_secondary_container);
+        Drawable drawable = ContextUtil.requireDrawable(requireContext(), R.drawable.symbol_chevron_right_24);
         drawable.setBounds(0, 0, (int) DimensionUnit.DP.toPixels(24), (int) DimensionUnit.DP.toPixels(24));
-
-        Drawable insetDrawable = new InsetDrawable(drawable, 0, 0, 0, (int) DimensionUnit.DP.toPixels(4));
-
-        SpanUtil.appendBottomImageSpan(nameBuilder, insetDrawable, 24, 28);
+        drawable.setTint(ContextCompat.getColor(requireContext(), R.color.signal_colorOutline));
+        nameBuilder.append(SpanUtil.buildCenteredImageSpan(drawable));
 
         fullName.setText(nameBuilder);
         fullName.setOnClickListener(v -> {
