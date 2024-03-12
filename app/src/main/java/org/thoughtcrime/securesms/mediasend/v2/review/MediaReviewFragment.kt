@@ -35,6 +35,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import org.signal.core.util.concurrent.LifecycleDisposable
 import org.signal.core.util.concurrent.SimpleTask
+import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
@@ -403,9 +404,9 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment), Schedul
       }
     } else {
       if (state.quality == SentMediaQuality.HIGH) {
-        getString(R.string.MediaReviewFragment__items_set_to_high_quality, mediaList.size)
+        resources.getQuantityString(R.plurals.MediaReviewFragment__items_set_to_high_quality, mediaList.size, mediaList.size)
       } else {
-        getString(R.string.MediaReviewFragment__items_set_to_standard_quality, mediaList.size)
+        resources.getQuantityString(R.plurals.MediaReviewFragment__items_set_to_standard_quality, mediaList.size, mediaList.size)
       }
     }
 
@@ -472,14 +473,17 @@ class MediaReviewFragment : Fragment(R.layout.v2_media_review_fragment), Schedul
   private fun presentAddMessageEntry(viewOnceState: MediaSelectionState.ViewOnceToggleState, message: CharSequence?) {
     when (viewOnceState) {
       MediaSelectionState.ViewOnceToggleState.INFINITE -> {
-        if (!message.isNullOrEmpty()) {
-          addMessageButton.gravity = Gravity.CENTER_VERTICAL
-          addMessageButton.setText(message, TextView.BufferType.SPANNABLE)
-        }
+        addMessageButton.gravity = Gravity.CENTER_VERTICAL
+        addMessageButton.setText(
+          message.takeIf { it.isNotNullOrBlank() } ?: getString(R.string.MediaReviewFragment__add_a_message),
+          TextView.BufferType.SPANNABLE
+        )
+        addMessageButton.isClickable = true
       }
       MediaSelectionState.ViewOnceToggleState.ONCE -> {
         addMessageButton.gravity = Gravity.CENTER
         addMessageButton.setText(R.string.MediaReviewFragment__view_once_message)
+        addMessageButton.isClickable = false
       }
     }
   }
