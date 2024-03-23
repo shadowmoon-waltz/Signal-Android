@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1399
-val canonicalVersionName = "7.1.2"
+val canonicalVersionCode = 1400
+val canonicalVersionName = "7.1.3"
 
 val postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -572,10 +572,6 @@ dependencies {
   }
   implementation(libs.android.tooltips) {
     exclude(group = "com.android.support", module = "appcompat-v7")
-  }
-  implementation(libs.android.smsmms) {
-    exclude(group = "com.squareup.okhttp", module = "okhttp")
-    exclude(group = "com.squareup.okhttp", module = "okhttp-urlconnection")
   }
   implementation(libs.stream)
   implementation(libs.lottie)
