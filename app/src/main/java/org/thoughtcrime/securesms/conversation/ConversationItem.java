@@ -683,10 +683,10 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     }
 
     if (conversationRecipient.getId().equals(modified.getId())) {
-      setBubbleState(messageRecord, modified, modified.hasWallpaper(), colorizer);
+      setBubbleState(messageRecord, modified, modified.getHasWallpaper(), colorizer);
 
       if (quoteView != null) {
-        quoteView.setWallpaperEnabled(modified.hasWallpaper());
+        quoteView.setWallpaperEnabled(modified.getHasWallpaper());
       }
 
       if (audioViewStub.resolved()) {
@@ -1120,7 +1120,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
                                   boolean messageRequestAccepted,
                                   boolean allowedToPlayInline)
   {
-    boolean showControls = messageRecord.isMediaPending() || (!messageRecord.isFailed() && !MessageRecordUtil.isScheduled(messageRecord));
+    boolean showControls = !MessageRecordUtil.isScheduled(messageRecord) && (messageRecord.isMediaPending() || !messageRecord.isFailed());
 
     ViewUtil.setTopMargin(bodyText, readDimen(R.dimen.message_bubble_top_padding));
 

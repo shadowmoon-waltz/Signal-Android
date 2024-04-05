@@ -447,7 +447,7 @@ public class CommunicationActions {
     SimpleTask.run(() -> {
       Recipient recipient = Recipient.external(activity, e164);
 
-      if (!recipient.isRegistered() || !recipient.hasServiceId()) {
+      if (!recipient.isRegistered() || !recipient.getHasServiceId()) {
         try {
           ContactDiscovery.refresh(activity, recipient, false, TimeUnit.SECONDS.toMillis(10));
           recipient = Recipient.resolved(recipient.getId());
@@ -460,7 +460,7 @@ public class CommunicationActions {
     }, recipient -> {
       dialog.dismiss();
 
-      if (recipient.isRegistered() && recipient.hasServiceId()) {
+      if (recipient.isRegistered() && recipient.getHasServiceId()) {
         startConversation(activity, recipient, null);
       } else {
         new MaterialAlertDialogBuilder(activity)
@@ -491,7 +491,7 @@ public class CommunicationActions {
     }, recipient -> {
       dialog.dismiss();
 
-      if (recipient != null && recipient.isRegistered() && recipient.hasServiceId()) {
+      if (recipient != null && recipient.isRegistered() && recipient.getHasServiceId()) {
         startConversation(activity, recipient, null);
       } else {
         new MaterialAlertDialogBuilder(activity)
