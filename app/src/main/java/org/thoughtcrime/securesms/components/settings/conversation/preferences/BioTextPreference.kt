@@ -89,7 +89,7 @@ object BioTextPreference {
     }
 
     override fun getSubhead0Text(context: Context): String? {
-      if (!recipient.isReleaseNotes && !recipient.isSelf() && TextSecurePreferences.isAlsoShowProfileName(context)) {
+      if (!recipient.isReleaseNotes && !recipient.isSelf && TextSecurePreferences.isAlsoShowProfileName(context)) {
         return recipient.getDisplayName2(context).let { return if (!it.isEmpty()) it else null }
       } else {
         return null

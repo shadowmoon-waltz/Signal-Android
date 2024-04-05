@@ -512,6 +512,24 @@ class Recipient(
     return StringUtil.isolateBidi(name)
   }
 
+  fun getDisplayName2(context: Context): String {
+    if (getGroupName(context).isNullOrBlank()) {
+      val name = profileName.toString()
+      val nickname2 = nickname.toString()
+      if (nickname2.isNotNullOrBlank()) {
+        if (name != nickname2) {
+          return name
+        }
+      }
+      else if (systemContactName.isNotNullOrBlank()) {
+        if (name != systemContactName) {
+          return name
+        }
+      }
+    }
+    return ""
+  }
+
   fun hasNonUsernameDisplayName(context: Context): Boolean {
     return getNameFromLocalData(context) != null
   }
