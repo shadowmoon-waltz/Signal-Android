@@ -1611,8 +1611,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
 
     if (!messageRecord.isMediaPending() && messageRecord.isFailed()) {
       alertView.setFailed();
-    } else if (messageRecord.isPendingInsecureSmsFallback()) {
-      alertView.setPendingApproval();
     } else if (messageRecord.isRateLimited()) {
       alertView.setRateLimited();
     } else {
@@ -1864,7 +1862,6 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
     return batchSelected.isEmpty() &&
            ((messageRecord.isFailed() && !messageRecord.isMmsNotification()) ||
             (messageRecord.isRateLimited() && SignalStore.rateLimit().needsRecaptcha()) ||
-            messageRecord.isPendingInsecureSmsFallback() ||
             messageRecord.isBundleKeyExchange());
   }
 
@@ -2028,7 +2025,7 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
   private boolean isFooterVisible(@NonNull MessageRecord current, @NonNull Optional<MessageRecord> next, boolean isGroupThread) {
     boolean differentTimestamps = next.isPresent() && !DateUtils.isSameExtendedRelativeTimestamp(next.get().getTimestamp(), current.getTimestamp());
 
-    return forceFooter(messageRecord) || current.getExpiresIn() > 0 || !current.isSecure() || current.isPending() || current.isPendingInsecureSmsFallback() ||
+    return forceFooter(messageRecord) || current.getExpiresIn() > 0 || !current.isSecure() || current.isPending() ||
            current.isFailed() || current.isRateLimited() || differentTimestamps || isEndOfMessageCluster(current, next, isGroupThread);
   }
 

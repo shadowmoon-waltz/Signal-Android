@@ -94,7 +94,6 @@ import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.ContextUtil
 import org.thoughtcrime.securesms.util.DateUtils
 import org.thoughtcrime.securesms.util.ExpirationUtil
-import org.thoughtcrime.securesms.util.FeatureFlags
 import org.thoughtcrime.securesms.util.Material3OnScrollHelper
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.ViewUtil
@@ -546,7 +545,7 @@ class ConversationSettingsFragment : DSLSettingsFragment(
         )
       }
 
-      if (FeatureFlags.nicknames() && state.recipient.isIndividual && !state.recipient.isSelf) {
+      if (state.recipient.isIndividual && !state.recipient.isSelf) {
         clickPref(
           title = DSLSettingsText.from(R.string.NicknameActivity__nickname),
           icon = DSLSettingsIcon.from(R.drawable.symbol_edit_24),

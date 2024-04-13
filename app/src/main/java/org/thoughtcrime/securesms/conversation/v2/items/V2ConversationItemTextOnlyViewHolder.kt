@@ -602,7 +602,6 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
 
     when {
       record.isFailed -> alert.setFailed()
-      record.isPendingInsecureSmsFallback -> alert.setPendingApproval()
       record.isRateLimited -> alert.setRateLimited()
       else -> alert.setNone()
     }
@@ -669,8 +668,6 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
       binding.footerDate.setOnClickListener {
         conversationContext.clickListener.onMessageWithErrorClicked(record)
       }
-    } else if (record.isPendingInsecureSmsFallback) {
-      binding.footerDate.setText(R.string.ConversationItem_click_to_approve_unencrypted)
     } else if (record.isRateLimited) {
       binding.footerDate.setText(R.string.ConversationItem_send_paused)
     } else if (record.isScheduled()) {
@@ -718,7 +715,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
 
     messageId = newMessageId
 
-    if (!record.isOutgoing || record.isFailed || record.isPendingInsecureSmsFallback || record.isScheduled()) {
+    if (!record.isOutgoing || record.isFailed || record.isScheduled()) {
       deliveryStatus.setNone()
       return
     }

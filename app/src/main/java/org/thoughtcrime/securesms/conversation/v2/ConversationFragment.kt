@@ -68,6 +68,8 @@ import androidx.recyclerview.widget.ConversationLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.Duration
 import com.google.android.material.snackbar.Snackbar
@@ -311,6 +313,8 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.WindowUtil
+import org.thoughtcrime.securesms.util.atMidnight
+import org.thoughtcrime.securesms.util.atUTC
 import org.thoughtcrime.securesms.util.createActivityViewModel
 import org.thoughtcrime.securesms.util.doAfterNextLayout
 import org.thoughtcrime.securesms.util.fragments.requireListener
@@ -319,13 +323,16 @@ import org.thoughtcrime.securesms.util.hasAudio
 import org.thoughtcrime.securesms.util.hasGiftBadge
 import org.thoughtcrime.securesms.util.hasNonTextSlide
 import org.thoughtcrime.securesms.util.isValidReactionTarget
+import org.thoughtcrime.securesms.util.padding
 import org.thoughtcrime.securesms.util.savedStateViewModel
+import org.thoughtcrime.securesms.util.toMillis
 import org.thoughtcrime.securesms.util.viewModel
 import org.thoughtcrime.securesms.util.views.Stub
 import org.thoughtcrime.securesms.util.visible
 import org.thoughtcrime.securesms.verify.VerifyIdentityActivity
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaperDimLevelUtil
+import java.time.LocalDateTime
 import java.util.Locale
 import java.util.Optional
 import java.util.concurrent.ExecutionException
@@ -601,6 +608,10 @@ class ConversationFragment :
 
     binding.conversationItemRecycler.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
       viewModel.onChatBoundsChanged(Rect(left, top, right, bottom))
+    }
+
+    binding.toolbar.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, _ ->
+      binding.conversationItemRecycler.padding(top = bottom)
     }
 
     binding.conversationItemRecycler.addItemDecoration(ChatColorsDrawable.ChatColorsItemDecoration)
@@ -1629,7 +1640,7 @@ class ConversationFragment :
       if (result.results.isNotEmpty()) {
         val messageResult = result.results[result.position]
         disposables += viewModel
-          .moveToSearchResult(messageResult)
+          .moveToDate(messageResult.receivedTimestampMs)
           .observeOn(AndroidSchedulers.mainThread())
           .subscribeBy {
             moveToPosition(it)
@@ -2546,6 +2557,16 @@ class ConversationFragment :
     return isScrolledToBottom() || layoutManager.findFirstVisibleItemPosition() <= 0
   }
 
+  private fun closeChatSearch() {
+    isSearchRequested = false
+    searchViewModel.onSearchClosed()
+    searchNav.visible = false
+    inputPanel.setHideForSearch(false)
+    viewModel.setSearchQuery(null)
+    binding.conversationDisabledInput.visible = true
+    invalidateOptionsMenu()
+  }
+
   /**
    * Controls animation and visibility of the scrollDateHeader.
    */
@@ -3303,6 +3324,7 @@ class ConversationFragment :
           searchNav.visible = true
           searchNav.setData(0, 0)
           inputPanel.setHideForSearch(true)
+          viewModel.onChatSearchOpened()
           binding.conversationDisabledInput.visible = false
 
           (0 until menu.size()).forEach {
@@ -3316,13 +3338,7 @@ class ConversationFragment :
 
         override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
           searchView.setOnQueryTextListener(null)
-          isSearchRequested = false
-          searchViewModel.onSearchClosed()
-          searchNav.visible = false
-          inputPanel.setHideForSearch(false)
-          binding.conversationDisabledInput.visible = true
-          viewModel.setSearchQuery(null)
-          invalidateOptionsMenu()
+          closeChatSearch()
           return true
         }
       })
@@ -4256,6 +4272,47 @@ class ConversationFragment :
 
     override fun onSearchMoveDownPressed() {
       searchViewModel.onMoveDown()
+    }
+
+    override fun onDatePickerSelected() {
+      disposables += viewModel.getEarliestMessageDate().subscribe { earliestDate ->
+        val local = LocalDateTime.now()
+          .atMidnight()
+          .atUTC()
+          .toMillis()
+        val datePicker =
+          MaterialDatePicker.Builder
+            .datePicker()
+            .setTitleText(getString(R.string.ScheduleMessageTimePickerBottomSheet__select_date_title))
+            .setSelection(local)
+            .setCalendarConstraints(
+              CalendarConstraints.Builder()
+                .setValidator(viewModel.jumpToDateValidator)
+                .setStart(earliestDate)
+                .setEnd(local)
+                .build()
+            )
+            .build()
+
+        datePicker.addOnDismissListener {
+          datePicker.clearOnDismissListeners()
+          datePicker.clearOnPositiveButtonClickListeners()
+        }
+
+        datePicker.addOnPositiveButtonClickListener { selectedDate ->
+          if (selectedDate != null) {
+            disposables += viewModel
+              .moveToDate(selectedDate)
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribeBy { position ->
+                moveToPosition(position - 1)
+                closeChatSearch()
+              }
+          }
+        }
+
+        datePicker.show(childFragmentManager, "DATE_PICKER")
+      }
     }
   }
 
