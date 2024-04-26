@@ -2492,7 +2492,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
         for (Slide slide : slides) {
           ApplicationDependencies.getJobManager().add(new AttachmentDownloadJob(messageRecord.getId(),
                                                                                 ((DatabaseAttachment) slide.asAttachment()).attachmentId,
-                                                                                true));
+                                                                                true,
+                                                                                false));
         }
       }
     }
@@ -2518,7 +2519,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
           setup(v, slide);
           jobManager.add(new AttachmentDownloadJob(messageRecord.getId(),
                                                    attachmentId,
-                                                   true));
+                                                   true,
+                                                   false));
           jobManager.addListener(queue, (job, jobState) -> {
             if (jobState.isComplete()) {
               cleanup();

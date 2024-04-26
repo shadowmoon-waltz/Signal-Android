@@ -376,7 +376,11 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
             '${AttachmentTable.BLUR_HASH}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.BLUR_HASH},
             '${AttachmentTable.TRANSFORM_PROPERTIES}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.TRANSFORM_PROPERTIES},
             '${AttachmentTable.DISPLAY_ORDER}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER},
-            '${AttachmentTable.UPLOAD_TIMESTAMP}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.UPLOAD_TIMESTAMP}
+            '${AttachmentTable.UPLOAD_TIMESTAMP}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.UPLOAD_TIMESTAMP},
+            '${AttachmentTable.DATA_HASH_END}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DATA_HASH_END},
+            '${AttachmentTable.ARCHIVE_CDN}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ARCHIVE_CDN},
+            '${AttachmentTable.ARCHIVE_MEDIA_NAME}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ARCHIVE_MEDIA_NAME},
+            '${AttachmentTable.ARCHIVE_MEDIA_ID}', ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ARCHIVE_MEDIA_ID}
           )
         ) AS ${AttachmentTable.ATTACHMENT_JSON_ALIAS}
       """.toSingleLine()
@@ -824,7 +828,8 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     timestamp: Long,
     eraId: String,
     joinedUuids: Collection<UUID>,
-    isCallFull: Boolean
+    isCallFull: Boolean,
+    isIncomingGroupCallRingingOnLocalDevice: Boolean
   ): MessageId {
     val recipient = Recipient.resolved(groupRecipientId)
     val threadId = threads.getOrCreateThreadIdFor(recipient)
@@ -836,7 +841,9 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
         startedCallUuid = Recipient.resolved(sender).requireServiceId().toString(),
         startedCallTimestamp = timestamp,
         inCallUuids = joinedUuids.map { it.toString() },
-        isCallFull = isCallFull
+        isCallFull = isCallFull,
+        localUserJoined = joinedUuids.contains(Recipient.self().requireServiceId().rawUuid),
+        isRingingOnLocalDevice = isIncomingGroupCallRingingOnLocalDevice
       ).encode()
 
       val values = contentValuesOf(
@@ -889,11 +896,46 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     }
   }
 
+  /**
+   * Clears the flag in GroupCallUpdateDetailsUtil that specifies that the call is ringing on the local device.
+   * Called when cleaning up the call ringing state (which can get out of sync in the case of an application crash)
+   */
+  fun clearIsRingingOnLocalDeviceFlag(messageIds: Collection<Long>) {
+    writableDatabase.withinTransaction { db ->
+      val queries = SqlUtil.buildCollectionQuery(ID, messageIds)
+
+      for (query in queries) {
+        val messageIdBodyPairs = db.select(ID, BODY)
+          .from(TABLE_NAME)
+          .where(query.where, query.whereArgs)
+          .run()
+          .readToList { cursor ->
+            cursor.requireLong(ID) to cursor.requireString(BODY)
+          }
+
+        for ((messageId, body) in messageIdBodyPairs) {
+          val oldBody = GroupCallUpdateDetailsUtil.parse(body)
+          if (!oldBody.isRingingOnLocalDevice) {
+            continue
+          }
+
+          val newBody = GroupCallUpdateDetailsUtil.createUpdatedBody(oldBody, oldBody.inCallUuids, oldBody.isCallFull, false)
+
+          db.update(TABLE_NAME)
+            .values(BODY to newBody)
+            .where(ID_WHERE, messageId)
+            .run()
+        }
+      }
+    }
+  }
+
   fun updateGroupCall(
     messageId: Long,
     eraId: String,
     joinedUuids: Collection<UUID>,
-    isCallFull: Boolean
+    isCallFull: Boolean,
+    isRingingOnLocalDevice: Boolean
   ): MessageId {
     writableDatabase.withinTransaction { db ->
       val message = try {
@@ -907,7 +949,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       val sameEraId = updateDetail.eraId == eraId && !Util.isEmpty(eraId)
       val inCallUuids = if (sameEraId) joinedUuids.map { it.toString() } else emptyList()
       val contentValues = contentValuesOf(
-        BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(updateDetail, inCallUuids, isCallFull)
+        BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(updateDetail, inCallUuids, isCallFull, isRingingOnLocalDevice)
       )
 
       if (sameEraId && containsSelf) {
@@ -925,7 +967,13 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     return MessageId(messageId)
   }
 
-  fun updatePreviousGroupCall(threadId: Long, peekGroupCallEraId: String?, peekJoinedUuids: Collection<UUID>, isCallFull: Boolean): Boolean {
+  fun updatePreviousGroupCall(
+    threadId: Long,
+    peekGroupCallEraId: String?,
+    peekJoinedUuids: Collection<UUID>,
+    isCallFull: Boolean,
+    isRingingOnLocalDevice: Boolean
+  ): Boolean {
     return writableDatabase.withinTransaction { db ->
       val cursor = db
         .select(*MMS_PROJECTION)
@@ -948,7 +996,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
         }
 
         val contentValues = contentValuesOf(
-          BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(groupCallUpdateDetails, inCallUuids, isCallFull)
+          BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(groupCallUpdateDetails, inCallUuids, isCallFull, isRingingOnLocalDevice)
         )
 
         if (sameEraId && containsSelf) {
@@ -1025,6 +1073,10 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
           notifyConversationListeners(threadId)
           TrimThreadJob.enqueueAsync(threadId)
         }
+
+      groupRecords.filter { it.isV2Group }.forEach {
+        SignalDatabase.nameCollisions.handleGroupNameCollisions(it.id.requireV2(), setOf(recipient.id))
+      }
     }
   }
 

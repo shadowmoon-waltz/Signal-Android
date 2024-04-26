@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1410
-val canonicalVersionName = "7.4.2"
+val canonicalVersionCode = 1413
+val canonicalVersionName = "7.5.2"
 
 val postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -200,7 +200,6 @@ android {
     buildConfigField("String", "SIGNAL_CDN3_URL", "\"https://cdn3.signal.org\"")
     buildConfigField("String", "SIGNAL_CDSI_URL", "\"https://cdsi.signal.org\"")
     buildConfigField("String", "SIGNAL_SERVICE_STATUS_URL", "\"uptime.signal.org\"")
-    buildConfigField("String", "SIGNAL_KEY_BACKUP_URL", "\"https://api.backup.signal.org\"")
     buildConfigField("String", "SIGNAL_SVR2_URL", "\"https://svr2.signal.org\"")
     buildConfigField("String", "SIGNAL_SFU_URL", "\"https://sfu.voip.signal.org\"")
     buildConfigField("String", "SIGNAL_STAGING_SFU_URL", "\"https://sfu.staging.voip.signal.org\"")
@@ -413,7 +412,6 @@ android {
       buildConfigField("String", "SIGNAL_CDN2_URL", "\"https://cdn2-staging.signal.org\"")
       buildConfigField("String", "SIGNAL_CDN3_URL", "\"https://cdn3-staging.signal.org\"")
       buildConfigField("String", "SIGNAL_CDSI_URL", "\"https://cdsi.staging.signal.org\"")
-      buildConfigField("String", "SIGNAL_KEY_BACKUP_URL", "\"https://api-staging.backup.signal.org\"")
       buildConfigField("String", "SIGNAL_SVR2_URL", "\"https://svr2.staging.signal.org\"")
       buildConfigField("String", "SVR2_MRENCLAVE", "\"acb1973aa0bbbd14b3b4e06f145497d948fd4a98efc500fcce363b3b743ec482\"")
       buildConfigField("String", "UNIDENTIFIED_SENDER_TRUST_ROOT", "\"BbqY1DzohE4NUZoVF+L18oUPrK3kILllLEJh2UnPSsEx\"")
