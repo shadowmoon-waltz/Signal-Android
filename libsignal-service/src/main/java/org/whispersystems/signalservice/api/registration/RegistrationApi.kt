@@ -8,6 +8,7 @@ package org.whispersystems.signalservice.api.registration
 import org.whispersystems.signalservice.api.NetworkResult
 import org.whispersystems.signalservice.api.account.AccountAttributes
 import org.whispersystems.signalservice.api.account.PreKeyCollection
+import org.whispersystems.signalservice.internal.push.BackupAuthCheckResponse
 import org.whispersystems.signalservice.internal.push.PushServiceSocket
 import org.whispersystems.signalservice.internal.push.RegistrationSessionMetadataResponse
 import org.whispersystems.signalservice.internal.push.VerifyAccountResponse
@@ -53,9 +54,18 @@ class RegistrationApi(
   /**
    * Submit a verification code sent by the service via one of the supported channels (SMS, phone call) to prove the registrant's control of the phone number.
    */
-  fun verifyAccount(verificationCode: String, sessionId: String): NetworkResult<RegistrationSessionMetadataResponse> {
+  fun verifyAccount(sessionId: String, verificationCode: String): NetworkResult<RegistrationSessionMetadataResponse> {
     return NetworkResult.fromFetch {
       pushServiceSocket.submitVerificationCode(sessionId, verificationCode)
+    }
+  }
+
+  /**
+   * Submits the solved captcha token to the service.
+   */
+  fun submitCaptchaToken(sessionId: String, captchaToken: String): NetworkResult<RegistrationSessionMetadataResponse> {
+    return NetworkResult.fromFetch {
+      pushServiceSocket.patchVerificationSession(sessionId, null, null, null, captchaToken, null)
     }
   }
 
@@ -65,6 +75,12 @@ class RegistrationApi(
   fun registerAccount(sessionId: String?, recoveryPassword: String?, attributes: AccountAttributes?, aciPreKeys: PreKeyCollection?, pniPreKeys: PreKeyCollection?, fcmToken: String?, skipDeviceTransfer: Boolean): NetworkResult<VerifyAccountResponse> {
     return NetworkResult.fromFetch {
       pushServiceSocket.submitRegistrationRequest(sessionId, recoveryPassword, attributes, aciPreKeys, pniPreKeys, fcmToken, skipDeviceTransfer)
+    }
+  }
+
+  fun getSvrAuthCredential(e164: String, usernamePasswords: List<String>): NetworkResult<BackupAuthCheckResponse> {
+    return NetworkResult.fromFetch {
+      pushServiceSocket.checkBackupAuthCredentials(e164, usernamePasswords)
     }
   }
 }

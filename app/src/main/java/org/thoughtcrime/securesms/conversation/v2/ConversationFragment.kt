@@ -357,7 +357,8 @@ class ConversationFragment :
   ConversationBottomSheetCallback,
   SafetyNumberBottomSheet.Callbacks,
   EnableCallNotificationSettingsDialog.Callback,
-  MultiselectForwardBottomSheet.Callback {
+  MultiselectForwardBottomSheet.Callback,
+  DoubleTapEditEducationSheet.Callback {
 
   companion object {
     private val TAG = Log.tag(ConversationFragment::class.java)
@@ -1337,6 +1338,13 @@ class ConversationFragment :
     if (!args.conversationScreenType.isInPopup) {
       titleView.setOnClickListener {
         optionsMenuCallback.handleConversationSettings()
+      }
+    }
+
+    if (recipient.isSystemContact) {
+      titleView.setOnLongClickListener {
+        startActivity(Intent(Intent.ACTION_VIEW, recipient.contactUri))
+        return@setOnLongClickListener true
       }
     }
   }
@@ -2845,6 +2853,20 @@ class ConversationFragment :
       RecipientBottomSheetDialogFragment.show(childFragmentManager, recipientId, groupId)
     }
 
+    override fun onItemDoubleClick(item: MultiselectPart) {
+      Log.d(TAG, "onItemDoubleClick")
+      if (!isValidEditMessageSend(item.getMessageRecord(), System.currentTimeMillis())) {
+        return
+      }
+
+      if (SignalStore.uiHints().hasSeenDoubleTapEditEducationSheet) {
+        onDoubleTapEditEducationSheetNext(item.conversationMessage)
+        return
+      }
+
+      DoubleTapEditEducationSheet(item).show(childFragmentManager, DoubleTapEditEducationSheet.KEY)
+    }
+
     override fun onMessageWithErrorClicked(messageRecord: MessageRecord) {
       val recipientId = viewModel.recipientSnapshot?.id ?: return
       if (messageRecord.isIdentityMismatchFailure) {
@@ -3186,7 +3208,7 @@ class ConversationFragment :
               }
 
               override fun onHide() {
-                if (!lifecycle.currentState.isAtLeast(Lifecycle.State.INITIALIZED)) {
+                if (!lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED) || activity == null || activity?.isFinishing == true) {
                   return
                 }
 
@@ -3195,10 +3217,8 @@ class ConversationFragment :
                   getVoiceNoteMediaController().resumePlayback(selectedConversationModel.audioUri, messageRecord.getId())
                 }
 
-                if (activity != null) {
-                  WindowUtil.setLightStatusBarFromTheme(requireActivity())
-                  WindowUtil.setLightNavigationBarFromTheme(requireActivity())
-                }
+                WindowUtil.setLightStatusBarFromTheme(requireActivity())
+                WindowUtil.setLightNavigationBarFromTheme(requireActivity())
 
                 clearFocusedItem()
 
@@ -4064,8 +4084,9 @@ class ConversationFragment :
         .with(this@ConversationFragment)
         .request(Manifest.permission.RECORD_AUDIO)
         .ifNecessary()
-        .withRationaleDialog(getString(R.string.ConversationActivity_to_send_audio_messages_allow_signal_access_to_your_microphone), R.drawable.ic_mic_solid_24)
-        .withPermanentDenialDialog(getString(R.string.ConversationActivity_signal_requires_the_microphone_permission_in_order_to_send_audio_messages))
+        .withRationaleDialog(getString(R.string.ConversationActivity_allow_access_microphone), getString(R.string.ConversationActivity_to_send_voice_messages_allow_signal_access_to_your_microphone), R.drawable.ic_mic_24)
+        .withPermanentDenialDialog(getString(R.string.ConversationActivity_signal_requires_the_microphone_permission_in_order_to_send_audio_messages), null, R.string.ConversationActivity_allow_access_microphone, R.string.ConversationActivity_signal_to_send_audio_messages, this@ConversationFragment.parentFragmentManager)
+        .onAnyDenied { Toast.makeText(this@ConversationFragment.requireContext(), R.string.ConversationActivity_signal_needs_microphone_access_voice_message, Toast.LENGTH_LONG).show() }
         .execute()
     }
 
@@ -4410,5 +4431,9 @@ class ConversationFragment :
           .addTo(disposables)
       }
     }
+  }
+
+  override fun onDoubleTapEditEducationSheetNext(conversationMessage: ConversationMessage) {
+    handleEditMessage(conversationMessage)
   }
 }

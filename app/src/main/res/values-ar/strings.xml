@@ -80,8 +80,9 @@
     <string name="AttachmentKeyboard_file">ملف</string>
     <string name="AttachmentKeyboard_contact">جهة الاتصال</string>
     <string name="AttachmentKeyboard_location">الموقع</string>
-    <string name="AttachmentKeyboard_Signal_needs_permission_to_show_your_photos_and_videos">يحتاج سيجنال إلى إذن لإظهار الصور ومقاطع الفيديو الخاصة بك.</string>
-    <string name="AttachmentKeyboard_give_access">منح الصلاحيات</string>
+    <string name="AttachmentKeyboard_Signal_needs_permission_to_show_your_photos_and_videos">Signal needs permission to show your photos and videos</string>
+    <!-- Text for a button prompting users to allow Signal access to their gallery storage -->
+    <string name="AttachmentKeyboard_allow_access">Allow Access</string>
     <string name="AttachmentKeyboard_payment">عملية الدفع</string>
 
     <!-- AttachmentManager -->
@@ -89,6 +90,22 @@
     <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">يحتاج سيجنال إلى إذن الوصول إلى التخزين من أجل إرفاق الصور والفيديوهات والملفّات الصوتيّة، ولكن الإذن لم يُمنح بشكل دائم. الّرجاء زيارة قائمة إعدادات التطبيق، واختيار \"الأذونات\"، ومن ثمّ تفعيل \"سعة التخزين\".</string>
     <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">يحتاج سيجنال إلى إذن الوصول لِ جهات الاتصال من أجل إرفاق بيانات جهة اتصال، لكن الإذن لم يُمنح بشكل دائم. الّرجاء زيارة قائمة إعدادات التطبيق، واختيار \"الأذونات\"، ومن ثم تفعيل \"جهات الاتصال\".</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">يحتاج سيجنال إلى إذن الوصول إلى الموقع من أجل إرفاق الموقع ولكن تم إيقاف الإذن على نحو دائم. يرجى زيارة قائمة إعدادات التطبيق ثم اختيار \"الأذونات\" وتفعيل \"الموقع\".</string>
+
+    <!-- Dialog title asking users for location permission -->
+    <string name="AttachmentManager_signal_allow_access_location">منح الوصول لِموقعك</string>
+    <!-- Dialog description that will explain the steps needed to give location permission -->
+    <string name="AttachmentManager_signal_to_send_location">لإرسال موقعك:</string>
+    <!-- Alert dialog description asking for location permission -->
+    <string name="AttachmentManager_signal_allow_signal_access_location">امنح سيجنال الوصول لإرسال موقعك.</string>
+    <!-- Toast text explaining Signal\'s need for location access -->
+    <string name="AttachmentManager_signal_needs_location_access">يَحتاج سيجنال إلى الوصول لموقعك لإرساله.</string>
+    <!-- Dialog title asking users for gallery storage permission -->
+    <string name="AttachmentManager_signal_allow_storage">Allow access to storage</string>
+    <!-- Dialog description that will explain the steps needed to give gallery storage permission -->
+    <string name="AttachmentManager_signal_to_show_photos">To show photos and videos:</string>
+    <!-- Toast text explaining Signal\'s need for storage access -->
+    <string name="AttachmentManager_signal_needs_storage_access">Signal needs storage access to show your photos and videos.</string>
+
     <!-- Alert dialog title to show the recipient has not activated payments -->
     <string name="AttachmentManager__not_activated_payments">لم يُفعّل %1$s عمليات الدفع </string>
     <!-- Alert dialog description to send the recipient a request to activate payments -->
@@ -398,8 +415,16 @@
     <string name="ConversationActivity_your_request_to_join_has_been_sent_to_the_group_admin">تم إرسال طلبك للانضمام إلى المشرفين على المجموعة. سيتم تنبيهك عند اتخاذهم الإجراء المناسب لهم.</string>
     <string name="ConversationActivity_cancel_request">إلغاء الطلب</string>
 
-    <string name="ConversationActivity_to_send_audio_messages_allow_signal_access_to_your_microphone">لإرسال الرسائل الصوتية، يرجى السماح لسيجنال بالوصول إلى الميكروفون.</string>
+    <!-- Dialog title asking users for microphone permission -->
+    <string name="ConversationActivity_allow_access_microphone">امنح الوصول إلى ميكروفونك</string>
+    <!-- Dialog description that will explain the steps needed to give microphone permissions -->
+    <string name="ConversationActivity_signal_to_send_audio_messages">لإرسال رسائل صوتية:</string>
+    <!-- Alert dialog description asking for microphone permission in order to send voice messages -->
+    <string name="ConversationActivity_to_send_voice_messages_allow_signal_access_to_your_microphone">لإرسال رسالة صوتية، امنح سيجال الوصول إلى ميكروفونك.</string>
+    <!-- Toast text explaining Signal\'s need for microphone access -->
+    <string name="ConversationActivity_signal_needs_microphone_access_voice_message">يحتاج سيجال إلى الوصول للميكروفون لتسجيل رسالة صوتية.</string>
     <string name="ConversationActivity_signal_requires_the_microphone_permission_in_order_to_send_audio_messages">يحتاج سيجنال إلى إذن الوصول إلى الميكروفون لإرسال الرسائل الصوتية، ولكن تم إيقاف الإذن على نحو دائم. الرّجاء الاطلاع على إعدادات التطبيق ثم اختيار \"الأذونات\" وتفعيل \"الميكروفون\".</string>
+
     <string name="ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s">يحتاج سيجنال إلى إذنَي الوصول إلى الميكروفون والكاميرا من أجل الاتصال بـ%1$s ولكن تم إيقافهما على نحو دائم. الرجاء الاطلاع على إعدادات التطبيق ثم اختيار \"الأذونات\" وتفعيل \"الميكروفون\" و\"الكاميرا\".</string>
     <string name="ConversationActivity_to_capture_photos_and_video_allow_signal_access_to_the_camera">لالتقاط الصور والفيديوهات، الرجاء السماح لسيجنال بالوصول إلي الكاميرا.</string>
     <string name="ConversationActivity_signal_needs_the_camera_permission_to_take_photos_or_video">يحتاج سيجنال إلى إذن الوصول إلى الكاميرا من أجل التقاط صور وفيديو، ولكن تم إيقاف الإذن على نحو دائم. الرجاء الاطلاع على إعدادات التطبيق ثم اختيار \"الأذونات\"، ثم تفعيل \"الكاميرا\".</string>
@@ -423,7 +448,13 @@
     <string name="ConversationActivity_you_will_leave_this_group_and_it_will_be_deleted_from_all_of_your_devices">سَتغادر هذه المجموعة، ثم ستُحذَف من كل أجهزتك.</string>
     <string name="ConversationActivity_delete">حذف</string>
     <string name="ConversationActivity_delete_and_leave">حذف ثم المغادرة</string>
-    <string name="ConversationActivity__to_call_s_signal_needs_access_to_your_microphone">للاتصال بـ %1$s، يحتاج سيجنال الوصول إلى ميكروفونك</string>
+
+    <!-- Dialog description that will explain the steps needed to give microphone permissions for a voice call -->
+    <string name="ConversationActivity__to_start_call">لبدء مكالمة:</string>
+    <!-- Alert dialog description asking for microphone permission in order to start a voice call -->
+    <string name="ConversationActivity__to_call_signal_needs_access_to_your_microphone">لبدء مكالمة، امنح سيجنال الوصول إلى ميكروفونك.</string>
+    <!-- Toast text explaining Signal\'s need for microphone access for a voice call -->
+    <string name="ConversationActivity_signal_needs_microphone_access_voice_call">يَحتاج سيجنال إلى الوصول للميكروفون لبدء المكالمة.</string>
 
 
     <string name="ConversationActivity_join">انضم</string>
@@ -1482,7 +1513,7 @@
     <string name="Megaphones_new_group">مجموعة جديدة</string>
     <string name="Megaphones_invite_friends">دعوة الأصدقاء</string>
     <string name="Megaphones_chat_colors">لون الدردشة</string>
-    <string name="Megaphones_add_a_profile_photo">إضافة صورة للحساب الشخصي</string>
+    <string name="Megaphones_add_a_profile_photo">صورة حساب شخصي</string>
 
     <!-- Title of a bottom sheet to render messages that all quote a specific message -->
     <string name="MessageQuotesBottomSheet_replies">الإجابات</string>
@@ -2555,10 +2586,10 @@
     <string name="SupportEmailUtil_filter">المُرشِّح :</string>
     <string name="SupportEmailUtil_device_info">معلومات الجهاز :</string>
     <string name="SupportEmailUtil_android_version">إصدار اﻷندرويد</string>
-    <string name="SupportEmailUtil_signal_version">إصدار سيجنال:</string>
-    <string name="SupportEmailUtil_signal_package">حزمة سيجنال:</string>
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_signal_version" translatable="false">Signal version:</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_signal_package" translatable="false">Signal package:</string> -->
     <string name="SupportEmailUtil_registration_lock">قفل التسجيل :</string>
-    <string name="SupportEmailUtil_locale">محلي :</string>
+  <!-- Removed by excludeNonTranslatables <string name="SupportEmailUtil_locale" translatable="false">Locale:</string> -->
 
     <!-- ThreadRecord -->
     <string name="ThreadRecord_group_updated">تم تحديث المجموعة</string>
@@ -3421,7 +3452,7 @@
   <!-- Removed by excludeNonTranslatables <string name="HelpFragment__link__faq" translatable="false">https://support.signal.org</string> -->
     <string name="HelpFragment__support_info">معلومات الدعم</string>
     <string name="HelpFragment__signal_android_support_request">طلب الدعم حول سيجنال Android</string>
-    <string name="HelpFragment__debug_log">سِجل التصحيح :</string>
+  <!-- Removed by excludeNonTranslatables <string name="HelpFragment__debug_log" translatable="false">Debug Log:</string> -->
     <string name="HelpFragment__could_not_upload_logs">لا يمكن تحميل السجلات</string>
     <string name="HelpFragment__please_be_as_descriptive_as_possible">نرجو منك الشرح لنا بإسهاب قدر الإمكان لمساعدتنا على فهم المشكلة.</string>
     <string-array name="HelpFragment__categories_5">
@@ -3632,7 +3663,8 @@
     <string name="preferences_storage__audio">صوت</string>
     <string name="preferences_storage__review_storage">مراجعة سعة التخزين</string>
     <string name="preferences_storage__delete_older_messages">حذف الرسائل القديمة؟</string>
-    <string name="preferences_storage__clear_message_history">محو محفوظات الرسائل؟</string>
+    <!-- Dialog title shown when selecting delete message history from manage storage -->
+    <string name="preferences_storage__delete_message_history">Delete message history?</string>
     <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">ستُحذَف جميع محفوظات الرسائل والوسائط الأقدم من %1$s من جهازك بصفة نهائية.</string>
     <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
     <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
@@ -3821,6 +3853,14 @@
     <string name="GrantPermissionsFragment__storage">التخزين</string>
     <!-- Storage permission row description -->
     <string name="GrantPermissionsFragment__send_photos_videos_and_files">أرسل صورًا وفيديوهات وملفات من جهازك.</string>
+
+    <!-- PermissionDeniedBottomSheet -->
+    <!-- Sheet describing step 1 on how to give permissions by opening settings -->
+    <string name="PermissionDeniedBottomSheet__1_tap_settings_below">1. انقر على \"إعدادات\" أسفله</string>
+    <!-- Sheet describing step 2 on how to give permissions by checking the permissions button in settings where %s will be replaced with an image of a checked button -->
+    <string name="PermissionDeniedBottomSheet__2_allow_permission">2. %1$s تمكين الصلاحية</string>
+    <!-- Label for button at the bottom of the sheet which opens the system permission settings -->
+    <string name="PermissionDeniedBottomSheet__settings">الإعدادات</string>
 
     <!-- PaymentsSecuritySetupFragment -->
     <!-- Toolbar title -->
@@ -4083,6 +4123,14 @@
     <!-- Label for a menu item that appears after pressing the three-dot icon in a  -->
     <string name="conversation_group_options__conversation">دردشة</string>
     <string name="conversation_group_options__broadcast">بث</string>
+
+    <!-- DoubleTapEditEducationSheet -->
+    <!-- Displayed as the title of the education bottom sheet -->
+    <string name="DoubleTapEditEducationSheet__double_tap_edit_title">انقر مرّتين للتعديل</string>
+    <!-- Text on the sheet explaining how double tapping on a message will let them edit it -->
+    <string name="DoubleTapEditEducationSheet__quickly_tap_twice">انقر مرّتين بسرعة على رسائلك لتعديلها. يُمكنك تعديل رسائلك لمدة تصل إلى 24 ساعة بعد إرسالها.</string>
+    <!-- Button label to dismiss sheet -->
+    <string name="DoubleTapEditEducationSheet__got_it">عُلم</string>
 
     <!-- text_secure_normal -->
     <string name="text_secure_normal__menu_new_group">مجموعة جديدة</string>
@@ -4608,8 +4656,24 @@
     <string name="ReviewCardDialogFragment__review_members">مراجعة الأعضاء</string>
     <!-- Title of a screen where the user will be prompted to review a message request matching the name of someone they already know -->
     <string name="ReviewCardDialogFragment__review_request">مُراجعة الطلب</string>
-    <string name="ReviewCardDialogFragment__d_group_members_have_the_same_name">%1$d من أعضاء المجموعة يحملون نفس الاسم، يُرجى مراجعة اﻷعضاء أسفله ثم القيام باﻹجراء المناسب.</string>
-    <string name="ReviewCardDialogFragment__if_youre_not_sure">إذا التبس عليك مصدر الطلب، يُرجى مراجعة جهات الاتصال أدناه والقيام بالإجراء المناسب.</string>
+    <!-- Message of a screen where the user will be prompted to review a message request matching the name of someone they already know -->
+    <plurals name="ReviewCardDialogFragment__d_group_members_have_the_same_name">
+        <item quantity="zero">%1$d عضو بالمجموعة يحمل نفس الاسم، يُرجى مراجعة الأعضاء أسفله أو اتخاذ إجراء.</item>
+        <item quantity="one">%1$d عضو بالمجموعة يحمل نفس الاسم، يُرجى مراجعة العضو أسفله واتخاذ إجراء.</item>
+        <item quantity="two">%1$d عضوان بالمجموعة يحملان نفس الاسم، يُرجى مراجعة الأعضاء أسفله واتخاذ إجراء.</item>
+        <item quantity="few">%1$d أعضاء بالمجموعة يحملون نفس الاسم، يُرجى مراجعة الأعضاء أسفله واتخاذ إجراء.</item>
+        <item quantity="many">%1$d عضوا بالمجموعة يحملون نفس الاسم، يُرجى مراجعة الأعضاء أسفله واتخاذ إجراء.</item>
+        <item quantity="other">%1$d عضوا بالمجموعة يحملون نفس الاسم، يُرجى مراجعة الأعضاء أسفله واتخاذ إجراء</item>
+    </plurals>
+    <!-- Message of a screen where the user will be prompted to review a message request matching the name of someone they already know -->
+    <plurals name="ReviewCardDialogFragment__if_youre_not_sure">
+        <item quantity="zero">إذا التبس عليك مصدر الطلب، يُرجى مُراجعة جهات الاتصال أدناه والقيام بالإجراء المناسب.</item>
+        <item quantity="one">إذا التبس عليك مصدر الطلب، يُرجى مراجعة جهة الاتصال أدناه والقيام بالإجراء المناسب.</item>
+        <item quantity="two">إذا التبس عليك مصدر الطلب، يُرجى مراجعة جهتي الاتصال أدناه والقيام بالإجراء المناسب.</item>
+        <item quantity="few">إذا التبس عليك مصدر الطلب، يُرجى مراجعة جهات الاتصال أدناه والقيام بالإجراء المناسب.</item>
+        <item quantity="many">إذا التبس عليك مصدر الطلب، يُرجى مراجعة جهات الاتصال أدناه والقيام بالإجراء المناسب.</item>
+        <item quantity="other">إذا التبس عليك مصدر الطلب، يُرجى مراجعة جهات الاتصال أدناه والقيام بالإجراء المناسب.</item>
+    </plurals>
     <string name="ReviewCardDialogFragment__no_other_groups_in_common">لا وجود لمجموعات أخرى مشتركة.</string>
     <string name="ReviewCardDialogFragment__no_groups_in_common">لا وجود لمجموعات مشتركة.</string>
     <plurals name="ReviewCardDialogFragment__d_other_groups_in_common">
@@ -4648,12 +4712,28 @@
     <string name="CallParticipantsListUpdatePopupWindow__s_joined">انضم %1$s</string>
     <string name="CallParticipantsListUpdatePopupWindow__s_and_s_joined">انضم %1$s و %2$s</string>
     <string name="CallParticipantsListUpdatePopupWindow__s_s_and_s_joined">انضم %1$s، %2$s و%3$s</string>
-    <string name="CallParticipantsListUpdatePopupWindow__s_s_and_d_others_joined">انضم %1$s، %2$s و%3$d آخرون</string>
+    <!-- Toast message shown in group call when 3 or more people join -->
+    <plurals name="CallParticipantsListUpdatePopupWindow__s_s_and_d_others_joined">
+        <item quantity="zero">انضمّ %1$s و%2$s و%3$d شخص آخر</item>
+        <item quantity="one">انضمّ %1$s و%2$s و%3$d شخص آخر</item>
+        <item quantity="two">انضمّ %1$s و%2$s و%3$d شخصين آخرين</item>
+        <item quantity="few">انضمّ %1$s و%2$s و%3$d أشخاص آخرين</item>
+        <item quantity="many">انضمّ %1$s و%2$s و%3$d شخص آخر</item>
+        <item quantity="other">انضم %1$s، %2$s و%3$d شخص آخر</item>
+    </plurals>
     <!-- Toast/popup text shown when someone leaves a group call -->
     <string name="CallParticipantsListUpdatePopupWindow__s_left">غادر العضو %1$s</string>
     <string name="CallParticipantsListUpdatePopupWindow__s_and_s_left">غادر %1$s و %2$s</string>
     <string name="CallParticipantsListUpdatePopupWindow__s_s_and_s_left">غادر %1$s، %2$s و%3$s</string>
-    <string name="CallParticipantsListUpdatePopupWindow__s_s_and_d_others_left">غادر %1$s، %2$s و%3$d آخرون</string>
+    <!-- Toast message shown in group call when 3 or more people leave -->
+    <plurals name="CallParticipantsListUpdatePopupWindow__s_s_and_d_others_left">
+        <item quantity="zero">غادر %1$s و%2$s و%3$d آخر</item>
+        <item quantity="one">غادر %1$s و%2$s و%3$d شخص آخر</item>
+        <item quantity="two">غادر %1$s و%2$s و%3$d شخصين آخرين</item>
+        <item quantity="few">غادر %1$s و%2$s و%3$d أشخاص آخرين</item>
+        <item quantity="many">غادر %1$s و%2$s و%3$d شخصا آخر</item>
+        <item quantity="other">غادر %1$s، %2$s و%3$d شخص آخر</item>
+    </plurals>
 
     <string name="CallParticipant__you">أنت</string>
     <string name="CallParticipant__you_on_another_device">أنت (في جهاز آخر)</string>
@@ -5031,7 +5111,15 @@
 
     <!-- PrivacySettingsFragment -->
     <string name="PrivacySettingsFragment__blocked">محظورة</string>
-    <string name="PrivacySettingsFragment__d_contacts">%1$d جهة اتصال</string>
+    <!-- Settings label that shows the number blocked contacts -->
+    <plurals name="PrivacySettingsFragment__d_contacts">
+        <item quantity="zero">%1$d جهات اتصال</item>
+        <item quantity="one">%1$d جهة اتصال</item>
+        <item quantity="two">%1$d جهتيْ اتصال</item>
+        <item quantity="few">%1$d جهات اتصال</item>
+        <item quantity="many">%1$d جهة اتصال</item>
+        <item quantity="other">%1$d جهة اتصال</item>
+    </plurals>
     <string name="PrivacySettingsFragment__messaging">التراسُل</string>
     <string name="PrivacySettingsFragment__disappearing_messages">الرسائل المختفية</string>
     <string name="PrivacySettingsFragment__app_security">أمان التطبيق</string>
@@ -7331,6 +7419,30 @@
     <string name="BackupProgressService_title">تجري استعادة النسخة الاحتياطية…</string>
     <!-- Notification title shown while downloading backup restore data -->
     <string name="BackupProgressService_title_downloading">يَجري تنزيل البيانات الاحتياطية…</string>
+
+    <!-- BackupsTypeSettingsFragment -->
+    <!-- Displayed as the user\'s payment method as a label in a preference row -->
+    <string name="BackupsTypeSettingsFragment__credit_or_debit_card">بطاقة الائتمان أو الخصم</string>
+    <!-- Displayed as the user\'s payment method as a label in a preference row -->
+    <string name="BackupsTypeSettingsFragment__iDEAL">iDEAL</string>
+    <!-- Displayed as the user\'s payment method as a label in a preference row -->
+    <string name="BackupsTypeSettingsFragment__google_pay">Google Pay</string>
+    <!-- Displayed as the user\'s payment method as a label in a preference row -->
+    <string name="BackupsTypeSettingsFragment__bank_transfer">تحويل مصرفي</string>
+    <!-- Displayed as the user\'s payment method as a label in a preference row -->
+    <string name="BackupsTypeSettingsFragment__paypal">PayPal</string>
+    <!-- Displayed as the user\'s payment method as a label in a preference row -->
+    <string name="BackupsTypeSettingsFragment__unknown">مجهول</string>
+
+    <!-- ManageStorageSettingsFragment -->
+    <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
+    <string name="ManageStorageSettingsFragment_chat_limit">Chat limits</string>
+    <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
+    <string name="ManageStorageSettingsFragment_delete_message_history">Delete message history</string>
+    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
+    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Messages older than the selected time will be permanently deleted.</string>
+    <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
+    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Messages exceeding the selected length will be permanently deleted.</string>
 
     <!-- EOF -->
 </resources>

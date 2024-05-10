@@ -8,6 +8,7 @@ package org.thoughtcrime.securesms.registration.v2.ui.phonenumber
 import android.content.Context
 import android.os.Bundle
 import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuInflater
@@ -23,6 +24,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -38,9 +40,9 @@ import org.thoughtcrime.securesms.databinding.FragmentRegistrationEnterPhoneNumb
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter
 import org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegate.setDebugLogSubmitMultiTapView
 import org.thoughtcrime.securesms.registration.util.CountryPrefix
-import org.thoughtcrime.securesms.registration.v2.ui.shared.RegistrationCheckpoint
-import org.thoughtcrime.securesms.registration.v2.ui.shared.RegistrationV2State
-import org.thoughtcrime.securesms.registration.v2.ui.shared.RegistrationV2ViewModel
+import org.thoughtcrime.securesms.registration.v2.ui.RegistrationCheckpoint
+import org.thoughtcrime.securesms.registration.v2.ui.RegistrationV2State
+import org.thoughtcrime.securesms.registration.v2.ui.RegistrationV2ViewModel
 import org.thoughtcrime.securesms.registration.v2.ui.toE164
 import org.thoughtcrime.securesms.util.PlayServicesUtil
 import org.thoughtcrime.securesms.util.SpanUtil
@@ -63,8 +65,11 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
   private lateinit var phoneNumberInputLayout: TextInputEditText
   private lateinit var spinnerView: MaterialAutoCompleteTextView
 
+  private var currentPhoneNumberFormatter: TextWatcher? = null
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setDebugLogSubmitMultiTapView(binding.verifyHeader)
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
       object : OnBackPressedCallback(true) {
@@ -80,34 +85,47 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
       R.layout.registration_country_code_dropdown_item,
       fragmentViewModel.supportedCountryPrefixes
     )
-    setDebugLogSubmitMultiTapView(binding.verifyHeader)
     binding.registerButton.setOnClickListener { onRegistrationButtonClicked() }
 
-    binding.toolbar.title = null
+    binding.toolbar.title = ""
     val activity = requireActivity() as AppCompatActivity
     activity.setSupportActionBar(binding.toolbar)
 
     requireActivity().addMenuProvider(UseProxyMenuProvider(), viewLifecycleOwner)
 
-    val existingPhoneNumber = sharedViewModel.uiState.value?.phoneNumber
-    if (existingPhoneNumber != null) {
-      fragmentViewModel.restoreState(existingPhoneNumber)
-      fragmentViewModel.phoneNumber()?.let {
-        phoneNumberInputLayout.setText(it.nationalNumber.toString())
-      }
-    } else if (spinnerView.editableText.isBlank()) {
-      spinnerView.setText(fragmentViewModel.countryPrefix().toString())
-    }
-
     sharedViewModel.uiState.observe(viewLifecycleOwner) { sharedState ->
       presentRegisterButton(sharedState)
       presentProgressBar(sharedState.inProgress, sharedState.isReRegister)
-      if (sharedState.registrationCheckpoint >= RegistrationCheckpoint.VERIFICATION_CODE_REQUESTED) {
+
+      sharedState.networkError?.let {
+        presentNetworkError(it)
+      }
+
+      if (sharedState.registrationCheckpoint >= RegistrationCheckpoint.PHONE_NUMBER_CONFIRMED && sharedState.canSkipSms) {
+        moveToEnterPinScreen()
+      } else if (sharedState.registrationCheckpoint >= RegistrationCheckpoint.VERIFICATION_CODE_REQUESTED) {
         moveToVerificationEntryScreen()
+      } else if (sharedState.registrationCheckpoint >= RegistrationCheckpoint.CHALLENGE_COMPLETED) {
+        sharedViewModel.submitCaptchaToken(requireContext())
+      } else if (sharedState.registrationCheckpoint >= RegistrationCheckpoint.CHALLENGE_RECEIVED) {
+        findNavController().safeNavigate(EnterPhoneNumberV2FragmentDirections.actionRequestCaptcha())
       }
     }
 
     fragmentViewModel.uiState.observe(viewLifecycleOwner) { fragmentState ->
+
+      fragmentState.phoneNumberFormatter?.let {
+        if (it != currentPhoneNumberFormatter) {
+          currentPhoneNumberFormatter?.let { oldWatcher ->
+            Log.d(TAG, "Removing current phone number formatter in fragment")
+            phoneNumberInputLayout.removeTextChangedListener(oldWatcher)
+          }
+          phoneNumberInputLayout.addTextChangedListener(it)
+          currentPhoneNumberFormatter = it
+          Log.d(TAG, "Updating phone number formatter in fragment")
+        }
+      }
+
       if (fragmentViewModel.isEnteredNumberValid(fragmentState)) {
         sharedViewModel.setPhoneNumber(fragmentViewModel.parsePhoneNumber(fragmentState))
       } else {
@@ -121,12 +139,26 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
 
     initializeInputFields()
 
+    val existingPhoneNumber = sharedViewModel.uiState.value?.phoneNumber
+    if (existingPhoneNumber != null) {
+      fragmentViewModel.restoreState(existingPhoneNumber)
+      fragmentViewModel.phoneNumber()?.let {
+        phoneNumberInputLayout.setText(it.nationalNumber.toString())
+      }
+    } else if (spinnerView.editableText.isBlank()) {
+      spinnerView.setText(fragmentViewModel.countryPrefix().toString())
+    }
+
     ViewUtil.focusAndShowKeyboard(phoneNumberInputLayout)
   }
 
   private fun initializeInputFields() {
+    binding.countryCode.editText?.addTextChangedListener { s ->
+      val countryCode: Int = s.toString().toInt()
+      fragmentViewModel.setCountry(countryCode)
+    }
+
     phoneNumberInputLayout.addTextChangedListener {
-      // TODO [regv2]: country code as you type formatter
       fragmentViewModel.setPhoneNumber(it?.toString())
     }
     phoneNumberInputLayout.onFocusChangeListener = View.OnFocusChangeListener { _: View?, hasFocus: Boolean ->
@@ -155,7 +187,6 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
       }
 
       fragmentViewModel.supportedCountryPrefixes.firstOrNull { it.toString() == s.toString() }?.let {
-        // TODO [regv2]: setCountryFormatter(it.regionCode)
         fragmentViewModel.setCountry(it.digits)
         val numberLength: Int = phoneNumberInputLayout.text?.length ?: 0
         phoneNumberInputLayout.setSelection(numberLength, numberLength)
@@ -176,7 +207,7 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
 
       EnterPhoneNumberV2State.Error.INVALID_PHONE_NUMBER -> {
         MaterialAlertDialogBuilder(requireContext()).apply {
-          setTitle(getString(R.string.RegistrationActivity_invalid_number))
+          setTitle(R.string.RegistrationActivity_invalid_number)
           setMessage(
             String.format(
               getString(R.string.RegistrationActivity_the_number_you_specified_s_is_invalid),
@@ -199,9 +230,25 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
       }
 
       EnterPhoneNumberV2State.Error.PLAY_SERVICES_TRANSIENT -> {
-        Log.w(TAG, "Not yet implemented!", NotImplementedError()) // TODO [regv2]
+        MaterialAlertDialogBuilder(requireContext()).apply {
+          setTitle(R.string.RegistrationActivity_play_services_error)
+          setMessage(R.string.RegistrationActivity_google_play_services_is_updating_or_unavailable)
+          setPositiveButton(android.R.string.ok) { _, _ -> fragmentViewModel.clearError() }
+          setOnCancelListener { fragmentViewModel.clearError() }
+          setOnDismissListener { fragmentViewModel.clearError() }
+          show()
+        }
       }
     }
+  }
+
+  private fun presentNetworkError(networkError: Throwable) {
+    // TODO [regv2]: check specific errors with a when clause
+    Log.i(TAG, "Unknown error during verification code request", networkError)
+    MaterialAlertDialogBuilder(requireContext())
+      .setMessage(R.string.RegistrationActivity_unable_to_connect_to_service)
+      .setPositiveButton(android.R.string.ok, null)
+      .show()
   }
 
   private fun onRegistrationButtonClicked() {
@@ -212,8 +259,14 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
       sharedViewModel.uiState.observe(viewLifecycleOwner, FcmTokenRetrievedObserver())
       sharedViewModel.fetchFcmToken(requireContext())
     } else {
-      sharedViewModel.setInProgress(false)
-      // TODO [regv2]: handle if FCM isn't available
+      sharedViewModel.uiState.value?.let { value ->
+        if (value.phoneNumber == null) {
+          fragmentViewModel.setError(EnterPhoneNumberV2State.Error.INVALID_PHONE_NUMBER)
+          sharedViewModel.setInProgress(false)
+        } else {
+          presentConfirmNumberDialog(value.phoneNumber, value.isReRegister, value.canSkipSms, missingFcmConsentRequired = true)
+        }
+      }
     }
   }
 
@@ -222,7 +275,7 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
       fragmentViewModel.setError(EnterPhoneNumberV2State.Error.INVALID_PHONE_NUMBER)
       sharedViewModel.setInProgress(false)
     } else {
-      presentConfirmNumberDialog(value.phoneNumber, value.isReRegister, value.canSkipSms)
+      presentConfirmNumberDialog(value.phoneNumber, value.isReRegister, value.canSkipSms, missingFcmConsentRequired = false)
     }
   }
 
@@ -274,7 +327,7 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
     ViewUtil.focusAndMoveCursorToEndAndOpenKeyboard(phoneNumberInputLayout)
   }
 
-  private fun presentConfirmNumberDialog(phoneNumber: PhoneNumber, isReRegister: Boolean, canSkipSms: Boolean) {
+  private fun presentConfirmNumberDialog(phoneNumber: PhoneNumber, isReRegister: Boolean, canSkipSms: Boolean, missingFcmConsentRequired: Boolean) {
     val title = if (isReRegister) {
       R.string.RegistrationActivity_additional_verification_required
     } else {
@@ -294,21 +347,46 @@ class EnterPhoneNumberV2Fragment : LoggingFragment(R.layout.fragment_registratio
       setMessage(message)
       setPositiveButton(android.R.string.ok) { _, _ ->
         Log.d(TAG, "User confirmed number.")
-        sharedViewModel.onUserConfirmedPhoneNumber(requireContext())
+        if (missingFcmConsentRequired) {
+          handlePromptForNoPlayServices()
+        } else {
+          sharedViewModel.onUserConfirmedPhoneNumber(requireContext())
+        }
       }
       setNegativeButton(R.string.RegistrationActivity_edit_number) { _, _ -> onConfirmNumberDialogCanceled() }
       setOnCancelListener { _ -> onConfirmNumberDialogCanceled() }
     }.show()
   }
 
+  private fun handlePromptForNoPlayServices() {
+    Log.d(TAG, "Device does not have Play Services, showing consent dialog.")
+    MaterialAlertDialogBuilder(requireContext()).apply {
+      setTitle(R.string.RegistrationActivity_missing_google_play_services)
+      setMessage(R.string.RegistrationActivity_this_device_is_missing_google_play_services)
+      setPositiveButton(R.string.RegistrationActivity_i_understand) { _, _ ->
+        Log.d(TAG, "User confirmed number.")
+        sharedViewModel.onUserConfirmedPhoneNumber(requireContext())
+      }
+      setNegativeButton(android.R.string.cancel, null)
+      setOnCancelListener { fragmentViewModel.clearError() }
+      setOnDismissListener { fragmentViewModel.clearError() }
+      show()
+    }
+  }
+
+  private fun moveToEnterPinScreen() {
+    findNavController().safeNavigate(EnterPhoneNumberV2FragmentDirections.actionReRegisterWithPinV2Fragment())
+    sharedViewModel.setInProgress(false)
+  }
+
   private fun moveToVerificationEntryScreen() {
-    NavHostFragment.findNavController(this).safeNavigate(EnterPhoneNumberV2FragmentDirections.actionEnterVerificationCode())
+    findNavController().safeNavigate(EnterPhoneNumberV2FragmentDirections.actionEnterVerificationCode())
     sharedViewModel.setInProgress(false)
   }
 
   private fun popBackStack() {
     sharedViewModel.setRegistrationCheckpoint(RegistrationCheckpoint.INITIALIZATION)
-    NavHostFragment.findNavController(this).popBackStack()
+    findNavController().popBackStack()
   }
 
   private inner class FcmTokenRetrievedObserver : LiveDataObserverCallback<RegistrationV2State>(sharedViewModel.uiState) {

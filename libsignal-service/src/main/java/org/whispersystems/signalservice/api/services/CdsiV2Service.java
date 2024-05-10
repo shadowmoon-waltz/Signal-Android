@@ -19,6 +19,7 @@ import org.whispersystems.signalservice.api.push.exceptions.NonSuccessfulRespons
 import org.whispersystems.signalservice.api.util.UuidUtil;
 import org.whispersystems.signalservice.internal.ServiceResponse;
 import org.whispersystems.signalservice.internal.configuration.SignalServiceConfiguration;
+import org.whispersystems.signalservice.internal.websocket.LibSignalNetwork;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -55,7 +57,7 @@ public final class CdsiV2Service {
 
   private final CdsiRequestHandler cdsiRequestHandler;
 
-  public CdsiV2Service(SignalServiceConfiguration configuration, String mrEnclave, @Nullable Network network) {
+  public CdsiV2Service(SignalServiceConfiguration configuration, String mrEnclave, @Nullable LibSignalNetwork network) {
 
     if (network != null) {
       this.cdsiRequestHandler = (username, password, request, tokenSaver) -> {
@@ -63,7 +65,12 @@ public final class CdsiV2Service {
           Log.i(TAG, "Starting CDSI lookup via libsignal-net");
           Future<CdsiLookupResponse> cdsiRequest = network.cdsiLookup(username, password, buildLibsignalRequest(request), tokenSaver);
           return Single.fromFuture(cdsiRequest)
-              .onErrorResumeNext((Throwable err) -> Single.error(mapLibsignalError(err)))
+              .onErrorResumeNext((Throwable err) -> {
+                if (err instanceof ExecutionException && err.getCause() != null) {
+                  err = err.getCause();
+                }
+                return Single.error(mapLibsignalError(err));
+              })
               .map(CdsiV2Service::parseLibsignalResponse)
               .toObservable();
         } catch (Exception exception) {

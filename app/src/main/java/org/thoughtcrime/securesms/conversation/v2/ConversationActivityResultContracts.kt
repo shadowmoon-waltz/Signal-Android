@@ -29,7 +29,6 @@ import org.thoughtcrime.securesms.maps.PlacePickerActivity
 import org.thoughtcrime.securesms.mediasend.Media
 import org.thoughtcrime.securesms.mediasend.MediaSendActivityResult
 import org.thoughtcrime.securesms.mediasend.v2.MediaSelectionActivity
-import org.thoughtcrime.securesms.permissions.PermissionCompat
 import org.thoughtcrime.securesms.permissions.Permissions
 import org.thoughtcrime.securesms.recipients.RecipientId
 
@@ -71,13 +70,7 @@ class ConversationActivityResultContracts(private val fragment: Fragment, privat
   }
 
   fun launchGallery(recipientId: RecipientId, text: CharSequence?, isReply: Boolean) {
-    Permissions
-      .with(fragment)
-      .request(*PermissionCompat.forImagesAndVideos())
-      .ifNecessary()
-      .withPermanentDenialDialog(fragment.getString(R.string.AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio))
-      .onAllGranted { mediaGalleryLauncher.launch(MediaSelectionInput(emptyList(), recipientId, text, isReply)) }
-      .execute()
+    mediaGalleryLauncher.launch(MediaSelectionInput(emptyList(), recipientId, text, isReply))
   }
 
   fun launchCamera(recipientId: RecipientId, isReply: Boolean) {
@@ -109,7 +102,9 @@ class ConversationActivityResultContracts(private val fragment: Fragment, privat
       Permissions.with(fragment)
         .request(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         .ifNecessary()
-        .withPermanentDenialDialog(fragment.getString(R.string.AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location))
+        .withRationaleDialog(fragment.getString(R.string.AttachmentManager_signal_allow_access_location), fragment.getString(R.string.AttachmentManager_signal_allow_signal_access_location), R.drawable.symbol_location_white_24)
+        .withPermanentDenialDialog(fragment.getString(R.string.AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location), null, R.string.AttachmentManager_signal_allow_access_location, R.string.AttachmentManager_signal_to_send_location, fragment.parentFragmentManager)
+        .onAnyDenied { Toast.makeText(fragment.requireContext(), R.string.AttachmentManager_signal_needs_location_access, Toast.LENGTH_LONG).show() }
         .onSomeGranted { selectLocationLauncher.launch(chatColors) }
         .execute()
     }
