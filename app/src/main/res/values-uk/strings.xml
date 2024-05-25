@@ -80,7 +80,7 @@
     <string name="AttachmentKeyboard_file">Файл</string>
     <string name="AttachmentKeyboard_contact">Контакт</string>
     <string name="AttachmentKeyboard_location">Розташування</string>
-    <string name="AttachmentKeyboard_Signal_needs_permission_to_show_your_photos_and_videos">Signal needs permission to show your photos and videos</string>
+    <string name="AttachmentKeyboard_Signal_needs_permission_to_show_your_photos_and_videos">Signal потребує дозволу, щоб показувати ваші фото і відео</string>
     <!-- Text for a button prompting users to allow Signal access to their gallery storage -->
     <string name="AttachmentKeyboard_allow_access">Надати доступ</string>
     <string name="AttachmentKeyboard_payment">Платіж</string>
@@ -100,11 +100,11 @@
     <!-- Toast text explaining Signal\'s need for location access -->
     <string name="AttachmentManager_signal_needs_location_access">Signal потребує доступу до розташування, щоб ним поділитися.</string>
     <!-- Dialog title asking users for gallery storage permission -->
-    <string name="AttachmentManager_signal_allow_storage">Allow access to storage</string>
+    <string name="AttachmentManager_signal_allow_storage">Надайте доступ до сховища</string>
     <!-- Dialog description that will explain the steps needed to give gallery storage permission -->
-    <string name="AttachmentManager_signal_to_show_photos">To show photos and videos:</string>
+    <string name="AttachmentManager_signal_to_show_photos">Для показу фото і відео:</string>
     <!-- Toast text explaining Signal\'s need for storage access -->
-    <string name="AttachmentManager_signal_needs_storage_access">Signal needs storage access to show your photos and videos.</string>
+    <string name="AttachmentManager_signal_needs_storage_access">Signal потребує доступу до сховища, щоб показувати ваші фото і відео.</string>
 
     <!-- Alert dialog title to show the recipient has not activated payments -->
     <string name="AttachmentManager__not_activated_payments">%1$s не активував/-ла платежі </string>
@@ -225,6 +225,38 @@
     <string name="CameraXFragment_capture_description">Захопити</string>
     <string name="CameraXFragment_change_camera_description">Змінити камеру</string>
     <string name="CameraXFragment_open_gallery_description">Відкрити галерею</string>
+    <!-- Button text asking for access to camera permissions -->
+    <string name="CameraXFragment_allow_access">Allow access</string>
+    <!-- Dialog title asking users for camera and microphone permission -->
+    <string name="CameraXFragment_allow_access_camera_microphone">Allow access to your camera and microphone</string>
+    <!-- Dialog title asking users for camera permission -->
+    <string name="CameraXFragment_allow_access_camera">Allow access to your camera</string>
+    <!-- Dialog title asking users for microphone permission -->
+    <string name="CameraXFragment_allow_access_microphone">Allow access to your microphone</string>
+    <!-- Text explaining why Signal needs camera access in order to take photos -->
+    <string name="CameraXFragment_to_capture_photos_allow_camera">To capture photos, allow Signal access to the camera.</string>
+    <!-- Text explaining why Signal needs camera access in order to take photos and videos -->
+    <string name="CameraXFragment_to_capture_photos_and_video_allow_camera">To capture photos and video, allow Signal access to the camera.</string>
+    <!-- Text explaining why Signal needs camera and microphone access in order to take photos and videos -->
+    <string name="CameraXFragment_to_capture_photos_and_video_allow_camera_microphone">To capture photos and video, allow Signal access to the camera and microphone.</string>
+    <!-- Text explaining why Signal needs microphone access to take videos -->
+    <string name="CameraXFragment_to_capture_videos_with_sound">To capture videos with sound, allow Signal access to your microphone.</string>
+    <!-- Text explaining why Signal needs camera access to scan QR codes -->
+    <string name="CameraXFragment_to_scan_qr_code_allow_camera">To scan a QR code, allow Signal access to the camera.</string>
+    <!-- Toast dialog explaining why Signal needs camera permissions when capturing photos -->
+    <string name="CameraXFragment_signal_needs_camera_access_capture_photos">Signal needs camera access to capture photos</string>
+    <!-- Toast dialog explaining why Signal needs camera permissions when scanning QR codes -->
+    <string name="CameraXFragment_signal_needs_camera_access_scan_qr_code">Signal needs camera access to scan QR codes</string>
+    <!-- Toast dialog explaining why Signal needs microphone permissions -->
+    <string name="CameraXFragment_signal_needs_microphone_access_video">Signal needs microphone access to capture video</string>
+    <!-- Dialog description that explains the steps needed to give camera permission -->
+    <string name="CameraXFragment_to_capture_photos">To capture photos in Signal:</string>
+    <!-- Dialog description that explains the steps needed to give camera and microphone permission -->
+    <string name="CameraXFragment_to_capture_photos_videos">To capture photos and videos in Signal:</string>
+    <!-- Dialog description that explains the steps needed to give microphone permission -->
+    <string name="CameraXFragment_to_capture_videos">To capture videos with sound:</string>
+    <!-- Dialog description that explains the steps needed to give Signal camera permissions -->
+    <string name="CameraXFragment_to_scan_qr_codes">To scan QR codes:</string>
 
     <!-- CameraContacts -->
     <string name="CameraContacts_recent_contacts">Нещодавні контакти</string>
@@ -297,7 +329,8 @@
 
     <!-- ContactsDatabase -->
     <string name="ContactsDatabase_message_s">Повідомлення %1$s</string>
-    <string name="ContactsDatabase_signal_call_s">Виклик у Signal %1$s</string>
+    <string name="ContactsDatabase_signal_call_s">Signal Voice Call %1$s</string>
+    <string name="ContactsDatabase_signal_video_call_s">Signal Video Call %1$s</string>
 
     <!-- ContactNameEditActivity -->
     <!-- Toolbar title for contact name edit activity -->
@@ -400,7 +433,7 @@
     <string name="ConversationActivity_attachment_exceeds_size_limits">Вкладення перевищує обмеження за розміром для типу повідомлення, яке ви надсилаєте.</string>
     <string name="ConversationActivity_unable_to_record_audio">Неможливо записати аудіо!</string>
     <string name="ConversationActivity_you_cant_send_messages_to_this_group">Ви не зможете відправляти повідомлення в цю групу, оскільки більше не є її членом.</string>
-    <string name="ConversationActivity_only_s_can_send_messages">Тільки %1$s можуть відправляти повідомлення.</string>
+    <string name="ConversationActivity_only_s_can_send_messages">Повідомлення можуть надсилати тільки %1$s.</string>
     <string name="ConversationActivity_admins">адміністратори</string>
     <string name="ConversationActivity_message_an_admin">Написати повідомлення адміністратору</string>
     <string name="ConversationActivity_cant_start_group_call">Неможливо почати груповий виклик</string>
@@ -480,9 +513,9 @@
     <!-- ConversationAdapter -->
     <plurals name="ConversationAdapter_n_unread_messages">
         <item quantity="one">%1$d непрочитане повідомлення</item>
-        <item quantity="few">%1$d непрочитаних повідомлень</item>
+        <item quantity="few">%1$d непрочитані повідомлення</item>
         <item quantity="many">%1$d непрочитаних повідомлень</item>
-        <item quantity="other">%1$d непрочитаних повідомлень</item>
+        <item quantity="other">%1$d непрочитаного повідомлення</item>
     </plurals>
 
     <!-- ConversationFragment -->
@@ -663,7 +696,7 @@
         <item quantity="other">Прочитати</item>
     </plurals>
     <plurals name="ConversationListFragment_unread_plural">
-        <item quantity="one">Непрочитане</item>
+        <item quantity="one">Непрочитаний</item>
         <item quantity="few">Непрочитані</item>
         <item quantity="many">Непрочитані</item>
         <item quantity="other">Непрочитані</item>
@@ -805,7 +838,7 @@
     <!-- Used when getting a time in the future. For example, Tomorrow at 9:00pm -->
     <string name="DateUtils_tomorrow">Завтра</string>
     <!-- Used in the context: Tonight at 9:00pm for example. Specifically this is after 7pm -->
-    <string name="DateUtils_tonight">Сьогодні ввечері</string>
+    <string name="DateUtils_tonight">Сьогодні</string>
 
     <!-- Scheduled Messages -->
     <!-- Title for dialog that shows all the users scheduled messages for a chat -->
@@ -1354,10 +1387,10 @@
     <string name="MessageRetrievalService_background_connection_enabled">Фонове підключення активоване</string>
 
     <!-- MediaOverviewActivity -->
-    <string name="MediaOverviewActivity_Media">Медіа</string>
+    <string name="MediaOverviewActivity_Media">Медіафайли</string>
     <string name="MediaOverviewActivity_Files">Файли</string>
     <string name="MediaOverviewActivity_Audio">Аудіо</string>
-    <string name="MediaOverviewActivity_All">Всі</string>
+    <string name="MediaOverviewActivity_All">Усі</string>
     <plurals name="MediaOverviewActivity_Media_delete_confirm_title">
         <item quantity="one">Видалити вибраний елемент?</item>
         <item quantity="few">Видалити вибраний елемент?</item>
@@ -1381,7 +1414,7 @@
     <string name="MediaOverviewActivity_Grid_view_description">Сітка</string>
     <string name="MediaOverviewActivity_List_view_description">Список</string>
     <string name="MediaOverviewActivity_Selected_description">Обрані</string>
-    <string name="MediaOverviewActivity_select_all">Обрати все</string>
+    <string name="MediaOverviewActivity_select_all">Вибрати все</string>
     <plurals name="MediaOverviewActivity_save_plural">
         <item quantity="one">Зберегти</item>
         <item quantity="few">Зберегти</item>
@@ -1484,9 +1517,9 @@
     <string name="MessageRecord_s_joined_signal">%1$s приєднався до Signal!</string>
     <string name="MessageRecord_you_disabled_disappearing_messages">Ви вимкнули тимчасові повідомлення.</string>
     <string name="MessageRecord_s_disabled_disappearing_messages">Користувач %1$s вимкнув тимчасові повідомлення.</string>
-    <string name="MessageRecord_you_set_disappearing_message_time_to_s">Ви встановили таймер тимчасових повідомлень на %1$s.</string>
-    <string name="MessageRecord_s_set_disappearing_message_time_to_s">Користувач %1$s встановив таймер тимчасових повідомлень на %2$s.</string>
-    <string name="MessageRecord_disappearing_message_time_set_to_s">Таймер тимчасових повідомлень встановлено на %1$s.</string>
+    <string name="MessageRecord_you_set_disappearing_message_time_to_s">Ви встановили таймер тимчасових повідомлень: %1$s.</string>
+    <string name="MessageRecord_s_set_disappearing_message_time_to_s">Користувач %1$s встановив таймер тимчасових повідомлень: %2$s.</string>
+    <string name="MessageRecord_disappearing_message_time_set_to_s">Установлено таймер: %1$s.</string>
     <string name="MessageRecord_this_group_was_updated_to_a_new_group">Цю групу оновлено до Нової групи.</string>
     <string name="MessageRecord_you_couldnt_be_added_to_the_new_group_and_have_been_invited_to_join">Вас не вдалось додати до Нової групи, а тому було запрошено приєднатись.</string>
     <string name="MessageRecord_chat_session_refreshed">Сесію чату оновлено</string>
@@ -1647,8 +1680,8 @@
     <string name="MessageRecord_the_group_link_has_been_reset">Посилання на групу була скинуто.</string>
 
     <!-- GV2 group link joins -->
-    <string name="MessageRecord_you_joined_the_group_via_the_group_link">Ви приєднались до групи за допомогою посилання.</string>
-    <string name="MessageRecord_s_joined_the_group_via_the_group_link">%1$s приєднався (-лась) до групи за допомогою посилання.</string>
+    <string name="MessageRecord_you_joined_the_group_via_the_group_link">Ви приєдналися до групи за допомогою посилання.</string>
+    <string name="MessageRecord_s_joined_the_group_via_the_group_link">Користувач %1$s приєднався до групи за допомогою посилання.</string>
 
     <!-- GV2 group link requests -->
     <string name="MessageRecord_you_sent_a_request_to_join_the_group">Ви надіслали запит на приєднання до групи.</string>
@@ -1926,7 +1959,7 @@
     <string name="RatingManager_later">Іншим разом</string>
 
     <!-- ReactionsBottomSheetDialogFragment -->
-    <string name="ReactionsBottomSheetDialogFragment_all">Всі · %1$d</string>
+    <string name="ReactionsBottomSheetDialogFragment_all">Усі · %1$d</string>
 
     <!-- ReactionsConversationView -->
     <string name="ReactionsConversationView_plus">+%1$d</string>
@@ -2187,7 +2220,7 @@
         <item quantity="other">%1$d спільної групи</item>
     </plurals>
     <!-- Text displayed in title for external recipients -->
-    <string name="AboutSheet__about">Про себе</string>
+    <string name="AboutSheet__about">Про контакт</string>
     <!-- Text displayed in title for you -->
     <string name="AboutSheet__you">Ви</string>
     <!-- Displays the name of a contact. The first placeholder is the name the user has assigned to that contact, the second name is the name the contact assigned to themselves -->
@@ -2331,7 +2364,7 @@
     <string name="RevealableMessageView_view_photo">Переглянути фото</string>
     <string name="RevealableMessageView_view_video">Переглянути відео</string>
     <string name="RevealableMessageView_viewed">Переглянуто</string>
-    <string name="RevealableMessageView_media">Медіа</string>
+    <string name="RevealableMessageView_media">Медіафайли</string>
 
     <!-- ReviewBannerView -->
     <!-- ReviewBannerView text when a name conflict has been found -->
@@ -2453,7 +2486,7 @@
     <string name="ThreadRecord_can_accept_payments">%1$s тепер може приймати платежі</string>
     <string name="ThreadRecord_s_is_on_signal">%1$s приєднався до Signal!</string>
     <string name="ThreadRecord_disappearing_messages_disabled">Тимчасові повідомлення вимкнено</string>
-    <string name="ThreadRecord_disappearing_message_time_updated_to_s">Таймер тимчасових повідомлень встановлено на %1$s</string>
+    <string name="ThreadRecord_disappearing_message_time_updated_to_s">Таймер встановлено на %1$s</string>
     <string name="ThreadRecord_safety_number_changed">Змінився код безпеки</string>
     <string name="ThreadRecord_your_safety_number_with_s_has_changed">Код безпеки для чату з %1$s змінився.</string>
     <string name="ThreadRecord_you_marked_verified">Ви перевірили</string>
@@ -2465,7 +2498,7 @@
     <string name="ThreadRecord_hidden_recipient">Ви приховали цей контакт. Щоби знову додати контакт до списку, надішліть йому повідомлення.</string>
     <string name="ThreadRecord_photo">Світлини</string>
     <string name="ThreadRecord_gif">GIF</string>
-    <string name="ThreadRecord_voice_message">Голосове Повідомлення</string>
+    <string name="ThreadRecord_voice_message">Голосове повідомлення</string>
     <string name="ThreadRecord_file">Файл</string>
     <string name="ThreadRecord_video">Відео</string>
     <string name="ThreadRecord_chat_session_refreshed">Сесію чату оновлено</string>
@@ -2847,6 +2880,10 @@
     <string name="contact_selection_activity__refresh_contacts">Оновити контакти</string>
     <!-- Row item description for refreshing contacts -->
     <string name="contact_selection_activity__missing_someone">Когось не вистачає? Спробуйте оновити</string>
+    <!-- Row item title for finding people on Signal via your contacts -->
+    <string name="contact_selection_activity__find_people_you_know">Find people you know on Signal</string>
+    <!-- Row item description asking users for access to their contacts to find people they know -->
+    <string name="contact_selection_activity__allow_access_to_contacts">Allow access to your contacts</string>
     <!-- Row header title for more section -->
     <string name="contact_selection_activity__more">Більше</string>
 
@@ -2882,6 +2919,14 @@
     <string name="ContactSelectionListFragment__find_by_phone_number">Пошук за номером телефону</string>
     <!-- Text on row item to find user by username -->
     <string name="ContactSelectionListFragment__find_by_username">Пошук за ім\'ям користувача</string>
+    <!-- Dialog title asking users for contact permission -->
+    <string name="ContactSelectionListFragment_allow_access_contacts">Allow access to contacts</string>
+    <!-- Dialog description that will explain the steps needed to give contact permissions -->
+    <string name="ContactSelectionListFragment_to_find_people">To find people you know on Signal:</string>
+    <!-- Text on button prompting users to give Signal contact permissions -->
+    <string name="ContactSelectionListFragment__allow_access">Allow access</string>
+    <!-- Text asking for user\'s contact permission -->
+    <string name="ContactSelectionListFragment__allow_access_to_your_contacts_encrypted">Allow access to your contacts. Your contacts are encrypted and not visible to the Signal service.</string>
 
     <!-- contact_selection_list_fragment -->
     <string name="contact_selection_list_fragment__signal_needs_access_to_your_contacts_in_order_to_display_them">Signal потребує дозволів \"Контакти\", щоб показати контакти.</string>
@@ -3114,7 +3159,7 @@
     <string name="load_more_header__loading">Завантаження</string>
 
     <!-- media_overview_activity -->
-    <string name="media_overview_activity__no_media">Без медіа</string>
+    <string name="media_overview_activity__no_media">Файлів немає</string>
 
     <!-- message_recipients_list_item -->
     <string name="message_recipients_list_item__view">Переглянути</string>
@@ -3191,15 +3236,15 @@
     <string name="EditProfileNameFragment_failed_to_save_due_to_network_issues_try_again_later">Не вдалось зберегти через мережеву помилку. Спробуйте пізніше.</string>
 
     <!-- recipient_preferences_activity -->
-    <string name="recipient_preference_activity__shared_media">Спільні медіа</string>
+    <string name="recipient_preference_activity__shared_media">Надіслані медіафайли</string>
 
     <!-- recipients_panel -->
 
     <!-- verify_display_fragment -->
     <!-- Explanation of how to verify the safety numbers. %s is replaced with the name of the other recipient -->
-    <string name="verify_display_fragment__pnp_verify_safety_numbers_explanation_with_s">Щоб перевірити наявність наскрізного шифрування з користувачем %1$s, порівняйте наведені вище цифри із цифрами на пристрої вашого співрозмовника. Користувач також може відсканувати ваш код за допомогою свого пристрою.</string>
+    <string name="verify_display_fragment__pnp_verify_safety_numbers_explanation_with_s">Щоб перевірити наявність наскрізного шифрування з користувачем %1$s, порівняйте наведені вище цифри із цифрами на пристрої цього співрозмовника. Також можна зісканувати код з пристрою користувача.</string>
     <string name="verify_display_fragment__tap_to_scan">Натисніть, щоб сканувати</string>
-    <string name="verify_display_fragment__successful_match">Збіг вдалий</string>
+    <string name="verify_display_fragment__successful_match">Коди збігаються</string>
     <string name="verify_display_fragment__failed_to_verify_safety_number">Не вдалося перевірити код безпеки</string>
     <string name="verify_display_fragment__loading">Завантаження…</string>
     <string name="verify_display_fragment__mark_as_verified">Позначити як перевірений</string>
@@ -3474,7 +3519,7 @@
     <string name="preferences_storage__review_storage">Переглянути сховище файлів</string>
     <string name="preferences_storage__delete_older_messages">Видаляти старіші повідомлення?</string>
     <!-- Dialog title shown when selecting delete message history from manage storage -->
-    <string name="preferences_storage__delete_message_history">Delete message history?</string>
+    <string name="preferences_storage__delete_message_history">Видалити історію повідомлень?</string>
     <string name="preferences_storage__this_will_permanently_delete_all_message_history_and_media">Усі повідомлення і медіа, які старіші ніж %1$s, будуть безповоротно видалені з вашого пристрою.</string>
     <!-- The body of an alert dialog that is shown when confirming a trim operation. Trimming will delete all but the most recent messages in a chat. The placeholder represents how many messages are kept in each chat. All older messages are deleted. -->
     <plurals name="preferences_storage__this_will_permanently_trim_all_conversations_to_the_d_most_recent_messages">
@@ -3507,7 +3552,7 @@
     <string name="preferences_app_protection__payments">Платежі</string>
     <string name="preferences_chats__chats">Чати</string>
     <string name="preferences_app_updates__title">Оновлення додатку</string>
-    <string name="preferences_data_and_storage__manage_storage">Керувати сховищем</string>
+    <string name="preferences_data_and_storage__manage_storage">Керування сховищем</string>
     <string name="preferences_data_and_storage__use_less_data_for_calls">Економити трафік для дзвінків</string>
     <string name="preferences_data_and_storage__never">Ніколи</string>
     <string name="preferences_data_and_storage__wifi_and_mobile_data">Wi-Fi і мобільні дані</string>
@@ -3570,7 +3615,7 @@
 
     <!-- Payments -->
     <string name="PaymentsActivityFragment__all_activity">Вся активність</string>
-    <string name="PaymentsAllActivityFragment__all">Всі</string>
+    <string name="PaymentsAllActivityFragment__all">Усі</string>
     <string name="PaymentsAllActivityFragment__sent">Надіслано</string>
     <string name="PaymentsAllActivityFragment__received">Одержано</string>
 
@@ -4099,13 +4144,13 @@
 
     <!-- CallNotificationBuilder -->
     <!-- Displayed in a notification when a Signal voice call is ringing -->
-    <string name="CallNotificationBuilder__incoming_signal_voice_call">Вхідний голосовий виклик Signal</string>
+    <string name="CallNotificationBuilder__incoming_signal_voice_call">Вхідний аудіовиклик у Signal</string>
     <!-- Displayed in a notification when a Signal video call is ringing -->
     <string name="CallNotificationBuilder__incoming_signal_video_call">Вхідний відеовиклик Signal</string>
     <!-- Displayed in a notification when a Signal group call is ringing -->
     <string name="CallNotificationBuilder__incoming_signal_group_call">Вхідний груповий виклик Signal</string>
     <!-- Displayed in a notification when a Signal voice call is in progress -->
-    <string name="CallNotificationBuilder__ongoing_signal_voice_call">Триває голосовий виклик Signal</string>
+    <string name="CallNotificationBuilder__ongoing_signal_voice_call">Триває аудіовиклик у Signal</string>
     <!-- Displayed in a notification when a Signal video call is in progress -->
     <string name="CallNotificationBuilder__ongoing_signal_video_call">Триває відеовиклик Signal</string>
     <!-- Displayed in a notification when a Signal group call is in progress -->
@@ -4204,7 +4249,7 @@
     <string name="PhoneNumberPrivacySettingsFragment__nobody_can_find_me_warning_message">Якщо обрати варіант «Ніхто» для параметра «Хто може знайти мене за номером», людям буде складніше знайти вас у Signal.</string>
     <!-- Dialog button text for canceling change action -->
     <string name="PhoneNumberPrivacySettingsFragment__cancel">Скасувати</string>
-    <string name="PhoneNumberPrivacy_everyone">Всі</string>
+    <string name="PhoneNumberPrivacy_everyone">Усі</string>
     <string name="PhoneNumberPrivacy_nobody">Ніхто</string>
     <string name="preferences_app_protection__screen_lock">Блокування екрану</string>
     <string name="preferences_app_protection__lock_signal_access_with_android_screen_lock_or_fingerprint">Заблокувати доступ до Signal через екран блокування чи відбиток пальця в Android</string>
@@ -4747,7 +4792,7 @@
     <!-- Label for our high quality media conversion. This has better quality than standard. -->
     <string name="QualitySelectorBottomSheetDialog__slower_more_data">Повільніше, більше даних</string>
     <!-- Title heading for our media conversion quality selector. -->
-    <string name="QualitySelectorBottomSheetDialog__media_quality">Якість медіа</string>
+    <string name="QualitySelectorBottomSheetDialog__media_quality">Якість медіафайлів</string>
 
     <!-- AppSettingsFragment -->
     <string name="AppSettingsFragment__invite_your_friends">Запросити друзів</string>
@@ -4896,7 +4941,7 @@
     <!-- This refers to the multi-tasking overview (recent apps) from the Android operating system.-->
     <string name="PrivacySettingsFragment__block_screenshots_in_the_recents_list_and_inside_the_app">Блокувати знімки екрану в списку недавніх і в застосунку</string>
     <string name="PrivacySettingsFragment__signal_message_and_calls">Повідомлення і виклики в Signal, завжди ретранслювати виклики, захищений відправник</string>
-    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Таймер за умовчанням для нових чатів</string>
+    <string name="PrivacySettingsFragment__default_timer_for_new_changes">Стандартний таймер для нових чатів</string>
     <string name="PrivacySettingsFragment__set_a_default_disappearing_message_timer_for_all_new_chats_started_by_you">Установіть стандартний таймер для тимчасових повідомлень у всіх нових чатах, які ви починаєте.</string>
     <!-- Summary for stories preference to launch into story privacy settings -->
     <string name="PrivacySettingsFragment__payment_lock_require_lock">Увімкніть розблокування екрана Android чи розблокування відбитком пальця для переказу коштів</string>
@@ -4930,8 +4975,8 @@
     <string name="ExpireTimerSettingsFragment__save">Зберегти</string>
 
     <string name="CustomExpireTimerSelectorView__seconds">секунди</string>
-    <string name="CustomExpireTimerSelectorView__minutes">хвилин</string>
-    <string name="CustomExpireTimerSelectorView__hours">годин</string>
+    <string name="CustomExpireTimerSelectorView__minutes">хвилини</string>
+    <string name="CustomExpireTimerSelectorView__hours">години</string>
     <string name="CustomExpireTimerSelectorView__days">дні</string>
     <string name="CustomExpireTimerSelectorView__weeks">тижні</string>
 
@@ -4947,7 +4992,7 @@
     <string name="HelpFragment__licenced_under_the_agplv3">Ліцензія: GNU AGPLv3</string>
 
     <!-- DataAndStorageSettingsFragment -->
-    <string name="DataAndStorageSettingsFragment__media_quality">Якість медіа</string>
+    <string name="DataAndStorageSettingsFragment__media_quality">Якість медіафайлів</string>
     <string name="DataAndStorageSettingsFragment__sent_media_quality">Якість медіафайлів, які ви надсилаєте</string>
     <string name="DataAndStorageSettingsFragment__sending_high_quality_media_will_use_more_data">Відправлення медіа високої якості споживатиме більше даних.</string>
     <!-- Setting option that can be selected to default media to be sent as high quality by default -->
@@ -5075,7 +5120,7 @@
     <string name="ConversationSettingsFragment__unblock">Розблокувати</string>
     <string name="ConversationSettingsFragment__unblock_group">Розблокувати групу</string>
     <string name="ConversationSettingsFragment__add_to_a_group">Додати до групи</string>
-    <string name="ConversationSettingsFragment__see_all">Побачити все</string>
+    <string name="ConversationSettingsFragment__see_all">Показати всі</string>
     <string name="ConversationSettingsFragment__add_members">Додати учасників</string>
     <string name="ConversationSettingsFragment__permissions">Дозволи</string>
     <string name="ConversationSettingsFragment__requests_and_invites">Запити і запрошення</string>
@@ -5233,7 +5278,7 @@
         <item quantity="other">Не вдалось переслати повідомлення тому що вони більше недоступні.</item>
     </plurals>
     <!-- Error message shown when attempting to select a group to forward/share but it\'s announcement only and you are not an admin -->
-    <string name="MultiselectForwardFragment__only_admins_can_send_messages_to_this_group">Лише адміністратори можуть відправляти повідомлення у цю групу.</string>
+    <string name="MultiselectForwardFragment__only_admins_can_send_messages_to_this_group">Надсилати повідомлення цій групі можуть тільки адміністратори.</string>
     <string name="MultiselectForwardFragment__limit_reached">Ліміт досягнуто</string>
 
     <!-- Media V2 -->
@@ -5730,7 +5775,7 @@
     <!-- Donation receipts activity title -->
     <string name="DonationReceiptListFragment__all_activity">Вся активність</string>
     <!-- Donation receipts all tab label -->
-    <string name="DonationReceiptListFragment__all">Всі</string>
+    <string name="DonationReceiptListFragment__all">Усі</string>
     <!-- Donation receipts recurring tab label -->
     <string name="DonationReceiptListFragment__recurring">Поточні</string>
     <!-- Donation receipts one-time tab label -->
@@ -5763,7 +5808,7 @@
     <!-- Label for Chats tab in home app screen -->
     <string name="ConversationListTabs__chats">Чати</string>
     <!-- Label for Calls tab in home app screen -->
-    <string name="ConversationListTabs__calls">Дзвінки</string>
+    <string name="ConversationListTabs__calls">Виклики</string>
     <!-- Label for Stories tab in home app screen -->
     <string name="ConversationListTabs__stories">Історії</string>
     <!-- String for counts above 99 in conversation list tabs -->
@@ -6044,7 +6089,7 @@
     <!-- Name story screen error when save attempted but label is duplicate -->
     <string name="CreateStoryWithViewersFragment__there_is_already_a_story_with_this_name">Історія з такою назвою вже існує.</string>
     <!-- Text for select all action when editing recipients for a story -->
-    <string name="BaseStoryRecipientSelectionFragment__select_all">Обрати все</string>
+    <string name="BaseStoryRecipientSelectionFragment__select_all">Вибрати все</string>
     <!-- Choose story type bottom sheet title -->
     <string name="ChooseStoryTypeBottomSheet__choose_your_story_type">Виберіть тип історії</string>
     <!-- Choose story type bottom sheet new story row title -->
@@ -6707,7 +6752,7 @@
     <!-- Accessibility description for the video call button -->
     <string name="CallLogAdapter__start_a_video_call">Почати відеодзвінок</string>
     <!-- Accessibility description for the voice call button -->
-    <string name="CallLogAdapter__start_a_voice_call">Почати голосовий виклик</string>
+    <string name="CallLogAdapter__start_a_voice_call">Почати аудіовиклик</string>
 
     <!-- Call Log context menu -->
     <!-- Displayed as a context menu item to start a video call -->
@@ -7134,13 +7179,13 @@
 
     <!-- ManageStorageSettingsFragment -->
     <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
-    <string name="ManageStorageSettingsFragment_chat_limit">Chat limits</string>
+    <string name="ManageStorageSettingsFragment_chat_limit">Обмеження чатів</string>
     <!-- Settings row title text that can be clicked to delete all messages and associated data from the device -->
-    <string name="ManageStorageSettingsFragment_delete_message_history">Delete message history</string>
+    <string name="ManageStorageSettingsFragment_delete_message_history">Видалити історію повідомлень</string>
     <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (time is a range like 30 days or 1 year etc) -->
-    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Messages older than the selected time will be permanently deleted.</string>
+    <string name="ManageStorageSettingsFragment_keep_messages_duration_warning">Повідомлення, старіші за обраний період, остаточно видаляються.</string>
     <!-- Warning message at the bottom of a settings screen indicating how messages will be deleted based on user\'s selection (limit is a number like 500 or 5,000) -->
-    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Messages exceeding the selected length will be permanently deleted.</string>
+    <string name="ManageStorageSettingsFragment_chat_length_limit_warning">Коли кількість повідомлень перевищує обране обмеження, надлишок остаточно видаляється.</string>
 
     <!-- EOF -->
 </resources>
