@@ -36,7 +36,7 @@ import org.thoughtcrime.securesms.conversation.ConversationIntents;
 import org.thoughtcrime.securesms.database.CallLinkTable;
 import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.database.model.GroupRecord;
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.dependencies.AppDependencies;
 import org.thoughtcrime.securesms.groups.GroupId;
 import org.thoughtcrime.securesms.groups.ui.invitesandrequests.joining.GroupJoinBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.groups.ui.invitesandrequests.joining.GroupJoinUpdateRequiredBottomSheetDialogFragment;
@@ -84,7 +84,7 @@ public class CommunicationActions {
     }
 
     if (recipient.isRegistered()) {
-      ApplicationDependencies.getSignalCallManager().isCallActive(new ResultReceiver(new Handler(Looper.getMainLooper())) {
+      AppDependencies.getSignalCallManager().isCallActive(new ResultReceiver(new Handler(Looper.getMainLooper())) {
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
           if (resultCode == 1) {
@@ -127,7 +127,7 @@ public class CommunicationActions {
       return;
     }
 
-    ApplicationDependencies.getSignalCallManager().isCallActive(new ResultReceiver(new Handler(Looper.getMainLooper())) {
+    AppDependencies.getSignalCallManager().isCallActive(new ResultReceiver(new Handler(Looper.getMainLooper())) {
       @Override
       protected void onReceiveResult(int resultCode, Bundle resultData) {
         startCallInternal(callContext, recipient, resultCode != 1, fromCallLink);
@@ -392,7 +392,7 @@ public class CommunicationActions {
                .withPermanentDenialDialog(callContext.getContext().getString(R.string.ConversationActivity__to_call_signal_needs_access_to_your_microphone), null, R.string.ConversationActivity_allow_access_microphone, R.string.ConversationActivity__to_start_call, callContext.getFragmentManager())
                .onAnyDenied(() -> Toast.makeText(callContext.getContext(), R.string.ConversationActivity_signal_needs_microphone_access_voice_call, Toast.LENGTH_LONG).show())
                .onAllGranted(() -> {
-                 ApplicationDependencies.getSignalCallManager().startOutgoingAudioCall(recipient);
+                 AppDependencies.getSignalCallManager().startOutgoingAudioCall(recipient);
 
                  MessageSender.onMessageSent();
 
@@ -405,36 +405,16 @@ public class CommunicationActions {
                .execute();
   }
 
-  private static void startVideoCallInternal2(@NonNull CallContext callContext, @NonNull Recipient recipient, boolean fromCallLink) {
-    ApplicationDependencies.getSignalCallManager().startPreJoinCall(recipient);
+  private static void startVideoCallInternal(@NonNull CallContext callContext, @NonNull Recipient recipient, boolean fromCallLink) {
+    AppDependencies.getSignalCallManager().startPreJoinCall(recipient);
 
     Intent activityIntent = new Intent(callContext.getContext(), WebRtcCallActivity.class);
 
     activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        .putExtra(WebRtcCallActivity.EXTRA_ENABLE_VIDEO_IF_AVAILABLE, true)
-        .putExtra(WebRtcCallActivity.EXTRA_STARTED_FROM_CALL_LINK, fromCallLink);
+                  .putExtra(WebRtcCallActivity.EXTRA_ENABLE_VIDEO_IF_AVAILABLE, true)
+                  .putExtra(WebRtcCallActivity.EXTRA_STARTED_FROM_CALL_LINK, fromCallLink);
 
-    callContext.startActivity(activityIntent);  
-  }
-
-  private static void startVideoCallInternal(@NonNull CallContext callContext, @NonNull Recipient recipient, boolean fromCallLink) {
-    // SW: TODO: add user-facing option to enable/disable audio-only call initialization by default
-    if (Permissions.hasAny(callContext.getContext(), Manifest.permission.RECORD_AUDIO)) {
-      startVideoCallInternal2(callContext, recipient, fromCallLink);
-      return;
-    }
-
-    callContext.getPermissionsBuilder()
-               .request(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA)
-               .ifNecessary()
-               .withRationaleDialog(callContext.getContext().getString(R.string.ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s, recipient.getDisplayName(callContext.getContext())),
-                                    R.drawable.ic_mic_solid_24,
-                                    R.drawable.ic_video_solid_24_tinted)
-               .withPermanentDenialDialog(callContext.getContext().getString(R.string.ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s, recipient.getDisplayName(callContext.getContext())))
-               .onAllGranted(() -> {
-                 startVideoCallInternal2(callContext, recipient, fromCallLink);
-               })
-               .execute();
+    callContext.startActivity(activityIntent);
   }
 
   private static void handleE164Link(Activity activity, String e164) {

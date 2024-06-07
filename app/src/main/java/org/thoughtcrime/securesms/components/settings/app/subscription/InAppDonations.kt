@@ -1,7 +1,7 @@
 package org.thoughtcrime.securesms.components.settings.app.subscription
 
 import org.signal.donations.PaymentSourceType
-import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalType
+import org.thoughtcrime.securesms.database.InAppPaymentTable
 
 /**
  * Helper object to determine in-app donations availability.
@@ -20,11 +20,11 @@ object InAppDonations {
     return false
   }
 
-  fun isPaymentSourceAvailable(paymentSourceType: PaymentSourceType, donateToSignalType: DonateToSignalType): Boolean {
+  fun isPaymentSourceAvailable(paymentSourceType: PaymentSourceType, inAppPaymentType: InAppPaymentTable.Type): Boolean {
     return false
   }
 
-  private fun isPayPalAvailableForDonateToSignalType(donateToSignalType: DonateToSignalType): Boolean {
+  private fun isPayPalAvailableForDonateToSignalType(inAppPaymentType: InAppPaymentTable.Type): Boolean {
     return false
   }
 
@@ -67,7 +67,7 @@ object InAppDonations {
    * Whether the user is in a region which supports SEPA Debit transfers, based off local phone number
    * and donation type.
    */
-  fun isSEPADebitAvailableForDonateToSignalType(donateToSignalType: DonateToSignalType): Boolean {
+  fun isSEPADebitAvailableForDonateToSignalType(inAppPaymentType: InAppPaymentTable.Type): Boolean {
     return false
   }
 
@@ -75,7 +75,7 @@ object InAppDonations {
    * Whether the user is in a region which suports IDEAL transfers, based off local phone number and
    * donation type
    */
-  fun isIDEALAvailbleForDonateToSignalType(donateToSignalType: DonateToSignalType): Boolean {
+  fun isIDEALAvailbleForDonateToSignalType(inAppPaymentType: InAppPaymentTable.Type): Boolean {
     return false
   }
 }

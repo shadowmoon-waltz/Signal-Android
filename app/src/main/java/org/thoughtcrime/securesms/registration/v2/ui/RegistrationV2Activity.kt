@@ -9,6 +9,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.ActivityNavigator
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.BaseActivity
@@ -16,9 +18,11 @@ import org.thoughtcrime.securesms.MainActivity
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.lock.v2.CreateSvrPinActivity
+import org.thoughtcrime.securesms.pin.PinRestoreActivity
 import org.thoughtcrime.securesms.profiles.AvatarHelper
 import org.thoughtcrime.securesms.profiles.edit.CreateProfileActivity
 import org.thoughtcrime.securesms.recipients.Recipient
+import org.thoughtcrime.securesms.registration.SmsRetrieverReceiver
 
 /**
  * Activity to hold the entire registration process.
@@ -29,46 +33,73 @@ class RegistrationV2Activity : BaseActivity() {
 
   val sharedViewModel: RegistrationV2ViewModel by viewModels()
 
+  private var smsRetrieverReceiver: SmsRetrieverReceiver? = null
+
+  init {
+    lifecycle.addObserver(SmsRetrieverObserver())
+  }
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_registration_navigation_v2)
-    sharedViewModel.uiState.observe(this) {
-      if (it.registrationCheckpoint == RegistrationCheckpoint.SERVICE_REGISTRATION_COMPLETED) {
+    sharedViewModel.checkpoint.observe(this) {
+      if (it >= RegistrationCheckpoint.LOCAL_REGISTRATION_COMPLETE) {
         handleSuccessfulVerify()
       }
     }
   }
 
   private fun handleSuccessfulVerify() {
-    // TODO [regv2]: add functionality of [RegistrationCompleteFragment]
-    val isProfileNameEmpty = Recipient.self().profileName.isEmpty
-    val isAvatarEmpty = !AvatarHelper.hasAvatar(this, Recipient.self().id)
-    val needsProfile = isProfileNameEmpty || isAvatarEmpty
-    val needsPin = !sharedViewModel.hasPin()
-
-    Log.i(TAG, "Pin restore flow not required. Profile name: $isProfileNameEmpty | Profile avatar: $isAvatarEmpty | Needs PIN: $needsPin")
-
-    SignalStore.internalValues().setForceEnterRestoreV2Flow(true)
-
-    if (!needsProfile && !needsPin) {
-      sharedViewModel.completeRegistration()
-    }
-    sharedViewModel.setInProgress(false)
-
-    val startIntent = MainActivity.clearTop(this).apply {
-      if (needsPin) {
-        putExtra("next_intent", CreateSvrPinActivity.getIntentForPinCreate(this@RegistrationV2Activity))
-      }
-
-      if (needsProfile) {
-        putExtra("next_intent", CreateProfileActivity.getIntentForUserProfile(this@RegistrationV2Activity))
-      }
+    if (SignalStore.misc().hasLinkedDevices) {
+      SignalStore.misc().shouldShowLinkedDevicesReminder = sharedViewModel.isReregister
     }
 
-    Log.d(TAG, "Launching ${startIntent.component}")
-    startActivity(startIntent)
-    finish()
-    ActivityNavigator.applyPopAnimationsToPendingTransition(this)
+    if (SignalStore.storageService().needsAccountRestore()) {
+      Log.i(TAG, "Performing pin restore.")
+      startActivity(Intent(this, PinRestoreActivity::class.java))
+      finish()
+    } else {
+      val isProfileNameEmpty = Recipient.self().profileName.isEmpty
+      val isAvatarEmpty = !AvatarHelper.hasAvatar(this, Recipient.self().id)
+      val needsProfile = isProfileNameEmpty || isAvatarEmpty
+      val needsPin = !sharedViewModel.hasPin()
+
+      Log.i(TAG, "Pin restore flow not required. Profile name: $isProfileNameEmpty | Profile avatar: $isAvatarEmpty | Needs PIN: $needsPin")
+
+      SignalStore.internalValues().setForceEnterRestoreV2Flow(true)
+
+      if (!needsProfile && !needsPin) {
+        sharedViewModel.completeRegistration()
+      }
+      sharedViewModel.setInProgress(false)
+
+      val startIntent = MainActivity.clearTop(this).apply {
+        if (needsPin) {
+          putExtra("next_intent", CreateSvrPinActivity.getIntentForPinCreate(this@RegistrationV2Activity))
+        }
+
+        if (needsProfile) {
+          putExtra("next_intent", CreateProfileActivity.getIntentForUserProfile(this@RegistrationV2Activity))
+        }
+      }
+
+      Log.d(TAG, "Launching ${startIntent.component}")
+      startActivity(startIntent)
+      finish()
+      ActivityNavigator.applyPopAnimationsToPendingTransition(this)
+    }
+  }
+
+  private inner class SmsRetrieverObserver : DefaultLifecycleObserver {
+    override fun onCreate(owner: LifecycleOwner) {
+      smsRetrieverReceiver = SmsRetrieverReceiver(application)
+      smsRetrieverReceiver?.registerReceiver()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+      smsRetrieverReceiver?.unregisterReceiver()
+      smsRetrieverReceiver = null
+    }
   }
 
   companion object {

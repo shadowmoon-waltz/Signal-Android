@@ -9,15 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 
-import org.signal.core.util.concurrent.SignalExecutors;
 import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.R;
-import org.thoughtcrime.securesms.database.SignalDatabase;
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.dependencies.AppDependencies;
 import org.thoughtcrime.securesms.mms.SentMediaQuality;
 import org.thoughtcrime.securesms.preferences.widgets.NotificationPrivacyPreference;
-import org.thoughtcrime.securesms.recipients.Recipient;
-import org.thoughtcrime.securesms.storage.StorageSyncHelper;
 import org.thoughtcrime.securesms.util.SingleLiveEvent;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.webrtc.CallDataMode;
@@ -70,6 +66,7 @@ public final class SettingsValues extends SignalStoreValues {
   private static final String CENSORSHIP_CIRCUMVENTION_ENABLED        = "settings.censorshipCircumventionEnabled";
   private static final String KEEP_MUTED_CHATS_ARCHIVED               = "settings.keepMutedChatsArchived";
   private static final String USE_COMPACT_NAVIGATION_BAR              = "settings.useCompactNavigationBar";
+  private static final String THREAD_TRIM_SYNC_TO_LINKED_DEVICES      = "settings.storage.syncThreadTrimDeletes";
 
   public static final int BACKUP_DEFAULT_HOUR   = 2;
   public static final int BACKUP_DEFAULT_MINUTE = 0;
@@ -143,6 +140,7 @@ public final class SettingsValues extends SignalStoreValues {
                          SENT_MEDIA_QUALITY,
                          KEEP_MUTED_CHATS_ARCHIVED,
                          USE_COMPACT_NAVIGATION_BAR,
+                         THREAD_TRIM_SYNC_TO_LINKED_DEVICES,
                          SHOW_REACTION_TIMESTAMPS,
                          FORCE_WEBSOCKET_MODE,
                          FAST_CUSTOM_REACTION_CHANGE,
@@ -199,6 +197,18 @@ public final class SettingsValues extends SignalStoreValues {
     putInteger(THREAD_TRIM_LENGTH, length);
   }
 
+  public boolean shouldSyncThreadTrimDeletes() {
+    if (!getStore().containsKey(THREAD_TRIM_SYNC_TO_LINKED_DEVICES)) {
+      setSyncThreadTrimDeletes(!isTrimByLengthEnabled() && getKeepMessagesDuration() == KeepMessagesDuration.FOREVER);
+    }
+
+    return getBoolean(THREAD_TRIM_SYNC_TO_LINKED_DEVICES, true);
+  }
+
+  public void setSyncThreadTrimDeletes(boolean syncDeletes) {
+    putBoolean(THREAD_TRIM_SYNC_TO_LINKED_DEVICES, syncDeletes);
+  }
+
   public void setSignalBackupDirectory(@NonNull Uri uri) {
     putString(SIGNAL_BACKUP_DIRECTORY, uri.toString());
     putString(SIGNAL_LATEST_BACKUP_DIRECTORY, uri.toString());
@@ -233,7 +243,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull Theme getTheme() {
-    return Theme.deserialize(getString(THEME, TextSecurePreferences.getTheme(ApplicationDependencies.getApplication())));
+    return Theme.deserialize(getString(THEME, TextSecurePreferences.getTheme(AppDependencies.getApplication())));
   }
 
   public void setTheme(@NonNull Theme theme) {
@@ -242,7 +252,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public int getMessageFontSize() {
-    return getInteger(MESSAGE_FONT_SIZE, TextSecurePreferences.getMessageBodyTextSize(ApplicationDependencies.getApplication()));
+    return getInteger(MESSAGE_FONT_SIZE, TextSecurePreferences.getMessageBodyTextSize(AppDependencies.getApplication()));
   }
 
   public int getMessageQuoteFontSize(@NonNull Context context) {
@@ -278,16 +288,16 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull String getLanguage() {
-    return TextSecurePreferences.getLanguage(ApplicationDependencies.getApplication());
+    return TextSecurePreferences.getLanguage(AppDependencies.getApplication());
   }
 
   public void setLanguage(@NonNull String language) {
-    TextSecurePreferences.setLanguage(ApplicationDependencies.getApplication(), language);
+    TextSecurePreferences.setLanguage(AppDependencies.getApplication(), language);
     onConfigurationSettingChanged.postValue(LANGUAGE);
   }
 
   public boolean isPreferSystemEmoji() {
-    return getBoolean(PREFER_SYSTEM_EMOJI, TextSecurePreferences.isSystemEmojiPreferred(ApplicationDependencies.getApplication()));
+    return getBoolean(PREFER_SYSTEM_EMOJI, TextSecurePreferences.isSystemEmojiPreferred(AppDependencies.getApplication()));
   }
 
   public void setPreferSystemEmoji(boolean useSystemEmoji) {
@@ -295,7 +305,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isEnterKeySends() {
-    return getBoolean(ENTER_KEY_SENDS, TextSecurePreferences.isEnterSendsEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(ENTER_KEY_SENDS, TextSecurePreferences.isEnterSendsEnabled(AppDependencies.getApplication()));
   }
 
   public void setEnterKeySends(boolean enterKeySends) {
@@ -303,7 +313,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isBackupEnabled() {
-    return getBoolean(BACKUPS_ENABLED, TextSecurePreferences.isBackupEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(BACKUPS_ENABLED, TextSecurePreferences.isBackupEnabled(AppDependencies.getApplication()));
   }
 
   public void setBackupEnabled(boolean backupEnabled) {
@@ -324,7 +334,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isSmsDeliveryReportsEnabled() {
-    return getBoolean(SMS_DELIVERY_REPORTS_ENABLED, TextSecurePreferences.isSmsDeliveryReportsEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(SMS_DELIVERY_REPORTS_ENABLED, TextSecurePreferences.isSmsDeliveryReportsEnabled(AppDependencies.getApplication()));
   }
 
   public void setSmsDeliveryReportsEnabled(boolean smsDeliveryReportsEnabled) {
@@ -332,7 +342,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isWifiCallingCompatibilityModeEnabled() {
-    return getBoolean(WIFI_CALLING_COMPATIBILITY_MODE_ENABLED, TextSecurePreferences.isWifiSmsEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(WIFI_CALLING_COMPATIBILITY_MODE_ENABLED, TextSecurePreferences.isWifiSmsEnabled(AppDependencies.getApplication()));
   }
 
   public void setWifiCallingCompatibilityModeEnabled(boolean wifiCallingCompatibilityModeEnabled) {
@@ -344,7 +354,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isMessageNotificationsEnabled() {
-    return getBoolean(MESSAGE_NOTIFICATIONS_ENABLED, TextSecurePreferences.isNotificationsEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(MESSAGE_NOTIFICATIONS_ENABLED, TextSecurePreferences.isNotificationsEnabled(AppDependencies.getApplication()));
   }
 
   public void setMessageNotificationSound(@NonNull Uri sound) {
@@ -352,7 +362,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull Uri getMessageNotificationSound() {
-    String result = getString(MESSAGE_NOTIFICATION_SOUND, TextSecurePreferences.getNotificationRingtone(ApplicationDependencies.getApplication()).toString());
+    String result = getString(MESSAGE_NOTIFICATION_SOUND, TextSecurePreferences.getNotificationRingtone(AppDependencies.getApplication()).toString());
 
     if (result.startsWith("file:")) {
       result = Settings.System.DEFAULT_NOTIFICATION_URI.toString();
@@ -362,7 +372,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isMessageVibrateEnabled() {
-    return getBoolean(MESSAGE_VIBRATE_ENABLED, TextSecurePreferences.isNotificationVibrateEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(MESSAGE_VIBRATE_ENABLED, TextSecurePreferences.isNotificationVibrateEnabled(AppDependencies.getApplication()));
   }
 
   public void setMessageVibrateEnabled(boolean messageVibrateEnabled) {
@@ -370,7 +380,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull String getMessageLedColor() {
-    return getString(MESSAGE_LED_COLOR, TextSecurePreferences.getNotificationLedColor(ApplicationDependencies.getApplication()));
+    return getString(MESSAGE_LED_COLOR, TextSecurePreferences.getNotificationLedColor(AppDependencies.getApplication()));
   }
 
   public void setMessageLedColor(@NonNull String ledColor) {
@@ -378,7 +388,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull String getMessageLedBlinkPattern() {
-    return getString(MESSAGE_LED_BLINK_PATTERN, TextSecurePreferences.getNotificationLedPattern(ApplicationDependencies.getApplication()));
+    return getString(MESSAGE_LED_BLINK_PATTERN, TextSecurePreferences.getNotificationLedPattern(AppDependencies.getApplication()));
   }
 
   public void setMessageLedBlinkPattern(@NonNull String blinkPattern) {
@@ -386,7 +396,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isMessageNotificationsInChatSoundsEnabled() {
-    return getBoolean(MESSAGE_IN_CHAT_SOUNDS_ENABLED, TextSecurePreferences.isInThreadNotifications(ApplicationDependencies.getApplication()));
+    return getBoolean(MESSAGE_IN_CHAT_SOUNDS_ENABLED, TextSecurePreferences.isInThreadNotifications(AppDependencies.getApplication()));
   }
 
   public void setMessageNotificationsInChatSoundsEnabled(boolean inChatSoundsEnabled) {
@@ -394,7 +404,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public int getMessageNotificationsRepeatAlerts() {
-    return getInteger(MESSAGE_REPEAT_ALERTS, TextSecurePreferences.getRepeatAlertsCount(ApplicationDependencies.getApplication()));
+    return getInteger(MESSAGE_REPEAT_ALERTS, TextSecurePreferences.getRepeatAlertsCount(AppDependencies.getApplication()));
   }
 
   public void setMessageNotificationsRepeatAlerts(int count) {
@@ -402,7 +412,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull NotificationPrivacyPreference getMessageNotificationsPrivacy() {
-    return new NotificationPrivacyPreference(getString(MESSAGE_NOTIFICATION_PRIVACY, TextSecurePreferences.getNotificationPrivacy(ApplicationDependencies.getApplication()).toString()));
+    return new NotificationPrivacyPreference(getString(MESSAGE_NOTIFICATION_PRIVACY, TextSecurePreferences.getNotificationPrivacy(AppDependencies.getApplication()).toString()));
   }
 
   public void setMessageNotificationsPrivacy(@NonNull NotificationPrivacyPreference messageNotificationsPrivacy) {
@@ -410,7 +420,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isCallNotificationsEnabled() {
-    return getBoolean(CALL_NOTIFICATIONS_ENABLED, TextSecurePreferences.isCallNotificationsEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(CALL_NOTIFICATIONS_ENABLED, TextSecurePreferences.isCallNotificationsEnabled(AppDependencies.getApplication()));
   }
 
   public void setCallNotificationsEnabled(boolean callNotificationsEnabled) {
@@ -418,7 +428,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull Uri getCallRingtone() {
-    String result = getString(CALL_RINGTONE, TextSecurePreferences.getCallNotificationRingtone(ApplicationDependencies.getApplication()).toString());
+    String result = getString(CALL_RINGTONE, TextSecurePreferences.getCallNotificationRingtone(AppDependencies.getApplication()).toString());
 
     if (result != null && result.startsWith("file:")) {
       result = Settings.System.DEFAULT_RINGTONE_URI.toString();
@@ -432,7 +442,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isCallVibrateEnabled() {
-    return getBoolean(CALL_VIBRATE_ENABLED, TextSecurePreferences.isCallNotificationVibrateEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(CALL_VIBRATE_ENABLED, TextSecurePreferences.isCallNotificationVibrateEnabled(AppDependencies.getApplication()));
   }
 
   public void setCallVibrateEnabled(boolean callVibrateEnabled) {
@@ -440,7 +450,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isNotifyWhenContactJoinsSignal() {
-    return getBoolean(NOTIFY_WHEN_CONTACT_JOINS_SIGNAL, TextSecurePreferences.isNewContactsNotificationEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(NOTIFY_WHEN_CONTACT_JOINS_SIGNAL, TextSecurePreferences.isNewContactsNotificationEnabled(AppDependencies.getApplication()));
   }
 
   public void setNotifyWhenContactJoinsSignal(boolean notifyWhenContactJoinsSignal) {
@@ -499,7 +509,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isShowReactionTimestamps() {
-    return getBoolean(SHOW_REACTION_TIMESTAMPS, TextSecurePreferences.isShowReactionTimeEnabled(ApplicationDependencies.getApplication()));
+    return getBoolean(SHOW_REACTION_TIMESTAMPS, TextSecurePreferences.isShowReactionTimeEnabled(AppDependencies.getApplication()));
   }
 
   public void setShowReactionTimestamps(boolean showReactionTimestamps) {
@@ -507,7 +517,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isForceWebsocketMode() {
-    return getBoolean(FORCE_WEBSOCKET_MODE, TextSecurePreferences.isForceWebsocketMode(ApplicationDependencies.getApplication()));
+    return getBoolean(FORCE_WEBSOCKET_MODE, TextSecurePreferences.isForceWebsocketMode(AppDependencies.getApplication()));
   }
 
   public void setForceWebsocketMode(boolean forceWebsocketMode) {
@@ -515,7 +525,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isFastCustomReactionChange() {
-    return getBoolean(FAST_CUSTOM_REACTION_CHANGE, TextSecurePreferences.isFastCustomReactionChange(ApplicationDependencies.getApplication()));
+    return getBoolean(FAST_CUSTOM_REACTION_CHANGE, TextSecurePreferences.isFastCustomReactionChange(AppDependencies.getApplication()));
   }
 
   public void setFastCustomReactionChange(boolean fastCustomReactionChange) {
@@ -523,7 +533,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isCopyTextOpensPopup() {
-    return getBoolean(COPY_TEXT_OPENS_POPUP, TextSecurePreferences.isCopyTextOpensPopup(ApplicationDependencies.getApplication()));
+    return getBoolean(COPY_TEXT_OPENS_POPUP, TextSecurePreferences.isCopyTextOpensPopup(AppDependencies.getApplication()));
   }
 
   public void setCopyTextOpensPopup(boolean copyTextOpensPopup) {
@@ -531,7 +541,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isConversationDeleteInMenu() {
-    return getBoolean(CONVERSATION_DELETE_IN_MENU, TextSecurePreferences.isConversationDeleteInMenu(ApplicationDependencies.getApplication()));
+    return getBoolean(CONVERSATION_DELETE_IN_MENU, TextSecurePreferences.isConversationDeleteInMenu(AppDependencies.getApplication()));
   }
 
   public void setConversationDeleteInMenu(boolean conversationDeleteInMenu) {
@@ -539,7 +549,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull String getSwipeToRightAction() {
-    return getString(SWIPE_TO_RIGHT_ACTION, TextSecurePreferences.getSwipeToRightAction(ApplicationDependencies.getApplication()));
+    return getString(SWIPE_TO_RIGHT_ACTION, TextSecurePreferences.getSwipeToRightAction(AppDependencies.getApplication()));
   }
 
   public void setSwipeToRightAction(@NonNull String swipeToRightAction) {
@@ -547,7 +557,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isRangeMultiSelect() {
-    return getBoolean(RANGE_MULTI_SELECT, TextSecurePreferences.isRangeMultiSelect(ApplicationDependencies.getApplication()));
+    return getBoolean(RANGE_MULTI_SELECT, TextSecurePreferences.isRangeMultiSelect(AppDependencies.getApplication()));
   }
 
   public void setRangeMultiSelect(boolean rangeMultiSelect) {
@@ -555,7 +565,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isLongPressMultiSelect() {
-    return getBoolean(LONG_PRESS_MULTI_SELECT, TextSecurePreferences.isLongPressMultiSelect(ApplicationDependencies.getApplication()));
+    return getBoolean(LONG_PRESS_MULTI_SELECT, TextSecurePreferences.isLongPressMultiSelect(AppDependencies.getApplication()));
   }
 
   public void setLongPressMultiSelect(boolean longPressMultiSelect) {
@@ -563,7 +573,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isAlsoShowProfileName() {
-    return getBoolean(ALSO_SHOW_PROFILE_NAME, TextSecurePreferences.isAlsoShowProfileName(ApplicationDependencies.getApplication()));
+    return getBoolean(ALSO_SHOW_PROFILE_NAME, TextSecurePreferences.isAlsoShowProfileName(AppDependencies.getApplication()));
   }
 
   public void setAlsoShowProfileName(boolean alsoShowProfileName) {
@@ -571,7 +581,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isManageGroupTweaks() {
-    return getBoolean(MANAGE_GROUP_TWEAKS, TextSecurePreferences.isManageGroupTweaks(ApplicationDependencies.getApplication()));
+    return getBoolean(MANAGE_GROUP_TWEAKS, TextSecurePreferences.isManageGroupTweaks(AppDependencies.getApplication()));
   }
 
   public void setManageGroupTweaks(boolean manageGroupTweaks) {
@@ -579,7 +589,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public @NonNull String getSwipeToLeftAction() {
-    return getString(SWIPE_TO_LEFT_ACTION, TextSecurePreferences.getSwipeToLeftAction(ApplicationDependencies.getApplication()));
+    return getString(SWIPE_TO_LEFT_ACTION, TextSecurePreferences.getSwipeToLeftAction(AppDependencies.getApplication()));
   }
 
   public void setSwipeToLeftAction(@NonNull String swipeToLeftAction) {
@@ -587,7 +597,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isTrashNoPromptForMe() {
-    return getBoolean(TRASH_NO_PROMPT_FOR_ME, TextSecurePreferences.isTrashNoPromptForMe(ApplicationDependencies.getApplication()));
+    return getBoolean(TRASH_NO_PROMPT_FOR_ME, TextSecurePreferences.isTrashNoPromptForMe(AppDependencies.getApplication()));
   }
 
   public void setTrashNoPromptForMe(boolean trashNoPromptForMe) {
@@ -595,7 +605,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isPromptMp4AsGif() {
-    return getBoolean(PROMPT_MP4_AS_GIF, TextSecurePreferences.isPromptMp4AsGif(ApplicationDependencies.getApplication()));
+    return getBoolean(PROMPT_MP4_AS_GIF, TextSecurePreferences.isPromptMp4AsGif(AppDependencies.getApplication()));
   }
 
   public void setPromptMp4AsGif(boolean promptMp4AsGif) {
@@ -603,7 +613,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public int getBackupIntervalInDays() {
-    return getInteger(BACKUP_INTERVAL_IN_DAYS, TextSecurePreferences.getBackupIntervalInDays(ApplicationDependencies.getApplication()));
+    return getInteger(BACKUP_INTERVAL_IN_DAYS, TextSecurePreferences.getBackupIntervalInDays(AppDependencies.getApplication()));
   }
 
   public void setBackupIntervalInDays(int backupIntervalInDays) {
@@ -611,7 +621,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isAltCollapseMediaKeyboard() {
-    return getBoolean(ALT_COLLAPSE_MEDIA_KEYBOARD, TextSecurePreferences.isAltCollapseMediaKeyboard(ApplicationDependencies.getApplication()));
+    return getBoolean(ALT_COLLAPSE_MEDIA_KEYBOARD, TextSecurePreferences.isAltCollapseMediaKeyboard(AppDependencies.getApplication()));
   }
 
   public void setAltCollapseMediaKeyboard(boolean altCollapseMediaKeyboard) {
@@ -619,7 +629,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isAltCloseMediaSelection() {
-    return getBoolean(ALT_CLOSE_MEDIA_SELECTION, TextSecurePreferences.isAltCloseMediaSelection(ApplicationDependencies.getApplication()));
+    return getBoolean(ALT_CLOSE_MEDIA_SELECTION, TextSecurePreferences.isAltCloseMediaSelection(AppDependencies.getApplication()));
   }
 
   public void setAltCloseMediaSelection(boolean altCloseMediaSelection) {
@@ -627,7 +637,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isStickerMruLongPressToPack() {
-    return getBoolean(STICKER_MRU_LONG_PRESS_TO_PACK, TextSecurePreferences.isStickerMruLongPressToPack(ApplicationDependencies.getApplication()));
+    return getBoolean(STICKER_MRU_LONG_PRESS_TO_PACK, TextSecurePreferences.isStickerMruLongPressToPack(AppDependencies.getApplication()));
   }
 
   public void setStickerMruLongPressToPack(boolean stickerMruLongPressToPack) {
@@ -635,7 +645,7 @@ public final class SettingsValues extends SignalStoreValues {
   }
 
   public boolean isStickerKeyboardPackMru() {
-    return getBoolean(STICKER_KEYBOARD_PACK_MRU, TextSecurePreferences.isStickerKeyboardPackMru(ApplicationDependencies.getApplication()));
+    return getBoolean(STICKER_KEYBOARD_PACK_MRU, TextSecurePreferences.isStickerKeyboardPackMru(AppDependencies.getApplication()));
   }
 
   public void setStickerKeyboardPackMru(boolean stickerKeyboardPackMru) {

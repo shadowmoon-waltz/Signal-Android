@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1421
-val canonicalVersionName = "7.8.1"
+val canonicalVersionCode = 1422
+val canonicalVersionName = "7.9.0"
 
 val postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
@@ -85,7 +85,7 @@ wire {
 }
 
 ktlint {
-  version.set("0.49.1")
+  version.set("1.2.1")
 }
 
 android {
@@ -174,7 +174,7 @@ android {
   }
 
   composeOptions {
-    kotlinCompilerExtensionVersion = "1.4.4"
+    kotlinCompilerExtensionVersion = "1.5.4"
   }
 
   defaultConfig {
@@ -587,6 +587,7 @@ dependencies {
   implementation(libs.accompanist.permissions)
   implementation(libs.kotlin.stdlib.jdk8)
   implementation(libs.kotlin.reflect)
+  implementation(libs.kotlinx.coroutines.play.services)
   implementation(libs.jackson.module.kotlin)
   implementation(libs.rxjava3.rxandroid)
   implementation(libs.rxjava3.rxkotlin)
@@ -748,7 +749,8 @@ fun Project.languageList(): List<String> {
     .map { valuesFolderName -> valuesFolderName.replace("values-", "") }
     .filter { valuesFolderName -> valuesFolderName != "values" }
     .map { languageCode -> languageCode.replace("-r", "_") }
-    .distinct() + "en"
+    .distinct()
+    .sorted() + "en"
 }
 
 fun String.capitalize(): String {

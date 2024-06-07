@@ -35,7 +35,7 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.backup.BackupDialog;
 import org.thoughtcrime.securesms.backup.BackupEvent;
 import org.thoughtcrime.securesms.database.NoExternalStorageException;
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies;
+import org.thoughtcrime.securesms.dependencies.AppDependencies;
 import org.thoughtcrime.securesms.jobs.LocalBackupJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.permissions.Permissions;
@@ -326,7 +326,7 @@ public class BackupsPreferenceFragment extends Fragment {
     verify.setVisibility(View.GONE);
     timer.setVisibility(View.GONE);
     interval.setVisibility(View.GONE);
-    ApplicationDependencies.getJobManager().cancelAllInQueue(LocalBackupJob.QUEUE);
+    AppDependencies.getJobManager().cancelAllInQueue(LocalBackupJob.QUEUE);
   }
 
   private void setIntervalSummary() {

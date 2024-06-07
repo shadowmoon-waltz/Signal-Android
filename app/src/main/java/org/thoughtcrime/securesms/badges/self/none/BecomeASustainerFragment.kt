@@ -12,16 +12,16 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsAdapter
 import org.thoughtcrime.securesms.components.settings.DSLSettingsBottomSheetFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
-import org.thoughtcrime.securesms.components.settings.app.subscription.MonthlyDonationRepository
+import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
 import org.thoughtcrime.securesms.components.settings.configure
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.util.BottomSheetUtil
 
 class BecomeASustainerFragment : DSLSettingsBottomSheetFragment() {
 
   private val viewModel: BecomeASustainerViewModel by viewModels(
     factoryProducer = {
-      BecomeASustainerViewModel.Factory(MonthlyDonationRepository(ApplicationDependencies.getDonationsService()))
+      BecomeASustainerViewModel.Factory(RecurringInAppPaymentRepository(AppDependencies.donationsService))
     }
   )
 

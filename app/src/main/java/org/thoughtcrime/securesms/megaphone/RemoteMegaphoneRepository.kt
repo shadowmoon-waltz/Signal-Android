@@ -12,13 +12,13 @@ import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.badges.gifts.flow.GiftFlowActivity
 import org.thoughtcrime.securesms.badges.models.Badge
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppDonations
+import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalActivity
-import org.thoughtcrime.securesms.components.settings.app.subscription.manage.DonationRedemptionJobWatcher
 import org.thoughtcrime.securesms.database.RemoteMegaphoneTable
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.RemoteMegaphoneRecord
 import org.thoughtcrime.securesms.database.model.RemoteMegaphoneRecord.ActionId
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.megaphone.RemoteMegaphoneRepository.Action
 import org.thoughtcrime.securesms.providers.BlobProvider
 import org.thoughtcrime.securesms.recipients.Recipient
@@ -37,7 +37,7 @@ object RemoteMegaphoneRepository {
   private val TAG = Log.tag(RemoteMegaphoneRepository::class.java)
 
   private val db: RemoteMegaphoneTable = SignalDatabase.remoteMegaphones
-  private val context: Application = ApplicationDependencies.getApplication()
+  private val context: Application = AppDependencies.application
 
   private val snooze: Action = Action { _, controller, remote ->
     controller.onMegaphoneSnooze(Megaphones.Event.REMOTE_MEGAPHONE)
@@ -131,7 +131,7 @@ object RemoteMegaphoneRepository {
   private fun shouldShowDonateMegaphone(): Boolean {
     return VersionTracker.getDaysSinceFirstInstalled(context) >= 7 &&
       InAppDonations.hasAtLeastOnePaymentMethodAvailable() &&
-      !DonationRedemptionJobWatcher.hasPendingRedemptionJob() &&
+      !InAppPaymentsRepository.hasPendingDonation() &&
       Recipient.self()
         .badges
         .stream()

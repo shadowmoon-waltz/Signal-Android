@@ -42,7 +42,7 @@ import org.thoughtcrime.securesms.conversation.v2.computed.FormattedDate
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationMessageElement
 import org.thoughtcrime.securesms.database.model.MessageRecord
 import org.thoughtcrime.securesms.database.model.MmsMessageRecord
-import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
+import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientForeverObserver
@@ -530,7 +530,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
         timer.startAnimation()
 
         if (record.expireStarted + record.expiresIn <= System.currentTimeMillis()) {
-          ApplicationDependencies.getExpiringMessageManager().checkSchedule()
+          AppDependencies.expiringMessageManager.checkSchedule()
         }
       } else if (!record.isOutgoing && !record.isMediaPending) {
         conversationContext.onStartExpirationTimeout(record)
@@ -701,7 +701,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
         }
 
         binding.footerDate.setOnClickListener {
-          conversationContext.clickListener.onEditedIndicatorClicked(record)
+          conversationContext.clickListener.onEditedIndicatorClicked(conversationMessage)
         }
       }
 

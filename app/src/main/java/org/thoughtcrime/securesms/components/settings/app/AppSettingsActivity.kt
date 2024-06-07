@@ -13,7 +13,7 @@ import org.thoughtcrime.securesms.components.settings.DSLSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.notifications.profiles.EditNotificationProfileScheduleFragmentArgs
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationPaymentComponent
 import org.thoughtcrime.securesms.components.settings.app.subscription.StripeRepository
-import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalType
+import org.thoughtcrime.securesms.database.InAppPaymentTable
 //import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.keyvalue.SettingsValues
 import org.thoughtcrime.securesms.keyvalue.SignalStore
@@ -22,6 +22,7 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.service.KeyCachingService
 import org.thoughtcrime.securesms.util.CachedInflater
 import org.thoughtcrime.securesms.util.DynamicTheme
+import org.thoughtcrime.securesms.util.FeatureFlags
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
 
 private const val START_LOCATION = "app.settings.start.location"
@@ -39,7 +40,8 @@ class AppSettingsActivity : DSLSettingsActivity(), DonationPaymentComponent {
 
   override fun onCreate(savedInstanceState: Bundle?, ready: Boolean) {
     if (intent?.hasExtra(ARG_NAV_GRAPH) != true) {
-      intent?.putExtra(ARG_NAV_GRAPH, R.navigation.app_settings)
+      val navGraphResId = if (FeatureFlags.registrationV2()) R.navigation.app_settings_with_change_number_v2 else R.navigation.app_settings
+      intent?.putExtra(ARG_NAV_GRAPH, navGraphResId)
     }
 
     super.onCreate(savedInstanceState, ready)
@@ -55,8 +57,8 @@ class AppSettingsActivity : DSLSettingsActivity(), DonationPaymentComponent {
         StartLocation.PROXY -> AppSettingsFragmentDirections.actionDirectToEditProxyFragment()
         StartLocation.NOTIFICATIONS -> AppSettingsFragmentDirections.actionDirectToNotificationsSettingsFragment()
         StartLocation.CHANGE_NUMBER -> AppSettingsFragmentDirections.actionDirectToChangeNumberFragment()
-        StartLocation.SUBSCRIPTIONS -> AppSettingsFragmentDirections.actionDirectToDonateToSignal(DonateToSignalType.MONTHLY)
-        StartLocation.BOOST -> AppSettingsFragmentDirections.actionDirectToDonateToSignal(DonateToSignalType.ONE_TIME)
+        StartLocation.SUBSCRIPTIONS -> AppSettingsFragmentDirections.actionDirectToDonateToSignal(InAppPaymentTable.Type.RECURRING_DONATION)
+        StartLocation.BOOST -> AppSettingsFragmentDirections.actionDirectToDonateToSignal(InAppPaymentTable.Type.ONE_TIME_DONATION)
         StartLocation.MANAGE_SUBSCRIPTIONS -> AppSettingsFragmentDirections.actionDirectToManageDonations()
         StartLocation.NOTIFICATION_PROFILES -> AppSettingsFragmentDirections.actionDirectToNotificationProfiles()
         StartLocation.CREATE_NOTIFICATION_PROFILE -> AppSettingsFragmentDirections.actionDirectToCreateNotificationProfiles()
@@ -195,8 +197,9 @@ class AppSettingsActivity : DSLSettingsActivity(), DonationPaymentComponent {
     fun usernameRecovery(context: Context): Intent = getIntentForStartLocation(context, StartLocation.RECOVER_USERNAME)
 
     private fun getIntentForStartLocation(context: Context, startLocation: StartLocation): Intent {
+      val navGraphResId = if (FeatureFlags.registrationV2()) R.navigation.app_settings_with_change_number_v2 else R.navigation.app_settings
       return Intent(context, AppSettingsActivity::class.java)
-        .putExtra(ARG_NAV_GRAPH, R.navigation.app_settings)
+        .putExtra(ARG_NAV_GRAPH, navGraphResId)
         .putExtra(START_LOCATION, startLocation.code)
     }
   }
