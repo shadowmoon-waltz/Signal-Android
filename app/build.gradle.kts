@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1422
-val canonicalVersionName = "7.9.0"
+val canonicalVersionCode = 1423
+val canonicalVersionName = "7.9.1"
 
 val postFixSize = 100
 // abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
