@@ -86,6 +86,13 @@
             app:popEnterAnim="@anim/fragment_close_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
         <action
+            android:id="@+id/action_appSettingsFragment_to_forkSettingsFragment"
+            app:destination="@id/forkSettingsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"  />
+        <action
             android:id="@+id/action_appSettingsFragment_to_manageProfileActivity"
             app:destination="@id/manageProfileActivity"
             app:enterAnim="@anim/fragment_open_enter"
@@ -375,6 +382,34 @@
         android:name="org.thoughtcrime.securesms.components.settings.app.wrapped.WrappedEditProxyFragment"
         android:label="edit_proxy_fragment" />
 
+    <!-- endregion -->
+
+    <!-- region Fork Specific -->
+    <fragment
+        android:id="@+id/forkSettingsFragment"
+        android:name="org.thoughtcrime.securesms.components.settings.app.fork.ForkSettingsFragment"
+        android:label="fork_settings_fragment"
+        tools:layout="@layout/dsl_settings_fragment">
+        <action
+            android:id="@+id/action_forkSettingsFragment_to_setIdentityKeysFragment"
+            app:destination="@id/setIdentityKeysFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_forkSettingsFragment_to_backupsPreferenceFragment"
+            app:destination="@id/backupsPreferenceFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/setIdentityKeysFragment"
+        android:name="org.thoughtcrime.securesms.components.settings.app.wrapped.WrappedSetIdentityKeysFragment"
+        android:label="set_identity_keys_fragment" />
     <!-- endregion -->
 
     <!-- region Help -->
