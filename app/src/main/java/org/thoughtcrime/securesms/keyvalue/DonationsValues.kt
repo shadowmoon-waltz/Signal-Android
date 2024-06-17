@@ -245,7 +245,7 @@ internal class DonationsValues internal constructor(store: KeyValueStore) : Sign
     } else {
       InAppPaymentSubscriberRecord(
         SubscriberId.fromBytes(subscriberIdBytes),
-        currencyCode,
+        currency,
         InAppPaymentSubscriberRecord.Type.DONATION,
         shouldCancelSubscriptionBeforeNextSubscribeAttempt,
         getSubscriptionPaymentSourceType().toPaymentMethodType()
@@ -253,19 +253,19 @@ internal class DonationsValues internal constructor(store: KeyValueStore) : Sign
     }
   }
 
-  fun setSubscriberCurrency(currencyCode: String, type: InAppPaymentSubscriberRecord.Type) {
+  fun setSubscriberCurrency(currency: Currency, type: InAppPaymentSubscriberRecord.Type) {
     if (type == InAppPaymentSubscriberRecord.Type.DONATION) {
       store.beginWrite()
-        .putString(KEY_DONATION_SUBSCRIPTION_CURRENCY_CODE, currencyCode)
+        .putString(KEY_DONATION_SUBSCRIPTION_CURRENCY_CODE, currency.currencyCode)
         .apply()
 
-      recurringDonationCurrencyPublisher.onNext(Currency.getInstance(currencyCode))
+      recurringDonationCurrencyPublisher.onNext(currency)
     } else {
       store.beginWrite()
-        .putString(KEY_BACKUPS_SUBSCRIPTION_CURRENCY_CODE, currencyCode)
+        .putString(KEY_BACKUPS_SUBSCRIPTION_CURRENCY_CODE, currency.currencyCode)
         .apply()
 
-      recurringBackupCurrencyPublisher.onNext(Currency.getInstance(currencyCode))
+      recurringBackupCurrencyPublisher.onNext(currency)
     }
   }
 
@@ -461,9 +461,11 @@ internal class DonationsValues internal constructor(store: KeyValueStore) : Sign
         }
       }
 
-      val subscriber = InAppPaymentsRepository.requireSubscriber(subscriberType)
-      InAppPaymentsRepository.setShouldCancelSubscriptionBeforeNextSubscribeAttempt(subscriber, true)
-      SignalDatabase.inAppPayments.markSubscriptionManuallyCanceled(subscriberId = subscriber.subscriberId)
+      val subscriber = InAppPaymentsRepository.getSubscriber(subscriberType)
+      InAppPaymentsRepository.setShouldCancelSubscriptionBeforeNextSubscribeAttempt(subscriberType, subscriber?.subscriberId, true)
+      if (subscriber != null) {
+        SignalDatabase.inAppPayments.markSubscriptionManuallyCanceled(subscriberId = subscriber.subscriberId)
+      }
     }
   }
 
