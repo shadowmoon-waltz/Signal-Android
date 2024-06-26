@@ -15,18 +15,16 @@ import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.livedata.Store
 
-class AppSettingsViewModel(
-  recurringInAppPaymentRepository: RecurringInAppPaymentRepository = RecurringInAppPaymentRepository(AppDependencies.donationsService)
-) : ViewModel() {
+class AppSettingsViewModel : ViewModel() {
 
   private val store = Store(
     AppSettingsState(
       Recipient.self(),
       0,
-      SignalStore.donationsValues().getExpiredGiftBadge() != null,
-      SignalStore.donationsValues().isLikelyASustainer() || InAppDonations.hasAtLeastOnePaymentMethodAvailable(),
-      TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application) || !SignalStore.account().isRegistered,
-      SignalStore.misc().isClientDeprecated
+      SignalStore.donations.getExpiredGiftBadge() != null,
+      SignalStore.donations.isLikelyASustainer() || InAppDonations.hasAtLeastOnePaymentMethodAvailable(),
+      TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application) || !SignalStore.account.isRegistered,
+      SignalStore.misc.isClientDeprecated
     )
   )
 
@@ -40,7 +38,7 @@ class AppSettingsViewModel(
     store.update(unreadPaymentsLiveData) { payments, state -> state.copy(unreadPaymentsCount = payments.map { it.unreadCount }.orElse(0)) }
     store.update(selfLiveData) { self, state -> state.copy(self = self) }
 
-    disposables += recurringInAppPaymentRepository.getActiveSubscription(InAppPaymentSubscriberRecord.Type.DONATION).subscribeBy(
+    disposables += RecurringInAppPaymentRepository.getActiveSubscription(InAppPaymentSubscriberRecord.Type.DONATION).subscribeBy(
       onSuccess = { activeSubscription ->
         store.update { state ->
           state.copy(allowUserToGoToDonationManagementScreen = activeSubscription.isActive || InAppDonations.hasAtLeastOnePaymentMethodAvailable())
@@ -57,13 +55,13 @@ class AppSettingsViewModel(
   fun refreshDeprecatedOrUnregistered() {
     store.update {
       it.copy(
-        clientDeprecated = SignalStore.misc().isClientDeprecated,
-        userUnregistered = TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application) || !SignalStore.account().isRegistered
+        clientDeprecated = SignalStore.misc.isClientDeprecated,
+        userUnregistered = TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application) || !SignalStore.account.isRegistered
       )
     }
   }
 
   fun refreshExpiredGiftBadge() {
-    store.update { it.copy(hasExpiredGiftBadge = SignalStore.donationsValues().getExpiredGiftBadge() != null) }
+    store.update { it.copy(hasExpiredGiftBadge = SignalStore.donations.getExpiredGiftBadge() != null) }
   }
 }

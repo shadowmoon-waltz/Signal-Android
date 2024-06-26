@@ -8,8 +8,9 @@ import org.signal.core.util.concurrent.SignalExecutors
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.MessageRecord
-import org.thoughtcrime.securesms.jobs.MultiDeviceDeleteSendSyncJob
+import org.thoughtcrime.securesms.jobs.MultiDeviceDeleteSyncJob
 import org.thoughtcrime.securesms.keyvalue.SignalStore
+import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.sms.MessageSender
 import org.thoughtcrime.securesms.util.task.ProgressDialogAsyncTask
 
@@ -32,13 +33,13 @@ object DeleteDialog {
   fun show(
     context: Context,
     messageRecords: Set<MessageRecord>,
-    title: CharSequence = context.resources.getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messageRecords.size, messageRecords.size),
-    message: CharSequence? = null,
+    title: CharSequence? = null,
+    message: CharSequence = context.resources.getQuantityString(R.plurals.ConversationFragment_delete_selected_messages, messageRecords.size, messageRecords.size),
     forceRemoteDelete: Boolean = false,
     forceDeleteForMe: Boolean = false,
     checkFastDeleteForMe: Boolean = false
   ): Single<Pair<Boolean, Boolean>> = Single.create { emitter ->
-    if (forceDeleteForMe || (checkFastDeleteForMe && SignalStore.settings().isTrashNoPromptForMe())) {
+    if (forceDeleteForMe || (checkFastDeleteForMe && SignalStore.settings.isTrashNoPromptForMe())) {
       handleDeleteForMe(context, messageRecords, emitter)
       return@create
     }
@@ -54,11 +55,22 @@ object DeleteDialog {
     if (forceRemoteDelete) {
       builder.setPositiveButton(R.string.ConversationFragment_delete_for_everyone) { _, _ -> deleteForEveryone(messageRecords, emitter) }
     } else {
-      builder.setPositiveButton(if (isNoteToSelfDelete) R.string.ConversationFragment_delete_on_this_device else R.string.ConversationFragment_delete_for_me) { _, _ ->
+      val deleteSyncEnabled = Recipient.self().deleteSyncCapability.isSupported
+
+      val positiveButton = if (isNoteToSelfDelete) {
+        if (deleteSyncEnabled) R.string.ConversationFragment_delete else R.string.ConversationFragment_delete_on_this_device
+      } else {
+        R.string.ConversationFragment_delete_for_me
+      }
+
+      builder.setPositiveButton(positiveButton) { _, _ ->
         handleDeleteForMe(context, messageRecords, emitter)
       }
 
-      if (MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis()) && (!isNoteToSelfDelete || TextSecurePreferences.isMultiDevice(context))) {
+      val canDeleteForEveryone = MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis()) && !isNoteToSelfDelete
+      val canDeleteForEveryoneInNoteToSelf = isNoteToSelfDelete && TextSecurePreferences.isMultiDevice(context) && !deleteSyncEnabled
+
+      if (canDeleteForEveryone || canDeleteForEveryoneInNoteToSelf) {
         builder.setNeutralButton(if (isNoteToSelfDelete) R.string.ConversationFragment_delete_everywhere else R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
       }
     }
@@ -76,18 +88,24 @@ object DeleteDialog {
     if (messageRecords.size > 1) {
       DeleteProgressDialogAsyncTask(context, messageRecords){ emitter.onSuccess(Pair(true, it)) }.executeOnExecutor(SignalExecutors.BOUNDED)
     } else {
-      SignalExecutors.BOUNDED.execute { emitter.onSuccess(Pair(true, SignalDatabase.messages.deleteMessage(messageRecords.first().id))) }
+      SignalExecutors.BOUNDED.execute {
+        val threadDeleted = SignalDatabase.messages.deleteMessage(messageRecords.first().id)
+        if (Recipient.self().deleteSyncCapability.isSupported) {
+          MultiDeviceDeleteSyncJob.enqueueMessageDeletes(messageRecords)
+        }
+        emitter.onSuccess(Pair(true, threadDeleted))
+      }
     }
   }
 
   private fun handleDeleteForEveryone(context: Context, messageRecords: Set<MessageRecord>, emitter: SingleEmitter<Pair<Boolean, Boolean>>) {
-    if (SignalStore.uiHints().hasConfirmedDeleteForEveryoneOnce()) {
+    if (SignalStore.uiHints.hasConfirmedDeleteForEveryoneOnce()) {
       deleteForEveryone(messageRecords, emitter)
     } else {
       MaterialAlertDialogBuilder(context)
         .setMessage(R.string.ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation)
         .setPositiveButton(R.string.ConversationFragment_delete_for_everyone) { _, _ ->
-          SignalStore.uiHints().markHasConfirmedDeleteForEveryoneOnce()
+          SignalStore.uiHints.markHasConfirmedDeleteForEveryoneOnce()
           deleteForEveryone(messageRecords, emitter)
         }
         .setNegativeButton(android.R.string.cancel) { _, _ -> emitter.onSuccess(Pair(false, false)) }
@@ -124,8 +142,8 @@ object DeleteDialog {
         }
       }
 
-      if (FeatureFlags.deleteSyncEnabled()) {
-        MultiDeviceDeleteSendSyncJob.enqueueMessageDeletes(messageRecords)
+      if (Recipient.self().deleteSyncCapability.isSupported) {
+        MultiDeviceDeleteSyncJob.enqueueMessageDeletes(messageRecords)
       }
 
       return threadDeleted

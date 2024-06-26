@@ -8,6 +8,7 @@ package org.thoughtcrime.securesms.jobs
 import io.reactivex.rxjava3.core.Single
 import org.signal.core.util.logging.Log
 import org.signal.core.util.money.FiatMoney
+import org.signal.donations.InAppPaymentType
 import org.signal.donations.PaymentSourceType
 import org.signal.donations.StripeApi
 import org.signal.donations.StripeIntentAccessor
@@ -16,6 +17,7 @@ import org.signal.donations.json.StripePaymentIntent
 import org.signal.donations.json.StripeSetupIntent
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper.toFiatMoney
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository
+import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.requireSubscriberType
 import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
 import org.thoughtcrime.securesms.database.InAppPaymentTable
 import org.thoughtcrime.securesms.database.SignalDatabase
@@ -37,7 +39,7 @@ import kotlin.time.Duration.Companion.days
  */
 class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : BaseJob(parameters), StripeApi.PaymentIntentFetcher, StripeApi.SetupIntentHelper {
 
-  constructor() : this(
+  private constructor() : this(
     Parameters.Builder()
       .addConstraint(NetworkConstraint.KEY)
       .setMaxAttempts(Parameters.UNLIMITED)
@@ -49,6 +51,13 @@ class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : Bas
   companion object {
     private val TAG = Log.tag(InAppPaymentAuthCheckJob::class.java)
     const val KEY = "InAppPaymentAuthCheckJob"
+
+    @JvmStatic
+    fun enqueueIfNeeded() {
+      if (SignalDatabase.inAppPayments.hasWaitingForAuth()) {
+        AppDependencies.jobManager.add(InAppPaymentAuthCheckJob())
+      }
+    }
   }
 
   private val stripeApi = StripeApi(Environment.Donations.STRIPE_CONFIGURATION, this, this, AppDependencies.okHttpClient)
@@ -95,14 +104,14 @@ class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : Bas
   }
 
   private fun migrateLegacyData() {
-    val pending3DSData = SignalStore.donationsValues().consumePending3DSData()
+    val pending3DSData = SignalStore.donations.consumePending3DSData()
     if (pending3DSData != null) {
       Log.i(TAG, "Found legacy data. Performing migration.", true)
 
       SignalDatabase.inAppPayments.insert(
         type = pending3DSData.inAppPayment.type,
         state = InAppPaymentTable.State.WAITING_FOR_AUTHORIZATION,
-        subscriberId = if (pending3DSData.inAppPayment.type == InAppPaymentTable.Type.RECURRING_DONATION) {
+        subscriberId = if (pending3DSData.inAppPayment.type == InAppPaymentType.RECURRING_DONATION) {
           InAppPaymentsRepository.requireSubscriber(InAppPaymentSubscriberRecord.Type.DONATION).subscriberId
         } else {
           null
@@ -132,8 +141,8 @@ class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : Bas
 
     Log.i(TAG, "Creating and inserting receipt.", true)
     val receipt = when (inAppPayment.type) {
-      InAppPaymentTable.Type.ONE_TIME_DONATION -> DonationReceiptRecord.createForBoost(inAppPayment.data.amount!!.toFiatMoney())
-      InAppPaymentTable.Type.ONE_TIME_GIFT -> DonationReceiptRecord.createForGift(inAppPayment.data.amount!!.toFiatMoney())
+      InAppPaymentType.ONE_TIME_DONATION -> DonationReceiptRecord.createForBoost(inAppPayment.data.amount!!.toFiatMoney())
+      InAppPaymentType.ONE_TIME_GIFT -> DonationReceiptRecord.createForGift(inAppPayment.data.amount!!.toFiatMoney())
       else -> {
         Log.e(TAG, "Unexpected type ${inAppPayment.type}", true)
         return CheckResult.Failure()
@@ -184,8 +193,8 @@ class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : Bas
 
     val subscriber = InAppPaymentsRepository.requireSubscriber(
       when (inAppPayment.type) {
-        InAppPaymentTable.Type.RECURRING_DONATION -> InAppPaymentSubscriberRecord.Type.DONATION
-        InAppPaymentTable.Type.RECURRING_BACKUP -> InAppPaymentSubscriberRecord.Type.BACKUP
+        InAppPaymentType.RECURRING_DONATION -> InAppPaymentSubscriberRecord.Type.DONATION
+        InAppPaymentType.RECURRING_BACKUP -> InAppPaymentSubscriberRecord.Type.BACKUP
         else -> {
           Log.e(TAG, "Expected recurring type but found ${inAppPayment.type}", true)
           return CheckResult.Failure()
@@ -240,7 +249,7 @@ class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : Bas
 
       val updateLevelResult = checkResult(updateLevelResponse)
       if (updateLevelResult is CheckResult.Failure) {
-        SignalStore.donationsValues().clearLevelOperations()
+        SignalStore.donations.clearLevelOperations()
         return CheckResult.Failure(updateLevelResult.errorData)
       }
 
@@ -352,7 +361,7 @@ class InAppPaymentAuthCheckJob private constructor(parameters: Parameters) : Bas
     error("Not needed, this job should not be creating intents.")
   }
 
-  override fun fetchSetupIntent(sourceType: PaymentSourceType.Stripe): Single<StripeIntentAccessor> {
+  override fun fetchSetupIntent(inAppPaymentType: InAppPaymentType, sourceType: PaymentSourceType.Stripe): Single<StripeIntentAccessor> {
     error("Not needed, this job should not be creating intents.")
   }
 

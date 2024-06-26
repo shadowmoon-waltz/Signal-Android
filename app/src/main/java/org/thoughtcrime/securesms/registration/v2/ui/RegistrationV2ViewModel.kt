@@ -22,6 +22,7 @@ import kotlinx.coroutines.withContext
 import org.signal.core.util.Stopwatch
 import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
+import org.thoughtcrime.securesms.backup.v2.BackupRepository
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.jobs.MultiDeviceProfileContentUpdateJob
 import org.thoughtcrime.securesms.jobs.MultiDeviceProfileKeyUpdateJob
@@ -59,7 +60,7 @@ import org.thoughtcrime.securesms.registration.v2.data.network.VerificationCodeR
 import org.thoughtcrime.securesms.registration.v2.data.network.VerificationCodeRequestResult.TokenNotAccepted
 import org.thoughtcrime.securesms.registration.v2.data.network.VerificationCodeRequestResult.UnknownError
 import org.thoughtcrime.securesms.registration.viewmodel.SvrAuthCredentialSet
-import org.thoughtcrime.securesms.util.FeatureFlags
+import org.thoughtcrime.securesms.util.RemoteConfig
 import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.util.dualsim.MccMncProducer
 import org.whispersystems.signalservice.api.SvrNoDataException
@@ -188,9 +189,9 @@ class RegistrationV2ViewModel : ViewModel() {
   }
 
   fun onBackupSuccessfullyRestored() {
-    val recoveryPassword = SignalStore.svr().recoveryPassword
+    val recoveryPassword = SignalStore.svr.recoveryPassword
     store.update {
-      it.copy(registrationCheckpoint = RegistrationCheckpoint.BACKUP_RESTORED_OR_SKIPPED, recoveryPassword = SignalStore.svr().recoveryPassword, canSkipSms = recoveryPassword != null, isReRegister = true)
+      it.copy(registrationCheckpoint = RegistrationCheckpoint.BACKUP_RESTORED_OR_SKIPPED, recoveryPassword = SignalStore.svr.recoveryPassword, canSkipSms = recoveryPassword != null, isReRegister = true)
     }
   }
 
@@ -228,7 +229,13 @@ class RegistrationV2ViewModel : ViewModel() {
           is BackupAuthCheckResult.SuccessWithCredentials -> {
             Log.d(TAG, "Found local valid SVR auth credentials.")
             store.update {
-              it.copy(isReRegister = true, canSkipSms = true, svrAuthCredentials = svrCredentialsResult.authCredentials, inProgress = false)
+              it.copy(
+                isReRegister = true,
+                canSkipSms = true,
+                svr2AuthCredentials = svrCredentialsResult.svr2Credentials,
+                svr3AuthCredentials = svrCredentialsResult.svr3Credentials,
+                inProgress = false
+              )
             }
             return@launch
           }
@@ -558,7 +565,7 @@ class RegistrationV2ViewModel : ViewModel() {
       if (RegistrationRepository.doesPinMatchLocalHash(pin)) {
         Log.d(TAG, "Found recovery password, attempting to re-register.")
         viewModelScope.launch(context = coroutineExceptionHandler) {
-          verifyReRegisterInternal(context, pin, SignalStore.svr().getOrCreateMasterKey(), registrationErrorHandler)
+          verifyReRegisterInternal(context, pin, SignalStore.svr.getOrCreateMasterKey(), registrationErrorHandler)
           setInProgress(false)
         }
       } else {
@@ -570,12 +577,14 @@ class RegistrationV2ViewModel : ViewModel() {
     }
 
     // remote recovery password
-    val authCredentials = store.value.svrAuthCredentials
-    if (authCredentials != null) {
-      Log.d(TAG, "Found SVR auth credentials, fetching recovery password from SVR.")
+    val svr2Credentials = store.value.svr2AuthCredentials
+    val svr3Credentials = store.value.svr3AuthCredentials
+
+    if (svr2Credentials != null || svr3Credentials != null) {
+      Log.d(TAG, "Found SVR auth credentials, fetching recovery password from SVR (svr2: ${svr2Credentials != null}, svr3: ${svr3Credentials != null}).")
       viewModelScope.launch(context = coroutineExceptionHandler) {
         try {
-          val masterKey = RegistrationRepository.fetchMasterKeyFromSvrRemote(pin, authCredentials)
+          val masterKey = RegistrationRepository.fetchMasterKeyFromSvrRemote(pin, svr2Credentials, svr3Credentials)
           setRecoveryPassword(masterKey.deriveRegistrationRecoveryPassword())
           updateSvrTriesRemaining(10)
           verifyReRegisterInternal(context, pin, masterKey, registrationErrorHandler)
@@ -627,7 +636,10 @@ class RegistrationV2ViewModel : ViewModel() {
 
     Log.i(TAG, "Received a registration lock response when trying to register an account. Retrying with master key.")
     store.update {
-      it.copy(svrAuthCredentials = registrationResult.svr2Credentials)
+      it.copy(
+        svr2AuthCredentials = registrationResult.svr2Credentials,
+        svr3AuthCredentials = registrationResult.svr3Credentials
+      )
     }
 
     return Pair(RegistrationRepository.registerAccount(context = context, sessionId = sessionId, registrationData = registrationData, pin = pin) { masterKey }, true)
@@ -712,22 +724,29 @@ class RegistrationV2ViewModel : ViewModel() {
     if (result is RegisterAccountResult.RegistrationLocked) {
       Log.d(TAG, "Registration lock response received.")
       reglock = true
-      if (pin == null && SignalStore.svr().registrationLockToken != null) {
+      if (pin == null && SignalStore.svr.registrationLockToken != null) {
         Log.d(TAG, "Retrying registration with stored credentials.")
-        result = RegistrationRepository.registerAccount(context, sessionId, registrationData, SignalStore.svr().pin) { SignalStore.svr().getOrCreateMasterKey() }
-      } else if (result.svr2Credentials != null) {
-        Log.d(TAG, "Retrying registration with received credentials.")
-        val credentials = result.svr2Credentials
+        result = RegistrationRepository.registerAccount(context, sessionId, registrationData, SignalStore.svr.pin) { SignalStore.svr.getOrCreateMasterKey() }
+      } else if (result.svr2Credentials != null || result.svr3Credentials != null) {
+        Log.d(TAG, "Retrying registration with received credentials (svr2: ${result.svr2Credentials != null}, svr3: ${result.svr3Credentials != null}).")
+        val svr2Credentials = result.svr2Credentials
+        val svr3Credentials = result.svr3Credentials
         state = store.updateAndGet {
-          it.copy(svrAuthCredentials = credentials)
+          it.copy(svr2AuthCredentials = svr2Credentials, svr3AuthCredentials = svr3Credentials)
         }
       }
     }
 
     if (reglock && pin.isNotNullOrBlank()) {
-      Log.d(TAG, "Registration lock enabled, attempting to register account restore master key from SVR.")
+      Log.d(TAG, "Registration lock enabled, attempting to register account restore master key from SVR (svr2: ${state.svr2AuthCredentials != null}, svr3: ${state.svr3AuthCredentials != null})")
       result = RegistrationRepository.registerAccount(context, sessionId, registrationData, pin) {
-        SvrRepository.restoreMasterKeyPreRegistration(SvrAuthCredentialSet(null, state.svrAuthCredentials), pin)
+        SvrRepository.restoreMasterKeyPreRegistration(
+          credentials = SvrAuthCredentialSet(
+            svr2Credentials = state.svr2AuthCredentials,
+            svr3Credentials = state.svr3AuthCredentials
+          ),
+          userPin = pin
+        )
       }
     }
 
@@ -748,8 +767,10 @@ class RegistrationV2ViewModel : ViewModel() {
     Log.v(TAG, "onSuccessfulRegistration()")
     RegistrationRepository.registerAccountLocally(context, registrationData, remoteResult, reglockEnabled)
 
+    restoreBackupTier()
+
     if (reglockEnabled) {
-      SignalStore.onboarding().clearAll()
+      SignalStore.onboarding.clearAll()
       val stopwatch = Stopwatch("RegistrationLockRestore")
 
       AppDependencies.jobManager.runSynchronously(StorageAccountRestoreJob(), StorageAccountRestoreJob.LIFESPAN)
@@ -761,13 +782,13 @@ class RegistrationV2ViewModel : ViewModel() {
         .enqueueAndBlockUntilCompletion(TimeUnit.SECONDS.toMillis(10))
       stopwatch.split("ContactRestore")
 
-      refreshFeatureFlags()
+      refreshRemoteConfig()
 
-      stopwatch.split("FeatureFlags")
+      stopwatch.split("RemoteConfig")
 
       stopwatch.stop(TAG)
     } else {
-      refreshFeatureFlags()
+      refreshRemoteConfig()
     }
 
     store.update {
@@ -797,7 +818,7 @@ class RegistrationV2ViewModel : ViewModel() {
     return if (e164 == null) {
       false
     } else {
-      e164 == SignalStore.account().e164
+      e164 == SignalStore.account.e164
     }
   }
 
@@ -813,7 +834,7 @@ class RegistrationV2ViewModel : ViewModel() {
     val currentState = store.value
     val code = currentState.enteredCode
     val e164: String = currentState.phoneNumber?.toE164() ?: throw IllegalStateException("Can't construct registration data without E164!")
-    val recoveryPassword = if (currentState.sessionId == null) SignalStore.svr().getRecoveryPassword() else null
+    val recoveryPassword = if (currentState.sessionId == null) SignalStore.svr.getRecoveryPassword() else null
     return RegistrationData(code, e164, password, RegistrationRepository.getRegistrationId(), RegistrationRepository.getProfileKey(e164), currentState.fcmToken, RegistrationRepository.getPniRegistrationId(), recoveryPassword)
   }
 
@@ -838,10 +859,16 @@ class RegistrationV2ViewModel : ViewModel() {
   companion object {
     private val TAG = Log.tag(RegistrationV2ViewModel::class.java)
 
-    private suspend fun refreshFeatureFlags() = withContext(Dispatchers.IO) {
+    private suspend fun restoreBackupTier() = withContext(Dispatchers.IO) {
+      val startTime = System.currentTimeMillis()
+      BackupRepository.restoreBackupTier()
+      Log.i(TAG, "Took " + (System.currentTimeMillis() - startTime) + " ms to restore the backup tier..")
+    }
+
+    private suspend fun refreshRemoteConfig() = withContext(Dispatchers.IO) {
       val startTime = System.currentTimeMillis()
       try {
-        FeatureFlags.refreshSync()
+        RemoteConfig.refreshSync()
         Log.i(TAG, "Took " + (System.currentTimeMillis() - startTime) + " ms to get feature flags.")
       } catch (e: IOException) {
         Log.w(TAG, "Failed to refresh flags after " + (System.currentTimeMillis() - startTime) + " ms.", e)

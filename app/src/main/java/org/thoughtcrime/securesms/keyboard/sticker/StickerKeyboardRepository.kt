@@ -19,7 +19,7 @@ class StickerKeyboardRepository(private val stickerTable: StickerTable) {
   fun getStickerPacks(consumer: Consumer<List<KeyboardStickerPack>>) {
     SignalExecutors.BOUNDED.execute {
       val packs: MutableList<KeyboardStickerPack> = mutableListOf()
-      val cursorMru = if (SignalStore.settings().isStickerKeyboardPackMru()) stickerTable.installedStickerPacksMru else null
+      val cursorMru = if (SignalStore.settings.isStickerKeyboardPackMru()) stickerTable.installedStickerPacksMru else null
 
       StickerPackRecordReader(stickerTable.installedStickerPacks, cursorMru).use { reader ->
         var pack: StickerPackRecord? = reader.next

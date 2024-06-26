@@ -93,6 +93,7 @@ import org.signal.core.util.dp
 import org.signal.core.util.logging.Log
 import org.signal.core.util.orNull
 import org.signal.core.util.setActionItemTint
+import org.signal.donations.InAppPaymentType
 import org.signal.ringrtc.CallLinkRootKey
 import org.thoughtcrime.securesms.BlockUnblockDialog
 import org.thoughtcrime.securesms.GroupMembersDialog
@@ -103,7 +104,6 @@ import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.audio.AudioRecorder
 import org.thoughtcrime.securesms.badges.gifts.OpenableGift
 import org.thoughtcrime.securesms.badges.gifts.OpenableGiftItemDecoration
-import org.thoughtcrime.securesms.badges.gifts.flow.GiftFlowActivity
 import org.thoughtcrime.securesms.badges.gifts.viewgift.received.ViewReceivedGiftBottomSheet
 import org.thoughtcrime.securesms.badges.gifts.viewgift.sent.ViewSentGiftBottomSheet
 import org.thoughtcrime.securesms.components.AnimatingToggle
@@ -126,6 +126,7 @@ import org.thoughtcrime.securesms.components.location.SignalPlace
 import org.thoughtcrime.securesms.components.mention.MentionAnnotation
 import org.thoughtcrime.securesms.components.menu.ActionItem
 import org.thoughtcrime.securesms.components.menu.SignalBottomActionBar
+import org.thoughtcrime.securesms.components.settings.app.subscription.donate.CheckoutFlowActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.DonateToSignalFragment
 import org.thoughtcrime.securesms.components.settings.conversation.ConversationSettingsActivity
 import org.thoughtcrime.securesms.components.spoiler.SpoilerAnnotation
@@ -199,7 +200,6 @@ import org.thoughtcrime.securesms.conversation.v2.items.ChatColorsDrawable
 import org.thoughtcrime.securesms.conversation.v2.items.InteractiveConversationElement
 import org.thoughtcrime.securesms.conversation.v2.keyboard.AttachmentKeyboardFragment
 import org.thoughtcrime.securesms.database.DraftTable
-import org.thoughtcrime.securesms.database.InAppPaymentTable
 import org.thoughtcrime.securesms.database.model.IdentityRecord
 import org.thoughtcrime.securesms.database.model.InMemoryMessageRecord
 import org.thoughtcrime.securesms.database.model.Mention
@@ -299,13 +299,13 @@ import org.thoughtcrime.securesms.util.DeleteDialog
 import org.thoughtcrime.securesms.util.Dialogs
 import org.thoughtcrime.securesms.util.DoubleClickDebouncer
 import org.thoughtcrime.securesms.util.DrawableUtil
-import org.thoughtcrime.securesms.util.FeatureFlags
 import org.thoughtcrime.securesms.util.FullscreenHelper
 import org.thoughtcrime.securesms.util.MediaUtil
 import org.thoughtcrime.securesms.util.MessageConstraintsUtil
 import org.thoughtcrime.securesms.util.MessageConstraintsUtil.getEditMessageThresholdHours
 import org.thoughtcrime.securesms.util.MessageConstraintsUtil.isValidEditMessageSend
 import org.thoughtcrime.securesms.util.PlayStoreUtil
+import org.thoughtcrime.securesms.util.RemoteConfig
 import org.thoughtcrime.securesms.util.SaveAttachmentUtil
 import org.thoughtcrime.securesms.util.SignalLocalMetrics
 import org.thoughtcrime.securesms.util.StorageUtil
@@ -663,7 +663,7 @@ class ConversationFragment :
       updateToggleButtonState()
     }
 
-    if (SignalStore.rateLimit().needsRecaptcha()) {
+    if (SignalStore.rateLimit.needsRecaptcha()) {
       RecaptchaProofBottomSheetFragment.show(childFragmentManager)
     }
   }
@@ -1027,8 +1027,8 @@ class ConversationFragment :
       .subscribeBy { presentRequestReviewState(it) }
       .addTo(disposables)
 
-    val sRight = SwipeAvailabilityProvider(SignalStore.settings().swipeToRightAction.let { if (it == SwipeActionTypes.DEFAULT) SwipeActionTypes.DEFAULT_FOR_RIGHT else it })
-    val sLeft = SwipeAvailabilityProvider(SignalStore.settings().swipeToLeftAction.let { if (it == SwipeActionTypes.DEFAULT) SwipeActionTypes.DEFAULT_FOR_LEFT else it })
+    val sRight = SwipeAvailabilityProvider(SignalStore.settings.swipeToRightAction.let { if (it == SwipeActionTypes.DEFAULT) SwipeActionTypes.DEFAULT_FOR_RIGHT else it })
+    val sLeft = SwipeAvailabilityProvider(SignalStore.settings.swipeToLeftAction.let { if (it == SwipeActionTypes.DEFAULT) SwipeActionTypes.DEFAULT_FOR_LEFT else it })
 
     ConversationItemSwipeCallback(
       sRight,
@@ -1146,7 +1146,7 @@ class ConversationFragment :
   }
 
   private fun presentStoryRing() {
-    if (SignalStore.storyValues().isFeatureDisabled) {
+    if (SignalStore.story.isFeatureDisabled) {
       return
     }
 
@@ -1531,7 +1531,7 @@ class ConversationFragment :
       return
     }
 
-    if (SignalStore.uiHints().hasNotSeenEditMessageBetaAlert()) {
+    if (SignalStore.uiHints.hasNotSeenEditMessageBetaAlert()) {
       Dialogs.showEditMessageBetaDialog(requireContext()) { handleSendEditMessage() }
       return
     }
@@ -1690,7 +1690,7 @@ class ConversationFragment :
   }
 
   private fun initializeMediaKeyboard() {
-    val isSystemEmojiPreferred = SignalStore.settings().isPreferSystemEmoji
+    val isSystemEmojiPreferred = SignalStore.settings.isPreferSystemEmoji
     val keyboardMode: TextSecurePreferences.MediaKeyboardMode = TextSecurePreferences.getMediaKeyboardMode(requireContext())
     val stickerIntro: Boolean = !TextSecurePreferences.hasSeenStickerIntroTooltip(requireContext())
 
@@ -1699,7 +1699,7 @@ class ConversationFragment :
     val keyboardPage = when (keyboardMode) {
       TextSecurePreferences.MediaKeyboardMode.EMOJI -> if (isSystemEmojiPreferred) KeyboardPage.STICKER else KeyboardPage.EMOJI
       TextSecurePreferences.MediaKeyboardMode.STICKER -> KeyboardPage.STICKER
-      TextSecurePreferences.MediaKeyboardMode.GIF -> if (FeatureFlags.gifSearchAvailable()) KeyboardPage.GIF else KeyboardPage.STICKER
+      TextSecurePreferences.MediaKeyboardMode.GIF -> if (RemoteConfig.gifSearchAvailable) KeyboardPage.GIF else KeyboardPage.STICKER
     }
 
     inputPanel.setMediaKeyboardToggleMode(keyboardPage)
@@ -1838,7 +1838,7 @@ class ConversationFragment :
       return
     }
 
-    if (SignalStore.uiHints().hasNotSeenTextFormattingAlert() && bodyRanges != null && bodyRanges.ranges.isNotEmpty()) {
+    if (SignalStore.uiHints.hasNotSeenTextFormattingAlert() && bodyRanges != null && bodyRanges.ranges.isNotEmpty()) {
       Dialogs.showFormattedTextDialog(requireContext()) {
         sendMessage(body, mentions, bodyRanges, messageToEdit, quote, scheduledDate, slideDeck, contacts, clearCompose, linkPreviews, preUploadResults, bypassPreSendSafetyNumberCheck, isViewOnce, afterSendComplete)
       }
@@ -2244,6 +2244,7 @@ class ConversationFragment :
     ConversationDialogs.displayDeleteDialog(requireContext(), recipient) {
       messageRequestViewModel
         .onDelete()
+        .doAfterSuccess { activity?.finish() }
         .subscribeWithShowProgress("delete message request")
     }
   }
@@ -2364,7 +2365,7 @@ class ConversationFragment :
   }
 
   private fun handleCopyMessage(messageParts: Set<MultiselectPart>) {
-    handleCopyMessage(messageParts, SignalStore.settings().isCopyTextOpensPopup())
+    handleCopyMessage(messageParts, SignalStore.settings.isCopyTextOpensPopup())
   }
 
   private fun handleCopyMessage(messageParts: Set<MultiselectPart>, popup: Boolean) {  
@@ -2435,7 +2436,6 @@ class ConversationFragment :
     if (DeleteSyncEducationDialog.shouldShow()) {
       DeleteSyncEducationDialog
         .show(childFragmentManager)
-        .observeOn(AndroidSchedulers.mainThread())
         .subscribe { handleDeleteMessages(messageParts) }
         .addTo(disposables)
 
@@ -2447,11 +2447,6 @@ class ConversationFragment :
     disposables += DeleteDialog.show(
       context = requireContext(),
       messageRecords = records,
-      message = if (TextSecurePreferences.isMultiDevice(requireContext()) && FeatureFlags.deleteSyncEnabled()) {
-        resources.getQuantityString(R.plurals.ConversationFragment_delete_on_linked_warning, records.size)
-      } else {
-        null
-      },
       forceDeleteForMe = forceDeleteForMe,
       checkFastDeleteForMe = checkFastDeleteForMe
     ).observeOn(AndroidSchedulers.mainThread())
@@ -2876,7 +2871,7 @@ class ConversationFragment :
       context ?: return
       val reactionsTag = "REACTIONS"
       if (parentFragmentManager.findFragmentByTag(reactionsTag) == null) {
-        ReactionsBottomSheetDialogFragment.create(messageId, isMms, if (SignalStore.settings().isShowReactionTimestamps()) Locale.getDefault() else null)
+        ReactionsBottomSheetDialogFragment.create(messageId, isMms, if (SignalStore.settings.isShowReactionTimestamps()) Locale.getDefault() else null)
                                           .show(childFragmentManager, reactionsTag)
       }
     }
@@ -2896,7 +2891,7 @@ class ConversationFragment :
         return
       }
 
-      if (SignalStore.uiHints().hasSeenDoubleTapEditEducationSheet) {
+      if (SignalStore.uiHints.hasSeenDoubleTapEditEducationSheet) {
         onDoubleTapEditEducationSheetNext(conversationMessage)
         return
       }
@@ -3015,7 +3010,7 @@ class ConversationFragment :
 
     override fun onCallToAction(action: String) {
       if ("gift_badge" == action) {
-        startActivity(Intent(requireContext(), GiftFlowActivity::class.java))
+        startActivity(CheckoutFlowActivity.createIntent(requireContext(), InAppPaymentType.ONE_TIME_GIFT))
       } else if ("username_edit" == action) {
         startActivity(EditProfileActivity.getIntentForUsernameEdit(requireContext()))
       }
@@ -3025,7 +3020,7 @@ class ConversationFragment :
       requireActivity()
         .supportFragmentManager
         .beginTransaction()
-        .add(DonateToSignalFragment.Dialog.create(InAppPaymentTable.Type.ONE_TIME_DONATION), "one_time_nav")
+        .add(DonateToSignalFragment.Dialog.create(InAppPaymentType.ONE_TIME_DONATION), "one_time_nav")
         .commitNow()
     }
 
@@ -3148,7 +3143,7 @@ class ConversationFragment :
     fun onItemLongClick2(itemView: View, item: MultiselectPart, motionEvent: MotionEvent? = null) {
       Log.d(TAG, "onItemLongClick")
       if (actionMode != null) {
-        if (SignalStore.settings().isRangeMultiSelect()) {
+        if (SignalStore.settings.isRangeMultiSelect()) {
           adapter.toggleFromMostRecentSelectedTo(item.getMessageRecord())
           binding.conversationItemRecycler.invalidateItemDecorations()
           setCorrectActionModeMenuVisibility()
@@ -3164,7 +3159,7 @@ class ConversationFragment :
         return
       }
 
-      if ((motionEvent != null || !SignalStore.settings().isLongPressMultiSelect()) &&
+      if ((motionEvent != null || !SignalStore.settings.isLongPressMultiSelect()) &&
         messageRecord.isValidReactionTarget() &&
         !recipient.isBlocked &&
         !viewModel.hasMessageRequestState &&
@@ -3836,7 +3831,7 @@ class ConversationFragment :
 
     @SuppressLint("InlinedApi")
     override fun changeBubbleSettingAction(disableSetting: Boolean) {
-      SignalStore.tooltips().markBubbleOptOutTooltipSeen()
+      SignalStore.tooltips.markBubbleOptOutTooltipSeen()
 
       if (disableSetting) {
         val intent = Intent(Settings.ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS)
@@ -3997,7 +3992,7 @@ class ConversationFragment :
     override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
       if (event.action == KeyEvent.ACTION_DOWN) {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
-          if (SignalStore.settings().isEnterKeySends || event.isCtrlPressed) {
+          if (SignalStore.settings.isEnterKeySends || event.isCtrlPressed) {
             sendButton.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
             sendButton.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))
             return true

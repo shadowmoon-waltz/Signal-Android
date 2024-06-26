@@ -171,7 +171,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
     binding.body.setOnLongClickListener(passthroughClickListener)
 
     binding.body.isFocusable = false
-    binding.body.setTextSize(TypedValue.COMPLEX_UNIT_SP, SignalStore.settings().messageFontSize.toFloat())
+    binding.body.setTextSize(TypedValue.COMPLEX_UNIT_SP, SignalStore.settings.messageFontSize.toFloat())
     binding.body.movementMethod = LongClickMovementMethod.getInstance(context)
 
     if (binding.isIncoming) {
@@ -269,8 +269,8 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
       bodyBubbleDrawable.clearLocalChatColors()
     }
 
-    setSwipeIcon(binding.swipeToLeft, SignalStore.settings().getSwipeToLeftAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_LEFT);
-    setSwipeIcon(binding.reply, SignalStore.settings().getSwipeToRightAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_RIGHT);
+    setSwipeIcon(binding.swipeToLeft, SignalStore.settings.getSwipeToLeftAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_LEFT);
+    setSwipeIcon(binding.reply, SignalStore.settings.getSwipeToRightAction(), SwipeActionTypes.DEFAULT_DRAWABLE_FOR_RIGHT);
 
     binding.swipeToLeft.setBackgroundColor(themeDelegate.getReplyIconBackgroundColor())
     binding.reply.setBackgroundColor(themeDelegate.getReplyIconBackgroundColor())
@@ -771,7 +771,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
       messageRecord.isFailed -> {
         conversationContext.clickListener.onMessageWithErrorClicked(messageRecord)
       }
-      messageRecord.isRateLimited && SignalStore.rateLimit().needsRecaptcha() -> {
+      messageRecord.isRateLimited && SignalStore.rateLimit.needsRecaptcha() -> {
         conversationContext.clickListener.onMessageWithRecaptchaNeededClicked(messageRecord)
       }
       messageRecord.isOutgoing && messageRecord.isIdentityMismatchFailure -> {

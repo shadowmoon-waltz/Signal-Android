@@ -240,7 +240,7 @@ class ConversationViewModel(
         conversationRecipient = recipient,
         messageRequestState = messageRequestRepository.getMessageRequestState(recipient, threadId),
         groupRecord = groupRecord.orNull(),
-        isClientExpired = SignalStore.misc().isClientDeprecated,
+        isClientExpired = SignalStore.misc.isClientDeprecated,
         isUnauthorized = TextSecurePreferences.isUnauthorizedReceived(AppDependencies.application),
         threadContainsSms = !recipient.isRegistered && !recipient.isPushGroup && !recipient.isSelf && messageRequestRepository.threadContainsSms(threadId)
       )
@@ -393,7 +393,7 @@ class ConversationViewModel(
     val oldRecord = messageRecord.oldReactionRecord()
 
     // TODO[sw]: don't hardcode fast custom reaction change hold duration?
-    return if ((!SignalStore.settings().isFastCustomReactionChange() || holdDuration < 500) && oldRecord != null && hasAddedCustomEmoji) {
+    return if ((!SignalStore.settings.isFastCustomReactionChange() || holdDuration < 500) && oldRecord != null && hasAddedCustomEmoji) {
       repository.sendReactionRemoval(messageRecord, oldRecord).toMaybe()
     } else {
       Maybe.just(Unit)

@@ -21,18 +21,10 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1427
-val canonicalVersionName = "7.9.5"
-
-val postFixSize = 100
-// abiPostFix fixed at 5 regardless of abi since 2022-01-30 to allow moving between build variants (may re-enable in future)
-// val abiPostFix: Map<String, Int> = mapOf(
-//   "universal" to 0,
-//   "armeabi-v7a" to 1,
-//   "arm64-v8a" to 2,
-//   "x86" to 3,
-//   "x86_64" to 4
-// )
+val canonicalVersionCode = 1429
+val canonicalVersionName = "7.10.0"
+val currentHotfixVersion = 0
+val maxHotfixVersions = 100
 
 val keystores: Map<String, Properties?> = mapOf("debug" to loadKeystoreProperties("keystore.debug.properties"))
 
@@ -97,6 +89,8 @@ android {
   flavorDimensions += listOf("distribution", "environment")
   useLibrary("org.apache.http.legacy")
   testBuildType = "instrumentation"
+
+  android.bundle.language.enableSplit = false
 
   kotlinOptions {
     jvmTarget = signalKotlinJvmTarget
@@ -178,7 +172,7 @@ android {
   }
 
   defaultConfig {
-    versionCode = canonicalVersionCode * postFixSize
+    versionCode = (canonicalVersionCode * maxHotfixVersions) + currentHotfixVersion
     versionName = canonicalVersionName
 
     minSdk = signalMinSdkVersion
@@ -230,6 +224,7 @@ android {
     buildConfigField("String", "SIGNAL_CAPTCHA_URL", "\"https://signalcaptchas.org/registration/generate.html\"")
     buildConfigField("String", "RECAPTCHA_PROOF_URL", "\"https://signalcaptchas.org/challenge/generate.html\"")
     buildConfigField("org.signal.libsignal.net.Network.Environment", "LIBSIGNAL_NET_ENV", "org.signal.libsignal.net.Network.Environment.PRODUCTION")
+    buildConfigField("int", "LIBSIGNAL_LOG_LEVEL", "org.signal.libsignal.protocol.logging.SignalProtocolLogger.INFO")
 
     buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"unset\"")
     buildConfigField("String", "BUILD_ENVIRONMENT_TYPE", "\"unset\"")
@@ -422,6 +417,7 @@ android {
       buildConfigField("String", "SIGNAL_CAPTCHA_URL", "\"https://signalcaptchas.org/staging/registration/generate.html\"")
       buildConfigField("String", "RECAPTCHA_PROOF_URL", "\"https://signalcaptchas.org/staging/challenge/generate.html\"")
       buildConfigField("org.signal.libsignal.net.Network.Environment", "LIBSIGNAL_NET_ENV", "org.signal.libsignal.net.Network.Environment.STAGING")
+      buildConfigField("int", "LIBSIGNAL_LOG_LEVEL", "org.signal.libsignal.protocol.logging.SignalProtocolLogger.DEBUG")
 
       buildConfigField("String", "BUILD_ENVIRONMENT_TYPE", "\"Staging\"")
       buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"pk_test_sngOd8FnXNkpce9nPXawKrJD00kIDngZkD\"")
@@ -441,7 +437,6 @@ android {
       .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
       .forEach { output ->
         if (output.baseName.contains("nightly")) {
-          output.versionCodeOverride = canonicalVersionCode * postFixSize + 5
           var tag = getCurrentGitTag()
           if (!tag.isNullOrEmpty()) {
             if (tag.startsWith("v")) {
@@ -455,14 +450,9 @@ android {
         } else {
           output.outputFileName = output.outputFileName.replace(".apk", "-$versionName.apk")
 
-          val abiName: String = output.getFilter("ABI") ?: "universal"
-          val postFix: Int = 5 // abiPostFix[abiName]!!
-
-          if (postFix >= postFixSize) {
-            throw AssertionError("postFix is too large")
+          if (currentHotfixVersion >= maxHotfixVersions) {
+            throw AssertionError("Hotfix version is too large!")
           }
-
-          output.versionCodeOverride = canonicalVersionCode * postFixSize + postFix
         }
       }
   }
@@ -545,6 +535,7 @@ dependencies {
   implementation(libs.androidx.profileinstaller)
   implementation(libs.androidx.asynclayoutinflater)
   implementation(libs.androidx.asynclayoutinflater.appcompat)
+  implementation(libs.androidx.emoji2)
   implementation(libs.firebase.messaging) {
     exclude(group = "com.google.firebase", module = "firebase-core")
     exclude(group = "com.google.firebase", module = "firebase-analytics")
@@ -576,6 +567,7 @@ dependencies {
   }
   implementation(libs.stream)
   implementation(libs.lottie)
+  implementation(libs.lottie.compose)
   implementation(libs.signal.android.database.sqlcipher)
   implementation(libs.androidx.sqlite)
   implementation(libs.google.ez.vcard) {

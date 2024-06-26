@@ -14,7 +14,6 @@ import org.signal.libsignal.protocol.InvalidMessageException;
 import org.signal.libsignal.zkgroup.profiles.ClientZkProfileOperations;
 import org.signal.libsignal.zkgroup.profiles.ProfileKey;
 import org.whispersystems.signalservice.api.backup.BackupKey;
-import org.whispersystems.signalservice.api.backup.MediaId;
 import org.whispersystems.signalservice.api.crypto.AttachmentCipherInputStream;
 import org.whispersystems.signalservice.api.crypto.AttachmentCipherStreamUtil;
 import org.whispersystems.signalservice.api.crypto.ProfileCipherInputStream;
@@ -44,6 +43,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -222,6 +222,11 @@ public class SignalServiceMessageReceiver {
 
   public void retrieveBackup(int cdnNumber, Map<String, String> headers, String cdnPath, File destination, ProgressListener listener) throws MissingConfigurationException, IOException {
     socket.retrieveBackup(cdnNumber, headers, cdnPath, destination, 1_000_000_000L, listener);
+  }
+
+  @Nullable
+  public ZonedDateTime getCdnLastModifiedTime(int cdnNumber, Map<String, String> headers, String cdnPath) throws MissingConfigurationException, IOException {
+    return socket.getCdnLastModifiedTime(cdnNumber, headers, cdnPath);
   }
 
   public InputStream retrieveSticker(byte[] packId, byte[] packKey, int stickerId)

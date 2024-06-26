@@ -13,11 +13,14 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.logging.Log
 import org.signal.donations.GooglePayPaymentSource
+import org.signal.donations.InAppPaymentType
 import org.signal.donations.PaymentSourceType
 import org.signal.donations.StripeApi
 import org.signal.donations.StripeIntentAccessor
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper.toFiatMoney
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository
+import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.requireSubscriberType
+import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.toErrorSource
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.toPaymentSourceType
 import org.thoughtcrime.securesms.components.settings.app.subscription.OneTimeInAppPaymentRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
@@ -30,8 +33,6 @@ import org.thoughtcrime.securesms.database.InAppPaymentTable
 import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
 import org.thoughtcrime.securesms.database.model.databaseprotos.InAppPaymentData
 import org.thoughtcrime.securesms.dependencies.AppDependencies
-import org.thoughtcrime.securesms.jobs.MultiDeviceSubscriptionSyncRequestJob
-import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
 import org.thoughtcrime.securesms.util.rx.RxStore
@@ -40,7 +41,6 @@ import org.whispersystems.signalservice.internal.push.exceptions.DonationProcess
 
 class StripePaymentInProgressViewModel(
   private val stripeRepository: StripeRepository,
-  private val recurringInAppPaymentRepository: RecurringInAppPaymentRepository,
   private val oneTimeInAppPaymentRepository: OneTimeInAppPaymentRepository
 ) : ViewModel() {
 
@@ -76,7 +76,7 @@ class StripePaymentInProgressViewModel(
   }
 
   fun processNewDonation(inAppPayment: InAppPaymentTable.InAppPayment, nextActionHandler: StripeNextActionHandler) {
-    Log.d(TAG, "Proceeding with donation...", true)
+    Log.d(TAG, "Proceeding with InAppPayment::${inAppPayment.id} of type ${inAppPayment.type}...", true)
 
     val paymentSourceProvider: PaymentSourceProvider = resolvePaymentSourceProvider(inAppPayment.type.toErrorSource())
 
@@ -143,18 +143,18 @@ class StripePaymentInProgressViewModel(
   }
 
   private fun proceedMonthly(inAppPayment: InAppPaymentTable.InAppPayment, paymentSourceProvider: PaymentSourceProvider, nextActionHandler: StripeNextActionHandler) {
-    val ensureSubscriberId: Completable = recurringInAppPaymentRepository.ensureSubscriberId(inAppPayment.type.requireSubscriberType())
+    val ensureSubscriberId: Completable = RecurringInAppPaymentRepository.ensureSubscriberId(inAppPayment.type.requireSubscriberType())
     val createAndConfirmSetupIntent: Single<StripeApi.Secure3DSAction> = paymentSourceProvider.paymentSource.flatMap {
-      stripeRepository.createAndConfirmSetupIntent(it, paymentSourceProvider.paymentSourceType as PaymentSourceType.Stripe)
+      stripeRepository.createAndConfirmSetupIntent(inAppPayment.type, it, paymentSourceProvider.paymentSourceType as PaymentSourceType.Stripe)
     }
 
-    val setLevel: Completable = recurringInAppPaymentRepository.setSubscriptionLevel(inAppPayment, paymentSourceProvider.paymentSourceType)
+    val setLevel: Completable = RecurringInAppPaymentRepository.setSubscriptionLevel(inAppPayment, paymentSourceProvider.paymentSourceType)
 
     Log.d(TAG, "Starting subscription payment pipeline...", true)
     store.update { DonationProcessorStage.PAYMENT_PIPELINE }
 
     val setup: Completable = ensureSubscriberId
-      .andThen(recurringInAppPaymentRepository.cancelActiveSubscriptionIfNecessary(inAppPayment.type.requireSubscriberType()))
+      .andThen(RecurringInAppPaymentRepository.cancelActiveSubscriptionIfNecessary(inAppPayment.type.requireSubscriberType()))
       .andThen(createAndConfirmSetupIntent)
       .flatMap { secure3DSAction ->
         nextActionHandler.handle(
@@ -171,7 +171,7 @@ class StripePaymentInProgressViewModel(
         )
           .flatMap { secure3DSResult -> stripeRepository.getStatusAndPaymentMethodId(secure3DSResult, secure3DSAction.paymentMethodId) }
       }
-      .flatMapCompletable { stripeRepository.setDefaultPaymentMethod(it.paymentMethod!!, it.intentId, paymentSourceProvider.paymentSourceType) }
+      .flatMapCompletable { stripeRepository.setDefaultPaymentMethod(it.paymentMethod!!, it.intentId, inAppPayment.type.requireSubscriberType(), paymentSourceProvider.paymentSourceType) }
       .onErrorResumeNext {
         when (it) {
           is DonationError -> Completable.error(it)
@@ -202,7 +202,7 @@ class StripePaymentInProgressViewModel(
 
     val amount = inAppPayment.data.amount!!.toFiatMoney()
     val recipientId = inAppPayment.data.recipientId?.let { RecipientId.from(it) } ?: Recipient.self().id
-    val verifyUser = if (inAppPayment.type == InAppPaymentTable.Type.ONE_TIME_GIFT) {
+    val verifyUser = if (inAppPayment.type == InAppPaymentType.ONE_TIME_GIFT) {
       OneTimeInAppPaymentRepository.verifyRecipientIsAllowedToReceiveAGift(recipientId)
     } else {
       Completable.complete()
@@ -254,12 +254,9 @@ class StripePaymentInProgressViewModel(
     Log.d(TAG, "Beginning cancellation...", true)
 
     store.update { DonationProcessorStage.CANCELLING }
-    disposables += recurringInAppPaymentRepository.cancelActiveSubscription(subscriberType).subscribeBy(
+    disposables += RecurringInAppPaymentRepository.cancelActiveSubscription(subscriberType).subscribeBy(
       onComplete = {
         Log.d(TAG, "Cancellation succeeded", true)
-        SignalStore.donationsValues().updateLocalStateForManualCancellation(subscriberType)
-        MultiDeviceSubscriptionSyncRequestJob.enqueue()
-        stripeRepository.scheduleSyncForAccountRecordChange()
         store.update { DonationProcessorStage.COMPLETE }
       },
       onError = { throwable ->
@@ -272,10 +269,10 @@ class StripePaymentInProgressViewModel(
   fun updateSubscription(inAppPayment: InAppPaymentTable.InAppPayment) {
     Log.d(TAG, "Beginning subscription update...", true)
     store.update { DonationProcessorStage.PAYMENT_PIPELINE }
-    disposables += recurringInAppPaymentRepository
+    disposables += RecurringInAppPaymentRepository
       .cancelActiveSubscriptionIfNecessary(inAppPayment.type.requireSubscriberType())
-      .andThen(recurringInAppPaymentRepository.getPaymentSourceTypeOfLatestSubscription(inAppPayment.type.requireSubscriberType()))
-      .flatMapCompletable { paymentSourceType -> recurringInAppPaymentRepository.setSubscriptionLevel(inAppPayment, paymentSourceType) }
+      .andThen(RecurringInAppPaymentRepository.getPaymentSourceTypeOfLatestSubscription(inAppPayment.type.requireSubscriberType()))
+      .flatMapCompletable { paymentSourceType -> RecurringInAppPaymentRepository.setSubscriptionLevel(inAppPayment, paymentSourceType) }
       .subscribeBy(
         onComplete = {
           Log.w(TAG, "Completed subscription update", true)
@@ -306,11 +303,10 @@ class StripePaymentInProgressViewModel(
 
   class Factory(
     private val stripeRepository: StripeRepository,
-    private val recurringInAppPaymentRepository: RecurringInAppPaymentRepository = RecurringInAppPaymentRepository(AppDependencies.donationsService),
     private val oneTimeInAppPaymentRepository: OneTimeInAppPaymentRepository = OneTimeInAppPaymentRepository(AppDependencies.donationsService)
   ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-      return modelClass.cast(StripePaymentInProgressViewModel(stripeRepository, recurringInAppPaymentRepository, oneTimeInAppPaymentRepository)) as T
+      return modelClass.cast(StripePaymentInProgressViewModel(stripeRepository, oneTimeInAppPaymentRepository)) as T
     }
   }
 }

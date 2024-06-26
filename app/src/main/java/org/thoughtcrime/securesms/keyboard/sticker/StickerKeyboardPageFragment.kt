@@ -183,7 +183,7 @@ open class StickerKeyboardPageFragment :
   }
 
   override fun onStickerLongClicked(sticker: KeyboardStickerListAdapter.Sticker) {
-    if (sticker.packId == RECENT_PACK_ID && SignalStore.settings().isStickerMruLongPressToPack()) {
+    if (sticker.packId == RECENT_PACK_ID && SignalStore.settings.isStickerMruLongPressToPack()) {
       scrollTo(sticker.stickerRecord.packId)
       viewModel.selectPack(sticker.stickerRecord.packId)
     } else {

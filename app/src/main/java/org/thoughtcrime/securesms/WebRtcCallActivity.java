@@ -94,7 +94,7 @@ import org.thoughtcrime.securesms.service.webrtc.SignalCallManager;
 import org.thoughtcrime.securesms.sms.MessageSender;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.EllapsedTimeFormatter;
-import org.thoughtcrime.securesms.util.FeatureFlags;
+import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.FullscreenHelper;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.ThrottledDebouncer;
@@ -415,7 +415,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   private void initializePendingParticipantFragmentListener() {
-    if (!FeatureFlags.adHocCalling()) {
+    if (!RemoteConfig.adHocCalling()) {
       return;
     }
 
@@ -822,7 +822,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   public void handleGroupMemberCountChange(int count) {
-    boolean canRing = count <= FeatureFlags.maxGroupCallRingSize();
+    boolean canRing = count <= RemoteConfig.maxGroupCallRingSize();
     callScreen.enableRingGroup(canRing);
     AppDependencies.getSignalCallManager().setRingGroup(canRing);
   }
@@ -1102,7 +1102,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     @Override
     public void toggleControls() {
       WebRtcControls controlState = viewModel.getWebRtcControls().getValue();
-      if (controlState != null && !controlState.displayIncomingCallButtons()) {
+      if (controlState != null && !controlState.displayIncomingCallButtons() && !controlState.displayErrorControls()) {
         controlsAndInfo.toggleControls();
       }
     }
@@ -1287,9 +1287,12 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
 
     @Override
     public void onHidden() {
-      fullscreenHelper.hideSystemUI();
-      if (videoTooltip != null) {
-        videoTooltip.dismiss();
+      WebRtcControls controlState = viewModel.getWebRtcControls().getValue();
+      if (controlState == null || !controlState.displayErrorControls()) {
+        fullscreenHelper.hideSystemUI();
+        if (videoTooltip != null) {
+          videoTooltip.dismiss();
+        }
       }
     }
   }

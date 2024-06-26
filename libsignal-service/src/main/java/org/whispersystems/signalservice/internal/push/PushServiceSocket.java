@@ -117,6 +117,8 @@ import org.whispersystems.signalservice.api.subscriptions.PayPalConfirmPaymentIn
 import org.whispersystems.signalservice.api.subscriptions.PayPalCreatePaymentIntentResponse;
 import org.whispersystems.signalservice.api.subscriptions.PayPalCreatePaymentMethodResponse;
 import org.whispersystems.signalservice.api.subscriptions.StripeClientSecret;
+import org.whispersystems.signalservice.api.svr.SetShareSetRequest;
+import org.whispersystems.signalservice.api.svr.Svr3Credentials;
 import org.whispersystems.signalservice.api.util.CredentialsProvider;
 import org.whispersystems.signalservice.api.util.Tls12SocketFactory;
 import org.whispersystems.signalservice.api.util.TlsProxySocketFactory;
@@ -169,6 +171,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -284,6 +288,7 @@ public class PushServiceSocket {
   private static final String REQUEST_RATE_LIMIT_PUSH_CHALLENGE = "/v1/challenge/push";
 
   private static final String DONATION_REDEEM_RECEIPT = "/v1/donation/redeem-receipt";
+  private static final String ARCHIVES_REDEEM_RECEIPT = "/v1/archives/redeem-receipt";
 
   private static final String UPDATE_SUBSCRIPTION_LEVEL                  = "/v1/subscription/%s/level/%s/%s/%s";
   private static final String SUBSCRIPTION                               = "/v1/subscription/%s";
@@ -306,11 +311,13 @@ public class PushServiceSocket {
   private static final String REGISTRATION_PATH    = "/v1/registration";
 
   private static final String CDSI_AUTH = "/v2/directory/auth";
-  private static final String SVR_AUTH  = "/v2/backup/auth";
+  private static final String SVR2_AUTH = "/v2/backup/auth";
+  private static final String SVR3_AUTH = "/v3/backup/auth";
 
   private static final String REPORT_SPAM = "/v1/messages/report/%s/%s";
 
-  private static final String BACKUP_AUTH_CHECK = "/v2/backup/auth/check";
+  private static final String BACKUP_AUTH_CHECK_V2 = "/v2/backup/auth/check";
+  private static final String BACKUP_AUTH_CHECK_V3 = "/v3/backup/auth/check";
 
   private static final String ARCHIVE_CREDENTIALS         = "/v1/archives/auth?redemptionStartSeconds=%d&redemptionEndSeconds=%d";
   private static final String ARCHIVE_READ_CREDENTIALS    = "/v1/archives/auth/read?cdn=%d";
@@ -324,6 +331,8 @@ public class PushServiceSocket {
   private static final String ARCHIVE_MEDIA_BATCH         = "/v1/archives/media/batch";
   private static final String ARCHIVE_MEDIA_DELETE        = "/v1/archives/media/delete";
   private static final String ARCHIVE_MEDIA_DOWNLOAD_PATH = "backups/%s/%s/%s";
+
+  private static final String SET_SHARE_SET_PATH = "/v3/backup/share-set";
 
   private static final String CALL_LINK_CREATION_AUTH = "/v1/call-link/create-auth";
   private static final String SERVER_DELIVERED_TIMESTAMP_HEADER = "X-Signal-Timestamp";
@@ -487,11 +496,16 @@ public class PushServiceSocket {
     return JsonUtil.fromJsonResponse(body, CdsiAuthResponse.class);
   }
 
-  public AuthCredentials getSvrAuthorization() throws IOException {
-    String          body        = makeServiceRequest(SVR_AUTH, "GET", null);
+  public AuthCredentials getSvr2Authorization() throws IOException {
+    String          body        = makeServiceRequest(SVR2_AUTH, "GET", null);
     AuthCredentials credentials = JsonUtil.fromJsonResponse(body, AuthCredentials.class);
 
     return credentials;
+  }
+
+  public Svr3Credentials getSvr3Authorization() throws IOException {
+    String body = makeServiceRequest(SVR3_AUTH, "GET", null);
+    return JsonUtil.fromJsonResponse(body, Svr3Credentials.class);
   }
 
   public ArchiveServiceCredentialsResponse getArchiveCredentials(long currentTime) throws IOException {
@@ -607,6 +621,11 @@ public class PushServiceSocket {
     String response = makeServiceRequestWithoutAuthentication(String.format(Locale.US, ARCHIVE_READ_CREDENTIALS, cdnNumber), "GET", null, headers, NO_HANDLER);
 
     return JsonUtil.fromJson(response, GetArchiveCdnCredentialsResponse.class);
+  }
+
+  public void setShareSet(byte[] shareSet) throws IOException {
+    SetShareSetRequest request = new SetShareSetRequest(shareSet);
+    makeServiceRequest(SET_SHARE_SET_PATH, "PUT", JsonUtil.toJson(request));
   }
 
   public VerifyAccountResponse changeNumber(@Nonnull ChangePhoneNumberRequest changePhoneNumberRequest)
@@ -1123,11 +1142,11 @@ public class PushServiceSocket {
         .onErrorReturn(ServiceResponse::forUnknownError);
   }
 
-  public Single<ServiceResponse<BackupAuthCheckResponse>> checkBackupAuthCredentials(@Nonnull BackupAuthCheckRequest request,
-                                                                                     @Nonnull ResponseMapper<BackupAuthCheckResponse> responseMapper)
+  public Single<ServiceResponse<BackupV2AuthCheckResponse>> checkSvr2AuthCredentials(@Nonnull BackupAuthCheckRequest request,
+                                                                                     @Nonnull ResponseMapper<BackupV2AuthCheckResponse> responseMapper)
   {
-    Single<ServiceResponse<BackupAuthCheckResponse>> requestSingle = Single.fromCallable(() -> {
-      try (Response response = getServiceConnection(BACKUP_AUTH_CHECK, "POST", jsonRequestBody(JsonUtil.toJson(request)), Collections.emptyMap(), Optional.empty(), false)) {
+    Single<ServiceResponse<BackupV2AuthCheckResponse>> requestSingle = Single.fromCallable(() -> {
+      try (Response response = getServiceConnection(BACKUP_AUTH_CHECK_V2, "POST", jsonRequestBody(JsonUtil.toJson(request)), Collections.emptyMap(), Optional.empty(), false)) {
         String body = response.body() != null ? readBodyString(response.body()): "";
         return responseMapper.map(response.code(), body, response::header, false);
       }
@@ -1139,21 +1158,14 @@ public class PushServiceSocket {
         .onErrorReturn(ServiceResponse::forUnknownError);
   }
 
-  public BackupAuthCheckResponse checkBackupAuthCredentials(@Nullable String number, @Nonnull List<String> passwords) throws IOException {
-    String response = makeServiceRequest(BACKUP_AUTH_CHECK, "POST", JsonUtil.toJson(new BackupAuthCheckRequest(number, passwords)), NO_HEADERS, UNOPINIONATED_HANDLER, Optional.empty());
-    return JsonUtil.fromJson(response, BackupAuthCheckResponse.class);
+  public BackupV2AuthCheckResponse checkSvr2AuthCredentials(@Nullable String number, @Nonnull List<String> passwords) throws IOException {
+    String response = makeServiceRequest(BACKUP_AUTH_CHECK_V2, "POST", JsonUtil.toJson(new BackupAuthCheckRequest(number, passwords)), NO_HEADERS, UNOPINIONATED_HANDLER, Optional.empty());
+    return JsonUtil.fromJson(response, BackupV2AuthCheckResponse.class);
   }
 
-  private Single<ServiceResponse<BackupAuthCheckResponse>> createBackupAuthCheckSingle(@Nonnull String path,
-                                                                                       @Nonnull BackupAuthCheckRequest request,
-                                                                                       @Nonnull ResponseMapper<BackupAuthCheckResponse> responseMapper)
-  {
-    return Single.fromCallable(() -> {
-      try (Response response = getServiceConnection(path, "POST", jsonRequestBody(JsonUtil.toJson(request)), Collections.emptyMap(), Optional.empty(), false)) {
-        String body = response.body() != null ? readBodyString(response.body()): "";
-        return responseMapper.map(response.code(), body, response::header, false);
-      }
-    });
+  public BackupV3AuthCheckResponse checkSvr3AuthCredentials(@Nullable String number, @Nonnull List<String> passwords) throws IOException {
+    String response = makeServiceRequest(BACKUP_AUTH_CHECK_V3, "POST", JsonUtil.toJson(new BackupAuthCheckRequest(number, passwords)), NO_HEADERS, UNOPINIONATED_HANDLER, Optional.empty());
+    return JsonUtil.fromJson(response, BackupV3AuthCheckResponse.class);
   }
 
   /**
@@ -1301,8 +1313,13 @@ public class PushServiceSocket {
   }
 
   public void redeemDonationReceipt(ReceiptCredentialPresentation receiptCredentialPresentation, boolean visible, boolean primary) throws IOException {
-    String payload = JsonUtil.toJson(new RedeemReceiptRequest(Base64.encodeWithPadding(receiptCredentialPresentation.serialize()), visible, primary));
+    String payload = JsonUtil.toJson(new RedeemDonationReceiptRequest(Base64.encodeWithPadding(receiptCredentialPresentation.serialize()), visible, primary));
     makeServiceRequest(DONATION_REDEEM_RECEIPT, "POST", payload);
+  }
+
+  public void redeemArchivesReceipt(ReceiptCredentialPresentation receiptCredentialPresentation) throws IOException {
+    String payload = JsonUtil.toJson(new RedeemArchivesReceiptRequest(Base64.encodeWithPadding(receiptCredentialPresentation.serialize())));
+    makeServiceRequest(ARCHIVES_REDEEM_RECEIPT, "POST", payload);
   }
 
   public StripeClientSecret createStripeOneTimePaymentIntent(String currencyCode, String paymentMethod, long amount, long level) throws IOException {
@@ -1695,6 +1712,56 @@ public class PushServiceSocket {
         }
       } else if (response.code() == 416) {
         throw new RangeException(offset);
+      } else {
+        throw new NonSuccessfulResponseCodeException(response.code(), "Response: " + response);
+      }
+    } catch (NonSuccessfulResponseCodeException | PushNetworkException e) {
+      throw e;
+    } catch (IOException e) {
+      throw new PushNetworkException(e);
+    } finally {
+      synchronized (connections) {
+        connections.remove(call);
+      }
+    }
+  }
+
+  @Nullable
+  public ZonedDateTime getCdnLastModifiedTime(int cdnNumber, Map<String, String> headers, String path) throws MissingConfigurationException, PushNetworkException, NonSuccessfulResponseCodeException {
+    ConnectionHolder[] cdnNumberClients = cdnClientsMap.get(cdnNumber);
+    if (cdnNumberClients == null) {
+      throw new MissingConfigurationException("Attempted to download from unsupported CDN number: " + cdnNumber + ", Our configuration supports: " + cdnClientsMap.keySet());
+    }
+    ConnectionHolder   connectionHolder = getRandom(cdnNumberClients, random);
+    OkHttpClient       okHttpClient     = connectionHolder.getClient()
+                                                          .newBuilder()
+                                                          .connectTimeout(soTimeoutMillis, TimeUnit.MILLISECONDS)
+                                                          .readTimeout(soTimeoutMillis, TimeUnit.MILLISECONDS)
+                                                          .build();
+
+    Request.Builder request = new Request.Builder().url(connectionHolder.getUrl() + "/" + path).get();
+
+    if (connectionHolder.getHostHeader().isPresent()) {
+      request.addHeader("Host", connectionHolder.getHostHeader().get());
+    }
+
+    for (Map.Entry<String, String> header : headers.entrySet()) {
+      request.addHeader(header.getKey(), header.getValue());
+    }
+
+    Call call = okHttpClient.newCall(request.build());
+
+    synchronized (connections) {
+      connections.add(call);
+    }
+
+    try (Response response = call.execute()) {
+      if (response.isSuccessful()) {
+        String lastModified = response.header("Last-Modified");
+        if (lastModified == null) {
+          return null;
+        }
+        return ZonedDateTime.parse(lastModified, DateTimeFormatter.RFC_1123_DATE_TIME);
       } else {
         throw new NonSuccessfulResponseCodeException(response.code(), "Response: " + response);
       }
@@ -2194,8 +2261,8 @@ public class PushServiceSocket {
 
         throw new LockedException(accountLockFailure.length,
                                   accountLockFailure.timeRemaining,
-                                  accountLockFailure.svr1Credentials,
-                                  accountLockFailure.svr2Credentials);
+                                  accountLockFailure.svr2Credentials,
+                                  accountLockFailure.svr3Credentials);
       case 428:
         ProofRequiredResponse proofRequiredResponse = readResponseJson(response, ProofRequiredResponse.class);
         String                retryAfterRaw = response.header("Retry-After");
@@ -2627,6 +2694,9 @@ public class PushServiceSocket {
 
     @JsonProperty
     public AuthCredentials svr2Credentials;
+
+    @JsonProperty
+    public Svr3Credentials svr3Credentials;
   }
 
   private static class ConnectionHolder {

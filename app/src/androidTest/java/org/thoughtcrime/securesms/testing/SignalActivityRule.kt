@@ -90,8 +90,8 @@ class SignalActivityRule(private val othersCount: Int = 4, private val createGro
     val preferences: SharedPreferences = application.getSharedPreferences(MasterSecretUtil.PREFERENCES_NAME, 0)
     preferences.edit().putBoolean("passphrase_initialized", true).commit()
 
-    SignalStore.account().generateAciIdentityKeyIfNecessary()
-    SignalStore.account().generatePniIdentityKeyIfNecessary()
+    SignalStore.account.generateAciIdentityKeyIfNecessary()
+    SignalStore.account.generatePniIdentityKeyIfNecessary()
 
     val registrationRepository = RegistrationRepository(application)
 
@@ -111,19 +111,19 @@ class SignalActivityRule(private val othersCount: Int = 4, private val createGro
         verifyAccountResponse = VerifyAccountResponse(UUID.randomUUID().toString(), UUID.randomUUID().toString(), false),
         masterKey = null,
         pin = null,
-        aciPreKeyCollection = RegistrationRepository.generateSignedAndLastResortPreKeys(SignalStore.account().aciIdentityKey, SignalStore.account().aciPreKeys),
-        pniPreKeyCollection = RegistrationRepository.generateSignedAndLastResortPreKeys(SignalStore.account().aciIdentityKey, SignalStore.account().pniPreKeys)
+        aciPreKeyCollection = RegistrationRepository.generateSignedAndLastResortPreKeys(SignalStore.account.aciIdentityKey, SignalStore.account.aciPreKeys),
+        pniPreKeyCollection = RegistrationRepository.generateSignedAndLastResortPreKeys(SignalStore.account.aciIdentityKey, SignalStore.account.pniPreKeys)
       ),
       false
     ).blockingGet()
 
     ServiceResponseProcessor.DefaultProcessor(response).resultOrThrow
 
-    SignalStore.svr().optOut()
+    SignalStore.svr.optOut()
     RegistrationUtil.maybeMarkRegistrationComplete()
     SignalDatabase.recipients.setProfileName(Recipient.self().id, ProfileName.fromParts("Tester", "McTesterson"))
 
-    SignalStore.settings().isMessageNotificationsEnabled = false
+    SignalStore.settings.isMessageNotificationsEnabled = false
 
     return Recipient.self()
   }
@@ -141,7 +141,7 @@ class SignalActivityRule(private val othersCount: Int = 4, private val createGro
       val recipientId = RecipientId.from(SignalServiceAddress(aci, "+15555551%03d".format(i)))
       SignalDatabase.recipients.setProfileName(recipientId, ProfileName.fromParts("Buddy", "#$i"))
       SignalDatabase.recipients.setProfileKeyIfAbsent(recipientId, ProfileKeyUtil.createNew())
-      SignalDatabase.recipients.setCapabilities(recipientId, SignalServiceProfile.Capabilities(true, true))
+      SignalDatabase.recipients.setCapabilities(recipientId, SignalServiceProfile.Capabilities(true, true, false))
       SignalDatabase.recipients.setProfileSharing(recipientId, true)
       SignalDatabase.recipients.markRegistered(recipientId, aci)
       val otherIdentity = IdentityKeyUtil.generateIdentityKeyPair()

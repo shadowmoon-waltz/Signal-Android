@@ -46,14 +46,14 @@ class VitalsViewModel(private val context: Application) : AndroidViewModel(conte
   private fun checkHeuristics(): Single<State> {
     return Single.fromCallable {
       var state = State.NONE
-      if (SlowNotificationHeuristics.isHavingDelayedNotifications()) {
+      if (SlowNotificationHeuristics.showPreemptively() || SlowNotificationHeuristics.isHavingDelayedNotifications()) {
         if (SlowNotificationHeuristics.isPotentiallyCausedByBatteryOptimizations() && SlowNotificationHeuristics.shouldPromptBatterySaver()) {
           state = State.PROMPT_BATTERY_SAVER_DIALOG
         } else if (SlowNotificationHeuristics.shouldPromptUserForLogs()) {
           state = State.PROMPT_DEBUGLOGS_FOR_NOTIFICATIONS
         }
       } else if (LogDatabase.getInstance(context).crashes.anyMatch(patterns = CrashConfig.patterns, promptThreshold = System.currentTimeMillis() - 14.days.inWholeMilliseconds)) {
-        val timeSinceLastPrompt = System.currentTimeMillis() - SignalStore.uiHints().lastCrashPrompt
+        val timeSinceLastPrompt = System.currentTimeMillis() - SignalStore.uiHints.lastCrashPrompt
 
         if (timeSinceLastPrompt > 1.days.inWholeMilliseconds) {
           state = State.PROMPT_DEBUGLOGS_FOR_CRASH

@@ -31,7 +31,7 @@ import org.whispersystems.signalservice.api.util.UuidUtil
 import org.whispersystems.signalservice.api.util.toByteArray
 import java.security.SecureRandom
 
-internal class AccountValues internal constructor(store: KeyValueStore) : SignalStoreValues(store) {
+class AccountValues internal constructor(store: KeyValueStore) : SignalStoreValues(store) {
 
   companion object {
     private val TAG = Log.tag(AccountValues::class.java)
@@ -336,7 +336,7 @@ internal class AccountValues internal constructor(store: KeyValueStore) : Signal
   // SW: retaining non-booleanValue version of this function due to the isForceWebsocketMode check
   var fcmEnabled: Boolean
     @JvmName("isFcmEnabled")
-    get() = getBoolean(KEY_FCM_ENABLED, false) && !SignalStore.settings().isForceWebsocketMode()
+    get() = getBoolean(KEY_FCM_ENABLED, false) && !SignalStore.settings.isForceWebsocketMode()
     set(value) = putBoolean(KEY_FCM_ENABLED, value)
 
   /** The FCM token, which allows the server to send us FCM messages. */

@@ -7,6 +7,7 @@ package org.thoughtcrime.securesms.jobs
 import io.reactivex.rxjava3.core.Single
 import org.signal.core.util.logging.Log
 import org.signal.core.util.money.FiatMoney
+import org.signal.donations.InAppPaymentType
 import org.signal.donations.PaymentSourceType
 import org.signal.donations.StripeApi
 import org.signal.donations.StripeIntentAccessor
@@ -15,11 +16,11 @@ import org.thoughtcrime.securesms.badges.Badges
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper.toFiatMoney
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository
+import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.toErrorSource
 import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.donate.stripe.Stripe3DSData
 import org.thoughtcrime.securesms.components.settings.app.subscription.errors.DonationError
 import org.thoughtcrime.securesms.components.settings.app.subscription.errors.DonationError.Companion.toDonationErrorValue
-import org.thoughtcrime.securesms.database.InAppPaymentTable
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.DonationReceiptRecord
 import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
@@ -68,8 +69,8 @@ class ExternalLaunchDonationJob private constructor(
   override fun onFailure() {
     if (donationError != null) {
       when (stripe3DSData.inAppPayment.type) {
-        InAppPaymentTable.Type.ONE_TIME_DONATION -> {
-          SignalStore.donationsValues().setPendingOneTimeDonation(
+        InAppPaymentType.ONE_TIME_DONATION -> {
+          SignalStore.donations.setPendingOneTimeDonation(
             DonationSerializationHelper.createPendingOneTimeDonationProto(
               Badges.fromDatabaseBadge(stripe3DSData.inAppPayment.data.badge!!),
               stripe3DSData.paymentSourceType,
@@ -80,8 +81,8 @@ class ExternalLaunchDonationJob private constructor(
           )
         }
 
-        InAppPaymentTable.Type.RECURRING_DONATION -> {
-          SignalStore.donationsValues().appendToTerminalDonationQueue(
+        InAppPaymentType.RECURRING_DONATION -> {
+          SignalStore.donations.appendToTerminalDonationQueue(
             TerminalDonationQueue.TerminalDonation(
               level = stripe3DSData.inAppPayment.data.level,
               isLongRunningPaymentMethod = stripe3DSData.isLongRunning,
@@ -113,7 +114,7 @@ class ExternalLaunchDonationJob private constructor(
     checkIntentStatus(stripePaymentIntent.status)
 
     Log.i(TAG, "Creating and inserting donation receipt record.", true)
-    val donationReceiptRecord = if (stripe3DSData.inAppPayment.type == InAppPaymentTable.Type.ONE_TIME_DONATION) {
+    val donationReceiptRecord = if (stripe3DSData.inAppPayment.type == InAppPaymentType.ONE_TIME_DONATION) {
       DonationReceiptRecord.createForBoost(stripe3DSData.inAppPayment.data.amount!!.toFiatMoney())
     } else {
       DonationReceiptRecord.createForGift(stripe3DSData.inAppPayment.data.amount!!.toFiatMoney())
@@ -122,7 +123,7 @@ class ExternalLaunchDonationJob private constructor(
     SignalDatabase.donationReceipts.addReceipt(donationReceiptRecord)
 
     Log.i(TAG, "Creating and inserting one-time pending donation.", true)
-    SignalStore.donationsValues().setPendingOneTimeDonation(
+    SignalStore.donations.setPendingOneTimeDonation(
       DonationSerializationHelper.createPendingOneTimeDonationProto(
         Badges.fromDatabaseBadge(stripe3DSData.inAppPayment.data.badge!!),
         stripe3DSData.paymentSourceType,
@@ -153,7 +154,7 @@ class ExternalLaunchDonationJob private constructor(
 
     Log.i(TAG, "Set default payment method via Signal service!", true)
     Log.i(TAG, "Storing the subscription payment source type locally.", true)
-    SignalStore.donationsValues().setSubscriptionPaymentSourceType(stripe3DSData.paymentSourceType)
+    SignalStore.donations.setSubscriptionPaymentSourceType(stripe3DSData.paymentSourceType)
 
     val subscriptionLevel = stripe3DSData.inAppPayment.data.level.toString()
 
@@ -170,13 +171,13 @@ class ExternalLaunchDonationJob private constructor(
       )
 
       getResultOrThrow(updateSubscriptionLevelResponse, doOnApplicationError = {
-        SignalStore.donationsValues().clearLevelOperations()
+        SignalStore.donations.clearLevelOperations()
       })
 
       if (updateSubscriptionLevelResponse.status in listOf(200, 204)) {
         Log.d(TAG, "Successfully set user subscription to level $subscriptionLevel with response code ${updateSubscriptionLevelResponse.status}", true)
-        SignalStore.donationsValues().updateLocalStateForLocalSubscribe(subscriber.type)
-        SignalStore.donationsValues().setVerifiedSubscription3DSData(stripe3DSData)
+        SignalStore.donations.updateLocalStateForLocalSubscribe(subscriber.type)
+        SignalStore.donations.setVerifiedSubscription3DSData(stripe3DSData)
         SignalDatabase.recipients.markNeedsSync(Recipient.self().id)
         StorageSyncHelper.scheduleSyncForDataChange()
       } else {
@@ -222,7 +223,7 @@ class ExternalLaunchDonationJob private constructor(
       Log.w(TAG, "An application error was present. ${serviceResponse.status}", serviceResponse.applicationError.get(), true)
       doOnApplicationError()
 
-      SignalStore.donationsValues().appendToTerminalDonationQueue(
+      SignalStore.donations.appendToTerminalDonationQueue(
         TerminalDonationQueue.TerminalDonation(
           level = stripe3DSData.inAppPayment.data.level,
           isLongRunningPaymentMethod = stripe3DSData.isLongRunning,
@@ -270,7 +271,7 @@ class ExternalLaunchDonationJob private constructor(
     error("Not needed, this job should not be creating intents.")
   }
 
-  override fun fetchSetupIntent(sourceType: PaymentSourceType.Stripe): Single<StripeIntentAccessor> {
+  override fun fetchSetupIntent(inAppPaymentType: InAppPaymentType, sourceType: PaymentSourceType.Stripe): Single<StripeIntentAccessor> {
     error("Not needed, this job should not be creating intents.")
   }
 }

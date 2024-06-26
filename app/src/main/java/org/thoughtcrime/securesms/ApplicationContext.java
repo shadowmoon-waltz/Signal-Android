@@ -53,6 +53,7 @@ import org.thoughtcrime.securesms.emoji.EmojiSource;
 import org.thoughtcrime.securesms.emoji.JumboEmoji;
 import org.thoughtcrime.securesms.gcm.FcmFetchManager;
 import org.thoughtcrime.securesms.jobs.AccountConsistencyWorkerJob;
+import org.thoughtcrime.securesms.jobs.BuildExpirationConfirmationJob;
 import org.thoughtcrime.securesms.jobs.CheckServiceReachabilityJob;
 import org.thoughtcrime.securesms.jobs.DownloadLatestEmojiDataJob;
 import org.thoughtcrime.securesms.jobs.EmojiSearchIndexDownloadJob;
@@ -97,7 +98,7 @@ import org.thoughtcrime.securesms.storage.StorageSyncHelper;
 import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.DynamicTheme;
-import org.thoughtcrime.securesms.util.FeatureFlags;
+import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.thoughtcrime.securesms.util.SignalUncaughtExceptionHandler;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
@@ -143,7 +144,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
     long startTime = System.currentTimeMillis();
 
-    if (FeatureFlags.internalUser()) {
+    if (RemoteConfig.internalUser()) {
       Tracer.getInstance().setMaxBufferSize(35_000);
     }
 
@@ -178,7 +179,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                               }
                             })
                             .addBlocking("blob-provider", this::initializeBlobProvider)
-                            .addBlocking("feature-flags", FeatureFlags::init)
+                            .addBlocking("remote-config", RemoteConfig::init)
                             .addBlocking("ring-rtc", this::initializeRingRtc)
                             .addBlocking("glide", () -> SignalGlideModule.setRegisterGlideComponents(new SignalGlideComponents()))
                             .addNonBlocking(() -> RegistrationUtil.maybeMarkRegistrationComplete())
@@ -206,7 +207,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addPostRender(RefreshSvrCredentialsJob::enqueueIfNecessary)
                             .addPostRender(() -> DownloadLatestEmojiDataJob.scheduleIfNecessary(this))
                             .addPostRender(EmojiSearchIndexDownloadJob::scheduleIfNecessary)
-                            .addPostRender(() -> SignalDatabase.messageLog().trimOldMessages(System.currentTimeMillis(), FeatureFlags.retryRespondMaxAge()))
+                            .addPostRender(() -> SignalDatabase.messageLog().trimOldMessages(System.currentTimeMillis(), RemoteConfig.retryRespondMaxAge()))
                             .addPostRender(() -> JumboEmoji.updateCurrentVersion(this))
                             .addPostRender(RetrieveRemoteAnnouncementsJob::enqueue)
                             .addPostRender(() -> AndroidTelecomUtil.registerPhoneAccount())
@@ -237,12 +238,12 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     AppDependencies.getMegaphoneRepository().onAppForegrounded();
     AppDependencies.getDeadlockDetector().start();
     InAppPaymentKeepAliveJob.enqueueAndTrackTimeIfNecessary();
-    AppDependencies.getJobManager().add(new InAppPaymentAuthCheckJob());
     FcmFetchManager.onForeground(this);
     startAnrDetector();
 
     SignalExecutors.BOUNDED.execute(() -> {
-      FeatureFlags.refreshIfNecessary();
+      InAppPaymentAuthCheckJob.enqueueIfNeeded();
+      RemoteConfig.refreshIfNecessary();
       RetrieveProfileJob.enqueueRoutineFetchIfNecessary();
       executePendingContactSync();
       KeyCachingService.onAppForegrounded(this);
@@ -255,7 +256,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
       long timeDiff           = currentTime - lastForegroundTime;
 
       if (timeDiff < 0) {
-        Log.w(TAG, "Time travel! The system clock has moved backwards. (currentTime: " + currentTime + " ms, lastForegroundTime: " + lastForegroundTime + " ms, diff: " + timeDiff + " ms)");
+        Log.w(TAG, "Time travel! The system clock has moved backwards. (currentTime: " + currentTime + " ms, lastForegroundTime: " + lastForegroundTime + " ms, diff: " + timeDiff + " ms)", true);
       }
 
       SignalStore.misc().setLastForegroundTime(currentTime);
@@ -277,9 +278,9 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
   }
 
   public void checkBuildExpiration() {
-    if (Util.getTimeUntilBuildExpiry() <= 0 && !SignalStore.misc().isClientDeprecated()) {
-      Log.w(TAG, "Build expired!");
-      SignalStore.misc().setClientDeprecated(true);
+    if (Util.getTimeUntilBuildExpiry(SignalStore.misc().getEstimatedServerTime()) <= 0 && !SignalStore.misc().isClientDeprecated()) {
+      Log.w(TAG, "Build potentially expired! Enqueing job to check.", true);
+      AppDependencies.getJobManager().add(new BuildExpirationConfirmationJob());
     }
   }
 
@@ -288,7 +289,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
    * This is so we can capture ANR's that happen on boot before the foreground event.
    */
   private void startAnrDetector() {
-    AnrDetector.start(TimeUnit.SECONDS.toMillis(5), FeatureFlags::internalUser, (dumps) -> {
+    AnrDetector.start(TimeUnit.SECONDS.toMillis(5), RemoteConfig::internalUser, (dumps) -> {
       LogDatabase.getInstance(this).anrs().save(System.currentTimeMillis(), dumps);
       return Unit.INSTANCE;
     });
@@ -313,9 +314,10 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
   @VisibleForTesting
   protected void initializeLogging() {
-    Log.initialize(FeatureFlags::internalUser, new AndroidLogger(), new PersistentLogger(this));
+    Log.initialize(RemoteConfig::internalUser, new AndroidLogger(), new PersistentLogger(this));
 
     SignalProtocolLoggerProvider.setProvider(new CustomSignalProtocolLogger());
+    SignalProtocolLoggerProvider.initializeLogging(BuildConfig.LIBSIGNAL_LOG_LEVEL);
 
     SignalExecutors.UNBOUNDED.execute(() -> {
       Log.blockUntilAllWritesFinished();
@@ -436,10 +438,10 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
   private void initializeRingRtc() {
     try {
       Map<String, String> fieldTrials = new HashMap<>();
-      if (FeatureFlags.callingFieldTrialAnyAddressPortsKillSwitch()) {
+      if (RemoteConfig.callingFieldTrialAnyAddressPortsKillSwitch()) {
         fieldTrials.put("RingRTC-AnyAddressPortsKillSwitch", "Enabled");
       }
-      if (!SignalStore.internalValues().callingDisableLBRed()) {
+      if (!SignalStore.internal().callingDisableLBRed()) {
         fieldTrials.put("RingRTC-Audio-LBRed-For-Opus", "Enabled,bitrate_pri:22000");
       }
       CallManager.initialize(this, new RingRtcLogger(), fieldTrials);
@@ -460,7 +462,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
   }
 
   private void ensureProfileUploaded() {
-    if (SignalStore.account().isRegistered() && !SignalStore.registrationValues().hasUploadedProfile() && !Recipient.self().getProfileName().isEmpty()) {
+    if (SignalStore.account().isRegistered() && !SignalStore.registration().hasUploadedProfile() && !Recipient.self().getProfileName().isEmpty()) {
       Log.w(TAG, "User has a profile, but has not uploaded one. Uploading now.");
       AppDependencies.getJobManager().add(new ProfileUploadJob());
     }

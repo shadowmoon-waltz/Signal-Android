@@ -286,7 +286,7 @@ final class GroupManagerV2 {
 
       Set<GroupCandidate> groupCandidates = groupCandidateHelper.recipientIdsToCandidates(new HashSet<>(newMembers));
 
-      if (SignalStore.internalValues().gv2ForceInvites()) {
+      if (SignalStore.internal().gv2ForceInvites()) {
         groupCandidates = GroupCandidate.withoutExpiringProfileKeyCredentials(groupCandidates);
       }
 
@@ -778,7 +778,7 @@ final class GroupManagerV2 {
     GroupCandidate      self       = groupCandidateHelper.recipientIdToCandidate(Recipient.self().getId());
     Set<GroupCandidate> candidates = new HashSet<>(groupCandidateHelper.recipientIdsToCandidates(members));
 
-    if (SignalStore.internalValues().gv2ForceInvites()) {
+    if (SignalStore.internal().gv2ForceInvites()) {
       Log.w(TAG, "Forcing GV2 invites due to internal setting");
       candidates = GroupCandidate.withoutExpiringProfileKeyCredentials(candidates);
     }
@@ -1240,7 +1240,7 @@ final class GroupManagerV2 {
           try {
             long messageId = SignalDatabase.messages().insertMessageOutbox(outgoingMessage, threadId, false, null);
             SignalDatabase.messages().markAsSent(messageId, true);
-            SignalDatabase.threads().update(threadId, true);
+            SignalDatabase.threads().update(threadId, true, true);
           } catch (MmsException e) {
             throw new AssertionError(e);
           }
