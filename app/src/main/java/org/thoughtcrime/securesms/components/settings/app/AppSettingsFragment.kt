@@ -33,7 +33,7 @@ import org.thoughtcrime.securesms.events.ReminderUpdateEvent
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.phonenumbers.PhoneNumberFormatter
 import org.thoughtcrime.securesms.recipients.Recipient
-import org.thoughtcrime.securesms.registration.RegistrationNavigationActivity
+import org.thoughtcrime.securesms.registration.ui.RegistrationActivity
 import org.thoughtcrime.securesms.util.Environment
 import org.thoughtcrime.securesms.util.PlayStoreUtil
 import org.thoughtcrime.securesms.util.RemoteConfig
@@ -114,7 +114,7 @@ class AppSettingsFragment : DSLSettingsFragment(
         PlayStoreUtil.openPlayStoreOrOurApkDownloadPage(requireContext())
       }
       R.id.reminder_action_re_register -> {
-        startActivity(RegistrationNavigationActivity.newIntentForReRegistration(requireContext()))
+        startActivity(RegistrationActivity.newIntentForReRegistration(requireContext()))
       }
     }
   }
@@ -159,13 +159,7 @@ class AppSettingsFragment : DSLSettingsFragment(
       clickPref(
         title = DSLSettingsText.from(R.string.preferences__linked_devices),
         icon = DSLSettingsIcon.from(R.drawable.symbol_devices_24),
-        onClick = {
-          if (RemoteConfig.internalUser) {
-            findNavController().safeNavigate(R.id.action_appSettingsFragment_to_linkDeviceFragment)
-          } else {
-            findNavController().safeNavigate(R.id.action_appSettingsFragment_to_deviceActivity)
-          }
-        },
+        onClick = { findNavController().safeNavigate(R.id.action_appSettingsFragment_to_linkDeviceFragment) },
         isEnabled = state.isRegisteredAndUpToDate()
       )
 
