@@ -55,7 +55,7 @@
     <string name="ApplicationPreferencesActivity_pin_disabled">PIN вимкнений.</string>
     <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Записати кодову фразу для платежів</string>
     <string name="ApplicationPreferencesActivity_record_phrase">Записати кодову фразу</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Перед вимкненням PIN-коду ви маєте створити кодову фразу, щоб упевнитись, що ви зможете відновити ваш платіжний обліковий запис.</string>
+    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Перед вимкненням PIN-коду ви маєте створити кодову фразу, щоб упевнитись, що ви зможете відновити свій платіжний профіль.</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -132,16 +132,16 @@
 
     <!-- BlockedUsersActivity -->
     <string name="BlockedUsersActivity__blocked_users">Заблоковані користувачі</string>
-    <string name="BlockedUsersActivity__add_blocked_user">Додати заблокованого користувача</string>
+    <string name="BlockedUsersActivity__add_blocked_user">Заблокувати користувача</string>
     <string name="BlockedUsersActivity__blocked_users_will">Заблоковані користувачі не зможуть вам дзвонити й надсилати повідомлення.</string>
-    <string name="BlockedUsersActivity__no_blocked_users">Немає заблокованих користувачів</string>
+    <string name="BlockedUsersActivity__no_blocked_users">Ви нікого не заблокували</string>
     <string name="BlockedUsersActivity__block_user">Заблокувати користувача?</string>
     <string name="BlockedUserActivity__s_will_not_be_able_to">%1$s більше не зможе вам дзвонити й надсилати повідомлення.</string>
     <string name="BlockedUsersActivity__block">Заблокувати</string>
 
     <!-- CreditCardFragment -->
     <!-- Title of fragment -->
-    <string name="CreditCardFragment__credit_or_debit_card">Кредитна або дебетова картка</string>
+    <string name="CreditCardFragment__credit_or_debit_card">Кредитна / Дебетова картка</string>
     <!-- Explanation of how to fill in the form and a note about pii, displayed above the credit card text fields -->
     <string name="CreditCardFragment__enter_your_card_details">Введіть дані банківської картки. Signal не збирає і не зберігає вашу особисту інформацію.</string>
     <!-- Displayed as a hint in the card number text field -->
@@ -173,7 +173,7 @@
 
     <!-- OneTimeDonationPreference -->
     <!-- Preference title with placeholder for amount. -->
-    <string name="OneTimeDonationPreference__one_time_s">%1$s одноразово</string>
+    <string name="OneTimeDonationPreference__one_time_s">%1$s разово</string>
     <!-- Preference subtitle when donation is pending -->
     <string name="OneTimeDonationPreference__donation_pending">Ваш донат ще не надійшов</string>
     <!-- Preference subtitle when donation is processing -->
@@ -771,7 +771,7 @@
     <string name="CreateProfileActivity_problem_setting_profile">Не вдалося встановити профіль</string>
     <string name="CreateProfileActivity_set_up_your_profile">Налаштувати ваш профайл</string>
     <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Ваш профіль і зміни в ньому бачитимуть ваші співрозмовники, контакти та групи.</string>
-    <string name="CreateProfileActivity_set_avatar_description">Встановити фото профілю</string>
+    <string name="CreateProfileActivity_set_avatar_description">Установити зображення профілю</string>
 
     <!-- ProfileCreateFragment -->
     <!-- Displayed at the top of the screen and explains how profiles can be viewed. -->
@@ -829,7 +829,7 @@
     <string name="BackupsPreferenceFragment__s_so_far">%1$s%% на цей час…</string>
     <string name="BackupsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Signal потребує дозволу \"Зберігання\", щоб створювати резервні копії, але наразі доступу немає. Будь ласка, перейдіть до налаштувань додатку, оберіть \"Дозволи\", та увімкніть \"Зберігання\".</string>
     <!-- Title of dialog shown when picking the time to perform a chat backup -->
-    <string name="BackupsPreferenceFragment__set_backup_time">Встановити час резервного копіювання</string>
+    <string name="BackupsPreferenceFragment__set_backup_time">Установити час резервного копіювання</string>
 
 
     <!-- CustomDefaultPreference -->
@@ -904,7 +904,7 @@
     <!-- Text explaining that on linked devices, messages will be encrypted where %s will be replaced with an image-->
     <string name="LinkDeviceFragment__messages_and_chat_info_are_protected">%1$s Повідомлення й інформацію про чати захищено наскрізним шифруванням на всіх пристроях</string>
     <!-- Bottom sheet title explaining how Signal works on a linked device -->
-    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal on desktop or iPad</string>
+    <string name="LinkDeviceFragment__signal_on_desktop_ipad">Signal на комп\'ютері чи iPad</string>
     <!-- Bottom sheet description explaining that messages on linked devices are private -->
     <string name="LinkDeviceFragment__all_messaging_is_private">Обмін повідомленнями на зв\'язаних пристроях завжди конфіденційний</string>
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
@@ -927,7 +927,7 @@
     <!-- Text message shown when the user has no linked devices -->
     <string name="LinkDeviceFragment__no_linked_devices">Зв\'язаних пристроїв немає</string>
     <!-- Title on biometrics prompt explaining what biometrics are being used for -->
-    <string name="LinkDeviceFragment__unlock_to_link">Unlock to link a device</string>
+    <string name="LinkDeviceFragment__unlock_to_link">Розблокуйте, щоб зв\'язати пристрій</string>
 
     <!-- AddLinkDeviceFragment -->
     <!-- Description text shown on the QR code scanner when linking a device -->
@@ -1163,7 +1163,7 @@
     <!-- Button to continue to try and disable battery saver -->
     <string name="PromptBatterySaverBottomSheet__continue">Продовжити</string>
     <!-- Button to dismiss battery saver dialog prompt-->
-    <string name="PromptBatterySaverBottomSheet__no_thanks">No thanks</string>
+    <string name="PromptBatterySaverBottomSheet__no_thanks">Не хочу</string>
   <!-- Removed by excludeNonTranslatables <string name="PromptBatterySaverBottomSheet__learn_more_url" translatable="false">https://support.signal.org/hc/articles/360007318711#android_notifications_troubleshooting</string> -->
 
     <!-- PendingMembersActivity -->
@@ -1275,7 +1275,7 @@
     <string name="ManageProfileFragment_profile_name">Назва профілю</string>
     <string name="ManageProfileFragment_username">Ім\'я користувача</string>
     <string name="ManageProfileFragment_about">Про себе</string>
-    <string name="ManageProfileFragment_failed_to_set_avatar">Не вдалось встановити фото профілю</string>
+    <string name="ManageProfileFragment_failed_to_set_avatar">Не вдалося встановити зображення профілю</string>
     <string name="ManageProfileFragment_badges">Значки</string>
     <!-- Text for a button that will take the user to the screen to manage their username link and QR code -->
     <string name="ManageProfileFragment_link_setting_text">QR-код чи посилання</string>
@@ -2208,13 +2208,13 @@
         <item quantity="other">%1$s, %2$s та %3$d інших будуть оповіщені</item>
     </plurals>
 
-    <string name="WebRtcCallView__ringing_s">Телефонуємо %1$s</string>
-    <string name="WebRtcCallView__ringing_s_and_s">Телефонуємо %1$s та %2$s</string>
+    <string name="WebRtcCallView__ringing_s">Дзвонимо користувачу %1$s</string>
+    <string name="WebRtcCallView__ringing_s_and_s">Дзвонимо користувачам %1$s і %2$s</string>
     <plurals name="WebRtcCallView__ringing_s_s_and_d_others">
-        <item quantity="one">Телефонуємо %1$s, %2$s та %3$d іншому</item>
-        <item quantity="few">Телефонуємо %1$s, %2$s та %3$d іншим</item>
-        <item quantity="many">Телефонуємо %1$s, %2$s, та %3$d іншим</item>
-        <item quantity="other">Телефонуємо %1$s, %2$s, та %3$d іншим</item>
+        <item quantity="one">Дзвонимо користувачам %1$s, %2$s і ще %3$d</item>
+        <item quantity="few">Дзвонимо користувачам %1$s, %2$s і ще %3$d</item>
+        <item quantity="many">Дзвонимо користувачам %1$s, %2$s і ще %3$d</item>
+        <item quantity="other">Дзвонимо користувачам %1$s, %2$s і ще %3$d</item>
     </plurals>
 
     <string name="WebRtcCallView__s_is_calling_you">Вам дзвонить %1$s</string>
@@ -2545,7 +2545,7 @@
     <!-- StickerManagementAdapter -->
     <string name="StickerManagementAdapter_installed_stickers">Встановлені стікери</string>
     <string name="StickerManagementAdapter_stickers_you_received">Отримані cтікери</string>
-    <string name="StickerManagementAdapter_signal_artist_series">Стікери від Художників Signal</string>
+    <string name="StickerManagementAdapter_signal_artist_series">Серія «Художники Signal»</string>
     <string name="StickerManagementAdapter_no_stickers_installed">Немає встановлених стікерів</string>
     <string name="StickerManagementAdapter_stickers_from_incoming_messages_will_appear_here">Тут будуть стікери зі вхідних повідомлень</string>
     <string name="StickerManagementAdapter_untitled">Без назви</string>
@@ -2554,7 +2554,7 @@
     <!-- StickerPackPreviewActivity -->
     <string name="StickerPackPreviewActivity_untitled">Без назви</string>
     <string name="StickerPackPreviewActivity_unknown">Невідомо</string>
-    <string name="StickerPackPreviewActivity_install">Встановити</string>
+    <string name="StickerPackPreviewActivity_install">Установити</string>
     <!-- Label for a button that, if pressed, will uninstall the sticker pack that is currently being previewed. -->
     <string name="StickerPackPreviewActivity_remove">Видалити</string>
     <string name="StickerPackPreviewActivity_stickers">Стікери</string>
@@ -2957,7 +2957,7 @@
     <string name="WebRtcCallActivity__declined_on_a_linked_device">Відхилений на прив\'язаному пристрої.</string>
     <string name="WebRtcCallActivity__busy_on_a_linked_device">Зайнято на зв\'язаному пристрої.</string>
     <!-- Tooltip message shown first time user is in a video call after switch camera button moved -->
-    <string name="WebRtcCallActivity__flip_camera_tooltip">Тепер кнопка перемикання камери знаходиться тут. Торкніться свого відео, щоб спробувати</string>
+    <string name="WebRtcCallActivity__flip_camera_tooltip">Тепер камера перемикається тут. Торкніться свого відео, щоб спробувати</string>
 
     <string name="GroupCallSafetyNumberChangeNotification__someone_has_joined_this_call_with_a_safety_number_that_has_changed">Хтось щойно приєднався до виклику зі зміненим кодом безпеки.</string>
 
@@ -3026,7 +3026,7 @@
     <string name="ContactSelectionListFragment_signal_requires_the_contacts_permission_in_order_to_display_your_contacts">Signal потребує дозволів \"Контакти\", щоб показати контакти, але наразі доступу немає. Будь ласка, перейдіть до налаштувань додатку, оберіть \"Дозволи\", та увімкніть \"Контакти\".</string>
     <string name="ContactSelectionListFragment_error_retrieving_contacts_check_your_network_connection">Не вдалося отримати список контактів, перевірте з\'єднання</string>
     <string name="ContactSelectionListFragment_username_not_found">Ім\'я користувача не знайдено</string>
-    <string name="ContactSelectionListFragment_s_is_not_a_signal_user">"«%1$s» — не є користувачем Signal. Будь ласка, перевірте ім\'я користувача і спробуйте ще раз."</string>
+    <string name="ContactSelectionListFragment_s_is_not_a_signal_user">"%1$s — не користувач Signal. Перевірте правильність імені користувача й повторіть пошук."</string>
     <string name="ContactSelectionListFragment_you_do_not_need_to_add_yourself_to_the_group">Вам не потрібно додавати себе в групу</string>
     <string name="ContactSelectionListFragment_maximum_group_size_reached">Досягнуто максимального розміру групи</string>
     <string name="ContactSelectionListFragment_signal_groups_can_have_a_maximum_of_d_members">У групах Signal можуть перебувати максимум %1$d учасників.</string>
@@ -3284,7 +3284,7 @@
     <string name="load_more_header__loading">Завантаження</string>
 
     <!-- media_overview_activity -->
-    <string name="media_overview_activity__no_media">Файлів немає</string>
+    <string name="media_overview_activity__no_media">Медіафайлів немає</string>
 
     <!-- message_recipients_list_item -->
     <string name="message_recipients_list_item__view">Переглянути</string>
@@ -3384,7 +3384,7 @@
 
     <!-- message_details_header -->
     <string name="message_details_header__issues_need_your_attention">Є деякі проблеми, що потребують вашої уваги.</string>
-    <string name="message_details_header_sent">Відправник</string>
+    <string name="message_details_header_sent">Надіслано</string>
     <string name="message_details_header_received">Отримано</string>
     <string name="message_details_header_disappears">Зникне через</string>
     <string name="message_details_header_via">Через</string>
@@ -3469,7 +3469,7 @@
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__objects">Предмети</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__symbols">Символи</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__flags">Прапори</string>
-    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Смайлики</string>
+    <string name="ReactWithAnyEmojiBottomSheetDialogFragment__emoticons">Емограми</string>
     <string name="ReactWithAnyEmojiBottomSheetDialogFragment__no_results_found">Нічого не знайдено</string>
 
     <!-- arrays.xml -->
@@ -3753,10 +3753,10 @@
     <string name="PaymentsHomeFragment__use_signal_to_send_and_receive">Використовуйте Signal для переказу та отримання MobileCoin, нової цифрової валюти, націленої на безпеку. Увімкніть, щоб почати.</string>
     <string name="PaymentsHomeFragment__activate_payments">Увімкнути платежі</string>
     <string name="PaymentsHomeFragment__activating_payments">Вмикаємо платежі…</string>
-    <string name="PaymentsHomeFragment__restore_payments_account">Відновити платіжний обліковий запис</string>
+    <string name="PaymentsHomeFragment__restore_payments_account">Відновити платіжний профіль</string>
     <string name="PaymentsHomeFragment__no_recent_activity_yet">Жодної активності останнім часом</string>
     <string name="PaymentsHomeFragment__recent_activity">Недавня активність</string>
-    <string name="PaymentsHomeFragment__see_all">Усі</string>
+    <string name="PaymentsHomeFragment__see_all">Показати решту</string>
     <string name="PaymentsHomeFragment__add_funds">Додати кошти</string>
     <string name="PaymentsHomeFragment__send">Відправити</string>
     <string name="PaymentsHomeFragment__sent_s">Відправлено %1$s</string>
@@ -3973,7 +3973,7 @@
     <string name="CurrencyAmountFormatter_s_at_s">%1$s в %2$s</string>
 
     <!-- SetCurrencyFragment -->
-    <string name="SetCurrencyFragment__set_currency">Встановити валюту</string>
+    <string name="SetCurrencyFragment__set_currency">Установити валюту</string>
     <string name="SetCurrencyFragment__all_currencies">Усі валюти</string>
 
     <!-- **************************************** -->
@@ -4201,10 +4201,10 @@
 
     <!-- KBS Reminder Dialog -->
     <string name="KbsReminderDialog__enter_your_signal_pin">Введіть свій PIN-код Signal</string>
-    <string name="KbsReminderDialog__to_help_you_memorize_your_pin">Щоб допомогти вам запам\'ятати свій PIN-код, ми будемо просити вас вводити його періодично. Згодом це буде відбуватися рідше.</string>
+    <string name="KbsReminderDialog__to_help_you_memorize_your_pin">Щоб ви запам\'ятали свій PIN-код, ми періодично проситимемо вас його вводити. Згодом це ставатиметься рідше.</string>
     <string name="KbsReminderDialog__skip">Пропустити</string>
     <string name="KbsReminderDialog__submit">Надіслати</string>
-    <string name="KbsReminderDialog__forgot_pin">Забули PIN?</string>
+    <string name="KbsReminderDialog__forgot_pin">Забули PIN-код?</string>
     <string name="KbsReminderDialog__incorrect_pin_try_again">Неправильний PIN-код. Будь ласка спробуйте ще раз.</string>
 
     <!-- AccountLockedFragment -->
@@ -4222,7 +4222,7 @@
     <!-- Button label to prompt the user to switch between an alphanumeric and numeric-only keyboards -->
     <string name="RegistrationLockFragment__switch_keyboard">Перемкнути клавіатуру</string>
     <string name="RegistrationLockFragment__incorrect_pin_try_again">Неправильний PIN-код. Будь ласка спробуйте ще раз.</string>
-    <string name="RegistrationLockFragment__forgot_pin">Забули PIN?</string>
+    <string name="RegistrationLockFragment__forgot_pin">Забули PIN-код?</string>
     <string name="RegistrationLockFragment__incorrect_pin">Неправильний PIN-код</string>
     <string name="RegistrationLockFragment__forgot_your_pin">Забули свій PIN-код?</string>
     <string name="RegistrationLockFragment__not_many_tries_left">Спроб майже не лишилося!</string>
@@ -4706,7 +4706,7 @@
     <string name="DeleteAccountFragment__delete_account">Видалити акаунт</string>
     <string name="DeleteAccountFragment__delete_your_account_info_and_profile_photo">Видалення ваших облікових даних і фото профілю</string>
     <string name="DeleteAccountFragment__delete_all_your_messages">Видалення всіх ваших повідомлень</string>
-    <string name="DeleteAccountFragment__delete_s_in_your_payments_account">Видаліть %1$s зі свого платіжного рахунку</string>
+    <string name="DeleteAccountFragment__delete_s_in_your_payments_account">Видаліть %1$s з вашого платіжного профілю</string>
     <string name="DeleteAccountFragment__no_country_code">Код країни не вказано</string>
     <string name="DeleteAccountFragment__no_number">Номер не вказано</string>
     <string name="DeleteAccountFragment__the_phone_number">Наданий номер телефону не належить до вашого акаунту.</string>
@@ -4806,7 +4806,7 @@
     <string name="payment_info_card_hide">Сховати</string>
     <!-- Title of save recovery phrase card -->
     <string name="payment_info_card_save_recovery_phrase">Зберегти кодову фразу</string>
-    <string name="payment_info_card_your_recovery_phrase_gives_you">Кодова фраза надає ще один спосіб відновлення вашого платіжного облікового запису.</string>
+    <string name="payment_info_card_your_recovery_phrase_gives_you">Кодова фраза надає ще один спосіб відновлення вашого платіжного профілю.</string>
     <!-- Button in save recovery phrase card -->
     <string name="payment_info_card_save_your_phrase">Збережіть свою фразу</string>
     <string name="payment_info_card_update_your_pin">Оновити PIN-код</string>
@@ -4845,9 +4845,9 @@
     <string name="PaymentsRecoveryStartFragment__got_balance">Ви маєте баланс! Час зберегти кодову фразу — ключ із 24 слів, за допомогою якого можна відновити свій баланс.</string>
     <!-- Description in save recovery phrase screen which shows up when user navigates from info card -->
     <string name="PaymentsRecoveryStartFragment__time_to_save">Час зберегти кодову фразу — ключ із 24 слів, за допомогою якого можна відновити баланс.</string>
-    <string name="PaymentsRecoveryStartFragment__your_recovery_phrase_is_a">Ваша кодова фраза — це унікальна фраза з %1$d слів. Вона використовується для відновлення балансу.</string>
+    <string name="PaymentsRecoveryStartFragment__your_recovery_phrase_is_a">Ваша кодова фраза — це унікальна фраза з %1$d слів. Вона необхідна для відновлення балансу.</string>
     <string name="PaymentsRecoveryStartFragment__start">Почати</string>
-    <string name="PaymentsRecoveryStartFragment__enter_manually">Ввести власноруч</string>
+    <string name="PaymentsRecoveryStartFragment__enter_manually">Ввести вручну</string>
     <string name="PaymentsRecoveryStartFragment__paste_from_clipboard">Вставити з буферу обміну</string>
     <!-- Alert dialog title which asks before going back if user wants to save recovery phrase -->
     <string name="PaymentsRecoveryStartFragment__continue_without_saving">Продовжити без збереження?</string>
@@ -4875,7 +4875,7 @@
     <string name="PaymentsRecoveryPhraseFragment__write_down_the_following_d_words">Запишіть наступні %1$d слова одне за одним. Зберігайте записане у надійному місці.</string>
     <string name="PaymentsRecoveryPhraseFragment__make_sure_youve_entered">Переконайтесь, що ви правильно ввели фразу.</string>
     <string name="PaymentsRecoveryPhraseFragment__do_not_screenshot_or_send_by_email">Не робіть знімків екрану та не відправляйте електронною поштою.</string>
-    <string name="PaymentsRecoveryPhraseFragment__payments_account_restored">Обліковий запис платежів відновлено.</string>
+    <string name="PaymentsRecoveryPhraseFragment__payments_account_restored">Платіжний профіль відновлено.</string>
     <string name="PaymentsRecoveryPhraseFragment__invalid_recovery_phrase">Неправильна кодова фраза</string>
     <string name="PaymentsRecoveryPhraseFragment__make_sure_youve_entered_your_phrase_correctly_and_try_again">Переконайтесь, що ви ввели правильно фразу і повторіть спробу.</string>
     <string name="PaymentsRecoveryPhraseFragment__copy_to_clipboard">Копіювати до буферу обміну?</string>
@@ -5196,7 +5196,7 @@
     <string name="AddAProfilePhotoMegaphone__add_photo">Додати фото</string>
 
     <!-- BecomeASustainerMegaphone -->
-    <string name="BecomeASustainerMegaphone__become_a_sustainer">Стати підтримувачем</string>
+    <string name="BecomeASustainerMegaphone__become_a_sustainer">Підтримати</string>
     <!-- Displayed in the Become a Sustainer megaphone -->
     <string name="BecomeASustainerMegaphone__signal_is_powered_by">Signal працює завдяки таким людям, як ви. Зробіть донат і отримайте значок.</string>
     <string name="BecomeASustainerMegaphone__not_now">Не зараз</string>
@@ -5256,7 +5256,7 @@
     <string name="ConversationSettingsFragment__unblock">Розблокувати</string>
     <string name="ConversationSettingsFragment__unblock_group">Розблокувати групу</string>
     <string name="ConversationSettingsFragment__add_to_a_group">Додати до групи</string>
-    <string name="ConversationSettingsFragment__see_all">Усі</string>
+    <string name="ConversationSettingsFragment__see_all">Показати решту</string>
     <string name="ConversationSettingsFragment__add_members">Додати учасників</string>
     <string name="ConversationSettingsFragment__permissions">Дозволи</string>
     <string name="ConversationSettingsFragment__requests_and_invites">Запити і запрошення</string>
@@ -5268,7 +5268,7 @@
     <string name="ConversationSettingsFragment__conversation_muted_forever">Сповіщення чату вимкнені назавжди</string>
     <string name="ConversationSettingsFragment__copied_phone_number_to_clipboard">Номер телефону скопійовано в буфер обміну.</string>
     <string name="ConversationSettingsFragment__phone_number">Номер телефону</string>
-    <string name="ConversationSettingsFragment__get_badges">Отримайте значки для свого профілю, підтримуючи Signal. Торкніться значка, щоб дізнатися більше.</string>
+    <string name="ConversationSettingsFragment__get_badges">Отримуйте значки для профілю за підтримку Signal. Торкніться значка, щоб дізнатися більше.</string>
 
     <!-- PermissionsSettingsFragment -->
     <string name="PermissionsSettingsFragment__add_members">Додати учасників</string>
@@ -5508,9 +5508,9 @@
     <!-- Title of a page in the bottom sheet. Placeholder is a user\'s short-name -->
     <string name="ViewBadgeBottomSheetDialogFragment__s_supports_signal">%1$s підтримує Signal</string>
     <!-- Description of a page in the bottom sheet of a monthly badge. Placeholder is a user\'s short-name -->
-    <string name="ViewBadgeBottomSheetDialogFragment__s_supports_signal_with_a_monthly">%1$s підтримує Signal місячним донатом. Signal є некомерційною організацією, яка не має рекламодавців та інвесторів. Ми працюємо лише завдяки вам.</string>
+    <string name="ViewBadgeBottomSheetDialogFragment__s_supports_signal_with_a_monthly">%1$s підтримує Signal, здійснюючи щомісячний донат. Signal — неприбуткова організація, що не має ні доходів від реклами, ні інвесторів. Її підтримують лише такі люди, як ви.</string>
     <!-- Description of a page in the bottom sheet of a one-time badge. Placeholder is a user\'s short-name -->
-    <string name="ViewBadgeBottomSheetDialogFragment__s_supports_signal_with_a_donation">%1$s підтримує Signal донатом. Signal є некомерційною організацією, яка не має рекламодавців та інвесторів. Ми працюємо лише завдяки вам.</string>
+    <string name="ViewBadgeBottomSheetDialogFragment__s_supports_signal_with_a_donation">%1$s підтримує Signal, здійснюючи щомісячний донат. Signal — неприбуткова організація, що не має ні доходів від реклами, ні інвесторів. Її підтримують лише такі люди, як ви.</string>
 
     <string name="ImageView__badge">Значок</string>
 
@@ -5544,14 +5544,14 @@
     <!-- Subtext underneath the dialog title on the thanks sheet -->
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__youve_earned_a_donor_badge">Ви отримали значок спонсора від Signal! Відобразіть його в профілі, щоб розповісти про свою підтримку.</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__you_can_also">Ви також можете</string>
-    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">стати підтримувачем щомісячно.</string>
+    <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__become_a_montly_sustainer">підтримувати щомісячно.</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__display_on_profile">Показувати в профілі</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__make_featured_badge">Обрати значок</string>
     <string name="SubscribeThanksForYourSupportBottomSheetDialogFragment__continue">Продовжити</string>
     <string name="ThanksForYourSupportBottomSheetFragment__when_you_have_more">Коли ви маєте більше одного значка, ви можете обирати, який саме відображати у своєму профілі.</string>
 
-    <string name="BecomeASustainerFragment__get_badges">Отримайте значки для свого профілю, підтримуючи Signal.</string>
-    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal — неприбутковий, без рекламодавців чи інвесторів, що підтримується лише такими людьми, як ви.</string>
+    <string name="BecomeASustainerFragment__get_badges">Отримуйте значки для профілю за підтримку Signal.</string>
+    <string name="BecomeASustainerFragment__signal_is_a_non_profit">Signal — неприбуткова організація, що не має ні доходів від реклами, ні інвесторів. Її підтримують лише такі люди, як ви.</string>
 
     <!-- Button label for creating a donation -->
     <string name="ManageDonationsFragment__donate_to_signal">Підтримати Signal</string>
@@ -5562,9 +5562,9 @@
     <string name="ManageDonationsFragment__my_support">Моя підтримка</string>
     <string name="ManageDonationsFragment__manage_subscription">Керувати передплатою</string>
     <!-- Label for Donation Receipts button -->
-    <string name="ManageDonationsFragment__donation_receipts">Квитанція внеску</string>
+    <string name="ManageDonationsFragment__donation_receipts">Підтвердження ваших донатів</string>
     <string name="ManageDonationsFragment__badges">Значки</string>
-    <string name="ManageDonationsFragment__subscription_faq">Поширені запитання про передплату</string>
+    <string name="ManageDonationsFragment__subscription_faq">Поширені запитання про підписку</string>
     <!-- Preference heading for other ways to donate -->
     <string name="ManageDonationsFragment__other_ways_to_give">Інші способи підтримки</string>
     <!-- Preference label to launch badge gifting -->
@@ -5835,7 +5835,7 @@
     <!-- Section header for showing schedule information -->
     <string name="NotificationProfileDetails__schedule">Розклад</string>
     <!-- If member list is long, will truncate the list and show an option to then see all when tapped -->
-    <string name="NotificationProfileDetails__see_all">Дивитись усі</string>
+    <string name="NotificationProfileDetails__see_all">Показати решту</string>
 
     <!-- Title for add schedule to profile in create flow -->
     <string name="EditNotificationProfileSchedule__add_a_schedule">Додати розклад</string>
@@ -5913,9 +5913,9 @@
     <!-- Donation receipts recurring tab label -->
     <string name="DonationReceiptListFragment__recurring">Поточні</string>
     <!-- Donation receipts one-time tab label -->
-    <string name="DonationReceiptListFragment__one_time">Одноразово</string>
+    <string name="DonationReceiptListFragment__one_time">Разові донати</string>
     <!-- Donation receipts gift tab -->
-    <string name="DonationReceiptListFragment__for_a_friend">Для друга</string>
+    <string name="DonationReceiptListFragment__for_a_friend">За друга</string>
     <!-- Donation receipts gift tab label -->
     <string name="DonationReceiptListFragment__donation_for_a_friend">Донат за друга</string>
     <!-- Donation receipts donation type heading -->
@@ -5923,19 +5923,19 @@
     <!-- Donation receipts date paid heading -->
     <string name="DonationReceiptDetailsFragment__date_paid">Дата оплати</string>
     <!-- Donation receipts share PNG -->
-    <string name="DonationReceiptDetailsFragment__share_receipt">Поділитись квитанцією</string>
+    <string name="DonationReceiptDetailsFragment__share_receipt">Поділитися</string>
     <!-- Donation receipts list end note -->
-    <string name="DonationReceiptListFragment__if_you_have">Якщо ви перевстановлювали Signal, квитанції попередніх донатів не будуть доступні.</string>
+    <string name="DonationReceiptListFragment__if_you_have">Якщо ви перевстановлювали Signal, підтвердження попередніх донатів будуть недоступні.</string>
     <!-- Donation receipts document title -->
-    <string name="DonationReceiptDetailsFragment__donation_receipt">Квитанція про донат</string>
+    <string name="DonationReceiptDetailsFragment__donation_receipt">Підтвердження донату</string>
     <!-- Donation receipts amount title -->
     <string name="DonationReceiptDetailsFragment__amount">Сума</string>
     <!-- Donation receipts thanks -->
-    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Дякуємо за підтримку Signal. Ваш внесок допомагає підтримувати місію розробки технології конфіденційності з відкритим кодом, яка захищає вільне висловлювання та забезпечує безпечне спілкування для мільйонів людей у всьому світі. Якщо ви є резидентом Сполучених Штатів, збережіть цю квитанцію для податкового обліку. Signal Technology Foundation – відповідно до розділу 501c3 Податкового кодексу це звільнена від податків некомерційна організація в Сполучених Штатах. Наш федеральний податковий номер: 82–4506840.</string>
+    <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Дякуємо за підтримку Signal. Ваш внесок допомагає реалізувати нашу місію: розробляти технологію конфіденційного обміну повідомленнями з відкритим кодом, яка захищає свободу слова й робить можливим безпечне спілкування для мільйонів людей у всьому світі. Якщо ви резидент Сполучених Штатів Америки, збережіть це підтвердження для звітування в податкові органи. Signal Technology Foundation — звільнена від оподаткування неприбуткова організація, створена відповідно до розділу 501c3 податкового кодексу США. Наш федеральний податковий номер: 82–4506840.</string>
     <!-- Donation receipt type -->
     <string name="DonationReceiptDetailsFragment__s_dash_s">%1$s - %2$s</string>
     <!-- Donation reciepts screen empty state title -->
-    <string name="DonationReceiptListFragment__no_receipts">Квитанцій немає</string>
+    <string name="DonationReceiptListFragment__no_receipts">Підтверджень немає</string>
 
     <!-- region "Stories Tab" -->
 
@@ -6590,7 +6590,7 @@
     <!-- Donation pill toggle monthly text -->
     <string name="DonationPillToggle__monthly">Щомісяця</string>
     <!-- Donation pill toggle one-time text -->
-    <string name="DonationPillToggle__one_time">Одноразово</string>
+    <string name="DonationPillToggle__one_time">Разово</string>
 
     <!-- GatewaySelectorBottomSheet -->
     <!-- Sheet title when subscribing -->
@@ -6609,7 +6609,7 @@
     <!-- Button label for paying with a bank transfer -->
     <string name="GatewaySelectorBottomSheet__bank_transfer">Банківський переказ</string>
     <!-- Button label for paying with a credit card -->
-    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Кредитна або дебетова картка</string>
+    <string name="GatewaySelectorBottomSheet__credit_or_debit_card">Кредитна / Дебетова картка</string>
     <!-- Sheet summary when giving donating for a friend -->
     <string name="GatewaySelectorBottomSheet__donate_for_a_friend">Донат за друга</string>
     <!-- Button label for paying with iDEAL -->
@@ -6709,7 +6709,7 @@
     <!-- Dialog title shown when using iDEAL payment for setting up a monthly donation -->
     <string name="IdealTransferDetailsFragment__confirm_your_donation_with_s">Підтвердьте ваш донат через %1$s</string>
     <!-- Dialog warning shown when using iDEAL payment for setting up a monthly donation. Placeholder is donation amount.Z -->
-    <string name="IdealTransferDetailsFragment__to_setup_your_recurring_donation">To setup your recurring donation tap continue to confirm a €0,01 charge with your bank. This will be automatically refunded and allows your %1$s/month donation to debited from your account.</string>
+    <string name="IdealTransferDetailsFragment__to_setup_your_recurring_donation">Щоб оформити регулярний благодійний платіж, виберіть «Продовжити» й підтвердьте списання 0,01€ у своєму банку. Цю суму буде автоматично повернуто. Ця операція потрібна, щоб активувати списання %1$s/місяць з вашого рахунку.</string>
     <!-- Dialog button shown when using iDEAL payment for setting up a monthly donation to continue with the donation -->
     <string name="IdealTransferDetailsFragment__continue">Продовжити</string>
 
@@ -7241,7 +7241,7 @@
     <!-- Dialog body for an invalid phone number. Placeholder is the entered phone number. -->
     <string name="FindByActivity__s_is_not_a_valid_phone_number">%1$s — недійсний номер телефону. Спробуйте ще раз, використовуючи дійсний номер телефону</string>
     <!-- Dialog body for not found username -->
-    <string name="FindByActivity__s_is_not_a_signal_user">«%1$s» — не є користувачем Signal. Будь ласка, перевірте ім\'я користувача і спробуйте ще раз.</string>
+    <string name="FindByActivity__s_is_not_a_signal_user">%1$s — не користувач Signal. Перевірте правильність імені користувача й повторіть пошук.</string>
     <!-- Dialog body for not found phone number -->
     <string name="FindByActivity__s_is_not_a_signal_user_would">%1$s не користується Signal. Ви хочете запросити абонента з цим номером?</string>
     <!-- Dialog action to invite the phone number to Signal -->
@@ -7301,23 +7301,23 @@
 
     <!-- BackupAlertBottomSheet -->
     <!-- Sheet title when user does not have enough space to download their backup -->
-    <string name="BackupAlertBottomSheet__cant_complete_download">Can\'t complete download</string>
+    <string name="BackupAlertBottomSheet__cant_complete_download">Неможливо завершити завантаження</string>
     <!-- Sheet body part 1 when user does not have enough space to download their backup. Placeholder is the amount of space needed. -->
-    <string name="BackupAlertBottomSheet__your_device_does_not_have_enough_free_space">Your device does not have enough free space. Free up to %1$s of space to download the media stored in your backup.</string>
+    <string name="BackupAlertBottomSheet__your_device_does_not_have_enough_free_space">На пристрої недостатньо місця. Звільніть %1$s, щоб завантажити медіафайли з резервної копії.</string>
     <!-- Sheet body part 2 when user does not have enough space to download their backup. Placeholder is the number of days until deletion -->
-    <string name="BackupAlertBottomSheet__if_you_choose_skip">If you choose \"Skip\" the media in your backup will be deleted in %1$d days.</string>
+    <string name="BackupAlertBottomSheet__if_you_choose_skip">Якщо вибрати «Пропустити», медіафайли з резервної копії буде видалено через %1$d днів.</string>
     <!-- Clickable text to learn more about the content of this bottom sheet -->
-    <string name="BackupAlertBottomSheet__learn_more">Learn more</string>
+    <string name="BackupAlertBottomSheet__learn_more">Дізнатися більше</string>
     <!-- Secondary action button text when user does not have enough free space to download their backup. -->
-    <string name="BackupAlertBottomSheet__skip">Skip</string>
+    <string name="BackupAlertBottomSheet__skip">Пропустити</string>
 
     <!-- BackupStatus -->
     <!-- Status title when user does not have enough free space to download their media. Placeholder is required disk space. -->
-    <string name="BackupStatus__free_up_s_of_space_to_download_your_media">Free up %1$s of space to download your media.</string>
+    <string name="BackupStatus__free_up_s_of_space_to_download_your_media">Звільніть %1$s, щоб завантажити свої медіафайли.</string>
 
     <!-- BackupsTypeSettingsFragment -->
     <!-- Displayed as the user\'s payment method as a label in a preference row -->
-    <string name="BackupsTypeSettingsFragment__credit_or_debit_card">Кредитна або дебетова картка</string>
+    <string name="BackupsTypeSettingsFragment__credit_or_debit_card">Кредитна / Дебетова картка</string>
     <!-- Displayed as the user\'s payment method as a label in a preference row -->
     <string name="BackupsTypeSettingsFragment__iDEAL">iDEAL</string>
     <!-- Displayed as the user\'s payment method as a label in a preference row -->
@@ -7329,7 +7329,7 @@
     <!-- Displayed as the user\'s payment method as a label in a preference row -->
     <string name="BackupsTypeSettingsFragment__unknown">Невідомо</string>
     <!-- Row title for entering payment history -->
-    <string name="BackupsTypeSettingsFragment__payment_history">Payment history</string>
+    <string name="BackupsTypeSettingsFragment__payment_history">Історія платежів</string>
 
     <!-- RemoteRestoreActivity -->
     <!-- Displayed at restore time to tell the user when their last backup was made. %$1s is replaced with the date (e.g. March 5, 2024) and %$2s is replaced with the time (e.g. 9:00am) -->
@@ -7358,17 +7358,17 @@
 
     <!-- RemoteBackupsPaymentHistoryFragment -->
     <!-- Title of the screen for payment history -->
-    <string name="RemoteBackupsPaymentHistoryFragment__payment_history">Payment history</string>
+    <string name="RemoteBackupsPaymentHistoryFragment__payment_history">Історія платежів</string>
     <!-- Description for backup rows -->
-    <string name="RemoteBackupsPaymentHistoryFragment__text_and_all_media_backup">Text and all media backup</string>
+    <string name="RemoteBackupsPaymentHistoryFragment__text_and_all_media_backup">Текстові повідомлення та всі медіафайли</string>
     <!-- Title of the screen for payment details -->
-    <string name="RemoteBackupsPaymentHistoryFragment__payment_details">Payment details</string>
+    <string name="RemoteBackupsPaymentHistoryFragment__payment_details">Платіжні дані</string>
     <!-- Title of row specifying the type of backup -->
-    <string name="RemoteBackupsPaymentHistoryFragment__backup_type">Backup type</string>
+    <string name="RemoteBackupsPaymentHistoryFragment__backup_type">Тип резервного копіювання</string>
     <!-- Title of row specifying the date the backup was paid on -->
-    <string name="RemoteBackupsPaymentHistoryFragment__date_paid">Date paid</string>
+    <string name="RemoteBackupsPaymentHistoryFragment__date_paid">Дата оплати</string>
     <!-- Button label to share the receipt -->
-    <string name="RemoteBackupsPaymentHistoryFragment__share">Share</string>
+    <string name="RemoteBackupsPaymentHistoryFragment__share">Поділитися</string>
 
     <!-- RemoteBackupsSettingsFragment -->
     <!-- Displayed on the title bar -->
