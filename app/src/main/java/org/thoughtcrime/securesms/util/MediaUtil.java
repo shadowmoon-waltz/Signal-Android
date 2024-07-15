@@ -578,7 +578,7 @@ public class MediaUtil {
       new MaterialAlertDialogBuilder(context)
         .setMessage("Video autoplay/loop like GIF?")
         .setPositiveButton("GIF", (d, w) -> {
-          Media media2 = new Media(media.getUri(), media.getMimeType(), media.getDate(), media.getWidth(), media.getHeight(), media.getSize(), media.getDuration(), media.isBorderless(), true, media.getBucketId(), media.getCaption(), media.getTransformProperties());
+          Media media2 = new Media(media.getUri(), media.getMimeType(), media.getDate(), media.getWidth(), media.getHeight(), media.getSize(), media.getDuration(), media.isBorderless(), true, media.getBucketId(), media.getCaption(), media.getTransformProperties(), media.getFileName());
           callback.onResponse(media2);
         })
         .setNegativeButton("Video", (d, w) -> {
