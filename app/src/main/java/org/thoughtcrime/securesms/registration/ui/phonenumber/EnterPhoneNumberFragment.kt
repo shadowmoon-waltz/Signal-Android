@@ -51,6 +51,7 @@ import org.thoughtcrime.securesms.registration.fragments.RegistrationViewDelegat
 import org.thoughtcrime.securesms.registration.ui.RegistrationCheckpoint
 import org.thoughtcrime.securesms.registration.ui.RegistrationState
 import org.thoughtcrime.securesms.registration.ui.RegistrationViewModel
+import org.thoughtcrime.securesms.registration.ui.isBindingInvalid
 import org.thoughtcrime.securesms.registration.ui.toE164
 import org.thoughtcrime.securesms.registration.util.CountryPrefix
 import org.thoughtcrime.securesms.util.CommunicationActions
@@ -299,6 +300,11 @@ class EnterPhoneNumberFragment : LoggingFragment(R.layout.fragment_registration_
   }
 
   private fun handleErrorResponse(result: RegistrationResult) {
+    if (isBindingInvalid()) {
+      Log.w(TAG, "Binding not valid, aborting! Result: $result")
+      result.logCause()
+      return
+    }
     if (!result.isSuccess()) {
       Log.i(TAG, "Handling error response.", result.getCause())
     }
@@ -332,8 +338,14 @@ class EnterPhoneNumberFragment : LoggingFragment(R.layout.fragment_registration_
       is VerificationCodeRequestResult.MalformedRequest -> presentRemoteErrorDialog(getString(R.string.RegistrationActivity_unable_to_connect_to_service), skipToNextScreen)
       is VerificationCodeRequestResult.MustRetry -> presentRemoteErrorDialog(getString(R.string.RegistrationActivity_unable_to_connect_to_service), skipToNextScreen)
       is VerificationCodeRequestResult.NonNormalizedNumber -> handleNonNormalizedNumberError(result.originalNumber, result.normalizedNumber, fragmentViewModel.mode)
-      is RegistrationSessionCreationResult.RateLimited -> presentRemoteErrorDialog(getString(R.string.RegistrationActivity_rate_limited_to_try_again, result.timeRemaining.milliseconds.toString()))
-      is VerificationCodeRequestResult.RateLimited -> presentRemoteErrorDialog(getString(R.string.RegistrationActivity_rate_limited_to_try_again, result.timeRemaining.milliseconds.toString()))
+      is RegistrationSessionCreationResult.RateLimited -> {
+        Log.i(TAG, "Session creation rate limited! Next attempt: ${result.timeRemaining.milliseconds}")
+        presentRemoteErrorDialog(getString(R.string.RegistrationActivity_rate_limited_to_try_again, result.timeRemaining.milliseconds.toString()))
+      }
+      is VerificationCodeRequestResult.RateLimited -> {
+        Log.i(TAG, "Code request rate limited! Next attempt: ${result.timeRemaining.milliseconds}")
+        presentRemoteErrorDialog(getString(R.string.RegistrationActivity_rate_limited_to_try_again, result.timeRemaining.milliseconds.toString()))
+      }
       is VerificationCodeRequestResult.TokenNotAccepted -> presentRemoteErrorDialog(getString(R.string.RegistrationActivity_we_need_to_verify_that_youre_human)) { _, _ -> moveToCaptcha() }
       else -> presentRemoteErrorDialog(getString(R.string.RegistrationActivity_unable_to_connect_to_service))
     }
@@ -516,7 +528,7 @@ class EnterPhoneNumberFragment : LoggingFragment(R.layout.fragment_registration_
   }
 
   private fun moveToEnterPinScreen() {
-    findNavController().safeNavigate(EnterPhoneNumberFragmentDirections.actionReRegisterWithPinV2Fragment())
+    findNavController().safeNavigate(EnterPhoneNumberFragmentDirections.actionReRegisterWithPinFragment())
     sharedViewModel.setInProgress(false)
   }
 

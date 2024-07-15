@@ -77,6 +77,7 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.logging.CustomSignalProtocolLogger;
 import org.thoughtcrime.securesms.logging.PersistentLogger;
 import org.thoughtcrime.securesms.messageprocessingalarm.RoutineMessageFetchReceiver;
+import org.thoughtcrime.securesms.messages.GroupSendEndorsementInternalNotifier;
 import org.thoughtcrime.securesms.migrations.ApplicationMigrations;
 import org.thoughtcrime.securesms.mms.SignalGlideComponents;
 import org.thoughtcrime.securesms.mms.SignalGlideModule;
@@ -222,6 +223,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addPostRender(GroupRingCleanupJob::enqueue)
                             .addPostRender(LinkedDeviceInactiveCheckJob::enqueueIfNecessary)
                             .addPostRender(() -> ActiveCallManager.clearNotifications(this))
+                            .addPostRender(() -> GroupSendEndorsementInternalNotifier.init())
                             .execute();
 
     Log.d(TAG, "onCreate() took " + (System.currentTimeMillis() - startTime) + " ms");
@@ -440,9 +442,6 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
       Map<String, String> fieldTrials = new HashMap<>();
       if (RemoteConfig.callingFieldTrialAnyAddressPortsKillSwitch()) {
         fieldTrials.put("RingRTC-AnyAddressPortsKillSwitch", "Enabled");
-      }
-      if (!SignalStore.internal().callingDisableLBRed()) {
-        fieldTrials.put("RingRTC-Audio-LBRed-For-Opus", "Enabled,bitrate_pri:22000");
       }
       CallManager.initialize(this, new RingRtcLogger(), fieldTrials);
     } catch (UnsatisfiedLinkError e) {

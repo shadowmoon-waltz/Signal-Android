@@ -993,11 +993,12 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
       val containsSelf = joinedUuids.contains(SignalStore.account.requireAci().rawUuid)
       val sameEraId = updateDetail.eraId == eraId && !Util.isEmpty(eraId)
       val inCallUuids = if (sameEraId) joinedUuids.map { it.toString() } else emptyList()
+      val body = GroupCallUpdateDetailsUtil.createUpdatedBody(updateDetail, inCallUuids, isCallFull, isRingingOnLocalDevice)
       val contentValues = contentValuesOf(
-        BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(updateDetail, inCallUuids, isCallFull, isRingingOnLocalDevice)
+        BODY to body
       )
 
-      if (sameEraId && containsSelf) {
+      if (sameEraId && (containsSelf || updateDetail.localUserJoined)) {
         contentValues.put(READ, 1)
       }
 
@@ -1044,7 +1045,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
           BODY to GroupCallUpdateDetailsUtil.createUpdatedBody(groupCallUpdateDetails, inCallUuids, isCallFull, isRingingOnLocalDevice)
         )
 
-        if (sameEraId && containsSelf) {
+        if (sameEraId && (containsSelf || groupCallUpdateDetails.localUserJoined)) {
           contentValues.put(READ, 1)
         }
 
@@ -3339,7 +3340,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     }
   }
 
-  private fun getSerializedSharedContacts(insertedAttachmentIds: Map<Attachment, AttachmentId>, contacts: List<Contact>): String? {
+  fun getSerializedSharedContacts(insertedAttachmentIds: Map<Attachment, AttachmentId>, contacts: List<Contact>): String? {
     if (contacts.isEmpty()) {
       return null
     }
@@ -3373,7 +3374,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
     return sharedContactJson.toString()
   }
 
-  private fun getSerializedLinkPreviews(insertedAttachmentIds: Map<Attachment, AttachmentId>, previews: List<LinkPreview>): String? {
+  fun getSerializedLinkPreviews(insertedAttachmentIds: Map<Attachment, AttachmentId>, previews: List<LinkPreview>): String? {
     if (previews.isEmpty()) {
       return null
     }

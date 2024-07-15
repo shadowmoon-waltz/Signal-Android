@@ -9,7 +9,7 @@ dependencyResolutionManagement {
       version("androidx-camera", "1.3.4")
       version("androidx-fragment", "1.6.2")
       version("androidx-lifecycle", "2.7.0")
-      version("androidx-media3", "1.2.1")
+      version("androidx-media3", "1.3.1")
       version("androidx-navigation", "2.7.6")
       version("androidx-window", "1.2.0")
       version("exoplayer", "2.19.0")
@@ -122,7 +122,7 @@ dependencyResolutionManagement {
       library("libsignal-client", "org.signal", "libsignal-client").versionRef("libsignal-client")
       library("libsignal-android", "org.signal", "libsignal-android").versionRef("libsignal-client")
       library("signal-aesgcmprovider", "org.signal:aesgcmprovider:0.0.3")
-      library("signal-ringrtc", "org.signal:ringrtc-android:2.44.0")
+      library("signal-ringrtc", "org.signal:ringrtc-android:2.44.3")
       library("signal-android-database-sqlcipher", "org.signal:sqlcipher-android:4.5.4-S2")
 
       // Third Party

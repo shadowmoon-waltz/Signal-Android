@@ -24,9 +24,11 @@ import org.thoughtcrime.securesms.backup.v2.BackupState
 import org.thoughtcrime.securesms.backup.v2.proto.BodyRange
 import org.thoughtcrime.securesms.backup.v2.proto.ChatItem
 import org.thoughtcrime.securesms.backup.v2.proto.ChatUpdateMessage
+import org.thoughtcrime.securesms.backup.v2.proto.ContactAttachment
 import org.thoughtcrime.securesms.backup.v2.proto.FilePointer
 import org.thoughtcrime.securesms.backup.v2.proto.GroupCall
 import org.thoughtcrime.securesms.backup.v2.proto.IndividualCall
+import org.thoughtcrime.securesms.backup.v2.proto.LinkPreview
 import org.thoughtcrime.securesms.backup.v2.proto.MessageAttachment
 import org.thoughtcrime.securesms.backup.v2.proto.PaymentNotification
 import org.thoughtcrime.securesms.backup.v2.proto.Quote
@@ -35,6 +37,7 @@ import org.thoughtcrime.securesms.backup.v2.proto.SendStatus
 import org.thoughtcrime.securesms.backup.v2.proto.SimpleChatUpdate
 import org.thoughtcrime.securesms.backup.v2.proto.StandardMessage
 import org.thoughtcrime.securesms.backup.v2.proto.Sticker
+import org.thoughtcrime.securesms.contactshare.Contact
 import org.thoughtcrime.securesms.database.AttachmentTable
 import org.thoughtcrime.securesms.database.CallTable
 import org.thoughtcrime.securesms.database.GroupReceiptTable
@@ -315,6 +318,60 @@ class ChatItemImportInserter(
         }
       }
     }
+    if (this.contactMessage != null) {
+      val contacts = this.contactMessage.contact.map { backupContact ->
+        Contact(
+          backupContact.name.toLocal(),
+          backupContact.organization,
+          backupContact.number.map { phone ->
+            Contact.Phone(
+              phone.value_ ?: "",
+              phone.type.toLocal(),
+              phone.label
+            )
+          },
+          backupContact.email.map { email ->
+            Contact.Email(
+              email.value_ ?: "",
+              email.type.toLocal(),
+              email.label
+            )
+          },
+          backupContact.address.map { address ->
+            Contact.PostalAddress(
+              address.type.toLocal(),
+              address.label,
+              address.street,
+              address.pobox,
+              address.neighborhood,
+              address.city,
+              address.region,
+              address.postcode,
+              address.country
+            )
+          },
+          Contact.Avatar(null, backupContact.avatar.toLocalAttachment(voiceNote = false, borderless = false, gif = false, wasDownloaded = true), true)
+        )
+      }
+      val contactAttachments = contacts.mapNotNull { it.avatarAttachment }
+      if (contacts.isNotEmpty()) {
+        followUp = { messageRowId ->
+          val attachmentMap = if (contactAttachments.isNotEmpty()) {
+            SignalDatabase.attachments.insertAttachmentsForMessage(messageRowId, contactAttachments, emptyList())
+          } else {
+            emptyMap()
+          }
+          db.update(
+            MessageTable.TABLE_NAME,
+            contentValuesOf(
+              MessageTable.SHARED_CONTACTS to SignalDatabase.messages.getSerializedSharedContacts(attachmentMap, contacts)
+            ),
+            "${MessageTable.ID} = ?",
+            SqlUtil.buildArgs(messageRowId)
+          )
+        }
+      }
+    }
     if (this.standardMessage != null) {
       val bodyRanges = this.standardMessage.text?.bodyRanges
       if (!bodyRanges.isNullOrEmpty()) {
@@ -335,15 +392,27 @@ class ChatItemImportInserter(
           }
         }
       }
+      val linkPreviews = this.standardMessage.linkPreview.map { it.toLocalLinkPreview() }
+      val linkPreviewAttachments = linkPreviews.mapNotNull { it.thumbnail.orNull() }
       val attachments = this.standardMessage.attachments.mapNotNull { attachment ->
         attachment.toLocalAttachment()
       }
       val quoteAttachments = this.standardMessage.quote?.attachments?.mapNotNull {
         it.toLocalAttachment()
       } ?: emptyList()
-      if (attachments.isNotEmpty()) {
+      if (attachments.isNotEmpty() || linkPreviewAttachments.isNotEmpty() || quoteAttachments.isNotEmpty()) {
         followUp = { messageRowId ->
-          SignalDatabase.attachments.insertAttachmentsForMessage(messageRowId, attachments, quoteAttachments)
+          val attachmentMap = SignalDatabase.attachments.insertAttachmentsForMessage(messageRowId, attachments + linkPreviewAttachments, quoteAttachments)
+          if (linkPreviews.isNotEmpty()) {
+            db.update(
+              MessageTable.TABLE_NAME,
+              contentValuesOf(
+                MessageTable.LINK_PREVIEWS to SignalDatabase.messages.getSerializedLinkPreviews(attachmentMap, linkPreviews)
+              ),
+              "${MessageTable.ID} = ?",
+              SqlUtil.buildArgs(messageRowId)
+            )
+          }
         }
       }
     }
@@ -930,6 +999,16 @@ class ChatItemImportInserter(
     )
   }
 
+  private fun LinkPreview.toLocalLinkPreview(): org.thoughtcrime.securesms.linkpreview.LinkPreview {
+    return org.thoughtcrime.securesms.linkpreview.LinkPreview(
+      this.url,
+      this.title ?: "",
+      this.description ?: "",
+      this.date ?: 0,
+      Optional.ofNullable(this.image?.toLocalAttachment(voiceNote = false, borderless = false, gif = false, wasDownloaded = true))
+    )
+  }
+
   private fun MessageAttachment.toLocalAttachment(): Attachment? {
     return pointer?.toLocalAttachment(
       voiceNote = flag == MessageAttachment.Flag.VOICE_MESSAGE,
@@ -938,6 +1017,42 @@ class ChatItemImportInserter(
       wasDownloaded = wasDownloaded,
       uuid = clientUuid
     )
+  }
+
+  private fun ContactAttachment.Name?.toLocal(): Contact.Name {
+    return Contact.Name(this?.displayName, this?.givenName, this?.familyName, this?.prefix, this?.suffix, this?.middleName)
+  }
+
+  private fun ContactAttachment.Phone.Type?.toLocal(): Contact.Phone.Type {
+    return when (this) {
+      ContactAttachment.Phone.Type.HOME -> Contact.Phone.Type.HOME
+      ContactAttachment.Phone.Type.MOBILE -> Contact.Phone.Type.MOBILE
+      ContactAttachment.Phone.Type.WORK -> Contact.Phone.Type.WORK
+      ContactAttachment.Phone.Type.CUSTOM,
+      ContactAttachment.Phone.Type.UNKNOWN,
+      null -> Contact.Phone.Type.CUSTOM
+    }
+  }
+
+  private fun ContactAttachment.Email.Type?.toLocal(): Contact.Email.Type {
+    return when (this) {
+      ContactAttachment.Email.Type.HOME -> Contact.Email.Type.HOME
+      ContactAttachment.Email.Type.MOBILE -> Contact.Email.Type.MOBILE
+      ContactAttachment.Email.Type.WORK -> Contact.Email.Type.WORK
+      ContactAttachment.Email.Type.CUSTOM,
+      ContactAttachment.Email.Type.UNKNOWN,
+      null -> Contact.Email.Type.CUSTOM
+    }
+  }
+
+  private fun ContactAttachment.PostalAddress.Type?.toLocal(): Contact.PostalAddress.Type {
+    return when (this) {
+      ContactAttachment.PostalAddress.Type.HOME -> Contact.PostalAddress.Type.HOME
+      ContactAttachment.PostalAddress.Type.WORK -> Contact.PostalAddress.Type.WORK
+      ContactAttachment.PostalAddress.Type.CUSTOM,
+      ContactAttachment.PostalAddress.Type.UNKNOWN,
+      null -> Contact.PostalAddress.Type.CUSTOM
+    }
   }
 
   private fun MessageAttachment.toLocalAttachment(contentType: String?, fileName: String?): Attachment? {

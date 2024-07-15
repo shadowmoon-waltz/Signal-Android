@@ -1096,6 +1096,15 @@
     <!-- Message explaining that battery saver may delay notifications -->
     <string name="PromptBatterySaverBottomSheet__message">Можете да оневозможите оптимизација на батерија за Signal со цел да не доцнат известувањата за пораки.</string>
 
+    <!-- Title in bottom sheet that states that notifications for this device could be delayed -->
+    <string name="DeviceSpecificNotificationBottomSheet__notifications_may_be_delayed">Известувањата може да бидат одложени поради оптимизација на батеријата</string>
+    <!-- Message in bottom sheet prompting users to fix potential issues by disabling battery optimizations -->
+    <string name="DeviceSpecificNotificationBottomSheet__disable_battery_optimizations">Можете да оневозможите оптимизација на батерија за Signal со цел да не доцнат известувањата за пораки. Допрете „Продолжи“ за да ги видите упатствата според вид на уред.</string>
+    <!-- Button to dismiss notification help prompt -->
+    <string name="DeviceSpecificNotificationBottomSheet__no_thanks">Не, благодарам</string>
+    <!-- Button to continue and go to Signal support website -->
+    <string name="DeviceSpecificNotificationBottomSheet__continue">Продолжи</string>
+
     <!-- Button to continue to try and disable battery saver -->
     <string name="PromptBatterySaverBottomSheet__continue">Продолжи</string>
     <!-- Button to dismiss battery saver dialog prompt-->
@@ -2126,7 +2135,7 @@
     <!-- A dialog prompt to confirm you want to lower your hand -->
     <string name="CallOverflowPopupWindow__lower_your_hand">Сакате да ја спуштите раката?</string>
     <!-- A dialog button to confirm you would like to lower your hand -->
-    <string name="CallOverflowPopupWindow__lower_hand">Спуштете ја раката</string>
+    <string name="CallOverflowPopupWindow__lower_hand">Спуштете</string>
     <!-- A negative button for a dialog confirming the user wants to lower their hand (withdraw a raised hand) -->
     <string name="CallOverflowPopupWindow__cancel">Откажи</string>
     <!-- A button to take you to a list of participants with raised hands -->
@@ -2951,6 +2960,8 @@
     <string name="ConversationUpdateItem_hidden_contact_message_to_add_back">Ја имате отстрането оваа личност, испраќањето порака го враќа контактот во вашата листа.</string>
     <!-- Update item button text shown for the accepted message request update message -->
     <string name="ConversationUpdateItem_options">Опции</string>
+    <!-- Update item button text shown for a profile name change. -->
+    <string name="ConversationUpdateItem_update">Aжурирај</string>
 
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Пушти … Пауза</string>
@@ -6992,16 +7003,46 @@
     <string name="BackupProgressService_title_downloading">Се преземаат податоците од резервната копија…</string>
 
     <!-- BackupAlertBottomSheet -->
+    <!-- Sheet title when media backups have been disabled -->
+    <string name="BackupAlertBottomSheet__media_backups_are_off">Резервните копии за медиумски датотеки се исклучени</string>
+    <!-- Sheet body part 1 when media backups have been disabled. Placeholder is the number of days until deletion. -->
+    <plurals name="BackupAlertBottomSheet__your_signal_media_backup_plan">
+        <item quantity="one">Вашиот претплатен пакет на резервни копии за медиумски датотеки на Signal е откажан зашто не можевме да го обработиме вашето плаќање. Имате %1$d ден за да ги преземете медиумските датотеки од вашата резервна копија. По %1$d ден, медиумските датотеки од вашата резервна копија ќе бидат избришани.</item>
+        <item quantity="other">Вашиот претплатен пакет на резервни копии за медиумски датотеки на Signal е откажан зашто не можевме да го обработиме вашето плаќање. Имате %1$d дена за да ги преземете медиумските датотеки од вашата резервна копија. По %1$d дена, медиумските датотеки од вашата резервна копија ќе бидат избришани.</item>
+    </plurals>
+    <!-- Sheet body part 2 when media backups have been disabled. -->
+    <string name="BackupAlertBottomSheet__you_can_begin_paying_for_backups_again">Можете во кое било време да почнете одново да плаќате за резервни копии за да продолжите да правите резервни копии од сите ваши медиумски датотеки. </string>
+    <!-- Sheet title when user\'s media will be deleted today -->
+    <string name="BackupAlertBottomSheet__your_media_will_be_deleted_today">Вашите медиумски датотеки ќе бидат избришани денес</string>
+    <!-- Sheet body part 1 when user\'s media will be deleted today -->
+    <string name="BackupAlertBottomSheet__your_signal_media_backup_plan_has_been">Вашиот претплатен пакет на резервни копии за медиумски датотеки на Signal е откажан зашто не можевме да го обработиме вашето плаќање. Ова ви е последна можност да ги преземете медиумските датотеки од вашата резервна копија пред да се избришат.</string>
     <!-- Sheet title when user does not have enough space to download their backup -->
     <string name="BackupAlertBottomSheet__cant_complete_download">Преземањето не може да се заврши</string>
     <!-- Sheet body part 1 when user does not have enough space to download their backup. Placeholder is the amount of space needed. -->
     <string name="BackupAlertBottomSheet__your_device_does_not_have_enough_free_space">На вашиот уред нема доволно слободен простор. Ослободете простор од %1$s за да ги преземете медиумските датотеки од вашата резервна копија.</string>
     <!-- Sheet body part 2 when user does not have enough space to download their backup. Placeholder is the number of days until deletion -->
-    <string name="BackupAlertBottomSheet__if_you_choose_skip">Ако изберете „Прескокни“, медиумските датотеки во вашата резервна копија ќе бидат избришани за %1$d дена.</string>
+    <plurals name="BackupAlertBottomSheet__if_you_choose_skip">
+        <item quantity="one">Ако изберете „Прескокни“, медиумските датотеки во вашата резервна копија ќе бидат избришани за %1$d ден.</item>
+        <item quantity="other">Ако изберете „Прескокни“, медиумските датотеки во вашата резервна копија ќе бидат избришани за %1$d дена.</item>
+    </plurals>
+    <!-- Sheet title when user payment failed to process -->
+    <string name="BackupAlertBottomSheet__cant_process_backup_payment">Не може да се обработи плаќањето за резервни копии</string>
+    <!-- Sheet body when user payment failed to process -->
+    <string name="BackupAlertBottomSheet__were_having_trouble_collecting__google_pay">Наидовме на проблем при собирање на средства за периодичното месечно плаќање за резервни копии. Проверете дали внесените податоци за начин на плаќање се ажурни. Ако не, ажурирајте во Google Pay. Signal ќе се обиде повторно да го процесира плаќањето за неколку дена.</string>
+    <!-- Sheet title for generic backup error -->
+    <string name="BackupAlertBottomSheet__couldnt_complete_backup">Не можеше да се направи резервна копија</string>
+    <!-- Sheet body for generic backup error. Placeholder is days since last backup. -->
+    <string name="BackupAlertBottomSheet__your_device_hasnt">Вашиот уред нема направено резервна копија %1$d дена. Проверете дали уредот e поврзан на Wi-Fi и допрете на „Направи резервна копија сега“. </string>
     <!-- Clickable text to learn more about the content of this bottom sheet -->
     <string name="BackupAlertBottomSheet__learn_more">Дознајте повеќе</string>
     <!-- Secondary action button text when user does not have enough free space to download their backup. -->
     <string name="BackupAlertBottomSheet__skip">Прескокни</string>
+    <!-- Primary action button text prompting user to download their media -->
+    <string name="BackupAlertBottomSheet__download_media_now">Преземете ги медиумските датотеки сега</string>
+    <!-- Secondary action button text to dismiss sheet, noting the user can download later -->
+    <string name="BackupAlertBottomSheet__download_later">Преземете подоцна</string>
+    <!-- Secondary action button text to dismiss sheet, skipping media download -->
+    <string name="BackupAlertBottomSheet__dont_download_media">Не преземајте медиумски датотеки</string>
 
     <!-- BackupStatus -->
     <!-- Status title when user does not have enough free space to download their media. Placeholder is required disk space. -->
@@ -7123,6 +7164,26 @@
     <string name="RemoteBackupsSettingsFragment__monthly">Месечно</string>
     <!-- Title for frequency option DAILY for backup frequency -->
     <string name="RemoteBackupsSettingsFragment__manually_back_up">Направете резервна копија рачно</string>
+    <!-- The body of an alert dialog shown when we detect the user may be confused by the lock screen -->
+    <string name="PassphrasePromptActivity_help_prompt_body">Ве молиме внесете го вашиот PIN, лозинка или шема за отклучување.</string>
 
+    <!-- Primary action button label when selecting a backup tier without a current selection -->
+    <string name="MessageBackupsTypeSelectionScreen__next">Следно</string>
+    <!-- Primary action button label when selecting a backup tier with a current selection -->
+    <string name="MessageBackupsTypeSelectionScreen__change_backup_type">Променете го видот на резервна копија</string>
+    <!-- Secondary action button label when selecting a backup tier with a current selection -->
+    <string name="MessageBackupsTypeSelectionScreen__cancel_subscription">Откажете претплата</string>
+
+    <!-- ConfirmBackupCancellationDialog -->
+    <!-- Dialog title -->
+    <string name="ConfirmBackupCancellationDialog__confirm_cancellation">Потврдете го откажувањето</string>
+    <!-- Dialog body -->
+    <string name="ConfirmBackupCancellationDialog__you_wont_be_charged_again">Нема да ви се наплати повторно. Резервните копии ќе бидат исклучени на крајот од вашиот претплатнички период. По тој датум, ќе имате 30 дена да ги преземете медиумските датотеки од кои моментално правите резервни копии.</string>
+    <!-- Action button label to cancel subscription and download now -->
+    <string name="ConfirmBackupCancellationDialog__confirm_and_download_now">Потврдете и преземете сега</string>
+    <!-- Action button label to cancel subscription and download later -->
+    <string name="ConfirmBackupCancellationDialog__confirm_and_download_later">Потврдете и преземете подоцна</string>
+    <!-- Action button label to keep current subscription -->
+    <string name="ConfirmBackupCancellationDialog__keep_subscription">Задржете ја претплатата</string>
     <!-- EOF -->
 </resources>
