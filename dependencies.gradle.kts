@@ -15,7 +15,7 @@ dependencyResolutionManagement {
       version("exoplayer", "2.19.0")
       version("glide", "4.15.1")
       version("kotlin", "1.9.20")
-      version("libsignal-client", "0.51.1")
+      version("libsignal-client", "0.52.2")
       version("mp4parser", "1.9.39")
       version("android-gradle-plugin", "8.4.0")
       version("accompanist", "0.28.0")
@@ -102,7 +102,7 @@ dependencyResolutionManagement {
 
       // Google
       library("google-protobuf-javalite", "com.google.protobuf:protobuf-javalite:3.11.4")
-      library("google-libphonenumber", "com.googlecode.libphonenumber:libphonenumber:8.13.23")
+      library("google-libphonenumber", "com.googlecode.libphonenumber:libphonenumber:8.13.40")
       library("google-play-services-maps", "com.google.android.gms:play-services-maps:18.2.0")
       library("google-play-services-auth", "com.google.android.gms:play-services-auth:21.0.0")
       library("google-play-services-wallet", "com.google.android.gms:play-services-wallet:19.2.1")
@@ -122,7 +122,7 @@ dependencyResolutionManagement {
       library("libsignal-client", "org.signal", "libsignal-client").versionRef("libsignal-client")
       library("libsignal-android", "org.signal", "libsignal-android").versionRef("libsignal-client")
       library("signal-aesgcmprovider", "org.signal:aesgcmprovider:0.0.3")
-      library("signal-ringrtc", "org.signal:ringrtc-android:2.44.3")
+      library("signal-ringrtc", "org.signal:ringrtc-android:2.44.4")
       library("signal-android-database-sqlcipher", "org.signal:sqlcipher-android:4.5.4-S2")
 
       // Third Party

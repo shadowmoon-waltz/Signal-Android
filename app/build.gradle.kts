@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1435
-val canonicalVersionName = "7.11.2"
+val canonicalVersionCode = 1438
+val canonicalVersionName = "7.12.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -158,7 +158,7 @@ android {
 
   packagingOptions {
     resources {
-      excludes += setOf("LICENSE.txt", "LICENSE", "NOTICE", "asm-license.txt", "META-INF/LICENSE", "META-INF/LICENSE.md", "META-INF/NOTICE", "META-INF/LICENSE-notice.md", "META-INF/proguard/androidx-annotations.pro", "libsignal_jni.dylib", "signal_jni.dll")
+      excludes += setOf("LICENSE.txt", "LICENSE", "NOTICE", "asm-license.txt", "META-INF/LICENSE", "META-INF/LICENSE.md", "META-INF/NOTICE", "META-INF/LICENSE-notice.md", "META-INF/proguard/androidx-annotations.pro", "libsignal_jni.dylib", "signal_jni.dll", "libsignal_jni_testing.dylib", "signal_jni_testing.dll")
     }
   }
 
@@ -460,6 +460,12 @@ android {
   androidComponents {
     beforeVariants { variant ->
       variant.enable = variant.name in selectableVariants
+    }
+    onVariants { variant ->
+      // Include the test-only library on debug builds.
+      if (variant.buildType != "debug") {
+        variant.packaging.jniLibs.excludes.add("**/libsignal_jni_testing.so")
+      }
     }
   }
 
