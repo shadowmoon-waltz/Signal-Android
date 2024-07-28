@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1439
-val canonicalVersionName = "7.12.2"
+val canonicalVersionCode = 1440
+val canonicalVersionName = "7.13.0"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -463,7 +463,7 @@ android {
     }
     onVariants { variant ->
       // Include the test-only library on debug builds.
-      if (variant.buildType != "debug") {
+      if (variant.buildType != "instrumentation") {
         variant.packaging.jniLibs.excludes.add("**/libsignal_jni_testing.so")
       }
     }
@@ -633,6 +633,7 @@ dependencies {
   androidTestImplementation(testLibs.mockito.kotlin)
   androidTestImplementation(testLibs.mockk.android)
   androidTestImplementation(testLibs.square.okhttp.mockserver)
+  androidTestImplementation(testLibs.diff.utils)
 
   androidTestUtil(testLibs.androidx.test.orchestrator)
 }

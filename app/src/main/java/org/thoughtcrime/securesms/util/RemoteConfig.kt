@@ -912,7 +912,7 @@ object RemoteConfig {
     hotSwappable = true
   )
 
-  const val CRASH_PROMPT_CONFIG: String = "android.crashPromptConfig"
+  const val CRASH_PROMPT_CONFIG: String = "android.crashPromptConfig.2"
 
   /** Config object for what crashes to prompt about.  */
   val crashPromptConfig: String by remoteString(
@@ -1102,6 +1102,13 @@ object RemoteConfig {
         AppDependencies.jobManager.add(Svr3MirrorJob())
       }
     }
+  )
+
+  /** JSON object representing some details about how we might want to warn the user around connectivity issues. */
+  val connectivityWarningConfig: String by remoteString(
+    key = "android.connectivityWarningConfig",
+    defaultValue = "",
+    hotSwappable = true
   )
 
   // endregion
