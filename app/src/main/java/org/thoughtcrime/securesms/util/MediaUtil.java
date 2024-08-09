@@ -574,11 +574,11 @@ public class MediaUtil {
 
   public static void maybeMp4AsGif(@NonNull Context context, @NonNull Media media, @NonNull Mp4AsGifCallback callback)
   {
-    if (SignalStore.settings().isPromptMp4AsGif() && isVideo(media.getMimeType()) && !media.isVideoGif()) {
+    if (SignalStore.settings().isPromptMp4AsGif() && isVideo(media.getContentType()) && !media.isVideoGif()) {
       new MaterialAlertDialogBuilder(context)
         .setMessage("Video autoplay/loop like GIF?")
         .setPositiveButton("GIF", (d, w) -> {
-          Media media2 = new Media(media.getUri(), media.getMimeType(), media.getDate(), media.getWidth(), media.getHeight(), media.getSize(), media.getDuration(), media.isBorderless(), true, media.getBucketId(), media.getCaption(), media.getTransformProperties(), media.getFileName());
+          Media media2 = new Media(media.getUri(), media.getContentType(), media.getDate(), media.getWidth(), media.getHeight(), media.getSize(), media.getDuration(), media.isBorderless(), true, media.getBucketId(), media.getCaption(), media.getTransformProperties(), media.getFileName());
           callback.onResponse(media2);
         })
         .setNegativeButton("Video", (d, w) -> {
