@@ -220,8 +220,8 @@ object BackupRepository {
             backupTimeMs = exportState.backupTime
           )
         )
-        // Note: Without a transaction, we may export inconsistent state. But because we have a transaction,
-        // writes from other threads are blocked. This is something to think more about.
+
+        // We're using a snapshot, so the transaction is more for perf than correctness
         dbSnapshot.rawWritableDatabase.withinTransaction {
           AccountDataProcessor.export(dbSnapshot, signalStoreSnapshot) {
             writer.write(it)
@@ -316,29 +316,29 @@ object BackupRepository {
       SignalDatabase.recipients.setProfileSharing(selfId, true)
 
       eventTimer.emit("setup")
-      val backupState = BackupState(backupKey)
-      val chatItemInserter: ChatItemImportInserter = ChatItemBackupProcessor.beginImport(backupState)
+      val importState = ImportState(backupKey)
+      val chatItemInserter: ChatItemImportInserter = ChatItemBackupProcessor.beginImport(importState)
 
       val totalLength = frameReader.getStreamLength()
       for (frame in frameReader) {
         when {
           frame.account != null -> {
-            AccountDataProcessor.import(frame.account, selfId)
+            AccountDataProcessor.import(frame.account, selfId, importState)
             eventTimer.emit("account")
           }
 
           frame.recipient != null -> {
-            RecipientBackupProcessor.import(frame.recipient, backupState)
+            RecipientBackupProcessor.import(frame.recipient, importState)
             eventTimer.emit("recipient")
           }
 
           frame.chat != null -> {
-            ChatBackupProcessor.import(frame.chat, backupState)
+            ChatBackupProcessor.import(frame.chat, importState)
             eventTimer.emit("chat")
           }
 
           frame.adHocCall != null -> {
-            AdHocCallBackupProcessor.import(frame.adHocCall, backupState)
+            AdHocCallBackupProcessor.import(frame.adHocCall, importState)
             eventTimer.emit("call")
           }
 
@@ -362,7 +362,7 @@ object BackupRepository {
         eventTimer.emit("chatItem")
       }
 
-      backupState.chatIdToLocalThreadId.values.forEach {
+      importState.chatIdToLocalThreadId.values.forEach {
         SignalDatabase.threads.update(it, unarchive = false, allowDeletion = false)
       }
     }
@@ -392,7 +392,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getArchiveMediaItemsPage(backupKey, credential, limit, cursor)
+        api.getArchiveMediaItemsPage(backupKey, SignalStore.account.requireAci(), credential, limit, cursor)
       }
   }
 
@@ -402,7 +402,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getBackupInfo(backupKey, credential)
+        api.getBackupInfo(backupKey, SignalStore.account.requireAci(), credential)
           .map { it.usedSpace }
       }
   }
@@ -431,12 +431,12 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getBackupInfo(backupKey, credential)
+        api.getBackupInfo(backupKey, SignalStore.account.requireAci(), credential)
           .map { it to credential }
       }
       .then { pair ->
         val (info, credential) = pair
-        api.debugGetUploadedMediaItemMetadata(backupKey, credential)
+        api.debugGetUploadedMediaItemMetadata(backupKey, SignalStore.account.requireAci(), credential)
           .also { Log.i(TAG, "MediaItemMetadataResult: $it") }
           .map { mediaObjects ->
             BackupMetadata(
@@ -458,7 +458,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getMessageBackupUploadForm(backupKey, credential)
+        api.getMessageBackupUploadForm(backupKey, SignalStore.account.requireAci(), credential)
           .also { Log.i(TAG, "UploadFormResult: $it") }
       }
       .then { form ->
@@ -480,7 +480,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getBackupInfo(backupKey, credential)
+        api.getBackupInfo(backupKey, SignalStore.account.requireAci(), credential)
       }
       .then { info -> getCdnReadCredentials(info.cdn ?: Cdn.CDN_3.cdnNumber).map { it.headers to info } }
       .map { pair ->
@@ -496,7 +496,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getBackupInfo(backupKey, credential)
+        api.getBackupInfo(backupKey, SignalStore.account.requireAci(), credential)
       }
       .then { info -> getCdnReadCredentials(info.cdn ?: Cdn.CDN_3.cdnNumber).map { it.headers to info } }
       .then { pair ->
@@ -517,7 +517,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.debugGetUploadedMediaItemMetadata(backupKey, credential)
+        api.debugGetUploadedMediaItemMetadata(backupKey, SignalStore.account.requireAci(), credential)
       }
   }
 
@@ -530,7 +530,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getMediaUploadForm(backupKey, credential)
+        api.getMediaUploadForm(backupKey, SignalStore.account.requireAci(), credential)
       }
       .then { form ->
         api.getResumableUploadSpec(form, secretKey)
@@ -546,6 +546,7 @@ object BackupRepository {
       .then { credential ->
         api.archiveAttachmentMedia(
           backupKey = backupKey,
+          aci = SignalStore.account.requireAci(),
           serviceCredential = credential,
           item = request
         )
@@ -563,6 +564,7 @@ object BackupRepository {
         api
           .archiveAttachmentMedia(
             backupKey = backupKey,
+            aci = SignalStore.account.requireAci(),
             serviceCredential = credential,
             item = request
           )
@@ -596,6 +598,7 @@ object BackupRepository {
         api
           .archiveAttachmentMedia(
             backupKey = backupKey,
+            aci = SignalStore.account.requireAci(),
             serviceCredential = credential,
             items = requests
           )
@@ -637,6 +640,7 @@ object BackupRepository {
       .then { credential ->
         api.deleteArchivedMedia(
           backupKey = backupKey,
+          aci = SignalStore.account.requireAci(),
           serviceCredential = credential,
           mediaToDelete = mediaToDelete
         )
@@ -668,6 +672,7 @@ object BackupRepository {
       .then { credential ->
         api.deleteArchivedMedia(
           backupKey = backupKey,
+          aci = SignalStore.account.requireAci(),
           serviceCredential = credential,
           mediaToDelete = mediaToDelete
         )
@@ -697,6 +702,7 @@ object BackupRepository {
             .then { credential ->
               api.deleteArchivedMedia(
                 backupKey = backupKey,
+                aci = SignalStore.account.requireAci(),
                 serviceCredential = credential,
                 mediaToDelete = mediaToDelete
               )
@@ -726,6 +732,7 @@ object BackupRepository {
         api.getCdnReadCredentials(
           cdnNumber = cdnNumber,
           backupKey = backupKey,
+          aci = SignalStore.account.requireAci(),
           serviceCredential = credential
         )
       }
@@ -781,7 +788,7 @@ object BackupRepository {
 
     return initBackupAndFetchAuth(backupKey)
       .then { credential ->
-        api.getBackupInfo(backupKey, credential).map {
+        api.getBackupInfo(backupKey, SignalStore.account.requireAci(), credential).map {
           SignalStore.backup.usedBackupMediaSpace = it.usedSpace ?: 0L
           BackupDirectories(it.backupDir!!, it.mediaDir!!)
         }
@@ -883,7 +890,7 @@ object BackupRepository {
       return api
         .triggerBackupIdReservation(backupKey)
         .then { getAuthCredential() }
-        .then { credential -> api.setPublicKey(backupKey, credential).map { credential } }
+        .then { credential -> api.setPublicKey(backupKey, SignalStore.account.requireAci(), credential).map { credential } }
         .runIfSuccessful { SignalStore.backup.backupsInitialized = true }
         .runOnStatusCodeError(resetInitializedStateErrorAction)
     }
@@ -947,15 +954,17 @@ data class ArchivedMediaObject(val mediaId: String, val cdn: Int)
 data class BackupDirectories(val backupDir: String, val mediaDir: String)
 
 class ExportState(val backupTime: Long, val allowMediaBackup: Boolean) {
-  val recipientIds = HashSet<Long>()
-  val threadIds = HashSet<Long>()
+  val recipientIds: MutableSet<Long> = hashSetOf()
+  val threadIds: MutableSet<Long> = hashSetOf()
+  val localToRemoteCustomChatColors: MutableMap<Long, Int> = hashMapOf()
 }
 
-class BackupState(val backupKey: BackupKey) {
-  val backupToLocalRecipientId = HashMap<Long, RecipientId>()
-  val chatIdToLocalThreadId = HashMap<Long, Long>()
-  val chatIdToLocalRecipientId = HashMap<Long, RecipientId>()
-  val chatIdToBackupRecipientId = HashMap<Long, Long>()
+class ImportState(val backupKey: BackupKey) {
+  val remoteToLocalRecipientId: MutableMap<Long, RecipientId> = hashMapOf()
+  val chatIdToLocalThreadId: MutableMap<Long, Long> = hashMapOf()
+  val chatIdToLocalRecipientId: MutableMap<Long, RecipientId> = hashMapOf()
+  val chatIdToBackupRecipientId: MutableMap<Long, Long> = hashMapOf()
+  val remoteToLocalColorId: MutableMap<Long, Long> = hashMapOf()
 }
 
 class BackupMetadata(

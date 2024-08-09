@@ -8,7 +8,7 @@ dependencyResolutionManagement {
       version("androidx-activity", "1.8.2")
       version("androidx-camera", "1.3.4")
       version("androidx-fragment", "1.6.2")
-      version("androidx-lifecycle", "2.7.0")
+      version("androidx-lifecycle", "2.8.4")
       version("androidx-media3", "1.3.1")
       version("androidx-navigation", "2.7.6")
       version("androidx-window", "1.2.0")
@@ -81,6 +81,7 @@ dependencyResolutionManagement {
       library("androidx-lifecycle-viewmodel-savedstate", "androidx.lifecycle", "lifecycle-viewmodel-savedstate").versionRef("androidx-lifecycle")
       library("androidx-lifecycle-common-java8", "androidx.lifecycle", "lifecycle-common-java8").versionRef("androidx-lifecycle")
       library("androidx-lifecycle-reactivestreams-ktx", "androidx.lifecycle", "lifecycle-reactivestreams-ktx").versionRef("androidx-lifecycle")
+      library("androidx-lifecycle-runtime-compose", "androidx.lifecycle", "lifecycle-runtime-compose").versionRef("androidx-lifecycle")
       library("androidx-camera-core", "androidx.camera", "camera-core").versionRef("androidx-camera")
       library("androidx-camera-camera2", "androidx.camera", "camera-camera2").versionRef("androidx-camera")
       library("androidx-camera-extensions", "androidx.camera", "camera-extensions").versionRef("androidx-camera")
@@ -122,7 +123,7 @@ dependencyResolutionManagement {
       library("libsignal-client", "org.signal", "libsignal-client").versionRef("libsignal-client")
       library("libsignal-android", "org.signal", "libsignal-android").versionRef("libsignal-client")
       library("signal-aesgcmprovider", "org.signal:aesgcmprovider:0.0.3")
-      library("signal-ringrtc", "org.signal:ringrtc-android:2.44.4")
+      library("signal-ringrtc", "org.signal:ringrtc-android:2.46.0")
       library("signal-android-database-sqlcipher", "org.signal:sqlcipher-android:4.5.4-S2")
 
       // Third Party
@@ -180,6 +181,7 @@ dependencyResolutionManagement {
       version("androidx-test", "1.5.0")
       version("androidx-test-ext-junit", "1.1.5")
       version("robolectric", "4.10.3")
+      version("espresso", "3.4.0")
 
       library("junit-junit", "junit:junit:4.13.2")
       library("androidx-test-core", "androidx.test", "core").versionRef("androidx-test")
@@ -189,7 +191,7 @@ dependencyResolutionManagement {
       library("androidx-test-monitor", "androidx.test:monitor:1.6.1")
       library("androidx-test-orchestrator", "androidx.test:orchestrator:1.4.1")
       library("androidx-test-runner", "androidx.test", "runner").versionRef("androidx-test")
-      library("espresso-core", "androidx.test.espresso:espresso-core:3.4.0")
+      library("espresso-core", "androidx.test.espresso", "espresso-core").versionRef("espresso")
       library("mockito-core", "org.mockito:mockito-inline:4.6.1")
       library("mockito-kotlin", "org.mockito.kotlin:mockito-kotlin:4.0.0")
       library("mockito-android", "org.mockito:mockito-android:4.6.1")

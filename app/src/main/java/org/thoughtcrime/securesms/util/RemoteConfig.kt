@@ -961,7 +961,7 @@ object RemoteConfig {
   @JvmStatic
   @get:JvmName("useActiveCallManager")
   val useActiveCallManager: Boolean by remoteBoolean(
-    key = "android.calling.useActiveCallManager.5",
+    key = "android.calling.useActiveCallManager.6",
     defaultValue = false,
     hotSwappable = false
   )
@@ -1088,6 +1088,15 @@ object RemoteConfig {
   val backgroundMessageProcessForegroundDelay: Int by remoteInt(
     key = "android.messageProcessor.foregroundDelayMs",
     defaultValue = 300,
+    hotSwappable = true
+  )
+
+  /** Whether to use the new Banner system instead of the old Reminder system.  */
+  @JvmStatic
+  @get:JvmName("newBannerUi")
+  val newBannerUi: Boolean by remoteBoolean(
+    key = "android.newBannerUi",
+    defaultValue = false,
     hotSwappable = true
   )
 

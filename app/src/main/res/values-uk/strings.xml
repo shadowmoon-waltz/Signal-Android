@@ -42,20 +42,20 @@
   <!-- Removed by excludeNonTranslatables <string name="AlbumThumbnailView_plus" translatable="false">\+%d</string> -->
 
     <!-- ApplicationMigrationActivity -->
-    <string name="ApplicationMigrationActivity__signal_is_updating">Signal оновлюється…</string>
+    <string name="ApplicationMigrationActivity__signal_is_updating">Триває оновлення Signal…</string>
 
     <!-- ApplicationPreferencesActivity -->
-    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Ви ще не встановили фразу-пароль!</string>
-    <string name="ApplicationPreferencesActivity_disable_passphrase">Вимкнути фразу-пароль?</string>
-    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Це назавжди розблокує Signal та сповіщення повідомлень.</string>
-    <string name="ApplicationPreferencesActivity_disable">Вимкнути</string>
+    <string name="ApplicationPreferenceActivity_you_havent_set_a_passphrase_yet">Ви ще не встановили пароль!</string>
+    <string name="ApplicationPreferencesActivity_disable_passphrase">Деактивувати пароль?</string>
+    <string name="ApplicationPreferencesActivity_this_will_permanently_unlock_signal_and_message_notifications">Signal і сповіщення про повідомлення буде безстроково розблоковано.</string>
+    <string name="ApplicationPreferencesActivity_disable">Деактивувати</string>
     <string name="ApplicationPreferencesActivity_error_connecting_to_server">Помилка під час з\'єднання із сервером!</string>
     <string name="ApplicationPreferencesActivity_pins_are_required_for_registration_lock">PIN-коди необхідні для блокування реєстрації. Для вимкнення PIN-кодів спершу необхідно вимкнути блокування реєстрації.</string>
-    <string name="ApplicationPreferencesActivity_pin_created">PIN створений.</string>
-    <string name="ApplicationPreferencesActivity_pin_disabled">PIN вимкнений.</string>
-    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Записати кодову фразу для платежів</string>
-    <string name="ApplicationPreferencesActivity_record_phrase">Записати кодову фразу</string>
-    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Перед вимкненням PIN-коду ви маєте створити кодову фразу, щоб упевнитись, що ви зможете відновити свій платіжний профіль.</string>
+    <string name="ApplicationPreferencesActivity_pin_created">PIN-код створено.</string>
+    <string name="ApplicationPreferencesActivity_pin_disabled">PIN-код вимкнено.</string>
+    <string name="ApplicationPreferencesActivity_record_payments_recovery_phrase">Запишіть кодову фразу для платіжного профілю</string>
+    <string name="ApplicationPreferencesActivity_record_phrase">Запишіть фразу</string>
+    <string name="ApplicationPreferencesActivity_before_you_can_disable_your_pin">Перед вимкненням PIN-коду ви повинні записати кодову фразу для свого платіжного профілю, щоб мати змогу відновити його.</string>
 
     <!-- NumericKeyboardView -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__1" translatable="false">1</string> -->
@@ -69,7 +69,7 @@
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__9" translatable="false">9</string> -->
   <!-- Removed by excludeNonTranslatables <string name="NumericKeyboardView__0" translatable="false">0</string> -->
     <!-- Back button on numeric keyboard -->
-    <string name="NumericKeyboardView__backspace">Повернутись</string>
+    <string name="NumericKeyboardView__backspace">Клавіша повернення</string>
 
     <!-- DraftDatabase -->
     <string name="DraftDatabase_Draft_image_snippet">(зображення)</string>
@@ -88,11 +88,25 @@
     <!-- Text for a button prompting users to allow Signal access to their gallery storage -->
     <string name="AttachmentKeyboard_allow_access">Надати доступ</string>
     <string name="AttachmentKeyboard_payment">Платіж</string>
+    <!-- Text in a button that allows users to manage which media Signal has access to -->
+    <string name="AttachmentKeyboard_manage">Manage</string>
+    <!-- Option in menu to select more photos that Signal will have access to -->
+    <string name="AttachmentKeyboard_select_more_photos">Select more photos</string>
+    <!-- Option in menu to go to settings -->
+    <string name="AttachmentKeyboard_go_to_settings">Go to Settings</string>
+    <!-- Text explaining that Signal has limited access to photos -->
+    <string name="AttachmentKeyboard_signal_has_limited_access">Signal has limited access to photos or videos</string>
+    <!-- Text shown when user has given no photos for Signal to access and an explanation on how to change those permissions -->
+    <string name="AttachmentKeyboard_no_photos_found">No photos found, select photos and videos to appear here or change permissions</string>
+
+    <!-- MediaGalleryFragment -->
+    <!-- Text describing that no photos or videos are currently found in the gallery and that Signal can only access media that the user allows -->
+    <string name="MediaGalleryFragment__no_photos_found">No photos or videos found. Signal only has access to photos and videos you selected.</string>
 
     <!-- AttachmentManager -->
-    <string name="AttachmentManager_cant_open_media_selection">Неможливо знайти програму для обрання медіа.</string>
-    <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">Signal потребує дозволу \"Зберігання\" для прикріплення фото, відео та аудіо, але наразі доступу немає. Будь ласка, перейдіть до налаштувань додатку, оберіть \"Дозволи\", та увімкніть \"Зберігання\".</string>
-    <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">Signal потребує дозволу \"Контакти\", щоб прикріпити контакт, але наразі доступу немає. Будь ласка, перейдіть до налаштувань додатку, оберіть \"Дозволи\", та увімкніть \"Контакти\".</string>
+    <string name="AttachmentManager_cant_open_media_selection">Не знайдено застосунок для вибору медіафайлів.</string>
+    <string name="AttachmentManager_signal_requires_the_external_storage_permission_in_order_to_attach_photos_videos_or_audio">Signal потребує доступу до пам\'яті, щоб прикріплювати фото, відео та аудіо, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи» та виберіть «Пам\'ять».</string>
+    <string name="AttachmentManager_signal_requires_contacts_permission_in_order_to_attach_contact_information">Signal потребує доступу до «Контактів», щоб прикріплювати контактну інформацію, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи», та виберіть «Пам\'ять».</string>
     <string name="AttachmentManager_signal_requires_location_information_in_order_to_attach_a_location">Signal потребує доступу до місцеположення, щоб його прикріпити, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи», та виберіть «Геодані».</string>
 
     <!-- Dialog title asking users for location permission -->
@@ -104,11 +118,11 @@
     <!-- Toast text explaining Signal\'s need for location access -->
     <string name="AttachmentManager_signal_needs_location_access">Signal потребує доступу до геоданих, щоб поділитися місцеположенням.</string>
     <!-- Dialog title asking users for gallery storage permission -->
-    <string name="AttachmentManager_signal_allow_storage">Надайте доступ до сховища</string>
+    <string name="AttachmentManager_signal_allow_storage">Надайте доступ до пам\'яті</string>
     <!-- Dialog description that will explain the steps needed to give gallery storage permission -->
     <string name="AttachmentManager_signal_to_show_photos">Для показу фото і відео:</string>
     <!-- Toast text explaining Signal\'s need for storage access -->
-    <string name="AttachmentManager_signal_needs_storage_access">Signal потребує доступу до сховища, щоб показувати ваші фото і відео.</string>
+    <string name="AttachmentManager_signal_needs_storage_access">Signal needs access to show your photos and videos.</string>
 
     <!-- Alert dialog title to show the recipient has not activated payments -->
     <string name="AttachmentManager__not_activated_payments">%1$s не активував/-ла платежі </string>
@@ -120,11 +134,11 @@
     <string name="AttachmentManager__cancel">Закрити</string>
 
     <!-- AttachmentUploadJob -->
-    <string name="AttachmentUploadJob_uploading_media">Вивантаження медіа…</string>
-    <string name="AttachmentUploadJob_compressing_video_start">Стиснення відео…</string>
+    <string name="AttachmentUploadJob_uploading_media">Триває вивантаження медіа…</string>
+    <string name="AttachmentUploadJob_compressing_video_start">Триває стиснення відео…</string>
 
     <!-- BackgroundMessageRetriever -->
-    <string name="BackgroundMessageRetriever_checking_for_messages">Перевірка нових повідомлень…</string>
+    <string name="BackgroundMessageRetriever_checking_for_messages">Перевірка наявності нових повідомлень…</string>
 
     <!-- Fcm notifications -->
     <!-- Notification we show when there may be messages for you, but we cannot connect to the server to check -->
@@ -184,19 +198,19 @@
     <!-- BlockUnblockDialog -->
     <string name="BlockUnblockDialog_block_and_leave_s">Заблокувати і покинути «%1$s»?</string>
     <string name="BlockUnblockDialog_block_s">Заблокувати %1$s?</string>
-    <string name="BlockUnblockDialog_you_will_no_longer_receive_messages_or_updates">Ви більше не отримуватимете повідомлень чи оновлень з цієї групи, та її учасники не зможуть додати вас до цієї групи знов.</string>
-    <string name="BlockUnblockDialog_group_members_wont_be_able_to_add_you">Учасники групи більше не зможуть додавати вас до цієї групи.</string>
-    <string name="BlockUnblockDialog_group_members_will_be_able_to_add_you">Учасники групи зможуть знову додати вас в неї.</string>
+    <string name="BlockUnblockDialog_you_will_no_longer_receive_messages_or_updates">Ви перестанете отримувати повідомлення та оновлення від цієї групи, а її учасники не зможуть знов додати вас до цієї групи.</string>
+    <string name="BlockUnblockDialog_group_members_wont_be_able_to_add_you">Учасники не зможуть знов додати вас до цієї групи.</string>
+    <string name="BlockUnblockDialog_group_members_will_be_able_to_add_you">Учасники зможуть знов додати вас до цієї групи.</string>
     <!-- Text that is shown when unblocking a Signal contact -->
     <string name="BlockUnblockDialog_you_will_be_able_to_call_and_message_each_other">Ви зможете надсилати повідомлення й дзвонити цьому користувачу. Користувач зможе надсилати повідомлення й дзвонити вам, а також бачити ваше ім\'я та фото.</string>
     <!-- Text that is shown when unblocking an SMS contact -->
-    <string name="BlockUnblockDialog_you_will_be_able_to_message_each_other">Ви зможете надсилати повідомлення один одному.</string>
+    <string name="BlockUnblockDialog_you_will_be_able_to_message_each_other">Ви зможете обмінюватися повідомленнями.</string>
     <string name="BlockUnblockDialog_blocked_people_wont_be_able_to_call_you_or_send_you_messages">Заблоковані користувачі не зможуть вам дзвонити й надсилати повідомлення.</string>
     <string name="BlockUnblockDialog_blocked_people_wont_be_able_to_send_you_messages">Заблоковані користувачі не зможуть надсилати вам повідомлення.</string>
     <!-- Message shown on block dialog when blocking the Signal release notes recipient -->
     <string name="BlockUnblockDialog_block_getting_signal_updates_and_news">Вимкнути отримання оновлень і новин Signal.</string>
     <!-- Message shown on unblock dialog when unblocking the Signal release notes recipient -->
-    <string name="BlockUnblockDialog_resume_getting_signal_updates_and_news">Увімкнути отримання оновлень та новин Signal.</string>
+    <string name="BlockUnblockDialog_resume_getting_signal_updates_and_news">Відновити отримання повідомлень про оновлення та новин Signal.</string>
     <string name="BlockUnblockDialog_unblock_s">Розблокувати %1$s?</string>
     <string name="BlockUnblockDialog_block">Заблокувати</string>
     <string name="BlockUnblockDialog_block_and_leave">Заблокувати і покинути</string>
@@ -249,8 +263,8 @@
     <string name="CameraFragment__video_recording_is_not_supported_on_your_device">Ваш пристрій не підтримує запис відео</string>
 
     <!-- CameraXFragment -->
-    <string name="CameraXFragment_tap_for_photo_hold_for_video">Натисніть для фото, тримайте для відео</string>
-    <string name="CameraXFragment_capture_description">Захопити</string>
+    <string name="CameraXFragment_tap_for_photo_hold_for_video">Торкніться для фото, утримуйте для відео</string>
+    <string name="CameraXFragment_capture_description">Зняти</string>
     <string name="CameraXFragment_change_camera_description">Змінити камеру</string>
     <string name="CameraXFragment_open_gallery_description">Відкрити галерею</string>
     <!-- Button text asking for access to camera permissions -->
@@ -297,10 +311,10 @@
         <item quantity="many">Ви можете поділитися максимум із %1$d чатами.</item>
         <item quantity="other">Ви можете поділитися максимум із %1$d чату.</item>
     </plurals>
-    <string name="CameraContacts_select_signal_recipients">Оберіть одержувача Signal</string>
+    <string name="CameraContacts_select_signal_recipients">Оберіть одержувачів у Signal</string>
     <string name="CameraContacts_no_signal_contacts">Контактів Signal немає</string>
-    <string name="CameraContacts_you_can_only_use_the_camera_button">Ви можете використовувати кнопку Камера лише для відправлення фото контактам Signal. </string>
-    <string name="CameraContacts_cant_find_who_youre_looking_for">Не можете знайти, кого шукали?</string>
+    <string name="CameraContacts_you_can_only_use_the_camera_button">Ви можете використовувати кнопку камери лише для надсилання фото контактам Signal. </string>
+    <string name="CameraContacts_cant_find_who_youre_looking_for">Не знайшли тих, кого шукали?</string>
     <string name="CameraContacts_invite_a_contact_to_join_signal">Запросити контакт приєднатися до Signal</string>
     <string name="CameraContacts__menu_search">Пошук</string>
 
@@ -308,7 +322,7 @@
     <!-- Title for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed -->
     <string name="CensorshipCircumventionMegaphone_turn_off_censorship_circumvention">Вимкнути обхід цензури?</string>
     <!-- Body for an alert that shows at the bottom of the chat list letting people know that circumvention is no longer needed -->
-    <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Тепер ви можете приєднатись до Signal напряму для отримання кращого досвіду.</string>
+    <string name="CensorshipCircumventionMegaphone_you_can_now_connect_to_the_signal_service">Тепер ви можете з\'єднатися з Signal напряму, щоб застосунком було зручніше користуватися.</string>
     <!-- Action to prompt the user to disable circumvention since it is no longer needed -->
     <string name="CensorshipCircumventionMegaphone_turn_off">Вимкнути</string>
     <!-- Action to prompt the user to dismiss the alert at the bottom of the chat list -->
@@ -316,15 +330,15 @@
 
     <!-- ClientDeprecatedActivity -->
     <string name="ClientDeprecatedActivity_update_signal">Оновити Signal</string>
-    <string name="ClientDeprecatedActivity_this_version_of_the_app_is_no_longer_supported">Ця версія застосунку більше не підтримується. Щоб продовжити надсилати та отримувати повідомлення, оновіться до останньої версії.</string>
+    <string name="ClientDeprecatedActivity_this_version_of_the_app_is_no_longer_supported">Ця версія застосунку вже не підтримується. Щоб і надалі надсилати та отримувати повідомлення, оновіться до останньої версії.</string>
     <string name="ClientDeprecatedActivity_update">Оновити</string>
     <string name="ClientDeprecatedActivity_dont_update">Не оновлювати</string>
-    <string name="ClientDeprecatedActivity_warning">Попередження</string>
+    <string name="ClientDeprecatedActivity_warning">Увага</string>
     <string name="ClientDeprecatedActivity_your_version_of_signal_has_expired_you_can_view_your_message_history">Ваша версія Signal застаріла. Ви можете переглядати історію повідомлень, але не зможете відправляти чи отримувати повідомлення допоки не оновите застосунок.</string>
 
     <!-- CommunicationActions -->
-    <string name="CommunicationActions_no_browser_found">Браузера не знайдено.</string>
-    <string name="CommunicationActions_send_email">Відправити електронний лист</string>
+    <string name="CommunicationActions_no_browser_found">Браузер не знайдено.</string>
+    <string name="CommunicationActions_send_email">Відправити електронного листа</string>
     <string name="CommunicationActions_a_cellular_call_is_already_in_progress">Зараз триває мобільний виклик.</string>
     <string name="CommunicationActions_start_voice_call">Почати аудіовиклик?</string>
     <string name="CommunicationActions_cancel">Закрити</string>
@@ -364,8 +378,8 @@
     <!-- Toolbar title for contact name edit activity -->
     <string name="ContactNameEditActivity_given_name">Ім\'я</string>
     <string name="ContactNameEditActivity_family_name">Прізвище</string>
-    <string name="ContactNameEditActivity_prefix">Звання</string>
-    <string name="ContactNameEditActivity_suffix">Титул</string>
+    <string name="ContactNameEditActivity_prefix">Звертання</string>
+    <string name="ContactNameEditActivity_suffix">Додаток до повного імені</string>
     <string name="ContactNameEditActivity_middle_name">Друге ім\'я</string>
 
     <!-- ContactShareEditActivity -->
@@ -379,22 +393,22 @@
     <!-- Content descrption for name edit button on contact share edit activity -->
     <string name="ContactShareEditActivity__edit_name">Редагувати ім’я</string>
     <!-- Content description for user avatar in edit activity -->
-    <string name="ContactShareEditActivity__avatar">Фото</string>
+    <string name="ContactShareEditActivity__avatar">Зображення</string>
 
     <!-- ConversationItem -->
-    <string name="ConversationItem_error_not_sent_tap_for_details">Не відправлено, торкніться для деталей</string>
-    <string name="ConversationItem_error_partially_not_delivered">Частково відправлено, торкніться для деталей</string>
-    <string name="ConversationItem_error_network_not_delivered">Не вдалося відправити</string>
+    <string name="ConversationItem_error_not_sent_tap_for_details">Не надіслано, торкніться для інформації</string>
+    <string name="ConversationItem_error_partially_not_delivered">Надіслано частково, торкніться для інформації</string>
+    <string name="ConversationItem_error_network_not_delivered">Не вдалося надіслати</string>
     <string name="ConversationItem_group_action_left">Користувач %1$s покинув групу.</string>
-    <string name="ConversationItem_send_paused">Відправлення призупинене</string>
-    <string name="ConversationItem_click_to_approve_unencrypted_sms_dialog_title">Скористатися незашифрованим SMS як запасним варіантом?</string>
-    <string name="ConversationItem_click_to_approve_unencrypted_mms_dialog_title">Скористатися незашифрованим MMS як запасним варіантом?</string>
-    <string name="ConversationItem_click_to_approve_unencrypted_dialog_message">Це повідомлення <b>не</b> буде зашифровано, оскільки одержувач більше не користується Signal.\n\nНадіслати незахищене повідомлення?</string>
-    <string name="ConversationItem_unable_to_open_media">Неможливо знайти застосунок для відкриття цього медіа.</string>
-    <string name="ConversationItem_copied_text">Скопійовано %1$s</string>
-    <string name="ConversationItem_from_s">від %1$s</string>
+    <string name="ConversationItem_send_paused">Надсилання зупинено</string>
+    <string name="ConversationItem_click_to_approve_unencrypted_sms_dialog_title">Надіслати натомість незашифроване SMS-повідомлення?</string>
+    <string name="ConversationItem_click_to_approve_unencrypted_mms_dialog_title">Надіслати натомість незашифроване MMS-повідомлення?</string>
+    <string name="ConversationItem_click_to_approve_unencrypted_dialog_message">Це повідомлення <b>не буде</b> зашифровано, оскільки одержувач більше не користується Signal.\n\nНадіслати незахищене повідомлення?</string>
+    <string name="ConversationItem_unable_to_open_media">Не знайдено застосунок, який міг би відкрити цей медіафайл.</string>
+    <string name="ConversationItem_copied_text">Скопійовано: %1$s</string>
+    <string name="ConversationItem_from_s">від користувача %1$s</string>
     <string name="ConversationItem_to_s">у %1$s</string>
-    <string name="ConversationItem_read_more">  Читати ще</string>
+    <string name="ConversationItem_read_more">  Читати далі</string>
     <string name="ConversationItem_download_more">  Завантажити ще</string>
     <string name="ConversationItem_pending">  Очікування</string>
     <string name="ConversationItem_this_message_was_deleted">Це повідомлення видалено.</string>
@@ -425,8 +439,8 @@
     <!-- Accessibility text associated with image button to send an edited message. -->
     <string name="ConversationActivity_send_edit">Надіслати редагування</string>
     <string name="ConversationActivity_compose_message">Написати повідомлення</string>
-    <string name="ConversationActivity_sorry_there_was_an_error_setting_your_attachment">Вибачте, сталася помилка при обробці вкладення.</string>
-    <string name="ConversationActivity_recipient_is_not_a_valid_sms_or_email_address_exclamation">Адреса одержувача SMS чи e-mail хибна!</string>
+    <string name="ConversationActivity_sorry_there_was_an_error_setting_your_attachment">На жаль, під час додавання вкладення сталася помилка.</string>
+    <string name="ConversationActivity_recipient_is_not_a_valid_sms_or_email_address_exclamation">Цьому одержувачу неможливо надіслати SMS-повідомлення / імейл!</string>
     <string name="ConversationActivity_message_is_empty_exclamation">Повідомлення порожнє!</string>
     <string name="ConversationActivity_group_members">Учасники групи</string>
     <!-- Warning dialog text shown to user if they try to send a message edit that is too old where %1$d is replaced with the amount of hours, e.g. 3 -->
@@ -444,48 +458,48 @@
         <item quantity="other">Це повідомлення можна змінити тільки %1$d разу.</item>
     </plurals>
 
-    <string name="ConversationActivity_invalid_recipient">Неприпустимий отримувач!</string>
-    <string name="ConversationActivity_added_to_home_screen">Додано до домашнього екрану</string>
+    <string name="ConversationActivity_invalid_recipient">Недійсний одержувач!</string>
+    <string name="ConversationActivity_added_to_home_screen">Додано на домашній екран</string>
     <string name="ConversationActivity_calls_not_supported">Виклики не підтримуються</string>
-    <string name="ConversationActivity_this_device_does_not_appear_to_support_dial_actions">Здається, цей пристрій не підтримує виклики.</string>
-    <string name="ConversationActivity_transport_insecure_sms">Незахищене SMS</string>
+    <string name="ConversationActivity_this_device_does_not_appear_to_support_dial_actions">Імовірно, цей пристрій не підтримує виклики.</string>
+    <string name="ConversationActivity_transport_insecure_sms">Незахищене SMS-повідомлення</string>
     <!-- A title for the option to send an SMS with a placeholder to put the name of their SIM card -->
-    <string name="ConversationActivity_transport_insecure_sms_with_sim">Незахищене SMS (%1$s)</string>
-    <string name="ConversationActivity_transport_insecure_mms">Незахищене MMS</string>
+    <string name="ConversationActivity_transport_insecure_sms_with_sim">Незахищене SMS-повідомлення (%1$s)</string>
+    <string name="ConversationActivity_transport_insecure_mms">Незахищене MMS-повідомлення</string>
     <!-- A title for the option to send an SMS with a placeholder to put the name of their SIM card -->
-    <string name="ConversationActivity_transport_signal">Повідомлення Signal</string>
+    <string name="ConversationActivity_transport_signal">Повідомлення через Signal</string>
     <!-- The content description for button to send a message in a conversation -->
     <string name="ConversationActivity_send_message_content_description">Надіслати повідомлення</string>
     <string name="ConversationActivity_lets_switch_to_signal">Пора переходити в Signal %1$s</string>
-    <string name="ConversationActivity_specify_recipient">Будь ласка, виберіть контакт</string>
-    <string name="ConversationActivity_attachment_exceeds_size_limits">Вкладення перевищує обмеження за розміром для типу повідомлення, яке ви надсилаєте.</string>
+    <string name="ConversationActivity_specify_recipient">Оберіть контакт</string>
+    <string name="ConversationActivity_attachment_exceeds_size_limits">Розмір вкладення перевищує максимальний для повідомлення того типу, який ви надсилаєте.</string>
     <string name="ConversationActivity_unable_to_record_audio">Неможливо записати аудіо!</string>
-    <string name="ConversationActivity_you_cant_send_messages_to_this_group">Ви не зможете відправляти повідомлення в цю групу, оскільки більше не є її членом.</string>
+    <string name="ConversationActivity_you_cant_send_messages_to_this_group">Ви не можете надсилати повідомлення в цій групі, бо ви вже не її учасник.</string>
     <string name="ConversationActivity_only_s_can_send_messages">Повідомлення можуть надсилати тільки %1$s.</string>
     <string name="ConversationActivity_admins">адміністратори</string>
-    <string name="ConversationActivity_message_an_admin">Написати повідомлення адміністратору</string>
+    <string name="ConversationActivity_message_an_admin">Написати адміністратору</string>
     <string name="ConversationActivity_cant_start_group_call">Неможливо почати груповий виклик</string>
     <string name="ConversationActivity_only_admins_of_this_group_can_start_a_call">Починати виклики можуть тільки адміністратори цієї групи.</string>
-    <string name="ConversationActivity_there_is_no_app_available_to_handle_this_link_on_your_device">Немає програми на вашому пристрої, що може відкрити це посилання.</string>
-    <string name="ConversationActivity_your_request_to_join_has_been_sent_to_the_group_admin">Ваш запит на приєднання надіслано до адміністраторів групи. Ви отримаєте повідомлення, коли вони відреагують.</string>
+    <string name="ConversationActivity_there_is_no_app_available_to_handle_this_link_on_your_device">На вашому пристрої немає застосунку, що може відкрити це посилання.</string>
+    <string name="ConversationActivity_your_request_to_join_has_been_sent_to_the_group_admin">Ваш запит на приєднання надіслано адміністраторам групи. Ви отримаєте сповіщення, коли його розглянуть.</string>
     <string name="ConversationActivity_cancel_request">Відкликати запит</string>
 
     <!-- Dialog title asking users for microphone permission -->
     <string name="ConversationActivity_allow_access_microphone">Надайте доступ до мікрофона</string>
     <!-- Dialog description that will explain the steps needed to give microphone permissions -->
-    <string name="ConversationActivity_signal_to_send_audio_messages">Щоб надсилати голосові повідомлення:</string>
+    <string name="ConversationActivity_signal_to_send_audio_messages">To send voice messages:</string>
     <!-- Alert dialog description asking for microphone permission in order to send voice messages -->
     <string name="ConversationActivity_to_send_voice_messages_allow_signal_access_to_your_microphone">Щоб надсилати голосові повідомлення, надайте Signal доступ до мікрофона.</string>
     <!-- Toast text explaining Signal\'s need for microphone access -->
     <string name="ConversationActivity_signal_needs_microphone_access_voice_message">Signal потребує доступу до мікрофона для запису голосового повідомлення.</string>
-    <string name="ConversationActivity_signal_requires_the_microphone_permission_in_order_to_send_audio_messages">Signal потребує дозволу «Мікрофон», щоб відправляти аудіоповідомлення, але наразі доступу немає. Будь ласка, перейдіть до налаштувань застосунку, оберіть «Дозволи» та увімкніть «Мікрофон».</string>
+    <string name="ConversationActivity_signal_requires_the_microphone_permission_in_order_to_send_audio_messages">Для надсилання голосових повідомлень Signal потребує доступу до мікрофона, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи» та виберіть мікрофон.</string>
 
     <string name="ConversationActivity_signal_needs_the_microphone_and_camera_permissions_in_order_to_call_s">Для виклику користувача %1$s Signal потребує доступу до мікрофона й камери, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи» та виберіть мікрофон і камеру.</string>
     <string name="ConversationActivity_to_capture_photos_and_video_allow_signal_access_to_the_camera">Щоб знімати фото і відео, надайте Signal доступ до камери.</string>
     <string name="ConversationActivity_signal_needs_the_camera_permission_to_take_photos_or_video">Signal потребує доступу до камери, щоб знімати фото або відео, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи» та виберіть камеру.</string>
     <string name="ConversationActivity_signal_needs_camera_permissions_to_take_photos_or_video">Signal потребує доступу до камери, щоб знімати фото або відео</string>
     <string name="ConversationActivity_enable_the_microphone_permission_to_capture_videos_with_sound">Надайте доступ до мікрофона, щоб записувати відео зі звуком.</string>
-    <string name="ConversationActivity_signal_needs_the_recording_permissions_to_capture_video">Signal потрібен дозвіл на доступ до мікрофона, щоб знімати відео, але воно було вами відхилено. Будь ласка, натисніть «Продовжити», щоб перейти в налаштування програми, відкрийте \"Дозволи\" і включіть \"Мікрофон\" та \"Камера\".</string>
+    <string name="ConversationActivity_signal_needs_the_recording_permissions_to_capture_video">Signal потребує доступу до мікрофона, щоб записувати відео, але ви вирішили не надавати його. Перейдіть у налаштування застосунку, відкрийте «Дозволи» і виберіть мікрофон і камеру.</string>
     <string name="ConversationActivity_signal_needs_recording_permissions_to_capture_video">Signal потребує доступу до мікрофона, щоб записувати відео.</string>
 
     <string name="ConversationActivity_quoted_contact_message">%1$s %2$s</string>
@@ -512,11 +526,11 @@
     <string name="ConversationActivity_signal_needs_microphone_access_voice_call">Signal потребує доступу до мікрофона, щоб почати виклик.</string>
 
 
-    <string name="ConversationActivity_join">Приєднатись</string>
+    <string name="ConversationActivity_join">Приєднатися</string>
     <!-- Button text for an active group call but the call is currently full and unjoinable -->
-    <string name="ConversationActivity_full">Переповнено</string>
+    <string name="ConversationActivity_full">Немає місць</string>
 
-    <string name="ConversationActivity_error_sending_media">Помилка відправлення медіа</string>
+    <string name="ConversationActivity_error_sending_media">Помилка під час надсилання медіафайлів</string>
 
     <!-- Message shown when opening an MMS group conversation with SMS disabled and there are no exported messages -->
     <string name="ConversationActivity__sms_messaging_is_no_longer_supported">Signal більше не підтримує SMS-повідомлення.</string>
@@ -548,45 +562,45 @@
 
     <!-- ConversationFragment -->
     <!-- Toast text when contacts activity is not found -->
-    <string name="ConversationFragment__contacts_app_not_found">Програму з контактами не знайдено.</string>
+    <string name="ConversationFragment__contacts_app_not_found">Застосунок для керування контактами не знайдено.</string>
     <plurals name="ConversationFragment_delete_selected_messages">
         <item quantity="one">Видалити вибране повідомлення?</item>
         <item quantity="few">Видалити вибрані повідомлення?</item>
         <item quantity="many">Видалити вибрані повідомлення?</item>
         <item quantity="other">Видалити вибрані повідомлення?</item>
     </plurals>
-    <string name="ConversationFragment_save_to_sd_card">Зберегти на носій?</string>
+    <string name="ConversationFragment_save_to_sd_card">Зберегти на пристрої?</string>
     <plurals name="ConversationFragment_saving_n_media_to_storage_warning">
-        <item quantity="one">Якщо зберегти цей файл до сховища, інші застосунки на вашому пристрої також отримають до нього доступ.\n\nПродовжити?</item>
-        <item quantity="few">Якщо зберегти всі %1$d файли до сховища, інші застосунки на вашому пристрої також отримають до них доступ.\n\nПродовжити?</item>
-        <item quantity="many">Якщо зберегти всі %1$d файлів до сховища, інші застосунки на вашому пристрої також отримають до них доступ.\n\nПродовжити?</item>
-        <item quantity="other">Якщо зберегти всі %1$d файлу до сховища, інші застосунки на вашому пристрої також отримають до них доступ.\n\nПродовжити?</item>
+        <item quantity="one">Якщо зберегти цей медіафайл у пам\'яті, інші застосунки на вашому пристрої також матимуть до нього доступ.\n\nПродовжити?</item>
+        <item quantity="few">Якщо зберегти всі %1$d файли в пам\'яті, інші застосунки на вашому пристрої також матимуть до них доступ.\n\nПродовжити?</item>
+        <item quantity="many">Якщо зберегти всі %1$d файлів у пам\'яті, інші застосунки на вашому пристрої також матимуть до них доступ.\n\nПродовжити?</item>
+        <item quantity="other">Якщо зберегти всі %1$d файлу в пам\'яті, інші застосунки на вашому пристрої також матимуть до них доступ.\n\nПродовжити?</item>
     </plurals>
     <plurals name="ConversationFragment_error_while_saving_attachments_to_sd_card">
-        <item quantity="one">Під час збереження вкладення до сховища сталася помилка!</item>
-        <item quantity="few">Під час збереження вкладень до сховища сталася помилка!</item>
-        <item quantity="many">Під час збереження вкладень до сховища сталася помилка!</item>
-        <item quantity="other">Під час збереження вкладень до сховища сталася помилка!</item>
+        <item quantity="one">Під час збереження вкладення в пам\'яті сталася помилка!</item>
+        <item quantity="few">Під час збереження вкладень у пам\'яті сталася помилка!</item>
+        <item quantity="many">Під час збереження вкладень у пам\'яті сталася помилка!</item>
+        <item quantity="other">Під час збереження вкладень у пам\'яті сталася помилка!</item>
     </plurals>
-    <string name="ConversationFragment_unable_to_write_to_sd_card_exclamation">Неможливо записати до сховища!</string>
+    <string name="ConversationFragment_unable_to_write_to_sd_card_exclamation">Неможливо зберегти в пам\'яті!</string>
     <plurals name="ConversationFragment_saving_n_attachments">
-        <item quantity="one">Зберігаємо вкладення</item>
-        <item quantity="few">Зберігаємо %1$d вкладення</item>
-        <item quantity="many">Зберігаємо %1$d вкладень</item>
-        <item quantity="other">Зберігаємо %1$d вкладення</item>
+        <item quantity="one">Триває збереження вкладення</item>
+        <item quantity="few">Триває збереження %1$d вкладень</item>
+        <item quantity="many">Триває збереження %1$d вкладень</item>
+        <item quantity="other">Триває збереження %1$d вкладення</item>
     </plurals>
     <plurals name="ConversationFragment_saving_n_attachments_to_sd_card">
-        <item quantity="one">Зберігаємо вкладення до сховища…</item>
-        <item quantity="few">Зберігаємо %1$d вкладення до сховища…</item>
-        <item quantity="many">Зберігаємо %1$d вкладень до сховища…</item>
-        <item quantity="other">Зберігаємо %1$d вкладення до сховища…</item>
+        <item quantity="one">Триває збереження вкладення в пам\'яті…</item>
+        <item quantity="few">Триває збереження %1$d вкладень у пам\'яті…</item>
+        <item quantity="many">Триває збереження %1$d вкладень у пам\'яті…</item>
+        <item quantity="other">Триває збереження %1$d вкладення в пам\'яті…</item>
     </plurals>
     <string name="ConversationFragment_pending">Очікування…</string>
     <string name="ConversationFragment_push">інтернет (Signal)</string>
-    <string name="ConversationFragment_mms">MMS</string>
-    <string name="ConversationFragment_sms">SMS</string>
-    <string name="ConversationFragment_deleting">Видалення</string>
-    <string name="ConversationFragment_deleting_messages">Видалення повідомлень…</string>
+    <string name="ConversationFragment_mms">MMS-повідомлення</string>
+    <string name="ConversationFragment_sms">SMS-повідомлення</string>
+    <string name="ConversationFragment_deleting">Триває видалення</string>
+    <string name="ConversationFragment_deleting_messages">Триває видалення повідомлень…</string>
     <string name="ConversationFragment_delete_for_me">Видалити для мене</string>
     <string name="ConversationFragment_delete_for_everyone">Видалити для всіх</string>
     <!-- Dialog button for deleting one or more note-to-self messages only on this device, leaving that same message intact on other devices. -->
@@ -596,16 +610,16 @@
     <!-- Dialog button for deleting one or more note-to-self messages on all linked devices. -->
     <string name="ConversationFragment_delete_everywhere">Видалити всюди</string>
     <string name="ConversationFragment_this_message_will_be_deleted_for_everyone_in_the_conversation">Це повідомлення буде видалено для всіх у цьому чаті, якщо вони використовують найновішу версію Signal. Учасники чату побачать, що ви видалили повідомлення.</string>
-    <string name="ConversationFragment_quoted_message_not_found">Оригінальне повідомлення не знайдено</string>
-    <string name="ConversationFragment_quoted_message_no_longer_available">Оригінальне повідомлення більше не доступно</string>
+    <string name="ConversationFragment_quoted_message_not_found">Початкове повідомлення не знайдено</string>
+    <string name="ConversationFragment_quoted_message_no_longer_available">Початкове повідомлення вже недоступне</string>
     <string name="ConversationFragment_failed_to_open_message">Не вдалося відкрити повідомлення</string>
-    <string name="ConversationFragment_you_can_swipe_to_the_right_reply">Ви можете потягнути будь-яке повідомлення праворуч для швидкої відповіді</string>
-    <string name="ConversationFragment_you_can_swipe_to_the_left_reply">Ви можете потягнути будь-яке повідомлення ліворуч для швидкої відповіді</string>
+    <string name="ConversationFragment_you_can_swipe_to_the_right_reply">Щоб швидко відповісти, свайпніть повідомлення вправо</string>
+    <string name="ConversationFragment_you_can_swipe_to_the_left_reply">Щоб швидко відповісти, свайпніть повідомлення вліво</string>
     <string name="ConversationFragment_view_once_media_is_deleted_after_sending">Одноразові медіафайли видаляються після надсилання</string>
     <string name="ConversationFragment_you_already_viewed_this_message">Ви вже переглянули це повідомлення</string>
     <string name="ConversationFragment__you_can_add_notes_for_yourself_in_this_conversation">У цьому чаті ви можете робити для себе нотатки. Якщо ваш акаунт має зв\'язані пристрої, нові нотатки буде синхронізовано.</string>
-    <string name="ConversationFragment__d_group_members_have_the_same_name">%1$d учасників групи мають однакові імена.</string>
-    <string name="ConversationFragment__tap_to_review">Натисніть для перегляду</string>
+    <string name="ConversationFragment__d_group_members_have_the_same_name">Кількість учасників групи з однаковими іменами: %1$d.</string>
+    <string name="ConversationFragment__tap_to_review">Торкніться для перегляду</string>
     <!-- The body of a banner that can show up at the top of a chat, letting the user know that you have two contacts with the same name -->
     <string name="ConversationFragment__review_banner_body">Ця людина має таке ж ім\'я, як і ваш інший контакт</string>
     <string name="ConversationFragment_contact_us">Зв\'яжіться з нами</string>
@@ -616,7 +630,7 @@
     <!-- Dialog title for block group link join requests -->
     <string name="ConversationFragment__block_request">Заблокувати запит?</string>
     <!-- Dialog message for block group link join requests -->
-    <string name="ConversationFragment__s_will_not_be_able_to_join_or_request_to_join_this_group_via_the_group_link">%1$s не зможе приєднатись до групи або надсилати запит на приєднання за посиланням групи. Його можна додати до групи вручну.</string>
+    <string name="ConversationFragment__s_will_not_be_able_to_join_or_request_to_join_this_group_via_the_group_link">Користувач %1$s не зможе ні приєднатися до групи, ні надіслати запит на приєднання, скориставшись посиланням на групу. Але цього користувача можна додати до групи вручну.</string>
     <!-- Dialog confirm block request button -->
     <string name="ConversationFragment__block_request_button">Заблокувати запит</string>
     <!-- Dialog cancel block request button -->
@@ -706,7 +720,7 @@
         <item quantity="many">%1$d вибраних чатів буде остаточно видалено з усіх ваших пристроїв.</item>
         <item quantity="other">%1$d вибраного чату буде остаточно видалено з усіх ваших пристроїв.</item>
     </plurals>
-    <string name="ConversationListFragment_deleting">Видалення</string>
+    <string name="ConversationListFragment_deleting">Триває видалення</string>
     <plurals name="ConversationListFragment_deleting_selected_conversations">
         <item quantity="one">Видаляємо вибраний чат…</item>
         <item quantity="few">Видаляємо вибрані чати…</item>
@@ -749,18 +763,18 @@
     <string name="ConversationListFragment_select_all">Вибрати все</string>
     <!-- Screen title shown when selecting multiple items from a list like conversation threads or call logs. -->
     <plurals name="ConversationListFragment_s_selected">
-        <item quantity="one">%1$d обрано</item>
-        <item quantity="few">%1$d обрано</item>
-        <item quantity="many">%1$d обрано</item>
-        <item quantity="other">%1$d обрано</item>
+        <item quantity="one">Вибрано %1$d</item>
+        <item quantity="few">Вибрано %1$d</item>
+        <item quantity="many">Вибрано %1$d</item>
+        <item quantity="other">Вибрано %1$d</item>
     </plurals>
 
     <!-- Show in conversation list overflow menu to open selection bottom sheet -->
     <string name="ConversationListFragment__notification_profile">Профіль сповіщень</string>
     <!-- Tooltip shown after you have created your first notification profile -->
-    <string name="ConversationListFragment__turn_your_notification_profile_on_or_off_here">Вмикайте та вимикайте профілі сповіщень тут.</string>
+    <string name="ConversationListFragment__turn_your_notification_profile_on_or_off_here">Тут можна вмикати та вимикати профілі сповіщень.</string>
     <!-- Message shown in top toast to indicate the named profile is on -->
-    <string name="ConversationListFragment__s_on">%1$s увімкнено</string>
+    <string name="ConversationListFragment__s_on">«%1$s» ввімкнено</string>
     <!-- -->
     <string name="ConversationListFragment_username_recovered_toast">Ваш QR-код і посилання було скинуто. Ваше ім’я користувача: %1$s</string>
 
@@ -775,7 +789,7 @@
     <string name="ConversationTitleView_you">Ви</string>
 
     <!-- ConversationTypingView -->
-    <string name="ConversationTypingView__plus_d">+%1$d</string>
+    <string name="ConversationTypingView__plus_d">+ %1$d</string>
 
     <!-- Title for a reminder bottom sheet to users who have re-registered that they need to go back to re-link their devices. -->
     <string name="RelinkDevicesReminderFragment__relink_your_devices">Прив\'яжіть пристрої повторно</string>
@@ -792,8 +806,8 @@
     <!-- CreateProfileActivity -->
     <string name="CreateProfileActivity__profile">Профіль</string>
     <string name="CreateProfileActivity_error_setting_profile_photo">Не вдалося встановити фото профілю</string>
-    <string name="CreateProfileActivity_problem_setting_profile">Не вдалося встановити профіль</string>
-    <string name="CreateProfileActivity_set_up_your_profile">Налаштувати ваш профайл</string>
+    <string name="CreateProfileActivity_problem_setting_profile">Не вдається налаштувати профіль</string>
+    <string name="CreateProfileActivity_set_up_your_profile">Налаштуйте профіль</string>
     <string name="CreateProfileActivity_signal_profiles_are_end_to_end_encrypted">Ваш профіль і зміни в ньому бачать ваші співрозмовники, контакти й групи.</string>
     <string name="CreateProfileActivity_set_avatar_description">Установити зображення профілю</string>
 
@@ -813,11 +827,11 @@
 
     <!-- ChooseBackupFragment -->
     <string name="ChooseBackupFragment__restore_from_backup">Відновити з резервної копії?</string>
-    <string name="ChooseBackupFragment__restore_your_messages_and_media">Відновити ваші повідомлення та медіа-файли із локальної резервної копії. Якщо Ви не бажаєте цього робити зараз, це можна зробити потім.</string>
+    <string name="ChooseBackupFragment__restore_your_messages_and_media">Відновіть повідомлення та медіафайли з локальної резервної копії. Якщо ви не відновите їх зараз, то не зможете зробити цього пізніше.</string>
     <string name="ChooseBackupFragment__icon_content_description">Значок відновлення з резервної копії</string>
     <string name="ChooseBackupFragment__choose_backup">Обрати резервну копію</string>
-    <string name="ChooseBackupFragment__learn_more">Дізнатися більше</string>
-    <string name="ChooseBackupFragment__no_file_browser_available">Немає менеджера файлів</string>
+    <string name="ChooseBackupFragment__learn_more">Докладніше</string>
+    <string name="ChooseBackupFragment__no_file_browser_available">Файловий менеджер не знайдено</string>
 
     <!-- RestoreBackupFragment -->
     <string name="RestoreBackupFragment__restore_complete">Відновлення завершено</string>
@@ -825,11 +839,11 @@
     <string name="RestoreBackupFragment__choose_folder">Обрати папку</string>
     <string name="RestoreBackupFragment__not_now">Не зараз</string>
     <!-- Couldn\'t find the selected backup -->
-    <string name="RestoreBackupFragment__backup_not_found">Резервну копію не знайдено.</string>
+    <string name="RestoreBackupFragment__backup_not_found">Резервної копії не знайдено.</string>
     <!-- Couldn\'t read the selected backup -->
-    <string name="RestoreBackupFragment__backup_could_not_be_read">Резервну копію неможливо прочитати.</string>
+    <string name="RestoreBackupFragment__backup_could_not_be_read">Резервну копію неможливо зчитати.</string>
     <!-- Backup has an unsupported file extension -->
-    <string name="RestoreBackupFragment__backup_has_a_bad_extension">Резервна копія має хибне розширення.</string>
+    <string name="RestoreBackupFragment__backup_has_a_bad_extension">Резервна копія має непідтримуване розширення.</string>
 
     <!-- CreateBackupBottomSheet -->
     <!-- Bottom sheet title -->
@@ -841,29 +855,64 @@
     <!-- Action button to dismiss sheet and back up now -->
     <string name="CreateBackupBottomSheet__back_up_now">Створити копію зараз</string>
 
+    <!-- Headline text for a bottom sheet dialog shown when the restoration of the media backup fails. -->
+    <string name="RestoreMediaFailedBottomSheet__Cant_restore_media">Can\'t restore media</string>
+    <!-- Help text for a bottom sheet dialog shown when the restoration of the media backup fails, displayed while the app is calculating the amount of disk space required. -->
+    <string name="RestoreMediaFailedBottomSheet__Your_device_does_not_have_enough_free_space_placeholder">Your device does not have enough free space. Free up storage space to restore your media.\n\nIf you choose “Skip restore” the media in your backup will be deleted the next time your device completes a new backup.</string>
+    <!-- Help text for a bottom sheet dialog shown when the restoration of the media backup fails, displayed once the app knows how much disk space is required. The placeholder is a filesize, such as "1.23 GB." -->
+    <string name="RestoreMediaFailedBottomSheet__Your_device_does_not_have_enough_free_space">Your device does not have enough free space. Free up %1$s of space to restore your media.\n\nIf you choose “Skip restore” the media in your backup will be deleted the next time your device completes a new backup.</string>
+    <!-- Confirmation button to dismiss bottom sheet dialog without aborting the restoration process. -->
+    <string name="RestoreMediaFailedBottomSheet__Okay">OK</string>
+    <!-- Negative button on a bottom sheet dialog shown when the restoration of the media backup fails. This aborts the restoration process. -->
+    <string name="RestoreMediaFailedBottomSheet__Skip_restore">Skip restore</string>
+    <!-- Accessibility content description for the "Backup Error" icon -->
+    <string name="RestoreMediaFailedBottomSheet__Backup_error_icon_content_description">Backup error icon</string>
+
+    <!-- Banner text that is displayed at the top of the app when trying to restore more media than the device\'s memory has space for. -->
+    <string name="RestoreMediaErrorBanner__Free_up_storage_space">Free up storage space to restore your media.</string>
+    <!-- Banner text that is displayed at the top of the app when trying to restore more media than the device\'s memory has space for. The placeholder is a filesize, such as "1.23 GB." -->
+    <string name="RestoreMediaErrorBanner__Free_up_of_space">Free up %1$s of space to restore your media.</string>
+
+    <!-- Remote media restoration in-process status title. -->
+    <string name="RestoreMediaReminder__Restoring_media">Restoring media</string>
+    <!-- Remote media restoration in-process description. The first to placeholders are filesizes, such as "865 MB" and "2.3 GB". The final placeholder is a whole number representing the percentage progress. -->
+    <string name="RestoreMediaReminder__Progress_filesize">%1$s of %2$s (%3$d%%)</string>
+    <!-- Remote media restoration paused status title. -->
+    <string name="RestoreMediaReminder__Restoring_media_paused">Restoring media paused</string>
+    <!-- Remote media restoration paused status description for when the restore is paused because unmetered connectivity, such as WiFi, is unavailable. -->
+    <string name="RestoreMediaReminder__Waiting_for_Wifi">Waiting for WiFi…</string>
+    <!-- Remote media restoration paused status description for when the restore is paused because internet is unavailable. -->
+    <string name="RestoreMediaReminder__Waiting_for_internet_connection">Waiting for Internet connection…</string>
+    <!-- Remote media restoration paused status description for when the device\'s battery is low -->
+    <string name="RestoreMediaReminder__low_battery">Low battery. Charge your device.</string>
+    <!-- Remote media restoration call to action when the device is out of space. The placeholder string is a file size, such as "1.23 GB". -->
+    <string name="RestoreMediaReminder__Free_up_space">Free up %1$s to restore your media.</string>
+    <!-- Button label to abort media restoration -->
+    <string name="RestoreMediaReminder__Skip_restore">Skip restore</string>
+
     <!-- BackupsPreferenceFragment -->
     <string name="BackupsPreferenceFragment__chat_backups">Резервне копіювання чатів</string>
     <string name="BackupsPreferenceFragment__backups_are_encrypted_with_a_passphrase">Резервні копії шифруються за допомогою пароля і зберігаються на вашому пристрої.</string>
     <string name="BackupsPreferenceFragment__create_backup">Створити резервну копію</string>
-    <string name="BackupsPreferenceFragment__last_backup">Остання резервна копія: %1$s</string>
+    <string name="BackupsPreferenceFragment__last_backup">Найновіша резервна копія: %1$s</string>
     <string name="BackupsPreferenceFragment__backup_folder">Папка для резервних копій</string>
     <!-- Title for a preference item allowing the user to selected the hour of the day when their chats are backed up. -->
-    <string name="BackupsPreferenceFragment__backup_time">Час резервного копіювання</string>
+    <string name="BackupsPreferenceFragment__backup_time">Час створення резервної копії</string>
     <string name="BackupsPreferenceFragment__verify_backup_passphrase">Перевірити пароль</string>
     <string name="BackupsPreferenceFragment__test_your_backup_passphrase">Введіть пароль від своєї резервної копії, щоб перевірити його правильність</string>
     <string name="BackupsPreferenceFragment__turn_on">Увімкнути</string>
     <string name="BackupsPreferenceFragment__turn_off">Вимкнути</string>
     <string name="BackupsPreferenceFragment__to_restore_a_backup">"Щоб відновити інформацію з резервної копії, встановіть застосунок Signal ще раз. Відкрийте його й натисніть «Відновити з резервної копії», потім виберіть збережений файл резервної копії. %1$s"</string>
-    <string name="BackupsPreferenceFragment__learn_more">Дізнатися більше</string>
-    <string name="BackupsPreferenceFragment__in_progress">В процесі…</string>
+    <string name="BackupsPreferenceFragment__learn_more">Докладніше</string>
+    <string name="BackupsPreferenceFragment__in_progress">Триває створення…</string>
     <!-- Status text shown in backup preferences when verifying a backup -->
-    <string name="BackupsPreferenceFragment__verifying_backup">Перевіряємо резервну копію…</string>
-    <string name="BackupsPreferenceFragment__d_so_far">%1$d на цей час…</string>
+    <string name="BackupsPreferenceFragment__verifying_backup">Перевірка резервної копії…</string>
+    <string name="BackupsPreferenceFragment__d_so_far">Уже %1$d…</string>
     <!-- Show percentage of completion of backup -->
-    <string name="BackupsPreferenceFragment__s_so_far">%1$s%% на цей час…</string>
-    <string name="BackupsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Signal потребує дозволу \"Зберігання\", щоб створювати резервні копії, але наразі доступу немає. Будь ласка, перейдіть до налаштувань додатку, оберіть \"Дозволи\", та увімкніть \"Зберігання\".</string>
+    <string name="BackupsPreferenceFragment__s_so_far">Уже %1$s%%…</string>
+    <string name="BackupsPreferenceFragment_signal_requires_external_storage_permission_in_order_to_create_backups">Signal потребує доступу до зовнішньої пам\'яті, щоб створювати резервні копії, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи», та виберіть «Пам\'ять».</string>
     <!-- Title of dialog shown when picking the time to perform a chat backup -->
-    <string name="BackupsPreferenceFragment__set_backup_time">Установити час резервного копіювання</string>
+    <string name="BackupsPreferenceFragment__set_backup_time">Установіть час створення резервної копії</string>
 
 
     <!-- CustomDefaultPreference -->
@@ -872,11 +921,11 @@
     <string name="CustomDefaultPreference_none">Жодного</string>
 
     <!-- AvatarSelectionBottomSheetDialogFragment -->
-    <string name="AvatarSelectionBottomSheetDialogFragment__taking_a_photo_requires_the_camera_permission">Щоб зробити фото, потрібен дозвіл на доступ до камери.</string>
-    <string name="AvatarSelectionBottomSheetDialogFragment__viewing_your_gallery_requires_the_storage_permission">Для перегляду галереї потрібен дозвіл на доступ до сховища.</string>
+    <string name="AvatarSelectionBottomSheetDialogFragment__taking_a_photo_requires_the_camera_permission">Щоб робити фото, потрібно надати доступ до камери.</string>
+    <string name="AvatarSelectionBottomSheetDialogFragment__viewing_your_gallery_requires_the_storage_permission">Щоб відкрити галерею, потрібно надати доступ до пам\'яті.</string>
 
     <!-- DateUtils -->
-    <string name="DateUtils_just_now">Щойно</string>
+    <string name="DateUtils_just_now">щойно</string>
     <string name="DateUtils_minutes_ago">%1$d хв</string>
     <string name="DateUtils_today">Сьогодні</string>
     <string name="DateUtils_yesterday">Учора</string>
@@ -944,7 +993,7 @@
     <!-- Bottom sheet description explaining that future messages on linked devices will be in sync with your phone but previous messages will not appear -->
     <string name="LinkDeviceFragment__signal_messages_are_synchronized">Повідомлення в Signal буде синхронізовано із застосунком Signal на вашому мобільному телефоні після зв\'язування. Попередню історію повідомлень не буде перенесено на новий зв\'язаний пристрій.</string>
     <!-- Bottom sheet description explaining that for non-desktop/iPad devices, they should go to %s to download Signal where %s is Signal\'s website -->
-    <string name="LinkDeviceFragment__on_other_device_visit_signal">Щоб установити Signal на іншому пристрої, зайдіть з нього на сторінку %1$s</string>
+    <string name="LinkDeviceFragment__on_other_device_visit_signal">On the device you want to link, visit %1$s to install Signal</string>
   <!-- Removed by excludeNonTranslatables <string name="LinkDeviceFragment__signal_download_url" translatable="false">signal.org/download</string> -->
     <!-- Header title listing out current linked devices -->
     <string name="LinkDeviceFragment__my_linked_devices">Мої зв\'язані пристрої</string>
@@ -986,29 +1035,29 @@
     <string name="AddLinkDeviceFragment__retry">Сканувати знову</string>
 
     <!-- DeviceListActivity -->
-    <string name="DeviceListActivity_unlink_s">Від\'єднати \'%1$s\'?</string>
+    <string name="DeviceListActivity_unlink_s">Відв\'язати «%1$s»?</string>
     <string name="DeviceListActivity_by_unlinking_this_device_it_will_no_longer_be_able_to_send_or_receive">Якщо відв\'язати цей пристрій, він більше не зможе надсилати та отримувати повідомлення.</string>
-    <string name="DeviceListActivity_network_connection_failed">Проблема з\'єднання</string>
-    <string name="DeviceListActivity_try_again">Спробуйте ще</string>
-    <string name="DeviceListActivity_unlinking_device">Від\'єднання пристрою…</string>
-    <string name="DeviceListActivity_unlinking_device_no_ellipsis">Від\'єднання пристрою</string>
-    <string name="DeviceListActivity_network_failed">Помилка мережі!</string>
+    <string name="DeviceListActivity_network_connection_failed">Зв\'язок з мережею відсутній</string>
+    <string name="DeviceListActivity_try_again">Повторіть спробу</string>
+    <string name="DeviceListActivity_unlinking_device">Триває відв\'язування пристрою…</string>
+    <string name="DeviceListActivity_unlinking_device_no_ellipsis">Триває відв\'язування пристрою</string>
+    <string name="DeviceListActivity_network_failed">Збій у мережі!</string>
 
     <!-- DeviceListItem -->
-    <string name="DeviceListItem_unnamed_device">Неназваний пристрій</string>
+    <string name="DeviceListItem_unnamed_device">Пристрій без назви</string>
     <string name="DeviceListItem_linked_s">Зв\'язано %1$s</string>
     <string name="DeviceListItem_last_active_s">Остання активність: %1$s</string>
     <string name="DeviceListItem_today">Сьогодні</string>
 
     <!-- DocumentView -->
-    <string name="DocumentView_unnamed_file">Безіменний файл</string>
+    <string name="DocumentView_unnamed_file">Файл без назви</string>
 
     <!-- DozeReminder -->
-    <string name="DozeReminder_optimize_for_missing_play_services">Оптимізувати для випадку відсутності служб Google Play</string>
-    <string name="DozeReminder_this_device_does_not_support_play_services_tap_to_disable_system_battery">Цей пристрій не підтримує служби Google Play. Торкніться, щоб вимкнути режим ощадливого споживання енергії Signal і отримувати повідомлення коли Signal працює у фоні.</string>
+    <string name="DozeReminder_optimize_for_missing_play_services">Оптимізувати у зв\'язку з відсутністю сервісів Google Play</string>
+    <string name="DozeReminder_this_device_does_not_support_play_services_tap_to_disable_system_battery">Цей пристрій не підтримує сервіси Google Play. Торкніться, щоб вимкнути режим економії заряду акумулятора, у якому Signal не може завантажувати повідомлення, коли застосунок неактивний.</string>
 
     <!-- ExpiredBuildReminder -->
-    <string name="ExpiredBuildReminder_this_version_of_signal_has_expired">Ваша версія Signal застаріла. Оновіть зараз, щоб відправляти та отримувати повідомлення.</string>
+    <string name="ExpiredBuildReminder_this_version_of_signal_has_expired">Ваша версія Signal застаріла. Оновіть застосунок, щоб надсилати та отримувати повідомлення.</string>
     <string name="ExpiredBuildReminder_update_now">Оновити зараз</string>
 
     <!-- PendingGroupJoinRequestsReminder -->
@@ -1018,7 +1067,7 @@
         <item quantity="many">Не розглянуто %1$d запитів на приєднання.</item>
         <item quantity="other">Не розглянуто %1$d запиту на приєднання.</item>
     </plurals>
-    <string name="PendingGroupJoinRequestsReminder_view">Детальніше</string>
+    <string name="PendingGroupJoinRequestsReminder_view">Переглянути</string>
 
     <!-- GcmRefreshJob -->
     <string name="GcmRefreshJob_Permanent_Signal_communication_failure">Постійний збій зв\'язку Signal!</string>
@@ -1026,30 +1075,30 @@
 
 
     <!-- GiphyActivity -->
-    <string name="GiphyActivity_error_while_retrieving_full_resolution_gif">Помилка при отриманні GIF у повному розширенні</string>
+    <string name="GiphyActivity_error_while_retrieving_full_resolution_gif">Помилка при завантаження GIF-файлу високої якості</string>
 
     <!-- GiphyFragmentPageAdapter -->
 
     <!-- AddToGroupActivity -->
     <string name="AddToGroupActivity_add_member">Додати учасника?</string>
     <string name="AddToGroupActivity_add_s_to_s">Додати користувача %1$s до «%2$s»?</string>
-    <string name="AddToGroupActivity_s_added_to_s">\"%1$s\" доданий до \"%2$s\".</string>
+    <string name="AddToGroupActivity_s_added_to_s">Користувача %1$s додано до «%2$s».</string>
     <string name="AddToGroupActivity_add_to_group">Додати до групи</string>
     <string name="AddToGroupActivity_add_to_groups">Додати до груп</string>
-    <string name="AddToGroupActivity_this_person_cant_be_added_to_legacy_groups">Ця людина не може бути додана до застарілих груп.</string>
+    <string name="AddToGroupActivity_this_person_cant_be_added_to_legacy_groups">Цю людину неможливо додати до застарілих груп.</string>
     <string name="AddToGroupActivity_add">Додати</string>
     <string name="AddToGroupActivity_add_to_a_group">Додати до групи</string>
 
     <!-- ChooseNewAdminActivity -->
-    <string name="ChooseNewAdminActivity_choose_new_admin">Виберіть нового адміністратора</string>
+    <string name="ChooseNewAdminActivity_choose_new_admin">Оберіть нового адміністратора</string>
     <string name="ChooseNewAdminActivity_done">Готово</string>
-    <string name="ChooseNewAdminActivity_you_left">Ви вийшли з «%1$s».</string>
+    <string name="ChooseNewAdminActivity_you_left">Ви вийшли з групи «%1$s».</string>
 
     <!-- GroupMembersDialog -->
     <string name="GroupMembersDialog_you">Ви</string>
 
     <!-- GV2 access levels -->
-    <string name="GroupManagement_access_level_anyone">Будь-хто</string>
+    <string name="GroupManagement_access_level_anyone">Усі</string>
     <string name="GroupManagement_access_level_all_members">Усі учасники</string>
     <string name="GroupManagement_access_level_only_admins">Тільки адміністратори</string>
     <string name="GroupManagement_access_level_no_one">Ніхто</string>
@@ -1576,7 +1625,7 @@
     <string name="MediaOverviewActivity_Newest">Найновіші</string>
     <string name="MediaOverviewActivity_Oldest">Найдавніші</string>
     <string name="MediaOverviewActivity_Storage_used">Розмір</string>
-    <string name="MediaOverviewActivity_All_storage_use">Загальне використання сховища</string>
+    <string name="MediaOverviewActivity_All_storage_use">Загальне використання пам\'яті</string>
     <string name="MediaOverviewActivity_Grid_view_description">Сітка</string>
     <string name="MediaOverviewActivity_List_view_description">Список</string>
     <string name="MediaOverviewActivity_Selected_description">Обрані</string>
@@ -1610,8 +1659,8 @@
 
     <string name="MediaOverviewActivity_sent_by_s">Надіслав користувач %1$s</string>
     <string name="MediaOverviewActivity_sent_by_you">Надіслали ви</string>
-    <string name="MediaOverviewActivity_sent_by_s_to_s">Надіслано користувачем %1$s у «%2$s»</string>
-    <string name="MediaOverviewActivity_sent_by_you_to_s">Надіслали ви в «%1$s»</string>
+    <string name="MediaOverviewActivity_sent_by_s_to_s">Надіслано користувачем %1$s у чаті «%2$s»</string>
+    <string name="MediaOverviewActivity_sent_by_you_to_s">Надіслали ви в чаті «%1$s»</string>
 
     <!-- Megaphones -->
     <string name="Megaphones_remind_me_later">Нагадати пізніше</string>
@@ -1690,7 +1739,7 @@
     <string name="MessageRecord_you_couldnt_be_added_to_the_new_group_and_have_been_invited_to_join">Вас не вдалося додати до нової групи, тому вас запрошено приєднатися до неї.</string>
     <string name="MessageRecord_chat_session_refreshed">Сесію чату оновлено</string>
     <plurals name="MessageRecord_members_couldnt_be_added_to_the_new_group_and_have_been_invited">
-        <item quantity="one">Не вдалося додати учасника до нової групи. Йому було надіслано запрошення.</item>
+        <item quantity="one">Не вдалося додати %1$s учасника до нової групи. Йому було надіслано запрошення.</item>
         <item quantity="few">Не вдалося додати %1$s учасників до нової групи. Їм було надіслано запрошення.</item>
         <item quantity="many">Не вдалося додати %1$s учасників до нової групи. Їм було надіслано запрошення.</item>
         <item quantity="other">Не вдалося додати %1$s учасника до нової групи. Їм було надіслано запрошення.</item>
@@ -1717,7 +1766,7 @@
 
     <!-- GV2 member additions -->
     <string name="MessageRecord_you_added_s">Ви додали %1$s.</string>
-    <string name="MessageRecord_s_added_s">%1$s додав %2$s.</string>
+    <string name="MessageRecord_s_added_s">Користувач %1$s додав користувача %2$s.</string>
     <string name="MessageRecord_s_added_you">Користувач %1$s додав вас до групи.</string>
     <string name="MessageRecord_you_joined_the_group">Ви приєдналися до групи.</string>
     <string name="MessageRecord_s_joined_the_group">%1$s приєдналися до групи.</string>
@@ -1806,12 +1855,12 @@
     <string name="MessageRecord_the_group_group_avatar_has_been_changed">Змінилося зображення групи.</string>
 
     <!-- GV2 attribute access level change -->
-    <string name="MessageRecord_you_changed_who_can_edit_group_info_to_s">Ви вибрали, хто може редагувати інформацію групи, на \"%1$s\".</string>
+    <string name="MessageRecord_you_changed_who_can_edit_group_info_to_s">%1$s тепер можуть редагувати інформацію про групу, оскільки ви змінили налаштування.</string>
     <string name="MessageRecord_s_changed_who_can_edit_group_info_to_s">%2$s тепер можуть редагувати інформацію про групу, оскільки користувач %1$s змінив налаштування.</string>
     <string name="MessageRecord_who_can_edit_group_info_has_been_changed_to_s">%1$s тепер можуть редагувати інформацію про групу.</string>
 
     <!-- GV2 membership access level change -->
-    <string name="MessageRecord_you_changed_who_can_edit_group_membership_to_s">Ви вибрали, хто може редагувати членство в групі, на \"%1$s\".</string>
+    <string name="MessageRecord_you_changed_who_can_edit_group_membership_to_s">%1$s тепер можуть змінювати склад групи, оскільки ви змінили налаштування.</string>
     <string name="MessageRecord_s_changed_who_can_edit_group_membership_to_s">%2$s тепер можуть змінювати склад групи, оскільки користувач %1$s змінив налаштування.</string>
     <string name="MessageRecord_who_can_edit_group_membership_has_been_changed_to_s">%1$s тепер можуть змінювати склад групи.</string>
 
@@ -2856,8 +2905,8 @@
     <string name="MediaPreviewActivity_you">Ви</string>
     <string name="MediaPreviewActivity_unssuported_media_type">Непідтримуваний тип медіа</string>
     <string name="MediaPreviewActivity_draft">Чернетка</string>
-    <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signal потребує дозволу \"Зберігання\", щоб зберігати файли, але наразі доступу немає. Будь ласка, перейдіть до налаштувань додатку, оберіть \"Дозволи\", та увімкніть \"Зберігання\".</string>
-    <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Без доступу до файлової системи зберегти файли неможливо</string>
+    <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signal потребує доступу до зовнішньої пам\'яті, щоб зберігати файли, але його не надано. Перейдіть у налаштування застосунку, відкрийте «Дозволи» та виберіть «Пам\'ять».</string>
+    <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Не надано відповідні дозволи, тому неможливо зберегти файли в зовнішній пам\'яті</string>
     <string name="MediaPreviewActivity_media_delete_confirmation_title">Видалити повідомлення?</string>
     <string name="MediaPreviewActivity_media_delete_confirmation_message">Це повідомлення буде остаточно виалено.</string>
     <string name="MediaPreviewActivity_s_to_s">%1$s до %2$s</string>
@@ -2944,7 +2993,7 @@
     <string name="NotificationChannel_channel_messages">Повідомлення</string>
     <string name="NotificationChannel_calls">Виклики</string>
     <string name="NotificationChannel_failures">Відмови</string>
-    <string name="NotificationChannel_backups">Резервне копіювання</string>
+    <string name="NotificationChannel_backups">Резервні копії</string>
     <string name="NotificationChannel_locked_status">Статус блокування</string>
     <string name="NotificationChannel_app_updates">Оновлення додатку</string>
     <string name="NotificationChannel_other">Інший</string>
@@ -3671,8 +3720,8 @@
     <string name="preferences__mmsc_password">Пароль MMSC</string>
     <string name="preferences__sms_delivery_reports">Звіти про доставку SMS</string>
     <string name="preferences__request_a_delivery_report_for_each_sms_message_you_send">Запитувати звіт про доставку для кожного відісланого вами SMS</string>
-    <string name="preferences__data_and_storage">Дані та сховище</string>
-    <string name="preferences__storage">Сховище</string>
+    <string name="preferences__data_and_storage">Дані та пам\'ять</string>
+    <string name="preferences__storage">Пам\'ять</string>
     <string name="preferences__payments">Платежі</string>
     <!-- Privacy settings payments section description -->
     <string name="preferences__payment_lock">Захист платежів</string>
@@ -3731,12 +3780,12 @@
     <string name="preferences_chats__when_roaming">Під час роумінгу</string>
     <string name="preferences_chats__media_auto_download">Автозавантаження медіа</string>
     <string name="preferences_chats__message_history">Історія повідомлень</string>
-    <string name="preferences_storage__storage_usage">Використання сховища</string>
+    <string name="preferences_storage__storage_usage">Використання пам\'яті</string>
     <string name="preferences_storage__photos">Фото</string>
     <string name="preferences_storage__videos">Відео</string>
     <string name="preferences_storage__files">Файли</string>
     <string name="preferences_storage__audio">Аудіо</string>
-    <string name="preferences_storage__review_storage">Переглянути сховище файлів</string>
+    <string name="preferences_storage__review_storage">Переглянути файли в пам\'яті</string>
     <string name="preferences_storage__delete_older_messages">Видаляти старіші повідомлення?</string>
     <!-- Dialog title shown when selecting delete message history from manage storage -->
     <string name="preferences_storage__delete_message_history">Видалити історію повідомлень?</string>
@@ -3770,13 +3819,13 @@
 
     <string name="preferences_storage__custom">Своя кількість</string>
     <string name="preferences_advanced__use_system_emoji">Використовувати системні емоджі</string>
-    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Ретранслювати всі виклики через сервер Signal, щоби ваш контакт не міг розкрити вашу IP-адресу. Увімкнення цієї функції знизить якість виклику.</string>
+    <string name="preferences_advanced__relay_all_calls_through_the_signal_server_to_avoid_revealing_your_ip_address">Ретранслювати всі виклики через сервер Signal, щоб не розкривати контактам своєї IP-адреси. Увімкнення цієї функції знизить якість викликів.</string>
     <string name="preferences_advanced__always_relay_calls">Завжди ретранслювати виклики</string>
     <!-- Privacy settings payments section title -->
     <string name="preferences_app_protection__payments">Платежі</string>
     <string name="preferences_chats__chats">Чати</string>
     <string name="preferences_app_updates__title">Оновлення додатку</string>
-    <string name="preferences_data_and_storage__manage_storage">Керування сховищем</string>
+    <string name="preferences_data_and_storage__manage_storage">Керування пам\'яттю</string>
     <string name="preferences_data_and_storage__use_less_data_for_calls">Економити трафік під час викликів</string>
     <string name="preferences_data_and_storage__never">Ніколи</string>
     <string name="preferences_data_and_storage__wifi_and_mobile_data">Wi-Fi та мобільний інтернет</string>
@@ -3925,7 +3974,7 @@
     <!-- Phone calls permission row description -->
     <string name="GrantPermissionsFragment__make_registering_easier">Спростіть процес реєстрації і ввімкніть додаткові функції викликів.</string>
     <!-- Storage permission row title -->
-    <string name="GrantPermissionsFragment__storage">Сховище</string>
+    <string name="GrantPermissionsFragment__storage">Пам\'ять</string>
     <!-- Storage permission row description -->
     <string name="GrantPermissionsFragment__send_photos_videos_and_files">Надсилайте фото, відео й інші файли зі свого пристрою.</string>
 
@@ -3934,6 +3983,10 @@
     <string name="PermissionDeniedBottomSheet__1_tap_settings_below">1. Торкніться кнопки «Налаштування»</string>
     <!-- Sheet describing step 2 on how to give permissions by checking the permissions button in settings where %s will be replaced with an image of a checked button -->
     <string name="PermissionDeniedBottomSheet__2_allow_permission">2. %1$s Надайте дозвіл</string>
+    <!-- Sheet describing step 2 on how to give permissions by tapping permissions in their settings -->
+    <string name="PermissionDeniedBottomSheet__2_tap_permissions">2. Tap “Permissions”</string>
+    <!-- Sheet describing step 3 on how to give permissions for photos and videos in settings where %s will be replaced with an image of a checked button -->
+    <string name="PermissionDeniedBottomSheet__3_allow_permission">3. %1$s Allow the “Photos and videos” permission</string>
     <!-- Label for button at the bottom of the sheet which opens the system permission settings -->
     <string name="PermissionDeniedBottomSheet__settings">Налаштування</string>
 
@@ -4388,7 +4441,7 @@
     <string name="Permissions_not_now">Не зараз</string>
     <string name="SQLCipherMigrationHelper_migrating_signal_database">Міграція бази даних Signal</string>
     <string name="enter_backup_passphrase_dialog__backup_passphrase">Пароль</string>
-    <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Резервна копія буду збережена у зовнішньому сховищі та зашифрована за допомогою наведеної нижче фрази-паролю. Ви повинні використати її для відновлення резервної копії.</string>
+    <string name="backup_enable_dialog__backups_will_be_saved_to_external_storage_and_encrypted_with_the_passphrase_below_you_must_have_this_passphrase_in_order_to_restore_a_backup">Резервну копію буде збережено в зовнішній пам\'яті та зашифровано за допомогою цього паролю. Ви повинні будете ввести його для відновлення даних з резервної копії.</string>
     <string name="backup_enable_dialog__you_must_have_this_passphrase">Вам знадобиться цей пароль, щоб відновити дані з резервної копії.</string>
     <string name="backup_enable_dialog__folder">Папка</string>
     <string name="backup_enable_dialog__i_have_written_down_this_passphrase">У мене збережено цей пароль. Без нього відновлення з резервної копії неможливе.</string>
@@ -4422,7 +4475,7 @@
     <string name="BackupDialog_copied_to_clipboard">Скопійовано в буфер обміну</string>
     <string name="BackupDialog_no_file_picker_available">Відсутня програма для вибору файлів.</string>
     <string name="BackupDialog_enter_backup_passphrase_to_verify">Ваш пароль від резервної копії</string>
-    <string name="BackupDialog_verify">Підтвердження</string>
+    <string name="BackupDialog_verify">Перевірити</string>
     <string name="BackupDialog_you_successfully_entered_your_backup_passphrase">Ваш пароль від резервної копії правильний</string>
     <string name="BackupDialog_passphrase_was_not_correct">Фраза-пароль була неправильна</string>
     <string name="LocalBackupJob_creating_signal_backup">Створення резервної копії Signal…</string>
@@ -4478,6 +4531,8 @@
     <string name="preferences_app_protection__screen_lock">Блокування екрана</string>
     <string name="preferences_app_protection__lock_signal_access_with_android_screen_lock_or_fingerprint">Блокувати доступ до Signal за допомогою екрана блокування Android чи відбитка пальця</string>
     <string name="preferences_app_protection__screen_lock_inactivity_timeout">Затримка блокування екрана при бездіяльності</string>
+    <!-- Snackbar text shown when trying to enable screen lock but the user does not have a password or biometrics enabled -->
+    <string name="preferences_app_protection__to_use_screen_lock">To use screen lock set a PIN, pattern, or password on this device.</string>
     <string name="preferences_app_protection__signal_pin">PIN-код Signal</string>
     <string name="preferences_app_protection__create_a_pin">Створіть PIN-код</string>
     <string name="preferences_app_protection__change_your_pin">Змінити PIN-код</string>
@@ -4497,9 +4552,42 @@
     <string name="RegistrationActivity_you_have_made_too_many_incorrect_registration_lock_pin_attempts_please_try_again_in_a_day">Ви зробили забагато невдалих спроб введення PIN-коду для блокування реєстрації. Ви знову зможете ввести код через день.</string>
     <string name="RegistrationActivity_you_have_made_too_many_attempts_please_try_again_later">Ви зробили надто багато спроб. Будь ласка, спробуйте ще раз пізніше</string>
     <string name="RegistrationActivity_error_connecting_to_service">Помилка з\'єднання із сервісом</string>
-    <string name="preferences_chats__backups">Резервне копіювання</string>
-    <string name="prompt_passphrase_activity__signal_is_locked">Signal заблоковано</string>
-    <string name="prompt_passphrase_activity__tap_to_unlock">НАТИСНІТЬ ДЛЯ РОЗБЛОКУВАННЯ</string>
+    <string name="preferences_chats__backups">Резервні копії</string>
+    <!-- Title text shown when Signal is locked and needs to be unlocked -->
+    <string name="prompt_passphrase_activity__unlock_signal">Unlock Signal</string>
+    <!-- Description text explaining how to unlock Signal -->
+    <string name="prompt_passphrase_activity__use_your_android_device">Use your Android device lock settings to unlock Signal.</string>
+    <!-- Text shown in a dialog that further explains how to unlock Signal by using the same unlocking methods that are used to unlock their own device -->
+    <string name="prompt_passphrase_activity__screen_lock_is_on">Screen lock is on and Signal is safely secured with your device lock settings. Unlock Signal the same way as you would normally unlock your phone, this could be with Face Unlock, Fingerprint Unlock, a PIN, password or pattern.</string>
+    <!-- Button in a dialog that will contact Signal support if pressed -->
+    <string name="prompt_passphrase_activity__contact_support">Contact support</string>
+    <!-- Button text to try again after unlocking has previously failed -->
+    <string name="prompt_passphrase_activity__try_again">Try again</string>
+
+    <!-- ScreenLockSettingsFragment -->
+    <!-- Text shown when screen lock is not enabled -->
+    <string name="ScreenLockSettingsFragment__off">Off</string>
+    <!-- Text shown with toggle that when switched on will enable screen lock -->
+    <string name="ScreenLockSettingsFragment__use_screen_lock">Use screen lock</string>
+    <!-- Description of what screen locking will do and how notification content will not be shown when screen is locked -->
+    <string name="ScreenLockSettingsFragment__your_android_device">Your Android device lock settings will be required to unlock Signal when you leave or switch apps. When locked, notification previews will not show message content.</string>
+    <!-- Title text explaining when users should start the screen lock -->
+    <string name="ScreenLockSettingsFragment__start_screen_lock">Start screen lock</string>
+    <!-- Option text explaining that screen lock should start immediately -->
+    <string name="ScreenLockSettingsFragment__immediately">Immediately</string>
+    <!-- Option text explaining that screen lock should start after 1 minute of inactivity -->
+    <string name="ScreenLockSettingsFragment__after_1_min">After 1 minute</string>
+    <!-- Option text explaining that screen lock should start after 5 minutes of inactivity -->
+    <string name="ScreenLockSettingsFragment__after_5_min">After 5 minutes</string>
+    <!-- Option text explaining that screen lock should start after 30 minutes of inactivity -->
+    <string name="ScreenLockSettingsFragment__after_30_min">After 30 minutes</string>
+    <!-- Option text explaining that screen lock should start at a custom time set by the user -->
+    <string name="ScreenLockSettingsFragment__custom_time">Custom time</string>
+    <!-- Title on biometrics prompt explaining that biometrics are needed to turn on screen lock -->
+    <string name="ScreenLockSettingsFragment__use_signal_screen_lock">Use Signal screen lock</string>
+    <!-- Title on biometrics prompt explaining that biometrics are needed to turn off screen lock -->
+    <string name="ScreenLockSettingsFragment__turn_off_signal_lock">Turn off Signal screen lock</string>
+
     <string name="Recipient_unknown">Невідомо</string>
     <!-- Name to use for a user across the UI when they are unregistered and have no other name available -->
     <string name="Recipient_deleted_account">Видалений акаунт</string>
@@ -4879,7 +4967,7 @@
     <string name="ChatWallpaperPreviewActivity__swipe_to_preview_more_wallpapers">Гортайте, щоб побачити більше шпалер</string>
     <string name="ChatWallpaperPreviewActivity__set_wallpaper_for_all_chats">Це будуть шпалери для всіх чатів.</string>
     <string name="ChatWallpaperPreviewActivity__set_wallpaper_for_s">Це будуть шпалери для чату «%1$s»</string>
-    <string name="ChatWallpaperPreviewActivity__viewing_your_gallery_requires_the_storage_permission">Для перегляду галереї потрібен дозвіл на доступ до сховища.</string>
+    <string name="ChatWallpaperPreviewActivity__viewing_your_gallery_requires_the_storage_permission">Щоб відкрити галерею, потрібно надати доступ до пам\'яті.</string>
 
     <!-- WallpaperImageSelectionActivity -->
 
@@ -5028,11 +5116,11 @@
     <!-- AppSettingsFragment -->
     <string name="AppSettingsFragment__invite_your_friends">Запросити друзів</string>
     <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">Copied donor subscriber id to clipboard</string>
+    <string name="AppSettingsFragment__copied_donor_subscriber_id_to_clipboard">Ідентифікатор підписника-донора скопійовано в буфер обміну</string>
     <!-- String displayed in a toast when we successfully copy the backups subscriber id to the clipboard -->
-    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">Copied backups subscriber id to clipboard</string>
+    <string name="AppSettingsFragment__copied_backups_subscriber_id_to_clipboard">Ідентифікатор передплатника резервного копіювання скопійовано в буфер обміну</string>
     <!-- String displayed in a toast when a subscriber id is not present for a given type -->
-    <string name="AppSettingsFragment__no_subscriber_id_set">No subscriber id set</string>
+    <string name="AppSettingsFragment__no_subscriber_id_set">Ідентифікатор не встановлено</string>
 
     <!-- AccountSettingsFragment -->
     <string name="AccountSettingsFragment__account">Акаунт</string>
@@ -5046,11 +5134,11 @@
     <!-- Part of requesting account data flow, this is the section title for requesting that account data -->
     <string name="ExportAccountDataFragment__your_account_data">Облікові дані</string>
     <!-- Explanation of account data the user can request. %1$s is replaced with Learn more with a link -->
-    <string name="ExportAccountDataFragment__export_explanation">Експортуйте звіт даних свого акаунту Signal. Звіт не містить повідомлень і медіафайлів. %1$s</string>
+    <string name="ExportAccountDataFragment__export_explanation">Експортуйте файл зі своїми обліковими даними користувача Signal. Облікові дані не включають повідомлення та медіафайли. %1$s</string>
     <!-- Learn more link to more information about requesting account data -->
     <string name="ExportAccountDataFragment__learn_more">Подробиці</string>
     <!-- Button action to export the report data to another app (e.g. email) -->
-    <string name="ExportAccountDataFragment__export_report">Експортувати звіт</string>
+    <string name="ExportAccountDataFragment__export_report">Експортувати файл</string>
 
     <!-- Radio option to export the data as a text file .txt -->
     <string name="ExportAccountDataFragment__export_as_txt">Експорт у форматі TXT</string>
@@ -5059,7 +5147,7 @@
     <!-- Radio option to export the data as a json (java script object notation) file .json -->
     <string name="ExportAccountDataFragment__export_as_json">Експорт у форматі JSON</string>
     <!-- Label for the json file option, the account data in a machine readable file format -->
-    <string name="ExportAccountDataFragment__export_as_json_label">Машиночитаний файл</string>
+    <string name="ExportAccountDataFragment__export_as_json_label">Машиночитний файл</string>
 
     <!-- Action to cancel (in a dialog) -->
     <string name="ExportAccountDataFragment__cancel_action">Скасувати</string>
@@ -5074,17 +5162,17 @@
     <!-- Title for export confirmation dialog -->
     <string name="ExportAccountDataFragment__export_report_confirmation">Експортувати дані?</string>
     <!-- Message for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_confirmation_message">Діліться даними свого акаунту Signal лише з людьми і застосунками, яким ви довіряєте.</string>
+    <string name="ExportAccountDataFragment__export_report_confirmation_message">Надсилайте свої облікові дані користувача Signal лише тим людям і через ті застосунки, яким довіряєте.</string>
     <!-- Action to export in for export confirmation dialog -->
-    <string name="ExportAccountDataFragment__export_report_action">Експорт</string>
+    <string name="ExportAccountDataFragment__export_report_action">Експортувати</string>
 
     <!-- Shown in a dialog with a spinner while the report is downloading -->
     <string name="ExportAccountDataFragment__download_progress">Створюємо звіт…</string>
     <!-- Explanation that the report is only generated on export and is not saved on the device -->
-    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Звіт генерується лише під час експортування. Signal не зберігає звіт на вашому пристрої.</string>
+    <string name="ExportAccountDataFragment__report_not_stored_disclaimer">Файл з обліковими даними створюється лише під час експортування. Signal не зберігає файл на вашому пристрої.</string>
 
     <!-- ChangeNumberFragment -->
-    <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Тут можна змінити поточний номер телефону на новий. Така зміна буде незворотна.\n\nПеревірте, чи можете ви отримувати SMS або дзвінки на новий номер, і продовжуйте.</string>
+    <string name="ChangeNumberFragment__use_this_to_change_your_current_phone_number_to_a_new_phone_number">Тут можна змінити поточний номер телефону на новий. Така зміна буде незворотна.\n\nЗапевніться, що можете отримувати SMS-повідомлення або дзвінки на новий номер, і продовжуйте.</string>
     <string name="ChangeNumberFragment__continue">Продовжити</string>
     <!-- Message shown on dialog after your number has been changed successfully. -->
     <string name="ChangeNumber__your_phone_number_has_changed_to_s">Ваш номер телефону змінено на %1$s</string>
@@ -5142,7 +5230,7 @@
 
     <!-- ChatsSettingsFragment -->
     <string name="ChatsSettingsFragment__keyboard">Клавіатура</string>
-    <string name="ChatsSettingsFragment__enter_key_sends">Enter надсилає повідомлення</string>
+    <string name="ChatsSettingsFragment__send_with_enter">Send with enter</string>
 
     <!-- NotificationsSettingsFragment -->
     <string name="NotificationsSettingsFragment__messages">Повідомлення</string>
@@ -5166,10 +5254,10 @@
     <string name="PrivacySettingsFragment__blocked">Заблоковані</string>
     <!-- Settings label that shows the number blocked contacts -->
     <plurals name="PrivacySettingsFragment__d_contacts">
-        <item quantity="one">%1$d контакт</item>
-        <item quantity="few">%1$d контакти</item>
-        <item quantity="many">%1$d контактів</item>
-        <item quantity="other">%1$d контакта</item>
+        <item quantity="one">%1$d contact or group</item>
+        <item quantity="few">%1$d contacts or groups</item>
+        <item quantity="many">%1$d contacts or groups</item>
+        <item quantity="other">%1$d contacts or groups</item>
     </plurals>
     <string name="PrivacySettingsFragment__messaging">Повідомлення</string>
     <string name="PrivacySettingsFragment__disappearing_messages">Тимчасові повідомлення</string>
@@ -5182,7 +5270,7 @@
     <!-- Summary for stories preference to launch into story privacy settings -->
     <string name="PrivacySettingsFragment__payment_lock_require_lock">Увімкніть розблокування екрана Android чи розблокування відбитком пальця для переказу коштів</string>
     <!-- Alert dialog title when payment lock cannot be enabled -->
-    <string name="PrivacySettingsFragment__cant_enable_title">Can’t enable payment lock</string>
+    <string name="PrivacySettingsFragment__cant_enable_title">Не вдалось увімкнути захист платежів</string>
     <!-- Alert dialog description to setup screen lock or fingerprint in phone settings -->
     <string name="PrivacySettingsFragment__cant_enable_description">Щоб активувати захист платежів, потрібно спочатку увімкнути блокування екрана чи розблокування відбитком пальця в налаштуваннях телефону.</string>
     <!-- Shown in a toast when we can\'t navigate to the user\'s system fingerprint settings -->
@@ -5378,7 +5466,7 @@
     <string name="PermissionsSettingsFragment__only_admins">Тільки адміністратори</string>
     <string name="PermissionsSettingsFragment__who_can_add_new_members">Хто може додавати нових учасників?</string>
     <string name="PermissionsSettingsFragment__who_can_edit_this_groups_info">Хто може редагувати інформацію цієї групи?</string>
-    <string name="PermissionsSettingsFragment__who_can_send_messages">Хто може надсилати повідомлення?</string>
+    <string name="PermissionsSettingsFragment__who_can_send_messages">Who can send messages and start calls?</string>
 
     <!-- SoundsAndNotificationsSettingsFragment -->
     <string name="SoundsAndNotificationsSettingsFragment__mute_notifications">Вимкнути сповіщення</string>
@@ -7435,7 +7523,7 @@
     <!-- Sheet title when user does not have enough space to download their backup -->
     <string name="BackupAlertBottomSheet__cant_complete_download">Неможливо завершити завантаження</string>
     <!-- Sheet body part 1 when user does not have enough space to download their backup. Placeholder is the amount of space needed. -->
-    <string name="BackupAlertBottomSheet__your_device_does_not_have_enough_free_space">Your device does not have enough free space. Free up %1$s of space to download the media stored in your backup.</string>
+    <string name="BackupAlertBottomSheet__your_device_does_not_have_enough_free_space">На пристрої недостатньо місця. Звільніть %1$s, щоб завантажити медіафайли з резервної копії.</string>
     <!-- Sheet body part 2 when user does not have enough space to download their backup. Placeholder is the number of days until deletion -->
     <plurals name="BackupAlertBottomSheet__if_you_choose_skip">
         <item quantity="one">Якщо вибрати «Пропустити», медіафайли з резервної копії буде видалено через %1$d день.</item>
@@ -7461,6 +7549,14 @@
     <string name="BackupAlertBottomSheet__download_later">Пізніше</string>
     <!-- Secondary action button text to dismiss sheet, skipping media download -->
     <string name="BackupAlertBottomSheet__dont_download_media">Не завантажувати медіафайлів</string>
+    <!-- Dialog title for last chance to download backup -->
+    <string name="BackupAlertBottomSheet__media_will_be_deleted">Media will be deleted</string>
+    <!-- Dialog message for last chance to download backup -->
+    <string name="BackupAlertBottomSheet__the_media_stored_in_your_backup">The media stored in your backup will be permanently deleted today. This is your last chance to download it.</string>
+    <!-- Dialog action to download now -->
+    <string name="BackupAlertBottomSheet__download">Download</string>
+    <!-- Dialog action to not download now -->
+    <string name="BackupAlertBottomSheet__dont_download">Don\'t download</string>
 
     <!-- BackupStatus -->
     <!-- Status title when user does not have enough free space to download their media. Placeholder is required disk space. -->
@@ -7503,6 +7599,20 @@
     <string name="ManageStorageSettingsFragment_apply_limits_title">Поширювати на зв\'язані пристрої</string>
     <!-- Setting description for syncing automated chat limit trimming (deleting messages automatically by length or date) to linked devices -->
     <string name="ManageStorageSettingsFragment_apply_limits_description">Якщо ввімкнути, то на зв\'язаних пристроях теж видалятимуться повідомлення, що перевищують обмеження.</string>
+    <!-- Setting section title header for storage optimization -->
+    <string name="ManageStorageSettingsFragment__on_device_storage">On-device storage</string>
+    <!-- Setting row title for storage optimization -->
+    <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Optimize on-device storage</string>
+    <!-- Setting row explanation for storage optimization -->
+    <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Unused media will be offloaded, but can be downloaded from your backup anytime.</string>
+
+    <!-- UpgradeToEnableOptimizedStorageSheet -->
+    <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
+    <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">Upgrade to enable this feature</string>
+    <!-- Subtitle of bottom sheet detailing that the user must upgrade to enable storage optimization -->
+    <string name="UpgradeToEnableOptimizedStorageSheet__storage_optimization_can_only_be_used">Storage optimization can only be used with the paid tier of Signal Backups. Upgrade your backup plan to start using this feature.</string>
+    <!-- Primary action to launch upgrade flow -->
+    <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_now">Upgrade now</string>
 
     <!-- Educational bottom sheet dialog title shown to notify about delete syncs causing deletes to happen across all devices -->
     <string name="DeleteSyncEducation_title">Тепер видалення синхронізується на всіх ваших пристроях</string>
@@ -7548,6 +7658,8 @@
     <string name="RemoteBackupsSettingsFragment__subscription_cancelled">Передплату скасовано</string>
     <!-- Snackbar text displayed when backup is successfully downloaded -->
     <string name="RemoteBackupsSettingsFragment__download_complete">Завантаження завершено</string>
+    <!-- Snackbar text displayed when backup will be created overnight -->
+    <string name="RemoteBackupsSettingsFragment__backup_will_be_created_overnight">Backup will be created overnight.</string>
     <!-- Title text in row detailing selected backup type -->
     <string name="RemoteBackupsSettingsFragment__backup_type">Тип резервного копіювання</string>
     <!-- Subtitle text in row detailing selected backup type displayed when backups are disabled -->
@@ -7618,6 +7730,8 @@
     <string name="MessageBackupsPinConfirmationScreen__next">Далі</string>
     <!-- Action button to switch keyboard type -->
     <string name="MessageBackupsPinConfirmationScreen__switch_keyboard">Перемкнути клавіатуру</string>
+    <!-- Action button to create a new pin if we type the incorrect one -->
+    <string name="MessageBackupsPinConfirmationScreen__create_new_pin">Create new pin</string>
 
     <!-- MessageBackupsPinEducationScreen -->
     <!-- Screen headline -->
@@ -7656,5 +7770,8 @@
     <string name="ConfirmBackupCancellationDialog__confirm_and_download_later">Підтвердити й завантажити пізніше</string>
     <!-- Action button label to keep current subscription -->
     <string name="ConfirmBackupCancellationDialog__keep_subscription">Продовжити передплату</string>
+
+    <!-- Accessible content description for the reminder view, describing the icon in the view. -->
+    <string name="ReminderView_icon_content_description">Reminder icon</string>
     <!-- EOF -->
 </resources>
