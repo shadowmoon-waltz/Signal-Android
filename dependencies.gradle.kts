@@ -15,7 +15,7 @@ dependencyResolutionManagement {
       version("exoplayer", "2.19.0")
       version("glide", "4.15.1")
       version("kotlin", "1.9.20")
-      version("libsignal-client", "0.52.5")
+      version("libsignal-client", "0.56.0")
       version("mp4parser", "1.9.39")
       version("android-gradle-plugin", "8.4.0")
       version("accompanist", "0.28.0")
@@ -26,7 +26,7 @@ dependencyResolutionManagement {
       library("android-application", "com.android.application", "com.android.application.gradle.plugin").versionRef("android-gradle-plugin")
 
       // Compose
-      library("androidx-compose-bom", "androidx.compose:compose-bom:2023.10.01")
+      library("androidx-compose-bom", "androidx.compose:compose-bom:2024.06.00")
       library("androidx-compose-material3", "androidx.compose.material3", "material3").withoutVersion()
       library("androidx-compose-ui-tooling-preview", "androidx.compose.ui", "ui-tooling-preview").withoutVersion()
       library("androidx-compose-ui-tooling-core", "androidx.compose.ui", "ui-tooling").withoutVersion()
@@ -47,6 +47,7 @@ dependencyResolutionManagement {
       library("kotlin-gradle-plugin", "org.jetbrains.kotlin", "kotlin-gradle-plugin").versionRef("kotlin")
       library("ktlint", "org.jlleitschuh.gradle:ktlint-gradle:12.1.1")
       library("kotlinx-coroutines-play-services", "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+      library("kotlinx-coroutines-rx3", "org.jetbrains.kotlinx:kotlinx-coroutines-rx3:1.3.9")
 
       // Android X
       library("androidx-activity-ktx", "androidx.activity", "activity-ktx").versionRef("androidx-activity")
@@ -97,6 +98,8 @@ dependencyResolutionManagement {
       library("androidx-asynclayoutinflater", "androidx.asynclayoutinflater:asynclayoutinflater:1.1.0-alpha01")
       library("androidx-asynclayoutinflater-appcompat", "androidx.asynclayoutinflater:asynclayoutinflater-appcompat:1.1.0-alpha01")
       library("androidx-emoji2", "androidx.emoji2:emoji2:1.4.0")
+      library("androidx-documentfile", "androidx.documentfile:documentfile:1.0.0")
+      library("android-billing", "com.android.billingclient:billing-ktx:7.0.0")
 
       // Material
       library("material-material", "com.google.android.material:material:1.8.0")
@@ -123,7 +126,7 @@ dependencyResolutionManagement {
       library("libsignal-client", "org.signal", "libsignal-client").versionRef("libsignal-client")
       library("libsignal-android", "org.signal", "libsignal-android").versionRef("libsignal-client")
       library("signal-aesgcmprovider", "org.signal:aesgcmprovider:0.0.3")
-      library("signal-ringrtc", "org.signal:ringrtc-android:2.46.0")
+      library("signal-ringrtc", "org.signal:ringrtc-android:2.46.1")
       library("signal-android-database-sqlcipher", "org.signal:sqlcipher-android:4.5.4-S2")
 
       // Third Party

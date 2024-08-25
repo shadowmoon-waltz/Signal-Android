@@ -6,11 +6,8 @@
 package org.thoughtcrime.securesms.banner
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -20,7 +17,11 @@ import org.signal.core.util.logging.Log
  * A class that can be instantiated with a list of [Flow]s that produce [Banner]s, then applied to a [ComposeView], typically within a [Fragment].
  * Usually, the [Flow]s will come from [Banner.BannerFactory] instances, but may also be produced by the other properties of the host.
  */
-class BannerManager(allFlows: Iterable<Flow<Banner>>) {
+class BannerManager @JvmOverloads constructor(
+  allFlows: Iterable<Flow<Banner>>,
+  private val onNewBannerShownListener: () -> Unit = {},
+  private val onNoBannerShownListener: () -> Unit = {}
+) {
 
   companion object {
     val TAG = Log.tag(BannerManager::class)
@@ -44,10 +45,15 @@ class BannerManager(allFlows: Iterable<Flow<Banner>>) {
       setContent {
         val state = combinedFlow.collectAsStateWithLifecycle(initialValue = emptyList())
 
-        state.value.firstOrNull()?.let {
-          Box(modifier = Modifier.padding(8.dp)) {
-            it.DisplayBanner()
+        val bannerToDisplay = state.value.firstOrNull()
+        if (bannerToDisplay != null) {
+          Box {
+            bannerToDisplay.DisplayBanner()
           }
+
+          onNewBannerShownListener()
+        } else {
+          onNoBannerShownListener()
         }
       }
     }

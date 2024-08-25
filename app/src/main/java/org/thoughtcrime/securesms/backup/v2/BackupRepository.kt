@@ -6,15 +6,17 @@
 package org.thoughtcrime.securesms.backup.v2
 
 import androidx.annotation.WorkerThread
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.EventBus
 import org.signal.core.util.Base64
 import org.signal.core.util.EventTimer
+import org.signal.core.util.concurrent.LimitedWorker
+import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.fullWalCheckpoint
 import org.signal.core.util.logging.Log
 import org.signal.core.util.money.FiatMoney
+import org.signal.core.util.stream.NonClosingOutputStream
 import org.signal.core.util.withinTransaction
 import org.signal.libsignal.messagebackup.MessageBackup
 import org.signal.libsignal.messagebackup.MessageBackup.ValidationResult
@@ -22,7 +24,6 @@ import org.signal.libsignal.messagebackup.MessageBackupKey
 import org.signal.libsignal.protocol.ServiceId.Aci
 import org.signal.libsignal.zkgroup.backups.BackupLevel
 import org.signal.libsignal.zkgroup.profiles.ProfileKey
-import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.attachments.Attachment
 import org.thoughtcrime.securesms.attachments.AttachmentId
 import org.thoughtcrime.securesms.attachments.Cdn
@@ -37,15 +38,16 @@ import org.thoughtcrime.securesms.backup.v2.processor.RecipientBackupProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.StickerBackupProcessor
 import org.thoughtcrime.securesms.backup.v2.proto.BackupInfo
 import org.thoughtcrime.securesms.backup.v2.stream.BackupExportWriter
+import org.thoughtcrime.securesms.backup.v2.stream.BackupImportReader
 import org.thoughtcrime.securesms.backup.v2.stream.EncryptedBackupReader
 import org.thoughtcrime.securesms.backup.v2.stream.EncryptedBackupWriter
 import org.thoughtcrime.securesms.backup.v2.stream.PlainTextBackupReader
 import org.thoughtcrime.securesms.backup.v2.stream.PlainTextBackupWriter
 import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsType
-import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsTypeFeature
 import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
 import org.thoughtcrime.securesms.crypto.AttachmentSecretProvider
 import org.thoughtcrime.securesms.crypto.DatabaseSecretProvider
+import org.thoughtcrime.securesms.database.AttachmentTable
 import org.thoughtcrime.securesms.database.KeyValueDatabase
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
@@ -78,18 +80,20 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.math.BigDecimal
 import java.time.ZonedDateTime
 import java.util.Currency
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration.Companion.milliseconds
 
 object BackupRepository {
 
   private val TAG = Log.tag(BackupRepository::class.java)
   private const val VERSION = 1L
-  private const val MAIN_DB_SNAPSHOT_NAME = "signal-snapshot.db"
-  private const val KEYVALUE_DB_SNAPSHOT_NAME = "key-value-snapshot.db"
+  private const val REMOTE_MAIN_DB_SNAPSHOT_NAME = "remote-signal-snapshot"
+  private const val REMOTE_KEYVALUE_DB_SNAPSHOT_NAME = "remote-signal-key-value-snapshot"
+  private const val LOCAL_MAIN_DB_SNAPSHOT_NAME = "local-signal-snapshot"
+  private const val LOCAL_KEYVALUE_DB_SNAPSHOT_NAME = "local-signal-key-value-snapshot"
 
   private val resetInitializedStateErrorAction: StatusCodeErrorAction = { error ->
     when (error.code) {
@@ -126,7 +130,7 @@ object BackupRepository {
     SignalStore.backup.backupTier = null
   }
 
-  private fun createSignalDatabaseSnapshot(): SignalDatabase {
+  private fun createSignalDatabaseSnapshot(baseName: String): SignalDatabase {
     // Need to do a WAL checkpoint to ensure that the database file we're copying has all pending writes
     if (!SignalDatabase.rawDatabase.fullWalCheckpoint()) {
       Log.w(TAG, "Failed to checkpoint WAL for main database! Not guaranteed to be using the most recent data.")
@@ -137,7 +141,9 @@ object BackupRepository {
       val context = AppDependencies.application
 
       val existingDbFile = context.getDatabasePath(SignalDatabase.DATABASE_NAME)
-      val targetFile = File(existingDbFile.parentFile, MAIN_DB_SNAPSHOT_NAME)
+      val targetFile = File(existingDbFile.parentFile, "$baseName.db")
+
+      existingDbFile.parentFile?.deleteAllFilesWithPrefix(baseName)
 
       try {
         existingDbFile.copyTo(targetFile, overwrite = true)
@@ -150,12 +156,12 @@ object BackupRepository {
         context = context,
         databaseSecret = DatabaseSecretProvider.getOrCreateDatabaseSecret(context),
         attachmentSecret = AttachmentSecretProvider.getInstance(context).getOrCreateAttachmentSecret(),
-        name = MAIN_DB_SNAPSHOT_NAME
+        name = "$baseName.db"
       )
     }
   }
 
-  private fun createSignalStoreSnapshot(): SignalStore {
+  private fun createSignalStoreSnapshot(baseName: String): SignalStore {
     val context = AppDependencies.application
 
     // Need to do a WAL checkpoint to ensure that the database file we're copying has all pending writes
@@ -166,7 +172,9 @@ object BackupRepository {
     // We make a copy of the database within a transaction to ensure that no writes occur while we're copying the file
     return KeyValueDatabase.getInstance(context).writableDatabase.withinTransaction {
       val existingDbFile = context.getDatabasePath(KeyValueDatabase.DATABASE_NAME)
-      val targetFile = File(existingDbFile.parentFile, KEYVALUE_DB_SNAPSHOT_NAME)
+      val targetFile = File(existingDbFile.parentFile, "$baseName.db")
+
+      existingDbFile.parentFile?.deleteAllFilesWithPrefix(baseName)
 
       try {
         existingDbFile.copyTo(targetFile, overwrite = true)
@@ -175,91 +183,65 @@ object BackupRepository {
         throw IllegalStateException("Failed to copy database file!", e)
       }
 
-      val db = KeyValueDatabase.createWithName(context, KEYVALUE_DB_SNAPSHOT_NAME)
-      SignalStore(KeyValueStore(db))
+      val db = KeyValueDatabase.createWithName(context, "$baseName.db")
+      SignalStore(context, KeyValueStore(db))
     }
   }
 
-  private fun deleteDatabaseSnapshot() {
-    val targetFile = AppDependencies.application.getDatabasePath(MAIN_DB_SNAPSHOT_NAME)
-    if (!targetFile.delete()) {
-      Log.w(TAG, "Failed to delete main database snapshot!")
-    }
+  private fun deleteDatabaseSnapshot(name: String) {
+    AppDependencies.application.getDatabasePath("$name.db")
+      .parentFile
+      ?.deleteAllFilesWithPrefix(name)
   }
 
-  private fun deleteSignalStoreSnapshot() {
-    val targetFile = AppDependencies.application.getDatabasePath(KEYVALUE_DB_SNAPSHOT_NAME)
-    if (!targetFile.delete()) {
-      Log.w(TAG, "Failed to delete key value database snapshot!")
+  fun localExport(
+    main: OutputStream,
+    localBackupProgressEmitter: ExportProgressListener,
+    archiveAttachment: (AttachmentTable.LocalArchivableAttachment, () -> InputStream?) -> Unit
+  ) {
+    val writer = EncryptedBackupWriter(
+      key = SignalStore.svr.getOrCreateMasterKey().deriveBackupKey(),
+      aci = SignalStore.account.aci!!,
+      outputStream = NonClosingOutputStream(main),
+      append = { main.write(it) }
+    )
+
+    export(currentTime = System.currentTimeMillis(), isLocal = true, writer = writer, progressEmitter = localBackupProgressEmitter) { dbSnapshot ->
+      val localArchivableAttachments = dbSnapshot
+        .attachmentTable
+        .getLocalArchivableAttachments()
+        .associateBy { MediaName.fromDigest(it.remoteDigest) }
+
+      localBackupProgressEmitter.onAttachment(0, localArchivableAttachments.size.toLong())
+
+      val progress = AtomicLong(0)
+
+      LimitedWorker.execute(SignalExecutors.BOUNDED_IO, 4, localArchivableAttachments.values) { attachment ->
+        try {
+          archiveAttachment(attachment) { dbSnapshot.attachmentTable.getAttachmentStream(attachment) }
+        } catch (e: IOException) {
+          Log.w(TAG, "Unable to open attachment, skipping", e)
+        }
+
+        val currentProgress = progress.incrementAndGet()
+        localBackupProgressEmitter.onAttachment(currentProgress, localArchivableAttachments.size.toLong())
+      }
     }
   }
 
   fun export(outputStream: OutputStream, append: (ByteArray) -> Unit, plaintext: Boolean = false, currentTime: Long = System.currentTimeMillis()) {
-    val eventTimer = EventTimer()
-    val dbSnapshot: SignalDatabase = createSignalDatabaseSnapshot()
-    val signalStoreSnapshot: SignalStore = createSignalStoreSnapshot()
-
-    try {
-      val writer: BackupExportWriter = if (plaintext) {
-        PlainTextBackupWriter(outputStream)
-      } else {
-        EncryptedBackupWriter(
-          key = SignalStore.svr.getOrCreateMasterKey().deriveBackupKey(),
-          aci = SignalStore.account.aci!!,
-          outputStream = outputStream,
-          append = append
-        )
-      }
-
-      val exportState = ExportState(backupTime = currentTime, allowMediaBackup = SignalStore.backup.backsUpMedia)
-
-      writer.use {
-        writer.write(
-          BackupInfo(
-            version = VERSION,
-            backupTimeMs = exportState.backupTime
-          )
-        )
-
-        // We're using a snapshot, so the transaction is more for perf than correctness
-        dbSnapshot.rawWritableDatabase.withinTransaction {
-          AccountDataProcessor.export(dbSnapshot, signalStoreSnapshot) {
-            writer.write(it)
-            eventTimer.emit("account")
-          }
-
-          RecipientBackupProcessor.export(dbSnapshot, signalStoreSnapshot, exportState) {
-            writer.write(it)
-            eventTimer.emit("recipient")
-          }
-
-          ChatBackupProcessor.export(dbSnapshot, exportState) { frame ->
-            writer.write(frame)
-            eventTimer.emit("thread")
-          }
-
-          AdHocCallBackupProcessor.export(dbSnapshot) { frame ->
-            writer.write(frame)
-            eventTimer.emit("call")
-          }
-
-          StickerBackupProcessor.export(dbSnapshot) { frame ->
-            writer.write(frame)
-            eventTimer.emit("sticker-pack")
-          }
-
-          ChatItemBackupProcessor.export(dbSnapshot, exportState) { frame ->
-            writer.write(frame)
-            eventTimer.emit("message")
-          }
-        }
-      }
-
-      Log.d(TAG, "export() ${eventTimer.stop().summary}")
-    } finally {
-      deleteDatabaseSnapshot()
-      deleteSignalStoreSnapshot()
+    val writer: BackupExportWriter = if (plaintext) {
+      PlainTextBackupWriter(outputStream)
+    } else {
+      EncryptedBackupWriter(
+        key = SignalStore.svr.getOrCreateMasterKey().deriveBackupKey(),
+        aci = SignalStore.account.aci!!,
+        outputStream = outputStream,
+        append = append
+      )
     }
+
+    export(currentTime = currentTime, isLocal = false, writer = writer)
   }
 
   /**
@@ -271,12 +253,96 @@ object BackupRepository {
     return outputStream.toByteArray()
   }
 
-  /**
-   * @return The time the backup was created, or null if the backup could not be read.
-   */
-  fun import(length: Long, inputStreamFactory: () -> InputStream, selfData: SelfData, plaintext: Boolean = false): ImportResult {
+  private fun export(
+    currentTime: Long,
+    isLocal: Boolean,
+    writer: BackupExportWriter,
+    progressEmitter: ExportProgressListener? = null,
+    exportExtras: ((SignalDatabase) -> Unit)? = null
+  ) {
     val eventTimer = EventTimer()
+    val mainDbName = if (isLocal) LOCAL_MAIN_DB_SNAPSHOT_NAME else REMOTE_MAIN_DB_SNAPSHOT_NAME
+    val keyValueDbName = if (isLocal) LOCAL_KEYVALUE_DB_SNAPSHOT_NAME else REMOTE_KEYVALUE_DB_SNAPSHOT_NAME
 
+    try {
+      val dbSnapshot: SignalDatabase = createSignalDatabaseSnapshot(mainDbName)
+      val signalStoreSnapshot: SignalStore = createSignalStoreSnapshot(keyValueDbName)
+
+      val exportState = ExportState(backupTime = currentTime, mediaBackupEnabled = SignalStore.backup.backsUpMedia)
+
+      writer.use {
+        writer.write(
+          BackupInfo(
+            version = VERSION,
+            backupTimeMs = exportState.backupTime
+          )
+        )
+
+        // We're using a snapshot, so the transaction is more for perf than correctness
+        dbSnapshot.rawWritableDatabase.withinTransaction {
+          progressEmitter?.onAccount()
+          AccountDataProcessor.export(dbSnapshot, signalStoreSnapshot) {
+            writer.write(it)
+            eventTimer.emit("account")
+          }
+
+          progressEmitter?.onRecipient()
+          RecipientBackupProcessor.export(dbSnapshot, signalStoreSnapshot, exportState) {
+            writer.write(it)
+            eventTimer.emit("recipient")
+          }
+
+          progressEmitter?.onThread()
+          ChatBackupProcessor.export(dbSnapshot, exportState) { frame ->
+            writer.write(frame)
+            eventTimer.emit("thread")
+          }
+
+          progressEmitter?.onCall()
+          AdHocCallBackupProcessor.export(dbSnapshot) { frame ->
+            writer.write(frame)
+            eventTimer.emit("call")
+          }
+
+          progressEmitter?.onSticker()
+          StickerBackupProcessor.export(dbSnapshot) { frame ->
+            writer.write(frame)
+            eventTimer.emit("sticker-pack")
+          }
+
+          progressEmitter?.onMessage()
+          ChatItemBackupProcessor.export(dbSnapshot, exportState) { frame ->
+            writer.write(frame)
+            eventTimer.emit("message")
+          }
+        }
+      }
+
+      exportExtras?.invoke(dbSnapshot)
+
+      Log.d(TAG, "export() ${eventTimer.stop().summary}")
+    } finally {
+      deleteDatabaseSnapshot(mainDbName)
+      deleteDatabaseSnapshot(keyValueDbName)
+    }
+  }
+
+  fun localImport(mainStreamFactory: () -> InputStream, mainStreamLength: Long, selfData: SelfData): ImportResult {
+    val backupKey = SignalStore.svr.getOrCreateMasterKey().deriveBackupKey()
+
+    val frameReader = EncryptedBackupReader(
+      key = backupKey,
+      aci = selfData.aci,
+      length = mainStreamLength,
+      dataStream = mainStreamFactory
+    )
+
+    return frameReader.use { reader ->
+      import(backupKey, reader, selfData)
+    }
+  }
+
+  fun import(length: Long, inputStreamFactory: () -> InputStream, selfData: SelfData, plaintext: Boolean = false): ImportResult {
     val backupKey = SignalStore.svr.getOrCreateMasterKey().deriveBackupKey()
 
     val frameReader = if (plaintext) {
@@ -290,6 +356,19 @@ object BackupRepository {
       )
     }
 
+    return frameReader.use { reader ->
+      import(backupKey, reader, selfData)
+    }
+  }
+
+  private fun import(
+    backupKey: BackupKey,
+    frameReader: BackupImportReader,
+    selfData: SelfData,
+    importExtras: ((EventTimer) -> Unit)? = null
+  ): ImportResult {
+    val eventTimer = EventTimer()
+
     val header = frameReader.getHeader()
     if (header == null) {
       Log.e(TAG, "Backup is missing header!")
@@ -302,13 +381,15 @@ object BackupRepository {
     // Note: Without a transaction, bad imports could lead to lost data. But because we have a transaction,
     // writes from other threads are blocked. This is something to think more about.
     SignalDatabase.rawDatabase.withinTransaction {
-      SignalStore.clearAllDataForBackupRestore()
       SignalDatabase.recipients.clearAllDataForBackupRestore()
       SignalDatabase.distributionLists.clearAllDataForBackupRestore()
       SignalDatabase.threads.clearAllDataForBackupRestore()
       SignalDatabase.messages.clearAllDataForBackupRestore()
       SignalDatabase.attachments.clearAllDataForBackupRestore()
       SignalDatabase.stickers.clearAllDataForBackupRestore()
+      SignalDatabase.reactions.clearAllDataForBackupRestore()
+      SignalDatabase.inAppPayments.clearAllDataForBackupRestore()
+      SignalDatabase.chatColors.clearAllDataForBackupRestore()
 
       // Add back self after clearing data
       val selfId: RecipientId = SignalDatabase.recipients.getAndPossiblyMerge(selfData.aci, selfData.pni, selfData.e164, pniVerified = true, changeSelf = true)
@@ -362,16 +443,19 @@ object BackupRepository {
         eventTimer.emit("chatItem")
       }
 
+      importExtras?.invoke(eventTimer)
+
       importState.chatIdToLocalThreadId.values.forEach {
         SignalDatabase.threads.update(it, unarchive = false, allowDeletion = false)
       }
     }
 
-    val groups = SignalDatabase.groups.getGroups()
-    while (groups.hasNext()) {
-      val group = groups.next()
-      if (group.id.isV2) {
-        AppDependencies.jobManager.add(RequestGroupV2InfoJob(group.id as GroupId.V2))
+    SignalDatabase.groups.getGroups().use { groups ->
+      while (groups.hasNext()) {
+        val group = groups.next()
+        if (group.id.isV2) {
+          AppDependencies.jobManager.add(RequestGroupV2InfoJob(group.id as GroupId.V2))
+        }
       }
     }
 
@@ -808,30 +892,29 @@ object BackupRepository {
   suspend fun getBackupsType(tier: MessageBackupTier): MessageBackupsType {
     val backupCurrency = SignalStore.inAppPayments.getSubscriptionCurrency(InAppPaymentSubscriberRecord.Type.BACKUP)
     return when (tier) {
-      MessageBackupTier.FREE -> getFreeType(backupCurrency)
+      MessageBackupTier.FREE -> getFreeType()
       MessageBackupTier.PAID -> getPaidType(backupCurrency)
     }
   }
 
-  private fun getFreeType(currency: Currency): MessageBackupsType {
-    return MessageBackupsType(
-      tier = MessageBackupTier.FREE,
-      pricePerMonth = FiatMoney(BigDecimal.ZERO, currency),
-      title = "Text + 30 days of media", // TODO [message-backups] Finalize text (does this come from server?)
-      features = persistentListOf(
-        MessageBackupsTypeFeature(
-          iconResourceId = R.drawable.symbol_thread_compact_bold_16,
-          label = "Full text message backup" // TODO [message-backups] Finalize text (does this come from server?)
-        ),
-        MessageBackupsTypeFeature(
-          iconResourceId = R.drawable.symbol_album_compact_bold_16,
-          label = "Last 30 days of media" // TODO [message-backups] Finalize text (does this come from server?)
-        )
-      )
+  private suspend fun getFreeType(): MessageBackupsType {
+    val config = getSubscriptionsConfiguration()
+
+    return MessageBackupsType.Free(
+      mediaRetentionDays = config.backupConfiguration.freeTierMediaDays
     )
   }
 
   private suspend fun getPaidType(currency: Currency): MessageBackupsType {
+    val config = getSubscriptionsConfiguration()
+
+    return MessageBackupsType.Paid(
+      pricePerMonth = FiatMoney(config.currencies[currency.currencyCode.lowercase()]!!.backupSubscription[SubscriptionsConfiguration.BACKUPS_LEVEL]!!, currency),
+      storageAllowanceBytes = config.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL]!!.storageAllowanceBytes
+    )
+  }
+
+  private suspend fun getSubscriptionsConfiguration(): SubscriptionsConfiguration {
     val serviceResponse = withContext(Dispatchers.IO) {
       AppDependencies
         .donationsService
@@ -850,31 +933,7 @@ object BackupRepository {
       error("Unhandled error occurred while downloading configuration.")
     }
 
-    val config = serviceResponse.result.get()
-
-    return MessageBackupsType(
-      tier = MessageBackupTier.PAID,
-      pricePerMonth = FiatMoney(config.currencies[currency.currencyCode.lowercase()]!!.backupSubscription[SubscriptionsConfiguration.BACKUPS_LEVEL]!!, currency),
-      title = "Text + All your media", // TODO [message-backups] Finalize text (does this come from server?)
-      features = persistentListOf(
-        MessageBackupsTypeFeature(
-          iconResourceId = R.drawable.symbol_thread_compact_bold_16,
-          label = "Full text message backup" // TODO [message-backups] Finalize text (does this come from server?)
-        ),
-        MessageBackupsTypeFeature(
-          iconResourceId = R.drawable.symbol_album_compact_bold_16,
-          label = "Full media backup" // TODO [message-backups] Finalize text (does this come from server?)
-        ),
-        MessageBackupsTypeFeature(
-          iconResourceId = R.drawable.symbol_thread_compact_bold_16,
-          label = "1TB of storage (~250K photos)" // TODO [message-backups] Finalize text (does this come from server?)
-        ),
-        MessageBackupsTypeFeature(
-          iconResourceId = R.drawable.symbol_heart_compact_bold_16,
-          label = "Thanks for supporting Signal!" // TODO [message-backups] Finalize text (does this come from server?)
-        )
-      )
-    )
+    return serviceResponse.result.get()
   }
 
   /**
@@ -917,6 +976,10 @@ object BackupRepository {
     }
   }
 
+  private fun File.deleteAllFilesWithPrefix(prefix: String) {
+    this.listFiles()?.filter { it.name.startsWith(prefix) }?.forEach { it.delete() }
+  }
+
   data class SelfData(
     val aci: ACI,
     val pni: PNI,
@@ -947,13 +1010,23 @@ object BackupRepository {
       iv = Base64.encodeWithPadding(mediaSecrets.iv)
     )
   }
+
+  interface ExportProgressListener {
+    fun onAccount()
+    fun onRecipient()
+    fun onThread()
+    fun onCall()
+    fun onSticker()
+    fun onMessage()
+    fun onAttachment(currentProgress: Long, totalCount: Long)
+  }
 }
 
 data class ArchivedMediaObject(val mediaId: String, val cdn: Int)
 
 data class BackupDirectories(val backupDir: String, val mediaDir: String)
 
-class ExportState(val backupTime: Long, val allowMediaBackup: Boolean) {
+class ExportState(val backupTime: Long, val mediaBackupEnabled: Boolean) {
   val recipientIds: MutableSet<Long> = hashSetOf()
   val threadIds: MutableSet<Long> = hashSetOf()
   val localToRemoteCustomChatColors: MutableMap<Long, Int> = hashMapOf()

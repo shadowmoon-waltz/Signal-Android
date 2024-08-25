@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1444
-val canonicalVersionName = "7.14.0"
+val canonicalVersionCode = 1449
+val canonicalVersionName = "7.15.2"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -156,9 +156,27 @@ android {
     targetCompatibility = signalJavaVersion
   }
 
-  packagingOptions {
+  packaging {
+    jniLibs {
+      excludes += setOf(
+        "**/*.dylib",
+        "**/*.dll"
+      )
+    }
     resources {
-      excludes += setOf("LICENSE.txt", "LICENSE", "NOTICE", "asm-license.txt", "META-INF/LICENSE", "META-INF/LICENSE.md", "META-INF/NOTICE", "META-INF/LICENSE-notice.md", "META-INF/proguard/androidx-annotations.pro", "libsignal_jni.dylib", "signal_jni.dll", "libsignal_jni_testing.dylib", "signal_jni_testing.dll")
+      excludes += setOf(
+        "LICENSE.txt",
+        "LICENSE",
+        "NOTICE",
+        "asm-license.txt",
+        "META-INF/LICENSE",
+        "META-INF/LICENSE.md",
+        "META-INF/NOTICE",
+        "META-INF/LICENSE-notice.md",
+        "META-INF/proguard/androidx-annotations.pro",
+        "**/*.dylib",
+        "**/*.dll"
+      )
     }
   }
 
@@ -587,10 +605,14 @@ dependencies {
   implementation(libs.kotlin.stdlib.jdk8)
   implementation(libs.kotlin.reflect)
   implementation(libs.kotlinx.coroutines.play.services)
+  implementation(libs.kotlinx.coroutines.rx3)
   implementation(libs.jackson.module.kotlin)
   implementation(libs.rxjava3.rxandroid)
   implementation(libs.rxjava3.rxkotlin)
   implementation(libs.rxdogtag)
+
+  "playImplementation"(project(":billing"))
+  "nightlyImplementation"(project(":billing"))
 
   "spinnerImplementation"(project(":spinner"))
 

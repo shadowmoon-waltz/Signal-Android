@@ -8,10 +8,9 @@ package org.thoughtcrime.securesms.banner.banners
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.pluralStringResource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flow
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.banner.Banner
+import org.thoughtcrime.securesms.banner.DismissibleBannerProducer
 import org.thoughtcrime.securesms.banner.ui.compose.Action
 import org.thoughtcrime.securesms.banner.ui.compose.DefaultBanner
 
@@ -33,17 +32,17 @@ class PendingGroupJoinRequestsBanner(override val enabled: Boolean, private val 
     )
   }
 
-  companion object {
-
-    @JvmStatic
-    fun createFlow(suggestionsSize: Int, onViewClicked: () -> Unit): Flow<PendingGroupJoinRequestsBanner> = Producer(suggestionsSize, onViewClicked).flow
+  private class Producer(suggestionsSize: Int, onViewClicked: () -> Unit) : DismissibleBannerProducer<PendingGroupJoinRequestsBanner>(bannerProducer = {
+    PendingGroupJoinRequestsBanner(suggestionsSize > 0, suggestionsSize, onViewClicked, it)
+  }) {
+    override fun createDismissedBanner(): PendingGroupJoinRequestsBanner {
+      return PendingGroupJoinRequestsBanner(false, 0, {}, null)
+    }
   }
 
-  private class Producer(suggestionsSize: Int, onViewClicked: () -> Unit) {
-    val dismissListener: () -> Unit = {
-      mutableStateFlow.tryEmit(PendingGroupJoinRequestsBanner(false, suggestionsSize, onViewClicked, null))
+  companion object {
+    fun createFlow(suggestionsSize: Int, onViewClicked: () -> Unit): Flow<PendingGroupJoinRequestsBanner> {
+      return Producer(suggestionsSize, onViewClicked).flow
     }
-    private val mutableStateFlow: MutableStateFlow<PendingGroupJoinRequestsBanner> = MutableStateFlow(PendingGroupJoinRequestsBanner(true, suggestionsSize, onViewClicked, dismissListener))
-    val flow: Flow<PendingGroupJoinRequestsBanner> = mutableStateFlow
   }
 }

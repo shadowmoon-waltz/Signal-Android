@@ -56,6 +56,7 @@ include(":core-ui")
 //include(":microbenchmark")
 include(":video")
 include(":video-app")
+include(":billing")
 
 project(":app").name = "SignalSW"
 project(":paging").projectDir = file("paging/lib")

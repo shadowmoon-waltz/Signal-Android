@@ -1031,15 +1031,6 @@ object RemoteConfig {
     BuildConfig.MESSAGE_BACKUP_RESTORE_ENABLED || value.asBoolean(false)
   }
 
-  /** Whether or not to use the custom CameraX controller class  */
-  @JvmStatic
-  @get:JvmName("customCameraXController")
-  val customCameraXController: Boolean by remoteBoolean(
-    key = "android.cameraXCustomController",
-    defaultValue = false,
-    hotSwappable = true
-  )
-
   /** Whether unauthenticated chat web socket is backed by libsignal-net  */
   @JvmStatic
   @get:JvmName("libSignalWebSocketEnabled")
@@ -1091,15 +1082,6 @@ object RemoteConfig {
     hotSwappable = true
   )
 
-  /** Whether to use the new Banner system instead of the old Reminder system.  */
-  @JvmStatic
-  @get:JvmName("newBannerUi")
-  val newBannerUi: Boolean by remoteBoolean(
-    key = "android.newBannerUi",
-    defaultValue = false,
-    hotSwappable = true
-  )
-
   /** Which phase we're in for the SVR3 migration  */
   val svr3MigrationPhase: Int by remoteInt(
     key = "global.svr3.phase",
@@ -1118,6 +1100,14 @@ object RemoteConfig {
     key = "android.connectivityWarningConfig",
     defaultValue = "",
     hotSwappable = true
+  )
+
+  @JvmStatic
+  @get:JvmName("useNewCallApi")
+  val newCallUi: Boolean by remoteBoolean(
+    key = "android.newCallUi",
+    defaultValue = false,
+    hotSwappable = false
   )
 
   // endregion

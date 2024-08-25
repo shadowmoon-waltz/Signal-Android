@@ -153,6 +153,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                                                   DatabaseSecretProvider.getOrCreateDatabaseSecret(this),
                                                   AttachmentSecretProvider.getInstance(this).getOrCreateAttachmentSecret());
                             })
+                            .addBlocking("signal-store", () -> SignalStore.init(this))
                             .addBlocking("logging", () -> {
                               initializeLogging();
                               Log.i(TAG, "onCreate()");
@@ -196,6 +197,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                             .addNonBlocking(this::beginJobLoop)
                             .addNonBlocking(EmojiSource::refresh)
                             .addNonBlocking(() -> AppDependencies.getGiphyMp4Cache().onAppStart(this))
+                            .addNonBlocking(AppDependencies::getBillingApi)
                             .addNonBlocking(this::ensureProfileUploaded)
                             .addNonBlocking(() -> AppDependencies.getExpireStoriesManager().scheduleIfNecessary())
                             .addPostRender(() -> AppDependencies.getDeletedCallEventManager().scheduleIfNecessary())

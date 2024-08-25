@@ -46,7 +46,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.PluralsRes;
@@ -97,8 +96,14 @@ import org.thoughtcrime.securesms.badges.self.expired.ExpiredOneTimeBadgeBottomS
 import org.thoughtcrime.securesms.badges.self.expired.MonthlyDonationCanceledBottomSheetDialogFragment;
 import org.thoughtcrime.securesms.banner.Banner;
 import org.thoughtcrime.securesms.banner.BannerManager;
-import org.thoughtcrime.securesms.banner.banners.OutdatedBuildBanner;
+import org.thoughtcrime.securesms.banner.banners.CdsPermanentErrorBanner;
+import org.thoughtcrime.securesms.banner.banners.CdsTemporaryErrorBanner;
+import org.thoughtcrime.securesms.banner.banners.DozeBanner;
 import org.thoughtcrime.securesms.banner.banners.MediaRestoreProgressBanner;
+import org.thoughtcrime.securesms.banner.banners.OutdatedBuildBanner;
+import org.thoughtcrime.securesms.banner.banners.ServiceOutageBanner;
+import org.thoughtcrime.securesms.banner.banners.UnauthorizedBanner;
+import org.thoughtcrime.securesms.banner.banners.UsernameOutOfSyncBanner;
 import org.thoughtcrime.securesms.components.DeleteSyncEducationDialog;
 import org.thoughtcrime.securesms.components.Material3SearchToolbar;
 import org.thoughtcrime.securesms.components.SignalProgressDialog;
@@ -106,16 +111,6 @@ import org.thoughtcrime.securesms.components.menu.ActionItem;
 import org.thoughtcrime.securesms.components.menu.SignalBottomActionBar;
 import org.thoughtcrime.securesms.components.menu.SignalContextMenu;
 import org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton;
-import org.thoughtcrime.securesms.components.reminder.CdsPermanentErrorReminder;
-import org.thoughtcrime.securesms.components.reminder.CdsTemporaryErrorReminder;
-import org.thoughtcrime.securesms.components.reminder.DozeReminder;
-import org.thoughtcrime.securesms.components.reminder.ExpiredBuildReminder;
-import org.thoughtcrime.securesms.components.reminder.OutdatedBuildReminder;
-import org.thoughtcrime.securesms.components.reminder.Reminder;
-import org.thoughtcrime.securesms.components.reminder.ReminderView;
-import org.thoughtcrime.securesms.components.reminder.ServiceOutageReminder;
-import org.thoughtcrime.securesms.components.reminder.UnauthorizedReminder;
-import org.thoughtcrime.securesms.components.reminder.UsernameOutOfSyncReminder;
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
 import org.thoughtcrime.securesms.components.settings.app.notifications.manual.NotificationProfileSelectionFragment;
 import org.thoughtcrime.securesms.components.settings.app.subscription.completed.InAppPaymentsBottomSheetDelegate;
@@ -129,8 +124,6 @@ import org.thoughtcrime.securesms.contacts.paged.ContactSearchData;
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey;
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchMediator;
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchState;
-import org.thoughtcrime.securesms.contacts.sync.CdsPermanentErrorBottomSheet;
-import org.thoughtcrime.securesms.contacts.sync.CdsTemporaryErrorBottomSheet;
 import org.thoughtcrime.securesms.conversationlist.chatfilter.ConversationFilterRequest;
 import org.thoughtcrime.securesms.conversationlist.chatfilter.ConversationFilterSource;
 import org.thoughtcrime.securesms.conversationlist.chatfilter.ConversationListFilterPullView;
@@ -142,10 +135,8 @@ import org.thoughtcrime.securesms.database.SignalDatabase;
 import org.thoughtcrime.securesms.database.ThreadTable;
 import org.thoughtcrime.securesms.database.model.ThreadRecord;
 import org.thoughtcrime.securesms.dependencies.AppDependencies;
-import org.thoughtcrime.securesms.events.ReminderUpdateEvent;
 import org.thoughtcrime.securesms.groups.SelectionLimits;
 import org.thoughtcrime.securesms.jobs.RefreshOwnProfileJob;
-import org.thoughtcrime.securesms.jobs.ServiceOutageDetectionJob;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.lock.v2.CreateSvrPinActivity;
 import org.thoughtcrime.securesms.main.Material3OnScrollHelperBinder;
@@ -163,7 +154,6 @@ import org.thoughtcrime.securesms.profiles.manage.UsernameEditFragment;
 import org.thoughtcrime.securesms.ratelimit.RecaptchaProofBottomSheetFragment;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.recipients.RecipientId;
-import org.thoughtcrime.securesms.registration.ui.RegistrationActivity;
 import org.thoughtcrime.securesms.search.MessageResult;
 import org.thoughtcrime.securesms.service.KeyCachingService;
 import org.thoughtcrime.securesms.sms.MessageSender;
@@ -174,9 +164,8 @@ import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.CachedInflater;
 import org.thoughtcrime.securesms.util.ConversationUtil;
-import org.thoughtcrime.securesms.util.PlayStoreUtil;
-import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.ServiceUtil;
+import org.thoughtcrime.securesms.util.SharedPreferencesLifecycleObserver;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.thoughtcrime.securesms.util.SignalProxyUtil;
 import org.thoughtcrime.securesms.util.SnapToTopDataObserver;
@@ -194,15 +183,17 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import kotlinx.coroutines.flow.Flow;
 
 import static android.app.Activity.RESULT_OK;
@@ -228,7 +219,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private ActionMode                             actionMode;
   private View                                   coordinator;
   private RecyclerView                           list;
-  private Stub<ReminderView>                     reminderView;
   private Stub<ComposeView>                      bannerView;
   private PulsingFloatingActionButton            fab;
   private PulsingFloatingActionButton            cameraFab;
@@ -293,7 +283,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     coordinator             = view.findViewById(R.id.coordinator);
     list                    = view.findViewById(R.id.list);
     bottomActionBar         = view.findViewById(R.id.conversation_list_bottom_action_bar);
-    reminderView            = new Stub<>(view.findViewById(R.id.reminder));
     bannerView              = new Stub<>(view.findViewById(R.id.banner_compose_view));
     megaphoneContainer      = new Stub<>(view.findViewById(R.id.megaphone_container));
     voiceNotePlayerViewStub = new Stub<>(view.findViewById(R.id.voice_note_player));
@@ -423,6 +412,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     initializeTypingObserver();
     initializeVoiceNotePlayer();
     initializeBanners();
+    maybeScheduleRefreshProfileJob();
 
     TooltipCompat.setTooltipText(requireCallback().getSearchAction(), getText(R.string.SearchToolbar_search_for_conversations_contacts_and_messages));
 
@@ -459,7 +449,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     coordinator             = null;
     list                    = null;
     bottomActionBar         = null;
-    reminderView            = null;
     megaphoneContainer      = null;
     voiceNotePlayerViewStub = null;
     fab                     = null;
@@ -479,7 +468,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     super.onResume();
 
     initializeSearchListener();
-    updateReminders();
     EventBus.getDefault().register(this);
     itemAnimator.disable();
     SpoilerAnnotation.resetRevealedSpoilers();
@@ -786,27 +774,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     dialogFragment.show(getChildFragmentManager(), "megaphone_dialog");
   }
 
-  private void initializeReminderView() {
-    reminderView.get().setOnDismissListener(this::updateReminders);
-    reminderView.get().setOnActionClickListener(this::onReminderAction);
-  }
-
-  private void onReminderAction(@IdRes int reminderActionId) {
-    if (reminderActionId == R.id.reminder_action_update_now) {
-      PlayStoreUtil.openPlayStoreOrOurApkDownloadPage(requireContext());
-    } else if (reminderActionId == R.id.reminder_action_cds_temporary_error_learn_more) {
-      CdsTemporaryErrorBottomSheet.show(getChildFragmentManager());
-    } else if (reminderActionId == R.id.reminder_action_cds_permanent_error_learn_more) {
-      CdsPermanentErrorBottomSheet.show(getChildFragmentManager());
-    } else if (reminderActionId == R.id.reminder_action_fix_username_and_link) {
-      startActivityForResult(AppSettingsActivity.usernameRecovery(requireContext()), UsernameEditFragment.REQUEST_CODE);
-    } else if (reminderActionId == R.id.reminder_action_fix_username_link) {
-      startActivity(AppSettingsActivity.usernameLinkSettings(requireContext()));
-    } else if (reminderActionId == R.id.reminder_action_re_register) {
-      startActivity(RegistrationActivity.newIntentForReRegistration(requireContext()));
-    }
-  }
-
   private void hideKeyboard() {
     InputMethodManager imm = ServiceUtil.getInputMethodManager(requireContext());
     imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
@@ -879,11 +846,47 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   }
 
   private void initializeBanners() {
-    if (RemoteConfig.newBannerUi()) {
-      final List<Flow<? extends Banner>> bannerRepositories = List.of(OutdatedBuildBanner.createFlow(requireContext()),
-                                                                      MediaRestoreProgressBanner.createLifecycleAwareFlow(getViewLifecycleOwner()));
-      final BannerManager bannerManager                     = new BannerManager(bannerRepositories);
-      bannerManager.setContent(bannerView.get());
+    Map<String, Function0<Unit>>       listenerMap                 = new HashMap<>();
+    final UnauthorizedBanner.Producer  unauthorizedBannerProducer  = new UnauthorizedBanner.Producer(requireContext());
+    final ServiceOutageBanner.Producer serviceOutageBannerProducer = new ServiceOutageBanner.Producer(requireContext());
+
+    listenerMap.put(TextSecurePreferences.UNAUTHORIZED_RECEIVED, () -> {
+      unauthorizedBannerProducer.queryAndEmit();
+      return Unit.INSTANCE;
+    });
+    listenerMap.put(TextSecurePreferences.SERVICE_OUTAGE, () -> {
+      serviceOutageBannerProducer.queryAndEmit();
+      return Unit.INSTANCE;
+    });
+
+    final SharedPreferencesLifecycleObserver sharedPrefsObserver = new SharedPreferencesLifecycleObserver(requireContext(), listenerMap);
+
+    getLifecycle().addObserver(sharedPrefsObserver);
+
+    final List<Flow<? extends Banner>> bannerRepositories = List.of(OutdatedBuildBanner.createFlow(requireContext(), OutdatedBuildBanner.ExpiryStatus.EXPIRED_ONLY),
+                                                                    unauthorizedBannerProducer.getFlow(),
+                                                                    serviceOutageBannerProducer.getFlow(),
+                                                                    OutdatedBuildBanner.createFlow(requireContext(), OutdatedBuildBanner.ExpiryStatus.OUTDATED_ONLY),
+                                                                    DozeBanner.createFlow(requireContext()),
+                                                                    CdsTemporaryErrorBanner.createFlow(getChildFragmentManager()),
+                                                                    CdsPermanentErrorBanner.createFlow(getChildFragmentManager()),
+                                                                    UsernameOutOfSyncBanner.createFlow(requireContext(), usernameCorruptedToo -> {
+                                                                      if (usernameCorruptedToo) {
+                                                                        startActivityForResult(AppSettingsActivity.usernameRecovery(requireContext()), UsernameEditFragment.REQUEST_CODE);
+                                                                      } else {
+                                                                        startActivity(AppSettingsActivity.usernameLinkSettings(requireContext()));
+                                                                      }
+                                                                      return Unit.INSTANCE;
+                                                                    }),
+                                                                    MediaRestoreProgressBanner.createLifecycleAwareFlow(getViewLifecycleOwner()));
+    final BannerManager bannerManager = new BannerManager(bannerRepositories);
+    bannerManager.setContent(bannerView.get());
+  }
+
+  private void maybeScheduleRefreshProfileJob() {
+    switch (SignalStore.account().getUsernameSyncState()) {
+      case USERNAME_AND_LINK_CORRUPTED, LINK_CORRUPTED -> AppDependencies.getJobManager().add(new RefreshOwnProfileJob());
+      case IN_SYNC -> {}
     }
   }
 
@@ -1055,46 +1058,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     }
 
     viewModel.onMegaphoneVisible(megaphone);
-  }
-
-  private void updateReminders() {
-    if (RemoteConfig.newBannerUi()) {
-      return;
-    }
-    Context context = requireContext();
-
-    SimpleTask.run(getViewLifecycleOwner().getLifecycle(), () -> {
-      if (ExpiredBuildReminder.isEligible()) {
-        return Optional.of(new ExpiredBuildReminder(context));
-      } else if (UnauthorizedReminder.isEligible(context)) {
-        return Optional.of(new UnauthorizedReminder());
-      } else if (ServiceOutageReminder.isEligible(context)) {
-        AppDependencies.getJobManager().add(new ServiceOutageDetectionJob());
-        return Optional.of(new ServiceOutageReminder());
-      } else if (OutdatedBuildReminder.isEligible()) {
-        return Optional.of(new OutdatedBuildReminder(context));
-      } else if (DozeReminder.isEligible(context)) {
-        return Optional.of(new DozeReminder(context));
-      } else if (CdsTemporaryErrorReminder.isEligible()) {
-        return Optional.of(new CdsTemporaryErrorReminder());
-      } else if (CdsPermanentErrorReminder.isEligible()) {
-        return Optional.of(new CdsPermanentErrorReminder());
-      } else if (UsernameOutOfSyncReminder.isEligible()) {
-        AppDependencies.getJobManager().add(new RefreshOwnProfileJob());
-        return Optional.of(new UsernameOutOfSyncReminder());
-      } else {
-        return Optional.<Reminder>empty();
-      }
-    }, reminder -> {
-      if (reminder.isPresent() && getActivity() != null && !isRemoving()) {
-        if (!reminderView.resolved()) {
-          initializeReminderView();
-        }
-        reminderView.get().showReminder(reminder.get());
-      } else if (reminderView.resolved() && !reminder.isPresent()) {
-        reminderView.get().hide();
-      }
-    });
   }
 
   private void handleCreateGroup() {
@@ -1539,11 +1502,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     }
 
     endActionModeIfActive();
-  }
-
-  @Subscribe(threadMode = ThreadMode.MAIN)
-  public void onEvent(ReminderUpdateEvent event) {
-    updateReminders();
   }
 
   @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
