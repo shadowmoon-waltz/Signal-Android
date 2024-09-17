@@ -77,39 +77,56 @@ public class VoiceNotePlaybackService extends MediaSessionService {
     player.addListener(new VoiceNotePlayerEventListener());
 
     voiceNotePlayerCallback = new VoiceNotePlayerCallback(this, player);
-    mediaSession            = buildMediaSession(false);
 
-    if (mediaSession == null) {
+    final MediaSession session = buildMediaSession(false);
+    if (session == null) {
       Log.e(TAG, "Unable to create media session at all, stopping service to avoid crash.");
       stopSelf();
       return;
+    } else {
+      mediaSession = session;
     }
 
-    keyClearedReceiver = new KeyClearedReceiver(this, mediaSession.getToken());
+    keyClearedReceiver = new KeyClearedReceiver(this, session.getToken());
 
     setMediaNotificationProvider(new VoiceNoteMediaNotificationProvider(this));
     setListener(new MediaSessionServiceListener());
-    AppDependencies.getDatabaseObserver().registerAttachmentObserver(attachmentDeletionObserver);
+    AppDependencies.getDatabaseObserver().registerAttachmentDeletedObserver(attachmentDeletionObserver);
   }
 
   @Override
   public void onTaskRemoved(Intent rootIntent) {
     super.onTaskRemoved(rootIntent);
 
-    mediaSession.getPlayer().stop();
-    mediaSession.getPlayer().clearMediaItems();
+    final MediaSession session = mediaSession;
+    if (session != null) {
+      session.getPlayer().stop();
+      session.getPlayer().clearMediaItems();
+    }
   }
 
   @Override
   public void onDestroy() {
     AppDependencies.getDatabaseObserver().unregisterObserver(attachmentDeletionObserver);
-    player.release();
-    mediaSession.release();
-    mediaSession = null;
+
+    final VoiceNotePlayer voiceNotePlayer = player;
+    if (voiceNotePlayer != null) {
+      voiceNotePlayer.release();
+    }
+
+    MediaSession session = mediaSession;
+    if (session != null) {
+      session.release();
+      mediaSession = null;
+    }
+
+    KeyClearedReceiver receiver = keyClearedReceiver;
+    if (receiver != null) {
+      receiver.unregister();
+    }
+
     clearListener();
-    mediaSession = null;
     super.onDestroy();
-    keyClearedReceiver.unregister();
   }
 
   @Nullable

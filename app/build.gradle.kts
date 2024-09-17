@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1451
-val canonicalVersionName = "7.15.4"
+val canonicalVersionCode = 1459
+val canonicalVersionName = "7.17.2"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -59,6 +59,7 @@ val signalBuildToolsVersion: String by rootProject.extra
 val signalCompileSdkVersion: String by rootProject.extra
 val signalTargetSdkVersion: Int by rootProject.extra
 val signalMinSdkVersion: Int by rootProject.extra
+val signalNdkVersion: String by rootProject.extra
 val signalJavaVersion: JavaVersion by rootProject.extra
 val signalKotlinJvmTarget: String by rootProject.extra
 
@@ -85,6 +86,7 @@ android {
 
   buildToolsVersion = signalBuildToolsVersion
   compileSdkVersion = signalCompileSdkVersion
+  ndkVersion = signalNdkVersion
 
   flavorDimensions += listOf("distribution", "environment")
   useLibrary("org.apache.http.legacy")
@@ -94,6 +96,7 @@ android {
 
   kotlinOptions {
     jvmTarget = signalKotlinJvmTarget
+    freeCompilerArgs = listOf("-Xjvm-default=all")
   }
 
   keystores["debug"]?.let { properties ->
