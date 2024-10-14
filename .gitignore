@@ -1,3 +1,6 @@
+keystore.release.properties
+*.jks
+
 .classpath
 captures/
 project.properties
@@ -30,6 +33,4 @@ pkcs11.password
 dev.keystore
 maps.key
 /local/
-
-keystore.release.properties
-*.jks
+kls_database.db

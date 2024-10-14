@@ -74,12 +74,15 @@ internal class BillingApiImpl(
           Log.d(TAG, "purchasesUpdatedListener: ${purchases.size} purchases.")
           val newestPurchase = purchases.maxByOrNull { it.purchaseTime }
           if (newestPurchase == null) {
+            Log.d(TAG, "purchasesUpdatedListener: no purchase.")
             BillingPurchaseResult.None
           } else {
+            Log.d(TAG, "purchasesUpdatedListener: successful purchase at ${newestPurchase.purchaseTime}")
             BillingPurchaseResult.Success(
               purchaseToken = newestPurchase.purchaseToken,
               isAcknowledged = newestPurchase.isAcknowledged,
-              purchaseTime = newestPurchase.purchaseTime
+              purchaseTime = newestPurchase.purchaseTime,
+              isAutoRenewing = newestPurchase.isAutoRenewing
             )
           }
         }
@@ -183,17 +186,26 @@ internal class BillingApiImpl(
     }
   }
 
-  override suspend fun queryPurchases() {
+  override suspend fun queryPurchases(): BillingPurchaseResult {
     val param = QueryPurchasesParams.newBuilder()
       .setProductType(ProductType.SUBS)
       .build()
 
-    val purchases = doOnConnectionReady {
+    val result = doOnConnectionReady {
       Log.d(TAG, "Querying purchases.")
       billingClient.queryPurchasesAsync(param)
     }
 
-    purchasesUpdatedListener.onPurchasesUpdated(purchases.billingResult, purchases.purchasesList)
+    purchasesUpdatedListener.onPurchasesUpdated(result.billingResult, result.purchasesList)
+
+    val purchase = result.purchasesList.maxByOrNull { it.purchaseTime } ?: return BillingPurchaseResult.None
+
+    return BillingPurchaseResult.Success(
+      purchaseTime = purchase.purchaseTime,
+      purchaseToken = purchase.purchaseToken,
+      isAcknowledged = purchase.isAcknowledged,
+      isAutoRenewing = purchase.isAutoRenewing
+    )
   }
 
   /**

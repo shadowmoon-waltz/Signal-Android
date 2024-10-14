@@ -178,8 +178,12 @@ object InAppPaymentsRepository {
     return when (inAppPayment.type) {
       InAppPaymentType.UNKNOWN -> error("Unsupported type UNKNOWN.")
       InAppPaymentType.ONE_TIME_GIFT, InAppPaymentType.ONE_TIME_DONATION -> "$JOB_PREFIX${inAppPayment.id.serialize()}"
-      InAppPaymentType.RECURRING_DONATION, InAppPaymentType.RECURRING_BACKUP -> "$JOB_PREFIX${inAppPayment.type.code}"
+      InAppPaymentType.RECURRING_DONATION, InAppPaymentType.RECURRING_BACKUP -> getRecurringJobQueueKey(inAppPayment.type)
     }
+  }
+
+  fun getRecurringJobQueueKey(inAppPaymentType: InAppPaymentType): String {
+    return "$JOB_PREFIX${inAppPaymentType.code}"
   }
 
   /**
@@ -224,6 +228,7 @@ object InAppPaymentsRepository {
       DonationErrorSource.ONE_TIME -> InAppPaymentType.ONE_TIME_DONATION
       DonationErrorSource.MONTHLY -> InAppPaymentType.RECURRING_DONATION
       DonationErrorSource.GIFT -> InAppPaymentType.ONE_TIME_GIFT
+      DonationErrorSource.BACKUPS -> InAppPaymentType.RECURRING_BACKUP
       DonationErrorSource.GIFT_REDEMPTION -> InAppPaymentType.UNKNOWN
       DonationErrorSource.KEEP_ALIVE -> InAppPaymentType.UNKNOWN
       DonationErrorSource.UNKNOWN -> InAppPaymentType.UNKNOWN
@@ -266,7 +271,7 @@ object InAppPaymentsRepository {
       InAppPaymentType.ONE_TIME_GIFT -> DonationErrorSource.GIFT
       InAppPaymentType.ONE_TIME_DONATION -> DonationErrorSource.ONE_TIME
       InAppPaymentType.RECURRING_DONATION -> DonationErrorSource.MONTHLY
-      InAppPaymentType.RECURRING_BACKUP -> DonationErrorSource.UNKNOWN // TODO [message-backups] error handling
+      InAppPaymentType.RECURRING_BACKUP -> DonationErrorSource.BACKUPS
     }
   }
 

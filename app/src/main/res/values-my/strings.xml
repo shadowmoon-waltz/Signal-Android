@@ -22,6 +22,9 @@
   <!-- Removed by excludeNonTranslatables <string name="pending_transfer_url" translatable="false">https://support.signal.org/hc/articles/360031949872#pending</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_faq_url" translatable="false">https://support.signal.org/hc/articles/360031949872#donate</string> -->
 
+    <!-- First placeholder is productId, second placeholder is app package -->
+    <string name="backup_subscription_management_url">https://play.google.com/store/account/subscriptions?sku=%1$s&amp;package=%2$s</string>
+
     <string name="yes">ဟုတ်ကဲ့</string>
     <string name="no">မလုပ်ပါ</string>
     <string name="delete">ဖျက်ရန်</string>
@@ -258,6 +261,7 @@
 
     <!-- CameraXFragment -->
     <string name="CameraXFragment_tap_for_photo_hold_for_video">ဓါတ်ပုံအတွက် နှိပ်ပါ။ ဗီဒီယိုအတွက် ဖိထားပါ</string>
+    <!-- Accessibility content description to describe the capture button when taking an image/video -->
     <string name="CameraXFragment_capture_description">ဓာတ်ပုံရိုက်သည်</string>
     <string name="CameraXFragment_change_camera_description">ကင်မရာပြောင်းရန်</string>
     <string name="CameraXFragment_open_gallery_description">ပုံပြခန်းကို ဖွင့်ပါ</string>
@@ -343,7 +347,7 @@
     <!-- Message on dialog when call link url cannot be parsed -->
     <string name="CommunicationActions_this_is_not_a_valid_call_link">ဤသည်မှာ မှန်ကန်သော ကောလ်လင့်ခ်တစ်ခု မဟုတ်ပါ။ ပါဝင်ရန် မကြိုးစားမီ လင့်ခ်တစ်ခုလုံးမှာ နဂိုအတိုင်းဖြစ်ကြောင်းနှင့် မှန်ကန်ကြောင်း သေချာအောင်လုပ်ပါ။</string>
     <!-- Displayed in a snackbar when the user is already in a call -->
-    <string name="CommunicationActions__you_are_already_in_a_call">You are already in a call</string>
+    <string name="CommunicationActions__you_are_already_in_a_call">သင်သည် ကောလ်ထဲတွင် ရှိပြီးဖြစ်သည်</string>
 
     <!-- ConfirmIdentityDialog -->
 
@@ -400,6 +404,7 @@
     <string name="ConversationItem_unable_to_open_media">ရုပ်သံ ကိုဖွင့်နိုင်သည့် app မရှိပါ။</string>
     <string name="ConversationItem_copied_text">ကူးပြီးပါပြီ %1$s</string>
     <string name="ConversationItem_from_s">%1$s မှ</string>
+    <!-- Footer shown in legacy SMS message where %s is the name of the recipient the message is going to -->
     <string name="ConversationItem_to_s">%1$s သို့</string>
     <string name="ConversationItem_read_more">ဆက်ဖတ်ရန်</string>
     <string name="ConversationItem_download_more">ဒေါင်းလုတ် ဆွဲရန်</string>
@@ -433,6 +438,7 @@
     <string name="ConversationActivity_send_edit">တည်းဖြတ်မှု ပေးပို့ရန်</string>
     <string name="ConversationActivity_compose_message">စာရေးသားမည်</string>
     <string name="ConversationActivity_sorry_there_was_an_error_setting_your_attachment">ပူးတွဲဖိုင်ကို ထည့်ရာတွင် အမှားအယွင်းရှိသည်။</string>
+    <!-- Toast shown when user is unable to find the recipient when sending a message -->
     <string name="ConversationActivity_recipient_is_not_a_valid_sms_or_email_address_exclamation">လက်ခံသူထံသို့ပို့၍မရနိုင်ပါ SMS သို့မဟုတ် အီးမေးလိပ်စာ မဟုတ်ပါ!</string>
     <string name="ConversationActivity_message_is_empty_exclamation">သတင်းစကား မရှိပါ!</string>
     <string name="ConversationActivity_group_members">အဖွဲ့ဝင်များ</string>
@@ -565,6 +571,7 @@
         <item quantity="other">ပူးတွဲဖိုင် %1$d ကို ဖုန်းထဲတွင် သိမ်းနေသည်</item>
     </plurals>
     <string name="ConversationFragment_pending">ဆိုင်းငံ့ထားသည်…</string>
+    <!-- Describes how the message was sent when looking at a message detail. Previously, messages could be through other means like SMS -->
     <string name="ConversationFragment_push">ဒေတာ (Signal)</string>
     <string name="ConversationFragment_mms">MMS</string>
     <string name="ConversationFragment_sms">SMS</string>
@@ -789,7 +796,7 @@
 
     <!-- CreateBackupBottomSheet -->
     <!-- Bottom sheet title -->
-    <string name="CreateBackupBottomSheet__create_backup">ဘက်ခ်အပ် ဖန်တီးမည်</string>
+    <string name="CreateBackupBottomSheet__you_are_all_set">You\'re all set. Start your backup now.</string>
     <!-- Bottom sheet message -->
     <string name="CreateBackupBottomSheet__depending_on_the_size">သင်၏ ဘက်ခ်အပ်အရွယ်အစားပေါ် မူတည်၍ အချိန်ကြာမြင့်နိုင်သည်။ ဘက်ခ်အပ်လုပ်နေစဉ်တွင် သင်သည် ပုံမှန်အတိုင်း သင့်ဖုန်းကို အသုံးပြုနိုင်သည်။</string>
     <!-- Action button to dismiss sheet and back up later -->
@@ -986,6 +993,7 @@
     <string name="DeviceListActivity_unlink_s">\'%1$s\' ကိုမချိတ်တော့ဘူးလား?</string>
     <string name="DeviceListActivity_by_unlinking_this_device_it_will_no_longer_be_able_to_send_or_receive">မချိတ်ဆက်တော့သည့်အတွက် စာတိုများကို ပေးပို့ခြင်း သို့မဟုတ် လက်ခံခြင်း မပြုနိုင်တော့ပါ။</string>
     <string name="DeviceListActivity_network_connection_failed">ကွန်ယက်ချိတ်ဆက်ခြင်းမအောင်မြင်ပါ</string>
+    <!-- Button label on an alert dialog. The dialog informs the user they have network issues. If pressed, we will retry the network request. -->
     <string name="DeviceListActivity_try_again">ထပ်မံကြိုးစားမည်</string>
     <string name="DeviceListActivity_unlinking_device">ကရိယာကို မချိတ်ဆက်တော့</string>
     <string name="DeviceListActivity_unlinking_device_no_ellipsis">ဖုန်းကို မချိတ်ဆက်တော့</string>
@@ -1368,7 +1376,7 @@
     <string name="ShareableGroupLinkDialogFragment__group_link">Group link</string>
     <string name="ShareableGroupLinkDialogFragment__share">ဝေမျှရန်</string>
     <string name="ShareableGroupLinkDialogFragment__reset_link">link ကိုပြန်လည်သတ်မှတ်</string>
-    <string name="ShareableGroupLinkDialogFragment__require_admin_approval">Require admin approval</string>
+    <string name="ShareableGroupLinkDialogFragment__require_admin_approval">အက်ဒ်မင်၏ ခွင့်ပြုချက်လိုအပ်သည်</string>
     <string name="ShareableGroupLinkDialogFragment__require_an_admin_to_approve_new_members_joining_via_the_group_link">အဖွဲ့ဝင်အသစ်များကို အဖွဲ့လင့်ခ်မှ ဝင်ခြင်းကို စီမံသူမှ အတည်ပြုရန် လိုအပ်စေပါ။</string>
     <string name="ShareableGroupLinkDialogFragment__are_you_sure_you_want_to_reset_the_group_link">အဖွဲ့လင့်ခ်ကို ပြန်သတ်မှတ်မည်ဆိုတာ သင်သေချာပါသလား? လက်ရှိလင့်ခ်ဖြင့် အခြားလူများ အဖွဲ့သို့ မဝင်ရောက်နိုင်တော့ပါမည်။</string>
 
@@ -1464,6 +1472,7 @@
         <item quantity="other">%1$dစာ SMS ဖြင့် ဖိတ်ခေါ်မလား။</item>
     </plurals>
     <string name="InviteActivity_lets_switch_to_signal">Signal ကိုပြောင်းသုံးကြစို့ : %1$s</string>
+    <!-- Toast shown when Signal is unable to find an external app to share the Invite text string to -->
     <string name="InviteActivity_no_app_to_share_to">သင့်မှာမျှဝေစရာ app များရှိပုံမရပါ။</string>
 
     <!-- LearnMoreTextView -->
@@ -1873,6 +1882,7 @@
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them">%1$s အား သင့်ထံ မက်ဆေ့ချ်ပို့ခွင့်ပြုပြီး သင်၏ အမည်နှင့် ပုံကို ၎င်းထံ မျှဝေမည်လား။ ၎င်းတို့အား ဘလော့ခ် မဖြေမချင်း မက်ဆေ့ချ်များ ရရှိမည် မဟုတ်ပါ။</string>
     <!-- Shown in message request flow. Describes what will happen if you unblock an SMS user -->
     <string name="MessageRequestBottomView_do_you_want_to_let_s_message_you_wont_receive_any_messages_until_you_unblock_them_SMS">%1$s အား သင့်ထံ မက်ဆေ့ချ် ပို့ခွင့်ပြုမည်လား။ ၎င်းတို့အား ဘလော့ခ် မဖြေမချင်း မက်ဆေ့ချ်များ ရရှိမည် မဟုတ်ပါ။</string>
+    <!-- Shown in message request flow. Describes what will happen if you unblock the Signal release notes channel -->
     <string name="MessageRequestBottomView_get_updates_and_news_from_s_you_wont_receive_any_updates_until_you_unblock_them">%1$s ထံမှ အပ်ဒိတ်များနှင့် သတင်းများ ရယူမည်လား။ ၎င်းတို့အား ဘလော့ခ် မဖြေမချင်း အပ်ဒိတ်များ ရရှိမည် မဟုတ်ပါ။</string>
     <string name="MessageRequestBottomView_continue_your_conversation_with_this_group_and_share_your_name_and_photo">ထိုအဖွဲ့နှင့် ဆက်လက်၍ ချက်(တ်)ပြီး သင်၏ အမည်နှင့် ရုပ်ပုံကို အဖွဲ့ဝင်များနှင့် ဝေမျှမည်လား။</string>
     <string name="MessageRequestBottomView_upgrade_this_group_to_activate_new_features">ဤပုံစံဟောင်းအဖွဲ့ကို အသုံးပြု၍မရတော့ပါ။ @mentions နှင့် အက်ဒ်မင်များကဲ့သို့ အင်္ဂါရပ်အသစ်များကို သက်ဝင်လုပ်ဆောင်ရန် အဖွဲ့သစ်တစ်ဖွဲ့ ဖန်တီးပါ။</string>
@@ -2171,6 +2181,7 @@
 
     <string name="WebRtcCallView__no_one_else_is_here">အခြား မည်သူမျှ မရှိပါ</string>
     <string name="WebRtcCallView__s_is_in_this_call">%1$s သည် ၎င်းခေါ်ဆိုမှုထဲတွင် ရှိပါသည်</string>
+    <!-- Description of who is in the call when it is only you, %1$s is replaced with either CallParticipant__you or CallParticipant__you_on_another_device -->
     <string name="WebRtcCallView__s_are_in_this_call">%1$s တို့သည် ဤကောလ်တွင် ရှိနေပါသည်</string>
     <string name="WebRtcCallView__s_and_s_are_in_this_call">%1$s နှင့် %2$s သည် ၎င်းခေါ်ဆိုမှုထဲတွင် ရှိပါသည်</string>
 
@@ -2562,7 +2573,7 @@
     <string name="ApkUpdateNotifications_failed_general_body">နောက်မှ ထပ်ကြိုးစားပါမည်။</string>
     <string name="ApkUpdateNotifications_auto_update_success_title">Signal ကို အောင်မြင်စွာ အပ်ဒိတ်လုပ်လိုက်ပါပြီ</string>
     <string name="ApkUpdateNotifications_auto_update_success_body">သင်သည် ဗားရှင်း %1$s သို့ အလိုအလျောက် အပ်ဒိတ်လုပ်လိုက်ပါပြီ။</string>
-    <string name="ApkUpdateNotifications_manual_update_success_body">You updated to version %1$s.</string>
+    <string name="ApkUpdateNotifications_manual_update_success_body">သင်သည် ဗားရှင်း %1$s သို့ အပ်ဒိတ်လုပ်ထားသည်။</string>
 
     <!-- UntrustedSendDialog -->
     <string name="UntrustedSendDialog_send_message">စာပို့မလား?</string>
@@ -2975,6 +2986,7 @@
     <string name="conversation_activity__attachment_thumbnail">ပူးတွဲဖိုင် စီခြင်း</string>
     <string name="conversation_activity__quick_attachment_drawer_toggle_camera_description">ကင်မရာပူးတွဲဖိုင်စီစဉ်ခြင်း နှိပ်ရန်</string>
     <string name="conversation_activity__quick_attachment_drawer_record_and_send_audio_description">အသံဖမ်းပြီး ပေးပို့လိုက်ပါ</string>
+    <!-- Accessibility content description describing how a user can lock voice note recording. -->
     <string name="conversation_activity__quick_attachment_drawer_lock_record_description">အသံဖိုင်တွဲ၏ အသံသွင်းချက်ကို လော့ခ်ချပါ</string>
     <string name="conversation_activity__message_could_not_be_sent">မက်ဆေ့ချ်ပို့ လို့မရပါ။ သင်၏ အင်တာနက်လိုင်းကို စစ်၍ ပြန်စမ်းကြည့်ပါ။</string>
 
@@ -2993,6 +3005,7 @@
     <string name="conversation_item_sent__message_read">စာဖတ်၍ ပြီးစီး။</string>
 
     <!-- conversation_item_received -->
+    <!-- Content description for profile pictures -->
     <string name="conversation_item_received__contact_photo_description">လိပ်စာပါ ဓာတ်ပုံ</string>
 
     <!-- ConversationUpdateItem -->
@@ -3077,6 +3090,7 @@
     <string name="EnableCallNotificationSettingsDialog__everything_looks_good_now">အခု အားလုံးကြည့်ကောင်းနေပြီ!</string>
     <string name="EnableCallNotificationSettingsDialog__to_receive_call_notifications_tap_here_and_turn_on_show_notifications">ခေါ်ဆိုမှု သတိပေးချက်များ လက်ခံရန် ဤနေရာနှိပ်၍ \"သတိပေးချက်များ ပြရန်\" အား ဖွင့်ထားပေးပါ။</string>
     <string name="EnableCallNotificationSettingsDialog__to_receive_call_notifications_tap_here_and_turn_on_notifications">ခေါ်ဆိုမှု သတိပေးချက်များ လက်ခံရန် ဤနေရာတွင်နှိပ်၍ သတိပေးချက်များ ဖွင့်ကာ အသံ နှင့် စာပေါ်ခြင်းများ (pop-ups) ကို ဖွင့်ထားရန် သေချာစေပါ။</string>
+    <!-- Message shown when Signal determines potential issues with getting call notifications and how to fix it -->
     <string name="EnableCallNotificationSettingsDialog__to_receive_call_notifications_tap_here_and_enable_background_activity_in_battery_settings">ခေါ်ဆိုမှု သတိပေးချက်များ လက်ခံရန် ဤနေရာတွင်နှိပ်၍ \"ဘက်ထရီ\" အပြင်အဆင်များထဲတွင် နောက်ခံလှုပ်ရှားမှု ဖွင့်ထားပေးပါ။ </string>
     <string name="EnableCallNotificationSettingsDialog__settings">အပြင်အဆင်များ</string>
     <string name="EnableCallNotificationSettingsDialog__to_receive_call_notifications_tap_settings_and_turn_on_show_notifications">ခေါ်ဆိုမှု သတိပေးချက်များ လက်ခံရန် အပြင်အဆင်များ နှိပ်၍ \"သတိပေးချက်များ ပြရန်\" ကိုဖွင့်ထားပေးပါ။</string>
@@ -3206,8 +3220,6 @@
     <string name="EditAboutFragment_free_to_chat">အခမဲ့ချက်(တ်)နိုင်သည်</string>
     <string name="EditAboutFragment_taking_a_break">အနားယူခြင်း</string>
     <string name="EditAboutFragment_working_on_something_new">အရာအသစ်တစ်ခု ကိုလုပ်ဆောင်နေသည်</string>
-    <!-- Error text shown when the About text contains an invalid character -->
-    <string name="EditAboutFragment_one_or_more_characters">One or more characters is invalid.</string>
 
     <!-- EditProfileFragment -->
     <string name="EditProfileFragment__edit_group">အဖွဲ့ကို ပြင်မည်</string>
@@ -3306,6 +3318,7 @@
   <!-- Removed by excludeNonTranslatables <string name="HelpFragment__emoji_1" translatable="false">emoji_1</string> -->
   <!-- Removed by excludeNonTranslatables <string name="HelpFragment__link__debug_info" translatable="false">https://support.signal.org/hc/articles/360007318591</string> -->
   <!-- Removed by excludeNonTranslatables <string name="HelpFragment__link__faq" translatable="false">https://support.signal.org</string> -->
+    <!-- Heading used within support email that lists additional information to help with debugging -->
     <string name="HelpFragment__support_info">ပံ့ပိုးမှု အချက်အလက်များ</string>
     <string name="HelpFragment__signal_android_support_request">Signal Android ပံ့ပိုးရန် တောင်းဆိုမှု</string>
   <!-- Removed by excludeNonTranslatables <string name="HelpFragment__debug_log" translatable="false">Debug Log:</string> -->
@@ -3393,6 +3406,7 @@
     <string name="preferences__retrieve_link_previews_from_websites_for_messages">သင်ပေးပို့သော မက်ဆေ့ချ်များ အတွက် ဝဘ်ဆိုဒ်များမှ ကြိုတင်ကြည့်ရှုနိုင်သည့် လင့်ခ်များကို တိုက်ရိုက်ရယူပါ။</string>
     <string name="preferences__change_passphrase">စကားဝှက်ကို ပြောင်းပါ</string>
     <string name="preferences__change_your_passphrase">သင့်ရဲ့ စကားဝှက်ကို ပြောင်းပါ</string>
+    <!-- Legacy preference menu item to enable a passphrase screen lock that is only available to those who have previously had a passphrase -->
     <string name="preferences__enable_passphrase">ဖုန်းမျက်နှာပြင်ကို စကားဝှက်ဖြင့် ပိတ်ထား၍ ရပါသည်</string>
     <string name="preferences__lock_signal_and_message_notifications_with_a_passphrase">ဖုန်းမျက်နှာပြင်နှင့် အသိပေးချက်များကို စကားဝှက်နှင့် ပိတ်ပါ</string>
     <string name="preferences__screen_security">အဖွင့်စာမျက်နှာ လုံခြုံရေး</string>
@@ -3405,6 +3419,7 @@
     <string name="preferences__pref_led_blink_title">LED လင်းမည့်ပုံစံ</string>
     <string name="preferences__customize">စိတ်ကြိုက်လုပ်ရန်</string>
     <string name="preferences__change_sound_and_vibration">အသံနှင့် တုန်ခါမှုကို ပြောင်းရန်</string>
+    <!-- Preference menu item to control the sound of notifications -->
     <string name="preferences__sound">အသံ</string>
     <string name="preferences__silent">အသံတိတ်</string>
     <string name="preferences__default">မူလ</string>
@@ -5251,6 +5266,7 @@
     <!-- Positive dialog action when sending a story via an add to group story button -->
     <string name="MediaReviewFragment__add_to_story">စတိုရီတွင် ပေါင်းထည့်ရန်</string>
     <string name="MediaReviewFragment__add_a_message">မက်ဆေ့ချ် ပေါင်းထည့်ရန်</string>
+    <!-- Hint text inside of a compose box that is shown when the user is adding media while quoting a message. -->
     <string name="MediaReviewFragment__add_a_reply">ပြန်စာ ပေါင်းထည့်ရန်</string>
     <string name="MediaReviewFragment__send_to">ဖော်ပြပါသို့ ပို့ရန်</string>
     <string name="MediaReviewFragment__view_once_message">တစ်ခါကြည့် မီဒီယာ</string>
@@ -5850,6 +5866,8 @@
     <plurals name="StoryViewerFragment__d_replies">
         <item quantity="other">ပြန်စာ %1$d ခု</item>
     </plurals>
+    <!-- Toast / Snackbar label when unhiding a story during viewer -->
+    <string name="StoryViewerPageFragment__story_no_longer_hidden">စတိုရီကို ဝှက်မထားတော့ပါ</string>
     <!-- Label on group stories to add a story -->
     <string name="StoryViewerPageFragment__add">ပေါင်းထည့်မယ်</string>
     <!-- Used when view receipts are disabled -->
@@ -7061,10 +7079,10 @@
 
     <!-- BackupAlertBottomSheet -->
     <!-- Sheet title when media backups have been disabled -->
-    <string name="BackupAlertBottomSheet__media_backups_are_off">မီဒီယာဘက်ခ်အပ်များကို ပိတ်ထားသည်</string>
+    <string name="BackupAlertBottomSheet__your_backups_subscription_expired">Your backups subscription expired</string>
     <!-- Sheet body part 1 when media backups have been disabled. Placeholder is the number of days until deletion. -->
-    <plurals name="BackupAlertBottomSheet__your_signal_media_backup_plan">
-        <item quantity="other">သင့်ငွေပေးချေမှုကို ကျွန်ုပ်တို့ မလုပ်ဆောင်နိုင်ခဲ့သောကြောင့် သင်၏ Signal မီဒီယာ ဘက်ခ်အပ်အစီအစဉ်ကို ပယ်ဖျက်လိုက်ပါသည်။ သင့်ဘက်ခ်အပ်တွင် သိမ်းဆည်းထားသည့် မည်သည့်မီဒီယာကိုမဆို ဒေါင်းလုဒ်လုပ်ရန် သင့်တွင် အချိန် %1$d ရက်ရှိသည်။ %1$d ရက်ကြာပြီးနောက် သင်၏ ဘက်ခ်အပ်လုပ်ထားသောမီဒီယာကို ဖျက်လိုက်ပါမည်။</item>
+    <plurals name="BackupAlertBottomSheet__your_backup_plan_has_expired">
+        <item quantity="other">Your backup plan has expired because it couldn\'t be renewed with your current payment method. After %1$d days, the media in your backup will be deleted.</item>
     </plurals>
     <!-- Sheet body part 2 when media backups have been disabled. -->
     <string name="BackupAlertBottomSheet__you_can_begin_paying_for_backups_again">သင်၏မီဒီယာအားလုံးကို ဆက်လက်ဘက်ခ်အပ်လုပ်ရန် ဘက်ခ်အပ်လုပ်ခြင်းများအတွက် အချိန်မရွေး ထပ်မံငွေပေးချေနိုင်ပါသည်။ </string>
@@ -7081,9 +7099,9 @@
         <item quantity="other">\"ကျော်မည်\" ကို ရွေးချယ်ပါက သင်ဘက်ခ်အပ်လုပ်ထားသော မီဒီယာကို %1$d ရက်အတွင်း ဖျက်ပစ်ပါမည်။</item>
     </plurals>
     <!-- Sheet title when user payment failed to process -->
-    <string name="BackupAlertBottomSheet__cant_process_backup_payment">ဘက်ခ်အပ်အတွက် ငွေပေးချေမှုကို လုပ်ဆောင်၍မရပါ</string>
+    <string name="BackupAlertBottomSheet__your_backups_subscription_failed_to_renew">Your backups subscription failed to renew</string>
     <!-- Sheet body when user payment failed to process -->
-    <string name="BackupAlertBottomSheet__were_having_trouble_collecting__google_pay">သင်၏ ဘက်ခ်အပ်အတွက် လစဉ်ငွေပေးချေမှုကို ကောက်ခံရာတွင် ပြဿနာရှိနေပါသည်။ သင်၏ ငွေပေးချေမှုနည်းလမ်းသည် အပ်ဒိတ်ဖြစ်ကြောင်း သေချာပါစေ။ မဖြစ်ပါက Google Pay တွင် အပ်ဒိတ်လုပ်ပါ။ Signal က ရက်အနည်းငယ်အကြာတွင် ငွေပေးချေမှုကို ထပ်မံစီမံလုပ်ဆောင်ရန် ကြိုးစားပါမည်။</string>
+    <string name="BackupAlertBottomSheet__check_to_make_sure_your_payment_method">Check to make sure your payment method is up to date. Tap Manage subscription and under Payment methods tap Update.</string>
     <!-- Sheet title for generic backup error -->
     <string name="BackupAlertBottomSheet__couldnt_complete_backup">ဘက်ခ်အပ်လုပ်ခြင်းကို အပြီးသတ်၍မရပါ။</string>
     <!-- Sheet body for generic backup error. Placeholder is days since last backup. -->
@@ -7092,12 +7110,16 @@
     <string name="BackupAlertBottomSheet__learn_more">ပိုမိုလေ့လာရန်</string>
     <!-- Secondary action button text when user does not have enough free space to download their backup. -->
     <string name="BackupAlertBottomSheet__skip">ကျော်မည်</string>
+    <!-- Primary action button to manage subscription in Google Play -->
+    <string name="BackupAlertBottomSheet__manage_subscription">ပုံမှန်လှူဒါန်းငွေကို စီမံရန်</string>
+    <!-- Primary action button text prompting user to subscriber. Placeholder is formatted price -->
+    <string name="BackupAlertBottomSheet__subscribe_for_s_month">Subscribe for %1$s/month</string>
     <!-- Primary action button text prompting user to download their media -->
     <string name="BackupAlertBottomSheet__download_media_now">မီဒီယာကို ယခုဒေါင်းလုဒ်လုပ်ပါ</string>
-    <!-- Secondary action button text to dismiss sheet, noting the user can download later -->
-    <string name="BackupAlertBottomSheet__download_later">နောက်မှ ဒေါင်းလုဒ်လုပ်ပါ</string>
     <!-- Secondary action button text to dismiss sheet, skipping media download -->
     <string name="BackupAlertBottomSheet__dont_download_media">မီဒီယာကို ဒေါင်းလုဒ်မလုပ်ပါနှင့်</string>
+    <!-- Secondary generic action button to dismiss sheet without performing an action -->
+    <string name="BackupAlertBottomSheet__not_now">ယခု မလုပ်သေးပါ</string>
     <!-- Dialog title for last chance to download backup -->
     <string name="BackupAlertBottomSheet__media_will_be_deleted">မီဒီယာကို ဖျက်လိုက်ပါမည်</string>
     <!-- Dialog message for last chance to download backup -->
@@ -7109,7 +7131,23 @@
 
     <!-- BackupStatus -->
     <!-- Status title when user does not have enough free space to download their media. Placeholder is required disk space. -->
-    <string name="BackupStatus__free_up_s_of_space_to_download_your_media">သင့်မီဒီယာကို ဒေါင်းလုဒ်လုပ်ရန် နေရာလွတ် %1$s ထွက်လာအောင် ရှင်းထုတ်ပါ။</string>
+    <string name="BackupStatus__free_up_s_of_space_to_download_your_media">သင့်မီဒီယာကိုပြန်လည်ရယူရန် နေရာလွတ် %1$s ထွက်လာအောင် ရှင်းထုတ်ပါ။</string>
+    <!-- Status title for banner when user is actively restoring media from a backup -->
+    <string name="BackupStatus__restoring_media">မီဒီယာကို ပြန်လည်ရယူနေသည်</string>
+    <!-- Status title for banner when user has paused restore media from a backup -->
+    <string name="BackupStatus__restore_paused">ပြန်လည်ရယူခြင်းကို ခေတ္တရပ်ထားသည်</string>
+    <!-- Status title for banner when user has completed restoring restore media from a backup -->
+    <string name="BackupStatus__restore_complete">ပြန်လည်ရယူခြင်း ပြီးစီးပါပြီ</string>
+
+    <!-- Status subtitle for banner when restoring media pauses for Wi-Fi -->
+    <string name="BackupStatus__status_waiting_for_wifi">Wi-Fi ကို စောင့်နေသည်…</string>
+    <!-- Status subtitle for banner when restoring media pauses for internet in general -->
+    <string name="BackupStatus__status_no_internet">အင်တာနက်မရှိ…</string>
+    <!-- Status subtitle for banner when restoring media pauses for low battery -->
+    <string name="BackupStatus__status_device_has_low_battery">ဘက်ထရီအားနည်းနေသည်</string>
+    <!-- Status subtitle for banner when restoring media. Placeholders are size already restored and total size to restore. e.g., 4.5MB of 100MB -->
+    <string name="BackupStatus__status_size_of_size">%1$s ၏ %2$s</string>
+
 
     <!-- BackupsTypeSettingsFragment -->
     <!-- Displayed as the user\'s payment method as a label in a preference row -->
@@ -7162,8 +7200,18 @@
     <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_to_enable_this_feature">ဤအင်္ဂါရပ်ကိုဖွင့်ရန် အဆင့်မြှင့်တင်ပါ</string>
     <!-- Subtitle of bottom sheet detailing that the user must upgrade to enable storage optimization -->
     <string name="UpgradeToEnableOptimizedStorageSheet__storage_optimization_can_only_be_used">သိုလှောင်မှု အကောင်းဆုံးချိန်ညှိခြင်းကို Signal Backups ၏ အခပေးအဆင့်ဖြင့်သာ အသုံးပြုနိုင်သည်။ ဤအင်္ဂါရပ်ကို စတင်အသုံးပြုရန် သင်၏ ဘက်ခ်အပ်အစီအစဉ်ကို အဆင့်မြှင့်တင်ပါ။</string>
-    <!-- Primary action to launch upgrade flow -->
-    <string name="UpgradeToEnableOptimizedStorageSheet__upgrade_now">ယခု အဆင့်မြှင့်တင်ပါ</string>
+    <!-- Primary action to launch upgrade flow. Placeholder is formatted price. -->
+    <string name="UpgradeToEnableOptimizedStorageSheet__subscribe_for_s_month">Subscribe for %1$s/month</string>
+
+    <!-- UpgradeToStartMediaBackupSheet -->
+    <!-- Title on a bottom sheet, detailing that in order to start backing up media, they need to upgrade to paid backup storage -->
+    <string name="UpgradeToStartMediaBackupSheet__this_media_is_no_longer_available">This media is no longer available</string>
+    <!-- Subtitle of bottom sheet detailing that with their current plan, there is a limitation to how many days media is stored for. Placeholder is number of days. -->
+    <plurals name="UpgradeToStartMediaBackupSheet__your_current_signal_backup_plan_includes">
+        <item quantity="other">Your current Signal backup plan includes your most recent %1$d days of media. To start backing up all your media, upgrade now.</item>
+    </plurals>
+    <!-- Primary action to launch upgrade flow. Placeholder is formatted price. -->
+    <string name="UpgradeToStartMediaBackupSheet__subscribe_for_s_month">Subscribe for %1$s/month</string>
 
     <!-- Educational bottom sheet dialog title shown to notify about delete syncs causing deletes to happen across all devices -->
     <string name="DeleteSyncEducation_title">ယခုအခါ သင့်စက်များအားလုံးတွင် ချိန်ကိုက်ပြီး ဖျက်နေပါပြီ</string>
@@ -7172,19 +7220,15 @@
     <!-- Educational bottom sheet confirm/dismiss button text shown to notify about delete syncs causing deletes to happen across all devices -->
     <string name="DeleteSyncEducation_acknowledge_button">အိုကေ</string>
 
-    <!-- RemoteBackupsPaymentHistoryFragment -->
-    <!-- Title of the screen for payment history -->
-    <string name="RemoteBackupsPaymentHistoryFragment__payment_history">ငွေပေးချေမှုမှတ်တမ်း</string>
-    <!-- Description for backup rows -->
-    <string name="RemoteBackupsPaymentHistoryFragment__text_and_all_media_backup">စာတိုနှင့် မီဒီယာအားလုံးဘက်ခ်အပ်</string>
-    <!-- Title of the screen for payment details -->
-    <string name="RemoteBackupsPaymentHistoryFragment__payment_details">ငွေပေးချေမှု အသေးစိတ်</string>
-    <!-- Title of row specifying the type of backup -->
-    <string name="RemoteBackupsPaymentHistoryFragment__backup_type">ဘက်ခ်အပ် အမျိုးအစား</string>
-    <!-- Title of row specifying the date the backup was paid on -->
-    <string name="RemoteBackupsPaymentHistoryFragment__date_paid">ပေးချေသည့် ရက်စွဲ</string>
-    <!-- Button label to share the receipt -->
-    <string name="RemoteBackupsPaymentHistoryFragment__share">ဝေမျှမည်</string>
+    <!-- BackupsSettingsFragment -->
+    <!-- Subtitle for row for active backup, first placeholder is formatted amount, second is renewal date -->
+    <string name="BackupsSettingsFragment_s_month_renews_s">တစ်လလျှင် %1$s ၊ %2$s တွင် သက်တမ်းတိုးမည်</string>
+    <!-- Subtitle for row for active backup, placeholder is last date of backup -->
+    <string name="BackupsSettingsFragment_last_backup_s">နောက်ဆုံးဘက်ခ်အပ် %1$s</string>
+    <!-- Subtitle for row for no backup ever created -->
+    <string name="BackupsSettingsFragment_automatic_backups_with_signals">Signal ၏ လုံခြုံသော ဟိုဘက်သည်ဘက် ကုဒ်ပြောင်းဝှက်ထားသည့် သိုလှောင်ရေးဝန်ဆောင်မှုဖြင့် အလိုအလျောက် ဘက်ခ်အပ်။</string>
+    <!-- Action button label to set up backups -->
+    <string name="BackupsSettingsFragment_set_up">သတ်မှတ်ရန်</string>
 
     <!-- RemoteBackupsSettingsFragment -->
     <!-- Displayed on the title bar -->
@@ -7199,6 +7243,10 @@
     <string name="RemoteBackupsSettingsFragment__backup_frequency">ဘက်ခ်အပ် အကြိမ်ရေ</string>
     <!-- Toggle row label for allowing backups to occur while on cellular connection -->
     <string name="RemoteBackupsSettingsFragment__back_up_using_cellular">ဆယ်လူလာသုံး၍ ဘက်ခ်အပ်လုပ်ပါ</string>
+    <!-- Row label for viewing backup key -->
+    <string name="RemoteBackupsSettingsFragment__view_backup_key">ဘက်ခ်အပ်ကီးကိုကြည့်ရန်</string>
+    <!-- Prompt title for unlocking device to view backup key -->
+    <string name="RemoteBackupsSettingsFragment__unlock_to_view_backup_key">ဘက်ခ်အပ်ကီးကိုကြည့်ရန် လော့ခ်ဖွင့်ပါ</string>
     <!-- Row label for cancelling and deleting backup -->
     <string name="RemoteBackupsSettingsFragment__turn_off_and_delete_backup">ပိတ်ပြီး ဘက်ခ်အပ်ကို ဖျက်ပါ</string>
     <!-- Snackbar text displayed when backup has been deleted and turned off -->
@@ -7212,13 +7260,27 @@
     <!-- Snackbar text displayed when backup will be created overnight -->
     <string name="RemoteBackupsSettingsFragment__backup_will_be_created_overnight">ဘက်ခ်အပ်ကို ညတွင်းချင်း ဖန်တီးပါမည်။</string>
     <!-- Title text in row detailing selected backup type -->
-    <string name="RemoteBackupsSettingsFragment__backup_type">ဘက်ခ်အပ် အမျိုးအစား</string>
+    <string name="RemoteBackupsSettingsFragment__backup_plan">ဘက်ခ်အပ်အစီအစဉ်</string>
     <!-- Subtitle text in row detailing selected backup type displayed when backups are disabled -->
     <string name="RemoteBackupsSettingsFragment__backups_disabled">ဘက်ခ်အပ် ပိတ်ထားသည်</string>
-    <!-- Format string for backup and cost. First placeholder is backup title, second is cost per month. -->
-    <string name="RemoteBackupsSettingsFragment__s_dot_s_per_month">%1$s အတွက် တစ်လလျှင် · %2$s</string>
-    <!-- Button label to enable backups -->
-    <string name="RemoteBackupsSettingsFragment__enable_backups">ဘက်ခ်အပ် လုပ်ဆောင်မည်</string>
+    <!-- Format string for backup and cost. First placeholder is cost per month. -->
+    <string name="RemoteBackupsSettingsFragment__s_per_month">တစ်လလျှင် %1$s</string>
+    <!-- String for free backups -->
+    <string name="RemoteBackupsSettingsFragment__your_backup_plan_is_free">သင်၏ ဘက်ခ်အပ်အစီအစဉ်သည် အခမဲ့ဖြစ်သည်</string>
+    <!-- Displays the date the subscription will renew -->
+    <string name="RemoteBackupsSettingsFragment__renews_s">%1$s တွင် သက်တမ်းတိုးသည်</string>
+    <!-- Displayed at the top of the screen when no backup is currently enabled -->
+    <string name="RemoteBackupsSettingsFragment__back_up_your_message_history">ဖုန်းအသစ်ရသောအခါ သို့မဟုတ် Signal ကို ပြန်လည်ထည့်သွင်းသည့်အခါ ဒေတာမဆုံးရှုံးစေရန် မက်ဆေ့ချ်မှတ်တမ်းကို ဘက်ခ်အပ်လုပ်ပါ။</string>
+    <!-- Section header for other ways to back up -->
+    <string name="RemoteBackupsSettingsFragment__other_ways_to_backup">ဘက်ခ်အပ်လုပ်ရန် အခြားနည်းလမ်းများ</string>
+    <!-- Row title for performing on-device backup -->
+    <string name="RemoteBackupsSettingsFragment__on_device_backups">စက်ပေါ်တွင် ဘက်ခ်အပ်လုပ်ရန်</string>
+    <!-- Row label for performing on-device backup -->
+    <string name="RemoteBackupsSettingsFragment__save_your_backups_to">ဘက်ခ်အပ်ကို ဤစက်ပေါ်ရှိ ဖိုဒါတစ်ခုတွင် သိမ်းဆည်းပါ</string>
+    <!-- Button label to manage or cancel backups -->
+    <string name="RemoteBackupsSettingsFragment__manage_or_cancel">စီမံရန် သို့မဟုတ် ပယ်ဖျက်ရန်</string>
+    <!-- button label to upgrade backups -->
+    <string name="RemoteBackupsSettingsFragment__upgrade">Upgrade</string>
     <!-- Progress indicator subtext displayed when a backup is in progress -->
     <string name="RemoteBackupsSettingsFragment__d_slash_d">%1$d/%2$d</string>
     <!-- Title text in row detailing last backup -->
@@ -7268,33 +7330,33 @@
 
     <!-- MessageBackupsKeyEducationScreen -->
     <!-- Screen headline -->
-    <string name="MessageBackupsKeyEducationScreen__your_backup_key">Your backup key</string>
+    <string name="MessageBackupsKeyEducationScreen__your_backup_key">သင့် ဘက်ခ်အပ်ကီး</string>
     <!-- Screen body part 1 -->
-    <string name="MessageBackupsKeyEducationScreen__your_backup_key_is_a">Your backup key is a 64-digit code that lets you restore your backup when you re-install Signal.</string>
+    <string name="MessageBackupsKeyEducationScreen__your_backup_key_is_a">သင်၏ ဘက်ခ်အပ်ကီးသည် Signal ကို ပြန်လည်ထည့်သွင်းသောအခါတွင် သင့် ဘက်ခ်အပ်ကို ပြန်လည်ရယူနိုင်သည့် ဂဏန်း 64 လုံးကုဒ်ဖြစ်သည်။</string>
     <!-- Screen body part 2 -->
-    <string name="MessageBackupsKeyEducationScreen__if_you_forget_your_key">If you forget your key, you will not be able to restore your backup. Signal cannot help you recover your backup.</string>
+    <string name="MessageBackupsKeyEducationScreen__if_you_forget_your_key">သင့် ကီးကိုမေ့သွားပါက သင်၏ဘက်ခ်အပ်ကို ပြန်လည်ရယူနိုင်တော့မည် မဟုတ်ပါ။ Signal သည် သင်၏ဘက်ခ်အပ်ကို ပြန်လည်ရယူရန် မကူညီနိုင်ပါ။</string>
     <!-- Action button label -->
-    <string name="MessageBackupsKeyEducationScreen__next">Next</string>
+    <string name="MessageBackupsKeyEducationScreen__next">ဆက်သွားမည်</string>
 
     <!-- MessageBackupsKeyRecordScreen -->
     <!-- Screen headline -->
-    <string name="MessageBackupsKeyRecordScreen__record_your_backup_key">Record your backup key</string>
+    <string name="MessageBackupsKeyRecordScreen__record_your_backup_key">သင်၏ အက်ခ်အပ်ကီးကို မှတ်တမ်းတင်ပါ</string>
     <!-- Screen subhead -->
-    <string name="MessageBackupsKeyRecordScreen__this_key_is_required_to_recover">This key is required to recover your account and data. Store this key somewhere safe. If you lose it, you won’t be able to recover your account.</string>
+    <string name="MessageBackupsKeyRecordScreen__this_key_is_required_to_recover">သင့်အကောင့်နှင့် ဒေတာကို ပြန်လည်ရယူရန် ဤကီးလိုအပ်ပါသည်။ ဤကီးကို လုံခြုံသောနေရာတွင် သိမ်းဆည်းပါ။ ၎င်းကိုဆုံးရှုံးသွားပါက သင့်အကောင့်ကို ပြန်လည်ရယူနိုင်မည်မဟုတ်ပါ။</string>
     <!-- Copy to clipboard button label -->
-    <string name="MessageBackupsKeyRecordScreen__copy_to_clipboard">Copy to clipboard</string>
+    <string name="MessageBackupsKeyRecordScreen__copy_to_clipboard">ကလစ်ဘုတ်သို့ ကူးယူမည်</string>
     <!-- Action button label -->
-    <string name="MessageBackupsKeyRecordScreen__next">Next</string>
+    <string name="MessageBackupsKeyRecordScreen__next">ဆက်သွားမည်</string>
     <!-- Bottom sheet title -->
-    <string name="MessageBackupsKeyRecordScreen__keep_your_key_safe">Keep your key safe</string>
+    <string name="MessageBackupsKeyRecordScreen__keep_your_key_safe">သင့်ကီးကို လုံခြုံအောင်ထားပါ</string>
     <!-- Bottom sheet subtitle -->
-    <string name="MessageBackupsKeyRecordScreen__signal_will_not">Signal will not be able to help you restore your backup if you lose your key. Store it somewhere safe and secure, and do not share it with others.</string>
+    <string name="MessageBackupsKeyRecordScreen__signal_will_not">ကီးဆုံးရှုံးသွားပါက Signal သည် သင့် ဘက်ခ်အပ်ကို ပြန်လည်ရယူရန် ကူညီနိုင်မည်မဟုတ်ပါ။ ၎င်းကို ဘေးကင်းလုံခြုံသောနေရာတွင် သိမ်းဆည်းထားပြီး အခြားသူများနှင့် မမျှဝေပါနှင့်။</string>
     <!-- Checkbox label -->
-    <string name="MessageBackupsKeyRecordScreen__ive_recorded_my_key">I\'ve recorded my key</string>
+    <string name="MessageBackupsKeyRecordScreen__ive_recorded_my_key">ကျွန်ုပ်ကီးကို မှတ်တမ်းတင်ပြီးပါပြီ</string>
     <!-- Sheet action button label -->
-    <string name="MessageBackupsKeyRecordScreen__continue">Continue</string>
+    <string name="MessageBackupsKeyRecordScreen__continue">ဆက်လုပ်ရန်</string>
     <!-- Sheet secondary action button label -->
-    <string name="MessageBackupsKeyRecordScreen__see_key_again">See key again</string>
+    <string name="MessageBackupsKeyRecordScreen__see_key_again">ကီး ကိုပြန်ကြည့်ရန်</string>
 
     <!-- MessagesBackupsTypeSelectionScreen -->
     <!-- Screen headline -->

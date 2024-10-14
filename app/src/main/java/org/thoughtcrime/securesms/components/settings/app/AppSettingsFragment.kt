@@ -201,6 +201,17 @@ class AppSettingsFragment : DSLSettingsFragment(
         isEnabled = state.isRegisteredAndUpToDate()
       )
 
+      if (RemoteConfig.messageBackups) {
+        clickPref(
+          title = DSLSettingsText.from(R.string.preferences_chats__backups),
+          icon = DSLSettingsIcon.from(R.drawable.symbol_backup_24),
+          onClick = {
+            findNavController().safeNavigate(R.id.action_appSettingsFragment_to_backupsSettingsFragment)
+          },
+          isEnabled = state.isRegisteredAndUpToDate()
+        )
+      }
+
       clickPref(
         title = DSLSettingsText.from(R.string.preferences__data_and_storage),
         icon = DSLSettingsIcon.from(R.drawable.symbol_data_24),
