@@ -412,10 +412,6 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
   }
 
   private void initializePendingParticipantFragmentListener() {
-    if (!RemoteConfig.adHocCalling()) {
-      return;
-    }
-
     getSupportFragmentManager().setFragmentResultListener(
         PendingParticipantsBottomSheet.REQUEST_KEY,
         this,
@@ -518,6 +514,7 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     viewModel.getEvents().observe(this, this::handleViewModelEvent);
 
     lifecycleDisposable.add(viewModel.getInCallstatus().subscribe(this::handleInCallStatus));
+    lifecycleDisposable.add(viewModel.getRecipientFlowable().subscribe(callScreen::setRecipient));
 
     boolean isStartedFromCallLink = getCallIntent().isStartedFromCallLink();
     LiveDataUtil.combineLatest(LiveDataReactiveStreams.fromPublisher(viewModel.getCallParticipantsState().toFlowable(BackpressureStrategy.LATEST)),
@@ -922,7 +919,6 @@ public class WebRtcCallActivity extends BaseActivity implements SafetyNumberChan
     previousEvent = event;
 
     viewModel.setRecipient(event.getRecipient());
-    callScreen.setRecipient(event.getRecipient());
     controlsAndInfoViewModel.setRecipient(event.getRecipient());
 
     switch (event.getState()) {

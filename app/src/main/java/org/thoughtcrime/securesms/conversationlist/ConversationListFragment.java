@@ -113,6 +113,7 @@ import org.thoughtcrime.securesms.components.menu.SignalBottomActionBar;
 import org.thoughtcrime.securesms.components.menu.SignalContextMenu;
 import org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton;
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
+import org.thoughtcrime.securesms.components.settings.app.chats.folders.ChatFolderRecord;
 import org.thoughtcrime.securesms.components.settings.app.notifications.manual.NotificationProfileSelectionFragment;
 import org.thoughtcrime.securesms.components.settings.app.subscription.completed.InAppPaymentsBottomSheetDelegate;
 import org.thoughtcrime.securesms.components.settings.app.subscription.errors.UnexpectedSubscriptionCancellation;
@@ -166,6 +167,7 @@ import org.thoughtcrime.securesms.util.AppForegroundObserver;
 import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.CachedInflater;
 import org.thoughtcrime.securesms.util.ConversationUtil;
+import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.ServiceUtil;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.thoughtcrime.securesms.util.SignalProxyUtil;
@@ -199,7 +201,9 @@ import static android.app.Activity.RESULT_OK;
 public class ConversationListFragment extends MainFragment implements ActionMode.Callback,
                                                                       ConversationListAdapter.OnConversationClickListener,
                                                                       MegaphoneActionController,
-                                                                      ClearFilterViewHolder.OnClearFilterClickListener
+                                                                      ClearFilterViewHolder.OnClearFilterClickListener,
+                                                                      ChatFolderAdapter.Callbacks,
+                                                                      ConversationListAdapter.EmptyFolderViewHolder.OnFolderSettingsClickListener
 {
   public static final short MESSAGE_REQUESTS_REQUEST_CODE_CREATE_NAME = 32562;
   public static final short SMS_ROLE_REQUEST_CODE                     = 32563;
@@ -215,6 +219,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
   private ActionMode                             actionMode;
   private View                                   coordinator;
+  private RecyclerView                           chatFolderList;
   private RecyclerView                           list;
   private Stub<ComposeView>                      bannerView;
   private PulsingFloatingActionButton            fab;
@@ -235,6 +240,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private SignalBottomActionBar                  bottomActionBar;
   private SignalContextMenu                      activeContextMenu;
   private LifecycleDisposable                    lifecycleDisposable;
+  private ChatFolderAdapter                      chatFolderAdapter;
 
   protected ConversationListArchiveItemDecoration archiveDecoration;
   protected ConversationListItemAnimator          itemAnimator;
@@ -280,6 +286,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     lifecycleDisposable.bindTo(getViewLifecycleOwner());
 
     coordinator             = view.findViewById(R.id.coordinator);
+    chatFolderList          = view.findViewById(R.id.chat_folder_list);
     list                    = view.findViewById(R.id.list);
     bottomActionBar         = view.findViewById(R.id.conversation_list_bottom_action_bar);
     bannerView              = new Stub<>(view.findViewById(R.id.banner_compose_view));
@@ -292,6 +299,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     fab.setVisibility(View.VISIBLE);
     cameraFab.setVisibility(View.VISIBLE);
+    chatFolderList.setVisibility(RemoteConfig.getShowChatFolders() ? View.VISIBLE : View.GONE);
 
     contactSearchMediator = new ContactSearchMediator(this,
                                                       Collections.emptySet(),
@@ -379,6 +387,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     archiveDecoration = new ConversationListArchiveItemDecoration(new ColorDrawable(getResources().getColor(R.color.conversation_list_archive_background_end)));
     itemAnimator      = new ConversationListItemAnimator();
+
+    chatFolderAdapter = new ChatFolderAdapter(this);
+
+    chatFolderList.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
+    chatFolderList.setAdapter(chatFolderAdapter);
+    chatFolderList.setItemAnimator(null);
 
     list.setLayoutManager(new LinearLayoutManager(requireActivity()));
     list.setItemAnimator(itemAnimator);
@@ -900,7 +914,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
 
   private void initializeListAdapters() {
-    defaultAdapter          = new ConversationListAdapter(getViewLifecycleOwner(), Glide.with(this), this, this);
+    defaultAdapter          = new ConversationListAdapter(getViewLifecycleOwner(), Glide.with(this), this, this, this);
 
     setAdapter(defaultAdapter);
 
@@ -969,6 +983,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     lifecycleDisposable.add(viewModel.getHasNoConversations().subscribe(this::updateEmptyState));
     lifecycleDisposable.add(viewModel.getNotificationProfiles().subscribe(profiles -> requireCallback().updateNotificationProfileStatus(profiles)));
     lifecycleDisposable.add(viewModel.getWebSocketState().subscribe(pipeState -> requireCallback().updateProxyStatus(pipeState)));
+    lifecycleDisposable.add(viewModel.getChatFolderState().subscribe(this::onChatFoldersChanged));
 
     appForegroundObserver = new AppForegroundObserver.Listener() {
       @Override
@@ -1026,6 +1041,10 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       }
       onPostSubmitList(conversations.size());
     });
+  }
+
+  private void onChatFoldersChanged(List<ChatFolderMappingModel> folders) {
+    chatFolderAdapter.submitList(new ArrayList<>(folders));
   }
 
   private void onMegaphoneChanged(@NonNull Megaphone megaphone) {
@@ -1640,6 +1659,54 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     pullViewAppBarLayout.setExpanded(false, true);
   }
 
+  @Override
+  public void onChatFolderClicked(@NonNull ChatFolderRecord chatFolder) {
+    viewModel.select(chatFolder);
+  }
+
+  @Override
+  public void onEdit(@NonNull ChatFolderRecord chatFolder) {
+    startActivity(AppSettingsActivity.createChatFolder(requireContext(), chatFolder.getId()));
+  }
+
+  @Override
+  public void onAdd() {
+    startActivity(AppSettingsActivity.createChatFolder(requireContext(), -1));
+  }
+
+  @Override
+  public void onMuteAll(@NonNull ChatFolderRecord chatFolder) {
+    MuteDialog.show(requireContext(), until -> viewModel.onMuteChatFolder(chatFolder, until));
+  }
+
+  @Override
+  public void onReadAll(@NonNull ChatFolderRecord chatFolder) {
+    if (chatFolder.getFolderType() == ChatFolderRecord.FolderType.ALL) {
+      handleMarkAllRead();
+    } else {
+      viewModel.markChatFolderRead(chatFolder);
+    }
+  }
+
+  @Override
+  public void onDelete(@NonNull ChatFolderRecord chatFolder) {
+    new MaterialAlertDialogBuilder(requireActivity())
+        .setMessage(getString(R.string.CreateFoldersFragment__delete_this_chat_folder))
+        .setPositiveButton(R.string.delete, (dialog, which) -> viewModel.deleteChatFolder(chatFolder))
+        .setNegativeButton(android.R.string.cancel, null)
+        .show();
+  }
+
+  @Override
+  public void onReorder() {
+    startActivity(AppSettingsActivity.chatFolders(requireContext()));
+  }
+
+  @Override
+  public void onFolderSettingsClick() {
+    startActivity(AppSettingsActivity.chatFolders(requireContext()));
+  }
+
   private class ArchiveListenerCallback extends ItemTouchHelper.SimpleCallback {
 
     private static final long SWIPE_ANIMATION_DURATION = 175;
@@ -1882,6 +1949,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     @Override
     public void onUnknownRecipientClicked(@NonNull View view, @NonNull ContactSearchData.UnknownRecipient unknownRecipient, boolean isSelected) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void onChatTypeClicked(@NonNull View view, @NonNull ContactSearchData.ChatTypeRow chatTypeRow, boolean isSelected) {
       throw new UnsupportedOperationException();
     }
   }
