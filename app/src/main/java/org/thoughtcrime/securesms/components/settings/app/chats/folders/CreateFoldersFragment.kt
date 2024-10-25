@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -32,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -56,6 +58,8 @@ import org.thoughtcrime.securesms.avatar.AvatarImage
 import org.thoughtcrime.securesms.compose.ComposeFragment
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.util.navigation.safeNavigate
+
+private const val MAX_CHAT_COUNT = 5
 
 /**
  * Fragment that allows user to create, edit, or delete an individual folder
@@ -125,7 +129,7 @@ class CreateFoldersFragment : ComposeFragment() {
         onToggleShowMuted = { viewModel.toggleShowMutedChats(it) },
         onDeleteClicked = { viewModel.showDeleteDialog(true) },
         onDeleteConfirmed = {
-          viewModel.deleteFolder()
+          viewModel.deleteFolder(requireContext())
           navController.popBackStack()
         },
         onDeleteDismissed = {
@@ -174,6 +178,9 @@ fun CreateFolderScreen(
   onCreateConfirmed: (Boolean) -> Unit = {},
   onCreateDismissed: (Boolean) -> Unit = {}
 ) {
+  var expandIncluded by remember { mutableStateOf(false) }
+  var expandExcluded by remember { mutableStateOf(false) }
+
   if (state.showDeleteDialog) {
     Dialogs.SimpleAlertDialog(
       title = "",
@@ -229,16 +236,14 @@ fun CreateFolderScreen(
         FolderRow(
           icon = R.drawable.symbol_plus_compact_16,
           title = stringResource(R.string.CreateFoldersFragment__add_chats),
-          onClick = onAddChat,
-          modifier = Modifier.padding(start = 12.dp)
+          onClick = onAddChat
         )
 
         if (state.currentFolder.showIndividualChats) {
           FolderRow(
             icon = R.drawable.symbol_person_light_24,
             title = stringResource(R.string.ChatFoldersFragment__one_on_one_chats),
-            onClick = onAddChat,
-            modifier = Modifier.padding(start = 12.dp)
+            onClick = onAddChat
           )
         }
 
@@ -246,17 +251,32 @@ fun CreateFolderScreen(
           FolderRow(
             icon = R.drawable.symbol_group_light_20,
             title = stringResource(R.string.ChatFoldersFragment__groups),
-            onClick = onAddChat,
-            modifier = Modifier.padding(start = 12.dp)
+            onClick = onAddChat
           )
         }
       }
 
-      items(state.currentFolder.includedRecipients.toList()) { recipient ->
-        ChatRow(
-          recipient = recipient,
-          onClick = onAddChat
-        )
+      if (!expandIncluded && state.currentFolder.includedRecipients.size > MAX_CHAT_COUNT) {
+        items(state.currentFolder.includedRecipients.toList().subList(0, MAX_CHAT_COUNT)) { recipient ->
+          ChatRow(
+            recipient = recipient,
+            onClick = onAddChat
+          )
+        }
+        item {
+          FolderRow(
+            icon = R.drawable.symbol_chevron_down_24,
+            title = stringResource(R.string.CreateFoldersFragment__see_all),
+            onClick = { expandIncluded = true }
+          )
+        }
+      } else {
+        items(state.currentFolder.includedRecipients.toList()) { recipient ->
+          ChatRow(
+            recipient = recipient,
+            onClick = onAddChat
+          )
+        }
       }
 
       item {
@@ -277,16 +297,31 @@ fun CreateFolderScreen(
         FolderRow(
           icon = R.drawable.symbol_plus_compact_16,
           title = stringResource(R.string.CreateFoldersFragment__exclude_chats),
-          onClick = onRemoveChat,
-          modifier = Modifier.padding(start = 12.dp)
+          onClick = onRemoveChat
         )
       }
 
-      items(state.currentFolder.excludedRecipients.toList()) { recipient ->
-        ChatRow(
-          recipient = recipient,
-          onClick = onRemoveChat
-        )
+      if (!expandExcluded && state.currentFolder.excludedRecipients.size > MAX_CHAT_COUNT) {
+        items(state.currentFolder.excludedRecipients.toList().subList(0, MAX_CHAT_COUNT)) { recipient ->
+          ChatRow(
+            recipient = recipient,
+            onClick = onAddChat
+          )
+        }
+        item {
+          FolderRow(
+            icon = R.drawable.symbol_chevron_down_24,
+            title = stringResource(R.string.CreateFoldersFragment__see_all),
+            onClick = { expandExcluded = true }
+          )
+        }
+      } else {
+        items(state.currentFolder.excludedRecipients.toList()) { recipient ->
+          ChatRow(
+            recipient = recipient,
+            onClick = onRemoveChat
+          )
+        }
       }
 
       item {
@@ -334,6 +369,9 @@ fun CreateFolderScreen(
       }
     } else if (!isNewFolder) {
       Buttons.MediumTonal(
+        colors = ButtonDefaults.filledTonalButtonColors(
+          disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
+        ),
         enabled = hasChanges,
         onClick = { onCreateConfirmed(true) },
         modifier = modifier
@@ -451,10 +489,11 @@ fun ChatRow(
         recipient = recipient,
         modifier = Modifier
           .padding(start = 24.dp, end = 16.dp)
-          .size(40.dp)
+          .size(40.dp),
+        useProfile = false
       )
     }
 
-    Text(text = recipient.getShortDisplayName(LocalContext.current))
+    Text(text = if (recipient.isSelf) stringResource(id = R.string.note_to_self) else recipient.getShortDisplayName(LocalContext.current))
   }
 }

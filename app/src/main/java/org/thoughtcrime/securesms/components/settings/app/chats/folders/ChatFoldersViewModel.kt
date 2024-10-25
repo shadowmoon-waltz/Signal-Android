@@ -24,7 +24,7 @@ class ChatFoldersViewModel : ViewModel() {
 
   fun loadCurrentFolders(context: Context) {
     viewModelScope.launch(Dispatchers.IO) {
-      val folders = ChatFoldersRepository.getCurrentFolders(includeUnreadCount = false)
+      val folders = ChatFoldersRepository.getCurrentFolders(includeUnreadAndMutedCounts = false)
       val suggestedFolders = getSuggestedFolders(context, folders)
 
       internalState.update {
@@ -79,7 +79,7 @@ class ChatFoldersViewModel : ViewModel() {
     if (showUnreadSuggestion) {
       suggestions.add(
         ChatFolderRecord(
-          name = context.getString(R.string.ChatFoldersFragment__unreads),
+          name = context.getString(R.string.ChatFoldersFragment__unread),
           showUnread = true,
           showIndividualChats = true,
           showGroupChats = true,
@@ -147,10 +147,13 @@ class ChatFoldersViewModel : ViewModel() {
     }
   }
 
-  fun deleteFolder() {
+  fun deleteFolder(context: Context, forceRefresh: Boolean = false) {
     viewModelScope.launch(Dispatchers.IO) {
       ChatFoldersRepository.deleteFolder(internalState.value.originalFolder)
 
+      if (forceRefresh) {
+        loadCurrentFolders(context)
+      }
       internalState.update {
         it.copy(showDeleteDialog = false)
       }
