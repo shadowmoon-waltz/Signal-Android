@@ -147,13 +147,11 @@ class ChatFoldersViewModel : ViewModel() {
     }
   }
 
-  fun deleteFolder(context: Context, forceRefresh: Boolean = false) {
+  fun deleteFolder(context: Context) {
     viewModelScope.launch(Dispatchers.IO) {
       ChatFoldersRepository.deleteFolder(internalState.value.originalFolder)
 
-      if (forceRefresh) {
-        loadCurrentFolders(context)
-      }
+      loadCurrentFolders(context)
       internalState.update {
         it.copy(showDeleteDialog = false)
       }
@@ -223,6 +221,25 @@ class ChatFoldersViewModel : ViewModel() {
           pendingExcludedRecipients = excludedChats,
           pendingChatTypes = chatTypes
         )
+      }
+    }
+  }
+
+  fun addThreadToIncludedChat(threadId: Long?) {
+    if (threadId == null || threadId == -1L) {
+      return
+    }
+    viewModelScope.launch {
+      val updatedFolder = internalState.value.currentFolder
+      val recipient = SignalDatabase.threads.getRecipientForThreadId(threadId)
+      if (recipient != null) {
+        internalState.update {
+          it.copy(
+            currentFolder = updatedFolder.copy(
+              includedRecipients = setOf(recipient)
+            )
+          )
+        }
       }
     }
   }
@@ -326,5 +343,9 @@ class ChatFoldersViewModel : ViewModel() {
         setCurrentFolder(folder)
       }
     }
+  }
+
+  fun hasEmptyName(): Boolean {
+    return state.value.currentFolder.name.isEmpty()
   }
 }
