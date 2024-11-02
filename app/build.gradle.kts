@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1478
-val canonicalVersionName = "7.22.1"
+val canonicalVersionCode = 1481
+val canonicalVersionName = "7.23.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -293,7 +293,6 @@ android {
         "proguard/proguard-glide.pro",
         "proguard/proguard-shortcutbadger.pro",
         "proguard/proguard-retrofit.pro",
-        "proguard/proguard-webrtc.pro",
         "proguard/proguard-klinker.pro",
         "proguard/proguard-mobilecoin.pro",
         "proguard/proguard-retrolambda.pro",
@@ -603,6 +602,7 @@ dependencies {
   implementation(libs.dnsjava)
   implementation(libs.kotlinx.collections.immutable)
   implementation(libs.accompanist.permissions)
+  implementation(libs.accompanist.drawablepainter)
   implementation(libs.kotlin.stdlib.jdk8)
   implementation(libs.kotlin.reflect)
   implementation(libs.kotlinx.coroutines.play.services)

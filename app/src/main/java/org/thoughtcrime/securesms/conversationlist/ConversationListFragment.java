@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -63,6 +64,7 @@ import androidx.core.view.ViewCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -170,7 +172,6 @@ import org.thoughtcrime.securesms.util.AppStartup;
 import org.thoughtcrime.securesms.util.BottomSheetUtil;
 import org.thoughtcrime.securesms.util.CachedInflater;
 import org.thoughtcrime.securesms.util.ConversationUtil;
-import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.ServiceUtil;
 import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.thoughtcrime.securesms.util.SignalProxyUtil;
@@ -391,11 +392,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     archiveDecoration = new ConversationListArchiveItemDecoration(new ColorDrawable(getResources().getColor(R.color.conversation_list_archive_background_end)));
     itemAnimator      = new ConversationListItemAnimator();
 
-    chatFolderAdapter = new ChatFolderAdapter(this);
+    chatFolderAdapter                          = new ChatFolderAdapter(this);
+    DefaultItemAnimator chatFolderItemAnimator = getChatFolderItemAnimator();
 
     chatFolderList.setLayoutManager(new LinearLayoutManager(requireActivity(), LinearLayoutManager.HORIZONTAL, false));
     chatFolderList.setAdapter(chatFolderAdapter);
-    chatFolderList.setItemAnimator(null);
+    chatFolderList.setItemAnimator(chatFolderItemAnimator);
 
     list.setLayoutManager(new LinearLayoutManager(requireActivity()));
     list.setItemAnimator(itemAnimator);
@@ -473,6 +475,16 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         return 150;
       }
     };
+  }
+
+  private @NonNull DefaultItemAnimator getChatFolderItemAnimator() {
+    int duration = 150;
+    DefaultItemAnimator animator = new DefaultItemAnimator();
+    animator.setAddDuration(duration);
+    animator.setMoveDuration(duration);
+    animator.setRemoveDuration(duration);
+    animator.setChangeDuration(duration);
+    return animator;
   }
 
   @Override
@@ -1222,7 +1234,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     alert.setTitle(context.getResources().getQuantityString(R.plurals.ConversationListFragment_delete_selected_conversations,
                                                             conversationsCount, conversationsCount));
 
-    if (TextSecurePreferences.isMultiDevice(context) && Recipient.self().getDeleteSyncCapability().isSupported()) {
+    if (SignalStore.account().hasLinkedDevices() && Recipient.self().getDeleteSyncCapability().isSupported()) {
       alert.setMessage(context.getResources().getQuantityString(R.plurals.ConversationListFragment_this_will_permanently_delete_all_n_selected_conversations_linked_device,
                                                                 conversationsCount, conversationsCount));
     } else {
@@ -1482,10 +1494,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     if (conversation.getThreadRecord().isArchived()) {
       items.add(new ActionItem(R.drawable.symbol_archive_up_24, getResources().getString(R.string.ConversationListFragment_unarchive), () -> handleArchive(id, false)));
     } else {
-      if (viewModel.getCurrentFolder().getFolderType() == ChatFolderRecord.FolderType.ALL) {
+      if (viewModel.getCurrentFolder().getFolderType() == ChatFolderRecord.FolderType.ALL &&
+          conversation.getThreadRecord().getRecipient().isIndividual() ||
+          conversation.getThreadRecord().getRecipient().isPushV2Group()) {
         List<ChatFolderRecord> folders = viewModel.getFolders().stream().map(ChatFolderMappingModel::getChatFolder).collect(Collectors.toList());
         items.add(new ActionItem(R.drawable.symbol_folder_add, getString(R.string.ConversationListFragment_add_to_folder), () ->
-          AddToFolderBottomSheet.showChatFolderSheet(folders, conversation.getThreadRecord().getThreadId()).show(getParentFragmentManager(), BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG)
+          AddToFolderBottomSheet.showChatFolderSheet(folders, conversation.getThreadRecord().getThreadId(), conversation.getThreadRecord().getRecipient().isIndividual()).show(getParentFragmentManager(), BottomSheetUtil.STANDARD_BOTTOM_SHEET_FRAGMENT_TAG)
         ));
       } else {
         items.add(new ActionItem(R.drawable.symbol_folder_minus, getString(R.string.ConversationListFragment_remove_from_folder), () -> viewModel.removeChatFromFolder(conversation.getThreadRecord().getThreadId())));
@@ -1710,6 +1724,14 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       }
     }
 
+    if (isScrolled()) {
+      list.smoothScrollToPosition(0);
+    }
+
+    if (oldIndex == newIndex) {
+      return;
+    }
+
     if (oldIndex < newIndex) {
       smoothScroller.setTargetPosition(Math.min(newIndex + 1, viewModel.getFolders().size()));
     } else {
@@ -1721,7 +1743,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     }
 
     viewModel.select(chatFolder);
-    list.smoothScrollToPosition(0);
   }
 
   @Override

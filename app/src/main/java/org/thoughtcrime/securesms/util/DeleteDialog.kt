@@ -67,7 +67,7 @@ object DeleteDialog {
         handleDeleteForMe(context, messageRecords, emitter)
       }
 
-      val canDeleteForEveryoneInNoteToSelf = isNoteToSelfDelete && TextSecurePreferences.isMultiDevice(context) && !deleteSyncEnabled
+      val canDeleteForEveryoneInNoteToSelf = isNoteToSelfDelete && SignalStore.account.hasLinkedDevices && !deleteSyncEnabled
 
       if (MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis()) && (!isNoteToSelfDelete || canDeleteForEveryoneInNoteToSelf)) {
         builder.setNeutralButton(if (isNoteToSelfDelete) R.string.ConversationFragment_delete_everywhere else R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
