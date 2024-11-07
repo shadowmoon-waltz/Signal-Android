@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1481
-val canonicalVersionName = "7.23.1"
+val canonicalVersionCode = 1482
+val canonicalVersionName = "7.24.0"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -184,6 +184,7 @@ android {
   }
 
   buildFeatures {
+    buildConfig = true
     viewBinding = true
     compose = true
   }

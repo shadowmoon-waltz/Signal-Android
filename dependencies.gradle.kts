@@ -15,7 +15,7 @@ dependencyResolutionManagement {
       version("exoplayer", "2.19.0")
       version("glide", "4.15.1")
       version("kotlin", "1.9.20")
-      version("libsignal-client", "0.58.2")
+      version("libsignal-client", "0.60.1")
       version("mp4parser", "1.9.39")
       version("android-gradle-plugin", "8.4.0")
       version("accompanist", "0.28.0")
@@ -215,7 +215,7 @@ dependencyResolutionManagement {
     }
 
     create("lintLibs") {
-      version("lint", "30.2.2")
+      version("lint", "31.4.0") // Lint version is AGP version + 23.0.0
 
       library("lint-api", "com.android.tools.lint", "lint-api").versionRef("lint")
       library("lint-checks", "com.android.tools.lint", "lint-checks").versionRef("lint")

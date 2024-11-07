@@ -1299,7 +1299,8 @@ class AttachmentTable(
       REMOTE_INCREMENTAL_DIGEST_CHUNK_SIZE to uploadResult.incrementalDigestChunkSize,
       DATA_SIZE to uploadResult.dataSize,
       DATA_HASH_END to dataHashEnd,
-      UPLOAD_TIMESTAMP to uploadResult.uploadTimestamp
+      UPLOAD_TIMESTAMP to uploadResult.uploadTimestamp,
+      BLUR_HASH to uploadResult.blurHash
     )
 
     val dataFilePath = getDataFilePath(id) ?: throw IOException("No data file found for attachment!")
@@ -1583,7 +1584,7 @@ class AttachmentTable(
       SELECT
           $mmsId,
           $CONTENT_TYPE,
-          $TRANSFER_PROGRESS_PENDING,
+          $TRANSFER_NEEDS_RESTORE,
           $CDN_NUMBER,
           $REMOTE_LOCATION,
           $REMOTE_DIGEST,
@@ -2453,7 +2454,7 @@ class AttachmentTable(
       contentValues.put(TRANSFORM_PROPERTIES, transformProperties.serialize())
       contentValues.put(ATTACHMENT_UUID, attachment.uuid?.toString())
 
-      if (attachment.transformProperties?.videoEdited == true) {
+      if (attachment.transformProperties?.videoTrimStartTimeUs != 0L) {
         contentValues.putNull(BLUR_HASH)
       } else {
         contentValues.put(BLUR_HASH, uploadTemplate.getVisualHashStringOrNull())
@@ -2793,7 +2794,7 @@ class AttachmentTable(
 
     companion object {
       fun deserialize(value: Int): ThumbnailRestoreState {
-        return values().firstOrNull { it.value == value } ?: NONE
+        return entries.firstOrNull { it.value == value } ?: NONE
       }
     }
   }
@@ -2833,7 +2834,7 @@ class AttachmentTable(
 
     companion object {
       fun deserialize(value: Int): ArchiveTransferState {
-        return values().firstOrNull { it.value == value } ?: NONE
+        return entries.firstOrNull { it.value == value } ?: NONE
       }
     }
   }

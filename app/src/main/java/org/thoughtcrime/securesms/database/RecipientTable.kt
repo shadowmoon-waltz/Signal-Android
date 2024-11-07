@@ -2061,7 +2061,18 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
    * Migrates all recipients using [legacyUri] for their wallpaper to [newUri].
    * Needed for an app migration.
    */
-  fun migrateWallpaperUri(legacyUri: Uri, newUri: Uri): Int {
+  fun migrateWallpaperUri(legacyUri: Uri, newUri: Uri?): Int {
+    if (newUri == null) {
+      return writableDatabase
+        .update(TABLE_NAME)
+        .values(
+          WALLPAPER to null,
+          WALLPAPER_URI to null
+        )
+        .where("$WALLPAPER_URI = ?", legacyUri)
+        .run()
+    }
+
     val newWallpaper = ChatWallpaperFactory.create(newUri)
 
     return writableDatabase
@@ -4703,7 +4714,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): VibrateState {
-        return values()[id]
+        return entries[id]
       }
 
       fun fromBoolean(enabled: Boolean): VibrateState {
@@ -4719,7 +4730,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): RegisteredState {
-        return values()[id]
+        return entries[id]
       }
     }
   }
@@ -4732,7 +4743,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromMode(mode: Int): SealedSenderAccessMode {
-        return values()[mode]
+        return entries[mode]
       }
     }
   }
@@ -4748,7 +4759,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): InsightsBannerTier {
-        return values()[id]
+        return entries[id]
       }
     }
   }
@@ -4763,7 +4774,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): RecipientType {
-        return values()[id]
+        return entries[id]
       }
     }
   }
@@ -4774,7 +4785,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): MentionSetting {
-        return values()[id]
+        return entries[id]
       }
     }
   }
@@ -4789,7 +4800,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): PhoneNumberSharingState {
-        return values()[id]
+        return entries[id]
       }
     }
   }
@@ -4801,7 +4812,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
 
     companion object {
       fun fromId(id: Int): PhoneNumberDiscoverableState {
-        return PhoneNumberDiscoverableState.values()[id]
+        return entries[id]
       }
     }
   }
