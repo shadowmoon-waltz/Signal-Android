@@ -92,7 +92,6 @@ import org.thoughtcrime.securesms.components.settings.app.subscription.MessageBa
 import org.thoughtcrime.securesms.compose.ComposeFragment
 import org.thoughtcrime.securesms.fonts.SignalSymbols
 import org.thoughtcrime.securesms.fonts.SignalSymbols.SignalSymbol
-import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.keyvalue.protos.ArchiveUploadProgressState
 import org.thoughtcrime.securesms.payments.FiatMoneyUtil
 import org.thoughtcrime.securesms.util.DateUtils
@@ -231,7 +230,6 @@ class RemoteBackupsSettingsFragment : ComposeFragment() {
 
     override fun onContactSupport() {
       requireActivity().finish()
-      requireActivity().startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.REMOTE_BACKUPS_INDEX))
     }
   }
 
