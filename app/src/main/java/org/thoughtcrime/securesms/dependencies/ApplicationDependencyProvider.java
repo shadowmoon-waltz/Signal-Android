@@ -70,6 +70,7 @@ import org.thoughtcrime.securesms.stories.Stories;
 import org.thoughtcrime.securesms.util.AlarmSleepTimer;
 import org.thoughtcrime.securesms.util.ByteUnit;
 import org.thoughtcrime.securesms.util.EarlyMessageCache;
+import org.thoughtcrime.securesms.util.Environment;
 import org.thoughtcrime.securesms.util.FrameRateTracker;
 import org.thoughtcrime.securesms.util.RemoteConfig;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
@@ -89,9 +90,11 @@ import org.whispersystems.signalservice.api.keys.KeysApi;
 import org.whispersystems.signalservice.api.link.LinkDeviceApi;
 import org.whispersystems.signalservice.api.push.ServiceId.ACI;
 import org.whispersystems.signalservice.api.push.ServiceId.PNI;
+import org.whispersystems.signalservice.api.registration.RegistrationApi;
 import org.whispersystems.signalservice.api.services.CallLinksService;
 import org.whispersystems.signalservice.api.services.DonationsService;
 import org.whispersystems.signalservice.api.services.ProfileService;
+import org.whispersystems.signalservice.api.storage.StorageServiceApi;
 import org.whispersystems.signalservice.api.util.CredentialsProvider;
 import org.whispersystems.signalservice.api.util.SleepTimer;
 import org.whispersystems.signalservice.api.util.UptimeSleepTimer;
@@ -242,6 +245,7 @@ public class ApplicationDependencyProvider implements AppDependencies.Provider {
   public @NonNull Network provideLibsignalNetwork(@NonNull SignalServiceConfiguration config) {
     Network network = new Network(BuildConfig.LIBSIGNAL_NET_ENV, StandardUserAgentInterceptor.USER_AGENT);
     LibSignalNetworkExtensions.applyConfiguration(network, config);
+
     return network;
   }
 
@@ -432,9 +436,10 @@ public class ApplicationDependencyProvider implements AppDependencies.Provider {
           Network network = libSignalNetworkSupplier.get();
           return new LibSignalChatConnection(
               "libsignal-unauth",
-              LibSignalNetworkExtensions.createChatService(network, null, Stories.isFeatureEnabled()),
-              healthMonitor,
-              false);
+              network,
+              null,
+              Stories.isFeatureEnabled(),
+              healthMonitor);
         } else {
           return new OkHttpWebSocketConnection("unidentified",
                                                signalServiceConfigurationSupplier.get(),
@@ -449,7 +454,7 @@ public class ApplicationDependencyProvider implements AppDependencies.Provider {
 
   @Override
   public @NonNull BillingApi provideBillingApi() {
-    return BillingFactory.create(GooglePlayBillingDependencies.INSTANCE, RemoteConfig.messageBackups());
+    return BillingFactory.create(GooglePlayBillingDependencies.INSTANCE, RemoteConfig.messageBackups() && !Environment.IS_STAGING);
   }
 
   @Override
@@ -470,6 +475,16 @@ public class ApplicationDependencyProvider implements AppDependencies.Provider {
   @Override
   public @NonNull LinkDeviceApi provideLinkDeviceApi(@NonNull PushServiceSocket pushServiceSocket) {
     return new LinkDeviceApi(pushServiceSocket);
+  }
+
+  @Override
+  public @NonNull RegistrationApi provideRegistrationApi(@NonNull PushServiceSocket pushServiceSocket) {
+    return new RegistrationApi(pushServiceSocket);
+  }
+
+  @Override
+  public @NonNull StorageServiceApi provideStorageServiceApi(@NonNull PushServiceSocket pushServiceSocket) {
+    return new StorageServiceApi(pushServiceSocket);
   }
 
   @VisibleForTesting

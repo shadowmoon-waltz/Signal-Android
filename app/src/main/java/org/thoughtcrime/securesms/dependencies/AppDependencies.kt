@@ -48,9 +48,11 @@ import org.whispersystems.signalservice.api.attachment.AttachmentApi
 import org.whispersystems.signalservice.api.groupsv2.GroupsV2Operations
 import org.whispersystems.signalservice.api.keys.KeysApi
 import org.whispersystems.signalservice.api.link.LinkDeviceApi
+import org.whispersystems.signalservice.api.registration.RegistrationApi
 import org.whispersystems.signalservice.api.services.CallLinksService
 import org.whispersystems.signalservice.api.services.DonationsService
 import org.whispersystems.signalservice.api.services.ProfileService
+import org.whispersystems.signalservice.api.storage.StorageServiceApi
 import org.whispersystems.signalservice.api.websocket.WebSocketConnectionState
 import org.whispersystems.signalservice.internal.configuration.SignalServiceConfiguration
 import org.whispersystems.signalservice.internal.push.PushServiceSocket
@@ -299,6 +301,13 @@ object AppDependencies {
     get() = networkModule.linkDeviceApi
 
   @JvmStatic
+  val registrationApi: RegistrationApi
+    get() = networkModule.registrationApi
+
+  val storageServiceApi: StorageServiceApi
+    get() = networkModule.storageServiceApi
+
+  @JvmStatic
   val okHttpClient: OkHttpClient
     get() = networkModule.okHttpClient
 
@@ -361,5 +370,7 @@ object AppDependencies {
     fun provideKeysApi(pushServiceSocket: PushServiceSocket): KeysApi
     fun provideAttachmentApi(signalWebSocket: SignalWebSocket, pushServiceSocket: PushServiceSocket): AttachmentApi
     fun provideLinkDeviceApi(pushServiceSocket: PushServiceSocket): LinkDeviceApi
+    fun provideRegistrationApi(pushServiceSocket: PushServiceSocket): RegistrationApi
+    fun provideStorageServiceApi(pushServiceSocket: PushServiceSocket): StorageServiceApi
   }
 }

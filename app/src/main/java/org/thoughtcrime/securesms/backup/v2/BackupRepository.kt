@@ -5,14 +5,18 @@
 
 package org.thoughtcrime.securesms.backup.v2
 
+import android.os.Environment
+import android.os.StatFs
 import androidx.annotation.WorkerThread
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okio.ByteString.Companion.toByteString
 import org.greenrobot.eventbus.EventBus
 import org.signal.core.util.Base64
+import org.signal.core.util.ByteSize
 import org.signal.core.util.EventTimer
 import org.signal.core.util.Stopwatch
+import org.signal.core.util.bytes
 import org.signal.core.util.concurrent.LimitedWorker
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.forceForeignKeyConstraintsEnabled
@@ -60,6 +64,7 @@ import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groups.GroupId
 import org.thoughtcrime.securesms.jobs.RequestGroupV2InfoJob
+import org.thoughtcrime.securesms.jobs.RestoreAttachmentJob
 import org.thoughtcrime.securesms.keyvalue.KeyValueStore
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.net.SignalNetwork
@@ -95,6 +100,7 @@ import java.io.OutputStream
 import java.time.ZonedDateTime
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import org.signal.libsignal.messagebackup.MessageBackupKey as LibSignalMessageBackupKey
 
@@ -126,9 +132,56 @@ object BackupRepository {
     }
   }
 
+  /**
+   * Refreshes backup via server
+   */
+  fun refreshBackup(): NetworkResult<Unit> {
+    return initBackupAndFetchAuth()
+      .then { accessPair ->
+        AppDependencies.archiveApi.refreshBackup(
+          aci = SignalStore.account.requireAci(),
+          archiveServiceAccess = accessPair.messageBackupAccess
+        )
+      }
+  }
+
+  /**
+   * Gets the free storage space in the device's data partition.
+   */
+  fun getFreeStorageSpace(): ByteSize {
+    val statFs = StatFs(Environment.getDataDirectory().absolutePath)
+    val free = (statFs.availableBlocksLong) * statFs.blockSizeLong
+
+    return free.bytes
+  }
+
+  /**
+   * Checks whether or not we do not have enough storage space for our remaining attachments to be downloaded.
+   * Caller from the attachment / thumbnail download jobs.
+   */
+  fun checkForOutOfStorageError(tag: String): Boolean {
+    val availableSpace = getFreeStorageSpace()
+    val remainingAttachmentSize = SignalDatabase.attachments.getRemainingRestorableAttachmentSize().bytes
+
+    return if (availableSpace < remainingAttachmentSize) {
+      Log.w(tag, "Possibly out of space. ${availableSpace.toUnitString()} available.", true)
+      SignalStore.backup.spaceAvailableOnDiskBytes = availableSpace.bytes
+      true
+    } else {
+      false
+    }
+  }
+
+  /**
+   * Cancels any relevant jobs for media restore
+   */
   @JvmStatic
   fun skipMediaRestore() {
-    // TODO [backups] -- Clear the error as necessary
+    SignalStore.backup.userManuallySkippedMediaRestore = true
+
+    AppDependencies.jobManager.cancelAllInQueue(RestoreAttachmentJob.constructQueueString(RestoreAttachmentJob.RestoreOperation.RESTORE_OFFLOADED))
+    AppDependencies.jobManager.cancelAllInQueue(RestoreAttachmentJob.constructQueueString(RestoreAttachmentJob.RestoreOperation.INITIAL_RESTORE))
+    AppDependencies.jobManager.cancelAllInQueue(RestoreAttachmentJob.constructQueueString(RestoreAttachmentJob.RestoreOperation.MANUAL))
   }
 
   /**
@@ -644,7 +697,7 @@ object BackupRepository {
 
           else -> Log.w(TAG, "Unrecognized frame")
         }
-        EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_RESTORE, frameReader.getBytesRead(), totalLength))
+        EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_RESTORE, frameReader.getBytesRead().bytes, totalLength.bytes))
       }
 
       if (chatItemInserter.flush()) {
@@ -1136,10 +1189,12 @@ object BackupRepository {
   private suspend fun getPaidType(): MessageBackupsType? {
     val config = getSubscriptionsConfiguration()
     val product = AppDependencies.billingApi.queryProduct() ?: return null
+    val backupLevelConfiguration = config.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL] ?: return null
 
     return MessageBackupsType.Paid(
       pricePerMonth = product.price,
-      storageAllowanceBytes = config.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL]!!.storageAllowanceBytes
+      storageAllowanceBytes = backupLevelConfiguration.storageAllowanceBytes,
+      mediaTtl = backupLevelConfiguration.mediaTtlDays.days
     )
   }
 
@@ -1176,7 +1231,7 @@ object BackupRepository {
     return if (SignalStore.backup.backupsInitialized) {
       getArchiveServiceAccessPair().runOnStatusCodeError(resetInitializedStateErrorAction)
     } else if (isPreRestoreDuringRegistration()) {
-      Log.w(TAG, "Requesting/using auth credentials in pre-restore state")
+      Log.w(TAG, "Requesting/using auth credentials in pre-restore state", Throwable())
       getArchiveServiceAccessPair()
     } else {
       val messageBackupKey = SignalStore.backup.messageBackupKey

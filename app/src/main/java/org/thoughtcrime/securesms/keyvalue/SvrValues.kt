@@ -2,12 +2,8 @@ package org.thoughtcrime.securesms.keyvalue
 
 import org.signal.core.util.StringStringSerializer
 import org.signal.core.util.logging.Log
-import org.thoughtcrime.securesms.util.JsonUtils
 import org.whispersystems.signalservice.api.kbs.MasterKey
 import org.whispersystems.signalservice.api.kbs.PinHashUtil.localPinHash
-import org.whispersystems.signalservice.internal.contacts.entities.TokenResponse
-import java.io.IOException
-import java.security.SecureRandom
 
 class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(store) {
   companion object {
@@ -16,8 +12,6 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
     const val REGISTRATION_LOCK_ENABLED: String = "kbs.v2_lock_enabled"
     const val OPTED_OUT: String = "kbs.opted_out"
 
-    private const val MASTER_KEY = "kbs.registration_lock_master_key"
-    private const val TOKEN_RESPONSE = "kbs.token_response"
     private const val PIN = "kbs.pin"
     private const val LOCK_LOCAL_PIN_HASH = "kbs.registration_lock_local_pin_hash"
     private const val LAST_CREATE_FAILED_TIMESTAMP = "kbs.last_create_failed_timestamp"
@@ -25,6 +19,7 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
     private const val SVR2_AUTH_TOKENS = "kbs.kbs_auth_tokens"
     private const val SVR_LAST_AUTH_REFRESH_TIMESTAMP = "kbs.kbs_auth_tokens.last_refresh_timestamp"
     private const val SVR3_AUTH_TOKENS = "kbs.svr3_auth_tokens"
+    private const val RESTORED_VIA_ACCOUNT_ENTROPY_KEY = "kbs.restore_via_account_entropy_pool"
   }
 
   public override fun onFirstEverAppLaunch() = Unit
@@ -41,7 +36,6 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
   fun clearRegistrationLockAndPin() {
     store.beginWrite()
       .remove(REGISTRATION_LOCK_ENABLED)
-      .remove(TOKEN_RESPONSE)
       .remove(LOCK_LOCAL_PIN_HASH)
       .remove(PIN)
       .remove(LAST_CREATE_FAILED_TIMESTAMP)
@@ -51,21 +45,41 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
       .commit()
   }
 
+  @Deprecated("Switch to restoring AEP instead")
   @Synchronized
-  fun setMasterKey(masterKey: MasterKey, pin: String) {
+  fun setMasterKey(masterKey: MasterKey, pin: String?) {
+    store.beginWrite().apply {
+//      putBlob(MASTER_KEY, masterKey.serialize())
+      putLong(LAST_CREATE_FAILED_TIMESTAMP, -1)
+      putBoolean(OPTED_OUT, false)
+
+      if (pin != null) {
+        putString(LOCK_LOCAL_PIN_HASH, localPinHash(pin))
+        putString(PIN, pin)
+        remove(RESTORED_VIA_ACCOUNT_ENTROPY_KEY)
+      } else {
+        putBoolean(RESTORED_VIA_ACCOUNT_ENTROPY_KEY, true)
+        remove(LOCK_LOCAL_PIN_HASH)
+        remove(PIN)
+      }
+    }.commit()
+  }
+
+  @Synchronized
+  fun setPin(pin: String) {
     store.beginWrite()
-      .putBlob(MASTER_KEY, masterKey.serialize())
-      .putString(LOCK_LOCAL_PIN_HASH, localPinHash(pin))
       .putString(PIN, pin)
-      .putLong(LAST_CREATE_FAILED_TIMESTAMP, -1)
-      .putBoolean(OPTED_OUT, false)
+      .putString(LOCK_LOCAL_PIN_HASH, localPinHash(pin))
       .commit()
   }
 
   @Synchronized
   fun setPinIfNotPresent(pin: String) {
     if (store.getString(PIN, null) == null) {
-      store.beginWrite().putString(PIN, pin).commit()
+      store.beginWrite()
+        .putString(PIN, pin)
+        .putString(LOCK_LOCAL_PIN_HASH, localPinHash(pin))
+        .commit()
     }
   }
 
@@ -85,32 +99,17 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
     return getLong(LAST_CREATE_FAILED_TIMESTAMP, -1) > 0
   }
 
-  @get:Synchronized
+  /** Returns the Master Key */
   val masterKey: MasterKey
-    /** Returns the Master Key, lazily creating one if needed. */
-    get() {
-      val blob = store.getBlob(MASTER_KEY, null)
-      if (blob != null) {
-        return MasterKey(blob)
-      }
-
-      Log.i(TAG, "Generating Master Key...", Throwable())
-      val masterKey = MasterKey.createNew(SecureRandom())
-      store.beginWrite().putBlob(MASTER_KEY, masterKey.serialize()).commit()
-      return masterKey
-    }
+    get() = SignalStore.account.accountEntropyPool.deriveMasterKey()
 
   @get:Synchronized
   val pinBackedMasterKey: MasterKey?
     /** Returns null if master key is not backed up by a pin. */
     get() {
       if (!isRegistrationLockEnabled) return null
-      return rawMasterKey
+      return masterKey
     }
-
-  @get:Synchronized
-  private val rawMasterKey: MasterKey?
-    get() = getBlob(MASTER_KEY, null)?.let { MasterKey(it) }
 
   @get:Synchronized
   val registrationLockToken: String?
@@ -122,8 +121,7 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
   @get:Synchronized
   val recoveryPassword: String?
     get() {
-      val masterKey = rawMasterKey
-      return if (masterKey != null && hasPin()) {
+      return if (hasOptedInWithAccess()) {
         masterKey.deriveRegistrationRecoveryPassword()
       } else {
         null
@@ -137,9 +135,17 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
   val localPinHash: String? by stringValue(LOCK_LOCAL_PIN_HASH, null)
 
   @Synchronized
+  fun hasOptedInWithAccess(): Boolean {
+    return hasPin() || restoredViaAccountEntropyPool
+  }
+
+  @Synchronized
   fun hasPin(): Boolean {
     return localPinHash != null
   }
+
+  @get:Synchronized
+  val restoredViaAccountEntropyPool by booleanValue(RESTORED_VIA_ACCOUNT_ENTROPY_KEY, false)
 
   @get:Synchronized
   @set:Synchronized
@@ -225,10 +231,9 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
   fun optOut() {
     store.beginWrite()
       .putBoolean(OPTED_OUT, true)
-      .remove(TOKEN_RESPONSE)
-      .putBlob(MASTER_KEY, MasterKey.createNew(SecureRandom()).serialize())
       .remove(LOCK_LOCAL_PIN_HASH)
       .remove(PIN)
+      .remove(RESTORED_VIA_ACCOUNT_ENTROPY_KEY)
       .putLong(LAST_CREATE_FAILED_TIMESTAMP, -1)
       .commit()
   }
@@ -237,18 +242,6 @@ class SvrValues internal constructor(store: KeyValueStore) : SignalStoreValues(s
   fun hasOptedOut(): Boolean {
     return getBoolean(OPTED_OUT, false)
   }
-
-  @get:Synchronized
-  val registrationLockTokenResponse: TokenResponse?
-    get() {
-      val token = store.getString(TOKEN_RESPONSE, null) ?: return null
-
-      try {
-        return JsonUtils.fromJson(token, TokenResponse::class.java)
-      } catch (e: IOException) {
-        throw AssertionError(e)
-      }
-    }
 
   var lastRefreshAuthTimestamp: Long by longValue(SVR_LAST_AUTH_REFRESH_TIMESTAMP, 0L)
 }

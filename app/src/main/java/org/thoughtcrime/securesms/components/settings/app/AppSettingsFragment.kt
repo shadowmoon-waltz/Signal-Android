@@ -92,6 +92,7 @@ class AppSettingsFragment : ComposeFragment(), Callbacks {
     val self by viewModel.self.observeAsState()
 
     if (state == null) return
+    if (self == null) return
 
     val context = LocalContext.current
     val bannerManager = remember {
@@ -594,7 +595,7 @@ private fun BioRow(
         ) { annotatedString, inlineTextContentMap ->
           Text(
             text = annotatedString,
-            color = MaterialTheme.colorScheme.outline,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             inlineContent = inlineTextContentMap,
             modifier = Modifier.padding(top = 8.dp)
           )

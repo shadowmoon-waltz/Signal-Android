@@ -1034,6 +1034,16 @@
     <!-- Button in dialog to retry linking a device with a qr code -->
     <string name="AddLinkDeviceFragment__retry">Yritä uudelleen</string>
 
+    <!-- LinkDeviceSyncBottomSheet -->
+    <!-- Option in bottom sheet to transfer message history -->
+    <string name="LinkDeviceSyncBottomSheet_transfer">Transfer message history</string>
+    <!-- Description in bottom sheet of what transferring message history will do -->
+    <string name="LinkDeviceSyncBottomSheet_transfer_your_text">Transfer your text messages and recent media to your desktop</string>
+    <!-- Option in bottom sheet to not transfer message history -->
+    <string name="LinkDeviceSyncBottomSheet_dont_transfer">Älä siirrä</string>
+    <!-- Description in bottom sheet of what not transferring history will do -->
+    <string name="LinkDeviceSyncBottomSheet_no_old_messages">No old messages or media will be transferred to your desktop</string>
+
     <!-- DeviceListActivity -->
     <string name="DeviceListActivity_unlink_s">Poistetaanko %1$s?</string>
     <string name="DeviceListActivity_by_unlinking_this_device_it_will_no_longer_be_able_to_send_or_receive">Jos poistat tämän laitteen, sillä ei voi enää lähettää eikä vastaanottaa viestejä.</string>
@@ -1328,20 +1338,6 @@
     <string name="ManageGroupActivity_more">lisää</string>
     <string name="ManageGroupActivity_add_group_description">Lisää ryhmän kuvaus…</string>
 
-    <!-- MoreTransferOrRestoreOptionsSheet -->
-    <!-- Row title for transfer option -->
-    <string name="MoreTransferOrRestoreOptionsSheet__transfer_from_android_device">Siirrä Android-laitteesta</string>
-    <!-- Row description for transfer option -->
-    <string name="MoreTransferOrRestoreOptionsSheet__transfer_your_account_and_messages">Siirrä tilisi ja viestit vanhasta Android-laitteestasi.</string>
-    <!-- Row title for logging in without transfer -->
-    <string name="MoreTransferOrRestoreOptionsSheet__log_in_without_transferring">Kirjaudu sisään ilman siirtoa</string>
-    <!-- Row description for logging in without transfer -->
-    <string name="MoreTransferOrRestoreOptionsSheet__continue_without_transferring">Jatka ilman viestien ja median siirtoa</string>
-    <!-- Row title for restoring from local backup -->
-    <string name="MoreTransferOrRestoreOptionsSheet__restore_local_backup">Palauta paikallinen varmuuskopio</string>
-    <!-- Row description for restoring from local backup -->
-    <string name="MoreTransferOrRestoreOptionsSheet__restore_your_messages">Palauta viestisi laitteellesi tallentamastasi varmuuskopiotiedostosta.</string>
-
     <!-- RemoteRestoreActivity -->
     <!-- Progress dialog label when downloading a backup -->
     <string name="RemoteRestoreActivity__downloading_backup">Ladataan varmuuskopiota…</string>
@@ -1359,12 +1355,16 @@
     <string name="RemoteRestoreActivity__all_of_your_messages">Kaikki viestisi</string>
     <!-- Screen title for restoring from backup -->
     <string name="RemoteRestoreActivity__restore_from_backup">Palauta varmuuskopiosta</string>
-    <!-- Notice about what media will be included in backups. Placeholder is days, and is curerntly fixed at 30. -->
+    <!-- Notice about what media will be included in backups. Placeholder is days, and is currently fixed at 30. -->
     <string name="RemoteRestoreActivity__only_media_sent_or_received">Mukana on vain viimeisten %1$d päivän aikana lähetetty tai vastaanotettu media.</string>
     <!-- Section title for explaining what your backup includes -->
     <string name="RemoteRestoreActivity__your_backup_includes">Varmuuskopio sisältää:</string>
     <!-- Primary action button copy for starting restoration -->
     <string name="RemoteRestoreActivity__restore_backup">Palauta varmuuskopio</string>
+    <!-- Displayed at restore time to tell the user when their last backup was made. %$1s is replaced with the date (e.g. March 5, 2024) and %$2s is replaced with the time (e.g. 9:00am) -->
+    <string name="RemoteRestoreActivity__backup_created_at">Viimeisin varmuuskopio tehtiin %1$s klo %2$s.</string>
+    <!-- Progress dialog label while fetching backup info if we don\'t already have it -->
+    <string name="RemoteRestoreActivity__fetching_backup_details">Haetaan varmuuskopion tietoja…</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">Ilmoita minulle maininnoista</string>
@@ -3458,15 +3458,15 @@
     <string name="HelpFragment__could_not_upload_logs">Lokien lähettäminen ei onnistunut</string>
     <string name="HelpFragment__please_be_as_descriptive_as_possible">Auta meitä ymmärtämään ongelma kuvailemalla se mahdollisimman tarkasti.</string>
     <string-array name="HelpFragment__categories_6">
-        <item>Please select an option</item>
-        <item>Something\'s Not Working</item>
-        <item>Feature Request</item>
-        <item>Question</item>
-        <item>Feedback</item>
-        <item>Other</item>
-        <item>Payments (MobileCoin)</item>
-        <item>Donations &amp; Badges</item>
-        <item>Signal Android Backup</item>
+        <item>Valitse vaihtoehto</item>
+        <item>Jokin ei toimi</item>
+        <item>Ominaisuuspyyntö</item>
+        <item>Kysymys</item>
+        <item>Palaute</item>
+        <item>Muu</item>
+        <item>Maksut (MobileCoin)</item>
+        <item>Lahjoitukset ja merkit</item>
+        <item>Signal Android -varmuuskopiointi</item>
     </string-array>
     <!-- Subject of email when submitting debug logs to help debug slow notifications -->
     <string name="DebugLogsPromptDialogFragment__signal_android_support_request">Signal Androidin virheenkorjauslokin lähetys</string>
@@ -4307,6 +4307,8 @@
     <string name="backup_enable_dialog__i_have_written_down_this_passphrase">Olen kirjoittanut ylös tämän salalauseen, joka on välttämätön varmuuskopion palauttamiseen.</string>
     <string name="registration_activity__restore_backup">Palauta varmuuskopio</string>
     <string name="registration_activity__transfer_or_restore_account">Siirrä tai palauta tili</string>
+    <!-- Screen title for restoring or transfering account -->
+    <string name="registration_activity__restore_or_transfer">Palauta tai siirrä</string>
     <string name="registration_activity__transfer_account">Siirrä tili</string>
     <string name="registration_activity__skip">Ohita</string>
     <string name="preferences_chats__chat_backups">Keskustelujen varmuuskopiot</string>
@@ -4964,7 +4966,7 @@
     <!-- String alerting user that something is wrong with their backups subscription -->
     <string name="AppSettingsFragment__renew_your_signal_backups_subscription">Uusi Signal-varmuuskopioinnin tilaus</string>
     <!-- String alerting user that backup failed -->
-    <string name="AppSettingsFragment__couldnt_complete_backup">Couldn\'t complete backup</string>
+    <string name="AppSettingsFragment__couldnt_complete_backup">Varmuuskopiointia ei voitu suorittaa loppuun</string>
     <!-- String displayed telling user to invite their friends to Signal -->
     <string name="AppSettingsFragment__invite_your_friends">Kutsu ystäviäsi</string>
     <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
@@ -5127,7 +5129,7 @@
     <!-- Name of a chat folder that contains all groups chats -->
     <string name="ChatFoldersFragment__groups">Ryhmät</string>
     <!-- Description of the suggested group chat folder -->
-    <string name="ChatFoldersFragment__only_group_messages">Only messages from group chats</string>
+    <string name="ChatFoldersFragment__only_group_messages">Vain viestit ryhmäkeskusteluista</string>
     <!-- Button text to add a suggested folder to a user\'s chat folders -->
     <string name="ChatFoldersFragment__add">Lisää</string>
     <!-- Toast shown when a folder gets added where %s is the name of the folder -->
@@ -5820,6 +5822,10 @@
     <string name="DonationsErrors__your_payment">Lahjoitusta ei voitu käsitellä, eikä sinua ei ole veloitettu. Yritä uudelleen.</string>
     <string name="DonationsErrors__still_processing">Käsitellään edelleen</string>
     <string name="DonationsErrors__couldnt_add_badge">Merkkiä ei voitu lisätä</string>
+    <!-- Displayed when backup credential could not be redeemed. Dialog or notification title -->
+    <string name="DonationsError__something_went_wrong">Something went wrong</string>
+    <!-- Displayed when backup credential could not be redeemed. Dialog or notification body -->
+    <string name="DonationsError__your_backups_subscription_couldnt_be_displayed">Your backups subscription couldn\'t be displayed. Please contact support.</string>
     <!-- Displayed when badge credential couldn\'t be verified -->
     <string name="DonationsErrors__failed_to_validate_badge">Merkin vahvistaminen epäonnistui</string>
     <!-- Displayed when badge credential couldn\'t be verified -->
@@ -6099,8 +6105,6 @@
     <string name="DonationReceiptDetailsFragment__amount">Summa</string>
     <!-- Donation receipts thanks -->
     <string name="DonationReceiptDetailsFragment__thank_you_for_supporting">Kiitos Signalin tukemisesta. Lahjoituksesi auttaa edistämään avoimen lähdekoodin tietosuojateknologian kehittämistä, joka suojaa sananvapautta ja mahdollistaa turvallisen maailmanlaajuisen viestinnän miljoonille käyttäjille ympäri maailmaa. Jos asut Yhdysvalloissa, säilytä tämä kuitti verotusta varten. Signal Technology Foundation on verovapaa voittoa tavoittelematon organisaatio Yhdysvaltojen Internal Revenue Code -pykälän 501c3 mukaisesti. Liittovaltion verotunnuksemme on 82-4506840.</string>
-    <!-- Donation receipt type -->
-    <string name="DonationReceiptDetailsFragment__s_dash_s">%1$s – %2$s</string>
     <!-- Donation reciepts screen empty state title -->
     <string name="DonationReceiptListFragment__no_receipts">Ei kuitteja</string>
 
@@ -7211,6 +7215,8 @@
     <string name="CallLinkDetailsFragment__delete_call_link">Poista puhelulinkki</string>
     <!-- Displayed whenever a name change, revocation, etc, fails. -->
     <string name="CallLinkDetailsFragment__couldnt_save_changes">Muutoksia ei voitu tallentaa. Tarkista verkkoyhteys ja yritä uudelleen.</string>
+    <!-- Displayed when the call link is in use when the user tries to delete it -->
+    <string name="CallLinkDetailsFragment__couldnt_delete_call_link">Couldn\'t delete call link as it is currently in use.</string>
     <!-- Displayed as title in dialog when user attempts to delete the link -->
     <string name="CallLinkDetailsFragment__delete_link">Poistetaanko linkki?</string>
     <!-- Displayed as body in dialog when user attempts to delete the link -->
@@ -7429,11 +7435,11 @@
     <!-- Sheet body part 1 when user\'s media will be deleted today -->
     <string name="BackupAlertBottomSheet__your_signal_media_backup_plan_has_been">Signal-median varmuuskopiointi on peruutettu, koska emme voineet käsitellä maksua. Tämä on viimeinen mahdollisuutesi ladata varmuuskopiossasi oleva media ennen sen poistamista.</string>
     <!-- Sheet title when user does not have enough space to download their backup. Placeholder is formatted byte size, for example 12GB. -->
-    <string name="BackupAlertBottomSheet__free_up_s_on_this_device">Free up %1$s on this device</string>
+    <string name="BackupAlertBottomSheet__free_up_s_on_this_device">Vapauta %1$s tällä laitteella</string>
     <!-- Sheet body part 1 when user does not have enough space to download their backup. Placeholder is the amount of space needed. -->
-    <string name="BackupAlertBottomSheet__to_finish_downloading_your_signal_backup">To finish downloading your Signal Backup your device needs %1$s of storage space.</string>
+    <string name="BackupAlertBottomSheet__to_finish_downloading_your_signal_backup">Signal-varmuuskopion loppuun lataamiseksi laitteessasi tarvitaan %1$s tallennustilaa.</string>
     <!-- Sheet body part 2 when user does not have enough space to download their backup. -->
-    <string name="BackupAlertBottomSheet__to_free_up_space_offload">To free up space offload or delete unused apps or content large in file size.</string>
+    <string name="BackupAlertBottomSheet__to_free_up_space_offload">Vapauta tilaa siirtämällä tai poistamalla käyttämättömiä sovelluksia tai tilaa vievää sisältöä.</string>
     <!-- Sheet title when user payment failed to process -->
     <string name="BackupAlertBottomSheet__your_backups_subscription_failed_to_renew">Varmuuskopiointitilauksesi uusiminen epäonnistui</string>
     <!-- Sheet body when user payment failed to process -->
@@ -7445,11 +7451,11 @@
     <!-- Clickable text to learn more about the content of this bottom sheet -->
     <string name="BackupAlertBottomSheet__learn_more">Lue lisää</string>
     <!-- Secondary action button text when user does not have enough free space to download their backup. -->
-    <string name="BackupAlertBottomSheet__skip_restore">Skip restore</string>
+    <string name="BackupAlertBottomSheet__skip_restore">Ohita palautus</string>
     <!-- Primary action button to start backup immediately -->
-    <string name="BackupAlertBottomSheet__back_up_now">Back up now</string>
+    <string name="BackupAlertBottomSheet__back_up_now">Varmuuskopioi nyt</string>
     <!-- Primary action button when user doesn\'t have enough space -->
-    <string name="BackupAlertBottomSheet__got_it">Got it</string>
+    <string name="BackupAlertBottomSheet__got_it">Selvä</string>
     <!-- Primary action button to manage subscription in Google Play -->
     <string name="BackupAlertBottomSheet__manage_subscription">Hallinnoi tilausta</string>
     <!-- Primary action button text prompting user to subscriber. Placeholder is formatted price -->
@@ -7461,7 +7467,7 @@
     <!-- Secondary generic action button to dismiss sheet without performing an action -->
     <string name="BackupAlertBottomSheet__not_now">Ei nyt</string>
     <!-- Secondary action button to dismiss could not complete backup sheet -->
-    <string name="BackupAlertBottomSheet__try_later">Try later</string>
+    <string name="BackupAlertBottomSheet__try_later">Yritä myöhemmin</string>
     <!-- Dialog title for last chance to download backup -->
     <string name="BackupAlertBottomSheet__media_will_be_deleted">Mediasisältö poistetaan</string>
     <!-- Dialog message for last chance to download backup -->
@@ -7473,9 +7479,9 @@
     <!-- Dialog action to skip media download -->
     <string name="BackupAlertBottomSheet__skip">Ohita</string>
     <!-- Dialog title for skipping media restore -->
-    <string name="BackupAlertBottomSheet__skip_restore_question">Skip restore?</string>
+    <string name="BackupAlertBottomSheet__skip_restore_question">Ohitetaanko palauttaminen?</string>
     <!-- Dialog text for skipping media restore -->
-    <string name="BackupAlertBottomSheet__if_you_skip_restore">If you skip restore the remaining media and attachments in your backup will be deleted the next time your device completes a new backup.</string>
+    <string name="BackupAlertBottomSheet__if_you_skip_restore_the">If you skip restore the remaining media and attachments in your backup can be downloaded at a later time when storage space becomes available.</string>
 
     <!-- BackupStatus -->
     <!-- Status title when user does not have enough free space to download their media. Placeholder is required disk space. -->
@@ -7487,7 +7493,7 @@
     <!-- Status title for banner when user has completed restoring restore media from a backup -->
     <string name="BackupStatus__restore_complete">Palautus suoritettu</string>
     <!-- Status action label for seeing more details about storage space -->
-    <string name="BackupStatus__details">Details</string>
+    <string name="BackupStatus__details">Lisätietoja</string>
 
     <!-- Status subtitle for banner when restoring media pauses for Wi-Fi -->
     <string name="BackupStatus__status_waiting_for_wifi">Odotetaan Wi-Fi-yhteyttä…</string>
@@ -7532,10 +7538,6 @@
     <!-- Row title to change or cancel subscription -->
     <string name="BackupsTypeSettingsFragment__change_or_cancel_subscription">Muuta tilausta tai peruuta se</string>
 
-    <!-- RemoteRestoreActivity -->
-    <!-- Displayed at restore time to tell the user when their last backup was made. %$1s is replaced with the date (e.g. March 5, 2024) and %$2s is replaced with the time (e.g. 9:00am) -->
-    <string name="RemoteRestoreActivity__backup_created_at">Viimeisin varmuuskopio tehtiin %1$s klo %2$s.</string>
-
     <!-- ManageStorageSettingsFragment -->
     <!-- Settings section title header show above manage settings options for automatic chat history management (deleting) -->
     <string name="ManageStorageSettingsFragment_chat_limit">Keskustelun rajoitukset</string>
@@ -7555,6 +7557,8 @@
     <string name="ManageStorageSettingsFragment__optimize_on_device_storage">Optimoi laitteen tallennustila</string>
     <!-- Setting row explanation for storage optimization -->
     <string name="ManageStorageSettingsFragment__unused_media_will_be_offloaded">Käyttämätön media poistetaan, mutta se voidaan ladata varmuuskopiosta milloin tahansa.</string>
+    <!-- Dialog message for paid tier pending dialog -->
+    <string name="ManageStorageSettingsFragment__storage_optimization_can_only_be_used">Storage optimization can only be used with the paid tier of Signal Backups. Your backups subscription is still processing and not yet active. Please try again later.</string>
 
     <!-- UpgradeToEnableOptimizedStorageSheet -->
     <!-- Title on a bottom sheet, detailing that the user must upgrade to enable storage optimization -->
@@ -7773,7 +7777,7 @@
     <!-- Screen headline -->
     <string name="MessageBackupsKeyEducationScreen__your_backup_key">Varmuuskopion avain</string>
     <!-- Screen body part 1 -->
-    <string name="MessageBackupsKeyEducationScreen__your_backup_key_is_a">Varmuuskopion avain on 64-numeroinen koodi, jonka avulla voit palauttaa varmuuskopion, kun asennat Signalin uudelleen.</string>
+    <string name="MessageBackupsKeyEducationScreen__your_backup_key_is_a">Your backup key is a 64-character code that lets you restore your backup when you re-install Signal.</string>
     <!-- Screen body part 2 -->
     <string name="MessageBackupsKeyEducationScreen__if_you_forget_your_key">Jos unohdat avaimen, et voi palauttaa varmuuskopiota. Signal ei voi auttaa sinua palauttamaan varmuuskopiota.</string>
     <!-- Action button label -->
@@ -7853,5 +7857,101 @@
 
     <!-- Accessible content description for the reminder view, describing the icon in the view. -->
     <string name="ReminderView_icon_content_description">Muistutuskuvake</string>
+
+    <!-- Row title for restore/transfer using a previous registered phone/device -->
+    <string name="WelcomeFragment_restore_action_i_have_my_old_phone">Minulla on vanha puhelimeni</string>
+    <!-- Row subtitle for restore/transfer using a previous registered phone/device -->
+    <string name="WelcomeFragment_restore_action_scan_qr">Aloita nopeasti skannaamalla nykyisen Signal-tilisi QR-koodi</string>
+
+    <!-- Row title for restore/transfer without using a previous device -->
+    <string name="WelcomeFragment_restore_action_i_dont_have_my_old_phone">Minulla ei ole vanhaa puhelintani</string>
+    <!-- Row subtitle for restore/transfer without using a previous device -->
+    <string name="WelcomeFragment_restore_action_reinstalling">Or you\'re reinstalling Signal on the same device</string>
+
+    <!-- Screen title for selecting which restore method to use during registration -->
+    <string name="SelectRestoreMethodFragment__restore_or_transfer_account">Palauta tai siirrä tili</string>
+    <!-- Screen subtitle for selecting which restore method to use during registration -->
+    <string name="SelectRestoreMethodFragment__get_your_signal_account">Siirrä Signal-tilisi ja viestihistoriasi tälle laitteelle.</string>
+    <!-- Option title for restoring via signal backups -->
+    <string name="SelectRestoreMethodFragment__from_signal_backups">Signal-varmuuskopiosta</string>
+    <!-- Option subtitle for restoring via signal backups -->
+    <string name="SelectRestoreMethodFragment__your_free_or_paid_signal_backup_plan">Ilmainen tai maksullinen Signal-varmuuskopioinnin tilaus</string>
+    <!-- Option title for restoring via a local backup folder -->
+    <string name="SelectRestoreMethodFragment__from_a_backup_folder">Varmuuskopiokansiosta</string>
+    <!-- Option title for restoring via a local backup file -->
+    <string name="SelectRestoreMethodFragment__from_a_backup_file">Varmuuskopiotiedostosta</string>
+    <!-- Option subtitle for restoring via a local backup -->
+    <string name="SelectRestoreMethodFragment__choose_a_backup_youve_saved">Valitse tallentamasi varmuuskopio</string>
+    <!-- Option title for restoring via device transfer -->
+    <string name="SelectRestoreMethodFragment__from_your_old_phone">Vanhasta puhelimestasi</string>
+    <!-- Option subtitle for restoring via device transfer -->
+    <string name="SelectRestoreMethodFragment__transfer_directly_from_old">Siirrä suoraan vanhasta Androidista</string>
+
+    <!-- Screen title for restore via local backup -->
+    <string name="RestoreLocalBackup_title">Palauta paikallinen varmuuskopio</string>
+    <!-- Screen subtitle for restore via local backup -->
+    <string name="RestoreLocalBackup_subtitle">Palauta viestisi laitteellesi tallentamastasi varmuuskopiosta. Jos et palauta niitä nyt, et voi palauttaa niitä enää myöhemmin.</string>
+
+    <!-- Screen title for manual entry of backup key material for restoring via signal backups -->
+    <string name="EnterBackupKey_title">Anna varmuuskopion avain</string>
+    <!-- Screen subtitle for manual entry of backup key material for restoring via signal backups -->
+    <string name="EnterBackupKey_subtitle">Your backup key is a 64-character code required to recover your account and data.</string>
+    <!-- Button to skip entering backup key and resuming normal registration flow -->
+    <string name="EnterBackupKey_no_backup_key">Eikö sinulla ole varmuuskopion avainta?</string>
+    <!-- Backup key text field hint -->
+    <string name="EnterBackupKey_backup_key">Varmuuskopion avain</string>
+    <!-- Backup key not known bottom sheet info paragraph 1 -->
+    <string name="EnterBackupKey_no_key_paragraph_1">Backups can\'t be recovered without their 64-character recovery code. If you\'ve lost your backup key Signal can\'t help restore your backup.</string>
+    <!-- Backup key not known bottom sheet info paragraph 2 -->
+    <string name="EnterBackupKey_no_key_paragraph_2">If you have your old device you can view your backup key in Settings &gt; Backups. Then tap View backup key.</string>
+    <!-- Backup key not known bottom sheet button to learn more about it -->
+    <string name="EnterBackupKey_learn_more">Lue lisää</string>
+    <!-- Backup key not known bottom sheet button to skip backup key entry and resume normal reregistration -->
+    <string name="EnterBackupKey_skip_and_dont_restore">Ohita äläkä palauta</string>
+
+    <!-- Title for restore via qr screen -->
+    <string name="RestoreViaQr_title">Skannaa tämä koodi vanhalla puhelimellasi</string>
+    <!-- First instruction on what to do with restore via qr code -->
+    <string name="RestoreViaQr_instruction_1">Avaa Signal vanhassa laitteessasi</string>
+    <!-- Second instruction on what to do with restore via qr code -->
+    <string name="RestoreViaQr_instruction_2">Napauta kamerakuvaketta </string>
+    <!-- Third instruction on what to do with restore via qr code -->
+    <string name="RestoreViaQr_instruction_3">Skannaa tämä koodi kameralla</string>
+    <!-- Error message shown when qr code could not be loaded -->
+    <string name="RestoreViaQr_qr_code_error">QR-koodin luominen ei onnistu</string>
+    <!-- Status message shown when qr code already scanned by other device -->
+    <string name="RestoreViaQr_qr_code_scanned">Skannattu vanhalla laitteella</string>
+    <!-- Error button text to retry getting a qr code -->
+    <string name="RestoreViaQr_retry">Yritä uudelleen</string>
+
+    <!-- Old device Transfer account screen title -->
+    <string name="TransferAccount_title">Siirrä tili</string>
+    <!-- Old device Transfer account screen body message with learn more placeholder -->
+    <string name="TransferAccount_body">Tilisi siirretään uuteen laitteeseen. Uusi laite voi jatkossa nähdä ryhmäsi ja yhteystietosi, lukea kaikki keskustelusi ja lähettää viestejä sinun nimissäsi. %1$s</string>
+    <!-- Old device Transfer account learn more placed into TransferAccount_body -->
+    <string name="TransferAccount_learn_more">Lue lisää</string>
+    <!-- Old device Transfer account button text to confirm transfer account to new device -->
+    <string name="TransferAccount_button">Siirrä tili</string>
+    <!-- Old device Transfer account footnote text describing e2e encryption for all data -->
+    <string name="TransferAccount_messages_e2e">Viestit ja keskustelujen tiedot on suojattu päästä päähän -salauksella kaikilla laitteilla</string>
+    <!-- Old device Transfer account screen title for system dialog shown to confirm OS device authentication (fingerprint, pattern, pin, etc.) -->
+    <string name="TransferAccount_unlock_to_transfer">Avaa lukitus siirtääksesi tilin</string>
+    <!-- Old device Transfer account bottom sheet dialog title -->
+    <string name="TransferAccount_continue_on_your_other_device">Jatka toisella laitteellasi</string>
+    <!-- Old device Transfer account bottom sheet dialog body -->
+    <string name="TransferAccount_continue_on_your_other_device_details">Jatka tilin siirtämistä toisella laitteellasi.</string>
+
+    <!-- Restore Complete bottom sheet dialog title -->
+    <string name="RestoreCompleteBottomSheet_restore_complete">Palautus suoritettu</string>
+    <!-- Restore Complete bottom sheet dialog message -->
+    <string name="RestoreCompleteBottomSheet_restore_complete_message">Signal-tilisi ja viestiesi siirto toiseen laitteeseen on käynnissä. Signal ei ole enää aktiivisena tällä laitteella.</string>
+    <!-- Restore Complete bottom sheet dialog title after device transfer -->
+    <string name="RestoreCompleteBottomSheet_transfer_complete">Siirto valmis</string>
+    <!-- Restore Complete bottom sheet dialog message after device transfer -->
+    <string name="RestoreCompleteBottomSheet_transfer_complete_message">Signal-tilisi ja viestisi on siirretty toiseen laitteeseen. Signal ei ole enää aktiivisena tällä laitteella.</string>
+    <!-- Restore Complete bottom sheet dialog button text to dismiss sheet -->
+    <string name="RestoreCompleteBottomSheet_button">Selvä</string>
+
+
     <!-- EOF -->
 </resources>

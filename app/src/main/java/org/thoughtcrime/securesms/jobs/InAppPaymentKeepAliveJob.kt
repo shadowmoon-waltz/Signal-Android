@@ -11,8 +11,6 @@ import org.thoughtcrime.securesms.badges.Badges
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper.toDecimalValue
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository
 import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaymentsRepository.toPaymentSourceType
-import org.thoughtcrime.securesms.components.settings.app.subscription.manage.DonationRedemptionJobStatus
-import org.thoughtcrime.securesms.components.settings.app.subscription.manage.DonationRedemptionJobWatcher
 import org.thoughtcrime.securesms.database.InAppPaymentTable
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
@@ -27,6 +25,7 @@ import org.whispersystems.signalservice.api.subscriptions.ActiveSubscription
 import org.whispersystems.signalservice.internal.EmptyResponse
 import org.whispersystems.signalservice.internal.ServiceResponse
 import java.util.Locale
+import kotlin.concurrent.withLock
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
@@ -90,7 +89,7 @@ class InAppPaymentKeepAliveJob private constructor(
   }
 
   override fun onRun() {
-    synchronized(type) {
+    type.lock.withLock {
       doRun()
     }
   }
@@ -122,15 +121,6 @@ class InAppPaymentKeepAliveJob private constructor(
     if (subscription == null) {
       info(type, "User does not have a subscription. Exiting.")
       return
-    }
-
-    // Note that this can be removed once the old jobs are decommissioned. These jobs live in different queues, and should still be respected.
-    if (type == InAppPaymentSubscriberRecord.Type.DONATION) {
-      val legacyRedemptionStatus = DonationRedemptionJobWatcher.getSubscriptionRedemptionJobStatus()
-      if (legacyRedemptionStatus != DonationRedemptionJobStatus.None && legacyRedemptionStatus != DonationRedemptionJobStatus.FailedSubscription) {
-        info(type, "Already trying to redeem donation, current status: ${legacyRedemptionStatus.javaClass.simpleName}")
-        return
-      }
     }
 
     val activeInAppPayment = getActiveInAppPayment(subscriber, subscription)

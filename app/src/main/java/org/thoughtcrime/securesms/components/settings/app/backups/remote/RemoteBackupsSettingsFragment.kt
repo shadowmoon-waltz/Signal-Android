@@ -1223,7 +1223,8 @@ private fun SubscriptionMismatchMissingGooglePlayCardPreview() {
       state = RemoteBackupsSettingsState.BackupState.SubscriptionMismatchMissingGooglePlay(
         messageBackupsType = MessageBackupsType.Paid(
           pricePerMonth = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD")),
-          storageAllowanceBytes = 100_000_000
+          storageAllowanceBytes = 100_000_000,
+          mediaTtl = 30.days
         ),
         renewalTime = System.currentTimeMillis().milliseconds + 30.days
       )
@@ -1240,7 +1241,8 @@ private fun BackupCardPreview() {
         backupState = RemoteBackupsSettingsState.BackupState.ActivePaid(
           messageBackupsType = MessageBackupsType.Paid(
             pricePerMonth = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD")),
-            storageAllowanceBytes = 100_000_000
+            storageAllowanceBytes = 100_000_000,
+            mediaTtl = 30.days
           ),
           renewalTime = 1727193018.seconds,
           price = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD"))
@@ -1251,7 +1253,8 @@ private fun BackupCardPreview() {
         backupState = RemoteBackupsSettingsState.BackupState.Canceled(
           messageBackupsType = MessageBackupsType.Paid(
             pricePerMonth = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD")),
-            storageAllowanceBytes = 100_000_000
+            storageAllowanceBytes = 100_000_000,
+            mediaTtl = 30.days
           ),
           renewalTime = 1727193018.seconds
         )
@@ -1261,7 +1264,8 @@ private fun BackupCardPreview() {
         backupState = RemoteBackupsSettingsState.BackupState.Inactive(
           messageBackupsType = MessageBackupsType.Paid(
             pricePerMonth = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD")),
-            storageAllowanceBytes = 100_000_000
+            storageAllowanceBytes = 100_000_000,
+            mediaTtl = 30.days
           ),
           renewalTime = 1727193018.seconds
         )
@@ -1271,7 +1275,8 @@ private fun BackupCardPreview() {
         backupState = RemoteBackupsSettingsState.BackupState.ActivePaid(
           messageBackupsType = MessageBackupsType.Paid(
             pricePerMonth = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD")),
-            storageAllowanceBytes = 100_000_000
+            storageAllowanceBytes = 100_000_000,
+            mediaTtl = 30.days
           ),
           renewalTime = 1727193018.seconds,
           price = FiatMoney(BigDecimal.valueOf(3), Currency.getInstance("CAD"))

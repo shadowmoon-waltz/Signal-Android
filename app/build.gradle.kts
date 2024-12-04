@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1482
-val canonicalVersionName = "7.24.0"
+val canonicalVersionCode = 1489
+val canonicalVersionName = "7.26.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -89,7 +89,6 @@ android {
   ndkVersion = signalNdkVersion
 
   flavorDimensions += listOf("distribution", "environment")
-  useLibrary("org.apache.http.legacy")
   testBuildType = "instrumentation"
 
   android.bundle.language.enableSplit = false
@@ -577,7 +576,6 @@ dependencies {
   implementation(libs.signal.ringrtc)
   implementation(libs.leolin.shortcutbadger)
   implementation(libs.emilsjolander.stickylistheaders)
-  implementation(libs.apache.httpclient.android)
   implementation(libs.glide.glide)
   implementation(libs.roundedimageview)
   implementation(libs.materialish.progress)
@@ -653,8 +651,6 @@ dependencies {
   androidTestImplementation(testLibs.androidx.test.core)
   androidTestImplementation(testLibs.androidx.test.core.ktx)
   androidTestImplementation(testLibs.androidx.test.ext.junit.ktx)
-  androidTestImplementation(testLibs.mockito.android)
-  androidTestImplementation(testLibs.mockito.kotlin)
   androidTestImplementation(testLibs.mockk.android)
   androidTestImplementation(testLibs.square.okhttp.mockserver)
   androidTestImplementation(testLibs.diff.utils)

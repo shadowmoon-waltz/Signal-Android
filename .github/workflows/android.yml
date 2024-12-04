@@ -5,8 +5,7 @@ on:
   #push:
   #  branches:
   #  - 'main'
-  #  - '4.**'
-  #  - '5.**'
+  #  - '7.**'
   workflow_dispatch
 
 permissions:
@@ -37,7 +36,7 @@ jobs:
 
     - name: Archive reports for failed build
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: reports
         path: '*/build/reports'
