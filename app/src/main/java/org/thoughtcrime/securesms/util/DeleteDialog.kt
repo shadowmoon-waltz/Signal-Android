@@ -84,9 +84,7 @@ object DeleteDialog {
     } else {
       SignalExecutors.BOUNDED.execute {
         val threadDeleted = SignalDatabase.messages.deleteMessage(messageRecords.first().id)
-        if (Recipient.self().deleteSyncCapability.isSupported) {
-          MultiDeviceDeleteSyncJob.enqueueMessageDeletes(messageRecords)
-        }
+        MultiDeviceDeleteSyncJob.enqueueMessageDeletes(messageRecords)
         emitter.onSuccess(Pair(true, threadDeleted))
       }
     }
