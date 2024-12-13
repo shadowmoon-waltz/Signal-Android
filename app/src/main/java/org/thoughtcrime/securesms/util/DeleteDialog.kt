@@ -64,8 +64,8 @@ object DeleteDialog {
         handleDeleteForMe(context, messageRecords, emitter)
       }
 
-      if (MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis())) {
-        builder.setNeutralButton(if (isNoteToSelfDelete) R.string.ConversationFragment_delete_everywhere else R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
+      if (MessageConstraintsUtil.isValidRemoteDeleteSend(messageRecords, System.currentTimeMillis()) && !isNoteToSelfDelete) {
+        builder.setNeutralButton(R.string.ConversationFragment_delete_for_everyone) { _, _ -> handleDeleteForEveryone(context, messageRecords, emitter) }
       }
     }
 
