@@ -3498,10 +3498,10 @@
         <item>Ominaisuuspyyntö</item>
         <item>Kysymys</item>
         <item>Palaute</item>
-        <item>Payments (MobileCoin)</item>
-        <item>Donations &amp; Badges</item>
-        <item>Signal Android Backup</item>
-        <item>Other</item>
+        <item>Maksut (MobileCoin)</item>
+        <item>Lahjoitukset ja merkit</item>
+        <item>Signal Android -varmuuskopiointi</item>
+        <item>Muu</item>
     </string-array>
     <!-- Subject of email when submitting debug logs to help debug slow notifications -->
     <string name="DebugLogsPromptDialogFragment__signal_android_support_request">Signal Androidin virheenkorjauslokin lähetys</string>
@@ -6445,7 +6445,7 @@
     <!-- Displayed when copying group story reply text to clipboard -->
     <string name="StoryGroupReplyFragment__copied_to_clipboard">Kopioitu leikepöydälle</string>
     <!-- Displayed in story caption when content is longer than 5 lines -->
-    <string name="StoryViewerPageFragment__read_more">Read more</string>
+    <string name="StoryViewerPageFragment__read_more">Lue lisää</string>
     <!-- Displayed in toast after sending a direct reply -->
     <string name="StoryDirectReplyDialogFragment__sending_reply">Lähetetään vastaus…</string>
     <!-- Displayed in the viewer when a story is no longer available -->
@@ -7260,6 +7260,8 @@
     <string name="CallLinkDetailsFragment__delete_call_link">Poista puhelulinkki</string>
     <!-- Displayed whenever a name change, revocation, etc, fails. -->
     <string name="CallLinkDetailsFragment__couldnt_save_changes">Muutoksia ei voitu tallentaa. Tarkista verkkoyhteys ja yritä uudelleen.</string>
+    <!-- Displayed whenever an admin update fails with a 409. -->
+    <string name="CallLinkDetailsFragment__couldnt_update_admin_approval">Couldn\'t update admin approval settings. Check the call link is not currently in use.</string>
     <!-- Displayed when the call link is in use when the user tries to delete it -->
     <string name="CallLinkDetailsFragment__couldnt_delete_call_link">Puhelulinkkiä ei voitu poistaa, koska se on tällä hetkellä käytössä.</string>
     <!-- Displayed as title in dialog when user attempts to delete the link -->

@@ -3795,10 +3795,10 @@
         <item>Iarratas ar Ghné Nua</item>
         <item>Ceist</item>
         <item>Aiseolas</item>
-        <item>Payments (MobileCoin)</item>
-        <item>Donations &amp; Badges</item>
-        <item>Signal Android Backup</item>
-        <item>Other</item>
+        <item>Íocaíochtaí (MobileCoin)</item>
+        <item>Tabhartais &amp; Suaitheantais</item>
+        <item>Cúltaca Signal Android</item>
+        <item>Eile</item>
     </string-array>
     <!-- Subject of email when submitting debug logs to help debug slow notifications -->
     <string name="DebugLogsPromptDialogFragment__signal_android_support_request">Cur Isteach Loga Dífhabhtaithe Android Signal</string>
@@ -6865,7 +6865,7 @@
     <!-- Displayed when copying group story reply text to clipboard -->
     <string name="StoryGroupReplyFragment__copied_to_clipboard">Macasamhlaithe chuig an ngearrthaisce</string>
     <!-- Displayed in story caption when content is longer than 5 lines -->
-    <string name="StoryViewerPageFragment__read_more">Read more</string>
+    <string name="StoryViewerPageFragment__read_more">Léigh a thuilleadh</string>
     <!-- Displayed in toast after sending a direct reply -->
     <string name="StoryDirectReplyDialogFragment__sending_reply">Freagra á sheoladh…</string>
     <!-- Displayed in the viewer when a story is no longer available -->
@@ -7731,6 +7731,8 @@
     <string name="CallLinkDetailsFragment__delete_call_link">Scrios nasc an ghlao</string>
     <!-- Displayed whenever a name change, revocation, etc, fails. -->
     <string name="CallLinkDetailsFragment__couldnt_save_changes">Níorbh fhéidir athruithe a shábháil. Seiceáil do nasc líonra agus triail arís.</string>
+    <!-- Displayed whenever an admin update fails with a 409. -->
+    <string name="CallLinkDetailsFragment__couldnt_update_admin_approval">Couldn\'t update admin approval settings. Check the call link is not currently in use.</string>
     <!-- Displayed when the call link is in use when the user tries to delete it -->
     <string name="CallLinkDetailsFragment__couldnt_delete_call_link">Níorbh fhéidir an nasc glao a scriosadh toisc go bhfuil sé in úsáid faoi láthair.</string>
     <!-- Displayed as title in dialog when user attempts to delete the link -->

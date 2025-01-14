@@ -3498,10 +3498,10 @@
         <item>சிறப்பு விண்ணப்பம்</item>
         <item>கேள்வி</item>
         <item>பின்னூட்டம்</item>
-        <item>Payments (MobileCoin)</item>
-        <item>Donations &amp; Badges</item>
-        <item>Signal Android Backup</item>
-        <item>Other</item>
+        <item>கட்டணங்கள் (MobileCoin)</item>
+        <item>நன்கொடைகள் மற்றும் பேட்ஜ்கள்</item>
+        <item>சிக்னல் ஆண்ட்ராய்டு காப்புப்பிரதி</item>
+        <item>மற்றவை</item>
     </string-array>
     <!-- Subject of email when submitting debug logs to help debug slow notifications -->
     <string name="DebugLogsPromptDialogFragment__signal_android_support_request">Signal Android பிழைத்திருத்த பதிவு சமர்ப்பிப்பு</string>
@@ -6445,7 +6445,7 @@
     <!-- Displayed when copying group story reply text to clipboard -->
     <string name="StoryGroupReplyFragment__copied_to_clipboard">கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது</string>
     <!-- Displayed in story caption when content is longer than 5 lines -->
-    <string name="StoryViewerPageFragment__read_more">Read more</string>
+    <string name="StoryViewerPageFragment__read_more">மேலும் படிக்க</string>
     <!-- Displayed in toast after sending a direct reply -->
     <string name="StoryDirectReplyDialogFragment__sending_reply">பதில் அனுப்பப்படுகிறது…</string>
     <!-- Displayed in the viewer when a story is no longer available -->
@@ -7260,6 +7260,8 @@
     <string name="CallLinkDetailsFragment__delete_call_link">அழைப்பு இணைப்பை நீக்கு</string>
     <!-- Displayed whenever a name change, revocation, etc, fails. -->
     <string name="CallLinkDetailsFragment__couldnt_save_changes">மாற்றங்களைச் சேமிக்க முடியவில்லை. உங்கள் நெட்வொர்க் இணைப்பைச் சரிபார்த்து, மீண்டும் முயலவும்.</string>
+    <!-- Displayed whenever an admin update fails with a 409. -->
+    <string name="CallLinkDetailsFragment__couldnt_update_admin_approval">Couldn\'t update admin approval settings. Check the call link is not currently in use.</string>
     <!-- Displayed when the call link is in use when the user tries to delete it -->
     <string name="CallLinkDetailsFragment__couldnt_delete_call_link">அழைப்பு இணைப்பு தற்போது பயன்பாட்டில் உள்ளதால் அதை அழிக்க முடியவில்லை.</string>
     <!-- Displayed as title in dialog when user attempts to delete the link -->
