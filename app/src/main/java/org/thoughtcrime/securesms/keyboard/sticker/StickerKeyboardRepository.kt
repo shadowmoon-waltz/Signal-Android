@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms.keyboard.sticker
 
 import android.net.Uri
 import org.signal.core.util.concurrent.SignalExecutors
+import org.signal.core.util.nullIfBlank
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.StickerTable
 import org.thoughtcrime.securesms.database.StickerTable.StickerPackRecordReader
@@ -19,13 +20,13 @@ class StickerKeyboardRepository(private val stickerTable: StickerTable) {
   fun getStickerPacks(consumer: Consumer<List<KeyboardStickerPack>>) {
     SignalExecutors.BOUNDED.execute {
       val packs: MutableList<KeyboardStickerPack> = mutableListOf()
-      val cursorMru = if (SignalStore.settings.isStickerKeyboardPackMru()) stickerTable.installedStickerPacksMru else null
+      val filter = if (SignalStore.settings.isStickerKeyboardPackMru()) stickerTable.installedStickerPacksMruSet else null
 
-      StickerPackRecordReader(stickerTable.installedStickerPacks, cursorMru).use { reader ->
+      StickerPackRecordReader(stickerTable.installedStickerPacks, filter).use { reader ->
         var pack: StickerPackRecord? = reader.next
         while (pack != null) {
-          packs += KeyboardStickerPack(packId = pack.packId, title = pack.title.orElse(null), coverUri = pack.cover.uri)
-          pack = reader.next
+          packs += KeyboardStickerPack(packId = pack.packId, title = pack.title.nullIfBlank(), coverUri = pack.cover.uri)
+          pack = reader.getNext()
         }
       }
 
@@ -33,10 +34,10 @@ class StickerKeyboardRepository(private val stickerTable: StickerTable) {
         val stickers: MutableList<StickerRecord> = mutableListOf()
 
         StickerRecordReader(stickerTable.getStickersForPack(p.packId)).use { reader ->
-          var sticker: StickerRecord? = reader.next
+          var sticker: StickerRecord? = reader.getNext()
           while (sticker != null) {
             stickers.add(sticker)
-            sticker = reader.next
+            sticker = reader.getNext()
           }
         }
 
@@ -55,10 +56,10 @@ class StickerKeyboardRepository(private val stickerTable: StickerTable) {
     val recentStickers: MutableList<StickerRecord> = mutableListOf()
 
     StickerRecordReader(stickerTable.getRecentlyUsedStickers(RECENT_LIMIT)).use { reader ->
-      var recentSticker: StickerRecord? = reader.next
+      var recentSticker: StickerRecord? = reader.getNext()
       while (recentSticker != null) {
         recentStickers.add(recentSticker)
-        recentSticker = reader.next
+        recentSticker = reader.getNext()
       }
     }
 

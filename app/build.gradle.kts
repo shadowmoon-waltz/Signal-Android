@@ -20,8 +20,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1501
-val canonicalVersionName = "7.29.4"
+val canonicalVersionCode = 1503
+val canonicalVersionName = "7.30.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -650,6 +650,7 @@ dependencies {
   androidTestImplementation(testLibs.androidx.test.core)
   androidTestImplementation(testLibs.androidx.test.core.ktx)
   androidTestImplementation(testLibs.androidx.test.ext.junit.ktx)
+  androidTestImplementation(testLibs.assertk)
   androidTestImplementation(testLibs.mockk.android)
   androidTestImplementation(testLibs.square.okhttp.mockserver)
   androidTestImplementation(testLibs.diff.utils)
