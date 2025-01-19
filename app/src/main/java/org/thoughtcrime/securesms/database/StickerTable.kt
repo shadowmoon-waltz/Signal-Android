@@ -153,6 +153,36 @@ class StickerTable(
       .run()
   }
 
+  fun getInstalledStickerPacksSet(): Set<Pair<String, String>> {
+    return readableDatabase
+      .select()
+      .from(TABLE_NAME)
+      .where("$COVER = 1 AND $INSTALLED = 1")
+      .orderBy("$PACK_ORDER ASC")
+      .run()
+      .readToSet { cursor ->
+        // TODO sw : swallow errors/don't add to set if can't get relevant columns?
+        val packId = cursor.getString(cursor.getColumnIndexOrThrow(PACK_ID))
+        val packKey = cursor.getString(cursor.getColumnIndexOrThrow(PACK_KEY))
+        Pair(packId, packKey)
+      }
+  }
+
+  fun getInstalledStickerPacksMru(): Cursor {
+    // SW alternate approach would be to use a sql query like: select * from sticker s1 join ( select s0.pack_id,max(s0.last_used) from sticker s0
+    // where s0.last_used > 0 and s0.cover = 0 group by s0.pack_id ) s2 on s1.cover = 1 and s1.installed = 1 and s1.pack_id = s2.pack_id;
+    return readableDatabase.rawQuery(
+      """
+      SELECT
+        *
+      FROM $TABLE_NAME
+      WHERE $COVER = 0
+      GROUP BY $PACK_ID, $PACK_KEY
+      ORDER BY MAX($LAST_USED) DESC, $PACK_ORDER ASC
+      """, null
+      )
+  }
+
   fun getStickersByEmoji(emoji: String): Cursor {
     return readableDatabase
       .select()
@@ -447,11 +477,20 @@ class StickerTable(
     }
   }
 
-  class StickerPackRecordReader(private val cursor: Cursor) : Closeable {
+  class StickerPackRecordReader(private val cursor: Cursor, private val filter: Set<Pair<String, String>>? = null) : Closeable {
 
     fun getNext(): StickerPackRecord? {
       if (!cursor.moveToNext()) {
         return null
+      }
+
+      if (filter != null) {
+        // SW TODO calls getString and getColumnIndexOrThrow an extra time
+        while (!filter.contains(Pair(cursor.getString(cursor.getColumnIndexOrThrow(PACK_ID)), cursor.getString(cursor.getColumnIndexOrThrow(PACK_KEY))))) {
+          if (!cursor.moveToNext()) {
+            return null
+          }
+        }
       }
 
       return getCurrent()

@@ -69,7 +69,7 @@ public class MultiDeviceStickerPackSyncJob extends BaseJob {
 
     List<StickerPackOperationMessage> operations = new LinkedList<>();
 
-    try (StickerPackRecordReader reader = new StickerPackRecordReader(SignalDatabase.stickers().getInstalledStickerPacks())) {
+    try (StickerPackRecordReader reader = new StickerPackRecordReader(SignalDatabase.stickers().getInstalledStickerPacks(), null)) {
       StickerPackRecord pack;
       while ((pack = reader.getNext()) != null) {
         byte[] packIdBytes  = Hex.fromStringCondensed(pack.packId);

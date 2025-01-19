@@ -58,7 +58,7 @@ final class StickerManagementRepository {
       List<StickerPackRecord> availablePacks = new ArrayList<>();
       List<StickerPackRecord> blessedPacks   = new ArrayList<>();
 
-      try (StickerPackRecordReader reader = new StickerPackRecordReader(stickerDatabase.getAllStickerPacks())) {
+      try (StickerPackRecordReader reader = new StickerPackRecordReader(stickerDatabase.getAllStickerPacks(), null)) {
         StickerPackRecord record;
         while ((record = reader.getNext()) != null) {
           if (record.isInstalled) {
