@@ -10,6 +10,7 @@
   <!-- Removed by excludeNonTranslatables <string name="install_url" translatable="false">https://signal.org/install</string> -->
   <!-- Removed by excludeNonTranslatables <string name="donate_url" translatable="false">https://signal.org/donate</string> -->
   <!-- Removed by excludeNonTranslatables <string name="backup_support_url" translatable="false">https://support.signal.org/hc/articles/360007059752</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="backup_failed_support_url" translatable="false">https://support.signal.org/hc/articles/8768161836954</string> -->
   <!-- Removed by excludeNonTranslatables <string name="transfer_support_url" translatable="false">https://support.signal.org/hc/articles/360007059752</string> -->
   <!-- Removed by excludeNonTranslatables <string name="support_center_url" translatable="false">https://support.signal.org/</string> -->
   <!-- Removed by excludeNonTranslatables <string name="terms_and_privacy_policy_url" translatable="false">https://signal.org/legal</string> -->
@@ -584,6 +585,12 @@
         <item quantity="one">સ્ટોરેજમાં જોડાણ સેવ થઈ રહ્યાં છે…</item>
         <item quantity="other">સ્ટોરેજમાં %1$d જોડાણો સેવ થઈ રહ્યાં છે…</item>
     </plurals>
+    <!-- Dialog title asking to save media to your phone\'s storage -->
+    <string name="ConversationFragment__save_to_phone">Save to phone?</string>
+    <!-- Dialog message explaining that media will be saved to your phone and can potentially be accessed by other phones. -->
+    <string name="ConversationFragment__this_media_will_be_saved">This media will be saved to your phone\'s storage. Other apps may be able to access it depending on your phone\'s permissions.</string>
+    <!-- Checkbox shown in dialog to not show the dialog again in future cases -->
+    <string name="ConversationFragment_dont_show_again">Don\'t show again</string>
     <string name="ConversationFragment_pending">બાકી</string>
     <!-- Describes how the message was sent when looking at a message detail. Previously, messages could be through other means like SMS -->
     <string name="ConversationFragment_push">તારીખ (Signal)</string>
@@ -920,7 +927,7 @@
     <!-- Used in the context: Tonight at 9:00pm for example. Specifically this is after 7pm -->
     <string name="DateUtils_tonight">આજે રાત્રે</string>
     <!-- Used when showing the time a device was linked. %1$s is replaced with the date while %2$s is replaced with the time. e.g. Jan 15 at 9:00pm -->
-    <string name="DateUtils_date_at">%1$s %2$s વાગ્યે</string>
+    <string name="DateUtils_date_at">%1$sના રોજ %2$s વાગ્યે</string>
 
     <!-- Scheduled Messages -->
     <!-- Title for dialog that shows all the users scheduled messages for a chat -->
@@ -1023,13 +1030,13 @@
     <!-- Option in context menu to edit the name of a linked device -->
     <string name="LinkDeviceFragment__edit_name">નામમાં ફેરફાર કરો</string>
     <!-- Toast shown when the process of linking a device has been cancelled -->
-    <string name="LinkDeviceFragment__linking_cancelled">Linking cancelled</string>
+    <string name="LinkDeviceFragment__linking_cancelled">લિંક કરવાનું રદ કર્યું</string>
     <!-- Message shown in progress dialog telling users to avoid closing the app while messages are being synced -->
-    <string name="LinkDeviceFragment__do_not_close">Do not close app</string>
+    <string name="LinkDeviceFragment__do_not_close">ઍપ બંધ કરશો નહીં</string>
     <!-- Dialog title shown when a device is unlinked -->
-    <string name="LinkDeviceFragment__device_unlinked">Device unlinked</string>
+    <string name="LinkDeviceFragment__device_unlinked">ડિવાઇસ અનલિંક કર્યું</string>
     <!-- Dialog body shown when a device is unlinked where %1$s is the date and time the device was originally linked (eg Jan 15 at 9:00pm) -->
-    <string name="LinkDeviceFragment__the_device_that_was">The device that was linked on %1$s is no longer linked.</string>
+    <string name="LinkDeviceFragment__the_device_that_was">%1$s વાગ્યે લિંક કરવામાં આવેલું ડિવાઇસ હાલમાં લિંક થયેલું નથી.</string>
     <!-- Button to dismiss dialog -->
     <string name="LinkDeviceFragment__ok">ઓકે</string>
 
@@ -1071,7 +1078,7 @@
     <!-- Option in bottom sheet to transfer message history -->
     <string name="LinkDeviceSyncBottomSheet_transfer">મેસેજની હિસ્ટ્રી ટ્રાન્સફર કરો</string>
     <!-- Description in bottom sheet of what transferring message history will do -->
-    <string name="LinkDeviceSyncBottomSheet_transfer_your_text">તમારા ટેક્સ્ટ મેસેજ અને તાજેતરના મીડિયાને તમારા લિંક કરેલા ડિવાઇસ પર ટ્રાન્સફર કરો</string>
+    <string name="LinkDeviceSyncBottomSheet_transfer_your_text">Transfer your text messages and your last 45 days of media</string>
     <!-- Option in bottom sheet to not transfer message history -->
     <string name="LinkDeviceSyncBottomSheet_dont_transfer">ટ્રાન્સફર કરશો નહીં</string>
     <!-- Description in bottom sheet of what not transferring history will do -->
@@ -1410,6 +1417,14 @@
     <string name="RemoteRestoreActivity__couldnt_transfer">ટ્રાન્સફર પૂર્ણ ન કરી શક્યા</string>
     <!-- Dialog message displayed when remote restore failed -->
     <string name="RemoteRestoreActivity__error_occurred">એક એરર આવી અને તમારું એકાઉન્ટ ટ્રાન્સફર કરી શકાયું નથી. તમારી ટ્રાન્સફર પદ્ધતિ પસંદ કરીને ફરી પ્રયાસ કરો.</string>
+    <!-- Dialog title displayed when remote restore failed because of an outdated backup version. -->
+    <string name="RemoteRestoreActivity__couldnt_restore">Couldn\'t restore this backup</string>
+    <!-- Dialog message explaining that an update to Signal is required to restore the backup. -->
+    <string name="RemoteRestoreActivity__update_latest">This version of Signal can\'t restore your backup. Update to the latest version and try again.</string>
+    <!-- Text on button that when pressed will redirect them to update Signal -->
+    <string name="RemoteRestoreActivity__update_signal">સિગ્નલ ને અપડેટ કરો</string>
+    <!-- Text label button to dismiss the dialog -->
+    <string name="RemoteRestoreActivity__not_now">અત્યારે નહીં</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">મને ઉલ્લેખો માટે સૂચિત કરો</string>
@@ -1670,7 +1685,7 @@
     <!-- Message body of megaphone telling users that a device was linked to their account. %1$s is the time it was linked -->
     <string name="NewLinkedDeviceMegaphone__a_new_device_was_linked">%1$s વાગ્યે એક નવું ડિવાઇસ તમારા એકાઉન્ટ સાથે લિંક કરવામાં આવ્યું હતું.</string>
     <!-- Button shown on megaphone that will redirect to the linked devices screen -->
-    <string name="NewLinkedDeviceMegaphone__view_device">View device</string>
+    <string name="NewLinkedDeviceMegaphone__view_device">ડિવાઇસ જુઓ</string>
     <!-- Button shown on megaphone to acknowledge and dismiss the megaphone -->
     <string name="NewLinkedDeviceMegaphone__ok">ઓકે</string>
 
@@ -2964,7 +2979,7 @@
     <!-- Notification channel name for other notifications related to messages. Will appear in the system notification settings as the title of this notification channel. -->
     <string name="NotificationChannel_additional_message_notifications">વધારાના મેસેજ નોટિફિકેશન</string>
     <!-- Notification channel name for notifications sent when a device has been linked -->
-    <string name="NotificationChannel_new_linked_device">New linked device</string>
+    <string name="NotificationChannel_new_linked_device">નવું લિંક કરેલું ડિવાઇસ</string>
 
     <!-- ProfileEditNameFragment -->
 
@@ -3029,10 +3044,7 @@
     <!-- Status update label used while the device is transcoding video as a prerequisite to uploading -->
     <string name="TransferControlView__processing">પ્રક્રિયા કરી રહ્યા છીએ…</string>
     <!-- Status update label used while the device is transmitting data over the network. Will take the form of "1.0 MB/2.0 MB" -->
-    <string name="TransferControlView__download_progress">%1$1.1f MB/%2$2.1f MB</string>
-    <!-- Attachment file size label for not-yet-downloaded images and video. Will take the form of "1.0 MB" -->
-    <string name="TransferControlView__filesize">%1$1.1f MB</string>
-
+    <string name="TransferControlView__download_progress_s_s">%1$s/%2$s</string>
 
     <!-- UnauthorizedReminder -->
     <!-- Message shown in a reminder banner when the user\'s device is no longer registered -->
@@ -5043,7 +5055,7 @@
     <!-- String alerting user that backup failed -->
     <string name="AppSettingsFragment__couldnt_complete_backup">બેકઅપ પૂર્ણ કરી શકાયું નથી</string>
     <!-- String alerting user that backup redemption -->
-    <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Couldn\'t redeem your backups subscription</string>
+    <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">તમારું બેકઅપ સબ્સ્ક્રિપ્શન રિડીમ કરી શકાયું નથી</string>
     <!-- String displayed telling user to invite their friends to Signal -->
     <string name="AppSettingsFragment__invite_your_friends">તમારા મિત્રોને આમંત્રણ આપો</string>
     <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
@@ -5121,7 +5133,7 @@
     <string name="ChangeNumberEnterPhoneNumberFragment__you_must_specify_your_old_phone_number">તમારે તમારો જૂનો ફોન નંબર દર્શાવવો આવશ્યક છે</string>
     <string name="ChangeNumberEnterPhoneNumberFragment__you_must_specify_your_new_number_country_code">તમારે તમારા નવા નંબરના દેશનો કોડ દર્શાવવો આવશ્યક છે</string>
     <string name="ChangeNumberEnterPhoneNumberFragment__you_must_specify_your_new_phone_number">તમારે તમારો નવો ફોન નંબર દર્શાવવો આવશ્યક છે</string>
-    <string name="ChangeNumberEnterPhoneNumberFragment__your_new_phone_number_can_not_be_same_as_your_old_phone_number">Your new phone number can not be same as your old phone number</string>
+    <string name="ChangeNumberEnterPhoneNumberFragment__your_new_phone_number_can_not_be_same_as_your_old_phone_number">Your new phone number cannot be the same as your old phone number</string>
 
     <!-- ChangeNumberVerifyFragment -->
     <string name="ChangeNumberVerifyFragment__change_number">નંબર બદલો</string>
@@ -5819,6 +5831,8 @@
     <string name="MySupportPreference__your_bank_transfer_of_s">તમારું %1$sનું બેંક ટ્રાન્સફર બાકી છે. બેંક ટ્રાન્સફર પૂર્ણ થવામાં 1 થી 14 કામકાજી દિવસ લાગી શકે છે.  </string>
     <!-- Displayed in the pending help dialog, used to launch user to more details about bank transfers -->
     <string name="MySupportPreference__learn_more">વધુ જાણો</string>
+    <!-- Displayed when a subscription refresh is being performed -->
+    <string name="MySupportPreference__checking_subscription">Checking subscription…</string>
 
     <!-- Title of dialog telling user they need to update signal as it expired -->
     <string name="UpdateSignalExpiredDialog__title">સિગ્નલ ને અપડેટ કરો</string>
@@ -7532,7 +7546,10 @@
     <!-- Sheet title for generic backup error -->
     <string name="BackupAlertBottomSheet__couldnt_complete_backup">બેકઅપ પૂર્ણ કરી શકાયું નથી</string>
     <!-- Sheet body for generic backup error. Placeholder is days since last backup. -->
-    <string name="BackupAlertBottomSheet__your_device_hasnt">તમારા ડિવાઇસે %1$d દિવસથી બેકઅપ પૂર્ણ કર્યું નથી. ખાતરી કરો કે તમારું ડિવાઇસ વાઇ-ફાઇ સાથે જોડાયેલ છે અને \"હમણાં બેક અપ લો\" પર ટેપ કરો. </string>
+    <plurals name="BackupAlertBottomSheet__your_device_hasnt">
+        <item quantity="one">Your device hasn\'t completed a backup for %1$d day. Make sure your device is connected to wi-fi and tap \"Back up now.\" </item>
+        <item quantity="other">Your device hasn\'t completed a backup for %1$d days. Make sure your device is connected to wi-fi and tap \"Back up now.\"</item>
+    </plurals>
     <!-- Clickable text to learn more about the content of this bottom sheet -->
     <string name="BackupAlertBottomSheet__learn_more">વધુ જાણો</string>
     <!-- Secondary action button text when user does not have enough free space to download their backup. -->
@@ -7570,17 +7587,17 @@
     <!-- Dialog title when a backup fails to be created -->
     <string name="BackupAlertBottomSheet__backup_failed">બૅકઅપ નિષ્ફળ</string>
     <!-- Dialog title when a backup redemption fails -->
-    <string name="BackupAlertBottomSheet__couldnt_redeem_your_backups_subscription">Couldn\'t redeem your backups subscription</string>
+    <string name="BackupAlertBottomSheet__couldnt_redeem_your_backups_subscription">તમારું બેકઅપ સબ્સ્ક્રિપ્શન રિડીમ કરી શકાયું નથી</string>
     <!-- Dialog text for when a backup fails to be created and ways to fix it -->
     <string name="BackupAlertBottomSheet__an_error_occurred">એક એરર આવી અને તમારું બેકઅપ પૂર્ણ કરી શકાયું નથી. ખાતરી કરો કે તમે Signalનું લેટેસ્ટ વર્ઝન વાપરો છો અને ફરી પ્રયાસ કરો. જો સમસ્યા ચાલુ રહે તો સપોર્ટનો સંપર્ક કરો.</string>
     <!-- Dialog action button that will allow you to check for any Signal version updates -->
     <string name="BackupAlertBottomSheet__check_for_update">અપડેટ માટે તપાસો</string>
     <!-- Backup redemption error sheet text line 1 -->
-    <string name="BackupAlertBottomSheet__too_many_devices_have_tried">Too many devices have tried to redeem your subscription this month. You may have:</string>
+    <string name="BackupAlertBottomSheet__too_many_devices_have_tried">આ મહિને ઘણા બધા ડિવાઇસ દ્વારા તમારું સબ્સ્ક્રિપ્શન રિડીમ કરવાનો પ્રયાસ કરવામાં આવ્યો છે. તમે આ કર્યું હોઈ શકે છે:</string>
     <!-- Backup redemption error sheet bullet point 1 -->
-    <string name="BackupAlertBottomSheet__reregistered_your_signal_account">Re-registered your Signal account too many times.</string>
+    <string name="BackupAlertBottomSheet__reregistered_your_signal_account">તમારા Signal એકાઉન્ટને ઘણી વખત ફરીથી રજીસ્ટર કર્યું હોય.</string>
     <!-- Backup redemption error sheet bullet point 2 -->
-    <string name="BackupAlertBottomSheet__have_too_many_devices_using_the_same_subscription">Have too many devices using the same subscription.</string>
+    <string name="BackupAlertBottomSheet__have_too_many_devices_using_the_same_subscription">ઘણા બધા ડિવાઇસ હોય જે સમાન સબ્સ્ક્રિપ્શનનો ઉપયોગ કરતાં હોય.</string>
 
     <!-- BackupStatus -->
     <!-- Status title when user does not have enough free space to download their media. Placeholder is required disk space. -->
