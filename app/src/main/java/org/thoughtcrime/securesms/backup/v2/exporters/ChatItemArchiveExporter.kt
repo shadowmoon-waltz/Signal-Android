@@ -14,6 +14,7 @@ import org.signal.core.util.EventTimer
 import org.signal.core.util.Hex
 import org.signal.core.util.ParallelEventTimer
 import org.signal.core.util.concurrent.SignalExecutors
+import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
 import org.signal.core.util.nullIfBlank
 import org.signal.core.util.nullIfEmpty
@@ -561,9 +562,14 @@ private fun BackupMessageRecord.toBasicChatItemBuilder(selfRecipientId: Recipien
     }
   }
 
-  if (!MessageTypes.isExpirationTimerUpdate(record.type) && builder.expiresInMs != null && builder.expireStartDate != null && builder.expireStartDate!! + builder.expiresInMs!! < backupStartTime + 1.days.inWholeMilliseconds) {
-    Log.w(TAG, ExportSkips.messageExpiresTooSoon(record.dateSent))
-    return null
+  if (!MessageTypes.isExpirationTimerUpdate(record.type) && builder.expiresInMs != null && builder.expireStartDate != null) {
+    val expiresAt = builder.expireStartDate!! + builder.expiresInMs!!
+    val threshold = if (exportState.forTransfer) backupStartTime else backupStartTime + 1.days.inWholeMilliseconds
+
+    if (expiresAt < threshold) {
+      Log.w(TAG, ExportSkips.messageExpiresTooSoon(record.dateSent))
+      return null
+    }
   }
 
   if (builder.expireStartDate != null && builder.expiresInMs == null) {
@@ -578,13 +584,21 @@ private fun BackupMessageRecord.toRemoteProfileChangeUpdate(): ChatUpdateMessage
     ?: Base64.decodeOrNull(this.body)?.let { ProfileChangeDetails.ADAPTER.decode(it) }
 
   return if (profileChangeDetails?.profileNameChange != null) {
-    if (profileChangeDetails.profileNameChange.previous.isNotEmpty() && profileChangeDetails.profileNameChange.newValue.isNotEmpty()) {
+    if (profileChangeDetails.profileNameChange.previous.isNotBlank() && profileChangeDetails.profileNameChange.newValue.isNotBlank()) {
       ChatUpdateMessage(profileChange = ProfileChangeChatUpdate(previousName = profileChangeDetails.profileNameChange.previous, newName = profileChangeDetails.profileNameChange.newValue))
     } else {
+      Log.w(TAG, ExportSkips.emptyProfileNameChange(this.dateSent))
       null
     }
   } else if (profileChangeDetails?.learnedProfileName != null) {
-    ChatUpdateMessage(learnedProfileChange = LearnedProfileChatUpdate(e164 = profileChangeDetails.learnedProfileName.e164?.e164ToLong(), username = profileChangeDetails.learnedProfileName.username))
+    val e164 = profileChangeDetails.learnedProfileName.e164?.e164ToLong()
+    val username = profileChangeDetails.learnedProfileName.username
+    if (e164 != null || username.isNotNullOrBlank()) {
+      ChatUpdateMessage(learnedProfileChange = LearnedProfileChatUpdate(e164 = e164, username = username))
+    } else {
+      Log.w(TAG, ExportSkips.emptyLearnedProfileChange(this.dateSent))
+      null
+    }
   } else {
     null
   }
@@ -1490,10 +1504,6 @@ private fun Cursor.toBackupMessageRecord(pastIds: Set<Long>, backupStartTime: Lo
 
   val expiresIn = this.requireLong(MessageTable.EXPIRES_IN)
   val expireStarted = this.requireLong(MessageTable.EXPIRE_STARTED)
-
-  if (expireStarted != 0L && expireStarted + expiresIn < backupStartTime + 1.days.inWholeMilliseconds) {
-    return null
-  }
 
   return BackupMessageRecord(
     id = id,

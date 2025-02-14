@@ -63,6 +63,7 @@ import org.thoughtcrime.securesms.migrations.CopyUsernameToSignalStoreMigrationJ
 import org.thoughtcrime.securesms.migrations.DatabaseMigrationJob;
 import org.thoughtcrime.securesms.migrations.DeleteDeprecatedLogsMigrationJob;
 import org.thoughtcrime.securesms.migrations.DirectoryRefreshMigrationJob;
+import org.thoughtcrime.securesms.migrations.DuplicateE164MigrationJob;
 import org.thoughtcrime.securesms.migrations.EmojiDownloadMigrationJob;
 import org.thoughtcrime.securesms.migrations.EmojiSearchIndexCheckMigrationJob;
 import org.thoughtcrime.securesms.migrations.GooglePlayBillingPurchaseTokenMigrationJob;
@@ -122,7 +123,6 @@ public final class JobManagerFactories {
       put(AttachmentCopyJob.KEY,                     new AttachmentCopyJob.Factory());
       put(AttachmentDownloadJob.KEY,                 new AttachmentDownloadJob.Factory());
       put(AttachmentHashBackfillJob.KEY,             new AttachmentHashBackfillJob.Factory());
-      put(MarkNoteToSelfAttachmentUploadedJob.KEY,   new MarkNoteToSelfAttachmentUploadedJob.Factory());
       put(AttachmentUploadJob.KEY,                   new AttachmentUploadJob.Factory());
       put(AutomaticSessionResetJob.KEY,              new AutomaticSessionResetJob.Factory());
       put(AvatarGroupsV1DownloadJob.KEY,             new AvatarGroupsV1DownloadJob.Factory());
@@ -289,6 +289,7 @@ public final class JobManagerFactories {
       put(DatabaseMigrationJob.KEY,                       new DatabaseMigrationJob.Factory());
       put(DeleteDeprecatedLogsMigrationJob.KEY,           new DeleteDeprecatedLogsMigrationJob.Factory());
       put(DirectoryRefreshMigrationJob.KEY,               new DirectoryRefreshMigrationJob.Factory());
+      put(DuplicateE164MigrationJob.KEY,                  new DuplicateE164MigrationJob.Factory());
       put(EmojiDownloadMigrationJob.KEY,                  new EmojiDownloadMigrationJob.Factory());
       put(EmojiSearchIndexCheckMigrationJob.KEY,          new EmojiSearchIndexCheckMigrationJob.Factory());
       put(GooglePlayBillingPurchaseTokenMigrationJob.KEY, new GooglePlayBillingPurchaseTokenMigrationJob.Factory());
@@ -377,6 +378,7 @@ public final class JobManagerFactories {
       put("DonationReceiptRedemptionJob",                new FailingJob.Factory());
       put("SendGiftJob",                                 new FailingJob.Factory());
       put("InactiveGroupCheckMigrationJob",              new PassingMigrationJob.Factory());
+      put("AttachmentMarkUploadedJob",                   new FailingJob.Factory());
     }};
   }
 

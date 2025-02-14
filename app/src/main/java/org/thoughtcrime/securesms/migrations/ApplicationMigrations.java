@@ -168,10 +168,12 @@ public class ApplicationMigrations {
     static final int GPB_TOKEN_MIGRATION           = 124;
     static final int GROUP_ADD_MIGRATION           = 125;
     static final int SSRE2_CAPABILITY              = 126;
-    static final int FIX_INACTIVE_GROUPS           = 127;
+//    static final int FIX_INACTIVE_GROUPS           = 127;
+    static final int DUPLICATE_E164_FIX            = 128;
+    static final int FTS_TRIGGER_FIX               = 129;
   }
 
-  public static final int CURRENT_VERSION = 127;
+  public static final int CURRENT_VERSION = 129;
 
  /**
    * This *must* be called after the {@link JobManager} has been instantiated, but *before* the call
@@ -777,7 +779,15 @@ public class ApplicationMigrations {
 //    if (lastSeenVersion < Version.FIX_INACTIVE_GROUPS) {
 //      jobs.put(Version.FIX_INACTIVE_GROUPS, new InactiveGroupCheckMigrationJob());
 //    }
-    
+
+    if (lastSeenVersion < Version.DUPLICATE_E164_FIX) {
+      jobs.put(Version.DUPLICATE_E164_FIX, new DuplicateE164MigrationJob());
+    }
+
+    if (lastSeenVersion < Version.FTS_TRIGGER_FIX) {
+      jobs.put(Version.FTS_TRIGGER_FIX, new DatabaseMigrationJob());
+    }
+
     return jobs;
   }
 

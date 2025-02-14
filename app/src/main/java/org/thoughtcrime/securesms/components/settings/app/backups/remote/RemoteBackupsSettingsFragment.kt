@@ -151,7 +151,7 @@ class RemoteBackupsSettingsFragment : ComposeFragment() {
       requestedSnackbar = state.snackbar,
       contentCallbacks = callbacks,
       backupProgress = backupProgress,
-      backupSize = state.backupSize,
+      backupMediaSize = state.backupMediaSize,
       backupState = state.backupState,
       backupRestoreState = restoreState,
       hasRedemptionError = state.hasRedemptionError
@@ -351,7 +351,7 @@ private fun RemoteBackupsSettingsContent(
   requestedSnackbar: RemoteBackupsSettingsState.Snackbar,
   contentCallbacks: ContentCallbacks,
   backupProgress: ArchiveUploadProgressState?,
-  backupSize: Long,
+  backupMediaSize: Long,
   hasRedemptionError: Boolean
 ) {
   val snackbarHostState = remember {
@@ -446,9 +446,10 @@ private fun RemoteBackupsSettingsContent(
         }
 
         appendBackupDetailsItems(
+          backupState = backupState,
           backupProgress = backupProgress,
           lastBackupTimestamp = lastBackupTimestamp,
-          backupSize = backupSize,
+          backupMediaSize = backupMediaSize,
           backupsFrequency = backupsFrequency,
           canBackUpUsingCellular = canBackUpUsingCellular,
           canRestoreUsingCellular = canRestoreUsingCellular,
@@ -567,9 +568,10 @@ private fun RemoteBackupsSettingsContent(
 }
 
 private fun LazyListScope.appendBackupDetailsItems(
+  backupState: RemoteBackupsSettingsState.BackupState,
   backupProgress: ArchiveUploadProgressState?,
   lastBackupTimestamp: Long,
-  backupSize: Long,
+  backupMediaSize: Long,
   backupsFrequency: BackupFrequency,
   canBackUpUsingCellular: Boolean,
   canRestoreUsingCellular: Boolean,
@@ -596,21 +598,23 @@ private fun LazyListScope.appendBackupDetailsItems(
     }
   }
 
-  item {
-    Rows.TextRow(text = {
-      Column {
-        Text(
-          text = stringResource(id = R.string.RemoteBackupsSettingsFragment__backup_size),
-          style = MaterialTheme.typography.bodyLarge,
-          color = MaterialTheme.colorScheme.onSurface
-        )
-        Text(
-          text = Util.getPrettyFileSize(backupSize),
-          style = MaterialTheme.typography.bodyMedium,
-          color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-      }
-    })
+  if (backupState !is RemoteBackupsSettingsState.BackupState.ActiveFree) {
+    item {
+      Rows.TextRow(text = {
+        Column {
+          Text(
+            text = stringResource(id = R.string.RemoteBackupsSettingsFragment__backup_size),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+          )
+          Text(
+            text = Util.getPrettyFileSize(backupMediaSize),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+          )
+        }
+      })
+    }
   }
 
   item {
@@ -1317,7 +1321,7 @@ private fun RemoteBackupsSettingsContentPreview() {
       requestedSnackbar = RemoteBackupsSettingsState.Snackbar.NONE,
       contentCallbacks = object : ContentCallbacks {},
       backupProgress = null,
-      backupSize = 2300000,
+      backupMediaSize = 2300000,
       backupState = RemoteBackupsSettingsState.BackupState.ActiveFree(
         messageBackupsType = MessageBackupsType.Free(mediaRetentionDays = 30)
       ),
