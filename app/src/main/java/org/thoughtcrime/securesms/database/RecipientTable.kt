@@ -98,6 +98,7 @@ import org.thoughtcrime.securesms.storage.StorageSyncModels
 import org.thoughtcrime.securesms.util.IdentityUtil
 import org.thoughtcrime.securesms.util.ProfileUtil
 import org.thoughtcrime.securesms.util.RemoteConfig
+import org.thoughtcrime.securesms.util.SignalE164Util
 import org.thoughtcrime.securesms.util.Util
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaperFactory
@@ -494,6 +495,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     }
 
     Log.d(TAG, "[getAndPossiblyMerge] Requires a transaction.")
+    val e164 = e164?.let { SignalE164Util.formatAsE164(it) }
+    require(aci != null || pni != null || e164 != null) { "E164 was improperly formatted!" }
 
     val db = writableDatabase
     lateinit var result: ProcessPnpTupleResult
@@ -724,20 +727,21 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     return RecipientReader(cursor)
   }
 
-  fun getRecords(ids: Collection<RecipientId>): Map<RecipientId, RecipientRecord> {
-    val queries = SqlUtil.buildCollectionQuery(
+  fun getExistingRecords(ids: Collection<RecipientId>): Map<RecipientId, RecipientRecord> {
+    val query = SqlUtil.buildFastCollectionQuery(
       column = ID,
       values = ids.map { it.serialize() }
     )
 
-    val foundRecords = queries.flatMap { query ->
-      readableDatabase.query(TABLE_NAME, null, query.where, query.whereArgs, null, null, null).readToList { cursor ->
-        RecipientTableCursorUtil.getRecord(context, cursor)
-      }
-    }
+    val foundRecords = readableDatabase
+      .select()
+      .from(TABLE_NAME)
+      .where(query.where, query.whereArgs)
+      .run()
+      .readToList { cursor -> RecipientTableCursorUtil.getRecord(context, cursor) }
 
     val foundIds = foundRecords.map { record -> record.id }
-    val remappedRecords = ids.filterNot { it in foundIds }.map(::findRemappedIdRecord)
+    val remappedRecords = ids.filterNot { it in foundIds }.mapNotNull { findRemappedIdRecord(it) }
 
     return (foundRecords + remappedRecords).associateBy { it.id }
   }
@@ -750,20 +754,24 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       return if (cursor != null && cursor.moveToNext()) {
         RecipientTableCursorUtil.getRecord(context, cursor)
       } else {
-        findRemappedIdRecord(id)
+        findRemappedIdRecordOrThrow(id)
       }
     }
   }
 
-  private fun findRemappedIdRecord(id: RecipientId): RecipientRecord {
+  private fun findRemappedIdRecord(id: RecipientId): RecipientRecord? {
     val remapped = RemappedRecords.getInstance().getRecipient(id)
 
     return if (remapped.isPresent) {
       Log.w(TAG, "Missing recipient for $id, but found it in the remapped records as ${remapped.get()}")
       getRecord(remapped.get())
     } else {
-      throw MissingRecipientException(id)
+      null
     }
+  }
+
+  private fun findRemappedIdRecordOrThrow(id: RecipientId): RecipientRecord {
+    return findRemappedIdRecord(id) ?: throw MissingRecipientException(id)
   }
 
   fun getRecordForSync(id: RecipientId): RecipientRecord? {
@@ -3395,7 +3403,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
   }
 
   fun querySignalContacts(contactSearchQuery: ContactSearchQuery): Cursor? {
-    val query = SqlUtil.buildCaseInsensitiveGlobPattern(contactSearchQuery.query)
+    val query = SqlUtil.buildCaseInsensitiveGlobPattern(contactSearchQuery.query.trim())
 
     val searchSelection = ContactSearchSelection.Builder()
       .withRegistered(true)
@@ -3661,32 +3669,38 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         PROFILE_SHARING to 0
       )
 
-      val e164Query = SqlUtil.buildFastCollectionQuery(E164, blockedE164s)
-      db.update(TABLE_NAME)
-        .values(blockValues)
-        .where(e164Query.where, e164Query.whereArgs)
-        .run()
-
-      val aciQuery = SqlUtil.buildFastCollectionQuery(ACI_COLUMN, blockedAcis.map { it.toString() })
-      db.update(TABLE_NAME)
-        .values(blockValues)
-        .where(aciQuery.where, aciQuery.whereArgs)
-        .run()
-
-      val groupIds: List<GroupId.V1> = blockedGroupIds.mapNotNull { raw ->
-        try {
-          GroupId.v1(raw)
-        } catch (e: BadGroupIdException) {
-          Log.w(TAG, "[applyBlockedUpdate] Bad GV1 ID!")
-          null
-        }
+      if (blockedE164s.isNotEmpty()) {
+        val e164Query = SqlUtil.buildFastCollectionQuery(E164, blockedE164s)
+        db.update(TABLE_NAME)
+          .values(blockValues)
+          .where(e164Query.where, e164Query.whereArgs)
+          .run()
       }
 
-      val groupIdQuery = SqlUtil.buildFastCollectionQuery(GROUP_ID, groupIds.map { it.toString() })
-      db.update(TABLE_NAME)
-        .values(blockValues)
-        .where(groupIdQuery.where, groupIdQuery.whereArgs)
-        .run()
+      if (blockedAcis.isNotEmpty()) {
+        val aciQuery = SqlUtil.buildFastCollectionQuery(ACI_COLUMN, blockedAcis.map { it.toString() })
+        db.update(TABLE_NAME)
+          .values(blockValues)
+          .where(aciQuery.where, aciQuery.whereArgs)
+          .run()
+      }
+
+      if (blockedGroupIds.isNotEmpty()) {
+        val groupIds: List<GroupId.V1> = blockedGroupIds.mapNotNull { raw ->
+          try {
+            GroupId.v1(raw)
+          } catch (e: BadGroupIdException) {
+            Log.w(TAG, "[applyBlockedUpdate] Bad GV1 ID!")
+            null
+          }
+        }
+
+        val groupIdQuery = SqlUtil.buildFastCollectionQuery(GROUP_ID, groupIds.map { it.toString() })
+        db.update(TABLE_NAME)
+          .values(blockValues)
+          .where(groupIdQuery.where, groupIdQuery.whereArgs)
+          .run()
+      }
     }
 
     AppDependencies.recipientCache.clear()

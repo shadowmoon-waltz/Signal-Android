@@ -335,6 +335,7 @@ import org.thoughtcrime.securesms.util.atUTC
 import org.thoughtcrime.securesms.util.createActivityViewModel
 import org.thoughtcrime.securesms.util.doAfterNextLayout
 import org.thoughtcrime.securesms.util.fragments.requireListener
+import org.thoughtcrime.securesms.util.getQuote
 import org.thoughtcrime.securesms.util.getRecordQuoteType
 import org.thoughtcrime.securesms.util.hasAudio
 import org.thoughtcrime.securesms.util.hasGiftBadge
@@ -1249,9 +1250,7 @@ class ConversationFragment :
   }
 
   private fun presentIdentityRecordsState(identityRecordsState: IdentityRecordsState) {
-    if (!identityRecordsState.isGroup) {
-      binding.conversationTitleView.root.setVerified(identityRecordsState.isVerified)
-    }
+    binding.conversationTitleView.root.setVerified(identityRecordsState.isVerified)
 
     if (identityRecordsState.isUnverified) {
       binding.conversationBanner.showUnverifiedBanner(identityRecordsState.identityRecords)
@@ -1604,6 +1603,15 @@ class ConversationFragment :
       Log.i(TAG, "Edit message no longer valid")
       val editDurationHours = getEditMessageThresholdHours()
       Dialogs.showAlertDialog(requireContext(), null, resources.getQuantityString(R.plurals.ConversationActivity_edit_message_too_old, editDurationHours, editDurationHours))
+      return
+    }
+
+    if (editMessage.body == composeText.editableText.toString() &&
+      editMessage.getQuote()?.displayText?.toString() == inputPanel.quote.map { it.text }.orNull() &&
+      editMessage.messageRanges == composeText.styling
+    ) {
+      Log.d(TAG, "Updated message matches original, exiting edit mode")
+      inputPanel.exitEditMessageMode()
       return
     }
 
@@ -3039,6 +3047,10 @@ class ConversationFragment :
 
     override fun onSafetyNumberLearnMoreClicked(recipient: Recipient) {
       ConversationDialogs.displaySafetyNumberLearnMoreDialog(this@ConversationFragment, recipient)
+    }
+
+    override fun onShowUnverifiedProfileSheet(forGroup: Boolean) {
+      UnverifiedProfileNameBottomSheet.show(parentFragmentManager, forGroup)
     }
 
     override fun onJoinGroupCallClicked() {
