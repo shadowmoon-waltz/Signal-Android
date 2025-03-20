@@ -1859,7 +1859,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     }
   }
 
-  fun setProfileAvatar(id: RecipientId, profileAvatar: String?) {
+  fun setProfileAvatar(id: RecipientId, profileAvatar: String?, forceNotify: Boolean = false) {
     val contentValues = ContentValues(1).apply {
       put(PROFILE_AVATAR, profileAvatar)
     }
@@ -1869,6 +1869,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
         rotateStorageId(id)
         StorageSyncHelper.scheduleSyncForDataChange()
       }
+    } else if (forceNotify) {
+      AppDependencies.databaseObserver.notifyRecipientChanged(id)
     }
   }
 
@@ -3815,8 +3817,15 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
     }
   }
 
-  fun manuallyShowAvatar(recipientId: RecipientId) {
-    updateExtras(recipientId) { b: RecipientExtras.Builder -> b.manuallyShownAvatar(true) }
+  fun clearHasGroupsInCommon(recipientId: RecipientId) {
+    if (update(recipientId, contentValuesOf(GROUPS_IN_COMMON to 0))) {
+      Log.i(TAG, "Reset $recipientId to have no groups in common.")
+      Recipient.live(recipientId).refresh()
+    }
+  }
+
+  fun manuallyUpdateShowAvatar(recipientId: RecipientId, showAvatar: Boolean) {
+    updateExtras(recipientId) { b: RecipientExtras.Builder -> b.manuallyShownAvatar(showAvatar) }
   }
 
   fun getCapabilities(id: RecipientId): RecipientRecord.Capabilities? {
@@ -4098,7 +4107,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       PNI_COLUMN to pni?.toString(),
       PNI_SIGNATURE_VERIFIED to pniVerified.toInt(),
       STORAGE_SERVICE_ID to Base64.encodeWithPadding(StorageSyncHelper.generateKey()),
-      AVATAR_COLOR to AvatarColorHash.forAddress((aci ?: pni)?.toString(), e164).serialize()
+      AVATAR_COLOR to AvatarColorHash.forAddress((aci ?: pni), e164).serialize()
     )
 
     if (pni != null || aci != null) {
@@ -4155,7 +4164,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
       }
 
       if (isInsert) {
-        put(AVATAR_COLOR, AvatarColorHash.forAddress(contact.proto.signalAci?.toString() ?: contact.proto.signalPni?.toString(), contact.proto.e164).serialize())
+        put(AVATAR_COLOR, AvatarColorHash.forAddress(contact.proto.signalAci ?: contact.proto.signalPni, contact.proto.e164).serialize())
       }
     }
   }

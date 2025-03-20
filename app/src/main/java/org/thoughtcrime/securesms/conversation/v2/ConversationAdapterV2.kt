@@ -33,6 +33,7 @@ import org.thoughtcrime.securesms.conversation.colors.Colorizable
 import org.thoughtcrime.securesms.conversation.colors.Colorizer
 import org.thoughtcrime.securesms.conversation.mutiselect.MultiselectPart
 import org.thoughtcrime.securesms.conversation.mutiselect.Multiselectable
+import org.thoughtcrime.securesms.conversation.v2.data.AvatarDownloadStateCache
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationElementKey
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationMessageElement
 import org.thoughtcrime.securesms.conversation.v2.data.ConversationUpdate
@@ -589,7 +590,19 @@ class ConversationAdapterV2(
       val (recipient, groupInfo, sharedGroups, messageRequestState) = model.recipientInfo
       val isSelf = recipient.id == Recipient.self().id
 
-      conversationBanner.setAvatar(requestManager, recipient)
+      when (model.avatarDownloadState) {
+        AvatarDownloadStateCache.DownloadState.NONE,
+        AvatarDownloadStateCache.DownloadState.FINISHED -> {
+          conversationBanner.setAvatar(requestManager, recipient)
+        }
+        AvatarDownloadStateCache.DownloadState.IN_PROGRESS -> {
+          conversationBanner.showProgressBar(recipient)
+        }
+        AvatarDownloadStateCache.DownloadState.FAILED -> {
+          conversationBanner.showFailedAvatarDownload(recipient)
+        }
+      }
+
       conversationBanner.showBackgroundBubble(recipient.hasWallpaper)
       val title: String = conversationBanner.setTitle(recipient) {
         displayDialogFragment(AboutSheet.create(recipient))
@@ -603,7 +616,7 @@ class ConversationAdapterV2(
 
       if (recipient.isGroup) {
         if (!groupInfo.hasExistingContacts) {
-          conversationBanner.setUnverifiedNameSubtitle(R.drawable.symbol_group_question_20, R.string.ConversationFragment_group_names, true) {
+          conversationBanner.setUnverifiedNameSubtitle(R.drawable.symbol_group_question_16, true) {
             clickListener.onShowUnverifiedProfileSheet(true)
           }
         } else {
@@ -612,17 +625,20 @@ class ConversationAdapterV2(
 
         if (groupInfo.pendingMemberCount > 0) {
           val invited = context.resources.getQuantityString(R.plurals.MessageRequestProfileView_invited, groupInfo.pendingMemberCount, groupInfo.pendingMemberCount)
-          conversationBanner.setSubtitle(context.resources.getQuantityString(R.plurals.MessageRequestProfileView_members_and_invited, groupInfo.fullMemberCount, groupInfo.fullMemberCount, invited), R.drawable.symbol_group_light_20) { goToGroupSettings(recipient) }
+          conversationBanner.setSubtitle(context.resources.getQuantityString(R.plurals.MessageRequestProfileView_members_and_invited, groupInfo.fullMemberCount, groupInfo.fullMemberCount, invited), R.drawable.symbol_group_compact_16) { goToGroupSettings(recipient) }
         } else if (groupInfo.fullMemberCount > 0) {
-          conversationBanner.setSubtitle(context.resources.getQuantityString(R.plurals.MessageRequestProfileView_members, groupInfo.fullMemberCount, groupInfo.fullMemberCount), R.drawable.symbol_group_light_20) { goToGroupSettings(recipient) }
+          if (groupInfo.fullMemberCount == 1 && recipient.isActiveGroup) {
+            conversationBanner.hideUnverifiedNameSubtitle()
+          }
+          conversationBanner.setSubtitle(context.resources.getQuantityString(R.plurals.MessageRequestProfileView_members, groupInfo.fullMemberCount, groupInfo.fullMemberCount), R.drawable.symbol_group_compact_16) { goToGroupSettings(recipient) }
         } else {
           conversationBanner.hideSubtitle()
         }
       } else if (isSelf) {
-        conversationBanner.setSubtitle(context.getString(R.string.ConversationFragment__you_can_add_notes_for_yourself_in_this_conversation), R.drawable.symbol_note_light_24, null)
+        conversationBanner.setSubtitle(context.getString(R.string.ConversationFragment__you_can_add_notes_for_yourself_in_this_conversation), R.drawable.symbol_note_compact_16, null)
       } else {
-        if (recipient.nickname.isEmpty && !recipient.isSystemContact) {
-          conversationBanner.setUnverifiedNameSubtitle(R.drawable.symbol_person_question_16, R.string.ConversationFragment_profile_names, false) {
+        if ((recipient.profileName.toString() == recipient.getDisplayName(context)) && recipient.nickname.isEmpty && !recipient.isSystemContact) {
+          conversationBanner.setUnverifiedNameSubtitle(R.drawable.symbol_person_question_16, false) {
             clickListener.onShowUnverifiedProfileSheet(false)
           }
         } else {
@@ -633,7 +649,7 @@ class ConversationAdapterV2(
         if (subtitle == null || subtitle == title) {
           conversationBanner.hideSubtitle()
         } else {
-          conversationBanner.setSubtitle(subtitle, R.drawable.symbol_phone_light_20, null)
+          conversationBanner.setSubtitle(subtitle, R.drawable.symbol_phone_compact_16, null)
         }
       }
 
@@ -646,7 +662,7 @@ class ConversationAdapterV2(
         conversationBanner.setButton(context.getString(R.string.ConversationFragment_safety_tips)) {
           clickListener.onShowSafetyTips(false)
         }
-        conversationBanner.setDescription(getDescription(context, sharedGroups), R.drawable.symbol_group_light_20)
+        conversationBanner.setDescription(getDescription(context, sharedGroups), R.drawable.symbol_group_compact_16)
       } else if (messageRequestState?.isAccepted == false && recipient.isGroup) {
         conversationBanner.showWarningSubtitle()
         conversationBanner.setButton(context.getString(R.string.ConversationFragment_safety_tips)) {
@@ -673,8 +689,9 @@ class ConversationAdapterV2(
         }
       } else {
         conversationBanner.hideWarningSubtitle()
-        conversationBanner.setDescription(getDescription(context, sharedGroups), R.drawable.symbol_group_light_20)
+        conversationBanner.setDescription(getDescription(context, sharedGroups), R.drawable.symbol_group_compact_16)
       }
+      conversationBanner.updateOutlineBoxSize()
     }
 
     private fun getDescription(context: Context, sharedGroups: List<String>): String {
