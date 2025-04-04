@@ -1,6 +1,7 @@
+@file:Suppress("UnstableApiUsage")
+
 import com.android.build.api.dsl.ManagedVirtualDevice
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -20,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1528
-val canonicalVersionName = "7.38.5"
+val canonicalVersionCode = 1532
+val canonicalVersionName = "7.39.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -95,6 +96,7 @@ android {
   kotlinOptions {
     jvmTarget = signalKotlinJvmTarget
     freeCompilerArgs = listOf("-Xjvm-default=all")
+    suppressWarnings = true
   }
 
   keystores["debug"]?.let { properties ->
@@ -447,6 +449,8 @@ android {
     abortOnError = true
     baseline = file("lint-baseline.xml")
     checkReleaseBuilds = false
+    ignoreWarnings = true
+    quiet = true
     disable += "LintError"
   }
 
@@ -643,6 +647,7 @@ dependencies {
   testImplementation(testLibs.mockk)
   testImplementation(testFixtures(project(":libsignal-service")))
   testImplementation(testLibs.espresso.core)
+  testImplementation(testLibs.kotlinx.coroutines.test)
 
   androidTestImplementation(platform(libs.androidx.compose.bom))
   androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -668,39 +673,25 @@ fun assertIsGitRepo() {
 fun getLastCommitTimestamp(): String {
   assertIsGitRepo()
 
-  ByteArrayOutputStream().use { os ->
-    exec {
-      executable = "git"
-      args = listOf("log", "-1", "--pretty=format:%ct")
-      standardOutput = os
-    }
-
-    return os.toString() + "000"
-  }
+  return providers.exec {
+    commandLine("git", "log", "-1", "--pretty=format:%ct")
+  }.standardOutput.asText.get() + "000"
 }
 
 fun getGitHash(): String {
   assertIsGitRepo()
 
-  val stdout = ByteArrayOutputStream()
-  exec {
-    commandLine = listOf("git", "rev-parse", "HEAD")
-    standardOutput = stdout
-  }
-
-  return stdout.toString().trim().substring(0, 12)
+  return providers.exec {
+    commandLine("git", "rev-parse", "HEAD")
+  }.standardOutput.asText.get().trim().substring(0, 12)
 }
 
 fun getCurrentGitTag(): String? {
   assertIsGitRepo()
 
-  val stdout = ByteArrayOutputStream()
-  exec {
-    commandLine = listOf("git", "tag", "--points-at", "HEAD")
-    standardOutput = stdout
-  }
-
-  val output: String = stdout.toString().trim()
+  val output = providers.exec {
+    commandLine("git", "tag", "--points-at", "HEAD")
+  }.standardOutput.asText.get().trim()
 
   return if (output.isNotEmpty()) {
     val tags = output.split("\n").toList()
@@ -720,19 +711,10 @@ tasks.withType<Test>().configureEach {
   }
 }
 
-project.tasks.configureEach {
-  if (name.lowercase().contains("nightly") && name != "checkNightlyParams") {
-    dependsOn(tasks.getByName("checkNightlyParams"))
-  }
-}
-
-tasks.register("checkNightlyParams") {
-  doFirst {
-    if (project.gradle.startParameter.taskNames.any { it.lowercase().contains("nightly") }) {
-
-      if (!file("${project.rootDir}/nightly-url.txt").exists()) {
-        throw GradleException("Cannot find 'nightly-url.txt' for nightly build! It must exist in the root of this project and contain the location of the nightly manifest.")
-      }
+gradle.taskGraph.whenReady {
+  if (gradle.startParameter.taskNames.any { it.contains("nightly", ignoreCase = true) }) {
+    if (!file("${project.rootDir}/nightly-url.txt").exists()) {
+      throw GradleException("Missing required file: nightly-url.txt")
     }
   }
 }

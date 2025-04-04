@@ -22,9 +22,13 @@ import java.util.Locale;
 
 final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecipientsAdapter.ViewHolder> {
 
-  private Locale locale = null;
+  private Locale                                 locale;
+  private ReactionViewPagerAdapter.EventListener listener = null;
+  private List<ReactionDetails>                  data     = Collections.emptyList();
 
-  private List<ReactionDetails> data = Collections.emptyList();
+  void setListener(ReactionViewPagerAdapter.EventListener listener) {
+    this.listener = listener;
+  }
 
   public ReactionRecipientsAdapter(Locale locale) {
     this.locale = locale;
@@ -45,7 +49,7 @@ final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecip
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    holder.bind(data.get(position), locale);
+    holder.bind(data.get(position), locale, listener);
   }
 
   @Override
@@ -60,18 +64,20 @@ final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecip
     private final TextView        recipient;
     private final TextView        time;
     private final TextView        emoji;
+    private final TextView        tapToRemoveText;
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
 
-      avatar    = itemView.findViewById(R.id.reactions_bottom_view_recipient_avatar);
-      badge     = itemView.findViewById(R.id.reactions_bottom_view_recipient_badge);
-      recipient = itemView.findViewById(R.id.reactions_bottom_view_recipient_name);
-      time      = itemView.findViewById(R.id.reactions_bottom_view_recipient_time);
-      emoji     = itemView.findViewById(R.id.reactions_bottom_view_recipient_emoji);
+      avatar          = itemView.findViewById(R.id.reactions_bottom_view_recipient_avatar);
+      badge           = itemView.findViewById(R.id.reactions_bottom_view_recipient_badge);
+      recipient       = itemView.findViewById(R.id.reactions_bottom_view_recipient_name);
+      time            = itemView.findViewById(R.id.reactions_bottom_view_recipient_time);
+      emoji           = itemView.findViewById(R.id.reactions_bottom_view_recipient_emoji);
+      tapToRemoveText = itemView.findViewById(R.id.reactions_bottom_view_recipient_tap_to_remove_action_text);
     }
 
-    void bind(@NonNull ReactionDetails reaction, Locale locale) {
+    void bind(@NonNull ReactionDetails reaction, Locale locale, ReactionViewPagerAdapter.EventListener listener) {
       this.emoji.setText(reaction.getDisplayEmoji());
       if (locale != null) {
         this.time.setText(DateUtils.getExtendedRelativeTimeSpanString(this.time.getContext(), locale, reaction.getTimestamp()));
@@ -84,10 +90,14 @@ final class ReactionRecipientsAdapter extends RecyclerView.Adapter<ReactionRecip
         this.avatar.setAvatar(Glide.with(avatar), null, false);
         this.badge.setBadge(null);
         AvatarUtil.loadIconIntoImageView(reaction.getSender(), avatar);
+        itemView.setOnClickListener((view) -> listener.onClick());
+        tapToRemoveText.setVisibility(View.VISIBLE);
       } else {
         this.recipient.setText(reaction.getSender().getDisplayName(itemView.getContext()));
         this.avatar.setAvatar(Glide.with(avatar), reaction.getSender(), false);
         this.badge.setBadgeFromRecipient(reaction.getSender());
+        itemView.setOnClickListener(null);
+        tapToRemoveText.setVisibility(View.GONE);
       }
     }
   }

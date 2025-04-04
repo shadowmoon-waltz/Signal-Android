@@ -580,13 +580,6 @@
         <item quantity="one">Salvando anexo no armazenamento…</item>
         <item quantity="other">Salvando %1$d anexos no armazenamento…</item>
     </plurals>
-    <!-- Dialog title asking to save media to your phone\'s storage -->
-    <string name="ConversationFragment__save_to_phone">Salvar no telefone?</string>
-    <!-- Dialog message explaining that media will be saved to your phone and can potentially be accessed by other phones. -->
-    <plurals name="ConversationFragment__this_media_will_be_saved">
-        <item quantity="one">Este arquivo de mídia será salvo no armazenamento do seu telefone. Outros aplicativos podem acessá-lo dependendo das permissões do seu telefone.</item>
-        <item quantity="other">Este arquivo de mídia será salvo no armazenamento do seu telefone. Outros aplicativos podem acessá-lo dependendo das permissões do seu telefone.</item>
-    </plurals>
     <!-- Checkbox shown in dialog to not show the dialog again in future cases -->
     <string name="ConversationFragment_dont_show_again">Não mostrar novamente</string>
     <string name="ConversationFragment_pending">Pendente…</string>
@@ -1162,6 +1155,7 @@
 
     <!-- DocumentView -->
     <string name="DocumentView_unnamed_file">Arquivo sem nome</string>
+    <string name="DocumentView_document_file">Document file</string>
 
     <!-- DozeReminder -->
     <string name="DozeReminder_optimize_for_missing_play_services">Otimizar para ausência do Play Services</string>
@@ -1689,7 +1683,6 @@
     </plurals>
     <string name="MediaOverviewActivity_Media_delete_progress_title">Excluindo</string>
     <string name="MediaOverviewActivity_Media_delete_progress_message">Excluindo mensagens…</string>
-    <string name="MediaOverviewActivity_collecting_attachments">Coletando anexos…</string>
     <string name="MediaOverviewActivity_Sort_by">Ordenar por</string>
     <string name="MediaOverviewActivity_Newest">O mais recente</string>
     <string name="MediaOverviewActivity_Oldest">O mais antigo</string>
@@ -2138,6 +2131,27 @@
         <item quantity="one">%1$d grupo adicional</item>
         <item quantity="other">%1$d grupos adicionais</item>
     </plurals>
+    <!-- Describes the names of members in a group. MessageRequestProfileView_group_members_* is nested in the first parentheses. MessageRequestProfileView_invited is nested in the second -->
+    <string name="MessageRequestProfileView_member_names_and_invited">%1$s (%2$s)</string>
+    <!-- Text for an empty group or when you are the only member -->
+    <string name="MessageRequestProfileView_group_members_zero">No other group members yet</string>
+    <!-- Text for a group with one member (not you). %1$s is their name -->
+    <string name="MessageRequestProfileView_group_members_one">%1$s</string>
+    <!-- Text for a 2 member group you are in. %1$s is the name of the other member -->
+    <string name="MessageRequestProfileView_group_members_one_and_you">%1$s and you</string>
+    <!-- Text for a 2 member group you are not in. %1$s and %2$s are the members\' names -->
+    <string name="MessageRequestProfileView_group_members_two">%1$s and %2$s</string>
+    <!-- Text for a 3 member group you are in. %1$s and %2$s are the members\' names -->
+    <string name="MessageRequestProfileView_group_members_two_and_you">%1$s, %2$s, and you</string>
+    <!-- Text for a 3 member group you are not in. %1$s, %2$s, %3$s are the names of the other members. -->
+    <string name="MessageRequestProfileView_group_members_three">%1$s, %2$s, and %3$s</string>
+    <!-- Text for a 3+ member group. %1$s, %2$s, %3$s are member names. %4$s is the string key MessageRequestProfileView_other_members-->
+    <string name="MessageRequestProfileView_group_members_other">%1$s, %2$s, %3$s, and %4$s</string>
+    <!-- Nested in MessageRequestProfileView_group_members_other that shows how many members (besides three) are in the group -->
+    <plurals name="MessageRequestProfileView_other_members">
+        <item quantity="one">%1$d other</item>
+        <item quantity="other">%1$d others</item>
+    </plurals>
     <!-- Button label to report spam for a conversation when in a message request state -->
     <string name="MessageRequestBottomView_report">Denunciar…</string>
     <!-- Alert dialog title to accept a message request -->
@@ -2253,6 +2267,7 @@
 
     <!-- ReactionsBottomSheetDialogFragment -->
     <string name="ReactionsBottomSheetDialogFragment_all">Todos · %1$d</string>
+    <string name="ReactionsBottomSheetDialogFragment_tap_to_remove">Tap to remove</string>
 
     <!-- ReactionsConversationView -->
     <string name="ReactionsConversationView_plus">+ %1$d</string>
@@ -2485,6 +2500,8 @@
     <string name="CallOverflowPopupWindow__view">Exibir</string>
 
 
+    <!-- A notification to the user that their hand is raised but they are currently speaking -->
+    <string name="CallRaiseHandSnackbar__lower_your_hand">Lower your hand?</string>
     <!-- A notification to the user that they successfully raised their hand. The placeholder string is CallParticipant__you, or CallParticipant__you_on_another_device -->
     <string name="CallRaiseHandSnackbar__expanded_second_person_raised_a_hand_single">%1$s levantou a mão</string>
     <!-- A notification to the user that they and at least one more participants in the call successfully raised their hand. The placeholder is a number quantifying how many other hands are also raised, besides the user. -->
@@ -2970,8 +2987,6 @@
     <string name="MediaPreviewActivity_you">Você</string>
     <string name="MediaPreviewActivity_unssuported_media_type">Tipo de mídia não suportado</string>
     <string name="MediaPreviewActivity_draft">Rascunho</string>
-    <string name="MediaPreviewActivity_signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">O Signal precisa da permissão Armazenamento para gravar dados no armazenamento externo, mas ela foi permanentemente negada. Favor ir no menu de configurações de aplicativos, selecionar \"Permissões\", e habilitar \"Armazenamento\".</string>
-    <string name="MediaPreviewActivity_unable_to_write_to_external_storage_without_permission">Não é possível gravar dados no armazenamento externo sem as permissões</string>
     <string name="MediaPreviewActivity_media_delete_confirmation_title">Apagar mensagem?</string>
     <string name="MediaPreviewActivity_media_delete_confirmation_message">Esta mensagem será apagada permanentemente.</string>
     <string name="MediaPreviewActivity_s_to_s">%1$s para %2$s</string>
@@ -3078,8 +3093,6 @@
     <!-- Notification channel name for notifications sent when a device has been linked -->
     <string name="NotificationChannel_new_linked_device">Novo dispositivo vinculado</string>
 
-    <!-- ProfileEditNameFragment -->
-
     <!-- QuickResponseService -->
     <string name="QuickResponseService_quick_response_unavailable_when_Signal_is_locked">Resposta rápida não disponível quando o Signal está trancado!</string>
     <string name="QuickResponseService_problem_sending_message">Problema ao enviar mensagem!</string>
@@ -3105,6 +3118,21 @@
         <item quantity="one">Erro ao salvar anexo no armazenamento!</item>
         <item quantity="other">Erro ao salvar anexos no armazenamento!</item>
     </plurals>
+
+    <!-- Dialog title asking to save media to your phone\'s storage -->
+    <string name="AttachmentSaver__save_to_phone">Save to phone?</string>
+
+    <!-- Dialog message explaining that media will be saved to your phone and can potentially be accessed by other phones. -->
+    <plurals name="AttachmentSaver__this_media_will_be_saved">
+        <item quantity="one">This media will be saved to your phone\'s storage. Other apps may be able to access it depending on your phone\'s permissions.</item>
+        <item quantity="other">This media will be saved to your phone\'s storage. Other apps may be able to access it depending on your phone\'s permissions.</item>
+    </plurals>
+
+    <!-- Message shown when the app requests permission to save media to the device storage, but that permission has been permanently denied by the user. -->
+    <string name="AttachmentSaver__signal_needs_the_storage_permission_in_order_to_write_to_external_storage_but_it_has_been_permanently_denied">Signal needs the Storage permission in order to save to external storage, but it has been permanently denied. Please continue to app settings, select \"Permissions\", and enable \"Storage\".</string>
+
+    <!-- Message explaining that it is not possible to save media to the device storage after the user denied the system save to storage permission. -->
+    <string name="AttachmentSaver__unable_to_write_to_external_storage_without_permission">Unable to save to external storage without permissions</string>
 
     <!-- SearchToolbar -->
     <string name="SearchToolbar_search">Procurar</string>
@@ -3362,6 +3390,11 @@
     <!-- audio_view -->
     <string name="audio_view__play_pause_accessibility_description">Tocar … Pausar</string>
     <string name="audio_view__download_accessibility_description">Baixar</string>
+
+    <!-- document_view -->
+    <string name="document_view__download_accessibility_description">Download</string>
+    <string name="document_view__upload_accessibility_description">Upload</string>
+    <string name="document_view__cancel_accessibility_description">Cancel</string>
 
     <!-- QuoteView -->
     <string name="QuoteView_audio">Áudio</string>
@@ -6459,6 +6492,8 @@
     <string name="StoryViewerPageFragment__send_failed">Falha no envio. Toque para tentar novamente</string>
     <!-- Label for the reply button in story viewer, which will launch the group story replies bottom sheet. -->
     <string name="StoryViewerPageFragment__reply_to_group">Responder ao grupo</string>
+    <!-- Content description for the any reaction button in reply to story composer, which will launch the emojis bottom sheet. -->
+    <string name="StoryViewerPageFragment_any_reaction_content_description">More reactions</string>
     <!-- Displayed when a story has no views -->
     <string name="StoryViewsFragment__no_views_yet">Ainda não há visualizações</string>
     <!-- Displayed when user has disabled receipts -->
@@ -8018,9 +8053,9 @@
     <!-- Linear progress dialog text shown when preparing a backup -->
     <string name="RemoteBackupsSettingsFragment__preparing_backup">Preparando backup…</string>
     <!-- Linear progress dialog text shown when processing messages for backup. First placeholder is completed count, second is approximate total count, third is percent completed. -->
-    <plurals name="RemoteBackupsSettingsFragment__processing_d_of_d_d_messages">
-        <item quantity="one">Processando %1$d mensagem de %2$d (%3$d%%)</item>
-        <item quantity="other">Processando %1$d mensagens de %2$d (%3$d%%)</item>
+    <plurals name="RemoteBackupsSettingsFragment__processing_messages_progress_text">
+        <item quantity="one">Processing %1$s of %2$s message (%3$d%%)</item>
+        <item quantity="other">Processing %1$s of ~%2$s messages (%3$d%%)</item>
     </plurals>
     <!-- Displayed in row when backup is available for download and users subscription has expired. First placeholder is data size e.g. 12MB, second is days before expiration -->
     <plurals name="RemoteBackupsSettingsFragment__you_have_s_of_backup_data">
@@ -8114,6 +8149,19 @@
     <string name="MessageBackupsKeyRecordScreen__continue">Continuar</string>
     <!-- Sheet secondary action button label -->
     <string name="MessageBackupsKeyRecordScreen__see_key_again">Ver chave novamente</string>
+
+    <!-- Confirm key title -->
+    <string name="MessageBackupsKeyVerifyScreen__confirm_your_backup_key">Confirm your backup key</string>
+    <!-- Confirm your key subtitle -->
+    <string name="MessageBackupsKeyVerifyScreen__enter_the_backup_key_that_you_just_recorded">Enter the backup key that you just recorded</string>
+    <!-- Confirm your key text entry hint text -->
+    <string name="MessageBackupsKeyVerifyScreen__backup_key">Backup key</string>
+    <!-- Confirm your key text entry error text -->
+    <string name="MessageBackupsKeyVerifyScreen__incorrect_backup_key">Incorrect backup key</string>
+    <!-- Confirm your key button text to return to record key screen. -->
+    <string name="MessageBackupsKeyVerifyScreen__see_key_again">See key again</string>
+    <!-- Confirm your key button text to move onto next screen in flow -->
+    <string name="MessageBackupsKeyVerifyScreen__next">Next</string>
 
     <!-- MessagesBackupsTypeSelectionScreen -->
     <!-- Screen headline -->
@@ -8240,6 +8288,25 @@
     <string name="EnterBackupKey_backup_key_you_entered_is_correct_but_no_backup">A chave de backup que você inseriu está correta, mas não há backup associado a ela. Se você ainda tiver seu telefone antigo, verifique se os backups estão habilitados e se um backup foi concluído e tente novamente.</string>
     <!-- Dialog button shown during registration and trying to restore a remote backup to instead skip said backup process -->
     <string name="EnterBackupKey_skip_restore">Pular restauração</string>
+    <!-- Dialog title text when encountering backup restore network error -->
+    <string name="EnterBackupKey_cant_restore_backup">Can\'t restore backup</string>
+    <!-- Dialog body text when encountering backup restore network error -->
+    <string name="EnterBackupKey_your_backup_cant_be_restored_right_now">Your backup can\'t be restored right now. Check your internet connection and try again. </string>
+    <!-- Dialog button text to contact support on network error -->
+    <string name="EnterBackupKey_contact_support">Contact support</string>
+
+    <!-- Email subject when contacting support on a restore backup network issue -->
+    <string name="EnterBackupKey_network_failure_support_email">Signal Android Backup restore network error</string>
+  <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Signal Android Backup restore network error</string> -->
+
+    <!-- Title of dialog asking to submit debuglogs -->
+    <string name="ContactSupportDialog_submit_debug_log">Submit debug log?</string>
+    <!-- Body of dialog explaining what debug logs are and that they are optional to submit -->
+    <string name="ContactSupportDialog_your_debug_logs">Your debug logs will help us troubleshoot your issue faster. Submitting your logs is optional.</string>
+    <!-- Button option to submit debug log when contacting support -->
+    <string name="ContactSupportDialog_submit_with_debug">Submit with debug log</string>
+    <!-- Button option to not submit debug log when contacting support -->
+    <string name="ContactSupportDialog_submit_without_debug">Submit without debug log</string>
 
     <!-- Title for restore via qr screen -->
     <string name="RestoreViaQr_title">Escaneie esse código com seu telefone antigo</string>

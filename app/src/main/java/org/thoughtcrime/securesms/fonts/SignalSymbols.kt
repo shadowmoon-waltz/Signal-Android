@@ -26,6 +26,7 @@ object SignalSymbols {
 
   enum class Glyph(val unicode: Char) {
     CHECKMARK('\u2713'),
+    CHEVRON_LEFT('\uE024'),
     CHEVRON_RIGHT('\uE025'),
     PERSON_CIRCLE('\uE05E'),
     LOCK('\uE041')
@@ -111,7 +112,7 @@ object SignalSymbols {
     private fun update(tp: TextPaint?) {
       tp.apply {
         val old = this!!.typeface
-        val oldStyle = old?.style ?: 0
+        val oldStyle = old?.style ?: Typeface.NORMAL
         val font = Typeface.create(font, oldStyle)
         typeface = font
       }
