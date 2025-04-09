@@ -16,22 +16,16 @@
  */
 package org.thoughtcrime.securesms.conversationlist;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -41,7 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.ColorInt;
@@ -53,11 +46,11 @@ import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.ActionMode;
+import androidx.compose.material3.SnackbarDuration;
 import androidx.compose.ui.platform.ComposeView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -73,7 +66,6 @@ import com.google.android.material.animation.ArgbEvaluatorCompat;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -87,7 +79,6 @@ import org.signal.core.util.logging.Log;
 import org.thoughtcrime.securesms.MainFragment;
 import org.thoughtcrime.securesms.MainNavigator;
 import org.thoughtcrime.securesms.MuteDialog;
-import org.thoughtcrime.securesms.NewConversationActivity;
 import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlert;
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlertBottomSheet;
@@ -113,7 +104,6 @@ import org.thoughtcrime.securesms.components.SignalProgressDialog;
 import org.thoughtcrime.securesms.components.menu.ActionItem;
 import org.thoughtcrime.securesms.components.menu.SignalBottomActionBar;
 import org.thoughtcrime.securesms.components.menu.SignalContextMenu;
-import org.thoughtcrime.securesms.components.registration.PulsingFloatingActionButton;
 import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity;
 import org.thoughtcrime.securesms.components.settings.app.chats.folders.ChatFolderRecord;
 import org.thoughtcrime.securesms.components.settings.app.subscription.completed.InAppPaymentsBottomSheetDelegate;
@@ -142,19 +132,13 @@ import org.thoughtcrime.securesms.groups.SelectionLimits;
 import org.thoughtcrime.securesms.jobs.RefreshOwnProfileJob;
 import org.thoughtcrime.securesms.keyvalue.AccountValues;
 import org.thoughtcrime.securesms.keyvalue.SignalStore;
-import org.thoughtcrime.securesms.lock.v2.CreateSvrPinActivity;
 import org.thoughtcrime.securesms.main.MainNavigationDestination;
 import org.thoughtcrime.securesms.main.MainToolbarMode;
 import org.thoughtcrime.securesms.main.MainToolbarViewModel;
 import org.thoughtcrime.securesms.main.Material3OnScrollHelperBinder;
-import org.thoughtcrime.securesms.mediasend.camerax.CameraXUtil;
-import org.thoughtcrime.securesms.mediasend.v2.MediaSelectionActivity;
-import org.thoughtcrime.securesms.megaphone.Megaphone;
-import org.thoughtcrime.securesms.megaphone.MegaphoneActionController;
-import org.thoughtcrime.securesms.megaphone.MegaphoneViewBuilder;
+import org.thoughtcrime.securesms.main.SnackbarState;
 import org.thoughtcrime.securesms.megaphone.Megaphones;
 import org.thoughtcrime.securesms.notifications.MarkReadReceiver;
-import org.thoughtcrime.securesms.permissions.Permissions;
 import org.thoughtcrime.securesms.profiles.manage.UsernameEditFragment;
 import org.thoughtcrime.securesms.ratelimit.RecaptchaProofBottomSheetFragment;
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -173,9 +157,7 @@ import org.thoughtcrime.securesms.util.SignalLocalMetrics;
 import org.thoughtcrime.securesms.util.SignalProxyUtil;
 import org.thoughtcrime.securesms.util.SnapToTopDataObserver;
 import org.thoughtcrime.securesms.util.ViewUtil;
-import org.thoughtcrime.securesms.util.WindowUtil;
 import org.thoughtcrime.securesms.util.adapter.mapping.PagingMappingAdapter;
-import org.thoughtcrime.securesms.util.task.SnackbarAsyncTask;
 import org.thoughtcrime.securesms.util.views.SimpleProgressDialog;
 import org.thoughtcrime.securesms.util.views.Stub;
 import org.thoughtcrime.securesms.wallpaper.ChatWallpaper;
@@ -192,14 +174,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import kotlin.Unit;
-
-import static android.app.Activity.RESULT_OK;
 
 
 public class ConversationListFragment extends MainFragment implements ActionMode.Callback,
                                                                       ConversationListAdapter.OnConversationClickListener,
-                                                                      MegaphoneActionController,
                                                                       ClearFilterViewHolder.OnClearFilterClickListener,
                                                                       ChatFolderAdapter.Callbacks,
                                                                       ConversationListAdapter.EmptyFolderViewHolder.OnFolderSettingsClickListener
@@ -221,15 +204,12 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private RecyclerView                           chatFolderList;
   private RecyclerView                           list;
   private Stub<ComposeView>                      bannerView;
-  private PulsingFloatingActionButton            fab;
-  private PulsingFloatingActionButton            cameraFab;
   private ConversationListFilterPullView         pullView;
   private AppBarLayout                           pullViewAppBarLayout;
   private ConversationListViewModel              viewModel;
   private RecyclerView.Adapter                   activeAdapter;
   private ConversationListAdapter                defaultAdapter;
   private PagingMappingAdapter<ContactSearchKey> searchAdapter;
-  private Stub<ViewGroup>                        megaphoneContainer;
   private SnapToTopDataObserver                  snapToTopDataObserver;
   private Drawable                               archiveDrawable;
   private AppForegroundObserver.Listener         appForegroundObserver;
@@ -248,6 +228,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private   ConversationListTabsViewModel         conversationListTabsViewModel;
   private   ContactSearchMediator                 contactSearchMediator;
   private   MainToolbarViewModel                  mainToolbarViewModel;
+  private   ChatListBackHandler                   chatListBackHandler;
 
   private BannerManager bannerManager;
 
@@ -286,20 +267,13 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     lifecycleDisposable = new LifecycleDisposable();
     lifecycleDisposable.bindTo(getViewLifecycleOwner());
 
-    coordinator             = view.findViewById(R.id.coordinator);
     chatFolderList          = view.findViewById(R.id.chat_folder_list);
     list                    = view.findViewById(R.id.list);
     bottomActionBar         = view.findViewById(R.id.conversation_list_bottom_action_bar);
     bannerView              = new Stub<>(view.findViewById(R.id.banner_compose_view));
-    megaphoneContainer      = new Stub<>(view.findViewById(R.id.megaphone_container));
     voiceNotePlayerViewStub = new Stub<>(view.findViewById(R.id.voice_note_player));
-    fab                     = view.findViewById(R.id.fab);
-    cameraFab               = view.findViewById(R.id.camera_fab);
     pullView                = view.findViewById(R.id.pull_view);
     pullViewAppBarLayout    = view.findViewById(R.id.recycler_coordinator_app_bar);
-
-    fab.setVisibility(View.VISIBLE);
-    cameraFab.setVisibility(View.VISIBLE);
 
     contactSearchMediator = new ContactSearchMediator(this,
                                                       Collections.emptySet(),
@@ -384,9 +358,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
       pullView.onUserDrag(progress);
     });
 
-    fab.show();
-    cameraFab.show();
-
     archiveDecoration = new ConversationListArchiveItemDecoration(new ColorDrawable(getResources().getColor(R.color.conversation_list_archive_background_end)));
     itemAnimator      = new ConversationListItemAnimator();
 
@@ -407,22 +378,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     new ItemTouchHelper(new ArchiveListenerCallback(getResources().getColor(R.color.conversation_list_archive_background_start),
                                                     getResources().getColor(R.color.conversation_list_archive_background_end))).attachToRecyclerView(list);
 
-    fab.setOnClickListener(v -> startActivity(new Intent(getActivity(), NewConversationActivity.class)));
-    cameraFab.setOnClickListener(v -> {
-      if (CameraXUtil.isSupported()) {
-        startActivity(MediaSelectionActivity.camera(requireContext()));
-      } else {
-        Permissions.with(this)
-                   .request(Manifest.permission.CAMERA)
-                   .ifNecessary()
-                   .withRationaleDialog(getString(R.string.CameraXFragment_allow_access_camera), getString(R.string.CameraXFragment_to_capture_photos_and_video_allow_camera), R.drawable.symbol_camera_24)
-                   .withPermanentDenialDialog(getString(R.string.CameraXFragment_signal_needs_camera_access_capture_photos), null, R.string.CameraXFragment_allow_access_camera, R.string.CameraXFragment_to_capture_photos_videos, getParentFragmentManager())
-                   .onAllGranted(() -> startActivity(MediaSelectionActivity.camera(requireContext())))
-                   .onAnyDenied(() -> Toast.makeText(requireContext(), R.string.CameraXFragment_signal_needs_camera_access_capture_photos, Toast.LENGTH_LONG).show())
-                   .execute();
-      }
-    });
-
     initializeViewModel();
     initializeListAdapters();
     initializeTypingObserver();
@@ -432,16 +387,8 @@ public class ConversationListFragment extends MainFragment implements ActionMode
 
     //RatingManager.showRatingDialogIfNecessary(requireContext());
 
-    requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-      @Override
-      public void handleOnBackPressed() {
-        if (!closeSearchIfOpen()) {
-          if (!NavHostFragment.findNavController(ConversationListFragment.this).popBackStack()) {
-            requireActivity().finish();
-          }
-        }
-      }
-    });
+    chatListBackHandler = new ChatListBackHandler(false);
+    requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), chatListBackHandler);
 
     conversationListTabsViewModel = new ViewModelProvider(requireActivity()).get(ConversationListTabsViewModel.class);
 
@@ -457,7 +404,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
                                                            }
                                                          }));
 
-    requireCallback().bindScrollHelper(list, chatFolderList, color -> {
+    requireCallback().bindScrollHelper(list, getViewLifecycleOwner(), chatFolderList, color -> {
       for (int i = 0; i < chatFolderList.getChildCount(); i++) {
         View child = chatFolderList.getChildAt(i);
         if (child != null && child.isSelected()) {
@@ -490,10 +437,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     coordinator             = null;
     list                    = null;
     bottomActionBar         = null;
-    megaphoneContainer      = null;
     voiceNotePlayerViewStub = null;
-    fab                     = null;
-    cameraFab               = null;
     snapToTopDataObserver   = null;
     itemAnimator            = null;
 
@@ -580,8 +524,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   public void onPause() {
     super.onPause();
 
-    fab.stopPulse();
-    cameraFab.stopPulse();
     EventBus.getDefault().unregister(this);
   }
 
@@ -594,7 +536,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   @Override
   public void onConfigurationChanged(@NonNull Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
-    onMegaphoneChanged(viewModel.getMegaphone());
   }
 
   private ContactSearchConfiguration mapSearchStateToConfiguration(@NonNull ContactSearchState state) {
@@ -662,32 +603,11 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     return mainToolbarViewModel.getState().getValue().getMode() == MainToolbarMode.SEARCH;
   }
 
-  private boolean closeSearchIfOpen() {
+  private void closeSearchIfOpen() {
     if (isSearchOpen()) {
       setAdapter(defaultAdapter);
       mainToolbarViewModel.setToolbarMode(MainToolbarMode.FULL);
-      conversationListTabsViewModel.onSearchClosed();
-      return true;
-    }
-
-    return false;
-  }
-
-  @Override
-  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    Permissions.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    if (resultCode == RESULT_OK && requestCode == CreateSvrPinActivity.REQUEST_NEW_PIN) {
-      Snackbar.make(fab, R.string.ConfirmKbsPinFragment__pin_created, Snackbar.LENGTH_LONG).show();
-      viewModel.onMegaphoneCompleted(Megaphones.Event.PINS_FOR_ALL);
-    }
-
-    if (resultCode == RESULT_OK && requestCode == UsernameEditFragment.REQUEST_CODE) {
-      String snackbarString = getString(R.string.ConversationListFragment_username_recovered_toast, SignalStore.account().getUsername());
-      Snackbar.make(fab, snackbarString, Snackbar.LENGTH_LONG).show();
+      chatListBackHandler.setEnabled(false);
     }
   }
 
@@ -732,41 +652,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     });
   }
 
-  @Override
-  public void onMegaphoneNavigationRequested(@NonNull Intent intent) {
-    startActivity(intent);
-  }
-
-  @Override
-  public void onMegaphoneNavigationRequested(@NonNull Intent intent, int requestCode) {
-    startActivityForResult(intent, requestCode);
-  }
-
-  @Override
-  public void onMegaphoneToastRequested(@NonNull String string) {
-    Snackbar.make(fab, string, Snackbar.LENGTH_LONG).show();
-  }
-
-  @Override
-  public @NonNull Activity getMegaphoneActivity() {
-    return requireActivity();
-  }
-
-  @Override
-  public void onMegaphoneSnooze(@NonNull Megaphones.Event event) {
-    viewModel.onMegaphoneSnoozed(event);
-  }
-
-  @Override
-  public void onMegaphoneCompleted(@NonNull Megaphones.Event event) {
-    viewModel.onMegaphoneCompleted(event);
-  }
-
-  @Override
-  public void onMegaphoneDialogFragmentRequested(@NonNull DialogFragment dialogFragment) {
-    dialogFragment.show(getChildFragmentManager(), "megaphone_dialog");
-  }
-
   private void hideKeyboard() {
     InputMethodManager imm = ServiceUtil.getInputMethodManager(requireContext());
     imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0);
@@ -784,7 +669,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
         mainToolbarViewModel.getSearchEventsFlowable().subscribe(event -> {
           if (event instanceof MainToolbarViewModel.Event.Search.Open) {
             onSearchOpen();
-          } else if (event instanceof MainToolbarViewModel.Event.Search.Close) {
+          } if (event instanceof MainToolbarViewModel.Event.Search.Close) {
             onSearchClose();
           } else if (event instanceof MainToolbarViewModel.Event.Search.Query) {
             onSearchQueryUpdated(((MainToolbarViewModel.Event.Search.Query) event).getQuery());
@@ -801,7 +686,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
           } else if (event instanceof MainToolbarViewModel.Event.Chats.ClearFilter) {
             onClearFilterClick();
           } else if (event instanceof MainToolbarViewModel.Event.Chats.CloseArchive) {
-            NavHostFragment.findNavController(this).popBackStack();
+            NavHostFragment.findNavController(this).popBackStack(R.id.conversationListFragment, false);
           }
         })
     );
@@ -951,7 +836,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   private void initializeViewModel() {
     viewModel = new ViewModelProvider(this, new ConversationListViewModel.Factory(isArchived())).get(ConversationListViewModel.class);
 
-    lifecycleDisposable.add(viewModel.getMegaphoneState().subscribe(this::onMegaphoneChanged));
     lifecycleDisposable.add(viewModel.getConversationsState().subscribe(this::onConversationListChanged));
     lifecycleDisposable.add(viewModel.getHasNoConversations().subscribe(this::updateEmptyState));
     lifecycleDisposable.add(viewModel.getWebSocketState().subscribe(pipeState -> requireCallback().updateProxyStatus(pipeState)));
@@ -1020,37 +904,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     chatFolderAdapter.submitList(new ArrayList<>(folders));
   }
 
-  private void onMegaphoneChanged(@NonNull Megaphone megaphone) {
-    if (megaphone == Megaphone.NONE || isArchived() || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-      if (megaphoneContainer.resolved()) {
-        megaphoneContainer.get().setVisibility(View.GONE);
-        megaphoneContainer.get().removeAllViews();
-      }
-      return;
-    }
-
-    View view = MegaphoneViewBuilder.build(requireContext(), megaphone, this);
-
-    megaphoneContainer.get().removeAllViews();
-
-    if (view != null) {
-      megaphoneContainer.get().addView(view);
-      if (isSearchOpen() || actionMode != null) {
-        megaphoneContainer.get().setVisibility(View.GONE);
-      } else {
-        megaphoneContainer.get().setVisibility(View.VISIBLE);
-      }
-    } else {
-      megaphoneContainer.get().setVisibility(View.GONE);
-
-      if (megaphone.getOnVisibleListener() != null) {
-        megaphone.getOnVisibleListener().onEvent(megaphone, this);
-      }
-    }
-
-    viewModel.onMegaphoneVisible(megaphone);
-  }
-
   private void handleMarkAsRead(@NonNull Collection<Long> ids) {
     Context   context   = requireContext();
     Stopwatch stopwatch = new Stopwatch("mark-read");
@@ -1094,31 +947,27 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     int       count                 = selectedConversations.size();
     String    snackBarTitle         = getResources().getQuantityString(getArchivedSnackbarTitleRes(), count, count);
 
-    new SnackbarAsyncTask<Void>(getViewLifecycleOwner().getLifecycle(),
-                                coordinator,
-                                snackBarTitle,
-                                getString(R.string.ConversationListFragment_undo),
-                                getResources().getColor(R.color.amber_500),
-                                Snackbar.LENGTH_LONG,
-                                showProgress)
-    {
+    lifecycleDisposable.add(Completable
+        .fromAction(() -> archiveThreads(selectedConversations))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(() -> {
+          endActionModeIfActive();
 
-      @Override
-      protected void onPostExecute(Void result) {
-        super.onPostExecute(result);
-        endActionModeIfActive();
-      }
-
-      @Override
-      protected void executeAction(@Nullable Void parameter) {
-        archiveThreads(selectedConversations);
-      }
-
-      @Override
-      protected void reverseAction(@Nullable Void parameter) {
-        reverseArchiveThreads(selectedConversations);
-      }
-    }.executeOnExecutor(SignalExecutors.BOUNDED);
+          getNavigator().getViewModel().setSnackbar(new SnackbarState(
+              snackBarTitle,
+              new SnackbarState.ActionState(
+                  getString(R.string.ConversationListFragment_undo),
+                  R.color.amber_500,
+                  () -> {
+                    SignalExecutors.BOUNDED_IO.execute(() -> reverseArchiveThreads(selectedConversations));
+                    return Unit.INSTANCE;
+                  }
+              ),
+              showProgress,
+              SnackbarDuration.Long
+          ));
+        }));
   }
 
   @SuppressLint("StaticFieldLeak")
@@ -1194,10 +1043,13 @@ public class ConversationListFragment extends MainFragment implements ActionMode
                                                       .toList());
 
     if (toPin.size() + viewModel.getPinnedCount() > MAXIMUM_PINNED_CONVERSATIONS) {
-      Snackbar.make(fab,
-                    getString(R.string.conversation_list__you_can_only_pin_up_to_d_chats, MAXIMUM_PINNED_CONVERSATIONS),
-                    Snackbar.LENGTH_LONG)
-              .show();
+      getNavigator().getViewModel().setSnackbar(new SnackbarState(
+          getString(R.string.conversation_list__you_can_only_pin_up_to_d_chats, MAXIMUM_PINNED_CONVERSATIONS),
+          null,
+          false,
+          SnackbarDuration.Long
+      ));
+
       endActionModeIfActive();
       return;
     }
@@ -1266,38 +1118,9 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     });
   }
 
-  private void fadeOutButtonsAndMegaphone(int fadeDuration) {
-    if (fab != null) {
-      ViewUtil.fadeOut(fab, fadeDuration);
-    }
-    if (cameraFab != null) {
-      ViewUtil.fadeOut(cameraFab, fadeDuration);
-    }
-    if (megaphoneContainer != null && megaphoneContainer.resolved()) {
-      ViewUtil.fadeOut(megaphoneContainer.get(), fadeDuration);
-    }
-  }
-
-  private void fadeInButtonsAndMegaphone(int fadeDuration) {
-    if (fab != null) {
-      ViewUtil.fadeIn(fab, fadeDuration);
-    }
-    if (cameraFab != null) {
-      ViewUtil.fadeIn(cameraFab, fadeDuration);
-    }
-    if (megaphoneContainer != null && megaphoneContainer.resolved()) {
-      ViewUtil.fadeIn(megaphoneContainer.get(), fadeDuration);
-    }
-  }
-
   private void startActionMode() {
     actionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(ConversationListFragment.this);
     ViewUtil.animateIn(bottomActionBar, bottomActionBar.getEnterAnimation());
-    ViewUtil.fadeOut(fab, 250);
-    ViewUtil.fadeOut(cameraFab, 250);
-    if (megaphoneContainer.resolved()) {
-      ViewUtil.fadeOut(megaphoneContainer.get(), 250);
-    }
     requireCallback().onMultiSelectStarted();
   }
 
@@ -1311,25 +1134,15 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     actionMode.finish();
     actionMode = null;
     ViewUtil.animateOut(bottomActionBar, bottomActionBar.getExitAnimation());
-    ViewUtil.fadeIn(fab, 250);
-    ViewUtil.fadeIn(cameraFab, 250);
-    if (megaphoneContainer.resolved()) {
-      ViewUtil.fadeIn(megaphoneContainer.get(), 250);
-    }
     requireCallback().onMultiSelectFinished();
   }
 
   void updateEmptyState(boolean isConversationEmpty) {
     if (isConversationEmpty) {
       Log.i(TAG, "Received an empty data set.");
-      fab.startPulse(3 * 1000);
-      cameraFab.startPulse(3 * 1000);
 
       SignalStore.onboarding().setShowNewGroup(true);
       SignalStore.onboarding().setShowInviteFriends(true);
-    } else {
-      fab.stopPulse();
-      cameraFab.stopPulse();
     }
   }
 
@@ -1445,22 +1258,6 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   @Override
   public void onDestroyActionMode(ActionMode mode) {
     viewModel.endSelection();
-
-    TypedArray color = getActivity().getTheme().obtainStyledAttributes(new int[] { android.R.attr.statusBarColor });
-    WindowUtil.setStatusBarColor(getActivity().getWindow(), color.getColor(0, Color.BLACK));
-    color.recycle();
-
-    if (Build.VERSION.SDK_INT >= 23) {
-      TypedArray lightStatusBarAttr = getActivity().getTheme().obtainStyledAttributes(new int[] { android.R.attr.windowLightStatusBar });
-      int        current            = getActivity().getWindow().getDecorView().getSystemUiVisibility();
-      int statusBarMode = lightStatusBarAttr.getBoolean(0, false) ? current | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                                                                  : current & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-
-      getActivity().getWindow().getDecorView().setSystemUiVisibility(statusBarMode);
-
-      lightStatusBarAttr.recycle();
-    }
-
     endActionModeIfActive();
   }
 
@@ -1598,34 +1395,40 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     archiveDecoration.onArchiveStarted();
     itemAnimator.enable();
 
-    new SnackbarAsyncTask<Long>(getViewLifecycleOwner().getLifecycle(),
-                                coordinator,
-                                getResources().getQuantityString(R.plurals.ConversationListFragment_conversations_archived, 1, 1),
-                                getString(R.string.ConversationListFragment_undo),
-                                getResources().getColor(R.color.amber_500),
-                                Snackbar.LENGTH_LONG,
-                                false)
-    {
-      private final ThreadTable threadTable = SignalDatabase.threads();
+    lifecycleDisposable.add(
+        Single
+            .fromCallable(() -> {
+              List<Long> pinnedThreadIds = SignalDatabase.threads().getPinnedThreadIds();
+              SignalDatabase.threads().archiveConversation(threadId);
 
-      private List<Long> pinnedThreadIds;
+              ConversationUtil.refreshRecipientShortcuts();
 
-      @Override
-      protected void executeAction(@Nullable Long parameter) {
-        pinnedThreadIds = threadTable.getPinnedThreadIds();
-        threadTable.archiveConversation(threadId);
+              return pinnedThreadIds;
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(pinnedThreadIds -> {
+              getNavigator().getViewModel().setSnackbar(new SnackbarState(
+                  getResources().getQuantityString(R.plurals.ConversationListFragment_conversations_archived, 1, 1),
+                  new SnackbarState.ActionState(
+                      getString(R.string.ConversationListFragment_undo),
+                      R.color.amber_500,
+                      () -> {
+                        SignalExecutors.BOUNDED_IO.execute(() -> {
+                          SignalDatabase.threads().unarchiveConversation(threadId);
+                          SignalDatabase.threads().restorePins(pinnedThreadIds);
 
-        ConversationUtil.refreshRecipientShortcuts();
-      }
+                          ConversationUtil.refreshRecipientShortcuts();
+                        });
 
-      @Override
-      protected void reverseAction(@Nullable Long parameter) {
-        threadTable.unarchiveConversation(threadId);
-        threadTable.restorePins(pinnedThreadIds);
-
-        ConversationUtil.refreshRecipientShortcuts();
-      }
-    }.executeOnExecutor(SignalExecutors.BOUNDED, threadId);
+                        return Unit.INSTANCE;
+                      }
+                  ),
+                  false,
+                  SnackbarDuration.Long
+              ));
+            })
+    );
   }
 
   @Override
@@ -1714,14 +1517,15 @@ public class ConversationListFragment extends MainFragment implements ActionMode
   }
 
   private void onSearchOpen() {
-    fadeOutButtonsAndMegaphone(250);
+    chatListBackHandler.setEnabled(true);
   }
 
   private void onSearchClose() {
     if (list != null) {
       setAdapter(defaultAdapter);
     }
-    fadeInButtonsAndMegaphone(250);
+
+    chatListBackHandler.setEnabled(false);
   }
 
   private void onSearchQueryUpdated(@NonNull String query) {
@@ -1991,6 +1795,18 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     @Override
     public void onChatTypeClicked(@NonNull View view, @NonNull ContactSearchData.ChatTypeRow chatTypeRow, boolean isSelected) {
       throw new UnsupportedOperationException();
+    }
+  }
+
+  private class ChatListBackHandler extends OnBackPressedCallback {
+
+    public ChatListBackHandler(boolean enabled) {
+      super(enabled);
+    }
+
+    @Override
+    public void handleOnBackPressed() {
+      closeSearchIfOpen();
     }
   }
 

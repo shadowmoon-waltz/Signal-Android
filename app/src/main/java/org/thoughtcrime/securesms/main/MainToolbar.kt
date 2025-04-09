@@ -21,11 +21,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -116,7 +120,7 @@ interface MainToolbarCallback {
 }
 
 enum class MainToolbarMode {
-  NONE,
+  ACTION_MODE,
   FULL,
   BASIC,
   SEARCH
@@ -146,12 +150,14 @@ data class MainToolbarState(
   }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainToolbar(
   state: MainToolbarState,
   callback: MainToolbarCallback
 ) {
-  if (state.mode == MainToolbarMode.NONE) {
+  if (state.mode == MainToolbarMode.ACTION_MODE) {
+    TopAppBar(title = {})
     return
   }
 
@@ -186,7 +192,9 @@ fun MainToolbar(
             SearchToolbar(
               state = state,
               callback = callback,
-              modifier = Modifier.circularReveal(visibility, revealOffset)
+              modifier = Modifier
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .circularReveal(visibility, revealOffset)
             )
           }
         }
@@ -214,7 +222,7 @@ private fun SearchToolbar(
           onClick = callback::onCloseSearchClick
         ) {
           Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.symbol_arrow_left_24),
+            imageVector = ImageVector.vectorResource(R.drawable.symbol_arrow_start_24),
             contentDescription = null
           )
         }
@@ -237,6 +245,7 @@ private fun SearchToolbar(
         Text(text = stringResource(state.searchHint))
       },
       modifier = modifier
+        .systemBarsPadding()
         .background(color = state.toolbarColor ?: MaterialTheme.colorScheme.surface)
         .height(dimensionResource(R.dimen.signal_m3_toolbar_height))
         .padding(horizontal = 16.dp, vertical = 10.dp)
@@ -269,7 +278,7 @@ private fun ArchiveToolbar(
         callback.onCloseArchiveClick()
       }) {
         Icon(
-          imageVector = ImageVector.vectorResource(R.drawable.symbol_arrow_left_24),
+          imageVector = ImageVector.vectorResource(R.drawable.symbol_arrow_start_24),
           contentDescription = stringResource(R.string.CallScreenTopBar__go_back)
         )
       }
@@ -556,7 +565,7 @@ private fun ChatDropdownItems(state: MainToolbarState, callback: MainToolbarCall
         )
       },
       onClick = {
-        callback.onNewGroupClick()
+        callback.onClearPassphraseClick()
         onOptionSelected()
       }
     )

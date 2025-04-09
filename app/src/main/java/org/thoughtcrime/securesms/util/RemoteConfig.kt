@@ -121,10 +121,9 @@ object RemoteConfig {
     Log.i(TAG, "[Disk]   After : ${result.disk}")
   }
 
-  /** Only for rendering debug info.  */
   @JvmStatic
   @get:Synchronized
-  val debugMemoryValues: Map<String, Any>
+  val memoryValues: Map<String, Any>
     get() = TreeMap(REMOTE_VALUES)
 
   /** Only for rendering debug info.  */
@@ -1021,9 +1020,8 @@ object RemoteConfig {
   /** Whether unauthenticated chat web socket is backed by libsignal-net  */
   @JvmStatic
   @get:JvmName("libSignalWebSocketEnabled")
-  val libSignalWebSocketEnabled: Boolean by remoteBoolean(
+  val libSignalWebSocketEnabled: Boolean by remoteValue(
     key = "android.libsignalWebSocketEnabled",
-    defaultValue = false,
     hotSwappable = false
   ) { value ->
     value.asBoolean(false) || Environment.IS_NIGHTLY
@@ -1107,13 +1105,6 @@ object RemoteConfig {
     key = "android.useHevcEncoder",
     defaultValue = false,
     hotSwappable = false
-  )
-
-  /** Whether or not libsignal-net's CDSI lookups use the new route-based internals or the old ones */
-  val libsignalRouteBasedCDSILookup: Boolean by remoteBoolean(
-    key = "android.libsignal.libsignalRouteBasedCDSILookup",
-    defaultValue = true,
-    hotSwappable = true
   )
 
   /** Whether to allow different WindowSizeClasses to be used to determine screen layout */

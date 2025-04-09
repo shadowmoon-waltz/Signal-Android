@@ -68,7 +68,7 @@ public class SignalServiceAccountManager {
     return new SignalServiceAccountManager(
         null,
         null,
-        new PushServiceSocket(configuration, credentialProvider, signalAgent, gv2Operations.getProfileOperations(), automaticNetworkRetry),
+        new PushServiceSocket(configuration, credentialProvider, signalAgent, automaticNetworkRetry),
         gv2Operations
     );
   }
@@ -94,10 +94,6 @@ public class SignalServiceAccountManager {
 
   public WhoAmIResponse getWhoAmI() throws IOException {
     return NetworkResultUtil.toBasicLegacy(accountApi.whoAmI());
-  }
-
-  public void deleteAccount() throws IOException {
-    this.pushServiceSocket.deleteAccount();
   }
 
   /**

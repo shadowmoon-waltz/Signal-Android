@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -100,44 +101,48 @@ fun MainNavigationBar(
   state: MainNavigationState,
   onDestinationSelected: (MainNavigationDestination) -> Unit
 ) {
-  NavigationBar(
-    containerColor = SignalTheme.colors.colorSurface2,
-    contentColor = MaterialTheme.colorScheme.onSurface,
-    modifier = Modifier.height(if (state.compact) 48.dp else 80.dp)
-  ) {
-    val entries = remember(state.isStoriesFeatureEnabled) {
-      if (state.isStoriesFeatureEnabled) {
-        MainNavigationDestination.entries
-      } else {
-        MainNavigationDestination.entries.filterNot { it == MainNavigationDestination.STORIES }
-      }
-    }
-
-    entries.forEach { destination ->
-
-      val badgeCount = when (destination) {
-        MainNavigationDestination.CHATS -> state.chatsCount
-        MainNavigationDestination.CALLS -> state.callsCount
-        MainNavigationDestination.STORIES -> state.storiesCount
+  Box(modifier = Modifier.background(color = SignalTheme.colors.colorSurface2)) {
+    NavigationBar(
+      containerColor = SignalTheme.colors.colorSurface2,
+      contentColor = MaterialTheme.colorScheme.onSurface,
+      modifier = Modifier
+        .navigationBarsPadding()
+        .height(if (state.compact) 48.dp else 80.dp)
+    ) {
+      val entries = remember(state.isStoriesFeatureEnabled) {
+        if (state.isStoriesFeatureEnabled) {
+          MainNavigationDestination.entries
+        } else {
+          MainNavigationDestination.entries.filterNot { it == MainNavigationDestination.STORIES }
+        }
       }
 
-      val selected = state.selectedDestination == destination
-      NavigationBarItem(
-        selected = selected,
-        icon = {
-          NavigationDestinationIcon(
-            destination = destination,
-            selected = selected
-          )
-        },
-        label = if (state.compact) null else {
-          { NavigationDestinationLabel(destination) }
-        },
-        onClick = {
-          onDestinationSelected(destination)
-        },
-        modifier = Modifier.drawNavigationBarBadge(count = badgeCount, compact = state.compact)
-      )
+      entries.forEach { destination ->
+
+        val badgeCount = when (destination) {
+          MainNavigationDestination.CHATS -> state.chatsCount
+          MainNavigationDestination.CALLS -> state.callsCount
+          MainNavigationDestination.STORIES -> state.storiesCount
+        }
+
+        val selected = state.selectedDestination == destination
+        NavigationBarItem(
+          selected = selected,
+          icon = {
+            NavigationDestinationIcon(
+              destination = destination,
+              selected = selected
+            )
+          },
+          label = if (state.compact) null else {
+            { NavigationDestinationLabel(destination) }
+          },
+          onClick = {
+            onDestinationSelected(destination)
+          },
+          modifier = Modifier.drawNavigationBarBadge(count = badgeCount, compact = state.compact)
+        )
+      }
     }
   }
 }
@@ -181,13 +186,14 @@ private fun Modifier.drawNavigationBarBadge(count: Int, compact: Boolean): Modif
         drawContent()
 
         val xOffset = size.width.toFloat() / 2f + xOffsetExtra
+        val yRadius = size.height.toFloat() / 2f
 
         if (size != IntSize.Zero) {
           drawRoundRect(
             color = color,
             topLeft = Offset(xOffset, yOffset),
             size = Size(textLayoutResult.size.width.toFloat() + padding * 2, textLayoutResult.size.height.toFloat()),
-            cornerRadius = CornerRadius(20f, 20f)
+            cornerRadius = CornerRadius(yRadius, yRadius)
           )
 
           drawText(
