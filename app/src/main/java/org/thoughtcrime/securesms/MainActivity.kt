@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.Toast
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -22,13 +23,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ThreePaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -38,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.compose.AndroidFragment
@@ -109,7 +113,6 @@ import org.thoughtcrime.securesms.util.CachedInflater
 import org.thoughtcrime.securesms.util.CommunicationActions
 import org.thoughtcrime.securesms.util.DynamicNoActionBarTheme
 import org.thoughtcrime.securesms.util.DynamicTheme
-import org.thoughtcrime.securesms.util.RemoteConfig
 import org.thoughtcrime.securesms.util.SplashScreenUtil
 import org.thoughtcrime.securesms.util.viewModel
 import org.thoughtcrime.securesms.window.AppScaffold
@@ -173,10 +176,16 @@ class MainActivity : PassphraseRequiredActivity(), VoiceNoteMediaControllerOwner
 
   @OptIn(ExperimentalMaterial3AdaptiveApi::class)
   override fun onCreate(savedInstanceState: Bundle?, ready: Boolean) {
-    enableEdgeToEdge()
-
     AppStartup.getInstance().onCriticalRenderEventStart()
-    super.onCreate(savedInstanceState, ready)
+
+    enableEdgeToEdge(
+      navigationBarStyle = if (DynamicTheme.isDarkTheme(this)) {
+        SystemBarStyle.dark(0)
+      } else {
+        SystemBarStyle.light(0, 0)
+      }
+    )
+
     conversationListTabsViewModel
 
     AppForegroundObserver.addListener(object : AppForegroundObserver.Listener {
@@ -230,7 +239,7 @@ class MainActivity : PassphraseRequiredActivity(), VoiceNoteMediaControllerOwner
 
       LaunchedEffect(detailLocation) {
         if (detailLocation is MainNavigationDetailLocation.Conversation) {
-          if (RemoteConfig.largeScreenUi) {
+          if (SignalStore.internal.largeScreenUi) {
             scaffoldNavigator.navigateTo(ThreePaneScaffoldRole.Primary, detailLocation)
           } else {
             startActivity((detailLocation as MainNavigationDetailLocation.Conversation).intent)
@@ -238,7 +247,7 @@ class MainActivity : PassphraseRequiredActivity(), VoiceNoteMediaControllerOwner
         }
       }
 
-      SignalTheme(isDarkMode = DynamicTheme.isDarkTheme(LocalContext.current)) {
+      MainContainer {
         AppScaffold(
           navigator = scaffoldNavigator,
           bottomNavContent = {
@@ -330,6 +339,32 @@ class MainActivity : PassphraseRequiredActivity(), VoiceNoteMediaControllerOwner
     CachedInflater.from(this).clear()
 
     lifecycleDisposable += vitalsViewModel.vitalsState.subscribe(this::presentVitalsState)
+  }
+
+  @Composable
+  private fun MainContainer(content: @Composable BoxWithConstraintsScope.() -> Unit) {
+    val windowSizeClass = WindowSizeClass.rememberWindowSizeClass()
+    val modifier = if (windowSizeClass.isLandscape()) {
+      Modifier.displayCutoutPadding()
+    } else {
+      Modifier
+    }
+
+    val backgroundColor = if (windowSizeClass.isCompact()) {
+      MaterialTheme.colorScheme.surface
+    } else {
+      SignalTheme.colors.colorSurface1
+    }
+
+    SignalTheme(isDarkMode = DynamicTheme.isDarkTheme(this)) {
+      BoxWithConstraints(
+        modifier = Modifier
+          .background(color = backgroundColor)
+          .then(modifier)
+      ) {
+        content()
+      }
+    }
   }
 
   override fun getIntent(): Intent {

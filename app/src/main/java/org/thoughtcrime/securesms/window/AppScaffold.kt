@@ -32,6 +32,7 @@ import androidx.window.core.ExperimentalWindowCoreApi
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import org.signal.core.ui.compose.Previews
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.main.MainNavigationBar
 import org.thoughtcrime.securesms.main.MainNavigationRail
 import org.thoughtcrime.securesms.main.MainNavigationState
@@ -65,13 +66,14 @@ enum class WindowSizeClass(
   fun isMedium(): Boolean = this == MEDIUM_PORTRAIT || this == MEDIUM_LANDSCAPE
   fun isExtended(): Boolean = this == EXTENDED_PORTRAIT || this == EXTENDED_LANDSCAPE
 
-  companion object {
+  fun isLandscape(): Boolean = this == COMPACT_LANDSCAPE || this == MEDIUM_LANDSCAPE || this == EXTENDED_LANDSCAPE
 
+  companion object {
     @OptIn(ExperimentalWindowCoreApi::class)
     fun Resources.getWindowSizeClass(): WindowSizeClass {
       val orientation = configuration.orientation
 
-      if (!RemoteConfig.largeScreenUi) {
+      if (isForcedCompact()) {
         return getCompactSizeClassForOrientation(orientation)
       }
 
@@ -84,12 +86,23 @@ enum class WindowSizeClass(
       return getSizeClassForOrientationAndSystemSizeClass(orientation, windowSizeClass)
     }
 
+    fun isForcedCompact(): Boolean {
+      return !SignalStore.internal.largeScreenUi
+    }
+
     @Composable
-    fun rememberWindowSizeClass(): WindowSizeClass {
+    fun checkForcedCompact(): Boolean {
+      return !LocalInspectionMode.current && isForcedCompact()
+    }
+
+    @Composable
+    fun rememberWindowSizeClass(forceCompact: Boolean = checkForcedCompact()): WindowSizeClass {
       val orientation = LocalConfiguration.current.orientation
 
-      if (!LocalInspectionMode.current && !RemoteConfig.largeScreenUi) {
-        return getCompactSizeClassForOrientation(orientation)
+      if (forceCompact) {
+        return remember(orientation) {
+          getCompactSizeClassForOrientation(orientation)
+        }
       }
 
       val wsc = currentWindowAdaptiveInfo().windowSizeClass
@@ -149,7 +162,19 @@ fun AppScaffold(
   bottomNavContent: @Composable () -> Unit = {},
   listContent: @Composable () -> Unit
 ) {
+  val isForcedCompact = WindowSizeClass.checkForcedCompact()
   val windowSizeClass = WindowSizeClass.rememberWindowSizeClass()
+
+  if (isForcedCompact) {
+    ListAndNavigation(
+      listContent = listContent,
+      navRailContent = navRailContent,
+      bottomNavContent = bottomNavContent,
+      windowSizeClass = windowSizeClass
+    )
+
+    return
+  }
 
   if (windowSizeClass.isMedium()) {
     Row {
