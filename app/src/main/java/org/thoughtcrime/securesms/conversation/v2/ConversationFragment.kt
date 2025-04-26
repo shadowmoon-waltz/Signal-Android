@@ -258,7 +258,7 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.linkpreview.LinkPreview
 import org.thoughtcrime.securesms.linkpreview.LinkPreviewViewModelV2
 import org.thoughtcrime.securesms.longmessage.LongMessageFragment
-import org.thoughtcrime.securesms.main.MainNavigationDestination
+import org.thoughtcrime.securesms.main.MainNavigationListLocation
 import org.thoughtcrime.securesms.mediaoverview.MediaOverviewActivity
 import org.thoughtcrime.securesms.mediapreview.MediaIntentFactory
 import org.thoughtcrime.securesms.mediapreview.MediaPreviewV2Activity
@@ -332,7 +332,6 @@ import org.thoughtcrime.securesms.util.ViewUtil
 import org.thoughtcrime.securesms.util.WindowUtil
 import org.thoughtcrime.securesms.util.atMidnight
 import org.thoughtcrime.securesms.util.atUTC
-import org.thoughtcrime.securesms.util.createActivityViewModel
 import org.thoughtcrime.securesms.util.doAfterNextLayout
 import org.thoughtcrime.securesms.util.fragments.requireListener
 import org.thoughtcrime.securesms.util.getQuote
@@ -478,7 +477,9 @@ class ConversationFragment :
     StickerSuggestionsViewModel()
   }
 
-  private lateinit var inlineQueryViewModel: InlineQueryViewModelV2
+  private val inlineQueryViewModel: InlineQueryViewModelV2 by viewModel {
+    InlineQueryViewModelV2(conversationRecipientRepository)
+  }
 
   private val shareDataTimestampViewModel: ShareDataTimestampViewModel by activityViewModels()
 
@@ -595,6 +596,8 @@ class ConversationFragment :
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     binding.toolbar.isBackInvokedCallbackEnabled = false
 
+    binding.root.setUseWindowTypes(!resources.getWindowSizeClass().isSplitPane())
+
     disposables.bindTo(viewLifecycleOwner)
 
     if (requireActivity() is ConversationActivity) {
@@ -603,8 +606,6 @@ class ConversationFragment :
 
     markReadHelper = MarkReadHelper(ConversationId.forConversation(args.threadId), requireContext(), viewLifecycleOwner)
     markReadHelper.ignoreViewReveals()
-
-    inlineQueryViewModel = createActivityViewModel { InlineQueryViewModelV2(recipientRepository = conversationRecipientRepository) }
 
     attachmentManager = AttachmentManager(requireContext(), requireView(), AttachmentManagerListener())
 
@@ -682,6 +683,8 @@ class ConversationFragment :
 
     if (!args.conversationScreenType.isInBubble) {
       AppDependencies.messageNotifier.setVisibleThread(ConversationId.forConversation(args.threadId))
+    } else {
+      AppDependencies.messageNotifier.setVisibleBubbleThread(ConversationId.forConversation(args.threadId))
     }
 
     viewModel.updateIdentityRecordsInBackground()
@@ -712,6 +715,8 @@ class ConversationFragment :
 
     if (!args.conversationScreenType.isInBubble) {
       AppDependencies.messageNotifier.clearVisibleThread()
+    } else {
+      AppDependencies.messageNotifier.clearVisibleBubbleThread()
     }
 
     if (activity?.isFinishing == true) {
@@ -1376,12 +1381,11 @@ class ConversationFragment :
   }
 
   private fun presentNavigationIconForNormal() {
-    val windowSizeClass = resources.getWindowSizeClass()
-
-    if (windowSizeClass.isCompact()) {
+    if (!resources.getWindowSizeClass().isSplitPane()) {
       binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_left_24)
       binding.toolbar.setNavigationContentDescription(R.string.ConversationFragment__content_description_back_button)
       binding.toolbar.setNavigationOnClickListener {
+        binding.root.hideKeyboard(composeText)
         requireActivity().onBackPressedDispatcher.onBackPressed()
       }
     } else {
@@ -1571,7 +1575,7 @@ class ConversationFragment :
   }
 
   private fun handleShareOrDraftData(inputReadyState: InputReadyState, data: ShareOrDraftData) {
-    shareDataTimestampViewModel.timestamp = args.shareDataTimestamp
+    shareDataTimestampViewModel.setTimestampFromConversationArgs(args)
 
     if (inputReadyState.isAnnouncementGroup == true && inputReadyState.isAdmin == false) {
       Toast.makeText(requireContext(), R.string.MultiselectForwardFragment__only_admins_can_send_messages_to_this_group, Toast.LENGTH_SHORT).show()
@@ -1585,7 +1589,10 @@ class ConversationFragment :
     when (data) {
       is ShareOrDraftData.SendKeyboardImage -> sendMessageWithoutComposeInput(slide = data.slide, clearCompose = false)
       is ShareOrDraftData.SendSticker -> sendMessageWithoutComposeInput(slide = data.slide, clearCompose = true)
-      is ShareOrDraftData.SetText -> composeText.setDraftText(data.text)
+      is ShareOrDraftData.SetText -> {
+        composeText.setDraftText(data.text)
+        inputPanel.clickOnComposeInput()
+      }
       is ShareOrDraftData.SetLocation -> attachmentManager.setLocation(data.location, MediaConstraints.getPushMediaConstraints())
       is ShareOrDraftData.SetEditMessage -> {
         composeText.setDraftText(data.draftText)
@@ -2836,6 +2843,17 @@ class ConversationFragment :
     }
   }
 
+  fun handleMoveToQuotePosition(quoteId: Long, authorId: RecipientId) {
+    disposables += viewModel.getQuotedMessagePosition(quoteId, authorId)
+      .subscribeBy {
+        if (it >= 0) {
+          moveToPosition(it)
+        } else {
+          toast(R.string.ConversationFragment_quoted_message_no_longer_available)
+        }
+      }
+  }
+
   //endregion Scroll Handling
 
   // region Conversation Callbacks
@@ -2869,14 +2887,7 @@ class ConversationFragment :
         return
       }
 
-      disposables += viewModel.getQuotedMessagePosition(quote)
-        .subscribeBy {
-          if (it >= 0) {
-            moveToPosition(it)
-          } else {
-            toast(R.string.ConversationFragment_quoted_message_no_longer_available)
-          }
-        }
+      handleMoveToQuotePosition(quote.id, quote.author)
     }
 
     override fun onLinkPreviewClicked(linkPreview: LinkPreview) {
@@ -3145,7 +3156,7 @@ class ConversationFragment :
       } else if ("username_edit" == action) {
         startActivity(EditProfileActivity.getIntentForUsernameEdit(requireContext()))
       } else if ("calls_tab" == action) {
-        startActivity(MainActivity.clearTopAndOpenTab(requireContext(), MainNavigationDestination.CALLS))
+        startActivity(MainActivity.clearTopAndOpenTab(requireContext(), MainNavigationListLocation.CALLS))
       } else if ("chat_folder" == action) {
         startActivity(AppSettingsActivity.chatFolders(requireContext()))
       }
@@ -3376,7 +3387,7 @@ class ConversationFragment :
                 multiselectItemDecoration.hideShade(binding.conversationItemRecycler)
                 ViewUtil.fadeOut(binding.reactionsShade, resources.getInteger(R.integer.reaction_scrubber_hide_duration), View.GONE)
 
-                if (focusedView == composeText) {
+                if (focusedView == composeText || searchMenuItem?.isActionViewExpanded == true) {
                   container.showSoftkey(composeText)
                 }
               }
@@ -4315,6 +4326,10 @@ class ConversationFragment :
       draftViewModel.clearQuoteDraft()
     }
 
+    override fun onQuoteClicked(quoteId: Long, authorId: RecipientId) {
+      handleMoveToQuotePosition(quoteId = quoteId, authorId = authorId)
+    }
+
     override fun onEnterEditMode() {
       updateToggleButtonState()
       previousPage = keyboardPagerViewModel.page().value
@@ -4368,7 +4383,7 @@ class ConversationFragment :
     }
 
     private fun sendKeyboardImage(uri: Uri, contentType: String, keyboardImageDetails: KeyboardUtil.ImageDetails?) {
-      if (keyboardImageDetails == null || !keyboardImageDetails.hasTransparency) {
+      if (keyboardImageDetails == null || !keyboardImageDetails.isSticker) {
         setMedia(uri, requireNotNull(SlideFactory.MediaType.from(contentType)))
         return
       }
@@ -4451,7 +4466,11 @@ class ConversationFragment :
       isEnabled = false
     }
 
-    override fun onKeyboardShown() = Unit
+    override fun onKeyboardShown() {
+      if (searchMenuItem?.isActionViewExpanded == true && searchMenuItem?.actionView?.hasFocus() == false) {
+        searchMenuItem?.actionView?.requestFocus()
+      }
+    }
 
     override fun onKeyboardHidden() {
       closeEmojiSearch()
