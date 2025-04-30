@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import org.signal.core.util.concurrent.LifecycleDisposable
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.mediasend.Media
 import org.thoughtcrime.securesms.mediasend.v2.MediaSelectionNavigator
@@ -30,6 +32,8 @@ class MediaSelectionGalleryFragment : Fragment(R.layout.fragment_container), Med
     ownerProducer = { requireActivity() }
   )
 
+  private val lifecycleDisposable = LifecycleDisposable()
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     val args = arguments
     val isFirst = when {
@@ -39,6 +43,7 @@ class MediaSelectionGalleryFragment : Fragment(R.layout.fragment_container), Med
       else -> false
     }
 
+    lifecycleDisposable.bindTo(this)
     sharedViewModel.setSuppressEmptyError(isFirst)
     mediaGalleryFragment = ensureMediaGalleryFragment()
 
@@ -47,6 +52,12 @@ class MediaSelectionGalleryFragment : Fragment(R.layout.fragment_container), Med
     sharedViewModel.state.observe(viewLifecycleOwner) { state ->
       mediaGalleryFragment.onViewStateUpdated(MediaGalleryFragment.ViewState(state.selectedMedia))
     }
+
+    lifecycleDisposable += sharedViewModel.mediaErrors
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribe {
+        mediaGalleryFragment.onMediaErrorOccurred()
+      }
 
     requireActivity().onBackPressedDispatcher.addCallback(
       viewLifecycleOwner,
