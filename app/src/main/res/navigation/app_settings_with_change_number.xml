@@ -540,7 +540,7 @@
 
     <fragment
         android:id="@+id/setIdentityKeysFragment"
-        android:name="org.thoughtcrime.securesms.components.settings.app.wrapped.WrappedSetIdentityKeysFragment"
+        android:name="org.thoughtcrime.securesms.preferences.SetIdentityKeysFragment"
         android:label="set_identity_keys_fragment" />
     <!-- endregion -->
 

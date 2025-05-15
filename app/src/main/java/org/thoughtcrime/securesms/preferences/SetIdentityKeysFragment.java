@@ -11,7 +11,9 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import org.thoughtcrime.securesms.R;
 
@@ -43,10 +45,6 @@ public class SetIdentityKeysFragment extends Fragment {
 
   private final int              authenticators = Authenticators.BIOMETRIC_STRONG | Authenticators.BIOMETRIC_WEAK | Authenticators.DEVICE_CREDENTIAL;
   private boolean                hadScreenLock = true;
-
-  public static SetIdentityKeysFragment newInstance() {
-    return new SetIdentityKeysFragment();
-  }
 
   @Override
   public @Nullable View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -155,6 +153,9 @@ public class SetIdentityKeysFragment extends Fragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    Toolbar toolbar = view.findViewById(R.id.toolbar);
+    toolbar.setNavigationOnClickListener(v -> Navigation.findNavController(v).popBackStack());
+
     this.publicKeyText  = view.findViewById(R.id.set_identity_keys_public_key);
     this.privateKeyText = view.findViewById(R.id.set_identity_keys_private_key);
     this.applyButton    = view.findViewById(R.id.set_identity_keys_apply);

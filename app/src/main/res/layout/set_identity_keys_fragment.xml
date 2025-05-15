@@ -4,9 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
+  <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:navigationIcon="@drawable/symbol_arrow_start_24"
+      app:title="@string/ForkSettingsFragment__view_set_identity_keys" />
+                
   <TextView
       android:id="@+id/set_identity_keys_public_key_title"
       android:layout_width="match_parent"
@@ -15,7 +24,7 @@
       android:fontFamily="sans-serif-medium"
       android:textColor="@color/signal_accent_primary"
       android:text="Public key"
-      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/toolbar"
       app:layout_constraintStart_toStartOf="parent"/>
 
   <EditText
