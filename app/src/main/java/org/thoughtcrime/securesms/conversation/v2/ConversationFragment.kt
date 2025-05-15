@@ -49,7 +49,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutManagerCompat
@@ -123,7 +122,6 @@ import org.thoughtcrime.securesms.calls.YouAreAlreadyInACallSnackbar
 import org.thoughtcrime.securesms.components.AnimatingToggle
 import org.thoughtcrime.securesms.components.ComposeText
 import org.thoughtcrime.securesms.components.ConversationSearchBottomBar
-import org.thoughtcrime.securesms.components.DeleteSyncEducationDialog
 import org.thoughtcrime.securesms.components.HidingLinearLayout
 import org.thoughtcrime.securesms.components.InputAwareConstraintLayout
 import org.thoughtcrime.securesms.components.InputPanel
@@ -131,6 +129,7 @@ import org.thoughtcrime.securesms.components.InsetAwareConstraintLayout
 import org.thoughtcrime.securesms.components.ScrollToPositionDelegate
 import org.thoughtcrime.securesms.components.SendButton
 import org.thoughtcrime.securesms.components.ViewBinderDelegate
+import org.thoughtcrime.securesms.components.compose.DeleteSyncEducationDialog
 import org.thoughtcrime.securesms.components.emoji.EmojiEventListener
 import org.thoughtcrime.securesms.components.emoji.MediaKeyboard
 import org.thoughtcrime.securesms.components.emoji.RecentEmojiPageModel
@@ -389,6 +388,7 @@ class ConversationFragment :
 
     private const val SCROLL_HEADER_ANIMATION_DURATION: Long = 100L
     private const val SCROLL_HEADER_CLOSE_DELAY: Long = SCROLL_HEADER_ANIMATION_DURATION * 4
+    private const val IS_SCROLLED_TO_BOTTOM_THRESHOLD: Int = 2
   }
 
   private val args: ConversationIntents.Args by lazy {
@@ -671,6 +671,11 @@ class ConversationFragment :
     outState.putBoolean(SAVED_STATE_IS_SEARCH_REQUESTED, isSearchRequested)
   }
 
+  override fun onStart() {
+    super.onStart()
+    recomputeMessageDates(forceUpdate = true)
+  }
+
   override fun onResume() {
     super.onResume()
 
@@ -834,7 +839,7 @@ class ConversationFragment :
   }
 
   override fun onStickerManagementClicked() {
-    startActivity(StickerManagementActivity.getIntent(requireContext()))
+    startActivity(StickerManagementActivity.createIntent(requireContext()))
     container.hideInput()
   }
 
@@ -943,6 +948,7 @@ class ConversationFragment :
             firstRender = false
             binding.conversationItemRecycler.doAfterNextLayout {
               SignalLocalMetrics.ConversationOpen.onRenderFinished()
+              (requireActivity() as? MainActivity)?.onFirstRender()
               doAfterFirstRender()
             }
           }
@@ -1183,12 +1189,7 @@ class ConversationFragment :
 
     getVoiceNoteMediaController().voiceNotePlaybackState.observe(viewLifecycleOwner, inputPanel.playbackStateObserver)
 
-    val conversationUpdateTick = ConversationUpdateTick {
-      disposables += ConversationMessageComputeWorkers.recomputeFormattedDate(
-        requireContext(),
-        adapter.currentList.filterIsInstance<ConversationMessageElement>()
-      ).observeOn(AndroidSchedulers.mainThread()).subscribeBy { adapter.updateTimestamps() }
-    }
+    val conversationUpdateTick = ConversationUpdateTick { recomputeMessageDates() }
 
     viewLifecycleOwner.lifecycle.addObserver(conversationUpdateTick)
 
@@ -1196,6 +1197,17 @@ class ConversationFragment :
       composeText.requestFocus()
       binding.conversationInputPanel.quickAttachmentToggle.disable()
     }
+  }
+
+  private fun recomputeMessageDates(forceUpdate: Boolean = false) {
+    disposables += ConversationMessageComputeWorkers
+      .recomputeFormattedDate(
+        context = requireContext(),
+        items = adapter.currentList.filterIsInstance<ConversationMessageElement>(),
+        forceUpdate = forceUpdate
+      )
+      .observeOn(AndroidSchedulers.mainThread())
+      .subscribeBy { adapter.updateTimestamps() }
   }
 
   private fun initializeInlineSearch() {
@@ -1899,6 +1911,8 @@ class ConversationFragment :
       stickerRecord.size,
       stickerLocator,
       stickerRecord.contentType
+        .takeIf { it.isNotBlank() }
+        ?: MediaUtil.IMAGE_WEBP
     )
 
     sendMessageWithoutComposeInput(slide = slide, clearCompose = clearCompose)
@@ -1929,7 +1943,7 @@ class ConversationFragment :
   }
 
   private fun sendMessage(
-    body: String = composeText.editableText.toString(),
+    body: String = composeText.editableText.toString().trim(),
     mentions: List<Mention> = composeText.mentions,
     bodyRanges: BodyRangeList? = composeText.styling,
     messageToEdit: MessageId? = inputPanel.editMessageId,
@@ -2693,8 +2707,17 @@ class ConversationFragment :
     }
   }
 
+  /**
+   * The methods used in this method are taken directly from View.canScrollVertically(-1)'s code path.
+   */
   private fun isScrolledToBottom(): Boolean {
-    return !binding.conversationItemRecycler.canScrollVertically(1)
+    return with(binding.conversationItemRecycler) {
+      val offset = computeVerticalScrollOffset()
+      val range = computeVerticalScrollRange() - computeVerticalScrollExtent()
+      val delta = range - offset
+
+      delta <= IS_SCROLLED_TO_BOTTOM_THRESHOLD
+    }
   }
 
   private fun isScrolledPastButtonThreshold(): Boolean {
@@ -2950,7 +2973,7 @@ class ConversationFragment :
       val activity = activity ?: return
       ViewCompat.setTransitionName(avatarTransitionView, "avatar")
       val bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, avatarTransitionView, "avatar").toBundle()
-      ActivityCompat.startActivity(activity, SharedContactDetailsActivity.getIntent(activity, contact), bundle)
+      activity.startActivity(SharedContactDetailsActivity.getIntent(activity, contact), bundle)
     }
 
     override fun onAddToContactsClicked(contact: Contact) {
@@ -3646,7 +3669,7 @@ class ConversationFragment :
         binding.toolbar
       )
 
-      ActivityCompat.startActivity(requireContext(), intent, bundle)
+      requireActivity().startActivity(intent, bundle)
     }
 
     override fun handleLeavePushGroup() {
@@ -3697,7 +3720,7 @@ class ConversationFragment :
         binding.toolbar
       )
 
-      ActivityCompat.startActivity(requireActivity(), intent, bundle)
+      requireActivity().startActivity(intent, bundle)
     }
 
     override fun handleSelectMessageExpiration() {
@@ -4301,6 +4324,10 @@ class ConversationFragment :
         )
         .onAnyDenied { Toast.makeText(this@ConversationFragment.requireContext(), R.string.ConversationActivity_signal_needs_microphone_access_voice_message, Toast.LENGTH_LONG).show() }
         .execute()
+    }
+
+    override fun onRecorderAlreadyInUse() {
+      toast(R.string.ConversationFragment_cannot_record_voice_message_during_call)
     }
 
     override fun onEmojiToggle() {
