@@ -1,6 +1,3 @@
-keystore.release.properties
-*.jks
-
 .classpath
 captures/
 project.properties

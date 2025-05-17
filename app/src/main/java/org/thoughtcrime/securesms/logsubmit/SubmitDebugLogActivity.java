@@ -134,15 +134,19 @@ public class SubmitDebugLogActivity extends BaseActivity implements SubmitDebugL
     } else if (item.getItemId() == R.id.menu_done_editing_log) {
       viewModel.onDoneEditingButtonPressed();
     } else if (item.getItemId() == R.id.menu_save) {
-      Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-      intent.addCategory(Intent.CATEGORY_OPENABLE);
-      intent.setType("application/zip");
-      intent.putExtra(Intent.EXTRA_TITLE, "signal-log-" + System.currentTimeMillis() + ".zip");
-
-      startActivityForResult(intent, CODE_SAVE);
+      onSaveClicked();
     }
 
     return false;
+  }
+
+  private void onSaveClicked() {
+    Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+    intent.setType("application/zip");
+    intent.putExtra(Intent.EXTRA_TITLE, "SignalSW-log-" + System.currentTimeMillis() + ".zip");
+
+    startActivityForResult(intent, CODE_SAVE);
   }
 
   @Override
@@ -185,7 +189,8 @@ public class SubmitDebugLogActivity extends BaseActivity implements SubmitDebugL
     this.lineList.setAdapter(adapter);
     this.lineList.setItemAnimator(null);
 
-    submitButton.setOnClickListener(v -> onSubmitClicked());
+    submitButton.setText(R.string.SubmitDebugLogActivity_save);
+    submitButton.setOnClickListener(v -> onSaveClicked());
 
     scrollToBottomButton.setOnClickListener(v -> lineList.scrollToPosition(adapter.getItemCount() - 1));
     scrollToTopButton.setOnClickListener(v -> lineList.scrollToPosition(0));
@@ -220,7 +225,7 @@ public class SubmitDebugLogActivity extends BaseActivity implements SubmitDebugL
     if (progressCard != null && lines.size() > 0) {
       progressCard.setVisibility(View.GONE);
 
-      warningBanner.setVisibility(View.VISIBLE);
+      //warningBanner.setVisibility(View.VISIBLE);
       submitButton.setVisibility(View.VISIBLE);
     }
 
@@ -309,6 +314,7 @@ public class SubmitDebugLogActivity extends BaseActivity implements SubmitDebugL
     builder.show();
   }
 
+  /*
   private void onSubmitClicked() {
     submitButton.setSpinning();
 
@@ -322,4 +328,5 @@ public class SubmitDebugLogActivity extends BaseActivity implements SubmitDebugL
       submitButton.cancelSpinning();
     });
   }
+  */
 }

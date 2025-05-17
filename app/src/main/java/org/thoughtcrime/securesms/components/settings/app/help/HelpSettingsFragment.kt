@@ -80,7 +80,6 @@ class HelpSettingsFragment : ComposeFragment() {
           )
         }
 
-        /*
         item {
           Rows.TextRow(
             text = stringResource(id = R.string.HelpSettingsFragment__debug_log),
@@ -89,7 +88,6 @@ class HelpSettingsFragment : ComposeFragment() {
             }
           )
         }
-        */
 
         item {
           Rows.TextRow(
