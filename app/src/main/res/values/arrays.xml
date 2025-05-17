@@ -378,6 +378,7 @@
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
         <item>@string/ForkSettingsFragment__select_multiple</item>
+        <item>@string/conversation_selection__menu_edit</item>
     </string-array>
 
     <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
@@ -394,6 +395,7 @@
         <item>show_options</item>
         <item>note_to_self</item>
         <item>multi_select</item>
+        <item>edit</item>
     </string-array>
 
     <string-array name="ForkSettingsFragment__swipe_to_left_action__entries">
@@ -408,6 +410,7 @@
         <item>@string/ForkSettingsFragment__show_options</item>
         <item>@string/note_to_self</item>
         <item>@string/ForkSettingsFragment__select_multiple</item>
+        <item>@string/conversation_selection__menu_edit</item>
     </string-array>
 
     <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
@@ -424,6 +427,7 @@
         <item>show_options</item>
         <item>note_to_self</item>
         <item>multi_select</item>
+        <item>edit</item>
     </string-array>
 
     <string-array name="ScreenLockSettingsFragment__labels">

@@ -458,6 +458,8 @@ public final class ConversationItem extends RelativeLayout implements BindableCo
       icon.setImageResource(R.drawable.ic_note_24);
     } else if (SwipeActionTypes.MULTI_SELECT.equals(action)) {
       icon.setImageResource(R.drawable.symbol_check_circle_24);
+    } else if (SwipeActionTypes.EDIT.equals(action)) {
+      icon.setImageResource(R.drawable.symbol_edit_24);
     } else { // for SwipeActionTypes.DEFAULT, SwipeActionTypes.NONE, and any other string
       icon.setImageResource(defaultDrawableId);
     }

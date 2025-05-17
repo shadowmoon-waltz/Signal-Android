@@ -31,6 +31,7 @@ public interface SwipeActionTypes {
   public static final String SHOW_OPTIONS = "show_options";
   public static final String NOTE_TO_SELF = "note_to_self";
   public static final String MULTI_SELECT = "multi_select";
+  public static final String EDIT = "edit";
 
   public static final String DEFAULT_FOR_RIGHT = REPLY;
   public static final String DEFAULT_FOR_LEFT = NONE;

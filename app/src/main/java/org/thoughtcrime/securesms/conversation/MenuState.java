@@ -235,6 +235,14 @@ public final class MenuState {
     return (!isActionMessage(messageRecord));
   }
 
+  public static boolean canEditMessage(@NonNull ConversationMessage conversationMessage) {
+    MessageRecord messageRecord = conversationMessage.getMessageRecord();
+    return (!isActionMessage(messageRecord) &&
+            messageRecord.getBody().length() > 0 &&
+            !conversationMessage.getOriginalMessage().isFailed() &&
+            MessageConstraintsUtil.isValidEditMessageSend(conversationMessage.getOriginalMessage(), System.currentTimeMillis()));
+  }
+
   public static boolean isActionMessage(@NonNull MessageRecord messageRecord) {
     return messageRecord.isInMemoryMessageRecord() || messageRecord.isUpdate();
   }

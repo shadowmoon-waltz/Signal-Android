@@ -301,6 +301,7 @@ open class V2ConversationItemTextOnlyViewHolder<Model : MappingModel<Model>>(
         SwipeActionTypes.SHOW_OPTIONS -> R.drawable.ic_more_vert_24
         SwipeActionTypes.NOTE_TO_SELF -> R.drawable.ic_note_24
         SwipeActionTypes.MULTI_SELECT -> R.drawable.symbol_check_circle_24
+        SwipeActionTypes.EDIT -> R.drawable.symbol_edit_24
         else -> defaultDrawableId // for SwipeActionTypes.DEFAULT, SwipeActionTypes.NONE, and any other string
       }
     )
