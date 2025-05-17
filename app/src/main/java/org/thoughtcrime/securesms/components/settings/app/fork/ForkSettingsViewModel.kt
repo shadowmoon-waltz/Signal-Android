@@ -26,7 +26,8 @@ class ForkSettingsViewModel : ViewModel() {
       altCollapseMediaKeyboard = SignalStore.settings.isAltCollapseMediaKeyboard,
       altCloseMediaSelection = SignalStore.settings.isAltCloseMediaSelection,
       stickerMruLongPressToPack = SignalStore.settings.isStickerMruLongPressToPack,
-      stickerKeyboardPackMru = SignalStore.settings.isStickerKeyboardPackMru
+      stickerKeyboardPackMru = SignalStore.settings.isStickerKeyboardPackMru,
+      SignalStore.settings.doubleTapAction
     )
 
     store = Store(initialState)
@@ -117,5 +118,10 @@ class ForkSettingsViewModel : ViewModel() {
   fun setStickerKeyboardPackMru(stickerKeyboardPackMru: Boolean) {
     store.update { it.copy(stickerKeyboardPackMru = stickerKeyboardPackMru) }
     SignalStore.settings.isStickerKeyboardPackMru = stickerKeyboardPackMru
+  }
+
+  fun setDoubleTapAction(doubleTapAction: String) {
+    store.update { it.copy(doubleTapAction = doubleTapAction) }
+    SignalStore.settings.doubleTapAction = doubleTapAction
   }
 }

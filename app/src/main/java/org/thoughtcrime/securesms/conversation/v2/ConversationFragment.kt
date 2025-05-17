@@ -520,6 +520,7 @@ class ConversationFragment :
   private lateinit var threadHeaderMarginDecoration: ThreadHeaderMarginDecoration
   private lateinit var conversationItemDecorations: ConversationItemDecorations
   private lateinit var optionsMenuCallback: ConversationOptionsMenuCallback
+  private lateinit var sapDoubleTap: SwipeAvailabilityProvider
 
   private var animationsAllowed = false
   private var actionMode: ActionMode? = null
@@ -1140,6 +1141,12 @@ class ConversationFragment :
       sLeft,
       sLeft
     ).attachToRecyclerView(binding.conversationItemRecycler)
+
+    sapDoubleTap = SwipeAvailabilityProvider(SignalStore.settings.doubleTapAction.let {
+      if (it == SwipeActionTypes.DEFAULT) SwipeActionTypes.DEFAULT_FOR_DOUBLE_TAP
+      else if (it == SwipeActionTypes.SHOW_OPTIONS) SwipeActionTypes.NONE
+      else it
+    })
 
     viewModel
       .inputReadyState
@@ -2619,7 +2626,7 @@ class ConversationFragment :
       return false
     }
 
-    override fun onSwipe(conversationMessage: ConversationMessage, element: InteractiveConversationElement, motionEvent: MotionEvent) {
+    override fun onSwipe(conversationMessage: ConversationMessage, element: InteractiveConversationElement?, motionEvent: MotionEvent?) {
       when (action) {
         SwipeActionTypes.REPLY -> handleReplyToMessage(conversationMessage)
         SwipeActionTypes.DELETE -> handleDeleteMessages(conversationMessage.multiselectCollection.toSet(), checkFastDeleteForMe = false)
@@ -2630,7 +2637,8 @@ class ConversationFragment :
         SwipeActionTypes.NOTE_TO_SELF -> handleForwardMessagePartsNoteToSelf(conversationMessage.multiselectCollection.toSet())
         SwipeActionTypes.MESSAGE_DETAILS -> handleDisplayDetails(conversationMessage)
         SwipeActionTypes.MULTI_SELECT -> handleEnterMultiselect(conversationMessage)
-        SwipeActionTypes.SHOW_OPTIONS -> if (element is View && element is Multiselectable) clickListener.onItemLongClick2(element, element.getMultiselectPartForLatestTouch(), motionEvent)
+        SwipeActionTypes.SHOW_OPTIONS ->
+          if (element != null && motionEvent != null && element is View && element is Multiselectable) clickListener.onItemLongClick2(element, element.getMultiselectPartForLatestTouch(), motionEvent)
         SwipeActionTypes.EDIT -> handleEditMessage(conversationMessage)
         // includes SwipeActionTypes.NONE and any other string
         else -> Unit
@@ -3026,6 +3034,13 @@ class ConversationFragment :
     }
 
     private fun onDoubleTapToEdit(conversationMessage: ConversationMessage) {
+      if (sapDoubleTap.action != SwipeActionTypes.EDIT) {
+        if (sapDoubleTap.isSwipeAvailable(conversationMessage)) {
+          sapDoubleTap.onSwipe(conversationMessage, null, null)
+        }
+        return
+      }
+
       if (!isValidEditMessageSend(conversationMessage.getMessageRecord(), System.currentTimeMillis())) {
         return
       }

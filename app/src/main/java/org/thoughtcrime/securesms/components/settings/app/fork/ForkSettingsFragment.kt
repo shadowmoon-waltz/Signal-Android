@@ -21,6 +21,9 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
   private val swipeToLeftActionLabels by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_left_action__entries) }
   private val swipeToLeftActionValues by lazy { resources.getStringArray(R.array.ForkSettingsFragment__swipe_to_left_action__values) }
 
+  private val doubleTapActionLabels by lazy { resources.getStringArray(R.array.ForkSettingsFragment__double_tap_action__entries) }
+  private val doubleTapActionValues by lazy { resources.getStringArray(R.array.ForkSettingsFragment__double_tap_action__values) }
+
   override fun bindAdapter(adapter: MappingAdapter) {
     viewModel = ViewModelProvider(this)[ForkSettingsViewModel::class.java]
 
@@ -210,6 +213,16 @@ class ForkSettingsFragment : DSLSettingsFragment(R.string.preferences__fork_spec
         onClick = {
           TextSecurePreferences.setStickerKeyboardPackMru(requireContext(), !state.stickerKeyboardPackMru)
           viewModel.setStickerKeyboardPackMru(!state.stickerKeyboardPackMru)
+        }
+      )
+
+      radioListPref(
+        title = DSLSettingsText.from(R.string.ForkSettingsFragment__double_tap_action),
+        listItems = doubleTapActionLabels,
+        selected = doubleTapActionValues.indexOf(state.doubleTapAction),
+        onSelected = {
+          TextSecurePreferences.setDoubleTapAction(requireContext(), doubleTapActionValues[it])
+          viewModel.setDoubleTapAction(doubleTapActionValues[it])
         }
       )
     }

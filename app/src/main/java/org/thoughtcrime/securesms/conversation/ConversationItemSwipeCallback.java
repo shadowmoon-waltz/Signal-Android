@@ -253,6 +253,6 @@ public class ConversationItemSwipeCallback extends ItemTouchHelper.SimpleCallbac
   }
 
   public interface OnSwipeListener {
-    void onSwipe(ConversationMessage conversationMessage, InteractiveConversationElement element, MotionEvent event);
+    void onSwipe(ConversationMessage conversationMessage, @Nullable InteractiveConversationElement element, @Nullable MotionEvent event);
   }
 }

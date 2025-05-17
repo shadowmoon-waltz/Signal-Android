@@ -15,6 +15,7 @@ Releases prior to and including v5.44.1-0 were locally compiled, locally signed 
 
 * debug log is back, but is save-only/submit option disabled for now
 * swipe to left/right now supports edit message as a action option
+* allows customizing double tap on conversation item actions (same as swipe actions with exception of option of show options)
 </details>
 
 <details>

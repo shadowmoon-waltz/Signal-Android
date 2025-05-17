@@ -415,6 +415,36 @@
 
     <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
 
+    <string-array name="ForkSettingsFragment__double_tap_action__values">
+        <item>default</item>
+        <item>message_details</item>
+        <item>reply</item>
+        <item>delete</item>
+        <item>delete_no_prompt</item>
+        <item>copy_text</item>
+        <item>copy_text_popup</item>
+        <item>forward</item>
+        <item>note_to_self</item>
+        <item>multi_select</item>
+        <item>edit</item>
+    </string-array>
+
+    <string-array name="ForkSettingsFragment__double_tap_action__entries">
+        <item>@string/ForkSettingsFragment__double_tap_action__default</item>
+        <item>@string/AndroidManifest__message_details</item>
+        <item>@string/MessageNotifier_reply</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_no_popup</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
+        <item>@string/conversation_selection__menu_forward</item>
+        <item>@string/note_to_self</item>
+        <item>@string/ForkSettingsFragment__select_multiple</item>
+        <item>@string/conversation_selection__menu_edit</item>
+    </string-array>
+
+    <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
+
     <string-array name="ForkSettingsFragment__swipe_to_left_action__values">
         <item>default</item>
         <item>message_details</item>

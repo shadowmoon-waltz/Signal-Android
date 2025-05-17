@@ -94,6 +94,7 @@ public final class SettingsValues extends SignalStoreValues {
   public static final String ALT_CLOSE_MEDIA_SELECTION               = "settings.alt.close.media.selection";
   public static final String STICKER_MRU_LONG_PRESS_TO_PACK          = "settings.sticker.mru.long.press.to.pack";
   public static final String STICKER_KEYBOARD_PACK_MRU               = "settings.sticker.keyboard.pack.mru";
+  public static final String DOUBLE_TAP_ACTION                       = "settings.double.tap.action";
 
   private final SingleLiveEvent<String> onConfigurationSettingChanged = new SingleLiveEvent<>();
 
@@ -182,7 +183,8 @@ public final class SettingsValues extends SignalStoreValues {
                          ALT_COLLAPSE_MEDIA_KEYBOARD,
                          ALT_CLOSE_MEDIA_SELECTION,
                          STICKER_MRU_LONG_PRESS_TO_PACK,
-                         STICKER_KEYBOARD_PACK_MRU);
+                         STICKER_KEYBOARD_PACK_MRU,
+                         DOUBLE_TAP_ACTION);
   }
 
   public @NonNull LiveData<String> getOnConfigurationSettingChanged() {
@@ -714,6 +716,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setStickerKeyboardPackMru(boolean stickerKeyboardPackMru) {
     putBoolean(STICKER_KEYBOARD_PACK_MRU, stickerKeyboardPackMru);
+  }
+
+  public @NonNull String getDoubleTapAction() {
+    return getString(DOUBLE_TAP_ACTION, TextSecurePreferences.getDoubleTapAction(AppDependencies.getApplication()));
+  }
+
+  public void setDoubleTapAction(@NonNull String doubleTapAction) {
+    putString(DOUBLE_TAP_ACTION, doubleTapAction);
   }
 
   public enum CensorshipCircumventionEnabled {

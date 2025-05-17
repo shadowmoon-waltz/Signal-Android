@@ -191,6 +191,8 @@ public class TextSecurePreferences {
 
   private static final String PREF_STICKER_KEYBOARD_PACK_MRU = "pref_sticker_keyboard_pack_mru";
 
+  private static final String PREF_DOUBLE_TAP_ACTION = "pref_double_tap_action";
+
   private static final String[] booleanPreferencesToBackup = {SCREEN_SECURITY_PREF,
                                                               INCOGNITO_KEYBORAD_PREF,
                                                               ALWAYS_RELAY_CALLS_PREF,
@@ -232,7 +234,8 @@ public class TextSecurePreferences {
                                                              MESSAGE_BODY_TEXT_SIZE_PREF,
                                                              PREF_SWIPE_TO_RIGHT_ACTION,
                                                              PREF_SWIPE_TO_LEFT_ACTION,
-                                                             PREF_BACKUP_INTERVAL_IN_DAYS};
+                                                             PREF_BACKUP_INTERVAL_IN_DAYS,
+                                                             PREF_DOUBLE_TAP_ACTION};
 
   private static final String[] stringSetPreferencesToBackup = {MEDIA_DOWNLOAD_MOBILE_PREF,
                                                                 MEDIA_DOWNLOAD_WIFI_PREF,
@@ -1057,6 +1060,14 @@ public class TextSecurePreferences {
 
   public static void setStickerKeyboardPackMru(Context context, boolean enabled) {
     setBooleanPreference(context, PREF_STICKER_KEYBOARD_PACK_MRU, enabled);
+  }
+
+  public static String getDoubleTapAction(Context context) {
+    return getStringPreference(context, PREF_DOUBLE_TAP_ACTION, SwipeActionTypes.DEFAULT_FOR_DOUBLE_TAP);
+  }
+
+  public static void setDoubleTapAction(Context context, String doubleTapAction) {
+    setStringPreference(context, PREF_DOUBLE_TAP_ACTION, doubleTapAction);
   }
 
   public static void setBooleanPreference(Context context, String key, boolean value) {

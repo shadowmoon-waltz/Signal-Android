@@ -17,5 +17,6 @@ data class ForkSettingsState(
   val altCollapseMediaKeyboard: Boolean,
   val altCloseMediaSelection: Boolean,
   val stickerMruLongPressToPack: Boolean,
-  val stickerKeyboardPackMru: Boolean
+  val stickerKeyboardPackMru: Boolean,
+  val doubleTapAction: String
 )
