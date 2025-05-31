@@ -213,6 +213,10 @@ class RemoteBackupsSettingsViewModel : ViewModel() {
     BackupMessagesJob.enqueue()
   }
 
+  fun cancelUpload() {
+    ArchiveUploadProgress.cancel()
+  }
+
   private suspend fun refreshState(lastPurchase: InAppPaymentTable.InAppPayment?) {
     try {
       performStateRefresh(lastPurchase)
@@ -321,19 +325,19 @@ class RemoteBackupsSettingsViewModel : ViewModel() {
 
           val subscription = activeSubscription.getOrThrow().activeSubscription
           if (subscription != null) {
-            Log.d(TAG, "Subscription found. Updating UI state with subscription details.")
+            Log.d(TAG, "Subscription found. Updating UI state with subscription details. Status: ${subscription.status}")
             _state.update {
               it.copy(
                 hasRedemptionError = lastPurchase?.data?.error?.data_ == "409",
                 backupState = when {
-                  subscription.isActive -> RemoteBackupsSettingsState.BackupState.ActivePaid(
+                  subscription.isCanceled && subscription.isActive -> RemoteBackupsSettingsState.BackupState.Canceled(
                     messageBackupsType = type,
-                    price = FiatMoney.fromSignalNetworkAmount(subscription.amount, Currency.getInstance(subscription.currency)),
                     renewalTime = subscription.endOfCurrentPeriod.seconds
                   )
 
-                  subscription.isCanceled -> RemoteBackupsSettingsState.BackupState.Canceled(
+                  subscription.isActive -> RemoteBackupsSettingsState.BackupState.ActivePaid(
                     messageBackupsType = type,
+                    price = FiatMoney.fromSignalNetworkAmount(subscription.amount, Currency.getInstance(subscription.currency)),
                     renewalTime = subscription.endOfCurrentPeriod.seconds
                   )
 
@@ -345,11 +349,19 @@ class RemoteBackupsSettingsViewModel : ViewModel() {
               )
             }
           } else {
-            Log.d(TAG, "ActiveSubscription had null subscription object. Updating UI state with INACTIVE subscription.")
-            _state.update {
-              it.copy(
-                backupState = RemoteBackupsSettingsState.BackupState.Inactive(type)
-              )
+            Log.d(TAG, "ActiveSubscription had null subscription object.")
+            if (SignalStore.backup.areBackupsEnabled) {
+              _state.update {
+                it.copy(
+                  backupState = RemoteBackupsSettingsState.BackupState.NotFound
+                )
+              }
+            } else {
+              _state.update {
+                it.copy(
+                  backupState = RemoteBackupsSettingsState.BackupState.Inactive(type)
+                )
+              }
             }
           }
         } else {

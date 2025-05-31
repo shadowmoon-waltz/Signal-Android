@@ -38,6 +38,7 @@ import org.thoughtcrime.securesms.attachments.Attachment
 import org.thoughtcrime.securesms.attachments.AttachmentId
 import org.thoughtcrime.securesms.attachments.Cdn
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment
+import org.thoughtcrime.securesms.backup.v2.BackupRepository.copyAttachmentToArchive
 import org.thoughtcrime.securesms.backup.v2.importer.ChatItemArchiveImporter
 import org.thoughtcrime.securesms.backup.v2.processor.AccountDataArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.AdHocCallArchiveProcessor
@@ -62,8 +63,11 @@ import org.thoughtcrime.securesms.crypto.DatabaseSecretProvider
 import org.thoughtcrime.securesms.database.AttachmentTable
 import org.thoughtcrime.securesms.database.BackupMediaSnapshotTable.ArchiveMediaItem
 import org.thoughtcrime.securesms.database.KeyValueDatabase
+import org.thoughtcrime.securesms.database.KyberPreKeyTable
+import org.thoughtcrime.securesms.database.OneTimePreKeyTable
 import org.thoughtcrime.securesms.database.SearchTable
 import org.thoughtcrime.securesms.database.SignalDatabase
+import org.thoughtcrime.securesms.database.SignedPreKeyTable
 import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groups.GroupId
@@ -142,7 +146,7 @@ object BackupRepository {
           Log.w(TAG, "Received status 403. The user is not in the media tier. Updating local state.", error.exception)
           SignalStore.backup.backupTier = MessageBackupTier.FREE
           SignalStore.uiHints.markHasEverEnabledRemoteBackups()
-          // TODO [backup] If the user thought they were in media tier but aren't, feels like we should have a special UX flow for this?
+          SignalStore.backup.backupExpiredAndDowngraded = true
         }
       }
     }
@@ -264,6 +268,18 @@ object BackupRepository {
     return SignalStore.backup.hasBackupBeenUploaded && SignalStore.backup.hasBackupFailure
   }
 
+  /**
+   * Displayed when the user falls out of the grace period for backups after their subscription
+   * expires.
+   */
+  fun shouldDisplayBackupExpiredAndDowngradedSheet(): Boolean {
+    if (shouldNotDisplayBackupFailedMessaging()) {
+      return false
+    }
+
+    return SignalStore.backup.backupExpiredAndDowngraded
+  }
+
   fun markBackupAlreadyRedeemedIndicatorClicked() {
     SignalStore.backup.hasBackupAlreadyRedeemedError = false
   }
@@ -281,6 +297,13 @@ object BackupRepository {
    */
   fun markBackupFailedSheetDismissed() {
     SignalStore.backup.updateMessageBackupFailureSheetWatermark()
+  }
+
+  /**
+   * User closed backup expiration alert sheet
+   */
+  fun markBackupExpiredAndDowngradedSheetDismissed() {
+    SignalStore.backup.backupExpiredAndDowngraded = false
   }
 
   /**
@@ -781,8 +804,14 @@ object BackupRepository {
       }
 
       Log.d(TAG, "[import] --- Recreating all tables ---")
+      val skipTables = setOf(KyberPreKeyTable.TABLE_NAME, OneTimePreKeyTable.TABLE_NAME, SignedPreKeyTable.TABLE_NAME)
       val tableMetadata = SignalDatabase.rawDatabase.getAllTableDefinitions().filter { !it.name.startsWith(SearchTable.FTS_TABLE_NAME + "_") }
       for (table in tableMetadata) {
+        if (skipTables.contains(table.name)) {
+          Log.d(TAG, "[import] Skipping drop/create of table ${table.name}")
+          continue
+        }
+
         Log.d(TAG, "[import] Dropping table ${table.name}...")
         SignalDatabase.rawDatabase.execSQL("DROP TABLE IF EXISTS ${table.name}")
 
@@ -1436,6 +1465,13 @@ object BackupRepository {
   }
 
   @WorkerThread
+  fun getBackupLevelConfiguration(): SubscriptionsConfiguration.BackupLevelConfiguration? {
+    val config = getSubscriptionsConfiguration()
+
+    return config.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL]
+  }
+
+  @WorkerThread
   private fun getFreeType(): MessageBackupsType.Free {
     val config = getSubscriptionsConfiguration()
 
@@ -1445,10 +1481,8 @@ object BackupRepository {
   }
 
   private suspend fun getPaidType(): MessageBackupsType.Paid? {
-    val config = getSubscriptionsConfiguration()
     val product = AppDependencies.billingApi.queryProduct() ?: return null
-
-    val backupLevelConfiguration = config.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL] ?: return null
+    val backupLevelConfiguration = getBackupLevelConfiguration() ?: return null
 
     return MessageBackupsType.Paid(
       pricePerMonth = product.price,
