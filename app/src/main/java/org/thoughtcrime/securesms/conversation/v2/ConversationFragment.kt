@@ -950,7 +950,7 @@ class ConversationFragment :
             firstRender = false
             binding.conversationItemRecycler.doAfterNextLayout {
               SignalLocalMetrics.ConversationOpen.onRenderFinished()
-              (requireActivity() as? MainActivity)?.onFirstRender()
+              (context as? MainActivity)?.onFirstRender()
               doAfterFirstRender()
             }
           }
@@ -1402,7 +1402,7 @@ class ConversationFragment :
 
   private fun presentNavigationIconForNormal() {
     if (!resources.getWindowSizeClass().isSplitPane()) {
-      binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_left_24)
+      binding.toolbar.setNavigationIcon(R.drawable.symbol_arrow_start_24)
       binding.toolbar.setNavigationContentDescription(R.string.ConversationFragment__content_description_back_button)
       binding.toolbar.setNavigationOnClickListener {
         binding.root.hideKeyboard(composeText)

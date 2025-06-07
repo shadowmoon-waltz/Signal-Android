@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1547
-val canonicalVersionName = "7.43.1"
+val canonicalVersionCode = 1549
+val canonicalVersionName = "7.44.1"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -75,6 +75,8 @@ wire {
   protoPath {
     srcDir("${project.rootDir}/libsignal-service/src/main/protowire")
   }
+  // Handled by libsignal
+  prune("signalservice.DecryptionErrorMessage")
 }
 
 ktlint {
@@ -618,6 +620,8 @@ dependencies {
   implementation(libs.rxjava3.rxandroid)
   implementation(libs.rxjava3.rxkotlin)
   implementation(libs.rxdogtag)
+  implementation(libs.androidx.credentials)
+  implementation(libs.androidx.credentials.compat)
 
   "playImplementation"(project(":billing"))
   "nightlyImplementation"(project(":billing"))
