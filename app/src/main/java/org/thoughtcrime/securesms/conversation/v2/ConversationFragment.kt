@@ -3342,6 +3342,8 @@ class ConversationFragment :
         return
       }
 
+      if (item.getMessageRecord().isInMemoryMessageRecord) { return }
+
       val messageRecord = item.getMessageRecord()
       val recipient = viewModel.recipientSnapshot ?: return
 

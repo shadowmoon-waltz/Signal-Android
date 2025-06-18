@@ -80,7 +80,7 @@ class ConversationAdapterV2(
 
   companion object {
     private val TAG = Log.tag(ConversationAdapterV2::class.java)
-    private val MIN_GROUPS_THRESHOLD = 2
+    private const val MIN_GROUPS_THRESHOLD = 2
   }
 
   private val _selected = hashSetOf<MultiselectPart>()
@@ -309,6 +309,8 @@ class ConversationAdapterV2(
   }
 
   fun toggleSelection(multiselectPart: MultiselectPart) {
+    if (multiselectPart.getMessageRecord().isInMemoryMessageRecord) { return }
+
     if (multiselectPart in _selected) {
       mostRecentSelected = null
       _selected.remove(multiselectPart)
