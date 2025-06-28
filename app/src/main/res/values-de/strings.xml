@@ -141,6 +141,10 @@
     <string name="AttachmentUploadJob_uploading_media">Medieninhalte werden hochgeladen …</string>
     <string name="AttachmentUploadJob_compressing_video_start">Video wird komprimiert …</string>
 
+    <!-- UploadAttachmentToArchiveJob -->
+    <!-- Notification message displayed when uploading large backup attachments to the archive CDN. -->
+    <string name="UploadAttachmentToArchiveJob_uploading_media">Medien werden gesichert…</string>
+
     <!-- BackgroundMessageRetriever -->
     <string name="BackgroundMessageRetriever_checking_for_messages">Prüfen auf Nachrichten …</string>
 
@@ -1093,7 +1097,7 @@
     <!-- Dialog title shown when you don\'t have enough storage space -->
     <string name="LinkDeviceFragment__not_enough_storage_space">Nicht genug Speicherplatz</string>
     <!-- Dialog message body explaining that you need to free storage space or transfer without sending over message -->
-    <string name="LinkDeviceFragment__you_dont_have_enough">Es ist nicht genug Speicherplatz auf deinem Gerät, um deine Nachrichten zu übertragen. Schaffe etwas Speicherplatz und versuche es erneut oder koppele dein Gerät, ohne deine Nachrichten zu übertragen.</string>
+    <string name="LinkDeviceFragment__you_dont_have_enough">Es ist nicht genug Speicherplatz auf deinem Gerät, um deine Nachrichten zu übertragen. Schaffe freien Speicherplatz und versuche es erneut oder koppele dein Gerät, ohne deine Nachrichten zu übertragen.</string>
 
     <!-- EditDeviceNameFragment -->
     <!-- App bar title when editing the name of a device -->
@@ -1171,6 +1175,11 @@
     <!-- ExpiredBuildReminder -->
     <string name="ExpiredBuildReminder_this_version_of_signal_has_expired">Diese Signal-Version ist veraltet. Aktualisiere jetzt, um Nachrichten senden und empfangen zu können.</string>
     <string name="ExpiredBuildReminder_update_now">Jetzt aktualisieren</string>
+
+    <!-- Title of notification telling users to update Signal -->
+    <string name="DeprecatedNotificationJob_update_signal">Signal aktualisieren</string>
+    <!-- Message body of notification telling users that this current version of Signal has expired. If pressed, we will direct them to the website APK or PlayStore page -->
+    <string name="DeprecatedNotificationJob_this_version_of_signal_has_expired">Diese Signal-Version ist abgelaufen. Antippen, um Signal zu aktualisieren und um Nachrichten senden und empfangen zu können.</string>
 
     <!-- PendingGroupJoinRequestsReminder -->
     <plurals name="PendingGroupJoinRequestsReminder_d_pending_member_requests">
@@ -1587,7 +1596,7 @@
     <!-- Title shown when there was an known issue getting group information from a group link -->
     <string name="GroupJoinBottomSheetDialogFragment_cant_join_group">Gruppenbeitritt nicht möglich</string>
     <!-- Message shown when you try to get information for a group via link but an admin has removed you -->
-    <string name="GroupJoinBottomSheetDialogFragment_you_cant_join_this_group_via_the_group_link_because_an_admin_removed_you">Du kannst dieser Gruppe nicht über den Gruppen-Link beitreten, da ein Admin dich entfernt hat. Kontaktiere einen Admin, um der Gruppe erneut hinzugefügt zu werden.</string>
+    <string name="GroupJoinBottomSheetDialogFragment_you_cant_join_this_group_via_the_group_link_because_an_admin_removed_you">Du kannst dieser Gruppe nicht über den Gruppen-Link beitreten, da ein Admin dich entfernt hat. Kontaktiere einen Gruppen-Admin, um der Gruppe erneut hinzugefügt zu werden.</string>
     <!-- Message shown when you try to get information for a group via link but the link is no longer valid -->
     <string name="GroupJoinBottomSheetDialogFragment_this_group_link_is_no_longer_valid">Dieser Gruppen-Link ist nicht mehr gültig.</string>
     <!-- Title shown when there was an unknown issue getting group information from a group link -->
@@ -5345,7 +5354,7 @@
     <!-- String alerting user that backup redemption -->
     <string name="AppSettingsFragment__couldnt_redeem_your_backups_subscription">Dein Backup-Abo konnte nicht eingelöst werden</string>
     <!-- String alerting user that backup storage limit has been reached -->
-    <string name="AppSettingsFragment__backup_storage_limit_reached">Speicherplatz für Datensicherung voll</string>
+    <string name="AppSettingsFragment__backup_storage_limit_reached">Speicherplatz für Backups voll</string>
     <!-- String displayed telling user to invite their friends to Signal -->
     <string name="AppSettingsFragment__invite_your_friends">Kontakte einladen</string>
     <!-- String displayed in a toast when we successfully copy the donations subscriber id to the clipboard -->
@@ -7222,7 +7231,7 @@
     <!-- Title of the screen, displayed in the toolbar -->
     <string name="IdealTransferDetailsFragment__ideal">iDEAL</string>
     <!-- Subtitle of the screen, displayed below the toolbar. Placeholder is for \'learn more\' -->
-    <string name="IdealTransferDetailsFragment__enter_your_bank">Gib deine Bank, deinen Namen und deine E-Mail Adresse ein. Stripe verwendet diese E-Mail-Adresse, um dir Updates zu deiner Spende zu schicken. %1$s</string>
+    <string name="IdealTransferDetailsFragment__enter_your_bank">Gib deinen Namen und deine E-Mail-Adresse ein. Stripe verwendet diese E-Mail-Adresse, um dir Updates zu deiner Spende zu schicken. %1$s</string>
     <!-- Subtitle of the screen, displayed below the toolbar. Placeholder is for \'learn more\' -->
     <string name="IdealTransferDetailsFragment__enter_your_bank_details_one_time">Gib deine Bankverbindung ein. Deine persönlichen Daten werden von Signal nicht erfasst oder gespeichert. %1$s</string>
     <!-- Subtitle learn-more button displayed inline with the subtitle text -->
@@ -7712,6 +7721,15 @@
     <!-- Button text to deny all participants from joining the call -->
     <string name="PendingParticipantsBottomSheet__deny_all">Alle ablehnen</string>
 
+    <!-- Title of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
+    <string name="TurnOnSignalBackups__title">Turn on Signal Backups</string>
+    <!-- Body of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
+    <string name="TurnOnSignalBackups__body">Verliere keine alten Nachrichten, wenn du ein neues Mobiltelefon hast bzw. Signal erneut installierst.</string>
+    <!-- Button of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups that will take the user to the flow to enable backups -->
+    <string name="TurnOnSignalBackups__turn_on">Einschalten</string>
+    <!-- Button of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups that will simply dismiss the megaphone -->
+    <string name="TurnOnSignalBackups__not_now">Jetzt nicht</string>
+
     <!-- Title of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
     <string name="GrantFullScreenIntentPermission_megaphone_title">Vollbildbenachrichtigungen aktivieren?</string>
     <!-- Body of a megaphone shown at the bottom of the chat list when a user has disable the system setting for showing full screen notifications used showing incoming calls -->
@@ -7835,11 +7853,11 @@
     <!-- Sheet body part 2 when media backups have been disabled. -->
     <string name="BackupAlertBottomSheet__you_can_begin_paying_for_backups_again">Um weiterhin all deine Medien zu sichern, kannst du jederzeit wieder für die Datensicherungen bezahlen. </string>
     <!-- Sheet title when user\'s media will be deleted today -->
-    <string name="BackupAlertBottomSheet__download_your_backup_data_today">Deine Sicherungsdaten jetzt herunterladen</string>
+    <string name="BackupAlertBottomSheet__download_your_backup_data_today">Deine Backupdaten jetzt herunterladen</string>
     <!-- Sheet title when user\'s media will be deleted at the end of their grace period -->
-    <string name="BackupAlertBottomSheet__download_your_backup_data">Lade deine Sicherungsdaten herunter</string>
+    <string name="BackupAlertBottomSheet__download_your_backup_data">Lade deine Backupdaten herunter</string>
     <!-- Sheet body part 1 when user\'s media will be deleted after grace period lapses -->
-    <string name="BackupAlertBottomSheet__you_have_s_of_media_thats_not_on_this_device">Du hast %1$s Medien, die nicht auf diesem Gerät gespeichert sind. Die in deiner Datensicherung gespeicherten Medien und Anhänge werden ohne kostenpflichtiges Abo dauerhaft gelöscht.</string>
+    <string name="BackupAlertBottomSheet__you_have_s_of_media_thats_not_on_this_device">Du hast %1$s Medien, die nicht auf diesem Gerät gespeichert sind. Die in deinem Backup gespeicherten Medien und Anhänge werden ohne kostenpflichtiges Abo dauerhaft gelöscht.</string>
     <!-- Sheet title when user does not have enough space to download their backup. Placeholder is formatted byte size, for example 12GB. -->
     <string name="BackupAlertBottomSheet__free_up_s_on_this_device">Gib auf diesem Gerät %1$s frei.</string>
     <!-- Sheet body part 1 when user does not have enough space to download their backup. Placeholder is the amount of space needed. -->
@@ -7865,6 +7883,8 @@
     </plurals>
     <!-- Clickable text to learn more about the content of this bottom sheet -->
     <string name="BackupAlertBottomSheet__learn_more">Mehr erfahren</string>
+    <!-- Clickable text to enter contact support flow -->
+    <string name="BackupAlertBottomSheet__contact_support">Support kontaktieren</string>
     <!-- Secondary action button text when user does not have enough free space to download their backup. -->
     <string name="BackupAlertBottomSheet__skip_restore">Wiederherstellen überspringen</string>
     <!-- Primary action button to open backups management screen -->
@@ -7878,9 +7898,9 @@
     <!-- Primary action button text prompting user to subscriber. Placeholder is formatted price -->
     <string name="BackupAlertBottomSheet__subscribe_for_s_month">Abonniere für %1$s/Monat</string>
     <!-- Primary action button text prompting user to download their media -->
-    <string name="BackupAlertBottomSheet__download_backup_now">Sicherungsdaten jetzt herunterladen</string>
+    <string name="BackupAlertBottomSheet__download_backup_now">Backupdaten jetzt herunterladen</string>
     <!-- Secondary action button text to dismiss sheet, skipping media download -->
-    <string name="BackupAlertBottomSheet__dont_download_backup">Sicherungsdaten nicht herunterladen</string>
+    <string name="BackupAlertBottomSheet__dont_download_backup">Backupdaten nicht herunterladen</string>
     <!-- Secondary generic action button to dismiss sheet without performing an action -->
     <string name="BackupAlertBottomSheet__not_now">Jetzt nicht</string>
     <!-- Secondary action button to dismiss could not complete backup sheet -->
@@ -7933,7 +7953,7 @@
     <!-- Status subtitle for banner when restoring media pauses for internet in general -->
     <string name="BackupStatus__status_no_internet">Kein Internet …</string>
     <!-- Status subtitle for banner when restoring media pauses for low battery -->
-    <string name="BackupStatus__status_device_has_low_battery">Der Akku des Geräts ist schwach</string>
+    <string name="BackupStatus__status_device_has_low_battery">Akkustand des Geräts ist niedrig</string>
     <!-- Status subtitle for banner when restoring media. Placeholders are size already restored and total size to restore. e.g., 4.5MB of 100MB -->
     <string name="BackupStatus__status_size_of_size">%1$s von %2$s</string>
 
@@ -7947,7 +7967,7 @@
     <!-- Text displayed under progress bar when restoring media pauses for internet -->
     <string name="BackupStatusRow__restore_no_internet">Wiederherstellung angehalten: Kein Internet …</string>
     <!-- Text displayed under progress bar when restoring media pauses for low battery -->
-    <string name="BackupStatusRow__restore_device_has_low_battery">Wiederherstellung angehalten: Der Akku des Geräts ist schwach</string>
+    <string name="BackupStatusRow__restore_device_has_low_battery">Wiederherstellung angehalten: Akkustand des Geräts ist niedrig</string>
     <!-- Backup progress during deletion download. Placeholders are size restored, size to restore, and percent, i.e. 50MB of 100MB (50%) -->
     <string name="BackupStatusRow__downloading_s_of_s_s">%1$s von %2$s (%3$s%%) werden heruntergeladen</string>
     <!-- Text displayed under progress bar when restoring media during deletion download pauses for Wi-Fi -->
@@ -7955,7 +7975,7 @@
     <!-- Text displayed under progress bar when restoring media during deletion download pauses for internet -->
     <string name="BackupStatusRow__download_no_internet">Download angehalten: Keine Internetverbindung …</string>
     <!-- Text displayed under progress bar when restoring media during deletion download pauses for low battery -->
-    <string name="BackupStatusRow__download_device_has_low_battery">Download angehalten: Akku des Geräts ist schwach</string>
+    <string name="BackupStatusRow__download_device_has_low_battery">Download angehalten: Akkustand des Geräts ist niedrig</string>
     <!-- Notice that there is not enough free space to continue restore. Placeholder is required space, for example 1.6GB -->
     <string name="BackupStatusRow__not_enough_space">Nicht genug Speicherplatz, um deine Datensicherung zu speichern. Gib %1$s Speicherplatz frei, um fortzufahren.</string>
     <!-- Text row label to skip download -->
@@ -8052,13 +8072,29 @@
     <!-- Educational bottom sheet confirm/dismiss button text shown to notify about delete syncs causing deletes to happen across all devices -->
     <string name="DeleteSyncEducation_acknowledge_button">OK</string>
 
+    <!-- NoManualBackupBottomSheet -->
+    <!-- Title for bottom sheet, placeholder is number of days. -->
+    <plurals name="NoManualBackupBottomSheet__no_backup_for_d_days">
+        <item quantity="one">No backup for %1$d day</item>
+        <item quantity="other">No backup for %1$d days</item>
+    </plurals>
+    <!-- Body for bottom sheet, placeholder is number of days. -->
+    <plurals name="NoManualBackupBottomSheet__you_have_not_completed_a_backup">
+        <item quantity="one">You haven\'t completed a backup for %1$d day. To ensure your messages and media are preserved, create a backup now.</item>
+        <item quantity="other">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
+    </plurals>
+
     <!-- BackupsSettingsFragment -->
     <!-- Subtitle for row for active backup, first placeholder is formatted amount, second is renewal date -->
     <string name="BackupsSettingsFragment_s_month_renews_s">%1$s/Monat, verlängert sich am %2$s</string>
     <!-- Subtitle for row for active backup, placeholder is last date of backup -->
     <string name="BackupsSettingsFragment_last_backup_s">Letzte Datensicherung: %1$s</string>
+    <!-- Subtitle for row for canceled backup -->
+    <string name="BackupsSettingsFragment__subscription_canceled">Abo gekündigt</string>
     <!-- Subtitle for row for no backup ever created -->
     <string name="BackupsSettingsFragment_automatic_backups_with_signals">Automatische Datensicherungen mit Signals sicherem Ende-zu-Ende-verschlüsselten Speicherservice.</string>
+    <!-- Subtitle for row for backups that are active but subscription not found -->
+    <string name="BackupsSettingsFragment_subscription_not_found_on_this_device">"Kein Abo auf diesem Gerät gefunden."</string>
     <!-- Action button label to set up backups -->
     <string name="BackupsSettingsFragment_set_up">Einrichten</string>
 
@@ -8144,7 +8180,9 @@
     <!-- Dialog title when confirming whether to turn off and deleting backups -->
     <string name="RemoteBackupsSettingsFragment__turn_off_and_delete_backups">Datensicherungen ausschalten und löschen?</string>
     <!-- Dialog message when confirming whether to turn off and delete backups -->
-    <string name="RemoteBackupsSettingsFragment__your_backup_will_be_deleted_and_no_new_backups_will_be_created">Deine Datensicherung wird gelöscht und es werden keine neuen Datensicherungen erstellt. Medien in deiner Datensicherung werden jetzt auf dein Smartphone heruntergeladen.</string>
+    <string name="RemoteBackupsSettingsFragment__your_backup_will_be_deleted_and_no_new_backups_will_be_created">Dein Backup wird gelöscht und es werden keine neuen Backups erstellt. Medien in deinem Backup werden jetzt auf dein Smartphone heruntergeladen.</string>
+    <!-- Dialog message when confirming whether to turn off and delete backups -->
+    <string name="RemoteBackupsSettingsFragment__your_subscription_will_be_canceled">Dein Abo wird storniert und es fallen keine weiteren Kosten an. Dein Backup wird ebenfalls gelöscht und es werden keine neuen Backups erstellt. Medien in deinem Backup werden jetzt auf dein Smartphone heruntergeladen.</string>
     <!-- Confirmation action on dialog to turn off and delete backups -->
     <string name="RemoteBackupsSettingsFragment__turn_off_and_delete">Ausschalten und löschen</string>
     <!-- Text on dialog while user backup is being deleted -->
@@ -8207,7 +8245,7 @@
         <item quantity="other">Wenn du »Download überspringen« wählst, werden die restlichen Medien und Anhänge in deiner Datensicherung in %1$d Tagen gelöscht.</item>
     </plurals>
     <!-- Dialog body for skipping download of backed up media during deletion -->
-    <string name="RemoteBackupsSettingsFragment__if_you_skip_downloading_the_remaining">Wenn du »Download überspringen« wählst, werden die restlichen Medien und Anhänge in deiner Datensicherung dauerhaft gelöscht. Diese Daten können nicht wiederhergestellt werden.</string>
+    <string name="RemoteBackupsSettingsFragment__if_you_skip_downloading_the_remaining">Wenn du den Download überspringst, werden die verbliebenen Medien und Anhänge in deinem Backup dauerhaft gelöscht. Diese Daten können nicht wiederhergestellt werden.</string>
     <!-- Dialog title for skipping download of in progress initial restore of backed up media -->
     <string name="RemoteBackupsSettingsFragment__skip_restore_question">Wiederherstellen überspringen?</string>
     <!-- Dialog message for skipping download of in progress initial restore of backed up media -->
@@ -8225,9 +8263,9 @@
     <!-- Button label to see more details about redemption error -->
     <string name="RemoteBackupsSettingsFragment__details">Details</string>
     <!-- Text displayed when there was an error deleting backup -->
-    <string name="RemoteBackupsSettingsFragment__backups_have_been_turned_off_but_there_was_an_error">Backups wurde deaktiviert und ist ein Fehler beim Löschen deiner Daten aus dem sicheren Speicherservice von Signal aufgetreten.</string>
+    <string name="RemoteBackupsSettingsFragment__backups_have_been_turned_off_but_there_was_an_error">Backups wurde deaktiviert, aber beim Löschen deiner Daten aus dem sicheren Speicherservice von Signal ist ein Fehler aufgetreten.</string>
     <!-- Text displayed as the title in a card when backup fails to delete -->
-    <string name="RemoteBackupsSettingsFragment__failed_to_delete_backup">Das Backup konnte nicht gelöscht werden</string>
+    <string name="RemoteBackupsSettingsFragment__failed_to_delete_backup">Backup konnte nicht gelöscht werden</string>
     <!-- Text displayed as the body in a card when backup fails to delete -->
     <string name="RemoteBackupsSettingsFragment__an_error_occurred_please_contact_support">Es ist ein Fehler aufgetreten. Bitte kontaktiere den Support.</string>
     <!-- Text displayed while we are processing a backup delete but are or need to download optimized media -->
@@ -8245,7 +8283,7 @@
 
     <!-- DownloadYourBackupTodayDialog -->
     <!-- Dialog title -->
-    <string name="DownloadYourBackupTodayDialog__download_your_backup_today">Lade deine Sicherungsdaten heute herunter</string>
+    <string name="DownloadYourBackupTodayDialog__download_your_backup_today">Lade deine Backupdaten heute herunter</string>
     <!-- Dialog body. Placeholder is human readable byte count, for example 2.3 MB -->
     <string name="DownloadYourBackupTodayDialog__you_have_s_of_backup_data">Du hast %1$s Backup-Daten, die nicht auf diesem Gerät gespeichert sind. Deine Medien und Anhänge werden ohne kostenpflichtiges Abo dauerhaft gelöscht.</string>
     <!-- Dialog positive action label -->
@@ -8315,7 +8353,7 @@
     <!-- Dialog title confirming that the user wants to save a backup key to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_title">Im Passwortmanager speichern?</string>
     <!-- Dialog message confirming that the user wants to save a backup key to the device password manager. -->
-    <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_body">Speichere deinen Datensicherungsschlüssel nur in einem sicheren Passwortmanager. Signal empfiehlt dir keinen passenden Passwortmanager.</string>
+    <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_body">Speichere deinen Backup-Schlüssel nur in einem sicheren Passwortmanager. Signal gibt keine Empfehlung ab, welcher der passende Passwortmanager für dich ist.</string>
     <!-- Message shown after the backup key is successfully saved to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__save_to_password_manager_success">In deinem Passwortmanager gespeichert</string>
     <!-- Dialog title shown when there is an error saving the backup key because no compatible password manager was detected. -->
@@ -8484,7 +8522,12 @@
 
     <!-- Email subject when contacting support on a restore backup network issue -->
     <string name="EnterBackupKey_network_failure_support_email">Signal Android Backup-Wiederherstellung: Netzwerk-Problem</string>
-  <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Signal Android Backup restore network error</string> -->
+  <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Android SignalBackups Import Failed</string> -->
+
+    <!-- Email subject when contacting support on a create backup failure -->
+    <string name="BackupAlertBottomSheet_network_failure_support_email">Signal Android Backup export network error</string>
+    <!-- Email filter when contacting support on a create backup failure -->
+  <!-- Removed by excludeNonTranslatables <string name="BackupAlertBottomSheet_export_failure_filter" translatable="false">Android SignalBackups Export Failed</string> -->
 
     <!-- Title of dialog asking to submit debuglogs -->
     <string name="ContactSupportDialog_submit_debug_log">Diagnoseprotokoll übermitteln?</string>
@@ -8573,6 +8616,25 @@
     <string name="SignalCheckbox_accessibility_checked_description">Markiert</string>
     <!-- Accessibility label describing an unchecked checkbox. -->
     <string name="SignalCheckbox_accessibility_unchecked_description">Nicht markiert</string>
+
+    <!-- Notification title for when user is out of remote storage -->
+    <string name="Notification_backup_storage_full">Backup-Speicherplatz voll</string>
+    <!-- Notification body for when user is out of remote storage -->
+    <string name="Notification_youve_reached_your_backup_storage_limit">Dein Speicherplatz für Backups ist aufgebraucht. Mach Platz in Signal, um Chats und Medien weiterhin sichern zu können.</string>
+    <!-- Notification title for when initial backup failed -->
+    <string name="Notification_backup_failed">Datensicherung gescheitert</string>
+    <!-- Notification body for when initial backup failed -->
+    <string name="Notification_an_error_occurred_and_your_backup">An error occurred and your backup could not be completed. Tap for details.</string>
+    <!-- Notification title for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
+    <plurals name="Notification_no_backup_for_d_days">
+        <item quantity="one">No backup for %1$d day</item>
+        <item quantity="other">No backup for %1$d days</item>
+    </plurals>
+    <!-- Notification body for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
+    <plurals name="Notification_you_have_not_completed_a_backup">
+        <item quantity="one">You haven’t completed a backup for %1$d day. Create a backup now.</item>
+        <item quantity="other">You haven’t completed a backup for %1$d days. Create a backup now.</item>
+    </plurals>
 
     <!-- EOF -->
 </resources>

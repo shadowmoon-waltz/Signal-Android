@@ -10,6 +10,7 @@ import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
 import org.signal.protos.resumableuploads.ResumableUpload
 import org.thoughtcrime.securesms.backup.ArchiveUploadProgress
+import org.thoughtcrime.securesms.backup.RestoreState
 import org.thoughtcrime.securesms.backup.v2.ArchiveMediaItemIterator
 import org.thoughtcrime.securesms.backup.v2.ArchiveValidator
 import org.thoughtcrime.securesms.backup.v2.BackupRepository
@@ -21,7 +22,10 @@ import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
 import org.thoughtcrime.securesms.jobmanager.impl.WifiConstraint
 import org.thoughtcrime.securesms.jobs.protos.BackupMessagesJobData
 import org.thoughtcrime.securesms.keyvalue.SignalStore
+import org.thoughtcrime.securesms.keyvalue.isDecisionPending
 import org.thoughtcrime.securesms.providers.BlobProvider
+import org.thoughtcrime.securesms.recipients.Recipient
+import org.thoughtcrime.securesms.storage.StorageSyncHelper
 import org.whispersystems.signalservice.api.NetworkResult
 import org.whispersystems.signalservice.api.messages.AttachmentTransferProgress
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachment
@@ -49,7 +53,33 @@ class BackupMessagesJob private constructor(
 
     const val KEY = "BackupMessagesJob"
 
+    private fun isBackupAllowed(): Boolean {
+      return when {
+        SignalStore.registration.restoreDecisionState.isDecisionPending -> {
+          Log.i(TAG, "Backup not allowed: a restore decision is pending.")
+          false
+        }
+
+        SignalStore.backup.restoreState == RestoreState.PENDING -> {
+          Log.i(TAG, "Backup not allowed: a restore is pending.")
+          false
+        }
+
+        SignalStore.backup.restoreState == RestoreState.RESTORING_DB -> {
+          Log.i(TAG, "Backup not allowed: a restore is in progress.")
+          false
+        }
+
+        else -> true
+      }
+    }
+
     fun enqueue() {
+      if (!isBackupAllowed()) {
+        Log.d(TAG, "Skip enqueueing BackupMessagesJob.")
+        return
+      }
+
       val jobManager = AppDependencies.jobManager
 
       val chain = jobManager.startChain(BackupMessagesJob())
@@ -70,7 +100,6 @@ class BackupMessagesJob private constructor(
       .addConstraint(if (SignalStore.backup.backupWithCellular) NetworkConstraint.KEY else WifiConstraint.KEY)
       .setMaxAttempts(3)
       .setMaxInstancesForFactory(1)
-      .setQueue(BackfillDigestJob.QUEUE) // We want to ensure digests have been backfilled before this runs. Could eventually remove this constraint.
       .build()
   )
 
@@ -90,16 +119,20 @@ class BackupMessagesJob private constructor(
   override fun onFailure() {
     if (!isCanceled) {
       Log.w(TAG, "Failed to backup user messages. Marking failure state.")
-      SignalStore.backup.markMessageBackupFailure()
-      ArchiveUploadProgress.onMainBackupFileUploadFailure()
+      BackupRepository.markBackupFailure()
     }
   }
 
   override fun run(): Result {
+    if (!isBackupAllowed()) {
+      Log.d(TAG, "Skip running BackupMessagesJob.")
+      return Result.success()
+    }
+
     val stopwatch = Stopwatch("BackupMessagesJob")
 
-    SignalDatabase.attachments.createKeyIvDigestForAttachmentsThatNeedArchiveUpload().takeIf { it > 0 }?.let { count -> Log.w(TAG, "Needed to create $count key/iv/digests.") }
-    stopwatch.split("key-iv-digest")
+    SignalDatabase.attachments.createRemoteKeyForAttachmentsThatNeedArchiveUpload().takeIf { it > 0 }?.let { count -> Log.w(TAG, "Needed to create $count remote keys.") }
+    stopwatch.split("keygen")
 
     if (isCanceled) {
       return Result.failure()
@@ -150,6 +183,11 @@ class BackupMessagesJob private constructor(
       when (val result = BackupRepository.uploadBackupFile(backupSpec, it, tempBackupFile.length(), progressListener)) {
         is NetworkResult.Success -> {
           Log.i(TAG, "Successfully uploaded backup file.")
+          if (!SignalStore.backup.hasBackupBeenUploaded) {
+            Log.i(TAG, "First time making a backup - scheduling a storage sync.")
+            SignalDatabase.recipients.markNeedsSync(Recipient.self().id)
+            StorageSyncHelper.scheduleSyncForDataChange()
+          }
           SignalStore.backup.hasBackupBeenUploaded = true
         }
 
@@ -193,7 +231,7 @@ class BackupMessagesJob private constructor(
       ArchiveUploadProgress.onMessageBackupFinishedEarly()
     }
 
-    SignalStore.backup.clearMessageBackupFailure()
+    BackupRepository.clearBackupFailure()
     SignalDatabase.backupMediaSnapshots.commitPendingRows()
 
     AppDependencies.jobManager.add(ArchiveCommitAttachmentDeletesJob())

@@ -184,7 +184,7 @@ private fun AppSettingsContent(
   Scaffolds.Settings(
     title = stringResource(R.string.text_secure_normal__menu_settings),
     navigationContentDescription = stringResource(R.string.CallScreenTopBar__go_back),
-    navigationIconPainter = painterResource(R.drawable.symbol_arrow_start_24),
+    navigationIcon = ImageVector.vectorResource(R.drawable.symbol_arrow_start_24),
     onNavigationClick = callbacks::onNavigationClick
   ) { contentPadding ->
     Column(
@@ -351,7 +351,7 @@ private fun AppSettingsContent(
             onClick = {
               callbacks.navigate(R.id.action_appSettingsFragment_to_chatsSettingsFragment)
             },
-            enabled = isRegisteredAndUpToDate
+            enabled = state.legacyLocalBackupsEnabled || isRegisteredAndUpToDate
           )
         }
 
@@ -697,7 +697,8 @@ private fun AppSettingsContentPreview() {
         showPayments = true,
         showAppUpdates = true,
         showBackups = true,
-        backupFailureState = BackupFailureState.OUT_OF_STORAGE_SPACE
+        backupFailureState = BackupFailureState.OUT_OF_STORAGE_SPACE,
+        legacyLocalBackupsEnabled = false
       ),
       bannerManager = BannerManager(
         banners = listOf(TestBanner())

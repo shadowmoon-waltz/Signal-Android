@@ -1684,7 +1684,7 @@ class ConversationFragment :
       return
     }
 
-    if (editMessage.body == composeText.editableText.toString() &&
+    if (editMessage.body == composeText.editableText.toString().trim() &&
       editMessage.getQuote()?.displayText?.toString() == inputPanel.quote.map { it.text }.orNull() &&
       editMessage.messageRanges == composeText.styling &&
       editMessage.hasLinkPreview() == inputPanel.hasLinkPreview()
@@ -2037,6 +2037,7 @@ class ConversationFragment :
     disposables += send
       .doOnSubscribe {
         if (clearCompose) {
+          AppDependencies.typingStatusSender.onTypingStopped(args.threadId)
           composeTextEventsListener?.typingStatusEnabled = false
           composeText.setText("")
           composeTextEventsListener?.typingStatusEnabled = true

@@ -8,6 +8,7 @@ package org.thoughtcrime.securesms.registrationv3.ui.restore
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
@@ -31,8 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.filterIsInstance
@@ -89,19 +92,46 @@ class RemoteRestoreActivity : BaseActivity() {
 
   private val contactSupportViewModel: ContactSupportViewModel by viewModels()
 
+  private lateinit var wakeLock: RemoteRestoreWakeLock
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    lifecycleScope.launch {
-      val restored = viewModel
-        .state
-        .map { it.importState }
-        .filterIsInstance<RemoteRestoreViewModel.ImportState.Restored>()
-        .firstOrNull()
+    wakeLock = RemoteRestoreWakeLock(this)
 
-      if (restored != null) {
-        startActivity(MainActivity.clearTop(this@RemoteRestoreActivity))
-        finish()
+    lifecycleScope.launch {
+      lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+        val restored = viewModel
+          .state
+          .map { it.importState }
+          .filterIsInstance<RemoteRestoreViewModel.ImportState.Restored>()
+          .firstOrNull()
+
+        if (restored != null) {
+          startActivity(MainActivity.clearTop(this@RemoteRestoreActivity))
+          finish()
+        }
+      }
+    }
+
+    lifecycleScope.launch {
+      lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+        viewModel
+          .state
+          .map { it.importState }
+          .collect {
+            when (it) {
+              RemoteRestoreViewModel.ImportState.InProgress -> {
+                wakeLock.acquire()
+                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+              }
+
+              else -> {
+                wakeLock.release()
+                window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+              }
+            }
+          }
       }
     }
 
@@ -281,7 +311,8 @@ private fun BackupAvailableContent(
     when (state.importState) {
       RemoteRestoreViewModel.ImportState.None -> Unit
       RemoteRestoreViewModel.ImportState.InProgress -> RestoreProgressDialog(state.restoreProgress)
-      is RemoteRestoreViewModel.ImportState.Restored -> Unit
+      RemoteRestoreViewModel.ImportState.Restored -> Unit
+      RemoteRestoreViewModel.ImportState.NetworkFailure -> RestoreNetworkFailedDialog(onDismiss = onImportErrorDialogDismiss)
       RemoteRestoreViewModel.ImportState.Failed -> {
         if (SignalStore.backup.hasInvalidBackupVersion) {
           InvalidBackupVersionDialog(onUpdateSignal = onUpdateSignal, onDismiss = onImportErrorDialogDismiss)
@@ -454,6 +485,19 @@ fun RestoreFailedDialog(
   Dialogs.SimpleAlertDialog(
     title = stringResource(R.string.RemoteRestoreActivity__couldnt_transfer),
     body = stringResource(R.string.RemoteRestoreActivity__error_occurred),
+    confirm = stringResource(android.R.string.ok),
+    onConfirm = onDismiss,
+    onDismiss = onDismiss
+  )
+}
+
+@Composable
+fun RestoreNetworkFailedDialog(
+  onDismiss: () -> Unit = {}
+) {
+  Dialogs.SimpleAlertDialog(
+    title = stringResource(R.string.RemoteRestoreActivity__couldnt_transfer),
+    body = stringResource(R.string.RegistrationActivity_error_connecting_to_service),
     confirm = stringResource(android.R.string.ok),
     onConfirm = onDismiss,
     onDismiss = onDismiss

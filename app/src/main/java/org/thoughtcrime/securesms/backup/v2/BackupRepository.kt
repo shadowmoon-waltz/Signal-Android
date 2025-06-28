@@ -5,18 +5,25 @@
 
 package org.thoughtcrime.securesms.backup.v2
 
+import android.app.PendingIntent
 import android.database.Cursor
 import android.os.Environment
 import android.os.StatFs
+import androidx.annotation.Discouraged
 import androidx.annotation.WorkerThread
+import androidx.core.app.NotificationCompat
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import org.greenrobot.eventbus.EventBus
 import org.signal.core.util.Base64
+import org.signal.core.util.Base64.decodeBase64OrThrow
 import org.signal.core.util.ByteSize
 import org.signal.core.util.CursorUtil
 import org.signal.core.util.EventTimer
+import org.signal.core.util.PendingIntentFlags.cancelCurrent
 import org.signal.core.util.Stopwatch
 import org.signal.core.util.bytes
 import org.signal.core.util.concurrent.LimitedWorker
@@ -31,18 +38,20 @@ import org.signal.core.util.getForeignKeyViolations
 import org.signal.core.util.logging.Log
 import org.signal.core.util.money.FiatMoney
 import org.signal.core.util.requireIntOrNull
-import org.signal.core.util.requireNonNullBlob
+import org.signal.core.util.requireNonNullString
 import org.signal.core.util.stream.NonClosingOutputStream
 import org.signal.core.util.urlEncode
 import org.signal.core.util.withinTransaction
 import org.signal.libsignal.zkgroup.VerificationFailedException
 import org.signal.libsignal.zkgroup.backups.BackupLevel
 import org.signal.libsignal.zkgroup.profiles.ProfileKey
+import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.attachments.Attachment
 import org.thoughtcrime.securesms.attachments.Cdn
 import org.thoughtcrime.securesms.attachments.DatabaseAttachment
 import org.thoughtcrime.securesms.backup.ArchiveUploadProgress
 import org.thoughtcrime.securesms.backup.DeletionState
+import org.thoughtcrime.securesms.backup.RestoreState
 import org.thoughtcrime.securesms.backup.v2.BackupRepository.copyAttachmentToArchive
 import org.thoughtcrime.securesms.backup.v2.importer.ChatItemArchiveImporter
 import org.thoughtcrime.securesms.backup.v2.processor.AccountDataArchiveProcessor
@@ -62,6 +71,7 @@ import org.thoughtcrime.securesms.backup.v2.stream.PlainTextBackupReader
 import org.thoughtcrime.securesms.backup.v2.stream.PlainTextBackupWriter
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlert
 import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsType
+import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.components.settings.app.subscription.RecurringInAppPaymentRepository
 import org.thoughtcrime.securesms.crypto.AttachmentSecretProvider
 import org.thoughtcrime.securesms.crypto.DatabaseSecretProvider
@@ -78,9 +88,14 @@ import org.thoughtcrime.securesms.database.model.InAppPaymentSubscriberRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
 import org.thoughtcrime.securesms.groups.GroupId
 import org.thoughtcrime.securesms.jobmanager.Job
+import org.thoughtcrime.securesms.jobmanager.impl.DataRestoreConstraint
+import org.thoughtcrime.securesms.jobmanager.impl.NetworkConstraint
+import org.thoughtcrime.securesms.jobmanager.impl.WifiConstraint
 import org.thoughtcrime.securesms.jobs.AvatarGroupsV2DownloadJob
 import org.thoughtcrime.securesms.jobs.BackupDeleteJob
+import org.thoughtcrime.securesms.jobs.BackupRestoreMediaJob
 import org.thoughtcrime.securesms.jobs.CheckRestoreMediaLeftJob
+import org.thoughtcrime.securesms.jobs.CreateReleaseChannelJob
 import org.thoughtcrime.securesms.jobs.RequestGroupV2InfoJob
 import org.thoughtcrime.securesms.jobs.RestoreAttachmentJob
 import org.thoughtcrime.securesms.jobs.RestoreOptimizedMediaJob
@@ -90,9 +105,15 @@ import org.thoughtcrime.securesms.keyvalue.KeyValueStore
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.keyvalue.isDecisionPending
 import org.thoughtcrime.securesms.net.SignalNetwork
+import org.thoughtcrime.securesms.notifications.NotificationChannels
+import org.thoughtcrime.securesms.notifications.NotificationIds
+import org.thoughtcrime.securesms.providers.BlobProvider
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.recipients.RecipientId
+import org.thoughtcrime.securesms.service.BackupProgressService
+import org.thoughtcrime.securesms.storage.StorageSyncHelper
 import org.thoughtcrime.securesms.util.RemoteConfig
+import org.thoughtcrime.securesms.util.ServiceUtil
 import org.thoughtcrime.securesms.util.toMillis
 import org.whispersystems.signalservice.api.AccountEntropyPool
 import org.whispersystems.signalservice.api.ApplicationErrorAction
@@ -110,6 +131,7 @@ import org.whispersystems.signalservice.api.backup.MediaName
 import org.whispersystems.signalservice.api.backup.MediaRootBackupKey
 import org.whispersystems.signalservice.api.backup.MessageBackupKey
 import org.whispersystems.signalservice.api.crypto.AttachmentCipherStreamUtil
+import org.whispersystems.signalservice.api.messages.AttachmentTransferProgress
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachment.ProgressListener
 import org.whispersystems.signalservice.api.push.ServiceId.ACI
 import org.whispersystems.signalservice.api.push.ServiceId.PNI
@@ -139,6 +161,7 @@ object BackupRepository {
   private const val LOCAL_MAIN_DB_SNAPSHOT_NAME = "local-signal-snapshot"
   private const val LOCAL_KEYVALUE_DB_SNAPSHOT_NAME = "local-signal-key-value-snapshot"
   private const val RECENT_RECIPIENTS_MAX = 50
+  private val MANUAL_BACKUP_NOTIFICATION_THRESHOLD = 30.days
 
   private val resetInitializedStateErrorAction: StatusCodeErrorAction = { error ->
     when (error.code) {
@@ -159,6 +182,7 @@ object BackupRepository {
             Log.w(TAG, "Local device thought it was on PAID tier. Downgrading to FREE tier.")
             SignalStore.backup.backupTier = MessageBackupTier.FREE
             SignalStore.backup.backupExpiredAndDowngraded = true
+            scheduleSyncForAccountChange()
           }
 
           SignalStore.uiHints.markHasEverEnabledRemoteBackups()
@@ -291,8 +315,88 @@ object BackupRepository {
     AppDependencies.jobManager.add(CheckRestoreMediaLeftJob(RestoreAttachmentJob.constructQueueString(RestoreAttachmentJob.RestoreOperation.MANUAL)))
   }
 
+  fun markBackupFailure() {
+    SignalStore.backup.markMessageBackupFailure()
+    ArchiveUploadProgress.onMainBackupFileUploadFailure()
+
+    if (!SignalStore.backup.hasBackupBeenUploaded) {
+      Log.w(TAG, "Failure of initial backup. Displaying notification.")
+      displayInitialBackupFailureNotification()
+    }
+  }
+
+  fun displayManualBackupNotCreatedInThresholdNotification() {
+    if (SignalStore.backup.lastBackupTime <= 0) {
+      return
+    }
+
+    val daysSinceLastBackup = (System.currentTimeMillis().milliseconds - SignalStore.backup.lastBackupTime.milliseconds).inWholeDays.toInt()
+    val context = AppDependencies.application
+    val pendingIntent = PendingIntent.getActivity(context, 0, AppSettingsActivity.remoteBackups(context), cancelCurrent())
+    val notification = NotificationCompat.Builder(context, NotificationChannels.getInstance().APP_ALERTS)
+      .setSmallIcon(R.drawable.ic_notification)
+      .setContentTitle(context.resources.getQuantityString(R.plurals.Notification_no_backup_for_d_days, daysSinceLastBackup, daysSinceLastBackup))
+      .setContentText(context.resources.getQuantityString(R.plurals.Notification_you_have_not_completed_a_backup, daysSinceLastBackup, daysSinceLastBackup))
+      .setContentIntent(pendingIntent)
+      .setAutoCancel(true)
+      .build()
+
+    ServiceUtil.getNotificationManager(context).notify(NotificationIds.MANUAL_BACKUP_NOT_CREATED, notification)
+  }
+
+  fun cancelManualBackupNotCreatedInThresholdNotification() {
+    ServiceUtil.getNotificationManager(AppDependencies.application).cancel(NotificationIds.MANUAL_BACKUP_NOT_CREATED)
+  }
+
+  @Discouraged("This is only public to allow internal settings to call it directly.")
+  fun displayInitialBackupFailureNotification() {
+    val context = AppDependencies.application
+
+    val pendingIntent = PendingIntent.getActivity(context, 0, AppSettingsActivity.remoteBackups(context), cancelCurrent())
+    val notification = NotificationCompat.Builder(context, NotificationChannels.getInstance().APP_ALERTS)
+      .setSmallIcon(R.drawable.ic_notification)
+      .setContentTitle(context.getString(R.string.Notification_backup_failed))
+      .setContentText(context.getString(R.string.Notification_an_error_occurred_and_your_backup))
+      .setContentIntent(pendingIntent)
+      .setAutoCancel(true)
+      .build()
+
+    ServiceUtil.getNotificationManager(context).notify(NotificationIds.INITIAL_BACKUP_FAILED, notification)
+  }
+
+  fun clearBackupFailure() {
+    SignalStore.backup.clearMessageBackupFailure()
+    ServiceUtil.getNotificationManager(AppDependencies.application).cancel(NotificationIds.INITIAL_BACKUP_FAILED)
+  }
+
+  fun markOutOfRemoteStorageError() {
+    val context = AppDependencies.application
+
+    val pendingIntent = PendingIntent.getActivity(context, 0, AppSettingsActivity.remoteBackups(context), cancelCurrent())
+    val notification = NotificationCompat.Builder(context, NotificationChannels.getInstance().APP_ALERTS)
+      .setSmallIcon(R.drawable.ic_notification)
+      .setContentTitle(context.getString(R.string.Notification_backup_storage_full))
+      .setContentText(context.getString(R.string.Notification_youve_reached_your_backup_storage_limit))
+      .setContentIntent(pendingIntent)
+      .setAutoCancel(true)
+      .build()
+
+    ServiceUtil.getNotificationManager(context).notify(NotificationIds.OUT_OF_REMOTE_STORAGE, notification)
+
+    SignalStore.backup.isNotEnoughRemoteStorageSpace = true
+  }
+
+  fun clearOutOfRemoteStorageError() {
+    SignalStore.backup.isNotEnoughRemoteStorageSpace = false
+    ServiceUtil.getNotificationManager(AppDependencies.application).cancel(NotificationIds.OUT_OF_REMOTE_STORAGE)
+  }
+
   fun shouldDisplayOutOfStorageSpaceUx(): Boolean {
-    return false // TODO [message-backups] Wire into actual error handling.
+    if (shouldNotDisplayBackupFailedMessaging()) {
+      return false
+    }
+
+    return SignalStore.backup.isNotEnoughRemoteStorageSpace
   }
 
   /**
@@ -353,6 +457,45 @@ object BackupRepository {
 
   fun markBackupAlreadyRedeemedIndicatorClicked() {
     SignalStore.backup.hasBackupAlreadyRedeemedError = false
+  }
+
+  /**
+   * Whether or not the "No backup" for manual backups should be displayed.
+   * This should only be displayed after a set threshold has passed and the user
+   * has set the MANUAL backups frequency.
+   */
+  fun shouldDisplayNoManualBackupForTimeoutSheet(): Boolean {
+    if (shouldNotDisplayBackupFailedMessaging()) {
+      return false
+    }
+
+    if (SignalStore.backup.backupFrequency != BackupFrequency.MANUAL) {
+      return false
+    }
+
+    if (SignalStore.backup.lastBackupTime <= 0) {
+      return false
+    }
+
+    val isNetworkConstraintMet = if (SignalStore.backup.backupWithCellular) {
+      NetworkConstraint.isMet(AppDependencies.application)
+    } else {
+      WifiConstraint.isMet(AppDependencies.application)
+    }
+
+    if (!isNetworkConstraintMet) {
+      return false
+    }
+
+    val durationSinceLastBackup = System.currentTimeMillis().milliseconds - SignalStore.backup.lastBackupTime.milliseconds
+    if (durationSinceLastBackup < MANUAL_BACKUP_NOTIFICATION_THRESHOLD) {
+      return false
+    }
+
+    val display = !SignalStore.backup.isNoBackupForManualUploadNotified
+    SignalStore.backup.isNoBackupForManualUploadNotified = false
+
+    return display
   }
 
   /**
@@ -442,7 +585,7 @@ object BackupRepository {
   }
 
   private fun shouldNotDisplayBackupFailedMessaging(): Boolean {
-    return !RemoteConfig.messageBackups || !SignalStore.backup.areBackupsEnabled
+    return !SignalStore.account.isRegistered || !RemoteConfig.messageBackups || !SignalStore.backup.areBackupsEnabled
   }
 
   /**
@@ -549,7 +692,7 @@ object BackupRepository {
       val localArchivableAttachments = dbSnapshot
         .attachmentTable
         .getLocalArchivableAttachments()
-        .associateBy { MediaName.fromDigest(it.remoteDigest) }
+        .associateBy { MediaName.fromPlaintextHashAndRemoteKey(it.plaintextHash, it.remoteKey) }
 
       localBackupProgressEmitter.onAttachment(0, localArchivableAttachments.size.toLong())
 
@@ -1048,6 +1191,8 @@ object BackupRepository {
 
     RetrieveProfileJob.enqueue(recipientIds)
 
+    AppDependencies.jobManager.add(CreateReleaseChannelJob.create())
+
     val groupJobs = SignalDatabase.groups.getGroups().use { groups ->
       val jobs = mutableListOf<Job>()
       groups
@@ -1100,6 +1245,7 @@ object BackupRepository {
     SignalStore.backup.lastCheckInMillis = System.currentTimeMillis()
     SignalStore.backup.lastCheckInSnoozeMillis = 0
     SignalStore.backup.clearDownloadNotifierState()
+    scheduleSyncForAccountChange()
   }
 
   /**
@@ -1145,11 +1291,11 @@ object BackupRepository {
     return initBackupAndFetchAuth()
       .then { credential ->
         SignalNetwork.archive.getMessageBackupUploadForm(SignalStore.account.requireAci(), credential.messageBackupAccess)
-          .also { Log.i(TAG, "UploadFormResult: $it") }
+          .also { Log.i(TAG, "UploadFormResult: ${it::class.simpleName}") }
       }
       .then { form ->
         SignalNetwork.archive.getBackupResumableUploadUrl(form)
-          .also { Log.i(TAG, "ResumableUploadUrlResult: $it") }
+          .also { Log.i(TAG, "ResumableUploadUrlResult: ${it::class.simpleName}") }
           .map { ResumableMessagesBackupUploadSpec(attachmentUploadForm = form, resumableUri = it) }
       }
   }
@@ -1162,7 +1308,7 @@ object BackupRepository {
   ): NetworkResult<Unit> {
     val (form, resumableUploadUrl) = resumableSpec
     return SignalNetwork.archive.uploadBackupFile(form, resumableUploadUrl, backupStream, backupStreamLength, progressListener)
-      .also { Log.i(TAG, "UploadBackupFileResult: $it") }
+      .also { Log.i(TAG, "UploadBackupFileResult: ${it::class.simpleName}") }
   }
 
   fun downloadBackupFile(destination: File, listener: ProgressListener? = null): NetworkResult<Unit> {
@@ -1250,7 +1396,7 @@ object BackupRepository {
       .map { response ->
         SignalDatabase.attachments.setArchiveCdn(attachmentId = attachment.attachmentId, archiveCdn = response.cdn)
       }
-      .also { Log.i(TAG, "archiveMediaResult: $it") }
+      .also { Log.i(TAG, "archiveMediaResult: ${it::class.simpleName}") }
   }
 
   fun deleteAbandonedMediaObjects(mediaObjects: Collection<ArchivedMediaObject>): NetworkResult<Unit> {
@@ -1261,6 +1407,7 @@ object BackupRepository {
           mediaId = it.mediaId
         )
       }
+      .filter { it.cdn == Cdn.CDN_3.cdnNumber }
 
     if (mediaToDelete.isEmpty()) {
       Log.i(TAG, "No media to delete, quick success")
@@ -1275,7 +1422,7 @@ object BackupRepository {
           mediaToDelete = mediaToDelete
         )
       }
-      .also { Log.i(TAG, "deleteAbandonedMediaObjectsResult: $it") }
+      .also { Log.i(TAG, "deleteAbandonedMediaObjectsResult: ${it::class.simpleName}") }
   }
 
   fun deleteBackup(): NetworkResult<Unit> {
@@ -1303,6 +1450,7 @@ object BackupRepository {
               mediaId = it.mediaId
             )
           }
+          .filter { it.cdn == Cdn.CDN_3.cdnNumber }
           .chunked(itemLimit)
 
         if (mediaChunksToDelete.isEmpty()) {
@@ -1330,7 +1478,7 @@ object BackupRepository {
       .map {
         SignalDatabase.attachments.clearAllArchiveData()
       }
-      .also { Log.i(TAG, "debugDeleteAllArchivedMediaResult: $it") }
+      .also { Log.i(TAG, "debugDeleteAllArchivedMediaResult: ${it::class.simpleName}") }
   }
 
   /**
@@ -1365,7 +1513,7 @@ object BackupRepository {
           credentialStore.cdnReadCredentials = it.result
         }
       }
-      .also { Log.i(TAG, "getCdnReadCredentialsResult: $it") }
+      .also { Log.i(TAG, "getCdnReadCredentialsResult: ${it::class.simpleName}") }
   }
 
   fun restoreBackupTier(aci: ACI): MessageBackupTier? {
@@ -1618,6 +1766,11 @@ object BackupRepository {
       RemoteConfig.restoreAfterRegistration
   }
 
+  private fun scheduleSyncForAccountChange() {
+    SignalDatabase.recipients.markNeedsSync(Recipient.self().id)
+    StorageSyncHelper.scheduleSyncForDataChange()
+  }
+
   private fun File.deleteAllFilesWithPrefix(prefix: String) {
     this.listFiles()?.filter { it.name.startsWith(prefix) }?.forEach { it.delete() }
   }
@@ -1642,6 +1795,75 @@ object BackupRepository {
       hmacKey = Base64.encodeWithPadding(mediaSecrets.macKey),
       encryptionKey = Base64.encodeWithPadding(mediaSecrets.aesKey)
     )
+  }
+
+  suspend fun restoreRemoteBackup(): RemoteRestoreResult {
+    val context = AppDependencies.application
+    SignalStore.backup.restoreState = RestoreState.PENDING
+
+    try {
+      DataRestoreConstraint.isRestoringData = true
+      return withContext(Dispatchers.IO) {
+        return@withContext BackupProgressService.start(context, context.getString(R.string.BackupProgressService_title)).use {
+          restoreRemoteBackup(controller = it, cancellationSignal = { !isActive })
+        }
+      }
+    } finally {
+      DataRestoreConstraint.isRestoringData = false
+    }
+  }
+
+  private fun restoreRemoteBackup(controller: BackupProgressService.Controller, cancellationSignal: () -> Boolean): RemoteRestoreResult {
+    SignalStore.backup.restoreState = RestoreState.RESTORING_DB
+
+    val progressListener = object : ProgressListener {
+      override fun onAttachmentProgress(progress: AttachmentTransferProgress) {
+        controller.update(
+          title = AppDependencies.application.getString(R.string.BackupProgressService_title_downloading),
+          progress = progress.value,
+          indeterminate = false
+        )
+        EventBus.getDefault().post(RestoreV2Event(RestoreV2Event.Type.PROGRESS_DOWNLOAD, progress.transmitted, progress.total))
+      }
+
+      override fun shouldCancel() = cancellationSignal()
+    }
+
+    Log.i(TAG, "[remoteRestore] Downloading backup")
+    val tempBackupFile = BlobProvider.getInstance().forNonAutoEncryptingSingleSessionOnDisk(AppDependencies.application)
+    when (val result = downloadBackupFile(tempBackupFile, progressListener)) {
+      is NetworkResult.Success -> Log.i(TAG, "[remoteRestore] Download successful")
+      else -> {
+        Log.w(TAG, "[remoteRestore] Failed to download backup file", result.getCause())
+        return RemoteRestoreResult.NetworkError
+      }
+    }
+
+    if (cancellationSignal()) {
+      return RemoteRestoreResult.Canceled
+    }
+
+    controller.update(
+      title = AppDependencies.application.getString(R.string.BackupProgressService_title),
+      progress = 0f,
+      indeterminate = true
+    )
+
+    val self = Recipient.self()
+    val selfData = SelfData(self.aci.get(), self.pni.get(), self.e164.get(), ProfileKey(self.profileKey))
+    Log.i(TAG, "[remoteRestore] Importing backup")
+    val result = import(length = tempBackupFile.length(), inputStreamFactory = tempBackupFile::inputStream, selfData = selfData, backupKey = SignalStore.backup.messageBackupKey, cancellationSignal = cancellationSignal)
+    if (result == ImportResult.Failure) {
+      Log.w(TAG, "[remoteRestore] Failed to import backup")
+      return RemoteRestoreResult.Failure
+    }
+
+    SignalStore.backup.restoreState = RestoreState.RESTORING_MEDIA
+
+    AppDependencies.jobManager.add(BackupRestoreMediaJob())
+
+    Log.i(TAG, "[remoteRestore] Restore successful")
+    return RemoteRestoreResult.Success
   }
 
   interface ExportProgressListener {
@@ -1715,6 +1937,13 @@ sealed class ImportResult {
   data object Failure : ImportResult()
 }
 
+sealed interface RemoteRestoreResult {
+  data object Success : RemoteRestoreResult
+  data object NetworkError : RemoteRestoreResult
+  data object Canceled : RemoteRestoreResult
+  data object Failure : RemoteRestoreResult
+}
+
 /**
  * Iterator that reads values from the given cursor. Expects that REMOTE_DIGEST is present and non-null, and ARCHIVE_CDN is present.
  *
@@ -1737,13 +1966,14 @@ class ArchiveMediaItemIterator(private val cursor: Cursor) : Iterator<ArchiveMed
   override fun hasNext(): Boolean = !cursor.isAfterLast
 
   override fun next(): ArchiveMediaItem {
-    val digest = cursor.requireNonNullBlob(AttachmentTable.REMOTE_DIGEST)
+    val plaintextHash = cursor.requireNonNullString(AttachmentTable.DATA_HASH_END).decodeBase64OrThrow()
+    val remoteKey = cursor.requireNonNullString(AttachmentTable.REMOTE_KEY).decodeBase64OrThrow()
     val cdn = cursor.requireIntOrNull(AttachmentTable.ARCHIVE_CDN)
 
-    val mediaId = MediaName.fromDigest(digest).toMediaId(SignalStore.backup.mediaRootBackupKey).encode()
-    val thumbnailMediaId = MediaName.fromDigestForThumbnail(digest).toMediaId(SignalStore.backup.mediaRootBackupKey).encode()
+    val mediaId = MediaName.fromPlaintextHashAndRemoteKey(plaintextHash, remoteKey).toMediaId(SignalStore.backup.mediaRootBackupKey).encode()
+    val thumbnailMediaId = MediaName.fromPlaintextHashAndRemoteKeyForThumbnail(plaintextHash, remoteKey).toMediaId(SignalStore.backup.mediaRootBackupKey).encode()
 
     cursor.moveToNext()
-    return ArchiveMediaItem(mediaId, thumbnailMediaId, cdn, digest)
+    return ArchiveMediaItem(mediaId, thumbnailMediaId, cdn, plaintextHash, remoteKey)
   }
 }
