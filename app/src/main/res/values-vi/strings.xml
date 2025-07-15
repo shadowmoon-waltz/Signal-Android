@@ -1452,6 +1452,8 @@
     <string name="RemoteRestoreActivity__update_signal">Cập nhật Signal</string>
     <!-- Text label button to dismiss the dialog -->
     <string name="RemoteRestoreActivity__not_now">Để sau</string>
+    <!-- Text shown on restore screen as information on what will happen if you skip -->
+    <string name="RemoteRestoreActivity__if_you_choose_not_to_restore">Nếu bạn chọn không khôi phục bây giờ, bạn sẽ không khôi phục được sau này. Tập tin đa phương tiện sẽ khôi phục ở chế độ nền.</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">Thông báo khi tôi được nhắc tên</string>
@@ -4448,6 +4450,8 @@
     <string name="ConfirmKbsPinFragment__pin_created">Mã PIN đã được tạo.</string>
     <string name="ConfirmKbsPinFragment__re_enter_your_pin">Điền lại mã PIN của bạn</string>
     <string name="ConfirmKbsPinFragment__creating_pin">Đang tạo mã PIN…</string>
+    <!-- ID used when saving the PIN to the device password manager. -->
+    <string name="ConfirmKbsPinFragment__pin_password_manager_id">Signal PIN</string>
 
     <!-- KbsSplashFragment -->
     <string name="KbsSplashFragment__introducing_pins">Giới thiệu mã PIN</string>
@@ -7551,7 +7555,7 @@
     <string name="PendingParticipantsBottomSheet__deny_all">Từ chối tất cả</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
-    <string name="TurnOnSignalBackups__title">Turn on Signal Backups</string>
+    <string name="TurnOnSignalBackups__title">Bật Sao lưu Signal</string>
     <!-- Body of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
     <string name="TurnOnSignalBackups__body">Không bao giờ bị mất tin nhắn khi bạn có điện thoại mới hoặc cài đặt lại Signal.</string>
     <!-- Button of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups that will take the user to the flow to enable backups -->
@@ -7900,11 +7904,11 @@
     <!-- NoManualBackupBottomSheet -->
     <!-- Title for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__no_backup_for_d_days">
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="other">Chưa sao lưu trong %1$d ngày</item>
     </plurals>
     <!-- Body for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__you_have_not_completed_a_backup">
-        <item quantity="other">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
+        <item quantity="other">Bạn chưa hoàn tất sao lưu trong %1$d ngày. Để đảm bảo tin nhắn và tập tin đa phương tiện của bạn được bảo toàn, tạo bản sao lưu ngay.</item>
     </plurals>
 
     <!-- BackupsSettingsFragment -->
@@ -7920,6 +7924,8 @@
     <string name="BackupsSettingsFragment_subscription_not_found_on_this_device">"Không tìm thấy gói đăng ký trên thiết bị này."</string>
     <!-- Action button label to set up backups -->
     <string name="BackupsSettingsFragment_set_up">Thiết Lập</string>
+    <!-- Action button label to open remote backup settings -->
+    <string name="BackupsSettingsFragment_view_settings">View settings</string>
 
     <!-- RemoteBackupsSettingsFragment -->
     <!-- Content description for canceling backup upload -->
@@ -8174,12 +8180,18 @@
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_title">Lưu vào công cụ quản lý mật khẩu?</string>
     <!-- Dialog message confirming that the user wants to save a backup key to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_body">Chỉ lưu trữ mã khóa sao lưu trong công cụ quản lý mật khẩu bạn tin tưởng là an toàn. Signal không đưa ra khuyến nghị về công cụ quản lý mật khẩu phù hợp với bạn.</string>
+    <!-- ID used when saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__backup_key_password_manager_id">Signal Backups</string>
     <!-- Message shown after the backup key is successfully saved to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__save_to_password_manager_success">Đã lưu vào công cụ quản lý mật khẩu</string>
-    <!-- Dialog title shown when there is an error saving the backup key because no compatible password manager was detected. -->
-    <string name="MessageBackupsKeyRecordScreen__missing_password_manager_title">Không thể lưu vào công cụ quản lý mật khẩu</string>
+    <!-- Dialog title shown when there is an error saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__cant_save_to_password_manager_title">Không thể lưu vào công cụ quản lý mật khẩu</string>
     <!-- Dialog message shown when there is an error saving the backup key because no compatible password manager was detected. -->
     <string name="MessageBackupsKeyRecordScreen__missing_password_manager_message">Bạn chưa thiết lập công cụ quản lý mật khẩu, hoặc công cụ quản lý mật khẩu bạn đang sử dụng không được hỗ trợ.</string>
+    <!-- Dialog message shown when there is an error saving the backup key because the user previously chose not to save Signal passwords to their password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__password_save_prompt_disabled_message">Trước đó, bạn đã chọn không lưu mật khẩu Signal vào Google Password Manager. Trong mục cài đặt của Google Password Manager, hãy xóa Signal khỏi mục \"Trang web và ứng dụng đã từ chối\" và thử lại.</string>
+    <!-- Label for a button that navigates to the device settings -->
+    <string name="MessageBackupsKeyRecordScreen__go_to_settings">Đến mục cài đặt</string>
     <!-- Action button label -->
     <string name="MessageBackupsKeyRecordScreen__next">Tiếp</string>
     <!-- Bottom sheet title -->
@@ -8343,7 +8355,7 @@
   <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Android SignalBackups Import Failed</string> -->
 
     <!-- Email subject when contacting support on a create backup failure -->
-    <string name="BackupAlertBottomSheet_network_failure_support_email">Signal Android Backup export network error</string>
+    <string name="BackupAlertBottomSheet_network_failure_support_email">Lỗi mạng xuất bản sao lưu của Signal Android</string>
     <!-- Email filter when contacting support on a create backup failure -->
   <!-- Removed by excludeNonTranslatables <string name="BackupAlertBottomSheet_export_failure_filter" translatable="false">Android SignalBackups Export Failed</string> -->
 
@@ -8442,14 +8454,14 @@
     <!-- Notification title for when initial backup failed -->
     <string name="Notification_backup_failed">Sao lưu thất bại.</string>
     <!-- Notification body for when initial backup failed -->
-    <string name="Notification_an_error_occurred_and_your_backup">An error occurred and your backup could not be completed. Tap for details.</string>
+    <string name="Notification_an_error_occurred_and_your_backup">Đã xảy ra lỗi và không thể hoàn tất quá trình sao lưu của bạn. Nhấn để biết chi tiết.</string>
     <!-- Notification title for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_no_backup_for_d_days">
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="other">Chưa sao lưu trong %1$d ngày</item>
     </plurals>
     <!-- Notification body for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_you_have_not_completed_a_backup">
-        <item quantity="other">You haven’t completed a backup for %1$d days. Create a backup now.</item>
+        <item quantity="other">Bạn chưa hoàn tất sao lưu trong %1$d ngày. Tạo bản sao lưu ngay.</item>
     </plurals>
 
     <!-- EOF -->

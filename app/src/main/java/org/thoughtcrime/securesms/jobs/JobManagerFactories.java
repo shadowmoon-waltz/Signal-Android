@@ -26,6 +26,7 @@ import org.thoughtcrime.securesms.jobmanager.impl.NetworkOrCellServiceConstraint
 import org.thoughtcrime.securesms.jobmanager.impl.NoRemoteArchiveGarbageCollectionPendingConstraint;
 import org.thoughtcrime.securesms.jobmanager.impl.NotInCallConstraint;
 import org.thoughtcrime.securesms.jobmanager.impl.NotInCallConstraintObserver;
+import org.thoughtcrime.securesms.jobmanager.impl.RegisteredConstraint;
 import org.thoughtcrime.securesms.jobmanager.impl.RestoreAttachmentConstraint;
 import org.thoughtcrime.securesms.jobmanager.impl.RestoreAttachmentConstraintObserver;
 import org.thoughtcrime.securesms.jobmanager.impl.SqlCipherMigrationConstraint;
@@ -152,6 +153,7 @@ public final class JobManagerFactories {
       put(DeviceNameChangeJob.KEY,                     new DeviceNameChangeJob.Factory());
       put(DirectoryRefreshJob.KEY,                     new DirectoryRefreshJob.Factory());
       put(DownloadLatestEmojiDataJob.KEY,              new DownloadLatestEmojiDataJob.Factory());
+      put(E164FormattingJob.KEY,                       new E164FormattingJob.Factory());
       put(EmojiSearchIndexDownloadJob.KEY,             new EmojiSearchIndexDownloadJob.Factory());
       put(FcmRefreshJob.KEY,                           new FcmRefreshJob.Factory());
       put(FetchRemoteMegaphoneImageJob.KEY,            new FetchRemoteMegaphoneImageJob.Factory());
@@ -256,6 +258,8 @@ public final class JobManagerFactories {
       put(SyncSystemContactLinksJob.KEY,               new SyncSystemContactLinksJob.Factory());
       put(MultiDeviceStorySendSyncJob.KEY,             new MultiDeviceStorySendSyncJob.Factory());
       put(ResetSvrGuessCountJob.KEY,                   new ResetSvrGuessCountJob.Factory());
+      put(RetryPendingSendsJob.KEY,                    new RetryPendingSendsJob.Factory());
+      put(RetryPendingSendSecondCheckJob.KEY,          new RetryPendingSendSecondCheckJob.Factory());
       put(ServiceOutageDetectionJob.KEY,               new ServiceOutageDetectionJob.Factory());
       put(StickerDownloadJob.KEY,                      new StickerDownloadJob.Factory());
       put(StickerPackDownloadJob.KEY,                  new StickerPackDownloadJob.Factory());
@@ -409,9 +413,10 @@ public final class JobManagerFactories {
       put(NetworkOrCellServiceConstraint.KEY,                    new NetworkOrCellServiceConstraint.Factory(application));
       put(NetworkOrCellServiceConstraint.LEGACY_KEY,             new NetworkOrCellServiceConstraint.Factory(application));
       put(NotInCallConstraint.KEY,                               new NotInCallConstraint.Factory());
+      put(RegisteredConstraint.KEY,                              new RegisteredConstraint.Factory());
+      put(RestoreAttachmentConstraint.KEY,                       new RestoreAttachmentConstraint.Factory(application));
       put(SqlCipherMigrationConstraint.KEY,                      new SqlCipherMigrationConstraint.Factory(application));
       put(WifiConstraint.KEY,                                    new WifiConstraint.Factory(application));
-      put(RestoreAttachmentConstraint.KEY,                       new RestoreAttachmentConstraint.Factory(application));
     }};
   }
 
@@ -425,7 +430,8 @@ public final class JobManagerFactories {
                          ChangeNumberConstraintObserver.INSTANCE,
                          DataRestoreConstraintObserver.INSTANCE,
                          RestoreAttachmentConstraintObserver.INSTANCE,
-                         NoRemoteArchiveGarbageCollectionPendingConstraint.Observer.INSTANCE);
+                         NoRemoteArchiveGarbageCollectionPendingConstraint.Observer.INSTANCE,
+                         RegisteredConstraint.Observer.INSTANCE);
   }
 
   public static List<JobMigration> getJobMigrations(@NonNull Application application) {

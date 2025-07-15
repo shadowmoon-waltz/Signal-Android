@@ -1612,6 +1612,8 @@
     <string name="RemoteRestoreActivity__update_signal">Nuashonraigh Signal</string>
     <!-- Text label button to dismiss the dialog -->
     <string name="RemoteRestoreActivity__not_now">Ní anois</string>
+    <!-- Text shown on restore screen as information on what will happen if you skip -->
+    <string name="RemoteRestoreActivity__if_you_choose_not_to_restore">Má roghnaíonn tú gan aischur a dhéanamh anois, ní bheidh tú in ann é a dhéanamh níos déanaí. Aischuirfear do mheáin sa chúlra.</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">Cuir Tráchtanna in iúl dom</string>
@@ -4920,6 +4922,8 @@
     <string name="ConfirmKbsPinFragment__pin_created">Cruthaíodh an UAP.</string>
     <string name="ConfirmKbsPinFragment__re_enter_your_pin">Cuir isteach d\'UAP arís</string>
     <string name="ConfirmKbsPinFragment__creating_pin">UAP á cruthú…</string>
+    <!-- ID used when saving the PIN to the device password manager. -->
+    <string name="ConfirmKbsPinFragment__pin_password_manager_id">Signal PIN</string>
 
     <!-- KbsSplashFragment -->
     <string name="KbsSplashFragment__introducing_pins">Seo dhuit UAPanna</string>
@@ -8235,7 +8239,7 @@
     <string name="PendingParticipantsBottomSheet__deny_all">Diúltaigh gach duine</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
-    <string name="TurnOnSignalBackups__title">Turn on Signal Backups</string>
+    <string name="TurnOnSignalBackups__title">Cas air Cúltacaí Signal</string>
     <!-- Body of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
     <string name="TurnOnSignalBackups__body">Ná caill teachtaireacht choíche nuair a fhaigheann tú guthán nua nó nuair a athshuiteálann tú Signal.</string>
     <!-- Button of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups that will take the user to the flow to enable backups -->
@@ -8600,19 +8604,19 @@
     <!-- NoManualBackupBottomSheet -->
     <!-- Title for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__no_backup_for_d_days">
-        <item quantity="one">No backup for %1$d day</item>
-        <item quantity="two">No backup for %1$d days</item>
-        <item quantity="few">No backup for %1$d days</item>
-        <item quantity="many">No backup for %1$d days</item>
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="one">Ní dhearnadh aon chúltaca le %1$d lá amháin anuas</item>
+        <item quantity="two">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
+        <item quantity="few">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
+        <item quantity="many">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
+        <item quantity="other">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
     </plurals>
     <!-- Body for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__you_have_not_completed_a_backup">
-        <item quantity="one">You haven\'t completed a backup for %1$d day. To ensure your messages and media are preserved, create a backup now.</item>
-        <item quantity="two">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
-        <item quantity="few">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
-        <item quantity="many">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
-        <item quantity="other">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
+        <item quantity="one">Níor chuir tú cúltaca i gcrích le %1$d lá amháin anuas. Lena chinntiú go gcoinnítear do theachtaireachtaí agus do mheáin, cruthaigh cúltaca anois.</item>
+        <item quantity="two">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Lena chinntiú go gcoinnítear do theachtaireachtaí agus do mheáin, cruthaigh cúltaca anois.</item>
+        <item quantity="few">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Lena chinntiú go gcoinnítear do theachtaireachtaí agus do mheáin, cruthaigh cúltaca anois.</item>
+        <item quantity="many">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Lena chinntiú go gcoinnítear do theachtaireachtaí agus do mheáin, cruthaigh cúltaca anois.</item>
+        <item quantity="other">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Lena chinntiú go gcoinnítear do theachtaireachtaí agus do mheáin, cruthaigh cúltaca anois.</item>
     </plurals>
 
     <!-- BackupsSettingsFragment -->
@@ -8628,6 +8632,8 @@
     <string name="BackupsSettingsFragment_subscription_not_found_on_this_device">"Ní bhfuarthas síntiús ar an ngléas seo."</string>
     <!-- Action button label to set up backups -->
     <string name="BackupsSettingsFragment_set_up">Socraigh</string>
+    <!-- Action button label to open remote backup settings -->
+    <string name="BackupsSettingsFragment_view_settings">View settings</string>
 
     <!-- RemoteBackupsSettingsFragment -->
     <!-- Content description for canceling backup upload -->
@@ -8894,12 +8900,18 @@
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_title">Sábháil chuig an mbainisteoir pasfhocal?</string>
     <!-- Dialog message confirming that the user wants to save a backup key to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_body">Ná stóráil d\'eochair chúltaca ach i mbainisteoir pasfhocal a bhfuil muinín agat as a shláine. Ní thugann Signal moladh ar bhainisteoir pasfhocal atá ceart duit.</string>
+    <!-- ID used when saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__backup_key_password_manager_id">Signal Backups</string>
     <!-- Message shown after the backup key is successfully saved to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__save_to_password_manager_success">Sábháilte chuig do bhainisteoir pasfhocal</string>
-    <!-- Dialog title shown when there is an error saving the backup key because no compatible password manager was detected. -->
-    <string name="MessageBackupsKeyRecordScreen__missing_password_manager_title">Ní féidir sábháil chuig an mbainisteoir pasfhocal</string>
+    <!-- Dialog title shown when there is an error saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__cant_save_to_password_manager_title">Ní féidir sábháil chuig an mbainisteoir pasfhocal</string>
     <!-- Dialog message shown when there is an error saving the backup key because no compatible password manager was detected. -->
     <string name="MessageBackupsKeyRecordScreen__missing_password_manager_message">Níl bainisteoir pasfhocal socraithe agat, nó níl tacú ar fáil don bhainisteoir pasfhocal atá in úsáid agat.</string>
+    <!-- Dialog message shown when there is an error saving the backup key because the user previously chose not to save Signal passwords to their password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__password_save_prompt_disabled_message">Roghnaigh tú roimhe gan pasfhocail do Signal a shábháil chuig Bainisteoir Pasfhocal Google. I do shocruithe le Bainisteoir Pasfhocal Google, bain Signal de \"Suíomhanna agus aipeanna ar diúltaíodh dóibh\" agus triail arís é.</string>
+    <!-- Label for a button that navigates to the device settings -->
+    <string name="MessageBackupsKeyRecordScreen__go_to_settings">Socruithe</string>
     <!-- Action button label -->
     <string name="MessageBackupsKeyRecordScreen__next">Ar aghaidh</string>
     <!-- Bottom sheet title -->
@@ -9071,7 +9083,7 @@
   <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Android SignalBackups Import Failed</string> -->
 
     <!-- Email subject when contacting support on a create backup failure -->
-    <string name="BackupAlertBottomSheet_network_failure_support_email">Signal Android Backup export network error</string>
+    <string name="BackupAlertBottomSheet_network_failure_support_email">Earráid líonra le heaspórtáil Chúltaca Signal Android</string>
     <!-- Email filter when contacting support on a create backup failure -->
   <!-- Removed by excludeNonTranslatables <string name="BackupAlertBottomSheet_export_failure_filter" translatable="false">Android SignalBackups Export Failed</string> -->
 
@@ -9170,22 +9182,22 @@
     <!-- Notification title for when initial backup failed -->
     <string name="Notification_backup_failed">Theip ar an gcúltaca</string>
     <!-- Notification body for when initial backup failed -->
-    <string name="Notification_an_error_occurred_and_your_backup">An error occurred and your backup could not be completed. Tap for details.</string>
+    <string name="Notification_an_error_occurred_and_your_backup">Tharla earráid agus níorbh fhéidir do cúltaca a chur i gcrích. Tapáil chun sonraí a fháil.</string>
     <!-- Notification title for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_no_backup_for_d_days">
-        <item quantity="one">No backup for %1$d day</item>
-        <item quantity="two">No backup for %1$d days</item>
-        <item quantity="few">No backup for %1$d days</item>
-        <item quantity="many">No backup for %1$d days</item>
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="one">Ní dhearnadh aon chúltaca le %1$d lá amháin anuas</item>
+        <item quantity="two">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
+        <item quantity="few">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
+        <item quantity="many">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
+        <item quantity="other">Ní dhearnadh aon chúltaca le %1$d lá anuas</item>
     </plurals>
     <!-- Notification body for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_you_have_not_completed_a_backup">
-        <item quantity="one">You haven’t completed a backup for %1$d day. Create a backup now.</item>
-        <item quantity="two">You haven’t completed a backup for %1$d days. Create a backup now.</item>
-        <item quantity="few">You haven’t completed a backup for %1$d days. Create a backup now.</item>
-        <item quantity="many">You haven’t completed a backup for %1$d days. Create a backup now.</item>
-        <item quantity="other">You haven’t completed a backup for %1$d days. Create a backup now.</item>
+        <item quantity="one">Níor chuir tú cúltaca i gcrích le %1$d lá amháin anuas. Cruthaigh cúltaca anois.</item>
+        <item quantity="two">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Cruthaigh cúltaca anois.</item>
+        <item quantity="few">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Cruthaigh cúltaca anois.</item>
+        <item quantity="many">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Cruthaigh cúltaca anois.</item>
+        <item quantity="other">Níor chuir tú cúltaca i gcrích le %1$d lá anuas. Cruthaigh cúltaca anois.</item>
     </plurals>
 
     <!-- EOF -->

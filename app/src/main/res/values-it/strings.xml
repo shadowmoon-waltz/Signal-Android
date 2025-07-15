@@ -1492,6 +1492,8 @@
     <string name="RemoteRestoreActivity__update_signal">Aggiorna Signal</string>
     <!-- Text label button to dismiss the dialog -->
     <string name="RemoteRestoreActivity__not_now">Non ora</string>
+    <!-- Text shown on restore screen as information on what will happen if you skip -->
+    <string name="RemoteRestoreActivity__if_you_choose_not_to_restore">Se non fai ora il ripristino, non potrai farlo più tardi. I tuoi media verranno ripristinati in background.</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">Notificami per le menzioni</string>
@@ -4566,6 +4568,8 @@
     <string name="ConfirmKbsPinFragment__pin_created">PIN creato.</string>
     <string name="ConfirmKbsPinFragment__re_enter_your_pin">Inserisci nuovamente il PIN</string>
     <string name="ConfirmKbsPinFragment__creating_pin">Creazione PIN…</string>
+    <!-- ID used when saving the PIN to the device password manager. -->
+    <string name="ConfirmKbsPinFragment__pin_password_manager_id">Signal PIN</string>
 
     <!-- KbsSplashFragment -->
     <string name="KbsSplashFragment__introducing_pins">Ti presentiamo i PIN</string>
@@ -7722,7 +7726,7 @@
     <string name="PendingParticipantsBottomSheet__deny_all">Rifiuta tutto</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
-    <string name="TurnOnSignalBackups__title">Turn on Signal Backups</string>
+    <string name="TurnOnSignalBackups__title">Attiva i backup di Signal</string>
     <!-- Body of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
     <string name="TurnOnSignalBackups__body">Non perderai neanche un messaggio se cambi telefono o reinstalli Signal.</string>
     <!-- Button of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups that will take the user to the flow to enable backups -->
@@ -8075,13 +8079,13 @@
     <!-- NoManualBackupBottomSheet -->
     <!-- Title for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__no_backup_for_d_days">
-        <item quantity="one">No backup for %1$d day</item>
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="one">Nessun backup da %1$d giorno</item>
+        <item quantity="other">Nessun backup da %1$d giorni</item>
     </plurals>
     <!-- Body for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__you_have_not_completed_a_backup">
-        <item quantity="one">You haven\'t completed a backup for %1$d day. To ensure your messages and media are preserved, create a backup now.</item>
-        <item quantity="other">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
+        <item quantity="one">Non effettui un backup da %1$d giorno. Per assicurarti che i tuoi messaggi e media vengano salvati, creane uno ora.</item>
+        <item quantity="other">Non effettui un backup da %1$d giorni. Per assicurarti che i tuoi messaggi e media vengano salvati, creane uno ora.</item>
     </plurals>
 
     <!-- BackupsSettingsFragment -->
@@ -8097,6 +8101,8 @@
     <string name="BackupsSettingsFragment_subscription_not_found_on_this_device">"Abbonamento non trovato su questo dispositivo."</string>
     <!-- Action button label to set up backups -->
     <string name="BackupsSettingsFragment_set_up">Imposta</string>
+    <!-- Action button label to open remote backup settings -->
+    <string name="BackupsSettingsFragment_view_settings">View settings</string>
 
     <!-- RemoteBackupsSettingsFragment -->
     <!-- Content description for canceling backup upload -->
@@ -8354,12 +8360,18 @@
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_title">Salvare sul Password manager?</string>
     <!-- Dialog message confirming that the user wants to save a backup key to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_body">Archivia la tua chiave di backup in un Password manager di cui ti fidi. Signal non raccomanda nessun Password manager specifico, la scelta spetta a te.</string>
+    <!-- ID used when saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__backup_key_password_manager_id">Signal Backups</string>
     <!-- Message shown after the backup key is successfully saved to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__save_to_password_manager_success">Salvata sul Password manager</string>
-    <!-- Dialog title shown when there is an error saving the backup key because no compatible password manager was detected. -->
-    <string name="MessageBackupsKeyRecordScreen__missing_password_manager_title">Impossibile salvare sul Password manager</string>
+    <!-- Dialog title shown when there is an error saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__cant_save_to_password_manager_title">Impossibile salvare sul Password manager</string>
     <!-- Dialog message shown when there is an error saving the backup key because no compatible password manager was detected. -->
     <string name="MessageBackupsKeyRecordScreen__missing_password_manager_message">Non hai impostato alcun Password manager oppure il Password manager che stai usando non è supportato.</string>
+    <!-- Dialog message shown when there is an error saving the backup key because the user previously chose not to save Signal passwords to their password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__password_save_prompt_disabled_message">In precedenza hai scelto di non salvare le password per Signal tramite Google Password Manager. Nelle Impostazioni del tuo Google Password Manager, rimuovi Signal dall\'elenco delle \"App e siti rifiutati\" e riprova.</string>
+    <!-- Label for a button that navigates to the device settings -->
+    <string name="MessageBackupsKeyRecordScreen__go_to_settings">Vai alle Impostazioni</string>
     <!-- Action button label -->
     <string name="MessageBackupsKeyRecordScreen__next">Avanti</string>
     <!-- Bottom sheet title -->
@@ -8525,7 +8537,7 @@
   <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Android SignalBackups Import Failed</string> -->
 
     <!-- Email subject when contacting support on a create backup failure -->
-    <string name="BackupAlertBottomSheet_network_failure_support_email">Signal Android Backup export network error</string>
+    <string name="BackupAlertBottomSheet_network_failure_support_email">Errore di network per l\'esportazione del backup di Signal Android</string>
     <!-- Email filter when contacting support on a create backup failure -->
   <!-- Removed by excludeNonTranslatables <string name="BackupAlertBottomSheet_export_failure_filter" translatable="false">Android SignalBackups Export Failed</string> -->
 
@@ -8624,16 +8636,16 @@
     <!-- Notification title for when initial backup failed -->
     <string name="Notification_backup_failed">Backup fallito</string>
     <!-- Notification body for when initial backup failed -->
-    <string name="Notification_an_error_occurred_and_your_backup">An error occurred and your backup could not be completed. Tap for details.</string>
+    <string name="Notification_an_error_occurred_and_your_backup">Si è verificato un errore e non è stato possibile completare il backup. Tocca per i dettagli.</string>
     <!-- Notification title for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_no_backup_for_d_days">
-        <item quantity="one">No backup for %1$d day</item>
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="one">Nessun backup da %1$d giorno</item>
+        <item quantity="other">Nessun backup da %1$d giorni</item>
     </plurals>
     <!-- Notification body for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_you_have_not_completed_a_backup">
-        <item quantity="one">You haven’t completed a backup for %1$d day. Create a backup now.</item>
-        <item quantity="other">You haven’t completed a backup for %1$d days. Create a backup now.</item>
+        <item quantity="one">Non effettui un backup da %1$d giorno. Creane uno ora.</item>
+        <item quantity="other">Non effettui un backup da %1$d giorni. Creane uno ora.</item>
     </plurals>
 
     <!-- EOF -->

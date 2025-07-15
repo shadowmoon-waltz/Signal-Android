@@ -1452,6 +1452,8 @@
     <string name="RemoteRestoreActivity__update_signal">Signal\'ды жаңыртуу</string>
     <!-- Text label button to dismiss the dialog -->
     <string name="RemoteRestoreActivity__not_now">Азыр эмес</string>
+    <!-- Text shown on restore screen as information on what will happen if you skip -->
+    <string name="RemoteRestoreActivity__if_you_choose_not_to_restore">Азыр калыбына келтирбесеңиз, кийин калыбына келтире албай каласыз. Медиа файлдар фондо калыбына келет.</string>
 
     <!-- GroupMentionSettingDialog -->
     <string name="GroupMentionSettingDialog_notify_me_for_mentions">Мени айтып өткөндөр тууралуу билип турайын</string>
@@ -4448,6 +4450,8 @@
     <string name="ConfirmKbsPinFragment__pin_created">PIN код түзүлдү.</string>
     <string name="ConfirmKbsPinFragment__re_enter_your_pin">PIN кодуңузду кайра киргизиңиз</string>
     <string name="ConfirmKbsPinFragment__creating_pin">PIN код түзүлүүдө…</string>
+    <!-- ID used when saving the PIN to the device password manager. -->
+    <string name="ConfirmKbsPinFragment__pin_password_manager_id">Signal PIN</string>
 
     <!-- KbsSplashFragment -->
     <string name="KbsSplashFragment__introducing_pins">PIN коддор менен таанышуу</string>
@@ -7551,7 +7555,7 @@
     <string name="PendingParticipantsBottomSheet__deny_all">Баарын четке кагуу</string>
 
     <!-- Title of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
-    <string name="TurnOnSignalBackups__title">Turn on Signal Backups</string>
+    <string name="TurnOnSignalBackups__title">Signal\'дын камдык көчүрмөлөрүн иштетүү</string>
     <!-- Body of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups -->
     <string name="TurnOnSignalBackups__body">Алардын баарын жаңы телефонуңузга же жаңы Signal\'га өткөрүп аласыз.</string>
     <!-- Button of a megaphone shown at the bottom of the chat list to prompt the user to enable message backups that will take the user to the flow to enable backups -->
@@ -7900,11 +7904,11 @@
     <!-- NoManualBackupBottomSheet -->
     <!-- Title for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__no_backup_for_d_days">
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="other">%1$d күндөн бери эч нерсе сактала элек</item>
     </plurals>
     <!-- Body for bottom sheet, placeholder is number of days. -->
     <plurals name="NoManualBackupBottomSheet__you_have_not_completed_a_backup">
-        <item quantity="other">You haven\'t completed a backup for %1$d days. To ensure your messages and media are preserved, create a backup now.</item>
+        <item quantity="other">%1$d күндөн бери бир да камдык көчүрмө сактала элек. Билдирүүлөрүңүз менен медиа файлдарыңызды жоготуп албаш үчүн алардын камдык көчүрмөлөрүн сактап коюңуз.</item>
     </plurals>
 
     <!-- BackupsSettingsFragment -->
@@ -7920,6 +7924,8 @@
     <string name="BackupsSettingsFragment_subscription_not_found_on_this_device">"Бул түзмөктө жазылуу табылган жок."</string>
     <!-- Action button label to set up backups -->
     <string name="BackupsSettingsFragment_set_up">Коюу</string>
+    <!-- Action button label to open remote backup settings -->
+    <string name="BackupsSettingsFragment_view_settings">View settings</string>
 
     <!-- RemoteBackupsSettingsFragment -->
     <!-- Content description for canceling backup upload -->
@@ -8174,12 +8180,18 @@
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_title">Сырсөздөрдү башкаргычка сактайсызбы?</string>
     <!-- Dialog message confirming that the user wants to save a backup key to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__confirm_save_to_password_manager_body">Камдык көчүрмөнүн ачкычын ишенимдүү сырсөздөрдү башкаргычка сактаңыз. Signal кайсы сырсөздөрдү башкаргычты колдонуу керектигин сунуштабайт.</string>
+    <!-- ID used when saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__backup_key_password_manager_id">Signal Backups</string>
     <!-- Message shown after the backup key is successfully saved to the device password manager. -->
     <string name="MessageBackupsKeyRecordScreen__save_to_password_manager_success">Сырсөздөрдү башкаргычыңызга сакталды</string>
-    <!-- Dialog title shown when there is an error saving the backup key because no compatible password manager was detected. -->
-    <string name="MessageBackupsKeyRecordScreen__missing_password_manager_title">Сырсөздөрдү башкаргычка сактоо мүмкүн болгон жок</string>
+    <!-- Dialog title shown when there is an error saving the backup key to the device password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__cant_save_to_password_manager_title">Сырсөздөрдү башкаргычка сактоо мүмкүн болгон жок</string>
     <!-- Dialog message shown when there is an error saving the backup key because no compatible password manager was detected. -->
     <string name="MessageBackupsKeyRecordScreen__missing_password_manager_message">Сырсөздөрдү башкаргычты орното элексиз же сиз колдонуп жаткан башкаргыч колдоого алынбайт.</string>
+    <!-- Dialog message shown when there is an error saving the backup key because the user previously chose not to save Signal passwords to their password manager. -->
+    <string name="MessageBackupsKeyRecordScreen__password_save_prompt_disabled_message">Signal\'дын сырсөздөрү Google Сырсөздөрдү башкаргычта сакталбасын дегенсиз. Google Сырсөздөрдү сактагычтын параметрлериндеги \"Четке кагылган сайттар менен колдонмолордон\" Signal\'ды өчүрүп, кайталап көрүңүз.</string>
+    <!-- Label for a button that navigates to the device settings -->
+    <string name="MessageBackupsKeyRecordScreen__go_to_settings">Тууралоо бөлүмүнө өтүү</string>
     <!-- Action button label -->
     <string name="MessageBackupsKeyRecordScreen__next">Кийинки</string>
     <!-- Bottom sheet title -->
@@ -8343,7 +8355,7 @@
   <!-- Removed by excludeNonTranslatables <string name="EnterBackupKey_network_failure_support_email_filter" translatable="false">Android SignalBackups Import Failed</string> -->
 
     <!-- Email subject when contacting support on a create backup failure -->
-    <string name="BackupAlertBottomSheet_network_failure_support_email">Signal Android Backup export network error</string>
+    <string name="BackupAlertBottomSheet_network_failure_support_email">Signal Android түзмөгүндөгү камдык көчүрмөнү калыбына келтирүүдө ката кетти</string>
     <!-- Email filter when contacting support on a create backup failure -->
   <!-- Removed by excludeNonTranslatables <string name="BackupAlertBottomSheet_export_failure_filter" translatable="false">Android SignalBackups Export Failed</string> -->
 
@@ -8442,14 +8454,14 @@
     <!-- Notification title for when initial backup failed -->
     <string name="Notification_backup_failed">Камдык көчүрмө сакталган жок</string>
     <!-- Notification body for when initial backup failed -->
-    <string name="Notification_an_error_occurred_and_your_backup">An error occurred and your backup could not be completed. Tap for details.</string>
+    <string name="Notification_an_error_occurred_and_your_backup">Ката кетти. Көбүрөөк билүү үчүн басып коюңуз.</string>
     <!-- Notification title for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_no_backup_for_d_days">
-        <item quantity="other">No backup for %1$d days</item>
+        <item quantity="other">%1$d күндөн бери эч нерсе сактала элек</item>
     </plurals>
     <!-- Notification body for when manual backup hasn\'t been created within threshold. Placeholder is number of days. -->
     <plurals name="Notification_you_have_not_completed_a_backup">
-        <item quantity="other">You haven’t completed a backup for %1$d days. Create a backup now.</item>
+        <item quantity="other">%1$d күндөн бери бир да камдык көчүрмө сактала элек. Азыр сактаңыз.</item>
     </plurals>
 
     <!-- EOF -->

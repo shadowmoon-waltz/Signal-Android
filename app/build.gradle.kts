@@ -21,8 +21,8 @@ plugins {
 
 apply(from = "static-ips.gradle.kts")
 
-val canonicalVersionCode = 1558
-val canonicalVersionName = "7.47.1"
+val canonicalVersionCode = 1562
+val canonicalVersionName = "7.49.0"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
 
@@ -591,6 +591,7 @@ dependencies {
   }
   implementation(libs.google.play.services.maps)
   implementation(libs.google.play.services.auth)
+  implementation(libs.google.signin)
   implementation(libs.bundles.media3)
   implementation(libs.conscrypt.android)
   implementation(libs.signal.aesgcmprovider)

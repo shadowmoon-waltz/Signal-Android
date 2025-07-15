@@ -29,12 +29,14 @@ import org.signal.core.util.bytes
 import org.signal.core.util.concurrent.LimitedWorker
 import org.signal.core.util.concurrent.SignalDispatchers
 import org.signal.core.util.concurrent.SignalExecutors
+import org.signal.core.util.decodeOrNull
 import org.signal.core.util.forceForeignKeyConstraintsEnabled
 import org.signal.core.util.fullWalCheckpoint
 import org.signal.core.util.getAllIndexDefinitions
 import org.signal.core.util.getAllTableDefinitions
 import org.signal.core.util.getAllTriggerDefinitions
 import org.signal.core.util.getForeignKeyViolations
+import org.signal.core.util.isNotEmpty
 import org.signal.core.util.logging.Log
 import org.signal.core.util.money.FiatMoney
 import org.signal.core.util.requireIntOrNull
@@ -62,6 +64,7 @@ import org.thoughtcrime.securesms.backup.v2.processor.ChatItemArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.NotificationProfileProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.RecipientArchiveProcessor
 import org.thoughtcrime.securesms.backup.v2.processor.StickerArchiveProcessor
+import org.thoughtcrime.securesms.backup.v2.proto.BackupDebugInfo
 import org.thoughtcrime.securesms.backup.v2.proto.BackupInfo
 import org.thoughtcrime.securesms.backup.v2.stream.BackupExportWriter
 import org.thoughtcrime.securesms.backup.v2.stream.BackupImportReader
@@ -104,6 +107,7 @@ import org.thoughtcrime.securesms.keyvalue.BackupValues.ArchiveServiceCredential
 import org.thoughtcrime.securesms.keyvalue.KeyValueStore
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.keyvalue.isDecisionPending
+import org.thoughtcrime.securesms.logsubmit.SubmitDebugLogRepository
 import org.thoughtcrime.securesms.net.SignalNetwork
 import org.thoughtcrime.securesms.notifications.NotificationChannels
 import org.thoughtcrime.securesms.notifications.NotificationIds
@@ -147,7 +151,10 @@ import java.io.OutputStream
 import java.time.ZonedDateTime
 import java.util.Currency
 import java.util.Locale
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicLong
+import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -530,7 +537,7 @@ object BackupRepository {
       return false
     }
 
-    return !SignalStore.backup.hasBackupBeenUploaded && System.currentTimeMillis().milliseconds > SignalStore.backup.nextBackupFailureSheetSnoozeTime
+    return !SignalStore.backup.hasBackupBeenUploaded && SignalStore.backup.hasBackupFailure && System.currentTimeMillis().milliseconds > SignalStore.backup.nextBackupFailureSheetSnoozeTime
   }
 
   /**
@@ -798,7 +805,8 @@ object BackupRepository {
             version = VERSION,
             backupTimeMs = exportState.backupTime,
             mediaRootBackupKey = SignalStore.backup.mediaRootBackupKey.value.toByteString(),
-            firstAppVersion = SignalStore.backup.firstAppVersion
+            firstAppVersion = SignalStore.backup.firstAppVersion,
+            debugInfo = buildDebugInfo()
           )
         )
         frameCount++
@@ -1211,6 +1219,7 @@ object BackupRepository {
     stopwatch.split("group-jobs")
 
     SignalStore.backup.firstAppVersion = header.firstAppVersion
+    SignalStore.internal.importedBackupDebugInfo = header.debugInfo.let { BackupDebugInfo.ADAPTER.decodeOrNull(it.toByteArray()) }
 
     Log.d(TAG, "[import] Finished! ${eventTimer.stop().summary}")
     stopwatch.stop(TAG)
@@ -1324,17 +1333,16 @@ object BackupRepository {
       }
   }
 
-  fun getBackupFileLastModified(): NetworkResult<ZonedDateTime?> {
+  fun getBackupFileLastModified(): NetworkResult<ZonedDateTime> {
     return initBackupAndFetchAuth()
       .then { credential ->
         SignalNetwork.archive.getBackupInfo(SignalStore.account.requireAci(), credential.messageBackupAccess)
       }
-      .then { info -> getCdnReadCredentials(CredentialType.MESSAGE, info.cdn ?: Cdn.CDN_3.cdnNumber).map { it.headers to info } }
+      .then { info -> getCdnReadCredentials(CredentialType.MESSAGE, info.cdn ?: RemoteConfig.backupFallbackArchiveCdn).map { it.headers to info } }
       .then { pair ->
         val (cdnCredentials, info) = pair
-        val messageReceiver = AppDependencies.signalServiceMessageReceiver
         NetworkResult.fromFetch {
-          messageReceiver.getCdnLastModifiedTime(info.cdn!!, cdnCredentials, "backups/${info.backupDir}/${info.backupName}")
+          AppDependencies.signalServiceMessageReceiver.getCdnLastModifiedTime(info.cdn!!, cdnCredentials, "backups/${info.backupDir}/${info.backupName}")
         }
       }
   }
@@ -1516,48 +1524,29 @@ object BackupRepository {
       .also { Log.i(TAG, "getCdnReadCredentialsResult: ${it::class.simpleName}") }
   }
 
-  fun restoreBackupTier(aci: ACI): MessageBackupTier? {
-    val tierResult = getBackupTier(aci)
+  fun restoreBackupFileTimestamp(): RestoreTimestampResult {
+    val timestampResult: NetworkResult<ZonedDateTime> = getBackupFileLastModified()
+
     when {
-      tierResult is NetworkResult.Success -> {
-        SignalStore.backup.backupTier = tierResult.result
-        Log.d(TAG, "Backup tier restored: ${SignalStore.backup.backupTier}")
+      timestampResult is NetworkResult.Success -> {
+        SignalStore.backup.lastBackupTime = timestampResult.result.toMillis()
+        SignalStore.backup.isBackupTimestampRestored = true
+        SignalStore.uiHints.markHasEverEnabledRemoteBackups()
+        return RestoreTimestampResult.Success(SignalStore.backup.lastBackupTime)
       }
 
-      tierResult is NetworkResult.StatusCodeError && tierResult.code == 404 -> {
-        Log.i(TAG, "Backups not enabled")
-        SignalStore.backup.backupTier = null
+      timestampResult is NetworkResult.StatusCodeError && timestampResult.code == 404 -> {
+        Log.i(TAG, "No backup file exists")
+        SignalStore.backup.lastBackupTime = 0L
+        SignalStore.backup.isBackupTimestampRestored = true
+        return RestoreTimestampResult.NotFound
       }
 
       else -> {
-        Log.w(TAG, "Could not retrieve backup tier.", tierResult.getCause())
-        return SignalStore.backup.backupTier
+        Log.w(TAG, "Could not check for backup file.", timestampResult.getCause())
+        return RestoreTimestampResult.Failure
       }
     }
-
-    SignalStore.backup.isBackupTierRestored = true
-
-    if (SignalStore.backup.backupTier != null) {
-      val timestampResult = getBackupFileLastModified()
-      when {
-        timestampResult is NetworkResult.Success -> {
-          SignalStore.backup.lastBackupTime = timestampResult.result?.toMillis() ?: 0L
-        }
-
-        timestampResult is NetworkResult.StatusCodeError && timestampResult.code == 404 -> {
-          Log.i(TAG, "No backup file exists")
-          SignalStore.backup.lastBackupTime = 0L
-        }
-
-        else -> {
-          Log.w(TAG, "Could not check for backup file.", timestampResult.getCause())
-        }
-      }
-
-      SignalStore.uiHints.markHasEverEnabledRemoteBackups()
-    }
-
-    return SignalStore.backup.backupTier
   }
 
   fun verifyBackupKeyAssociatedWithAccount(aci: ACI, aep: AccountEntropyPool): MessageBackupTier? {
@@ -1626,29 +1615,44 @@ object BackupRepository {
   }
 
   suspend fun getBackupsType(tier: MessageBackupTier): MessageBackupsType? {
-    return when (tier) {
+    val result = when (tier) {
       MessageBackupTier.FREE -> getFreeType()
       MessageBackupTier.PAID -> getPaidType()
+    }
+
+    return if (result is NetworkResult.Success) {
+      result.result
+    } else {
+      null
     }
   }
 
   @WorkerThread
-  fun getBackupLevelConfiguration(): SubscriptionsConfiguration.BackupLevelConfiguration? {
-    val config = getSubscriptionsConfiguration()
-
-    return config.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL]
+  fun getBackupLevelConfiguration(): NetworkResult<SubscriptionsConfiguration.BackupLevelConfiguration> {
+    return AppDependencies.donationsApi
+      .getDonationsConfiguration(Locale.getDefault())
+      .then {
+        val config = it.backupConfiguration.backupLevelConfigurationMap[SubscriptionsConfiguration.BACKUPS_LEVEL]
+        if (config != null) {
+          NetworkResult.Success(config)
+        } else {
+          NetworkResult.StatusCodeError(NonSuccessfulResponseCodeException(404))
+        }
+      }
   }
 
   @WorkerThread
-  private fun getFreeType(): MessageBackupsType.Free {
-    val config = getSubscriptionsConfiguration()
-
-    return MessageBackupsType.Free(
-      mediaRetentionDays = config.backupConfiguration.freeTierMediaDays
-    )
+  private fun getFreeType(): NetworkResult<MessageBackupsType.Free> {
+    return AppDependencies.donationsApi
+      .getDonationsConfiguration(Locale.getDefault())
+      .map {
+        MessageBackupsType.Free(
+          mediaRetentionDays = it.backupConfiguration.freeTierMediaDays
+        )
+      }
   }
 
-  suspend fun getPaidType(): MessageBackupsType.Paid? {
+  suspend fun getPaidType(): NetworkResult<MessageBackupsType.Paid> {
     val productPrice: FiatMoney? = if (SignalStore.backup.backupTierInternalOverride == MessageBackupTier.PAID) {
       Log.d(TAG, "Accessing price via mock subscription.")
       RecurringInAppPaymentRepository.getActiveSubscriptionSync(InAppPaymentSubscriberRecord.Type.BACKUP).getOrNull()?.activeSubscription?.let {
@@ -1661,37 +1665,17 @@ object BackupRepository {
 
     if (productPrice == null) {
       Log.w(TAG, "No pricing available. Exiting.")
-      return null
+      return NetworkResult.StatusCodeError(NonSuccessfulResponseCodeException(404))
     }
 
-    val backupLevelConfiguration = getBackupLevelConfiguration() ?: return null
-
-    return MessageBackupsType.Paid(
-      pricePerMonth = productPrice,
-      storageAllowanceBytes = backupLevelConfiguration.storageAllowanceBytes,
-      mediaTtl = backupLevelConfiguration.mediaTtlDays.days
-    )
-  }
-
-  @WorkerThread
-  private fun getSubscriptionsConfiguration(): SubscriptionsConfiguration {
-    val serviceResponse = AppDependencies
-      .donationsService
-      .getDonationsConfiguration(Locale.getDefault())
-
-    if (serviceResponse.result.isEmpty) {
-      if (serviceResponse.applicationError.isPresent) {
-        throw serviceResponse.applicationError.get()
+    return getBackupLevelConfiguration()
+      .map {
+        MessageBackupsType.Paid(
+          pricePerMonth = productPrice,
+          storageAllowanceBytes = it.storageAllowanceBytes,
+          mediaTtl = it.mediaTtlDays.days
+        )
       }
-
-      if (serviceResponse.executionError.isPresent) {
-        throw serviceResponse.executionError.get()
-      }
-
-      error("Unhandled error occurred while downloading configuration.")
-    }
-
-    return serviceResponse.result.get()
   }
 
   /**
@@ -1866,6 +1850,38 @@ object BackupRepository {
     return RemoteRestoreResult.Success
   }
 
+  private fun buildDebugInfo(): ByteString {
+    if (!RemoteConfig.internalUser) {
+      return ByteString.EMPTY
+    }
+
+    var debuglogUrl: String? = null
+
+    if (SignalStore.internal.includeDebuglogInBackup) {
+      Log.i(TAG, "User has debuglog inclusion enabled. Generating a debuglog.")
+      val latch = CountDownLatch(1)
+      SubmitDebugLogRepository().buildAndSubmitLog { url ->
+        debuglogUrl = url.getOrNull()
+        latch.countDown()
+      }
+
+      try {
+        val success = latch.await(10, TimeUnit.SECONDS)
+        if (!success) {
+          Log.w(TAG, "Timed out waiting for debuglog!")
+        }
+      } catch (e: Exception) {
+        Log.w(TAG, "Hit an error while generating the debuglog!")
+      }
+    }
+
+    return BackupDebugInfo(
+      debuglogUrl = debuglogUrl ?: "",
+      attachmentDetails = SignalDatabase.attachments.debugAttachmentStatsForBackupProto(),
+      usingPaidTier = SignalStore.backup.backupTier == MessageBackupTier.PAID
+    ).encodeByteString()
+  }
+
   interface ExportProgressListener {
     fun onAccount()
     fun onRecipient()
@@ -1942,6 +1958,12 @@ sealed interface RemoteRestoreResult {
   data object NetworkError : RemoteRestoreResult
   data object Canceled : RemoteRestoreResult
   data object Failure : RemoteRestoreResult
+}
+
+sealed interface RestoreTimestampResult {
+  data class Success(val timestamp: Long) : RestoreTimestampResult
+  data object NotFound : RestoreTimestampResult
+  data object Failure : RestoreTimestampResult
 }
 
 /**
