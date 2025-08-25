@@ -32,6 +32,7 @@ import org.whispersystems.signalservice.api.messages.AttachmentTransferProgress;
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachment.ProgressListener;
 import org.whispersystems.signalservice.api.messages.SignalServiceAttachmentRemoteId;
 import org.whispersystems.signalservice.api.messages.calls.CallingResponse;
+import org.whispersystems.signalservice.api.messages.multidevice.RegisterAsSecondaryDeviceResponse;
 import org.whispersystems.signalservice.api.push.SignalServiceAddress;
 import org.whispersystems.signalservice.api.push.SignedPreKeyEntity;
 import org.whispersystems.signalservice.api.push.exceptions.AlreadyVerifiedException;
@@ -179,7 +180,7 @@ public class PushServiceSocket {
 
   private static final String REGISTRATION_PATH    = "/v1/registration";
 
-  private static final String BACKUP_AUTH_CHECK_V2 = "/v2/backup/auth/check";
+  private static final String BACKUP_AUTH_CHECK_V2 = "/v2/svr/auth/check";
   private static final String BACKUP_AUTH_CHECK_V3 = "/v3/backup/auth/check";
 
   private static final String ARCHIVE_MEDIA_DOWNLOAD_PATH = "backups/%s/%s";
@@ -342,6 +343,11 @@ public class PushServiceSocket {
 
   public void requestPushChallenge(String sessionId, String gcmRegistrationId) throws IOException {
     patchVerificationSession(sessionId, gcmRegistrationId, null, null, null, null);
+  }
+
+  public RegisterAsSecondaryDeviceResponse registerAsSecondaryDevice(RegisterAsSecondaryDeviceRequest request) throws IOException {
+    String responseText = makeServiceRequest("/v1/devices/link", "PUT", JsonUtil.toJson(request));
+    return JsonUtil.fromJson(responseText, RegisterAsSecondaryDeviceResponse.class);
   }
 
   public SendGroupMessageResponse sendGroupMessage(byte[] body, @Nonnull SealedSenderAccess sealedSenderAccess, long timestamp, boolean online, boolean urgent, boolean story)
@@ -961,7 +967,7 @@ public class PushServiceSocket {
       if (response.isSuccessful()) {
         return file.getAttachmentDigest();
       } else {
-        throw new NonSuccessfulResponseCodeException(response.code(), "Response: " + response);
+        throw new NonSuccessfulResponseCodeException(response.code(), "Response: " + response, response.body().string());
       }
     } catch (PushNetworkException | NonSuccessfulResponseCodeException e) {
       throw e;

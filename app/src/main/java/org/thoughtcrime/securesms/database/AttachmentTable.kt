@@ -521,7 +521,7 @@ class AttachmentTable(
           file = File(it.requireNonNullString(DATA_FILE)),
           random = it.requireNonNullBlob(DATA_RANDOM),
           size = it.requireLong(DATA_SIZE),
-          remoteKey = it.requireBlob(REMOTE_KEY)!!,
+          remoteKey = Base64.decode(it.requireNonNullString(REMOTE_KEY)),
           plaintextHash = Base64.decode(it.requireNonNullString(DATA_HASH_END))
         )
       }
@@ -545,8 +545,8 @@ class AttachmentTable(
           attachmentId = AttachmentId(it.requireLong(ID)),
           mmsId = it.requireLong(MESSAGE_ID),
           size = it.requireLong(DATA_SIZE),
-          plaintextHash = it.requireBlob(DATA_HASH_END),
-          remoteKey = it.requireBlob(REMOTE_KEY)
+          plaintextHash = it.requireString(DATA_HASH_END)?.let { hash -> Base64.decode(hash) },
+          remoteKey = it.requireString(REMOTE_KEY)?.let { key -> Base64.decode(key) }
         )
       }
   }
@@ -569,8 +569,8 @@ class AttachmentTable(
           attachmentId = AttachmentId(it.requireLong(ID)),
           mmsId = it.requireLong(MESSAGE_ID),
           size = it.requireLong(DATA_SIZE),
-          plaintextHash = it.requireBlob(DATA_HASH_END),
-          remoteKey = it.requireBlob(REMOTE_KEY)
+          plaintextHash = it.requireString(DATA_HASH_END)?.let { hash -> Base64.decode(hash) },
+          remoteKey = it.requireString(REMOTE_KEY)?.let { key -> Base64.decode(key) }
         )
       }
   }
@@ -588,8 +588,8 @@ class AttachmentTable(
           attachmentId = AttachmentId(it.requireLong(ID)),
           mmsId = it.requireLong(MESSAGE_ID),
           size = it.requireLong(DATA_SIZE),
-          plaintextHash = it.requireBlob(DATA_HASH_END),
-          remoteKey = it.requireBlob(REMOTE_KEY)
+          plaintextHash = it.requireString(DATA_HASH_END)?.let { hash -> Base64.decode(hash) },
+          remoteKey = it.requireString(REMOTE_KEY)?.let { key -> Base64.decode(key) }
         )
       }
   }
@@ -606,8 +606,8 @@ class AttachmentTable(
           attachmentId = AttachmentId(it.requireLong(ID)),
           mmsId = it.requireLong(MESSAGE_ID),
           size = it.requireLong(DATA_SIZE),
-          plaintextHash = it.requireNonNullBlob(DATA_HASH_END),
-          remoteKey = it.requireNonNullBlob(REMOTE_KEY)
+          plaintextHash = it.requireString(DATA_HASH_END)?.let { hash -> Base64.decode(hash) },
+          remoteKey = it.requireString(REMOTE_KEY)?.let { key -> Base64.decode(key) }
         )
       }
   }
@@ -630,9 +630,9 @@ class AttachmentTable(
       .readToSingleLong()
   }
 
-  private fun getMessageDoesNotExpireWithinTimeoutClause(): String {
-    val messageHasExpiration = "${MessageTable.TABLE_NAME}.${MessageTable.EXPIRES_IN} > 0"
-    val messageExpiresInOneDayAfterViewing = "$messageHasExpiration AND  ${MessageTable.TABLE_NAME}.${MessageTable.EXPIRES_IN} < ${1.days.inWholeMilliseconds}"
+  private fun getMessageDoesNotExpireWithinTimeoutClause(tablePrefix: String = MessageTable.TABLE_NAME): String {
+    val messageHasExpiration = "$tablePrefix.${MessageTable.EXPIRES_IN} > 0"
+    val messageExpiresInOneDayAfterViewing = "$messageHasExpiration AND  $tablePrefix.${MessageTable.EXPIRES_IN} < ${1.days.inWholeMilliseconds}"
     return "NOT $messageExpiresInOneDayAfterViewing"
   }
 
@@ -643,11 +643,7 @@ class AttachmentTable(
     return readableDatabase
       .select("$TABLE_NAME.$ID")
       .from("$TABLE_NAME LEFT JOIN ${MessageTable.TABLE_NAME} ON $TABLE_NAME.$MESSAGE_ID = ${MessageTable.TABLE_NAME}.${MessageTable.ID}")
-      .where(
-        "($ARCHIVE_TRANSFER_STATE = ? or $ARCHIVE_TRANSFER_STATE = ?) AND $DATA_FILE NOT NULL AND $TRANSFER_STATE = $TRANSFER_PROGRESS_DONE AND (${MessageTable.STORY_TYPE} = 0 OR ${MessageTable.STORY_TYPE} IS NULL) AND ${getMessageDoesNotExpireWithinTimeoutClause()}",
-        ArchiveTransferState.NONE.value,
-        ArchiveTransferState.TEMPORARY_FAILURE.value
-      )
+      .where(buildAttachmentsThatNeedUploadQuery())
       .orderBy("$TABLE_NAME.$ID DESC")
       .run()
       .readToList { AttachmentId(it.requireLong(ID)) }
@@ -691,14 +687,10 @@ class AttachmentTable(
   /**
    * Similar to [getAttachmentsThatNeedArchiveUpload], but returns if the list would be non-null in a more efficient way.
    */
-  fun doAnyAttachmentsNeedArchiveUpload(): Boolean {
+  fun doAnyAttachmentsNeedArchiveUpload(currentTime: Long): Boolean {
     return readableDatabase
       .exists("$TABLE_NAME LEFT JOIN ${MessageTable.TABLE_NAME} ON $TABLE_NAME.$MESSAGE_ID = ${MessageTable.TABLE_NAME}.${MessageTable.ID}")
-      .where(
-        "($ARCHIVE_TRANSFER_STATE = ? OR $ARCHIVE_TRANSFER_STATE = ?) AND $DATA_FILE NOT NULL AND $TRANSFER_STATE = $TRANSFER_PROGRESS_DONE AND (${MessageTable.STORY_TYPE} = 0 OR ${MessageTable.STORY_TYPE} IS NULL) AND ${getMessageDoesNotExpireWithinTimeoutClause()}",
-        ArchiveTransferState.NONE.value,
-        ArchiveTransferState.TEMPORARY_FAILURE.value
-      )
+      .where(buildAttachmentsThatNeedUploadQuery())
       .run()
   }
 
@@ -855,12 +847,42 @@ class AttachmentTable(
               $DATA_HASH_END NOT NULL AND 
               $REMOTE_KEY NOT NULL AND
               $ARCHIVE_TRANSFER_STATE NOT IN (${ArchiveTransferState.FINISHED.value}, ${ArchiveTransferState.PERMANENT_FAILURE.value}) AND
+              $CONTENT_TYPE != '${MediaUtil.LONG_TEXT}' AND
               (${MessageTable.STORY_TYPE} = 0 OR ${MessageTable.STORY_TYPE} IS NULL) AND
-              ${getMessageDoesNotExpireWithinTimeoutClause()}
+              (${MessageTable.EXPIRES_IN} = 0 OR ${MessageTable.EXPIRES_IN} > ${ChatItemArchiveExporter.EXPIRATION_CUTOFF.inWholeMilliseconds})
           )
         """.trimIndent()
       )
       .readToSingleLong()
+  }
+
+  /**
+   * Returns sum of the file sizes of attachments that are not fully uploaded to the archive CDN.
+   */
+  fun debugGetPendingArchiveUploadAttachments(): List<DatabaseAttachment> {
+    return readableDatabase
+      .rawQuery(
+        """
+          SELECT *
+          FROM $TABLE_NAME as t
+          JOIN (
+            SELECT DISTINCT $DATA_HASH_END, $REMOTE_KEY, $DATA_SIZE
+            FROM $TABLE_NAME LEFT JOIN ${MessageTable.TABLE_NAME} ON $TABLE_NAME.$MESSAGE_ID = ${MessageTable.TABLE_NAME}.${MessageTable.ID}
+            WHERE
+              $DATA_FILE NOT NULL AND
+              $DATA_HASH_END NOT NULL AND
+              $REMOTE_KEY NOT NULL AND
+              $ARCHIVE_TRANSFER_STATE NOT IN (${ArchiveTransferState.FINISHED.value}, ${ArchiveTransferState.PERMANENT_FAILURE.value}) AND
+              $CONTENT_TYPE != '${MediaUtil.LONG_TEXT}' AND
+              (${MessageTable.STORY_TYPE} = 0 OR ${MessageTable.STORY_TYPE} IS NULL) AND
+              (${MessageTable.EXPIRES_IN} = 0 OR ${MessageTable.EXPIRES_IN} > ${ChatItemArchiveExporter.EXPIRATION_CUTOFF.inWholeMilliseconds})
+          ) as filtered
+          ON t.$DATA_HASH_END = filtered.$DATA_HASH_END
+        """.trimIndent()
+      )
+      .readToList {
+        it.readAttachment()
+      }
   }
 
   fun deleteAttachmentsForMessage(mmsId: Long): Boolean {
@@ -1994,6 +2016,24 @@ class AttachmentTable(
       .run()
   }
 
+  fun debugMakeValidForArchive(attachmentId: AttachmentId) {
+    writableDatabase
+      .execSQL(
+        """
+        UPDATE $TABLE_NAME
+        SET $DATA_HASH_END = $DATA_HASH_START
+        WHERE $ID = ${attachmentId.id}
+      """
+      )
+
+    writableDatabase
+      .update(TABLE_NAME)
+      .values(
+        REMOTE_KEY to Base64.encodeWithPadding(Util.getSecretBytes(64)),
+        REMOTE_DIGEST to Util.getSecretBytes(64)
+      )
+  }
+
   /**
    * Deletes the data file if there's no strong references to other attachments.
    * If deleted, it will also clear all weak references (i.e. quotes) of the attachment.
@@ -2481,8 +2521,6 @@ class AttachmentTable(
   }
 
   fun getEstimatedArchiveMediaSize(): Long {
-    val expirationCutoff = ChatItemArchiveExporter.EXPIRATION_CUTOFF.inWholeMilliseconds
-
     val estimatedThumbnailCount = readableDatabase
       .select("COUNT(*)")
       .from(
@@ -2497,7 +2535,7 @@ class AttachmentTable(
             $TRANSFER_STATE = $TRANSFER_PROGRESS_DONE AND
             $ARCHIVE_TRANSFER_STATE != ${ArchiveTransferState.PERMANENT_FAILURE.value} AND 
             ($CONTENT_TYPE LIKE 'image/%' OR $CONTENT_TYPE LIKE 'video/%') AND
-            (m.${MessageTable.EXPIRES_IN} = 0 OR (m.${MessageTable.EXPIRES_IN} > $expirationCutoff AND (m.${MessageTable.EXPIRE_STARTED} + m.${MessageTable.EXPIRES_IN} + $expirationCutoff < ${System.currentTimeMillis()})))
+            ${getMessageDoesNotExpireWithinTimeoutClause(tablePrefix = "m")}
         )
         """
       )
@@ -2517,7 +2555,7 @@ class AttachmentTable(
               $REMOTE_KEY NOT NULL AND 
               $TRANSFER_STATE = $TRANSFER_PROGRESS_DONE AND
               $ARCHIVE_TRANSFER_STATE != ${ArchiveTransferState.PERMANENT_FAILURE.value} AND
-              (m.${MessageTable.EXPIRES_IN} = 0 OR (m.${MessageTable.EXPIRES_IN} > $expirationCutoff AND (m.${MessageTable.EXPIRE_STARTED} + m.${MessageTable.EXPIRES_IN} + $expirationCutoff < ${System.currentTimeMillis()})))
+              ${getMessageDoesNotExpireWithinTimeoutClause(tablePrefix = "m")}
           )
         """
       )
@@ -2547,6 +2585,16 @@ class AttachmentTable(
       }
   }
 
+  private fun buildAttachmentsThatNeedUploadQuery(): String {
+    return """
+      $ARCHIVE_TRANSFER_STATE IN (${ArchiveTransferState.NONE.value}, ${ArchiveTransferState.TEMPORARY_FAILURE.value}) AND 
+      $DATA_FILE NOT NULL AND 
+      $TRANSFER_STATE = $TRANSFER_PROGRESS_DONE AND 
+      (${MessageTable.STORY_TYPE} = 0 OR ${MessageTable.STORY_TYPE} IS NULL) AND 
+      (${MessageTable.TABLE_NAME}.${MessageTable.EXPIRES_IN} <= 0 OR ${MessageTable.TABLE_NAME}.${MessageTable.EXPIRES_IN} > ${ChatItemArchiveExporter.EXPIRATION_CUTOFF.inWholeMilliseconds}) AND
+      $CONTENT_TYPE != '${MediaUtil.LONG_TEXT}'
+    """
+  }
   private fun getAttachment(cursor: Cursor): DatabaseAttachment {
     val contentType = cursor.requireString(CONTENT_TYPE)
 
