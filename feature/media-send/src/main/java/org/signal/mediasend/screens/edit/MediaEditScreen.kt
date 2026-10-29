@@ -106,7 +106,8 @@ internal fun MediaEditScreen(
   state: MediaEditState,
   onEvent: (MediaEditScreenEvents) -> Unit,
   imageControllers: ImageController.Container,
-  videoPlayerCommands: Flow<VideoPlayerCommand> = emptyFlow()
+  videoPlayerCommands: Flow<VideoPlayerCommand> = emptyFlow(),
+  onLongClick: (() -> Unit)? = null
 ) {
   val scope = rememberCoroutineScope()
 
@@ -567,7 +568,8 @@ internal fun MediaEditScreen(
           MediaEditSummaryPill(
             displayName = displayName,
             selectedMedia = state.selectedMedia,
-            selectedPage = pagerState.currentPage
+            selectedPage = pagerState.currentPage,
+            onLongClick = onLongClick
           )
         }
       }

@@ -370,6 +370,15 @@ class AccountValues internal constructor(store: KeyValueStore, context: Context)
     }
   }
 
+  fun setIdentityKeysManually(publicKey: ByteArray, privateKey: ByteArray) {
+    require(isPrimaryDevice) { "Must be a primary device!" }
+    store
+      .beginWrite()
+      .putBlob(KEY_ACI_IDENTITY_PUBLIC_KEY, publicKey)
+      .putBlob(KEY_ACI_IDENTITY_PRIVATE_KEY, privateKey)
+      .commit()
+  }
+
   fun setNumberAndPniIdentity(e164: String, pni: PNI, pniRegistrationId: Int, pniIdentityKeyPair: IdentityKeyPair) {
     synchronized(this) {
       Log.i(TAG, "Setting the E164, PNI, PNI registration ID, and PNI identity key pair.")
@@ -462,8 +471,11 @@ class AccountValues internal constructor(store: KeyValueStore, context: Context)
   }
 
   /** Indicates whether the user has the ability to receive FCM messages. Largely coupled to whether they have Play Service. */
-  @get:JvmName("isFcmEnabled")
-  var fcmEnabled: Boolean by booleanValue(KEY_FCM_ENABLED, false)
+  // SW: retaining non-booleanValue version of this function due to the isForceWebsocketMode check
+  var fcmEnabled: Boolean
+    @JvmName("isFcmEnabled")
+    get() = getBoolean(KEY_FCM_ENABLED, false) && !SignalStore.settings.isForceWebsocketModeSW
+    set(value) = putBoolean(KEY_FCM_ENABLED, value) // still need this?
 
   /** The FCM token, which allows the server to send us FCM messages. */
   var fcmToken: String?

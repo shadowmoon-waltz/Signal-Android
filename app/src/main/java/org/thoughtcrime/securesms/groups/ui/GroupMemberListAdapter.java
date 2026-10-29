@@ -20,6 +20,7 @@ import org.thoughtcrime.securesms.badges.BadgeImageView;
 import org.thoughtcrime.securesms.components.AvatarImageView;
 import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
 import org.thoughtcrime.securesms.conversation.colors.NameColor;
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.groups.memberlabel.MemberLabel;
 import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelPillView;
 import org.thoughtcrime.securesms.recipients.Recipient;
@@ -257,8 +258,16 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
       }
 
       if (this.about != null) {
-        this.about.setText(about);
-        this.about.setVisibility(Util.isEmpty(about) ? View.GONE : View.VISIBLE);
+        if (!Util.isEmpty(about)) {
+          this.about.setText(about);
+          this.about.setVisibility(View.VISIBLE);
+        } else if (SignalStore.settings().isAlsoShowProfileName()) {
+          final String displayName2 = recipient.getDisplayName2(this.context);
+          this.about.setText(displayName2);
+          this.about.setVisibility(Util.isEmpty(displayName2) ? View.GONE : View.VISIBLE);
+        } else {
+          this.about.setVisibility(View.GONE);
+        }
       }
     }
 

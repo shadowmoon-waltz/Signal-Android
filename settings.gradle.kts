@@ -164,4 +164,4 @@ include(":microbenchmark")
 // App project name
 project(":app").name = "Signal-Android"
 
-rootProject.name = "Signal"
+rootProject.name = "SignalSW"

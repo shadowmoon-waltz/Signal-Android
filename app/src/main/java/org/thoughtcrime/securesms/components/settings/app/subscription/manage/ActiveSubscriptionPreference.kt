@@ -122,28 +122,14 @@ object ActiveSubscriptionPreference {
     private fun presentPaymentFailureState(model: Model) {
       val contactString = context.getString(R.string.MySupportPreference__please_contact_support)
 
-      expiry.text = SpanUtil.clickSubstring(
-        context.getString(R.string.DonationsErrors__error_processing_payment_s, contactString),
-        contactString,
-        {
-          model.onContactSupport()
-        },
-        ContextCompat.getColor(context, CoreUiR.color.signal_accent_primary)
-      )
+      expiry.text = context.getString(R.string.DonationsErrors__error_processing_payment_s, contactString)
       progress.visible = false
     }
 
     private fun presentRedemptionFailureState(model: Model) {
       val contactString = context.getString(R.string.MySupportPreference__please_contact_support)
 
-      expiry.text = SpanUtil.clickSubstring(
-        context.getString(R.string.MySupportPreference__couldnt_add_badge_s, contactString),
-        contactString,
-        {
-          model.onContactSupport()
-        },
-        ContextCompat.getColor(context, CoreUiR.color.signal_accent_primary)
-      )
+      expiry.text = context.getString(R.string.MySupportPreference__couldnt_add_badge_s, contactString)
       progress.visible = false
     }
   }

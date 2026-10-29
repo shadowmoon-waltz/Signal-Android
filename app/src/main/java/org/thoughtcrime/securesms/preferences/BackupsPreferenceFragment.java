@@ -2,6 +2,7 @@ package org.thoughtcrime.securesms.preferences;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -11,12 +12,14 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.compose.ui.platform.ComposeView;
 import androidx.core.text.HtmlCompat;
@@ -43,6 +46,7 @@ import org.thoughtcrime.securesms.keyvalue.SignalStore;
 import org.thoughtcrime.securesms.preferences.widgets.UpgradeLocalBackupCard;
 import org.thoughtcrime.securesms.service.LocalBackupListener;
 import org.thoughtcrime.securesms.util.BackupUtil;
+import org.thoughtcrime.securesms.util.DateUtils;
 import org.thoughtcrime.securesms.util.Environment;
 import org.thoughtcrime.securesms.util.LocalTimeExtensionsKt;
 
@@ -72,6 +76,9 @@ public class BackupsPreferenceFragment extends Fragment {
   private ProgressBar progress;
   private TextView    progressSummary;
   private ComposeView upgradeCard;
+  private View        interval;
+  private TextView    intervalSummary;
+  private TextView    intervalNext;
 
   private final NumberFormat formatter = NumberFormat.getInstance();
 
@@ -100,11 +107,15 @@ public class BackupsPreferenceFragment extends Fragment {
     progress        = view.findViewById(R.id.fragment_backup_progress);
     progressSummary = view.findViewById(R.id.fragment_backup_progress_summary);
     upgradeCard     = view.findViewById(R.id.upgrade_to_improved_backups_card);
+    interval        = view.findViewById(R.id.fragment_backup_interval);
+    intervalSummary = view.findViewById(R.id.fragment_backup_interval_summary);
+    intervalNext    = view.findViewById(R.id.fragment_backup_interval_next);
 
     toggle.setOnClickListener(unused -> onToggleClicked());
     create.setOnClickListener(unused -> onCreateClicked());
     verify.setOnClickListener(unused -> BackupDialog.showVerifyBackupPassphraseDialog(requireContext()));
     timer.setOnClickListener(unused -> pickTime());
+    interval.setOnClickListener(unused -> onIntervalClicked());
 
     formatter.setMinimumFractionDigits(1);
     formatter.setMaximumFractionDigits(1);
@@ -131,6 +142,8 @@ public class BackupsPreferenceFragment extends Fragment {
     setBackupSummary();
     setInfo();
     setUpdateState();
+    setIntervalSummary();
+    setIntervalNext();
   }
 
   @Override
@@ -340,6 +353,7 @@ public class BackupsPreferenceFragment extends Fragment {
     create.setVisibility(View.VISIBLE);
     verify.setVisibility(View.VISIBLE);
     timer.setVisibility(View.VISIBLE);
+    interval.setVisibility(View.VISIBLE);
     updateToggle();
     updateTimeLabel();
     setBackupFolderName();
@@ -351,7 +365,58 @@ public class BackupsPreferenceFragment extends Fragment {
     folder.setVisibility(View.GONE);
     verify.setVisibility(View.GONE);
     timer.setVisibility(View.GONE);
+    interval.setVisibility(View.GONE);
     updateToggle();
     AppDependencies.getJobManager().cancelAllInQueue(LocalBackupJob.QUEUE);
+  }
+
+  private void setIntervalSummary() {
+    int days = SignalStore.settings().getBackupIntervalInDays();
+    intervalSummary.setText(requireContext().getResources().getQuantityString(R.plurals.fork__backup_interval_format, days, days));
+  }
+
+  private void setIntervalNext() {
+    long next = SignalStore.settings().getLocalBackupNextTime();
+    intervalNext.setText(getString(R.string.fork__next_backup_format, DateUtils.getTimeString(requireContext(), Locale.getDefault(), next)));
+  }
+
+  private void onIntervalClicked() {
+    final Context context = requireContext();
+    final EditText v = new EditText(context);
+    final int days = SignalStore.settings().getBackupIntervalInDays();
+    String daysStr = (days > 1) ? Integer.toString(days) : "1";
+    v.setText(daysStr);
+    new AlertDialog.Builder(context)
+      .setTitle(R.string.fork__backup_interval_in_days)
+      .setView(v)
+      .setPositiveButton(android.R.string.ok, (d, i) -> {
+        int newDays;
+        try {
+          newDays = Integer.parseInt(v.getText().toString());
+        } catch (Throwable e) {
+          newDays = 0;
+        }
+        d.dismiss();
+        if (newDays > 0 && newDays != days) {
+          SignalStore.settings().setBackupIntervalInDays(newDays);
+          if (SignalStore.settings().isBackupEnabled() && BackupUtil.canUserAccessBackupDirectory(context)) {
+            LocalBackupListener.setNextBackupTimeToIntervalFromPrevious(context, days);
+            LocalBackupListener.schedule(context);
+            setIntervalSummary();
+            setIntervalNext();
+          }
+        } else {
+          new AlertDialog.Builder(context)
+            .setMessage(R.string.fork__backup_interval_invalid)
+            .setPositiveButton(android.R.string.ok, (d2, i2) -> {
+              d2.dismiss();
+            })
+            .show();
+        }
+      })
+      .setNegativeButton(android.R.string.cancel, (d, i) -> {
+        d.dismiss();
+      })
+      .show();
   }
 }

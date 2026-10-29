@@ -303,6 +303,32 @@ public final class MenuState {
            !conversationRecipient.isReleaseNotes();
   }
 
+  public static boolean canDeleteMessage(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord) || !messageRecord.isInMemoryMessageRecord());
+  }
+
+
+  public static boolean canCopyMessage(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord) && !messageRecord.isRemoteDelete() && messageRecord.getBody().length() > 0);
+  }
+
+  public static boolean canForwardMessage(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord) && (!messageRecord.isMms() || ((MmsMessageRecord) messageRecord).getSharedContacts().isEmpty()) &&
+            !messageRecord.isViewOnce() && !messageRecord.isRemoteDelete() && !messageRecord.isMediaPending());
+  }
+
+  public static boolean canShowMessageDetails(@NonNull MessageRecord messageRecord) {
+    return (!isActionMessage(messageRecord));
+  }
+
+  public static boolean canEditMessage(@NonNull ConversationMessage conversationMessage) {
+    MessageRecord messageRecord = conversationMessage.getMessageRecord();
+    return (!isActionMessage(messageRecord) &&
+            messageRecord.getBody().length() > 0 &&
+            !conversationMessage.getOriginalMessage().isFailed() &&
+            MessageConstraintsUtil.isValidEditMessageSend(conversationMessage.getOriginalMessage(), System.currentTimeMillis()));
+  }
+
   public static boolean isActionMessage(@NonNull MessageRecord messageRecord) {
     return messageRecord.isInMemoryMessageRecord() || messageRecord.isUpdate();
   }

@@ -132,6 +132,11 @@ internal object ConversationOptionsMenu {
 
       menuInflater.inflate(R.menu.conversation, menu)
 
+      // TODO[sw]: not sure deleting release notes still crashes (removed other workaround to past crash when switching to upstream delete chat)
+      if (!SignalStore.settings.isConversationDeleteInMenu || recipient.isReleaseNotes) {
+        hideMenuItem(menu, R.id.menu_delete_chat_2)
+      }
+
       if (!recipient.isGroup && !isPushAvailable && !recipient.isReleaseNotes) {
         menuInflater.inflate(R.menu.conversation_insecure, menu)
       }
@@ -235,6 +240,7 @@ internal object ConversationOptionsMenu {
         R.id.menu_unblock -> callback.handleUnblock()
         R.id.menu_report_spam -> callback.handleReportSpam()
         R.id.menu_accept -> callback.handleMessageRequestAccept()
+        R.id.menu_delete_chat_2,
         R.id.menu_delete_chat -> callback.handleDeleteConversation()
         R.id.edittext_bold,
         R.id.edittext_italic,

@@ -1,10 +1,13 @@
 package org.thoughtcrime.securesms.conversation.mutiselect.forward
 
+import android.app.Activity
+import android.widget.Toast
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.signal.core.models.recipients.RecipientId
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.network.util.Preconditions
+import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.contacts.paged.ContactSearchKey
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.recipients.Recipient
@@ -99,5 +102,20 @@ object MultiselectForwardRepository {
     } else {
       resultHandlers.onAllMessageSentSuccessfully()
     }
+  }
+
+  fun sendNoteToSelf(activity: Activity, args: MultiselectForwardFragmentArgs) {
+    val recipient = Recipient.self()
+    SignalDatabase.threads.getOrCreateThreadIdFor(recipient)
+    send(
+      "",
+      args.multiShareArgs,
+      setOf(ContactSearchKey.RecipientSearchKey(recipient.id, false)),
+      MultiselectForwardResultHandlers(
+        onAllMessageSentSuccessfully = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
+        onAllMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_failed_to_send, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } },
+        onSomeMessagesFailed = { activity.runOnUiThread { Toast.makeText(activity, activity.resources.getQuantityString(R.plurals.MultiselectForwardFragment_messages_sent, args.multiShareArgs.size), Toast.LENGTH_SHORT).show() } }
+      )
+    )
   }
 }

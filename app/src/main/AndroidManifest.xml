@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- SW: android:targetSandboxVersion="2" ? -->
+    
+    <queries>
+      <intent>
+        <action android:name="android.intent.action.PROCESS_TEXT" />
+        <data android:mimeType="text/plain" />
+      </intent>
+    </queries>
+
     <!-- ======================================= -->
     <!-- Features                                -->
     <!-- ======================================= -->
@@ -524,6 +533,13 @@
 
         <activity
             android:name=".preferences.EditProxyActivity"
+            android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"
+            android:exported="false"
+            android:theme="@style/Signal.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".preferences.SetIdentityKeysActivity"
             android:configChanges="touchscreen|keyboard|keyboardHidden|orientation|screenLayout|screenSize"
             android:exported="false"
             android:theme="@style/Signal.DayNight.NoActionBar"

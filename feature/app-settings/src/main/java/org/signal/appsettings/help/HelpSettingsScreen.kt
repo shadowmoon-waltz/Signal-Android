@@ -70,6 +70,7 @@ fun HelpSettingsScreen(
         )
       }
 
+      /*
       item {
         Rows.TextRow(
           text = stringResource(R.string.HelpSettingsFragment__contact_us),
@@ -77,6 +78,7 @@ fun HelpSettingsScreen(
           modifier = Modifier.testTag(HelpSettingsTestTags.ROW_CONTACT_US)
         )
       }
+      */
 
       item {
         Dividers.Default()
@@ -135,7 +137,9 @@ private fun LegalNotice() {
     TextAndLabel(
       label = listOf(
         stringResource(R.string.HelpFragment__copyright_signal_messenger),
+        ", shadowmoon_waltz",
         stringResource(R.string.HelpFragment__licenced_under_the_agplv3),
+        "MollySW (this app) is a unaffiliated fork of Molly",
         stringResource(R.string.HelpSettingsFragment__signal_is_a_501c3)
       ).joinToString("\n")
     )

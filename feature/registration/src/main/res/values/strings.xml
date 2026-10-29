@@ -834,4 +834,6 @@
     <string name="PasskeyVerificationScreen__cancel">Cancel</string>
     <!-- Dialog message shown when a passkey verification attempt fails for a reason the user can\'t act on -->
     <string name="PasskeyVerificationScreen__something_went_wrong_with_your_passkey">Something went wrong with your passkey. Please try again.</string>
+
+    <string name="ForkSettingsFragment__view_set_identity_keys">View/Set Identity Keys</string>
 </resources>

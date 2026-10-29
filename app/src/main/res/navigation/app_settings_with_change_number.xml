@@ -107,6 +107,13 @@
             app:popEnterAnim="@anim/fragment_close_enter"
             app:popExitAnim="@anim/fragment_close_exit" />
         <action
+            android:id="@+id/action_appSettingsFragment_to_forkSettingsFragment"
+            app:destination="@id/forkSettingsFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit"  />
+        <action
             android:id="@+id/action_appSettingsFragment_to_manageProfileActivity"
             app:destination="@id/manageProfileActivity"
             app:enterAnim="@anim/fragment_open_enter"
@@ -696,6 +703,32 @@
 
     <!-- endregion -->
 
+    <!-- region Fork Specific -->
+    <fragment
+        android:id="@+id/forkSettingsFragment"
+        android:name="org.thoughtcrime.securesms.components.settings.app.fork.ForkSettingsFragment"
+        android:label="fork_settings_fragment"
+        tools:layout="@layout/dsl_settings_fragment">
+        <action
+            android:id="@+id/action_forkSettingsFragment_to_setIdentityKeysFragment"
+            app:destination="@id/set_identity_keys"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+        <action
+            android:id="@+id/action_forkSettingsFragment_to_backupsPreferenceFragment"
+            app:destination="@id/backupsPreferenceFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit"
+            app:popEnterAnim="@anim/fragment_close_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+
+    <include app:graph="@navigation/set_identity_keys" />
+
+    <!-- endregion -->
+
     <!-- region Help -->
     <fragment
         android:id="@+id/helpSettingsFragment"
@@ -803,6 +836,14 @@
     <action
         android:id="@+id/action_direct_to_editProxyFragment"
         app:destination="@id/edit_proxy"
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit" />
+
+    <action
+        android:id="@+id/action_direct_to_setIdentityKeysFragment"
+        app:destination="@id/set_identity_keys"
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_open_exit"
         app:popEnterAnim="@anim/fragment_close_enter"
@@ -998,6 +1039,16 @@
     <action
         android:id="@+id/action_direct_to_linkedDeviceAccountSettingsFragment"
         app:destination="@id/linkedDeviceAccountSettingsFragment"
+        app:enterAnim="@anim/fragment_open_enter"
+        app:exitAnim="@anim/fragment_open_exit"
+        app:popEnterAnim="@anim/fragment_close_enter"
+        app:popExitAnim="@anim/fragment_close_exit"
+        app:popUpTo="@id/app_settings"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_direct_to_forkSettingsFragment"
+        app:destination="@id/forkSettingsFragment"
         app:enterAnim="@anim/fragment_open_enter"
         app:exitAnim="@anim/fragment_open_exit"
         app:popEnterAnim="@anim/fragment_close_enter"

@@ -246,6 +246,9 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
       Sorting.Newest -> " ORDER BY ${MessageTable.TABLE_NAME}.${MessageTable.DATE_SENT} DESC"
       Sorting.Oldest -> " ORDER BY ${MessageTable.TABLE_NAME}.${MessageTable.DATE_SENT} ASC"
       Sorting.Largest -> " ORDER BY ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DATA_SIZE} DESC"
+      // TODO: SW: need new indices?
+      Sorting.ContentTypeLargest -> " ORDER BY ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC, ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DATA_SIZE} DESC"
+      Sorting.ContentTypeNewest -> " ORDER BY ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC, ${MessageTable.TABLE_NAME}.${MessageTable.DATE_SENT} DESC"
     }
     val query = linkMediaQuery(threadId) + orderBy
     val args = arrayOf(threadId.toString())
@@ -272,6 +275,9 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
       Sorting.Newest -> " ORDER BY $MEDIA_MESSAGE_ID DESC"
       Sorting.Oldest -> " ORDER BY $MEDIA_MESSAGE_ID ASC"
       Sorting.Largest -> " ORDER BY ${AttachmentTable.DATA_SIZE} DESC"
+      // TODO: SW: need new indices?
+      Sorting.ContentTypeLargest -> " ORDER BY ${AttachmentTable.CONTENT_TYPE} DESC, ${AttachmentTable.DATA_SIZE} DESC"
+      Sorting.ContentTypeNewest -> " ORDER BY ${AttachmentTable.CONTENT_TYPE} DESC, $MEDIA_MESSAGE_ID DESC"
     }
 
     var query = "$allMediaSubquery UNION ALL $linkSubquery$orderBy"
@@ -510,12 +516,32 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC,
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ID} DESC
       """
+    ),
+    ContentTypeLargest(
+      """
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DATA_SIZE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC
+      """
+    ),
+    ContentTypeNewest(
+      """
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.MESSAGE_ID} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ID} DESC
+      """
     );
 
     private val postFix: String = " ORDER BY $order"
 
+    // SW : includes content type newest because I want to show file sizes in that case (for display
+    //      still groups by content type due to an earlier isRelatedToContentType check)
     val isRelatedToFileSize: Boolean
-      get() = this == Largest
+      get() = (this == Largest || this == ContentTypeLargest || this == ContentTypeNewest)
+
+    val isRelatedToContentType: Boolean
+      get() = (this == ContentTypeLargest || this == ContentTypeNewest)
 
     fun applyToQuery(query: String): String {
       return query + postFix
@@ -531,6 +557,7 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
       val displayOrder = anchor.displayOrder.toString()
       val id = anchor.attachmentId.id.toString()
       val dataSize = anchor.size.toString()
+      val contentType = anchor.contentType ?: ""
 
       return when (this) {
         Newest -> SqlUtil.Query(
@@ -546,6 +573,15 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
         Largest -> SqlUtil.Query(
           "(${AttachmentTable.DATA_SIZE} > ? OR (${AttachmentTable.DATA_SIZE} = ? AND (${AttachmentTable.DISPLAY_ORDER} > ? OR (${AttachmentTable.DISPLAY_ORDER} = ? AND ${AttachmentTable.ID} > ?))))",
           arrayOf(dataSize, dataSize, displayOrder, displayOrder, id)
+        )
+        ContentTypeLargest -> SqlUtil.Query(
+          "(${AttachmentTable.CONTENT_TYPE} > ? OR (${AttachmentTable.DATA_SIZE} > ? OR (${AttachmentTable.DATA_SIZE} = ? AND (${AttachmentTable.DISPLAY_ORDER} > ? OR (${AttachmentTable.DISPLAY_ORDER} = ? AND ${AttachmentTable.ID} > ?)))))",
+          arrayOf(contentType, dataSize, dataSize, displayOrder, displayOrder, id)
+        )
+        ContentTypeNewest -> SqlUtil.Query(
+          """(${AttachmentTable.CONTENT_TYPE} > ? OR (${MessageTable.DATE_RECEIVED} > ? OR (${MessageTable.DATE_RECEIVED} = ? AND
+             (${AttachmentTable.MESSAGE_ID} > ? OR (${AttachmentTable.MESSAGE_ID} = ? AND (${AttachmentTable.DISPLAY_ORDER} > ? OR (${AttachmentTable.DISPLAY_ORDER} = ? AND ${AttachmentTable.ID} > ?)))))))""",
+          arrayOf(contentType, dateReceived, dateReceived, messageId, messageId, displayOrder, displayOrder, id)
         )
       }
     }

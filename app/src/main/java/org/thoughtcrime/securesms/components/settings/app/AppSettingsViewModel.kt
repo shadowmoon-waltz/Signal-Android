@@ -75,11 +75,11 @@ class AppSettingsViewModel(
       AppSettingsEvent.AccountClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.AccountRoute.Account)
       AppSettingsEvent.LinkedDevicesClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.LinkDeviceRoute.LinkDevice)
       AppSettingsEvent.DonateClicked -> {
-        if (_state.value.allowUserToGoToDonationManagementScreen) {
-          parentEventEmitter.navigateTo(AppSettingsRoute.DonationsRoute.Donations())
-        } else {
+        //if (_state.value.allowUserToGoToDonationManagementScreen) {
+        //  parentEventEmitter.navigateTo(AppSettingsRoute.DonationsRoute.Donations())
+        //} else {
           _actions.send(AppSettingsAction.OpenDonateUrl)
-        }
+        //}
       }
       AppSettingsEvent.DonateLongClicked -> copySubscriberId(InAppPaymentSubscriberRecord.Type.DONATION, Snackbar.CopiedDonorSubscriberId)
       AppSettingsEvent.AppearanceClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.AppearanceRoute.Appearance)
@@ -96,6 +96,7 @@ class AppSettingsViewModel(
       AppSettingsEvent.DataAndStorageClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.DataAndStorageRoute.DataAndStorage)
       AppSettingsEvent.AppUpdatesClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.AppUpdates)
       AppSettingsEvent.PaymentsClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.Payments)
+      AppSettingsEvent.ForkSettingsClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.ForkSettings)
       AppSettingsEvent.HelpClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.HelpRoute.Settings())
       AppSettingsEvent.InviteClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.Invite)
       AppSettingsEvent.LabsClicked -> parentEventEmitter.navigateTo(AppSettingsRoute.LabsRoute.Labs)

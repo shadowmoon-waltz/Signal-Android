@@ -76,6 +76,7 @@ object AppSettingsTestTags {
   const val ROW_DATA_AND_STORAGE = "row-data-and-storage"
   const val ROW_APP_UPDATES = "row-app-updates"
   const val ROW_PAYMENTS = "row-payments"
+  const val ROW_FORK_SETTINGS = "row-fork-settings"
   const val ROW_HELP = "row-help"
   const val ROW_INVITE = "row-invite"
   const val ROW_LABS = "row-labs"
@@ -323,6 +324,21 @@ fun AppSettingsScreen(
               modifier = Modifier.selectionHighlight(selectedRoute == AppSettingsRoute.Payments)
             )
           }
+        }
+
+        item {
+          Dividers.Default()
+        }
+
+        item {
+          Rows.TextRow(
+            text = stringResource(R.string.preferences__fork_specific),
+            icon = SignalIcons.Help.painter,
+            onClick = { onEvent(AppSettingsEvent.ForkSettingsClicked) },
+            modifier = Modifier
+              .selectionHighlight(selectedRoute is AppSettingsRoute.ForkSettings)
+              .testTag(AppSettingsTestTags.ROW_FORK_SETTINGS)
+          )
         }
 
         item {

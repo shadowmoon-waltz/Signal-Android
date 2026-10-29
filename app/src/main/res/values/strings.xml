@@ -7,7 +7,7 @@
 
 <!-- smartling.instruction_comments_enabled = on -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">Signal</string>
+    <string name="app_name" translatable="false">SignalSW</string>
 
     <string name="donate_url" translatable="false">https://signal.org/donate</string>
     <string name="backup_support_url" translatable="false">https://support.signal.org/hc/articles/360007059752</string>
@@ -1521,7 +1521,7 @@
     <string name="LongMessageActivity_your_message">Your message</string>
 
     <!-- MessageRetrievalService -->
-    <string name="MessageRetrievalService_signal">Signal</string>
+    <string name="MessageRetrievalService_signal">SignalSW</string>
     <string name="MessageRetrievalService_background_connection_enabled">Background connection enabled</string>
 
     <!-- MediaOverviewActivity -->
@@ -3117,7 +3117,7 @@
     <string name="ShortcutLauncherActivity_invalid_shortcut">Invalid shortcut</string>
 
     <!-- SingleRecipientNotificationBuilder -->
-    <string name="SingleRecipientNotificationBuilder_signal">Signal</string>
+    <string name="SingleRecipientNotificationBuilder_signal">SignalSW</string>
     <string name="SingleRecipientNotificationBuilder_new_message">New message</string>
     <string name="SingleRecipientNotificationBuilder_message_request">Message request</string>
     <string name="SingleRecipientNotificationBuilder_you">You</string>
@@ -4071,7 +4071,7 @@
 
     <!-- BiometricDeviceAuthentication -->
     <!-- Biometric/Device authentication prompt title -->
-    <string name="BiometricDeviceAuthentication__signal">Signal</string>
+    <string name="BiometricDeviceAuthentication__signal">SignalSW</string>
 
 
     <!-- CurrencyAmountFormatter_s_at_s -->
@@ -5180,6 +5180,62 @@
     <string name="ExpireTimerSettingsFragment__custom_time">Custom time</string>
     <string name="ExpireTimerSettingsFragment__save">Save</string>
 
+
+    <!-- Fork -->
+    <string name="preferences__fork_specific">Fork Specific</string>
+    <string name="ForkSettingsFragment__show_reaction_timestamps">Show reaction timestamps</string>
+    <string name="ForkSettingsFragment__force_websocket_mode">Force WebSocket mode</string>
+    <string name="ForkSettingsFragment__force_websocket_mode_summary">May require an app restart to take effect</string>
+    <string name="ForkSettingsFragment__view_set_identity_keys">View/Set Identity Keys</string>
+    <string name="ForkSettingsFragment__fast_custom_reaction_change">Fast Custom Reaction Change</string>
+    <string name="ForkSettingsFragment__fast_custom_reaction_change_summary">After sending a custom emoji as a reaction, click the custom emoji in the popup to bring up the emoji selector (click it at top of selector to remove)</string>
+    <string name="ForkSettingsFragment__copy_text_opens_popup">Copy Text Opens Popup</string>
+    <string name="ForkSettingsFragment__copy_text_opens_popup_summary">When selecting copy text for one or more messages in a conversation, it will appear as an editable string in a popup allowing easy modification and/or copying of part or all of the string</string>
+    <string name="ForkSettingsFragment__conversation_delete_in_menu">Delete Option in Conversation Menu</string>
+    <string name="ForkSettingsFragment__conversation_delete_in_menu_summary">Option will show up in menu while viewing a conversation</string>
+    <string name="ForkSettingsFragment__swipe_to_right_action__default">Default (Reply)</string>
+    <string name="ForkSettingsFragment__swipe_action__delete_prompt">Delete (Prompt)</string>
+    <string name="ForkSettingsFragment__swipe_action__delete_no_prompt">Delete (For Me) (No Prompt) (TODO: visual glitch)</string>
+    <string name="ForkSettingsFragment__swipe_action__copy_text_no_popup">Copy Text (No Popup)</string>
+    <string name="ForkSettingsFragment__swipe_action__copy_text_popup">Copy Text (Popup)</string>
+    <string name="ForkSettingsFragment__show_options">Show Options</string>
+    <string name="ForkSettingsFragment__select_multiple">Select multiple</string>
+    <string name="ForkSettingsFragment__swipe_to_right_action">Swipe to Right Conversation Item Action</string>
+    <string name="ForkSettingsFragment__range_multi_select">Conversation Items Range Multi Select</string>
+    <string name="ForkSettingsFragment__range_multi_select_summary">When using select multiple on conversation items, allow long pressing an item after selecting an item to select all items in that range (including the selected and long pressed items)</string>
+    <string name="ForkSettingsFragment__long_press_multi_select">Conversation Item Long Press Always Multi Select</string>
+    <string name="ForkSettingsFragment__long_press_multi_select_summary">Most useful when setting Swipe to Right Conversation Item Action to Show Options</string>
+    <string name="ForkSettingsFragment__also_show_profile_name">Also Show Profile Names with Contact Names</string>
+    <string name="ForkSettingsFragment__also_show_profile_name_summary">When enabled, profile names will be shown under contact names in detailed recipient views and group member lists (when a member does not have about set), for recipients with contact entries (by default, contact names replace profile names in most views)</string>
+    <string name="ForkSettingsFragment__manage_group_tweaks">(TO BE FIXED) Manage Group View Tweaks</string>
+    <string name="ForkSettingsFragment__manage_group_tweaks_summary">Hide text with prompt to add group description or number of members and move member list almost to top of view (but leaving the add members button where it usually is)</string>
+    <string name="ForkSettingsFragment__swipe_to_left_action__default">Default (None)</string>
+    <string name="ForkSettingsFragment__swipe_to_left_action">Swipe to Left Conversation Item Action</string>
+    <string name="ForkSettingsFragment__trash_no_prompt_for_me">Trash Button Deletes Messages For Me Without Confirmation</string>
+    <string name="ForkSettingsFragment__trash_no_prompt_for_me_summary">This does not affect the delete action in Swipe to Left or Right Conversation Item Actions (which may be helpful to access the otherwise unavailable Delete For Everyone when this is enabled, use Delete For Me (No Prompt) if you want the same behavior in the swipe actions)</string>
+    <string name="ForkSettingsFragment__prompt_mp4_as_gif">(TO BE FIXED) Prompt to send videos like GIFs</string>
+    <string name="ForkSettingsFragment__prompt_mp4_as_gif_summary">When selecting a video, a prompt will appear. Videos will autoplay, not have seek controls, will loop, sometimes appear larger than if sent as video, and may not have audio</string>
+    <string name="ForkSettingsFragment__backup_interval_in_days_summary">Click here to view/set in Chat Backup settings</string>
+    <string name="ForkSettingsFragment__alt_collapse_media_keyboard">(OBSOLETE) Long-press Signal icon in conversation bubble to hide media/attachment keyboard</string>
+    <string name="ForkSettingsFragment__alt_collapse_media_keyboard_summary">(Can now click the message textbox or swipe down from the top of the media keyboard to close) Works around possible bug where it may be otherwise difficult to close the media/attachment keyboard in conversation bubbles</string>
+    <string name="ForkSettingsFragment__alt_close_media_selection">Long-press recipient label while selecting media to close media selection</string>
+    <string name="ForkSettingsFragment__alt_close_media_selection_summary">Refers to recipient label that appears above media while adding/editing media to send in a conversation. Works around possible bug where it is otherwise difficult to close/go back from media selection while in conversation bubbles</string>
+    <string name="ForkSettingsFragment__sticker_mru_long_press_to_pack">(TO BE FIXED) Long-press sticker in recent list in sticker keyboard to jump to the pack</string>
+    <string name="ForkSettingsFragment__sticker_keyboard_pack_mru">Show packs on sticker keyboard in recently used order</string>
+    <string name="ForkSettingsFragment__double_tap_action__default">Default (Edit)</string>
+    <string name="ForkSettingsFragment__double_tap_action">Double Tap Conversation Item Action</string>
+
+    <string name="fork__backup_interval">Backup Interval</string>
+    <plurals name="fork__backup_interval_format">
+        <item quantity="one">Every day</item>
+        <item quantity="other">Every %d days</item>
+    </plurals>
+    <string name="fork__next_backup_format">Next backup: %s</string>
+    <string name="fork__backup_interval_in_days">Backup Interval in Days</string>
+    <string name="fork__backup_interval_invalid">Invalid number of days for backup interval</string>
+
+    <string name="fork__content_type_largest">Type / Largest</string>
+    <string name="fork__content_type_newest">Type / Newest</string>
 
     <!-- ChatColorSelectionFragment -->
     <!-- Text shown on a circle button to indicate the app will automatically select a color for conversation bubbles for this chat. -->

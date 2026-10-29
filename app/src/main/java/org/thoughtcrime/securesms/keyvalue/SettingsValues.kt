@@ -16,6 +16,7 @@ import org.thoughtcrime.securesms.preferences.widgets.NotificationPrivacyPrefere
 import org.thoughtcrime.securesms.util.DynamicTheme
 import org.thoughtcrime.securesms.util.Environment
 import org.thoughtcrime.securesms.util.SingleLiveEvent
+import org.thoughtcrime.securesms.util.SwipeActionTypes
 import java.util.Arrays
 import java.util.Random
 import kotlin.math.abs
@@ -103,6 +104,26 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
 
     const val BACKUP_DEFAULT_HOUR = 2
     const val BACKUP_DEFAULT_MINUTE = 0
+
+    const val SHOW_REACTION_TIMESTAMPS = "settings.fork.show.reaction.timestamps"
+    const val FORCE_WEBSOCKET_MODE_SW = "settings.fork.force.websocket.mode"
+    const val FAST_CUSTOM_REACTION_CHANGE = "settings.fork.fast.custom.reaction.change"
+    const val COPY_TEXT_OPENS_POPUP = "settings.fork.copy.text.opens.popup"
+    const val CONVERSATION_DELETE_IN_MENU = "settings.conversation.delete.in.menu"
+    const val SWIPE_TO_RIGHT_ACTION = "settings.swipe.to.right.action"
+    const val RANGE_MULTI_SELECT = "settings.range.multi.select"
+    const val LONG_PRESS_MULTI_SELECT = "settings.long.press.multi.select"
+    const val ALSO_SHOW_PROFILE_NAME = "settings.also.show.profile.name"
+    const val MANAGE_GROUP_TWEAKS = "settings.manage.group.tweaks"
+    const val SWIPE_TO_LEFT_ACTION = "settings.swipe.to.left.action"
+    const val TRASH_NO_PROMPT_FOR_ME = "settings.trash.no.prompt.for.me"
+    const val PROMPT_MP4_AS_GIF = "settings.prompt.mp4.as.gif"
+    const val BACKUP_INTERVAL_IN_DAYS = "settings.backup.interval.in.days"
+    const val ALT_COLLAPSE_MEDIA_KEYBOARD = "settings.alt.collapse.media.keyboard"
+    const val ALT_CLOSE_MEDIA_SELECTION = "settings.alt.close.media.selection"
+    const val STICKER_MRU_LONG_PRESS_TO_PACK = "settings.sticker.mru.long.press.to.pack"
+    const val STICKER_KEYBOARD_PACK_MRU = "settings.sticker.keyboard.pack.mru"
+    const val DOUBLE_TAP_ACTION = "settings.double.tap.action"
   }
 
   private val configurationSettingChanged = SingleLiveEvent<String>()
@@ -174,7 +195,27 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
     MEDIA_DOWNLOAD_MOBILE,
     MEDIA_DOWNLOAD_WIFI,
     MEDIA_DOWNLOAD_ROAMING,
-    AUTOPLAY_STICKERS_AND_GIFS
+    AUTOPLAY_STICKERS_AND_GIFS,
+    THREAD_TRIM_SYNC_TO_LINKED_DEVICES,
+    SHOW_REACTION_TIMESTAMPS,
+    FORCE_WEBSOCKET_MODE_SW,
+    FAST_CUSTOM_REACTION_CHANGE,
+    COPY_TEXT_OPENS_POPUP,
+    CONVERSATION_DELETE_IN_MENU,
+    SWIPE_TO_RIGHT_ACTION,
+    RANGE_MULTI_SELECT,
+    LONG_PRESS_MULTI_SELECT,
+    ALSO_SHOW_PROFILE_NAME,
+    MANAGE_GROUP_TWEAKS,
+    SWIPE_TO_LEFT_ACTION,
+    TRASH_NO_PROMPT_FOR_ME,
+    PROMPT_MP4_AS_GIF,
+    BACKUP_INTERVAL_IN_DAYS,
+    ALT_COLLAPSE_MEDIA_KEYBOARD,
+    ALT_CLOSE_MEDIA_SELECTION,
+    STICKER_MRU_LONG_PRESS_TO_PACK,
+    STICKER_KEYBOARD_PACK_MRU,
+    DOUBLE_TAP_ACTION
   )
 
   val onConfigurationSettingChanged: LiveData<String>
@@ -441,6 +482,45 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
 
   var isTurnOnly: Boolean by booleanValue(ALWAYS_RELAY_CALLS, false)
 
+  var isShowReactionTimestamps: Boolean by booleanValue(SHOW_REACTION_TIMESTAMPS, false)
+
+  // SW: remove now duplicate option?
+  var isForceWebsocketModeSW: Boolean by booleanValue(FORCE_WEBSOCKET_MODE_SW, false)
+
+  var isFastCustomReactionChange: Boolean by booleanValue(FAST_CUSTOM_REACTION_CHANGE, false)
+
+  var isCopyTextOpensPopup: Boolean by booleanValue(COPY_TEXT_OPENS_POPUP, false)
+
+  var isConversationDeleteInMenu: Boolean by booleanValue(CONVERSATION_DELETE_IN_MENU, false)
+
+  var swipeToRightAction: String by stringValue(SWIPE_TO_RIGHT_ACTION, SwipeActionTypes.DEFAULT)
+
+  var isRangeMultiSelect: Boolean by booleanValue(RANGE_MULTI_SELECT, false)
+
+  var isLongPressMultiSelect: Boolean by booleanValue(LONG_PRESS_MULTI_SELECT, false)
+
+  var isAlsoShowProfileName: Boolean by booleanValue(ALSO_SHOW_PROFILE_NAME, false)
+
+  var isManageGroupTweaks: Boolean by booleanValue(MANAGE_GROUP_TWEAKS, false)
+
+  var swipeToLeftAction: String by stringValue(SWIPE_TO_LEFT_ACTION, SwipeActionTypes.DEFAULT)
+
+  var isTrashNoPromptForMe: Boolean by booleanValue(TRASH_NO_PROMPT_FOR_ME, false)
+
+  var isPromptMp4AsGif: Boolean by booleanValue(PROMPT_MP4_AS_GIF, false)
+
+  var backupIntervalInDays: Int by integerValue(BACKUP_INTERVAL_IN_DAYS, 1)
+
+  var isAltCollapseMediaKeyboard: Boolean by booleanValue(ALT_COLLAPSE_MEDIA_KEYBOARD, false)
+
+  var isAltCloseMediaSelection: Boolean by booleanValue(ALT_CLOSE_MEDIA_SELECTION, false)
+
+  var isStickerMruLongPressToPack: Boolean by booleanValue(STICKER_MRU_LONG_PRESS_TO_PACK, false)
+
+  var isStickerKeyboardPackMru: Boolean by booleanValue(STICKER_KEYBOARD_PACK_MRU, false)
+
+  var doubleTapAction: String by stringValue(DOUBLE_TAP_ACTION, SwipeActionTypes.DEFAULT_FOR_DOUBLE_TAP)
+
   var automaticVerificationEnabled: Boolean
     get() = getBoolean(AUTOMATIC_VERIFICATION_ENABLED, true)
     set(value) {
@@ -617,6 +697,64 @@ class SettingsValues internal constructor(store: KeyValueStore, private val cont
     }
     if (!store.containsKey(NOTIFY_WHEN_CONTACT_JOINS_SIGNAL)) {
       writer.putBoolean(NOTIFY_WHEN_CONTACT_JOINS_SIGNAL, LegacySharedPrefs.getBoolean(context, "pref_enable_new_contacts_notifications", false))
+    }
+
+    if (!store.containsKey(SHOW_REACTION_TIMESTAMPS)) {
+      writer.putBoolean(SHOW_REACTION_TIMESTAMPS, LegacySharedPrefs.getBoolean(context, "pref_show_reaction_time", false))
+    }
+    if (!store.containsKey(FORCE_WEBSOCKET_MODE_SW)) {
+      writer.putBoolean(FORCE_WEBSOCKET_MODE_SW, LegacySharedPrefs.getBoolean(context, "pref_force_websocket_mode", false))
+    }
+    if (!store.containsKey(FAST_CUSTOM_REACTION_CHANGE)) {
+      writer.putBoolean(FAST_CUSTOM_REACTION_CHANGE, LegacySharedPrefs.getBoolean(context, "pref_fast_custom_reaction_change", false))
+    }
+    if (!store.containsKey(COPY_TEXT_OPENS_POPUP)) {
+      writer.putBoolean(COPY_TEXT_OPENS_POPUP, LegacySharedPrefs.getBoolean(context, "pref_copy_text_opens_popup", false))
+    }
+    if (!store.containsKey(CONVERSATION_DELETE_IN_MENU)) {
+      writer.putBoolean(CONVERSATION_DELETE_IN_MENU, LegacySharedPrefs.getBoolean(context, "pref_conversation_delete_in_menu", false))
+    }
+    if (!store.containsKey(SWIPE_TO_RIGHT_ACTION)) {
+      writer.putString(SWIPE_TO_RIGHT_ACTION, LegacySharedPrefs.getString(context, "pref_swipe_to_right_action", SwipeActionTypes.DEFAULT))
+    }
+    if (!store.containsKey(RANGE_MULTI_SELECT)) {
+      writer.putBoolean(RANGE_MULTI_SELECT, LegacySharedPrefs.getBoolean(context, "pref_range_multi_select", false))
+    }
+    if (!store.containsKey(LONG_PRESS_MULTI_SELECT)) {
+      writer.putBoolean(LONG_PRESS_MULTI_SELECT, LegacySharedPrefs.getBoolean(context, "pref_long_press_multi_select", false))
+    }
+    if (!store.containsKey(ALSO_SHOW_PROFILE_NAME)) {
+      writer.putBoolean(ALSO_SHOW_PROFILE_NAME, LegacySharedPrefs.getBoolean(context, "pref_also_show_profile_name", false))
+    }
+    if (!store.containsKey(MANAGE_GROUP_TWEAKS)) {
+      writer.putBoolean(MANAGE_GROUP_TWEAKS, LegacySharedPrefs.getBoolean(context, "pref_manage_group_tweaks", false))
+    }
+    if (!store.containsKey(SWIPE_TO_LEFT_ACTION)) {
+      writer.putString(SWIPE_TO_LEFT_ACTION, LegacySharedPrefs.getString(context, "pref_swipe_to_left_action", SwipeActionTypes.DEFAULT))
+    }
+    if (!store.containsKey(TRASH_NO_PROMPT_FOR_ME)) {
+      writer.putBoolean(TRASH_NO_PROMPT_FOR_ME, LegacySharedPrefs.getBoolean(context, "pref_trash_no_prompt_for_me", false))
+    }
+    if (!store.containsKey(PROMPT_MP4_AS_GIF)) {
+      writer.putBoolean(PROMPT_MP4_AS_GIF, LegacySharedPrefs.getBoolean(context, "pref_prompt_mp4_as_gif", false))
+    }
+    if (!store.containsKey(BACKUP_INTERVAL_IN_DAYS)) {
+      writer.putInteger(BACKUP_INTERVAL_IN_DAYS, LegacySharedPrefs.getIntegerFromString(context, "pref_backup_interval_in_days", 1))
+    }
+    if (!store.containsKey(ALT_COLLAPSE_MEDIA_KEYBOARD)) {
+      writer.putBoolean(ALT_COLLAPSE_MEDIA_KEYBOARD, LegacySharedPrefs.getBoolean(context, "pref_alt_collapse_media_keyboard", false))
+    }
+    if (!store.containsKey(ALT_CLOSE_MEDIA_SELECTION)) {
+      writer.putBoolean(ALT_CLOSE_MEDIA_SELECTION, LegacySharedPrefs.getBoolean(context, "pref_alt_close_media_selection", false))
+    }
+    if (!store.containsKey(STICKER_MRU_LONG_PRESS_TO_PACK)) {
+      writer.putBoolean(STICKER_MRU_LONG_PRESS_TO_PACK, LegacySharedPrefs.getBoolean(context, "pref_sticker_mru_long_press_to_pack", false))
+    }
+    if (!store.containsKey(STICKER_KEYBOARD_PACK_MRU)) {
+      writer.putBoolean(STICKER_KEYBOARD_PACK_MRU, LegacySharedPrefs.getBoolean(context, "pref_sticker_keyboard_pack_mru", false))
+    }
+    if (!store.containsKey(DOUBLE_TAP_ACTION)) {
+      writer.putString(DOUBLE_TAP_ACTION, LegacySharedPrefs.getString(context, "pref_double_tap_action", SwipeActionTypes.DEFAULT_FOR_DOUBLE_TAP))
     }
 
     writer.putString(MESSAGE_LED_BLINK_PATTERN_CUSTOM, LegacySharedPrefs.getString(context, "pref_led_blink_custom", "500,2000"))

@@ -6,6 +6,9 @@
     android:layout_height="52dp"
     tools:viewBindingIgnore="true">
 
+    <!-- https://stackoverflow.com/questions/37603751/set-width-to-match-constraints-in-constraintlayout -->
+    <!-- SW: see if we need to set layout_width for reactions_bottom_view_recipient_name or its parent to 0dp again -->
+
     <org.thoughtcrime.securesms.components.AvatarImageView
         android:id="@+id/reactions_bottom_view_recipient_avatar"
         android:layout_width="36dp"
@@ -26,13 +29,13 @@
         app:layout_constraintTop_toTopOf="@id/reactions_bottom_view_recipient_avatar" />
 
     <LinearLayout
+        android:id="@+id/reactions_bottom_view_recipient_name_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/reactions_bottom_view_recipient_emoji"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@id/reactions_bottom_view_recipient_time"
         app:layout_constraintStart_toEndOf="@id/reactions_bottom_view_recipient_avatar"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -63,6 +66,20 @@
             tools:visibility="visible" />
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/reactions_bottom_view_recipient_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="0"
+        android:gravity="center_vertical"
+        android:textAppearance="@style/Signal.Text.Caption"
+        android:textColor="@color/signal_text_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/reactions_bottom_view_recipient_emoji"
+        app:layout_constraintStart_toEndOf="@id/reactions_bottom_view_recipient_name_layout"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <org.thoughtcrime.securesms.components.emoji.EmojiTextView
         android:id="@+id/reactions_bottom_view_recipient_emoji"

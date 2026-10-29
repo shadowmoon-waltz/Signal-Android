@@ -150,6 +150,8 @@ public final class MediaOverviewActivity extends PassphraseRequiredActivity {
       case Oldest  : return R.string.MediaOverviewActivity_Oldest;
       case Newest  : return R.string.MediaOverviewActivity_Newest;
       case Largest : return R.string.MediaOverviewActivity_Storage_used;
+      case ContentTypeLargest: return R.string.fork__content_type_largest;
+      case ContentTypeNewest: return R.string.fork__content_type_newest;
       default      : throw new AssertionError();
     }
   }

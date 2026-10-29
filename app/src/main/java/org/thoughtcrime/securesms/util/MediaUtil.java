@@ -55,6 +55,8 @@ import java.net.URLConnection;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import org.thoughtcrime.securesms.keyvalue.SignalStore;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import kotlin.Pair;
 
 public class MediaUtil {
@@ -611,5 +613,38 @@ public class MediaUtil {
     LONG_TEXT,
     VIEW_ONCE,
     DOCUMENT
+  }
+
+  public interface Mp4AsGifCallback {
+    void onResponse(@NonNull Media media);
+  }
+
+  public static void maybeMp4AsGif(@NonNull Context context, @NonNull Media media, @NonNull Mp4AsGifCallback callback)
+  {
+    if (SignalStore.settings().isPromptMp4AsGif() && isVideo(media.getContentType()) && !media.isVideoGif()) {
+      new MaterialAlertDialogBuilder(context)
+        .setMessage("Video autoplay/loop like GIF?")
+        .setPositiveButton("GIF", (d, w) -> {
+          Media media2 = new Media(media.getUri(), media.getContentType(), media.getDate(), media.getWidth(), media.getHeight(), media.getSize(), media.getDuration(), media.isBorderless(), true, media.getBucketId(), media.getCaption(), media.getTransformProperties(), media.getFileName());
+          callback.onResponse(media2);
+        })
+        .setNegativeButton("Video", (d, w) -> {
+          callback.onResponse(media);
+        })
+      .show();
+    } else {
+      callback.onResponse(media);
+    }
+  }
+
+  public static @NonNull String getContentTypeStringWithGif(@NonNull Attachment attachment, @NonNull String defaultValue) {
+    String contentType = attachment.contentType.trim();
+    if (contentType.isEmpty()) {
+      contentType = defaultValue;
+    }
+    if (isVideoType(attachment.contentType) && attachment.videoGif) {
+      contentType += " (gif)";
+    }
+    return contentType;
   }
 }

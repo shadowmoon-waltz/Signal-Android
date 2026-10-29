@@ -58,6 +58,7 @@ import org.thoughtcrime.securesms.components.settings.app.subscription.InAppPaym
 import org.thoughtcrime.securesms.contacts.index.ContactIndexRepository;
 import org.thoughtcrime.securesms.jobs.StorageSyncJob;
 import org.thoughtcrime.securesms.preferences.EditProxyActivity;
+import org.thoughtcrime.securesms.preferences.SetIdentityKeysActivity;
 import org.thoughtcrime.securesms.conversation.drafts.DraftBlobs;
 import org.thoughtcrime.securesms.crypto.AppAttachmentSecretStore;
 import org.thoughtcrime.securesms.crypto.DatabaseSecretProvider;
@@ -459,7 +460,11 @@ public class ApplicationContext extends Application implements AppForegroundObse
           context.startActivity(EditProxyActivity.intent(context));
           return Unit.INSTANCE;
         },
-        new AppContactSupportController()
+        new AppContactSupportController(),
+        context -> {
+          context.startActivity(SetIdentityKeysActivity.intent(context));
+          return Unit.INSTANCE;
+        }
       )
     );
   }

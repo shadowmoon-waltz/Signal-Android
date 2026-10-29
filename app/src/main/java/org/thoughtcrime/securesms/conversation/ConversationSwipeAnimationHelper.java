@@ -33,19 +33,31 @@ final class ConversationSwipeAnimationHelper {
   private ConversationSwipeAnimationHelper() {
   }
 
-  public static void update(@NonNull InteractiveConversationElement interactiveConversationElement, float dx, float sign) {
+  public static void update(@NonNull InteractiveConversationElement interactiveConversationElement, float dx, float sign, boolean swipeToLeft) {
+    if (swipeToLeft) sign *= -1.0f;
+
     float progress = dx / TRIGGER_DX;
 
     updateBodyBubbleTransition(interactiveConversationElement.getBubbleViews(), dx, sign);
     updateReactionsTransition(interactiveConversationElement.getReactionsView(), dx, sign);
     updateQuotedIndicatorTransition(interactiveConversationElement.getQuotedIndicatorView(), dx, progress, sign);
-    updateReplyIconTransition(interactiveConversationElement.getReplyView(), dx, progress, sign);
-    updateContactPhotoHolderTransition(interactiveConversationElement.getContactPhotoHolderView(), progress, sign);
-    updateContactPhotoHolderTransition(interactiveConversationElement.getBadgeImageView(), progress, sign);
+    if (!swipeToLeft) {
+      updateReplyIconTransition(interactiveConversationElement.getReplyView(), dx, progress, sign);
+      updateContactPhotoHolderTransition(interactiveConversationElement.getContactPhotoHolderView(), progress, sign);
+      updateContactPhotoHolderTransition(interactiveConversationElement.getBadgeImageView(), progress, sign);
+
+      updateReplyIconTransition(interactiveConversationElement.getSwipeToLeftView(), 0.0f, 0.0f, sign);
+    } else {
+      updateReplyIconTransition(interactiveConversationElement.getSwipeToLeftView(), dx, progress, sign);
+
+      updateReplyIconTransition(interactiveConversationElement.getReplyView(), 0.0f, 0.0f, sign);
+      updateContactPhotoHolderTransition(interactiveConversationElement.getContactPhotoHolderView(), 0.0f, sign);
+      updateContactPhotoHolderTransition(interactiveConversationElement.getBadgeImageView(), 0.0f, sign);
+    }
   }
 
-  public static void trigger(@NonNull InteractiveConversationElement interactiveConversationElement) {
-    triggerReplyIcon(interactiveConversationElement.getReplyView());
+  public static void trigger(@NonNull InteractiveConversationElement interactiveConversationElement, boolean swipeToLeft) {
+    triggerReplyIcon(!swipeToLeft ? interactiveConversationElement.getReplyView() : interactiveConversationElement.getSwipeToLeftView());
   }
 
   private static void updateBodyBubbleTransition(@NonNull List<View> bubbleViews, float dx, float sign) {

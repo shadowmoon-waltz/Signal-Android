@@ -599,6 +599,24 @@ class Recipient(
     return BidiUtil.isolateBidi(name)
   }
 
+  fun getDisplayName2(context: Context): String {
+    if (getGroupName(context).isNullOrBlank()) {
+      val name = profileName.toString()
+      val nickname2 = nickname.toString()
+      if (nickname2.isNotNullOrBlank()) {
+        if (name != nickname2) {
+          return name
+        }
+      }
+      else if (systemContactName.isNotNullOrBlank()) {
+        if (name != systemContactName) {
+          return name
+        }
+      }
+    }
+    return ""
+  }
+
   /** The first name we have for this person, ranking our own nickname for them below their real names. */
   val sharedContactName: ProfileName?
     get() = listOf(systemProfileName, profileName, sharedName, nickname).firstOrNull { !it.isEmpty }
