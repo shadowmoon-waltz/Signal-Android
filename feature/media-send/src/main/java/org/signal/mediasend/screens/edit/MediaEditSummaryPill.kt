@@ -5,7 +5,9 @@
 
 package org.signal.mediasend.screens.edit
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -27,12 +29,14 @@ import org.signal.core.util.ContentTypeUtil
 import org.signal.core.util.isNotNullOrBlank
 import org.signal.mediasend.R
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun MediaEditSummaryPill(
   displayName: String?,
   selectedMedia: List<Media>,
   selectedPage: Int,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  onLongClick: (() -> Unit)? = null
 ) {
   val selectedMediaText = rememberSelectedMediaText(selectedMedia, selectedPage)
 
@@ -65,7 +69,7 @@ internal fun MediaEditSummaryPill(
   }
 
   Box(
-    modifier = modifier
+    modifier = modifier.let { if (onLongClick != null) it.combinedClickable(onClick = {}, onLongClick = onLongClick) else it }
   ) {
     when (targetState) {
       is MediaEditSummaryPillTargetState.MultiRow -> MultiRowPill(targetState)

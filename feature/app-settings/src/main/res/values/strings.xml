@@ -974,4 +974,6 @@
     <string name="UsernameLinkSettingsScreen__allow_access">Allow access</string>
     <!-- Shown when the camera permission was denied, or permanently denied, and a QR code can\'t be scanned -->
     <string name="UsernameLinkSettingsScreen__camera_needed">Signal needs camera access to scan QR codes</string>
+
+    <string name="preferences__fork_specific">Fork Specific</string>
 </resources>

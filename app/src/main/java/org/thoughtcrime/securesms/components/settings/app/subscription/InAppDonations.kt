@@ -5,10 +5,6 @@ import org.signal.donations.InAppPaymentType
 import org.signal.donations.PaymentSourceType
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.database.model.InAppPaymentReceiptRecord
-import org.thoughtcrime.securesms.keyvalue.SignalStore
-import org.thoughtcrime.securesms.util.Environment
-import org.thoughtcrime.securesms.util.LocaleRemoteConfig
-import org.thoughtcrime.securesms.util.RemoteConfig
 import java.util.Currency
 
 /**
@@ -25,58 +21,39 @@ object InAppDonations {
    * - Able to use PayPal and is in a region where it is able to be accepted.
    */
   fun hasAtLeastOnePaymentMethodAvailable(): Boolean {
-    return isCreditCardAvailable() || isPayPalAvailable() || isGooglePayAvailable() || isSEPADebitAvailable() || isIDEALAvailable()
+    return false
   }
 
   /**
    * @param currency The currency the user selected for the payment, if known. Used to decide region-based availability for accounts without a phone number.
    */
   fun isDonationsPaymentSourceAvailable(paymentSourceType: PaymentSourceType, inAppPaymentType: InAppPaymentType, currency: Currency? = null): Boolean {
-    if (inAppPaymentType == InAppPaymentType.RECURRING_BACKUP) {
-      error("Not supported.")
-    }
-
-    return when (paymentSourceType) {
-      PaymentSourceType.PayPal -> isPayPalAvailableForDonateToSignalType(inAppPaymentType)
-      PaymentSourceType.Stripe.CreditCard -> isCreditCardAvailable()
-      PaymentSourceType.Stripe.GooglePay -> isGooglePayAvailable()
-      PaymentSourceType.Stripe.SEPADebit -> isSEPADebitAvailableForDonateToSignalType(inAppPaymentType, currency)
-      PaymentSourceType.Stripe.IDEAL -> isIDEALAvailbleForDonateToSignalType(inAppPaymentType, currency)
-      PaymentSourceType.GooglePlayBilling -> false
-      PaymentSourceType.Unknown -> false
-    }
+    return false
   }
 
   private fun isPayPalAvailableForDonateToSignalType(inAppPaymentType: InAppPaymentType): Boolean {
-    return when (inAppPaymentType) {
-      InAppPaymentType.UNKNOWN -> error("Unsupported type UNKNOWN")
-      InAppPaymentType.ONE_TIME_DONATION -> true
-      InAppPaymentType.ONE_TIME_GIFT -> true
-      InAppPaymentType.RECURRING_DONATION -> true
-      InAppPaymentType.RECURRING_BACKUP -> false
-    } &&
-      !LocaleRemoteConfig.isPayPalDisabled()
+    return false
   }
 
   /**
    * Whether the user is in a region that supports credit cards, based off local phone number.
    */
   fun isCreditCardAvailable(): Boolean {
-    return !LocaleRemoteConfig.isCreditCardDisabled()
+    return false
   }
 
   /**
    * Whether the user is in a region that supports PayPal, based off local phone number.
    */
   fun isPayPalAvailable(): Boolean {
-    return !LocaleRemoteConfig.isPayPalDisabled()
+    return false
   }
 
   /**
    * Whether the user is using a device that supports GooglePay, based off Wallet API and phone number.
    */
   fun isGooglePayAvailable(): Boolean {
-    return SignalStore.inAppPayments.isGooglePayReady && !LocaleRemoteConfig.isGooglePayDisabled()
+    return false
   }
 
   /**
@@ -84,7 +61,7 @@ object InAppDonations {
    * locale and the selected [currency] for accounts without a phone number.
    */
   fun isSEPADebitAvailable(currency: Currency? = null): Boolean {
-    return Environment.IS_STAGING || (RemoteConfig.sepaDebitDonations && LocaleRemoteConfig.isSepaEnabled(currency))
+    return false
   }
 
   /**
@@ -92,7 +69,7 @@ object InAppDonations {
    * locale and the selected [currency] for accounts without a phone number.
    */
   fun isIDEALAvailable(currency: Currency? = null): Boolean {
-    return Environment.IS_STAGING || (RemoteConfig.idealDonations && LocaleRemoteConfig.isIdealEnabled(currency))
+    return false
   }
 
   /**
@@ -100,7 +77,7 @@ object InAppDonations {
    * and donation type.
    */
   fun isSEPADebitAvailableForDonateToSignalType(inAppPaymentType: InAppPaymentType, currency: Currency? = null): Boolean {
-    return inAppPaymentType != InAppPaymentType.ONE_TIME_GIFT && isSEPADebitAvailable(currency)
+    return false
   }
 
   /**
@@ -108,7 +85,7 @@ object InAppDonations {
    * donation type
    */
   fun isIDEALAvailbleForDonateToSignalType(inAppPaymentType: InAppPaymentType, currency: Currency? = null): Boolean {
-    return inAppPaymentType != InAppPaymentType.ONE_TIME_GIFT && isIDEALAvailable(currency)
+    return false
   }
 
   /**

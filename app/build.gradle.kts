@@ -46,6 +46,9 @@ val debugKeystorePropertiesProvider: Provider<Properties> = providers.of(Propert
   parameters.file.set(rootProject.layout.projectDirectory.file("keystore.debug.properties"))
 }
 
+val signConfigExists = project.hasProperty("keystoreFile") && project.hasProperty("keystorePassword") && project.hasProperty("keystoreAlias") && project.hasProperty("keystoreAliasPassword")
+val signConfigExists2 = !signConfigExists && System.getenv("TEMP_KEYSTORE_FILE") != null && file(System.getenv("TEMP_KEYSTORE_FILE")).canRead()
+
 val languagesProvider: Provider<List<String>> = providers.of(LanguageListValueSource::class.java) {
   parameters.resDir.set(layout.projectDirectory.dir("src/main/res"))
 }
@@ -176,6 +179,22 @@ android {
     }
   }
 
+  if (signConfigExists) {
+    signingConfigs.create("swSign").apply {
+      storeFile = file(project.property("keystoreFile")!!)
+      storePassword = project.property("keystorePassword") as String
+      keyAlias = project.property("keystoreAlias") as String
+      keyPassword = project.property("keystoreAliasPassword") as String
+    }
+  } else if (signConfigExists2) {
+    signingConfigs.create("swSign").apply {
+      storeFile = file(System.getenv("TEMP_KEYSTORE_FILE"))
+      storePassword = System.getenv("TEMP_KEYSTORE_PASSWORD")
+      keyAlias = System.getenv("TEMP_KEYSTORE_ALIAS")
+      keyPassword = System.getenv("TEMP_KEYSTORE_ALIAS_PASSWORD")
+    }
+  }
+
   testOptions {
     execution = "ANDROIDX_TEST_ORCHESTRATOR"
 
@@ -258,7 +277,7 @@ android {
     targetSdk = libs.versions.targetSdk.get().toInt()
 
     vectorDrawables.useSupportLibrary = true
-    project.ext.set("archivesBaseName", "Signal")
+    project.ext.set("archivesBaseName", "SignalSW")
 
     manifestPlaceholders["mapsKey"] = "AIzaSyCSx9xea86GwDKGznCAULE9Y5a8b-TfN9U"
 
@@ -314,7 +333,9 @@ android {
     buildConfigField("boolean", "LINK_DEVICE_UX_ENABLED", "false")
 
     ndk {
-      abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+      //abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+      // SW: arm64 only for now
+      abiFilters += listOf("arm64-v8a")
     }
     resourceConfigurations += listOf()
 
@@ -337,7 +358,10 @@ android {
 
   buildTypes {
     getByName("debug") {
-      if (debugKeystorePropertiesProvider.orNull != null) {
+      if (signConfigExists || signConfigExists2) {
+        signingConfig = signingConfigs["swSign"]
+      }
+      else if (debugKeystorePropertiesProvider.orNull != null) {
         signingConfig = signingConfigs["debug"]
       }
       isDefault = true
@@ -376,6 +400,9 @@ android {
       isMinifyEnabled = true
       proguardFiles(*buildTypes["debug"].proguardFiles.toTypedArray())
       buildConfigField("String", "BUILD_VARIANT_TYPE", "\"Release\"")
+      if (signConfigExists || signConfigExists2) {
+        signingConfig = signingConfigs["swSign"]
+      }
     }
 
     create("spinner") {
@@ -452,9 +479,10 @@ android {
 
     create("website") {
       dimension = "distribution"
-      buildConfigField("boolean", "MANAGES_APP_UPDATES", "true")
-      buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "\"https://updates.signal.org/android/latest.json\"")
-      buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"website\"")
+      applicationIdSuffix = ".sw"
+      buildConfigField("boolean", "MANAGES_APP_UPDATES", "false")
+      buildConfigField("String", "APK_UPDATE_MANIFEST_URL", "null") // "\"https://updates.signal.org/android/latest.json\""
+      buildConfigField("String", "BUILD_DISTRIBUTION_TYPE", "\"sw\"") // "\"website\""
     }
 
     create("github") {
@@ -514,6 +542,7 @@ android {
   lint {
     abortOnError = true
     baseline = file("lint-baseline.xml")
+    // SW: disable lint on release for now
     checkReleaseBuilds = false
     ignoreWarnings = true
     quiet = true

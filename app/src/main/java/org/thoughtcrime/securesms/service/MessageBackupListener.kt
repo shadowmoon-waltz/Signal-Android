@@ -56,7 +56,7 @@ class MessageBackupListener : PersistentAlarmManagerListener() {
 
       val endOfJitterWindowForNow = now.plusSeconds(maxJitterSeconds.toLong() / 2)
       while (!endOfJitterWindowForNow.isBefore(next)) {
-        next = next.plusDays(1)
+        next = next.plusDays(SignalStore.settings.backupIntervalInDays.toLong())
       }
 
       val jitter = randomSource.nextInt(maxJitterSeconds) - maxJitterSeconds / 2

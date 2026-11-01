@@ -65,6 +65,7 @@ class AppSettingsFragment : ComposeFragment() {
       is AppSettingsRoute.InternalRoute.Internal -> findNavController().safeNavigate(R.id.action_appSettingsFragment_to_internalSettingsFragment)
       is AppSettingsRoute.AccountRoute.ManageProfile -> findNavController().safeNavigate(R.id.action_appSettingsFragment_to_manageProfileActivity)
       is AppSettingsRoute.UsernameLinkRoute.UsernameLink -> findNavController().safeNavigate(R.id.action_appSettingsFragment_to_usernameLinkSettingsFragment)
+      is AppSettingsRoute.ForkSettings -> findNavController().safeNavigate(R.id.action_appSettingsFragment_to_forkSettingsFragment)
       else -> error("Unsupported route: ${route.javaClass.name}")
     }
   }

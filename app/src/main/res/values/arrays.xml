@@ -138,6 +138,8 @@
         <item>@string/MediaOverviewActivity_Newest</item>
         <item>@string/MediaOverviewActivity_Oldest</item>
         <item>@string/MediaOverviewActivity_Storage_used</item>
+        <item>@string/fork__content_type_largest</item>
+        <item>@string/fork__content_type_newest</item>
     </string-array>
 
     <string-array name="ExpireTimerSettingsFragment__labels">
@@ -168,6 +170,102 @@
         <item>@string/CustomExpireTimerSelectorView__hours</item>
         <item>@string/CustomExpireTimerSelectorView__days</item>
         <item>@string/CustomExpireTimerSelectorView__weeks</item>
+    </string-array>
+
+    <string-array name="ForkSettingsFragment__swipe_to_right_action__entries">
+        <item>@string/ForkSettingsFragment__swipe_to_right_action__default</item>
+        <item>@string/preferences__none</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_no_popup</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
+        <item>@string/conversation_selection__menu_forward</item>
+        <item>@string/AndroidManifest__message_details</item>
+        <item>@string/ForkSettingsFragment__show_options</item>
+        <item>@string/note_to_self</item>
+        <item>@string/ForkSettingsFragment__select_multiple</item>
+        <item>@string/conversation_selection__menu_edit</item>
+    </string-array>
+
+    <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
+
+    <string-array name="ForkSettingsFragment__swipe_to_right_action__values">
+        <item>default</item>
+        <item>none</item>
+        <item>delete</item>
+        <item>delete_no_prompt</item>
+        <item>copy_text</item>
+        <item>copy_text_popup</item>
+        <item>forward</item>
+        <item>message_details</item>
+        <item>show_options</item>
+        <item>note_to_self</item>
+        <item>multi_select</item>
+        <item>edit</item>
+    </string-array>
+
+    <string-array name="ForkSettingsFragment__swipe_to_left_action__entries">
+        <item>@string/ForkSettingsFragment__swipe_to_left_action__default</item>
+        <item>@string/AndroidManifest__message_details</item>
+        <item>@string/MessageNotifier_reply</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_no_popup</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
+        <item>@string/conversation_selection__menu_forward</item>
+        <item>@string/ForkSettingsFragment__show_options</item>
+        <item>@string/note_to_self</item>
+        <item>@string/ForkSettingsFragment__select_multiple</item>
+        <item>@string/conversation_selection__menu_edit</item>
+    </string-array>
+
+    <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
+
+    <string-array name="ForkSettingsFragment__double_tap_action__values">
+        <item>default</item>
+        <item>message_details</item>
+        <item>reply</item>
+        <item>delete</item>
+        <item>delete_no_prompt</item>
+        <item>copy_text</item>
+        <item>copy_text_popup</item>
+        <item>forward</item>
+        <item>show_options</item>
+        <item>note_to_self</item>
+        <item>multi_select</item>
+        <item>edit</item>
+    </string-array>
+
+    <string-array name="ForkSettingsFragment__double_tap_action__entries">
+        <item>@string/ForkSettingsFragment__double_tap_action__default</item>
+        <item>@string/AndroidManifest__message_details</item>
+        <item>@string/MessageNotifier_reply</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__delete_no_prompt</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_no_popup</item>
+        <item>@string/ForkSettingsFragment__swipe_action__copy_text_popup</item>
+        <item>@string/conversation_selection__menu_forward</item>
+        <item>@string/ForkSettingsFragment__show_options</item>
+        <item>@string/note_to_self</item>
+        <item>@string/ForkSettingsFragment__select_multiple</item>
+        <item>@string/conversation_selection__menu_edit</item>
+    </string-array>
+
+    <!-- keep in sync with org.thoughtcrime.securesms.util.SwipeActionTypes -->
+
+    <string-array name="ForkSettingsFragment__swipe_to_left_action__values">
+        <item>default</item>
+        <item>message_details</item>
+        <item>reply</item>
+        <item>delete</item>
+        <item>delete_no_prompt</item>
+        <item>copy_text</item>
+        <item>copy_text_popup</item>
+        <item>forward</item>
+        <item>show_options</item>
+        <item>note_to_self</item>
+        <item>multi_select</item>
+        <item>edit</item>
     </string-array>
 
     <string-array name="SoundsAndNotificationsSettingsFragment__mention_labels">

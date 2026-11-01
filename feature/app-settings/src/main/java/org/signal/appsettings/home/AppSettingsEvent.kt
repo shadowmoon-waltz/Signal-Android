@@ -67,6 +67,9 @@ sealed interface AppSettingsEvent {
   /** The user tapped the payments row. */
   data object PaymentsClicked : AppSettingsEvent
 
+  /** The user tapped the fork settings row. */
+  data object ForkSettingsClicked : AppSettingsEvent
+
   /** The user tapped the help row. */
   data object HelpClicked : AppSettingsEvent
 

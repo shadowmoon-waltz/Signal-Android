@@ -61,7 +61,8 @@ internal fun MediaSendNavigation(
   modifier: Modifier = Modifier,
   textStoryEditorSlot: @Composable () -> Unit = {},
   sendSlot: @Composable (MediaSendFlowState) -> Unit = {},
-  stickerSelectSlot: @Composable (onStickerSelected: (Renderer?) -> Unit) -> Unit = {}
+  stickerSelectSlot: @Composable (onStickerSelected: (Renderer?) -> Unit) -> Unit = {},
+  longClickExit: Boolean = false
 ) {
   Box {
     NavDisplay(
@@ -159,7 +160,8 @@ internal fun MediaSendNavigation(
             state = state,
             onEvent = editViewModel::onEvent,
             imageControllers = viewModel.imageControllers,
-            videoPlayerCommands = editViewModel.videoPlayerCommands
+            videoPlayerCommands = editViewModel.videoPlayerCommands,
+            onLongClick = { if (longClickExit) viewModel.onCloseRequested() }
           )
         }
 

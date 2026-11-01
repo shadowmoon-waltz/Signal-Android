@@ -58,4 +58,12 @@ public class LocalBackupListener extends PersistentAlarmManagerListener {
 
     return nextTime;
   }
+
+  public static void setNextBackupTimeToIntervalFromPrevious(@NonNull Context context, int oldInterval) {
+    int days = SignalStore.settings().getBackupIntervalInDays();
+    long adjust = (days >= oldInterval) ? TimeUnit.DAYS.toMillis(days - oldInterval) : -TimeUnit.DAYS.toMillis(oldInterval - days);
+    // SW: add jitter?
+    long nextTime = SignalStore.settings().getLocalBackupNextTime() + adjust; // getNextScheduledExecutionTime(context) + adjust;
+    SignalStore.settings().setLocalBackupNextTime(nextTime);
+  }
 }

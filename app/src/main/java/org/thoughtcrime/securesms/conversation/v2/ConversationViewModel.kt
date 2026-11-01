@@ -624,7 +624,7 @@ class ConversationViewModel(
   fun updateCustomReaction(messageRecord: MessageRecord, hasAddedCustomEmoji: Boolean): Maybe<Unit> {
     val oldRecord = messageRecord.oldReactionRecord()
 
-    return if (oldRecord != null && hasAddedCustomEmoji) {
+    return if (!SignalStore.settings.isFastCustomReactionChange && oldRecord != null && hasAddedCustomEmoji) {
       repository.sendReactionRemoval(messageRecord, oldRecord).toMaybe()
     } else {
       Maybe.just(Unit)
@@ -731,6 +731,10 @@ class ConversationViewModel(
 
   fun copyToClipboard(context: Context, messageParts: Set<MultiselectPart>): Maybe<CharSequence> {
     return repository.copyToClipboard(context, messageParts)
+  }
+
+  fun getAsText(context: Context, messageParts: Set<MultiselectPart>): Maybe<CharSequence> {
+    return repository.getAsText(context, messageParts)
   }
 
   fun resendMessage(conversationMessage: ConversationMessage): Completable {
