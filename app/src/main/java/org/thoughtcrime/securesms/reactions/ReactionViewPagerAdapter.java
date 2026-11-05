@@ -12,6 +12,8 @@ import org.thoughtcrime.securesms.R;
 import org.thoughtcrime.securesms.util.adapter.AlwaysChangedDiffUtil;
 
 import java.util.List;
+import java.util.Locale;
+
 
 /**
  * ReactionViewPagerAdapter provides pages to a ViewPager2 which contains the reactions on a given message.
@@ -19,12 +21,14 @@ import java.util.List;
 class ReactionViewPagerAdapter extends ListAdapter<EmojiCount, ReactionViewPagerAdapter.ViewHolder> {
 
   private       int           selectedPosition = 0;
+  private final Locale        locale;
   private final EventListener listener;
   private final boolean       isGroupTerminated;
 
-  protected ReactionViewPagerAdapter(@NonNull EventListener listener, boolean isGroupTerminated) {
+  protected ReactionViewPagerAdapter(Locale locale, @NonNull EventListener listener, boolean isGroupTerminated) {
     super(new AlwaysChangedDiffUtil<>());
-    this.listener          = listener;
+    this.locale = locale;
+    this.listener = listener;
     this.isGroupTerminated = isGroupTerminated;
   }
 
@@ -40,7 +44,7 @@ class ReactionViewPagerAdapter extends ListAdapter<EmojiCount, ReactionViewPager
 
   @Override
   public @NonNull ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.reactions_bottom_sheet_dialog_fragment_recycler, parent, false), isGroupTerminated);
+    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.reactions_bottom_sheet_dialog_fragment_recycler, parent, false), locale, isGroupTerminated);
   }
 
   @Override
@@ -72,11 +76,11 @@ class ReactionViewPagerAdapter extends ListAdapter<EmojiCount, ReactionViewPager
     private final RecyclerView              recycler;
     private final ReactionRecipientsAdapter adapter;
 
-    public ViewHolder(@NonNull View itemView, boolean isGroupTerminated) {
+    public ViewHolder(@NonNull View itemView, Locale locale, boolean isGroupTerminated) {
       super(itemView);
 
       recycler = (RecyclerView) itemView;
-      adapter  = new ReactionRecipientsAdapter(isGroupTerminated);
+      adapter  = new ReactionRecipientsAdapter(locale, isGroupTerminated);
 
       ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                                                                  ViewGroup.LayoutParams.MATCH_PARENT);

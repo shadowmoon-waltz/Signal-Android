@@ -10,7 +10,9 @@ android {
     applicationId = "org.signal.devicetransfer.app"
 
     ndk {
-      abiFilters += setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+      //abiFilters += setOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+      // SW: arm64 only for now
+      abiFilters += setOf("arm64-v8a")
     }
 
     buildConfigField("String", "LIBSIGNAL_VERSION", "\"libsignal ${libs.versions.libsignal.client.get()}\"")

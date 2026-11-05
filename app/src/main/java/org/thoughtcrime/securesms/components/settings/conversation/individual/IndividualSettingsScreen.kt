@@ -51,6 +51,7 @@ import org.thoughtcrime.securesms.components.settings.conversation.shared.Unmute
 import org.thoughtcrime.securesms.components.settings.conversation.shared.callLogSection
 import org.thoughtcrime.securesms.components.settings.conversation.shared.previewRecipient
 import org.thoughtcrime.securesms.components.settings.conversation.shared.sharedMediaSection
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.profiles.ProfileName
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.signal.core.ui.R as CoreUiR
@@ -86,6 +87,11 @@ fun IndividualSettingsScreen(
         name = state.recipient.getDisplayName(context),
         storyViewState = state.storyViewState,
         subhead = state.recipient.combinedAboutAndEmoji,
+        subhead0 = if (!state.recipient.isReleaseNotes && !state.recipient.isSelf && SignalStore.settings.isAlsoShowProfileName) {
+          state.recipient.getDisplayName2(context).takeIf { it.isNotEmpty() }
+        } else {
+          null
+        },
         showVerifiedBadge = state.recipient.showVerified,
         showSystemContactBadge = state.recipient.isSystemContact,
         badges = state.recipient.badges,

@@ -69,6 +69,7 @@ fun ConversationHeader(
   modifier: Modifier = Modifier,
   storyViewState: StoryViewState = StoryViewState.NONE,
   subhead: String? = null,
+  subhead0: String? = null,
   showVerifiedBadge: Boolean = false,
   showSystemContactBadge: Boolean = false,
   badges: List<Badge> = emptyList(),
@@ -76,7 +77,7 @@ fun ConversationHeader(
   onBadgeClick: (Badge) -> Unit = {},
   onNameClick: (() -> Unit)? = null,
   onAvatarViewCreated: (View) -> Unit = {},
-  underName: @Composable ColumnScope.() -> Unit = {}
+  underName: @Composable ColumnScope.() -> Unit = {},
 ) {
   Column(modifier = modifier) {
     AvatarHeader(
@@ -103,6 +104,16 @@ fun ConversationHeader(
       )
 
       underName()
+
+      if (!subhead0.isNullOrBlank()) {
+        EmojiText(
+          text = subhead0,
+          style = MaterialTheme.typography.bodyLarge,
+          color = MaterialTheme.colorScheme.onSurfaceVariant,
+          textAlign = TextAlign.Center,
+          modifier = Modifier.padding(top = 8.dp)
+        )
+      }
 
       if (!subhead.isNullOrBlank()) {
         EmojiText(

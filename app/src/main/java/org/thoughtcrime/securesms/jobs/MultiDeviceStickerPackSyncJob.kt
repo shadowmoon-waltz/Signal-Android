@@ -51,7 +51,7 @@ class MultiDeviceStickerPackSyncJob(parameters: Parameters) : CoroutineJob(param
       return Result.success()
     }
 
-    val operations = StickerPackRecordReader(SignalDatabase.stickers.getInstalledStickerPacks()).use { reader ->
+    val operations = StickerPackRecordReader(SignalDatabase.stickers.getInstalledStickerPacks(), null).use { reader ->
       reader.asSequence()
         .map { pack ->
           SyncMessage.StickerPackOperation(

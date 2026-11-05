@@ -1173,4 +1173,6 @@
     <string name="SelectRecipientsFragment__add">Add</string>
     <!-- Title for add recipients to notification profile screen in create flow -->
     <string name="SelectRecipientsScreen__allowed_notifications">Allowed notifications</string>
+
+    <string name="preferences__fork_specific">Fork Specific</string>
 </resources>

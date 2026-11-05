@@ -112,6 +112,7 @@ import org.thoughtcrime.securesms.messages.IncomingMessageObserver;
 import org.thoughtcrime.securesms.migrations.ApplicationMigrations;
 import org.thoughtcrime.securesms.mms.SignalGlideModule;
 import org.thoughtcrime.securesms.preferences.EditProxyActivity;
+import org.thoughtcrime.securesms.preferences.SetIdentityKeysActivity;
 import org.thoughtcrime.securesms.ratelimit.RateLimitUtil;
 import org.thoughtcrime.securesms.recipients.Recipient;
 import org.thoughtcrime.securesms.registration.util.RegistrationUtil;
@@ -468,7 +469,11 @@ public class ApplicationContext extends Application implements AppForegroundObse
           context.startActivity(EditProxyActivity.intent(context));
           return Unit.INSTANCE;
         },
-        new AppContactSupportController()
+        new AppContactSupportController(),
+        context -> {
+          context.startActivity(SetIdentityKeysActivity.intent(context));
+          return Unit.INSTANCE;
+        }
       )
     );
   }

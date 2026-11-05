@@ -86,6 +86,7 @@ class AppSettingsActivity : NavGraphHostActivity(), GooglePayComponent {
         } else {
           AppSettingsFragmentDirections.actionDirectToLinkedDeviceAccountSettingsFragment()
         }
+        AppSettingsRoute.ForkSettings -> AppSettingsFragmentDirections.actionDirectToForkSettingsFragment()
         else -> error("Unsupported start location: ${appSettingsRoute?.javaClass?.name}")
       }
     }
@@ -210,6 +211,9 @@ class AppSettingsActivity : NavGraphHostActivity(), GooglePayComponent {
 
     @JvmStatic
     fun invite(context: Context): Intent = getIntentForStartLocation(context, AppSettingsRoute.Invite)
+
+    @JvmStatic
+    fun forkSettings(context: Context): Intent = getIntentForStartLocation(context, AppSettingsRoute.ForkSettings)
 
     @JvmStatic
     fun upgradeLocalBackups(context: Context): Intent = getIntentForStartLocation(context, AppSettingsRoute.BackupsRoute.Local(triggerUpdateFlow = true))
