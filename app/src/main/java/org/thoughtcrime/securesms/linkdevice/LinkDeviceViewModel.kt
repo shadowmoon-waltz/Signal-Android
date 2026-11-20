@@ -531,31 +531,6 @@ class LinkDeviceViewModel : ViewModel() {
   }
 
   fun onContactSupport(includeLogs: Boolean) {
-    viewModelScope.launch {
-      if (includeLogs) {
-        _state.update {
-          it.copy(
-            dialogState = DialogState.LoadingDebugLog
-          )
-        }
-        submitDebugLogRepository.buildAndSubmitLog { result ->
-          val url = result.getOrNull()
-          _state.update {
-            it.copy(
-              debugLogUrl = url,
-              oneTimeEvent = OneTimeEvent.LaunchEmail,
-              dialogState = DialogState.None
-            )
-          }
-        }
-      } else {
-        _state.update {
-          it.copy(
-            oneTimeEvent = OneTimeEvent.LaunchEmail,
-            dialogState = DialogState.None
-          )
-        }
-      }
-    }
+
   }
 }

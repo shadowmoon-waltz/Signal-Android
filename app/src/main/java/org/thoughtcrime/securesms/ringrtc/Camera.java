@@ -9,6 +9,7 @@ import android.hardware.camera2.CameraMetadata;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.signal.core.ui.permissions.Permissions;
 import org.signal.core.util.logging.Log;
 import org.signal.ringrtc.CameraControl;
 import org.thoughtcrime.securesms.components.webrtc.EglBaseWrapper;
@@ -33,6 +34,8 @@ import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.BACK;
 import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.FRONT;
 import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.NONE;
 import static org.thoughtcrime.securesms.ringrtc.CameraState.Direction.PENDING;
+
+import android.Manifest;
 
 /**
  * Encapsulate the camera functionality needed for video calling.
@@ -66,6 +69,14 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
     this.context                = context;
     this.cameraEventListener    = cameraEventListener;
     this.eglBase                = eglBase;
+
+    if (!Permissions.hasAny(context, Manifest.permission.CAMERA))
+    {
+      cameraCount = 0;
+      capturer = null;
+      return;
+    }
+
     CameraEnumerator enumerator = getCameraEnumerator(context);
     cameraCount                 = enumerator.getDeviceNames().length;
 

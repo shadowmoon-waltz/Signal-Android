@@ -339,13 +339,14 @@ public class SubmitDebugLogActivity extends BaseActivity {
       subscribeToLogLines();
     });
 
-    boolean isViewOnly = getIntent().getBooleanExtra(ARG_VIEW_ONLY, false);
-    if (isViewOnly) {
+    // SW: TODO: add save logic?
+    //boolean isViewOnly = getIntent().getBooleanExtra(ARG_VIEW_ONLY, false);
+    //if (isViewOnly) {
       submitButton.setText(R.string.SubmitDebugLogActivity_close);
       submitButton.setOnClickListener(v -> ActivityCompat.finishAfterTransition(this));
-    } else {
-      submitButton.setOnClickListener(v -> onSubmitClicked());
-    }
+    //} else {
+    //  submitButton.setOnClickListener(v -> onSubmitClicked());
+    //}
 
     scrollToTopButton.setOnClickListener(v -> DebugLogsViewer.scrollToTop(logWebView));
     scrollToBottomButton.setOnClickListener(v -> DebugLogsViewer.scrollToBottom(logWebView));
@@ -382,7 +383,7 @@ public class SubmitDebugLogActivity extends BaseActivity {
 
   private void appendLines(@NonNull List<String> lines) {
     ThreadUtil.runOnMain(() -> {
-      warningBanner.setVisibility(View.VISIBLE);
+      //warningBanner.setVisibility(View.VISIBLE);
       submitButton.setVisibility(View.VISIBLE);
     });
 
@@ -473,6 +474,7 @@ public class SubmitDebugLogActivity extends BaseActivity {
     builder.show();
   }
 
+  /*
   private void onSubmitClicked() {
     submitButton.setSpinning();
 
@@ -486,6 +488,7 @@ public class SubmitDebugLogActivity extends BaseActivity {
       submitButton.cancelSpinning();
     });
   }
+  */
 
   @Override
   protected void onDestroy() {

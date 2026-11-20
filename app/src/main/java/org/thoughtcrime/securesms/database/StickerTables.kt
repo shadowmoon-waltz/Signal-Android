@@ -20,6 +20,7 @@ import org.signal.core.util.crypto.ModernDecryptingPartInputStream
 import org.signal.core.util.crypto.ModernEncryptingPartOutputStream
 import org.signal.core.util.eventbus.EventBus
 import org.signal.core.util.forEach
+import org.signal.core.util.groupBy
 import org.signal.core.util.hasUnknownFields
 import org.signal.core.util.isNotNullOrBlank
 import org.signal.core.util.logging.Log
@@ -432,6 +433,29 @@ class StickerTables(
       null
     )
   }
+
+  fun getInstalledStickerPacksSet(): Set<Pair<String, String>> {
+    return getInstalledStickerPacks()
+      .readToSet { cursor ->
+        // TODO sw : swallow errors/don't add to set if can't get relevant columns?
+        val packId = cursor.getString(cursor.getColumnIndexOrThrow(Pack.PACK_ID))
+        val packKey = cursor.getString(cursor.getColumnIndexOrThrow(Pack.PACK_KEY))
+        Pair(packId, packKey)
+      }
+  }
+
+  // TODO: needs testing
+  /*
+  fun getInstalledStickerPacksMru(): Cursor {
+    return readableDatabase
+      .select(*RECORD_PROJECTION)
+      .from(JOINED_TABLES)
+      .where("${Sticker.TABLE_NAME}.${Sticker.COVER} = 0")
+      .orderBy("MAX(${Sticker.TABLE_NAME}.${Sticker.LAST_USED}) DESC, ${Pack.TABLE_NAME}.${Pack.POSITION} ASC")
+      .groupBy("${Pack.TABLE_NAME}.${Pack.PACK_ID}, ${Pack.TABLE_NAME}.${Pack.PACK_KEY}")
+      .run()
+  }
+  */
 
   fun getStickersByEmoji(emoji: String): Cursor {
     return readableDatabase
@@ -1745,11 +1769,20 @@ class StickerTables(
     }
   }
 
-  class StickerPackRecordReader(private val cursor: Cursor) : Closeable, Iterable<StickerPackRecord> {
+  class StickerPackRecordReader(private val cursor: Cursor, private val filter: Set<Pair<String, String>>? = null) : Closeable, Iterable<StickerPackRecord> {
 
     fun getNext(): StickerPackRecord? {
       if (!cursor.moveToNext()) {
         return null
+      }
+
+      if (filter != null) {
+        // SW TODO calls getString and getColumnIndexOrThrow an extra time
+        while (!filter.contains(Pair(cursor.getString(cursor.getColumnIndexOrThrow(Pack.PACK_ID)), cursor.getString(cursor.getColumnIndexOrThrow(Pack.PACK_KEY))))) {
+          if (!cursor.moveToNext()) {
+            return null
+          }
+        }
       }
 
       return getCurrent()

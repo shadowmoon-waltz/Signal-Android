@@ -176,7 +176,6 @@ private class EntryCallbacks(
 
   override fun onContactSupport() {
     activity.finish()
-    activity.startActivity(AppSettingsActivity.help(activity, HelpFragment.REMOTE_BACKUPS_INDEX))
   }
 
   override fun onLearnMoreAboutBackupFailure() {

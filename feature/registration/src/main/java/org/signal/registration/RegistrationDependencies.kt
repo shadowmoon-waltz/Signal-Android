@@ -25,6 +25,7 @@ import org.signal.registration.util.SensitiveLog
  * @param debugLogCallback Callback to launch the debug log viewer. The actual app provides the real implementation.
  * @param proxyConfigCallback Callback to launch the proxy configuration settings. The actual app provides the real implementation.
  * @param contactSupportController Lets the user contact support, optionally attaching a debug log. The actual app provides the real implementation.
+ * @param setIdentityKeysCallback Callback to launch the proxy configuration settings. The actual app provides the real implementation. (SW)
  */
 class RegistrationDependencies(
   val networkController: NetworkController,
@@ -36,7 +37,8 @@ class RegistrationDependencies(
   val sensitiveLogger: Log.Logger?,
   val debugLogCallback: ((Context) -> Unit)?,
   val proxyConfigCallback: ((Context) -> Unit)?,
-  val contactSupportController: ContactSupportController?
+  val contactSupportController: ContactSupportController?,
+  val setIdentityKeysCallback: ((Context) -> Unit)?
 ) {
   companion object {
     lateinit var dependencies: RegistrationDependencies

@@ -24,8 +24,6 @@ import org.thoughtcrime.securesms.components.settings.DSLConfiguration
 import org.thoughtcrime.securesms.components.settings.DSLSettingsFragment
 import org.thoughtcrime.securesms.components.settings.DSLSettingsIcon
 import org.thoughtcrime.securesms.components.settings.DSLSettingsText
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsNavigationActivity
 import org.thoughtcrime.securesms.components.settings.app.appSettingsRouter
 import org.thoughtcrime.securesms.components.settings.app.subscription.DonationSerializationHelper.toFiatMoney
 import org.thoughtcrime.securesms.components.settings.app.subscription.completed.InAppPaymentsBottomSheetDelegate
@@ -38,7 +36,6 @@ import org.thoughtcrime.securesms.components.settings.models.IndeterminateLoadin
 import org.thoughtcrime.securesms.database.InAppPaymentTable
 import org.thoughtcrime.securesms.database.model.databaseprotos.DonationErrorValue
 import org.thoughtcrime.securesms.database.model.databaseprotos.PendingOneTimeDonation
-import org.thoughtcrime.securesms.help.HelpFragment
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.payments.FiatMoneyUtil
 import org.thoughtcrime.securesms.subscription.Subscription
@@ -283,7 +280,7 @@ class ManageDonationsFragment :
           subscription = subscription,
           renewalTimestamp = renewalTimestamp,
           redemptionState = state.subscriptionRedemptionState,
-          onContactSupport = { contactSupport() },
+          onContactSupport = { requireActivity().finish() },
           isPaymentFailure = payment.isPaymentFailure(),
           subscriberRequiresCancel = state.subscriberRequiresCancel,
           onRowClick = {
@@ -416,7 +413,6 @@ class ManageDonationsFragment :
           .setNegativeButton(R.string.DonationsErrors__learn_more) { _, _ ->
             CommunicationActions.openBrowserLink(requireContext(), DONATE_TROUBLESHOOTING_URL)
           }
-          .setPositiveButton(R.string.Subscription__contact_support) { _, _ -> contactSupport() }
           .setOnDismissListener {
             SignalStore.inAppPayments.setPendingOneTimeDonation(null)
           }
@@ -450,12 +446,7 @@ class ManageDonationsFragment :
   }
 
   private fun contactSupport() {
-    if (requireActivity() is AppSettingsNavigationActivity) {
-      (appSettingsRouter::onEvent).navigateTo(AppSettingsRoute.HelpRoute.Help(startCategoryIndex = HelpFragment.DONATION_INDEX))
-    } else {
-      requireActivity().finish()
-      startActivity(AppSettingsActivity.help(requireContext(), HelpFragment.DONATION_INDEX))
-    }
+
   }
 
   override fun onToolbarNavigationClicked() {

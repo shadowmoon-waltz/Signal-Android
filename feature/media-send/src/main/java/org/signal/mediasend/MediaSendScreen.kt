@@ -29,7 +29,8 @@ fun MediaSendScreen(
   textStoryEditorSlot: @Composable () -> Unit = {},
   sendSlot: @Composable (MediaSendFlowState) -> Unit = {},
   stickerSelectSlot: @Composable (onStickerSelected: (Renderer?) -> Unit) -> Unit = {},
-  onExternalHudCommand: (MediaSendFlowHudCommand) -> Unit = {}
+  onExternalHudCommand: (MediaSendFlowHudCommand) -> Unit = {},
+  longClickExit: Boolean = false
 ) {
   val viewModel = viewModel<MediaSendFlowViewModel>(factory = MediaSendFlowViewModel.Factory(args = contractArgs))
 
@@ -87,7 +88,8 @@ fun MediaSendScreen(
           modifier = modifier,
           textStoryEditorSlot = textStoryEditorSlot,
           sendSlot = sendSlot,
-          stickerSelectSlot = stickerSelectSlot
+          stickerSelectSlot = stickerSelectSlot,
+          longClickExit = longClickExit
         )
       }
     }

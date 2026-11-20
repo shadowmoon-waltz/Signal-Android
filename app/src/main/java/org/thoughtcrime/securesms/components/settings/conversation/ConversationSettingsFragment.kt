@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.IntRect
+import androidx.core.net.toUri
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,10 +29,10 @@ import org.signal.core.models.recipients.RecipientId
 import org.signal.core.ui.compose.CollectActions
 import org.signal.core.ui.compose.ComposeFragment
 import org.signal.core.ui.permissions.Permissions
+import org.signal.core.util.encourageNewBrowserTab
 import org.signal.core.util.getParcelableArrayListExtraCompat
 import org.signal.core.util.logging.Log
 import org.signal.core.util.requireParcelableCompat
-import org.signal.donations.InAppPaymentType
 import org.signal.uicomponents.recentmediarail.RecentMediaRailEvents
 import org.thoughtcrime.securesms.AvatarPreviewActivity
 import org.thoughtcrime.securesms.BlockUnblockDialog
@@ -447,7 +448,7 @@ class ConversationSettingsFragment : ComposeFragment() {
         startActivity(AppSettingsActivity.help(requireContext()))
       }
       ConversationSettingsAction.OpenDonate -> {
-        startActivity(CheckoutFlowActivity.createIntent(requireContext(), InAppPaymentType.ONE_TIME_DONATION))
+        startActivity(Intent(Intent.ACTION_VIEW, getString(R.string.donate_url).toUri()).encourageNewBrowserTab())
       }
       is ConversationSettingsAction.AddToAGroup -> {
         startActivity(AddToGroupsActivity.createIntent(requireContext(), action.recipientId, action.groupMembership))

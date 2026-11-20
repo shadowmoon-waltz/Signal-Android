@@ -83,6 +83,7 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
   private GroupedThreadMedia media;
   private boolean            showFileSizes;
   private boolean            detailView;
+  private boolean            showFileType;
 
   private static final int AUDIO_DETAIL    = 1;
   public static final  int GALLERY         = 2;
@@ -113,7 +114,8 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
                          ItemClickListener clickListener,
                          @NonNull AudioItemListener audioItemListener,
                          boolean showFileSizes,
-                         boolean showThread)
+                         boolean showThread,
+                         boolean showFileType)
   {
     this.context           = context;
     this.requestManager    = requestManager;
@@ -122,6 +124,7 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
     this.audioItemListener = audioItemListener;
     this.showFileSizes     = showFileSizes;
     this.showThread        = showThread;
+    this.showFileType      = showFileType;
   }
 
   public void setMedia(GroupedThreadMedia media) {
@@ -257,6 +260,10 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
 
   void setShowFileSizes(boolean showFileSizes) {
     this.showFileSizes = showFileSizes;
+  }
+
+  void setShowFileType(boolean showFileType) {
+    this.showFileType = showFileType;
   }
 
   void setDetailView(boolean detailView) {
@@ -463,10 +470,16 @@ final class MediaGalleryAllAdapter extends StickyHeaderGridAdapter {
       if (slide == null) {
         return DateUtils.formatDateWithoutDayOfWeek(Locale.getDefault(), mediaRecord.getDate());
       }
-      return context.getString(R.string.MediaOverviewActivity_detail_line_3_part,
+      if (showFileType) {
+        return context.getString(R.string.MediaOverviewActivity_detail_line_3_part,
+                                 new ByteSize(slide.getFileSize()).toUnitString(2),
+                                 getFileTypeDescription(context, slide),
+                                 DateUtils.formatDateWithoutDayOfWeek(Locale.getDefault(), mediaRecord.getDate()));
+      } else {
+        return context.getString(R.string.MediaOverviewActivity_detail_line_2_part,
                                new ByteSize(slide.getFileSize()).toUnitString(2),
-                               getFileTypeDescription(context, slide),
                                DateUtils.formatDateWithoutDayOfWeek(Locale.getDefault(), mediaRecord.getDate()));
+      }
     }
 
     protected String getFileTypeDescription(@NonNull Context context, @Nullable Slide slide) {

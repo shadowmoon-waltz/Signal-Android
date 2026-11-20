@@ -9,7 +9,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.concurrent.SimpleTask
 import org.thoughtcrime.securesms.R
-import org.thoughtcrime.securesms.components.settings.app.AppSettingsActivity
 import org.thoughtcrime.securesms.database.SignalDatabase
 import org.thoughtcrime.securesms.database.model.MessageRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
@@ -51,10 +50,6 @@ object ConversationDialogs {
     MaterialAlertDialogBuilder(context)
       .setView(R.layout.decryption_failed_dialog)
       .setPositiveButton(android.R.string.ok) { d, _ -> d.dismiss() }
-      .setNeutralButton(R.string.ConversationFragment_contact_us) { d, _ ->
-        context.startActivity(AppSettingsActivity.help(context, 0))
-        d.dismiss()
-      }
       .show()
   }
 

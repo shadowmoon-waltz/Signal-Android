@@ -211,6 +211,13 @@ private fun TopAppBar() {
             menuController.hide()
           }
         )
+        DropdownMenus.Item(
+          text = { Text(text = stringResource(R.string.ForkSettingsFragment__view_set_identity_keys)) },
+          onClick = {
+            RegistrationDependencies.get().setIdentityKeysCallback?.invoke(context)
+            menuController.hide()
+          }
+        )
       }
     }
   )

@@ -24,7 +24,6 @@ import org.signal.core.ui.compose.DayNightPreviews
 import org.signal.core.ui.compose.Previews
 import org.thoughtcrime.securesms.R
 import org.thoughtcrime.securesms.backup.v2.BackupRepository
-import org.thoughtcrime.securesms.components.contactsupport.ContactSupportDialogFragment
 import org.thoughtcrime.securesms.util.CommunicationActions
 
 class NoRemoteStorageSpaceAvailableBottomSheet : ComposeBottomSheetDialogFragment() {
@@ -38,11 +37,6 @@ class NoRemoteStorageSpaceAvailableBottomSheet : ComposeBottomSheetDialogFragmen
         CommunicationActions.openBrowserLink(context, supportUrl)
       },
       onContactSupportClick = {
-        ContactSupportDialogFragment.create(
-          subject = R.string.BackupAlertBottomSheet_network_failure_support_email,
-          filter = R.string.BackupAlertBottomSheet_export_failure_filter
-        ).show(parentFragmentManager, null)
-
         dismissAllowingStateLoss()
       },
       onOkClick = {

@@ -101,6 +101,8 @@ class ConversationAdapterV2(
 
   private val onScrollStateChangedListener = OnScrollStateChangedListener()
 
+  private var mostRecentSelected: MessageRecord? = null
+
   init {
     registerFactory(ThreadHeader::class.java, ::ThreadHeaderViewHolder, R.layout.conversation_item_thread_header)
 
@@ -300,6 +302,7 @@ class ConversationAdapterV2(
   }
 
   fun clearSelection() {
+    mostRecentSelected = null
     _selected.clear()
     updateSelected()
   }
@@ -331,14 +334,17 @@ class ConversationAdapterV2(
         _selected.removeAll(collapsedChildren.toSet())
       }
     } else if (multiselectPart in _selected) {
+      mostRecentSelected = null
       _selected.remove(multiselectPart)
     } else {
+      mostRecentSelected = multiselectPart.getMessageRecord()
       _selected.add(multiselectPart)
     }
     updateSelected()
   }
 
   fun removeFromSelection(expired: Set<MultiselectPart>) {
+    clearMostRecentSelectedIfNecessary(expired.map(MultiselectPart::getMessageRecord).toSet())
     _selected.removeAll(expired)
     updateSelected()
   }
@@ -353,6 +359,52 @@ class ConversationAdapterV2(
 
   private fun updateSelected() {
     notifyItemRangeChanged(0, itemCount, ConversationAdapterBridge.PAYLOAD_SELECTED)
+  }
+
+  fun toggleFromMostRecentSelectedTo(messageRecord: MessageRecord) {
+    val mostRecentSelected_ = mostRecentSelected ?: return
+
+    var indexOfMRS = 0
+    var indexOfCM = 0
+
+    while (true) {
+      val cm = getConversationMessage(indexOfMRS)
+      if (cm != null && cm.messageRecord == mostRecentSelected_) {
+        break
+      }
+      if (indexOfMRS++ >= itemCount) {
+        return
+      }
+    }
+
+    while (true) {
+      val cm = getConversationMessage(indexOfCM)
+      if (cm != null && cm.messageRecord == messageRecord) {
+        break;
+      }
+      if (indexOfCM++ >= itemCount) {
+        return
+      }
+    }
+
+    if (indexOfMRS > indexOfCM) {
+      indexOfMRS = indexOfCM.also { indexOfCM = indexOfMRS }
+    }
+
+    while (indexOfMRS <= indexOfCM) {
+      getConversationMessage(indexOfMRS)?.let { _selected.addAll(it.getMultiselectCollection().toSet()) }
+      indexOfMRS++
+    }
+
+    mostRecentSelected = messageRecord
+  }
+
+  fun clearMostRecentSelectedIfNecessary(messageRecords: Set<MessageRecord>?) {
+    mostRecentSelected?.let {
+      if (messageRecords != null && messageRecords.contains(it)) {
+        mostRecentSelected = null
+      }
+    }
   }
 
   private inner class ConversationUpdateViewHolder(itemView: View) : ConversationViewHolder<ConversationUpdate>(itemView) {

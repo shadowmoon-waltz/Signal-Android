@@ -432,4 +432,7 @@ sealed interface AppSettingsRoute : Parcelable, DetailNavKey {
     @Serializable
     data object Start : ChangeNumberRoute
   }
+
+  @Serializable
+  data object ForkSettings : AppSettingsRoute
 }

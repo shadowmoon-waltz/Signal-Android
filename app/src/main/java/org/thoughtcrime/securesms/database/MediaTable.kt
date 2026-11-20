@@ -660,6 +660,26 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
         ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ID} DESC
       """,
       "${AttachmentTable.DATA_SIZE} DESC, ${AttachmentTable.DISPLAY_ORDER} DESC, ${AttachmentTable.ID} DESC"
+    ),
+    ContentTypeLargest(
+      """
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DATA_SIZE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC
+      """,
+      // TODO: SW: need new indices?
+      "${AttachmentTable.CONTENT_TYPE} DESC, ${AttachmentTable.DATA_SIZE} DESC, ${AttachmentTable.DISPLAY_ORDER} DESC, ${AttachmentTable.ID} DESC"
+    ),
+    ContentTypeNewest(
+      """
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.CONTENT_TYPE} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.MESSAGE_ID} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.DISPLAY_ORDER} DESC,
+        ${AttachmentTable.TABLE_NAME}.${AttachmentTable.ID} DESC
+      """,
+      // TODO: SW: need new indices?
+      // used to be date sent, not date received
+      "${AttachmentTable.CONTENT_TYPE} DESC, ${MessageTable.DATE_RECEIVED} DESC, $MEDIA_MESSAGE_ID DESC, ${AttachmentTable.DISPLAY_ORDER} DESC, ${AttachmentTable.ID} DESC"
     );
 
     val orderBy: String = " ORDER BY $order"
@@ -667,8 +687,13 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
     /** Orders by result column names rather than table columns, as a compound query requires. */
     val projectedOrderBy: String = " ORDER BY $projectedOrder"
 
+    // SW : includes content type newest because I want to show file sizes in that case (for display
+    //      still groups by content type due to an earlier isRelatedToContentType check)
     val isRelatedToFileSize: Boolean
-      get() = this == Largest
+      get() = (this == Largest || this == ContentTypeLargest || this == ContentTypeNewest)
+
+    val isRelatedToContentType: Boolean
+      get() = (this == ContentTypeLargest || this == ContentTypeNewest)
 
     /**
      * A WHERE fragment against the projected column names matching rows strictly ahead of [anchor]
@@ -680,6 +705,7 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
       val displayOrder = anchor.displayOrder.toString()
       val id = anchor.attachmentId.id.toString()
       val dataSize = anchor.size.toString()
+      val contentType = anchor.contentType ?: ""
 
       return when (this) {
         Newest -> SqlUtil.Query(
@@ -695,6 +721,15 @@ class MediaTable internal constructor(context: Context?, databaseHelper: SignalD
         Largest -> SqlUtil.Query(
           "(${AttachmentTable.DATA_SIZE} > ? OR (${AttachmentTable.DATA_SIZE} = ? AND (${AttachmentTable.DISPLAY_ORDER} > ? OR (${AttachmentTable.DISPLAY_ORDER} = ? AND ${AttachmentTable.ID} > ?))))",
           arrayOf(dataSize, dataSize, displayOrder, displayOrder, id)
+        )
+        ContentTypeLargest -> SqlUtil.Query(
+          "(${AttachmentTable.CONTENT_TYPE} > ? OR (${AttachmentTable.DATA_SIZE} > ? OR (${AttachmentTable.DATA_SIZE} = ? AND (${AttachmentTable.DISPLAY_ORDER} > ? OR (${AttachmentTable.DISPLAY_ORDER} = ? AND ${AttachmentTable.ID} > ?)))))",
+          arrayOf(contentType, dataSize, dataSize, displayOrder, displayOrder, id)
+        )
+        ContentTypeNewest -> SqlUtil.Query(
+          """(${AttachmentTable.CONTENT_TYPE} > ? OR (${MessageTable.DATE_RECEIVED} > ? OR (${MessageTable.DATE_RECEIVED} = ? AND
+             (${AttachmentTable.MESSAGE_ID} > ? OR (${AttachmentTable.MESSAGE_ID} = ? AND (${AttachmentTable.DISPLAY_ORDER} > ? OR (${AttachmentTable.DISPLAY_ORDER} = ? AND ${AttachmentTable.ID} > ?)))))))""",
+          arrayOf(contentType, dateReceived, dateReceived, messageId, messageId, displayOrder, displayOrder, id)
         )
       }
     }

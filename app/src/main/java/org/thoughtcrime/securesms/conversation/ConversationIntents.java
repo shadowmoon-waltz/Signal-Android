@@ -51,6 +51,7 @@ public class ConversationIntents {
   private static final String EXTRA_HAS_WALLPAPER                    = "has_wallpaper";
   private static final String INTENT_DATA                            = "intent_data";
   private static final String INTENT_TYPE                            = "intent_type";
+  private static final String EXTRA_IS_VIDEO_GIF                     = "is_video_gif";
 
   private ConversationIntents() {
   }
@@ -207,6 +208,7 @@ public class ConversationIntents {
     private boolean                incognito;
     private boolean                hasWallpaper;
     private int                    flags;
+    private boolean                isVideoGif = false;
 
     private Builder(@NonNull Context context,
                     @NonNull Class<? extends Activity> conversationActivityClass,
@@ -371,6 +373,10 @@ public class ConversationIntents {
       intent.putExtra(EXTRA_CONVERSATION_TYPE, conversationScreenType.code);
       intent.putExtra(EXTRA_INCOGNITO, incognito);
       intent.putExtra(EXTRA_HAS_WALLPAPER, hasWallpaper);
+
+      if (isVideoGif) {
+        intent.putExtra(EXTRA_IS_VIDEO_GIF, isVideoGif);
+      }
 
       if (draftText != null) {
         intent.putExtra(EXTRA_TEXT, draftText);

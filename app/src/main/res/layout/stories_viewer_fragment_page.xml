@@ -98,7 +98,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/story_content_card_touch_interceptor"
         app:layout_constraintVertical_bias="0"
-        tools:icon="@drawable/ic_reply_24_outline"
+        tools:icon="@drawable/symbol_reply_24"
         tools:text="6 views 4 replies" />
 
     <FrameLayout
